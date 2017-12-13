@@ -1,0 +1,24 @@
+# /Batch/
+/Batch
+
+# /Build/
+/Build
+
+# /Source/
+/Source/.vs/
+/Source/Corral.v12.suo
+/Source/NuGetPackages
+/Source/Neptune.sln.DotSettings
+/Source/Neptune.sln.DotSettings.user
+/Source/**/bin/
+/Source/**/obj/
+
+# /Source/LtInfo.Common/
+/Source/LtInfo.Common/Lorax.Common.csproj.user
+/Source/LtInfo.Common/Lorax.Common.csproj.DotSettings.user
+
+# /Source/LtInfo.Common/HealthMonitor/
+
+# /Source/Neptune.Web/
+/Source/Neptune.Web/*.user
+/Source/Neptune.Web/Web.config
