@@ -1,0 +1,1 @@
+﻿ParentTableSchemaName	ParentTableName	ParentKeyColumnName	ChildTableSchemaName	ChildTableName	ChildKeyColumnName	ChildKeyColumnIsNullable	KeyName	ForeignKeySql

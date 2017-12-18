@@ -7,7 +7,7 @@
     <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
   </configSections>
   <appSettings>
-    <add key="FirmaEnvironment" value="${environment}"/>
+    <add key="NeptuneEnvironment" value="${environment}"/>
     <add key="vs:EnableBrowserLink" value="false"/>
     <add key="webpages:Version" value="3.0.0.0"/>
     <add key="webpages:Enabled" value="false"/>
@@ -23,7 +23,7 @@
     <add key="MaximumAllowedUploadFileSize" value="${max-file-upload-size}"/>
     <add key="DatabaseConnectionString" value="Server=${db-data-source};Database=${db-name};${db-auth-settings}"/>
     <add key="RecaptchaValidatorUrl" value="https://www.google.com/recaptcha/api/siteverify"/>
-    <add key="SitkaSupportEmail" value="projectfirma@sitkatech.com"/>
+    <add key="SitkaSupportEmail" value="projectneptune@sitkatech.com"/>
     <add key="DoNotReplyEmail" value="donotreply@${application-domain}"/>
     <add key="ApplicationDomain" value="${application-domain}"/>
     <add key="Ogr2OgrExecutable" value="C:\Program Files\GDAL\ogr2ogr.exe"/>
@@ -38,7 +38,7 @@
     <add key="KeystoneUserProfileUrl" value="${keystone-user-profile-endpoint}"/>
     <add key="KeystoneOrganizationEditUrl" value="${keystone-organization-edit-endpoint}"/>
     <add key="KeystoneWebServiceApplicationGuid" value="3F675C06-1803-4A18-A0D2-8E660D7402E9"/>
-    <add key="DefaultModalDialogButtonCssClasses" value="btn-firma,btn-xs"/>
+    <add key="DefaultModalDialogButtonCssClasses" value="btn-neptune,btn-xs"/>
   </appSettings>
   <system.net>
     <mailSettings>
@@ -126,7 +126,7 @@
   </microsoft.identityModel>
   <log4net>
     <appender name="FileAppender" type="log4net.Appender.RollingFileAppender">
-      <param name="File" value="C:\Sitka\ProjectFirma\Logs\WEB.log"/>
+      <param name="File" value="C:\Sitka\Neptune\Logs\WEB.log"/>
       <param name="AppendToFile" value="true"/>
       <rollingStyle value="Date"/>
       <datePattern value="yyyyMMdd"/>
@@ -144,7 +144,7 @@
     <appender name="SmtpAppender" type="LtInfo.Common.SmtpAppenderWithPathAndExceptionTypeInSubject, LtInfo.Common">
       <to value="AppAlerts-LT@sitkatech.com"/>
       <from value="Application Alerts LT Info &lt;AppAlerts-LT@sitkatech.com&gt;"/>
-      <subject value="ProjectFirma Alert: ${environment} application error"/>
+      <subject value="Neptune Alert: ${environment} application error"/>
       <smtpHost value="${smtp-server}"/>
       <bufferSize value="1"/>
       <threshold value="ERROR"/>
@@ -197,7 +197,7 @@
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral"/>
-        <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.0.0.0"/>
+        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="9.0.0.0"/>
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Web.Razor" publicKeyToken="31bf3856ad364e35" culture="neutral"/>
@@ -228,16 +228,16 @@
     </providers>
   </entityFramework>
   <connectionStrings>
-    <add name="DatabaseEntities" connectionString="metadata=res://ProjectFirma.Web/ProjectFirma.Web.DatabaseEntities.csdl|res://ProjectFirma.Web/ProjectFirma.Web.DatabaseEntities.ssdl|res://ProjectFirma.Web/ProjectFirma.Web.DatabaseEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};MultipleActiveResultSets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
-    <add name="ProjectFirmaDbContext" connectionString="data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};multipleactiveresultsets=True;application name=EntityFramework" providerName="System.Data.SqlClient"/>
+    <add name="DatabaseEntities" connectionString="metadata=res://Neptune.Web/Neptune.Web.DatabaseEntities.csdl|res://Neptune.Web/Neptune.Web.DatabaseEntities.ssdl|res://Neptune.Web/Neptune.Web.DatabaseEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};MultipleActiveResultSets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
+    <add name="NeptuneDbContext" connectionString="data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};multipleactiveresultsets=True;application name=EntityFramework" providerName="System.Data.SqlClient"/>
   </connectionStrings>
   <system.serviceModel>
     <!-- Services being PUBLISHED -->
     <!-- ======================== -->
     <serviceHostingEnvironment multipleSiteBindingsEnabled="true" aspNetCompatibilityEnabled="true" minFreeMemoryPercentageToActivateService="0"/>
     <services>
-      <service name="ProjectFirma.Web.Service.WebServices" behaviorConfiguration="WebServices.ServiceBehavior">
-        <endpoint address="basicEndpoint" binding="basicHttpBinding" contract="ProjectFirma.Web.Service.IWebServices" bindingConfiguration="BasicHttpBinding_IWebServices"/>
+      <service name="Neptune.Web.Service.WebServices" behaviorConfiguration="WebServices.ServiceBehavior">
+        <endpoint address="basicEndpoint" binding="basicHttpBinding" contract="Neptune.Web.Service.IWebServices" bindingConfiguration="BasicHttpBinding_IWebServices"/>
         <endpoint address="mex" binding="mexHttpBinding" contract="IMetadataExchange"/>
       </service>
     </services>

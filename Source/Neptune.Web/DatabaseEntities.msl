@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="NeptuneWebModelsStoreContainer" CdmEntityContainer="DatabaseEntities">
+    <EntitySetMapping Name="AuditLog">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.AuditLog">
+        <MappingFragment StoreEntitySet="AuditLog">
+          <ScalarProperty Name="AuditLogID" ColumnName="AuditLogID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="AuditLogDate" ColumnName="AuditLogDate" />
+          <ScalarProperty Name="AuditLogEventTypeID" ColumnName="AuditLogEventTypeID" />
+          <ScalarProperty Name="TableName" ColumnName="TableName" />
+          <ScalarProperty Name="RecordID" ColumnName="RecordID" />
+          <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+          <ScalarProperty Name="OriginalValue" ColumnName="OriginalValue" />
+          <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+          <ScalarProperty Name="AuditDescription" ColumnName="AuditDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="County">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.County">
+        <MappingFragment StoreEntitySet="County">
+          <ScalarProperty Name="CountyID" ColumnName="CountyID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="CountyName" ColumnName="CountyName" />
+          <ScalarProperty Name="StateProvinceID" ColumnName="StateProvinceID" />
+          <ScalarProperty Name="CountyFeature" ColumnName="CountyFeature" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FieldDefinitionData">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.FieldDefinitionData">
+        <MappingFragment StoreEntitySet="FieldDefinitionData">
+          <ScalarProperty Name="FieldDefinitionDataID" ColumnName="FieldDefinitionDataID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FieldDefinitionID" ColumnName="FieldDefinitionID" />
+          <ScalarProperty Name="FieldDefinitionDataValue" ColumnName="FieldDefinitionDataValue" />
+          <ScalarProperty Name="FieldDefinitionLabel" ColumnName="FieldDefinitionLabel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FieldDefinitionDataImage">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.FieldDefinitionDataImage">
+        <MappingFragment StoreEntitySet="FieldDefinitionDataImage">
+          <ScalarProperty Name="FieldDefinitionDataImageID" ColumnName="FieldDefinitionDataImageID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FieldDefinitionDataID" ColumnName="FieldDefinitionDataID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FileResource">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.FileResource">
+        <MappingFragment StoreEntitySet="FileResource">
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceMimeTypeID" ColumnName="FileResourceMimeTypeID" />
+          <ScalarProperty Name="OriginalBaseFilename" ColumnName="OriginalBaseFilename" />
+          <ScalarProperty Name="OriginalFileExtension" ColumnName="OriginalFileExtension" />
+          <ScalarProperty Name="FileResourceGUID" ColumnName="FileResourceGUID" />
+          <ScalarProperty Name="FileResourceData" ColumnName="FileResourceData" />
+          <ScalarProperty Name="CreatePersonID" ColumnName="CreatePersonID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NeptuneHomePageImage">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.NeptuneHomePageImage">
+        <MappingFragment StoreEntitySet="NeptuneHomePageImage">
+          <ScalarProperty Name="NeptuneHomePageImageID" ColumnName="NeptuneHomePageImageID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NeptunePage">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.NeptunePage">
+        <MappingFragment StoreEntitySet="NeptunePage">
+          <ScalarProperty Name="NeptunePageID" ColumnName="NeptunePageID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="NeptunePageTypeID" ColumnName="NeptunePageTypeID" />
+          <ScalarProperty Name="NeptunePageContent" ColumnName="NeptunePageContent" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NeptunePageImage">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.NeptunePageImage">
+        <MappingFragment StoreEntitySet="NeptunePageImage">
+          <ScalarProperty Name="NeptunePageImageID" ColumnName="NeptunePageImageID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="NeptunePageID" ColumnName="NeptunePageID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notification">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.Notification">
+        <MappingFragment StoreEntitySet="Notification">
+          <ScalarProperty Name="NotificationID" ColumnName="NotificationID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="NotificationTypeID" ColumnName="NotificationTypeID" />
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="NotificationDate" ColumnName="NotificationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Organization">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.Organization">
+        <MappingFragment StoreEntitySet="Organization">
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="OrganizationGuid" ColumnName="OrganizationGuid" />
+          <ScalarProperty Name="OrganizationName" ColumnName="OrganizationName" />
+          <ScalarProperty Name="OrganizationShortName" ColumnName="OrganizationShortName" />
+          <ScalarProperty Name="PrimaryContactPersonID" ColumnName="PrimaryContactPersonID" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="OrganizationUrl" ColumnName="OrganizationUrl" />
+          <ScalarProperty Name="LogoFileResourceID" ColumnName="LogoFileResourceID" />
+          <ScalarProperty Name="OrganizationTypeID" ColumnName="OrganizationTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganizationType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.OrganizationType">
+        <MappingFragment StoreEntitySet="OrganizationType">
+          <ScalarProperty Name="OrganizationTypeID" ColumnName="OrganizationTypeID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="OrganizationTypeName" ColumnName="OrganizationTypeName" />
+          <ScalarProperty Name="OrganizationTypeAbbreviation" ColumnName="OrganizationTypeAbbreviation" />
+          <ScalarProperty Name="LegendColor" ColumnName="LegendColor" />
+          <ScalarProperty Name="IsDefaultOrganizationType" ColumnName="IsDefaultOrganizationType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Person">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.Person">
+        <MappingFragment StoreEntitySet="Person">
+          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="PersonGuid" ColumnName="PersonGuid" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+          <ScalarProperty Name="LastActivityDate" ColumnName="LastActivityDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="ReceiveSupportEmails" ColumnName="ReceiveSupportEmails" />
+          <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StateProvince">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.StateProvince">
+        <MappingFragment StoreEntitySet="StateProvince">
+          <ScalarProperty Name="StateProvinceID" ColumnName="StateProvinceID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="StateProvinceName" ColumnName="StateProvinceName" />
+          <ScalarProperty Name="StateProvinceAbbreviation" ColumnName="StateProvinceAbbreviation" />
+          <ScalarProperty Name="StateProvinceFeature" ColumnName="StateProvinceFeature" />
+          <ScalarProperty Name="StateProvinceFeatureForAnalysis" ColumnName="StateProvinceFeatureForAnalysis" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupportRequestLog">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.SupportRequestLog">
+        <MappingFragment StoreEntitySet="SupportRequestLog">
+          <ScalarProperty Name="SupportRequestLogID" ColumnName="SupportRequestLogID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+          <ScalarProperty Name="RequestPersonName" ColumnName="RequestPersonName" />
+          <ScalarProperty Name="RequestPersonEmail" ColumnName="RequestPersonEmail" />
+          <ScalarProperty Name="RequestPersonID" ColumnName="RequestPersonID" />
+          <ScalarProperty Name="SupportRequestTypeID" ColumnName="SupportRequestTypeID" />
+          <ScalarProperty Name="RequestDescription" ColumnName="RequestDescription" />
+          <ScalarProperty Name="RequestPersonOrganization" ColumnName="RequestPersonOrganization" />
+          <ScalarProperty Name="RequestPersonPhone" ColumnName="RequestPersonPhone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TenantAttribute">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TenantAttribute">
+        <MappingFragment StoreEntitySet="TenantAttribute">
+          <ScalarProperty Name="TenantAttributeID" ColumnName="TenantAttributeID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="DefaultBoundingBox" ColumnName="DefaultBoundingBox" />
+          <ScalarProperty Name="MinimumYear" ColumnName="MinimumYear" />
+          <ScalarProperty Name="PrimaryContactPersonID" ColumnName="PrimaryContactPersonID" />
+          <ScalarProperty Name="TenantSquareLogoFileResourceID" ColumnName="TenantSquareLogoFileResourceID" />
+          <ScalarProperty Name="TenantBannerLogoFileResourceID" ColumnName="TenantBannerLogoFileResourceID" />
+          <ScalarProperty Name="TenantStyleSheetFileResourceID" ColumnName="TenantStyleSheetFileResourceID" />
+          <ScalarProperty Name="TenantDisplayName" ColumnName="TenantDisplayName" />
+          <ScalarProperty Name="ToolDisplayName" ColumnName="ToolDisplayName" />
+          <ScalarProperty Name="RecaptchaPublicKey" ColumnName="RecaptchaPublicKey" />
+          <ScalarProperty Name="RecaptchaPrivateKey" ColumnName="RecaptchaPrivateKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

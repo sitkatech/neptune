@@ -1,0 +1,106 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="EditBoundingBox.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using Neptune.Web.Views.Tenant
+@inherits EditBoundingBox
+
+@Html.ValidationSummary()
+
+<form method="POST" id="@ViewDataTyped.EditBoundingBoxFormID" action="@ViewDataTyped.EditBoundingBoxUrl">
+    @Html.HiddenFor(x => x.TenantID)
+    @Html.HiddenFor(x => x.North)
+    @Html.HiddenFor(x => x.South)
+    @Html.HiddenFor(x => x.East)
+    @Html.HiddenFor(x => x.West)
+</form>
+
+<div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 400px;"></div>
+
+<script type="text/javascript">
+    // <![CDATA[
+    jQuery(function()
+    {
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None)),
+            neptuneMap = new NeptuneMaps.Map(mapInitJson),
+            drawnItems = new L.FeatureGroup(),
+            drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems
+                },
+                draw: {
+                    // Rectangle only
+                    polygon: false,
+                    polyline: false,
+                    circle: false,
+                    marker: false
+                }
+            });
+        neptuneMap.map.addControl(drawControl);
+        var north = @Html.Raw(Model.North != null ? Model.North.ToString() :"null"),
+            south = @Html.Raw(Model.South != null ? Model.South.ToString() : "null"),
+            east = @Html.Raw(Model.East != null ? Model.East.ToString() : "null"),
+            west = @Html.Raw(Model.West != null ? Model.West.ToString() : "null");
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(north) &&
+            !Sitka.Methods.isUndefinedNullOrEmpty(south) &&
+            !Sitka.Methods.isUndefinedNullOrEmpty(east) &&
+            !Sitka.Methods.isUndefinedNullOrEmpty(west)) {
+            L.rectangle([[south, west], [north, east]]).addTo(drawnItems);
+        }
+        neptuneMap.map.addLayer(drawnItems);
+
+        function setBoundingBoxValues(north, south, east, west)
+        {
+            jQuery("#@Html.IdFor(m => m.North)").val(north);
+            jQuery("#@Html.IdFor(m => m.South)").val(south);
+            jQuery("#@Html.IdFor(m => m.East)").val(east);
+            jQuery("#@Html.IdFor(m => m.West)").val(west);
+        }
+
+        function setBoundingBox(layer) {
+            var bounds = layer.getBounds();
+            //var northEast = bounds.getNorthEast().wrap();
+            //var southWest = bounds.getSouthWest().wrap();
+            var northEast = bounds.getNorthEast();
+            var southWest = bounds.getSouthWest();
+            setBoundingBoxValues(northEast.lat, southWest.lat, northEast.lng, southWest.lng);
+        }
+
+        function removePreviousRegion()
+        {
+            drawnItems.clearLayers();
+            setBoundingBoxValues("", "", "", "");
+        }
+
+        neptuneMap.map.on("draw:drawstart", removePreviousRegion);
+        neptuneMap.map.on("draw:deleted", removePreviousRegion);
+
+        neptuneMap.map.on("draw:created",
+            function(event)
+            {
+                drawnItems.addLayer(event.layer);
+                setBoundingBox(event.layer);
+            });
+        neptuneMap.map.on("draw:edited",
+            function(event) { event.layers.eachLayer(function(layer) { setBoundingBox(layer); }); });
+    });
+        // ]]>
+</script>

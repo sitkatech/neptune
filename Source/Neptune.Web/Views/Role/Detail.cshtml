@@ -1,0 +1,114 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common
+@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.Role.Detail
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Basics
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-2 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinition.RoleName)</div>
+                    <div class="col-xs-10">@(ViewDataTyped.RoleName)</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 fieldLabel text-right">Description:</div>
+                    <div class="col-xs-10">@(ViewDataTyped.RoleDescription)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Approved Permissions
+            </div>
+            <table class="table table-striped" style="background-color: #d9d9f9;">
+                @foreach (var featurePermission in ViewDataTyped.ApprovedFeatures.OrderByDescending(x => x.HasPermission).ThenBy(x => x.FeatureName))
+                {
+                    <tr>
+                        <td>@featurePermission.FeatureName</td>
+                        <td style="text-align: center">
+                            @featurePermission.HasPermission.ToYesNo()
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Denied Permissions
+            </div>
+            <table class="table table-striped">
+                @if (ViewDataTyped.DeniedFeatures.Any())
+                {
+                    foreach (var featurePermission in ViewDataTyped.DeniedFeatures.OrderByDescending(x => x.HasPermission).ThenBy(x => x.FeatureName))
+                    {
+                        <tr>
+                            <td><span style="color: lightgray">@featurePermission.FeatureName</span></td>
+                            <td style="text-align: center">
+                                <span style="color: lightgray">@featurePermission.HasPermission.ToYesNo()</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <span class="alert">This role has access to all permissions.</span>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                People with this role:
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>

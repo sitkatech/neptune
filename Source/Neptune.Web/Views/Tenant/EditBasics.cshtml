@@ -1,0 +1,90 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="EditBasics.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using LtInfo.Common
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.Mvc
+@using Neptune.Web.Views.Tenant
+@inherits EditBasics
+
+@using (Html.BeginForm())
+{
+<div class="form-horizontal">
+    @Html.HiddenFor(m => m.TenantID)
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.TenantDisplayName)</div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.TenantDisplayName, new Dictionary<string, object> { { "class", "form-control" }, { "style", "width:auto;" } })
+            @Html.ValidationMessageFor(x => x.TenantDisplayName)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.ToolDisplayName)</div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.ToolDisplayName, new Dictionary<string, object> { { "class", "form-control" }, { "style", "width:auto;" } })
+            @Html.ValidationMessageFor(x => x.ToolDisplayName)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.PrimaryContactPersonID)</div>
+        <div class="col-md-8">
+            @Html.SearchableDropDownListFor(m => m.PrimaryContactPersonID, ViewDataTyped.TenantPeople)
+            @Html.ValidationMessageFor(x => x.PrimaryContactPersonID)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.MinimumYear)</div>
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.MinimumYear, new Dictionary<string, object> {{"type", "number"}, {"class", "form-control"}, {"style", "width:auto;"}})
+            @Html.ValidationMessageFor(m => m.MinimumYear)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.TenantStyleSheetFileResourceData)</div>
+        <div class="col-md-8">
+            @Html.EditorFor(x => x.TenantStyleSheetFileResourceData)
+            <span class="smallExplanationText">
+                Allowed Extensions: @Model.GetFileExtensions(x => x.TenantStyleSheetFileResourceData)
+            </span>
+            @Html.ValidationMessageFor(x => x.TenantStyleSheetFileResourceData)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.TenantSquareLogoFileResourceData)</div>
+        <div class="col-md-8">
+            @Html.EditorFor(x => x.TenantSquareLogoFileResourceData)
+            <span class="smallExplanationText">
+                Allowed Extensions: @Model.GetFileExtensions(x => x.TenantSquareLogoFileResourceData)
+            </span>
+            @Html.ValidationMessageFor(x => x.TenantSquareLogoFileResourceData)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-4 text-right">@Html.LabelFor(m => m.TenantBannerLogoFileResourceData)</div>
+        <div class="col-md-8">
+            @Html.EditorFor(x => x.TenantBannerLogoFileResourceData)
+            <span class="smallExplanationText">
+                Allowed Extensions: @Model.GetFileExtensions(x => x.TenantBannerLogoFileResourceData)
+            </span>
+            @Html.ValidationMessageFor(x => x.TenantBannerLogoFileResourceData)
+        </div>
+    </div>
+</div>
+}

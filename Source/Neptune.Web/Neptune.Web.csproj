@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\NuGetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\NuGetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\NuGetPackages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\NuGetPackages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,22 +7,25 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C9760C9C-10D4-4CC7-97FC-9C5A90F3D880}</ProjectGuid>
+    <ProjectGuid>{8EB2FDE5-7FBA-4257-919F-11921D2C9615}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Neptune.Web</RootNamespace>
     <AssemblyName>Neptune.Web</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>c13e0360</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,9 +35,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
@@ -45,38 +46,623 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+    <Compile Include="Models\Generated\AuditLog.Binding.cs" />
+    <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
+    <Compile Include="Models\Generated\AuditLogEventTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\AuditLogPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\County.Binding.cs" />
+    <Compile Include="Models\Generated\County.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\CountyPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\DatabaseEntities.Context.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinition.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionData.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionData.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionDataImage.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionDataImage.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionDataImagePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionDataPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\FieldDefinitionPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\FileResource.Binding.cs" />
+    <Compile Include="Models\Generated\FileResource.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FileResourceMimeType.Binding.cs" />
+    <Compile Include="Models\Generated\FileResourceMimeTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\FileResourcePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\GoogleChartType.Binding.cs" />
+    <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\MeasurementUnitType.Binding.cs" />
+    <Compile Include="Models\Generated\MeasurementUnitTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NeptuneHomePageImage.Binding.cs" />
+    <Compile Include="Models\Generated\NeptuneHomePageImage.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\NeptuneHomePageImagePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePage.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePage.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\NeptunePageImage.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePageImage.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\NeptunePageImagePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePagePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePageRenderType.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePageRenderTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePageType.Binding.cs" />
+    <Compile Include="Models\Generated\NeptunePageTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Notification.Binding.cs" />
+    <Compile Include="Models\Generated\Notification.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\NotificationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\NotificationType.Binding.cs" />
+    <Compile Include="Models\Generated\NotificationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Organization.Binding.cs" />
+    <Compile Include="Models\Generated\Organization.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OrganizationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\OrganizationType.Binding.cs" />
+    <Compile Include="Models\Generated\OrganizationType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OrganizationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Person.Binding.cs" />
+    <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\PersonPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Role.Binding.cs" />
+    <Compile Include="Models\Generated\RolePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StateProvince.Binding.cs" />
+    <Compile Include="Models\Generated\StateProvince.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\StateProvincePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\SupportRequestLog.Binding.cs" />
+    <Compile Include="Models\Generated\SupportRequestLog.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\SupportRequestLogPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\SupportRequestType.Binding.cs" />
+    <Compile Include="Models\Generated\SupportRequestTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Tenant.Binding.cs" />
+    <Compile Include="Models\Generated\TenantAttribute.Binding.cs" />
+    <Compile Include="Models\Generated\TenantAttribute.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TenantAttributePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TenantPrimaryKey.Binding.cs" />
+    <Compile Include="Common\RouteTableBuilder.cs" />
+    <Compile Include="Common\RouteTableBuilderTest.cs" />
+    <Compile Include="Common\SitkaController.cs" />
+    <Compile Include="Common\SitkaControllerObsoleteFunctions.cs" />
+    <Compile Include="Common\SitkaLinkBuilder.cs" />
+    <Compile Include="Common\SitkaRoute.cs" />
+    <Compile Include="Common\SitkaRouteTableEntry.cs" />
+    <Compile Include="Controllers\GoogleChartController.cs" />
+    <Compile Include="Models\HslColor.cs" />
+    <Compile Include="Models\OrganizationType.DatabaseContextExtensions.cs" />
+    <Compile Include="Security\LoggedInAndNotUnassignedRoleUnclassifiedFeature.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\Edit.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\EditViewData.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\EditViewModel.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\New.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\NewViewData.cs" />
+    <Compile Include="Views\NeptuneHomePageImage\NewViewModel.cs" />
+    <Compile Include="Views\NeptunePage\Edit.cs" />
+    <Compile Include="Views\NeptunePage\EditViewData.cs" />
+    <Compile Include="Views\NeptunePage\EditViewModel.cs" />
+    <Compile Include="Views\NeptunePage\Index.cs" />
+    <Compile Include="Views\NeptunePage\IndexViewData.cs" />
+    <Compile Include="Views\NeptunePage\NeptunePageDetails.cs" />
+    <Compile Include="Views\NeptunePage\NeptunePageDetailsViewData.cs" />
+    <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
+    <Compile Include="Views\Shared\GoogleChartAnnotations.cs" />
+    <Compile Include="Views\Shared\GoogleChartAxis.cs" />
+    <Compile Include="Views\Shared\GoogleChartAxisLabelFormat.cs" />
+    <Compile Include="Views\Shared\GoogleChartAxisType.cs" />
+    <Compile Include="Views\Shared\GoogleChartBackground.cs" />
+    <Compile Include="Views\Shared\GoogleChartColumn.cs" />
+    <Compile Include="Views\Shared\GoogleChartColumnDataType.cs" />
+    <Compile Include="Views\Shared\GoogleChartConfigurationArea.cs" />
+    <Compile Include="Views\Shared\GoogleChartDataSimple.cs" />
+    <Compile Include="Views\Shared\GoogleChartDomainAxis.cs" />
+    <Compile Include="Views\Shared\GoogleChartErrorBars.cs" />
+    <Compile Include="Views\Shared\GoogleChartFormatOptions.cs" />
+    <Compile Include="Views\Shared\GoogleChartGridlinesOptions.cs" />
+    <Compile Include="Views\Shared\GoogleChartLegend.cs" />
+    <Compile Include="Views\Shared\GoogleChartLegendPosition.cs" />
+    <Compile Include="Views\Shared\GoogleChartPopupViewModel.cs" />
+    <Compile Include="Views\Shared\GoogleChartRowC.cs" />
+    <Compile Include="Views\Shared\GoogleChartRowV.cs" />
+    <Compile Include="Views\Shared\GoogleChartSeries.cs" />
+    <Compile Include="Views\Shared\GoogleChartTextStyle.cs" />
+    <Compile Include="Views\Shared\GoogleChartTooltip.cs" />
+    <Compile Include="Views\Shared\GoogleChartViewWindow.cs" />
+    <Compile Include="Views\Shared\GooglePieChartConfiguration.cs" />
+    <Compile Include="Views\Shared\GooglePieChartSlice.cs" />
+    <Compile Include="Views\Shared\ViewGoogleChart.cs" />
+    <Compile Include="Views\Shared\ViewGoogleChartViewData.cs" />
+    <Compile Include="Models\LayerGeoJsonType.cs" />
+    <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
+    <Compile Include="Controllers\TenantController.cs" />
+    <Content Include="Content\Bootstrap\neptune\base.theme.css">
+      <DependentUpon>base.theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\base.theme.css" />
+    <Content Include="Content\Bootstrap\neptune\base.theme.min.css">
+      <DependentUpon>base.theme.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\base.theme.min.css" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css">
+      <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css.map">
+      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.min.css">
+      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css">
+      <DependentUpon>bootstrap.neptune.base.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map">
+      <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css">
+      <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css">
+      <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map">
+      <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css">
+      <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\clackamas.css">
+      <DependentUpon>clackamas.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\clackamas.min.css">
+      <DependentUpon>clackamas.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.min.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.min.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.min.css" />
+    <Content Include="Content\Bootstrap\neptune\rcd.theme.css">
+      <DependentUpon>rcd.theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\rcd.theme.min.css">
+      <DependentUpon>rcd.theme.css</DependentUpon>
+    </Content>
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-114x114.png" />
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-120x120.png" />
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-57x57.png" />
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-60x60.png" />
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-72x72.png" />
+    <Content Include="Content\img\ClackamasPartnership\apple-icon-76x76.png" />
+    <Content Include="Content\img\ClackamasPartnership\favicon-16x16.png" />
+    <Content Include="Content\img\ClackamasPartnership\favicon-32x32.png" />
+    <Content Include="Content\img\ClackamasPartnership\favicon-96x96.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-144x144.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-192x192.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-256x256.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-36x36.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-384x384.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-48x48.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-72x72.png" />
+    <Content Include="Content\img\RCDProjectTracker\android-chrome-96x96.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-114x114.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-120x120.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-144x144.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-152x152.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-180x180.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-57x57.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-60x60.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-72x72.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-76x76.png" />
+    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon.png" />
+    <Content Include="Content\img\RCDProjectTracker\browserconfig.xml" />
+    <Content Include="Content\img\RCDProjectTracker\favicon-16x16.png" />
+    <Content Include="Content\img\RCDProjectTracker\favicon-32x32.png" />
+    <Content Include="Content\img\RCDProjectTracker\favicon.ico" />
+    <Content Include="Content\img\RCDProjectTracker\mstile-144x144.png" />
+    <Content Include="Content\img\RCDProjectTracker\mstile-150x150.png" />
+    <Content Include="Content\img\RCDProjectTracker\mstile-310x150.png" />
+    <Content Include="Content\img\RCDProjectTracker\mstile-310x310.png" />
+    <Content Include="Content\img\RCDProjectTracker\mstile-70x70.png" />
+    <Content Include="Content\img\RCDProjectTracker\safari-pinned-tab.svg" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-57x57.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-60x60.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-72x72.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-76x76.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\favicon-16x16.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\favicon-32x32.png" />
+    <Content Include="Content\img\SitkaTechnologyGroup\favicon-96x96.png" />
+    <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.css" />
+    <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.js" />
+    <Content Include="Content\qtip\jquery.qtip.validation.min.js">
+      <DependentUpon>jquery.qtip.validation.js</DependentUpon>
+    </Content>
+    <Content Include="Content\spinjs\spin.min.js" />
+    <Content Include="Content\typeahead\typeahead.js" />
+    <Content Include="Content\typeahead\typeahead.min.js">
+      <DependentUpon>typeahead.js</DependentUpon>
+    </Content>
+    <Content Include="robots-local.txt" />
+    <Content Include="robots-prod.txt" />
+    <Content Include="robots-qa.txt" />
+    <Content Include="robots.txt" />
+    <Content Include="ScriptsCustom\bootstrap-ckeditor-fix.min.js.map" />
+    <Content Include="ScriptsCustom\BootstrapModalAlert.min.js.map" />
+    <Content Include="ScriptsCustom\CkEditorReady.min.js.map" />
+    <Content Include="ScriptsCustom\DatePickerReady.min.js.map" />
+    <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
+    <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js.map" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
+      <DependentUpon>NeptuneMaps.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ProjectLocationSummary.min.js">
+      <DependentUpon>NeptuneMaps.ProjectLocationSummary.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.SelectableMap.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.SelectableMap.min.js">
+      <DependentUpon>NeptuneMaps.SelectableMap.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\ModalDialogForm.min.js.map" />
+    <Content Include="ScriptsCustom\qtippopuphelper.min.js.map" />
+    <Content Include="ScriptsCustom\sitka.grid.min.js.map" />
+    <Content Include="ScriptsCustom\sitka.min.js.map" />
+    <Content Include="ScriptsCustom\sitkaAjax.min.js.map" />
+    <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
+    <Content Include="ScriptsCustom\unsavedChanges.min.js.map" />
+    <Content Include="Content\Bootstrap\neptune\base.theme.less" />
+    <Content Include="Content\img\RCDProjectTracker\manifest.json" />
+    <Content Include="Content\Bootstrap\neptune\rcd.theme.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Content\Bootstrap\neptune\clackamas.less" />
+    <None Include="bundleconfig.json" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Content\Bootstrap\neptune\base.theme.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css.map" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.less" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css.map" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.less" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.css.map" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.less" />
+    <Content Include="Content\Bootstrap\neptune\typeahead.less" />
+    <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
+    <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
+    <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
+    <Content Include="ScriptsCustom\bootstrap-ckeditor-fix.js" />
+    <Content Include="ScriptsCustom\BootstrapModalAlert.js" />
+    <Content Include="ScriptsCustom\BootstrapModalAlert.min.js" />
+    <Content Include="ScriptsCustom\CkEditorReady.js" />
+    <Content Include="ScriptsCustom\CkEditorReady.min.js" />
+    <Content Include="ScriptsCustom\DatePickerReady.js" />
+    <Content Include="ScriptsCustom\DatePickerReady.min.js" />
+    <Content Include="ScriptsCustom\FancyboxReady.js" />
+    <Content Include="ScriptsCustom\FancyboxReady.min.js" />
+    <Content Include="ScriptsCustom\GoogleAnalytics.js" />
+    <Content Include="ScriptsCustom\GoogleAnalytics.min.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ProjectLocationSummary.js" />
+    <Content Include="ScriptsCustom\ModalDialogForm.js" />
+    <Content Include="ScriptsCustom\ModalDialogForm.min.js">
+      <DependentUpon>ModalDialogForm.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\qtippopuphelper.js" />
+    <Content Include="ScriptsCustom\qtippopuphelper.min.js" />
+    <Content Include="ScriptsCustom\sitka.grid.js" />
+    <Content Include="ScriptsCustom\sitka.grid.min.js" />
+    <Content Include="ScriptsCustom\sitka.js" />
+    <Content Include="ScriptsCustom\sitka.min.js" />
+    <Content Include="ScriptsCustom\sitkaAjax.js" />
+    <Content Include="ScriptsCustom\sitkaAjax.min.js" />
+    <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.js" />
+    <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js" />
+    <Content Include="ScriptsCustom\unsavedChanges.js" />
+    <Content Include="ScriptsCustom\unsavedChanges.min.js" />
+    <Content Include="Service References\KeystoneDataService\Neptune.Web.KeystoneDataService.Organization.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\KeystoneDataService\Neptune.Web.KeystoneDataService.UserProfile.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\KeystoneDataService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\KeystoneDataService\KeystoneData.wsdl" />
+    <None Include="Service References\KeystoneDataService\KeystoneData.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\KeystoneDataService\KeystoneData1.wsdl" />
+    <None Include="Service References\KeystoneDataService\KeystoneData1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\KeystoneDataService\KeystoneData2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateTagUrlHtmlTest.approved.txt" />
+    <Content Include="Views\Organization\PullOrganizationFromKeystone.cshtml" />
+    <Content Include="Views\Home\ManageHomePageImages.cshtml" />
+    <Content Include="Views\NeptuneHomePageImage\Edit.cshtml" />
+    <Content Include="Views\NeptuneHomePageImage\New.cshtml" />
+    <Content Include="Views\NeptunePage\Edit.cshtml" />
+    <Content Include="Views\NeptunePage\Index.cshtml" />
+    <Content Include="Views\NeptunePage\NeptunePageDetails.cshtml" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\OrganizationType.cs" />
+    <Compile Include="Models\Tenant.cs" />
+    <Compile Include="Security\SitkaAdminFeature.cs" />
+    <Compile Include="Service References\KeystoneDataService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="UnitTestCommon\TestOrganizationType.cs" />
+    <Compile Include="Views\Home\ManageHomePageImagesViewData.cs" />
+    <Compile Include="Views\Home\ManageHomePageImages.cs" />
+    <Compile Include="Models\NeptuneHomePageImage.cs" />
+    <Compile Include="Views\Organization\PullOrganizationFromKeystone.cs" />
+    <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewData.cs" />
+    <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewModel.cs" />
+    <Compile Include="Common\MultiTenantHelpers.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Security\NeptuneFeature.cs" />
+    <Compile Include="Security\NeptuneFeatureWithContext.cs" />
+    <Compile Include="Security\FieldDefinitionViewFeature.cs" />
+    <Compile Include="Views\Shared\ViewPageContent.cs" />
+    <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
+    <Compile Include="Views\Tenant\Detail.cs" />
+    <Compile Include="Views\Home\Index.cs" />
+    <Compile Include="Views\Home\IndexViewData.cs" />
+    <Compile Include="Models\LayerGeoJson.cs" />
+    <Compile Include="Models\LayerInitialVisibility.cs" />
+    <Compile Include="Models\OrganizationTypeSimple.cs" />
+    <Compile Include="Models\SupportRequestTypeSimple.cs" />
+    <Compile Include="Common\NeptuneEnvironment.cs" />
+    <Compile Include="Common\WebServiceDocumentationAttribute.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\RelyingPartyAccountController.cs" />
+    <Compile Include="Controllers\RelyingPartyAuthorizeAttribute.cs" />
+    <Compile Include="Models\Organization.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\SupportRequestType.cs" />
+    <Compile Include="Models\SupportRequestLogTest.cs" />
+    <Compile Include="Controllers\PersonOrganizationController.cs" />
+    <Compile Include="Common\NeptuneLogger.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Models\AnonymousRole.cs" />
+    <Compile Include="Models\FeaturePermission.cs" />
+    <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Models\IRoleExtensions.cs" />
+    <Compile Include="Models\Person.DatabaseContextExtensions.cs" />
+    <Compile Include="Security\NeptunePageViewListFeature.cs" />
+    <Compile Include="Security\FieldDefinitionViewListFeature.cs" />
+    <Compile Include="Security\NeptuneBaseFeatureHelpers.cs" />
+    <Compile Include="Security\LoggedInUnclassifiedFeature.cs" />
+    <Compile Include="Security\SecurityFeatureDescription.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Common\NeptuneValidationMessages.cs" />
+    <Compile Include="Controllers\FieldDefinitionController.cs" />
+    <Compile Include="Views\Shared\GoogleChartConfigurationViewModel.cs" />
+    <Compile Include="Models\IRole.cs" />
+    <Compile Include="Security\NeptuneAdminFeature.cs" />
+    <Compile Include="Security\NeptunePageManageFeature.cs" />
+    <Compile Include="Security\FieldDefinitionManageFeature.cs" />
+    <Compile Include="Security\NeptuneBaseFeature.cs" />
+    <Compile Include="Security\Shared\AnonymousUnclassifiedFeature.cs" />
+    <Compile Include="Security\UserEditFeature.cs" />
+    <Compile Include="Controllers\NeptuneBaseControllerTest.cs" />
+    <Compile Include="Controllers\NeptunePageController.cs" />
+    <Compile Include="Controllers\FileResourceController.cs" />
+    <Compile Include="Controllers\NeptuneBaseController.cs" />
+    <Compile Include="Models\ReportedValueForDisplay.cs" />
+    <Compile Include="Common\FieldDefinitionDisplayAttribute.cs" />
+    <Compile Include="Models\EntityNote.cs" />
+    <Compile Include="Models\ExternalLink.cs" />
+    <Compile Include="Models\BoundingBoxTest.cs" />
+    <Compile Include="Models\IEntityExternalLink.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Views\Shared\CalendarYearString.cs" />
+    <Compile Include="Views\Shared\DisplayPageContent.cs" />
+    <Compile Include="Views\Shared\DisplayPageContentViewData.cs" />
+    <Compile Include="Views\NeptuneViewData.cs" />
+    <Compile Include="Views\Shared\HtmlDiffContainer.cs" />
+    <Compile Include="Views\Shared\HtmlDiffSummary.cs" />
+    <Compile Include="Views\Shared\HtmlDiffSummaryViewData.cs" />
+    <Compile Include="Views\Shared\NavAndHeaderLayout.cs" />
+    <Compile Include="Views\Tenant\DetailViewData.cs" />
+    <Compile Include="Views\Tenant\EditBasics.cs" />
+    <Compile Include="Views\Tenant\EditBoundingBox.cs" />
+    <Compile Include="Views\Tenant\EditBoundingBoxViewData.cs" />
+    <Compile Include="Views\Tenant\EditBoundingBoxViewModel.cs" />
+    <Compile Include="Views\Tenant\EditBasicsViewData.cs" />
+    <Compile Include="Views\Tenant\EditBasicsViewModel.cs" />
+    <Compile Include="Views\Tenant\DetailGridSpec.cs" />
+    <Compile Include="Views\User\PullUserFromKeystone.cs" />
+    <Compile Include="Views\User\PullUserFromKeystoneViewData.cs" />
+    <Compile Include="Views\User\PullUserFromKeystoneViewModel.cs" />
+    <Compile Include="Views\Shared\SupportForm.cs" />
+    <Compile Include="Views\Shared\SupportFormViewData.cs" />
+    <Compile Include="Views\Shared\SupportFormViewModel.cs" />
+    <Compile Include="Views\NeptuneDhtmlxGridHtmlHelpers.cs" />
+    <Compile Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.cs" />
+    <Compile Include="Views\NeptuneUserControlViewData.cs" />
+    <Compile Include="Views\LtInfoMenuItem.cs" />
+    <Compile Include="Views\LtInfoMenuItemTest.cs" />
+    <Compile Include="Views\Role\Index.cs" />
+    <Compile Include="Views\Role\PersonWithRoleGridSpec.cs" />
+    <Compile Include="Views\Role\IndexGridSpec.cs" />
+    <Compile Include="Views\Role\Detail.cs" />
+    <Compile Include="Views\Role\IndexViewData.cs" />
+    <Compile Include="Views\Role\DetailViewData.cs" />
+    <Compile Include="Views\Shared\AuditLogsGridSpec.cs" />
+    <Compile Include="Views\Shared\FieldDefinitionDetails.cs" />
+    <Compile Include="Views\Shared\FieldDefinitionDetailsViewData.cs" />
+    <Compile Include="Views\Shared\NeptuneLateLoadingIncludes.cs" />
+    <Compile Include="Views\Shared\NeptuneIncludes.cs" />
+    <Compile Include="Views\Shared\GoogleChartJson.cs" />
+    <Compile Include="Views\Shared\GoogleChartConfiguration.cs" />
+    <Compile Include="Views\Shared\GoogleChartDataTable.cs" />
+    <Compile Include="Views\Shared\GoogleChartPopup.cs" />
+    <Compile Include="Views\Shared\NotFound.cs" />
+    <Compile Include="Views\Shared\GoogleChartPopupViewData.cs" />
+    <Compile Include="Views\Shared\NotFoundViewData.cs" />
+    <Compile Include="Views\Shared\SiteLayout.cs" />
+    <Compile Include="Views\Shared\Error.cs" />
+    <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\User\PullUserFromKeystone.cshtml" />
+    <Content Include="Views\Tenant\Detail.cshtml" />
+    <Content Include="Views\Tenant\EditBasics.cshtml" />
+    <Content Include="Views\Tenant\EditBoundingBox.cshtml" />
+    <Content Include="Views\Shared\ViewPageContent.cshtml" />
+    <Content Include="Views\Shared\ViewGoogleChart.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MoneyWholeNumber.cshtml" />
+    <Compile Include="Views\GoogleChart\DownloadChartDataViewModel.cs" />
+    <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ApprovalTests, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\ApprovalTests.3.0.11\lib\net40\ApprovalTests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ApprovalUtilities, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\ApprovalUtilities.3.0.11\lib\net45\ApprovalUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ApprovalUtilities.Net45, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\ApprovalUtilities.3.0.11\lib\net45\ApprovalUtilities.Net45.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.76.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\ClosedXML.0.76.0\lib\net40-client\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DHTMLX.Export.Excel">
+      <HintPath>..\Libraries\DhtmlxGrid\DHTMLX.Export.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\NuGetPackages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\FluentValidation.5.6.2.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\FluentValidation.MVC5.5.6.2.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GeoJSON.Net, Version=0.1.47.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\GeoJSON.Net.0.1.47\lib\portable-net40+sl5+wp80+win8+wpa81\GeoJSON.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlDiff, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\htmldiff.net.1.3\lib\net35\HtmlDiff.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\NuGetPackages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\NuGetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\NuGetPackages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Web.Mvc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.Mvc.Futures.5.0.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\NuGetPackages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjectApproval, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\ObjectApproval.1.4.0\Lib\NET40\ObjectApproval.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenExcel">
+      <HintPath>..\Libraries\DhtmlxGrid\OpenExcel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Web.Infrastructure">
       <Private>True</Private>
       <HintPath>..\NuGetPackages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -84,124 +670,1484 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\NuGetPackages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="WebGrease">
       <HintPath>..\NuGetPackages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.ApplicationInsights">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+    <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\NuGetPackages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.AI.Agent.Intercept">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AI.Web">
-      <HintPath>..\NuGetPackages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    <Reference Include="XmlDiffPatch.View, Version=1.0.1493.40755, Culture=neutral">
+      <HintPath>..\NuGetPackages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.View.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Common\AuditLog\IDescribableEntity.cs" />
+    <Compile Include="Common\NeptuneDateUtilities.cs" />
+    <Compile Include="Common\NeptuneMathUtilities.cs" />
+    <Compile Include="Common\NeptuneHelpers.cs" />
+    <Compile Include="Common\SecuredActionUrlHelper.cs" />
+    <Compile Include="NeptuneSetupFixture.cs" />
+    <Compile Include="Common\CkEditorExtension.cs" />
+    <Compile Include="Common\CkEditorExtensionTest.cs" />
+    <Compile Include="Common\FileResourceResult.cs" />
+    <Compile Include="Common\PdfResult.cs" />
+    <Compile Include="Models\CalendarYearMonetaryAmount.cs" />
+    <Compile Include="Models\FancyTreeNode.cs" />
+    <Compile Include="Models\FieldDefinitionData.cs" />
+    <Compile Include="Models\OrganizationModelExtensions.cs" />
+    <Compile Include="Models\ICalendarYearMonetaryAmount.cs" />
+    <Compile Include="Models\AuditLog.cs" />
+    <Compile Include="Models\AuditLogEventType.cs" />
+    <Compile Include="Models\CalendarYearReportedValue.cs" />
+    <Compile Include="Models\NeptunePage.cs" />
+    <Compile Include="Models\NeptunePageType.cs" />
+    <Compile Include="Models\County.cs" />
+    <Compile Include="Models\FieldDefinition.cs" />
+    <Compile Include="Models\FileResourceOrientation.cs" />
+    <Compile Include="Models\FieldDefinitionData.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\DatabaseEntities.cs" />
+    <Compile Include="Models\IAuditableEntity.cs" />
+    <Compile Include="Models\IEntityNote.cs" />
+    <Compile Include="Models\BoundingBox.cs" />
+    <Compile Include="Models\BoundingBoxJson.cs" />
+    <Compile Include="Models\CheckPrimaryNaturalAndForeignKeysTest.cs" />
+    <Compile Include="Models\FileResourceMimeType.cs" />
+    <Compile Include="Models\FileResourceTest.cs" />
+    <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\OrganizationSimple.cs" />
+    <Compile Include="Models\MeasurementUnitType.cs" />
+    <Compile Include="Models\PersonModelExtensions.cs" />
+    <Compile Include="Models\PersonSimple.cs" />
+    <Compile Include="Models\Point.cs" />
+    <Compile Include="Common\NeptuneDateUtilitiesTest.cs" />
+    <Compile Include="Models\SupportRequestLog.cs" />
+    <Compile Include="Security\NeptuneFeatureTest.cs" />
+    <Compile Include="Security\INeptuneBaseFeatureWithContext.cs" />
+    <Compile Include="Security\OrganizationManageFeature.cs" />
+    <Compile Include="Security\OrganizationViewFeature.cs" />
+    <Compile Include="Security\PermissionCheckResult.cs" />
+    <Compile Include="Security\UserViewFeature.cs" />
+    <Compile Include="Models\AuditLogTest.cs" />
+    <Compile Include="UnitTestCommon\TestOrganization.cs" />
+    <Compile Include="UnitTestCommon\TestImageFile.cs" />
+    <Compile Include="UnitTestCommon\DatabaseDirectAccessTestFixtureBase.cs" />
+    <Compile Include="Models\FileResource.cs" />
+    <Compile Include="Common\HttpRequestStorage.cs" />
+    <Compile Include="Common\NeptuneWebConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\NeptuneTestWithContext.cs" />
+    <Compile Include="Models\IFileResourcePhoto.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Security\NeptuneFeatureWithContextImpl.cs" />
+    <Compile Include="UnitTestCommon\AssertCustom.cs" />
+    <Compile Include="UnitTestCommon\TestFileResource.cs" />
+    <Compile Include="UnitTestCommon\TestFramework.cs" />
+    <Compile Include="UnitTestCommon\TestPerson.cs" />
+    <Compile Include="Views\Shared\DhtmlxGridIncludes.cs" />
+    <Compile Include="Views\Shared\TextControls\EntityExternalLinks.cs" />
+    <Compile Include="Views\Shared\TextControls\EntityExternalLinksViewData.cs" />
+    <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
+    <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
+    <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha.png" />
+    <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\hue.png" />
+    <Content Include="Content\bootstrap-colorpicker\img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Content\bootstrap-colorpicker\js\bootstrap-colorpicker.js" />
+    <Content Include="Content\bootstrap-colorpicker\js\bootstrap-colorpicker.min.js" />
+    <Content Include="Content\bootstrap-toc\bootstrap-toc.min.js">
+      <DependentUpon>bootstrap-toc.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap-theme.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap-theme.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\js\bootstrap.js" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\js\bootstrap.min.js" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\js\npm.js" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\bootstrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\media.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\alerts.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\background-variant.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\border-radius.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\buttons.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\center-block.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\clearfix.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\forms.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\gradients.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid-framework.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\hide-text.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\image.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\labels.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\list-group.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-divider.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-vertical-align.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\opacity.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\pagination.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\panels.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\progress-bar.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-filter.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-text.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\resize.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\responsive-visibility.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\size.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\tab-focus.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\table-row.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-emphasis.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-overflow.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\vendor-prefixes.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\normalize.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\print.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\responsive-embed.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\theme.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\variables.css" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css">
+      <DependentUpon>glyphicons-filetypes.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.min.css">
+      <DependentUpon>glyphicons-filetypes.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css">
+      <DependentUpon>glyphicons-regular.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.min.css">
+      <DependentUpon>glyphicons-regular.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.css">
+      <DependentUpon>glyphicons-social.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.min.css">
+      <DependentUpon>glyphicons-social.css</DependentUpon>
+    </Content>
+    <Content Include="Content\css\jquery.ui.neptune.min.css">
+      <DependentUpon>jquery.ui.neptune.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-toc\bootstrap-toc.js" />
+    <Content Include="Content\img\Neptune_Logo_2016_FNL.width-600.png" />
+    <Content Include="Content\img\Neptune_Logo_Square.png" />
+    <Content Include="Content\qtip\jquery.qtip.neptune.min.css">
+      <DependentUpon>jquery.qtip.neptune.css</DependentUpon>
+    </Content>
+    <Content Include="Security\NeptuneFeatureTest.AdministratorsCanAccessAllFeaturesAndUnassignedCantAccessAnyFeatures.approved.txt" />
+    <Content Include="Security\NeptuneFeatureTest.SitkaAdministratorsCanAccessAllFeaturesAndUnassignedCantAccessAnyFeatures.approved.txt" />
+    <Content Include="Content\img\built_by_ei.png" />
+    <Content Include="Content\img\built_by_sitka.png" />
+    <Content Include="Content\img\funding_org_epa.png" />
+    <Content Include="Content\img\funding_org_sgc.png" />
+    <Content Include="Content\img\funding_org_trpa.png" />
+    <Content Include="Content\img\funding_org_usfs.png" />
+    <Content Include="Content\leaflet\leaflet.fullscreen\fullscreen%402x.png" />
+    <Content Include="Content\leaflet\leaflet.fullscreen\fullscreen.png" />
+    <Content Include="Content\leaflet\leaflet.fullscreen\leaflet.fullscreen.css" />
+    <Content Include="Content\leaflet\leaflet.fullscreen\Leaflet.fullscreen.js" />
+    <Content Include="Content\leaflet\leaflet.fullscreen\Leaflet.fullscreen.min.js" />
+    <Content Include="Content\leaflet\leaflet.legend\leaflet-legend.css" />
+    <Content Include="Content\leaflet\leaflet.legend\leaflet-legend.js" />
+    <Content Include="Content\leaflet\leaflet.legend\leaflet-legend.min.css">
+      <DependentUpon>leaflet-legend.css</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.legend\leaflet-legend.min.js">
+      <DependentUpon>leaflet-legend.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.pip\leaflet-pip.min.js">
+      <DependentUpon>leaflet-pip.js</DependentUpon>
+    </Content>
+    <Content Include="Content\css\google-chart-config-overrides.css" />
+    <Content Include="Content\css\dhtmlxgrid_ltinfo_skin.min.css">
+      <DependentUpon>dhtmlxgrid_ltinfo_skin.css</DependentUpon>
+    </Content>
+    <Content Include="Content\css\jquery.ui.neptune.css" />
+    <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\qtip\jquery.qtip.neptune.css" />
+    <Compile Include="Views\FieldDefinition\Edit.cs" />
+    <Compile Include="Views\FieldDefinition\EditViewData.cs" />
+    <Compile Include="Views\FieldDefinition\EditViewModel.cs" />
+    <Compile Include="Views\FieldDefinition\FieldDefinitionGridSpec.cs" />
+    <Compile Include="Views\FieldDefinition\Index.cs" />
+    <Compile Include="Views\FieldDefinition\IndexViewData.cs" />
+    <Compile Include="Views\Shared\SitkaRecaptcha.cs" />
+    <Compile Include="Views\Shared\SitkaRecaptchaViewData.cs" />
+    <Compile Include="Models\MapInitJson.cs" />
+    <Compile Include="Views\Shared\TextControls\EntityNotes.cs" />
+    <Compile Include="Views\Shared\TextControls\EntityNotesViewData.cs" />
+    <Compile Include="Views\PersonOrganization\EditPersonOrganizations.cs" />
+    <Compile Include="Views\PersonOrganization\EditPersonOrganizationsViewData.cs" />
+    <Compile Include="Views\PersonOrganization\EditPersonOrganizationsViewModel.cs" />
+    <Compile Include="Views\Organization\EditViewModelValidator.cs" />
+    <Compile Include="Views\Organization\Detail.cs" />
+    <Compile Include="Views\Organization\DetailViewData.cs" />
+    <Compile Include="Views\Organization\EditViewModelTest.cs" />
+    <Compile Include="Views\User\EditRoles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\EditRolesViewData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\EditRolesViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\Index.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\IndexGridSpec.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\IndexViewData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\Detail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\DetailViewData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\User\UserNotificationGridSpec.cs" />
+    <Compile Include="Views\Organization\Edit.cs" />
+    <Compile Include="Views\Organization\EditViewData.cs" />
+    <Compile Include="Views\Organization\EditViewModel.cs" />
+    <Compile Include="Views\Organization\IndexGridSpec.cs" />
+    <Compile Include="Views\Organization\Index.cs" />
+    <Compile Include="Views\Organization\IndexViewData.cs" />
+    <Compile Include="Views\Shared\MapJavascriptIncludes.cs" />
+    <Compile Include="Views\Shared\ImageGallery.cs" />
+    <Compile Include="Views\Shared\ImageGalleryViewData.cs" />
+    <Compile Include="Views\Shared\ConfirmDialogFormViewModel.cs" />
+    <Compile Include="Views\Shared\ConfirmDialogForm.cs" />
+    <Compile Include="Views\Shared\ConfirmDialogFormViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="WebServices.svc" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="ApplicationInsights.config">
+    <Content Include="..\NuGetPackages\PhantomJS.2.0.0\tools\phantomjs\phantomjs.exe">
+      <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateCkEditorInlineDivTest.approved.txt" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateCkEditorInlineForTest.approved.txt" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateJavascriptWithAllToolbarsTest.approved.txt" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateJavascriptWithMinimalToolbarTest.approved.txt" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateJavascriptWithMinimalWithImagesToolbarTest.approved.txt" />
+    <Content Include="Common\CkEditorExtensionTest.GenerateJavascriptWithNoToolbarTest.approved.txt" />
+    <Content Include="Content\angular\angular-animate.js" />
+    <Content Include="Content\angular\angular-animate.min.js" />
+    <Content Include="Content\angular\angular-aria.js" />
+    <Content Include="Content\angular\angular-aria.min.js" />
+    <Content Include="Content\angular\angular-cookies.js" />
+    <Content Include="Content\angular\angular-cookies.min.js" />
+    <Content Include="Content\angular\angular-csp.css" />
+    <Content Include="Content\angular\angular-loader.js" />
+    <Content Include="Content\angular\angular-loader.min.js" />
+    <Content Include="Content\angular\angular-messages.js" />
+    <Content Include="Content\angular\angular-messages.min.js" />
+    <Content Include="Content\angular\angular-mocks.js" />
+    <Content Include="Content\angular\angular-resource.js" />
+    <Content Include="Content\angular\angular-resource.min.js" />
+    <Content Include="Content\angular\angular-route.js" />
+    <Content Include="Content\angular\angular-route.min.js" />
+    <Content Include="Content\angular\angular-sanitize.js" />
+    <Content Include="Content\angular\angular-sanitize.min.js" />
+    <Content Include="Content\angular\angular-scenario.js" />
+    <Content Include="Content\angular\angular-touch.js" />
+    <Content Include="Content\angular\angular-touch.min.js" />
+    <Content Include="Content\angular\angular.js" />
+    <Content Include="Content\angular\angular.min.js" />
+    <Content Include="Content\angular\directives\angular-nvd3.js" />
+    <Content Include="Content\angular\directives\angular-nvd3.min.js" />
+    <Content Include="Content\angular\directives\serverValidate.js" />
+    <Content Include="Content\angular\NeptuneApp.js" />
+    <Content Include="Content\angular\directives\ui-bootstrap-tpls-0.12.1.min.js" />
+    <Content Include="Content\angular\ng-currency.js" />
+    <Content Include="Content\bootstrap-file-input\css\fileinput.css" />
+    <Content Include="Content\bootstrap-file-input\css\fileinput.min.css" />
+    <Content Include="Content\bootstrap-file-input\img\loading-sm.gif" />
+    <Content Include="Content\bootstrap-file-input\img\loading.gif" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput.min.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_ar.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_bg.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_ca.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_cr.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_cz.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_da.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_de.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_el.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_es.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_fa.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_fr.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_hu.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_it.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_ja.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_LANG.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_nl.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_pl.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_pt-BR.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_pt.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_ro.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_ru.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_sk.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_th.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_tr.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_uk.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_zh-TW.js" />
+    <Content Include="Content\bootstrap-file-input\js\fileinput_locale_zh.js" />
+    <Content Include="Content\bootstrap-file-input\js\plugins\canvas-to-blob.js" />
+    <Content Include="Content\bootstrap-file-input\js\plugins\canvas-to-blob.min.js" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.css" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.js" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.min.css" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.min.js" />
+    <Content Include="Content\bootstrap-tags\bootstrap-tags.css" />
+    <Content Include="Content\bootstrap-tags\bootstrap-tags.js" />
+    <Content Include="Content\bootstrap-tags\bootstrap-tags.min.css">
+      <DependentUpon>bootstrap-tags.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tags\bootstrap-tags.min.js">
+      <DependentUpon>bootstrap-tags.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.js" />
+    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.min.js">
+      <DependentUpon>bootstrap3-typeahead.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\bootstrap.js" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\bootstrap.min.js" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\npm.js" />
+    <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.js" />
+    <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.min.js" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-filetypes-regular.svg" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-regular.svg" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.svg" />
+    <Content Include="Content\JQuery\jquery.blockUI.min.js">
+      <DependentUpon>jquery.blockUI.js</DependentUpon>
+    </Content>
+    <Content Include="Content\JQuery\jquery.ui.autocomplete.html.min.js">
+      <DependentUpon>jquery.ui.autocomplete.html.js</DependentUpon>
+    </Content>
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureEachTableHasPrimaryKeyOrAlternateKey.approved.txt" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureNoMissingForeignKeys.approved.txt" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureThatForeignKeyNamesMatchNamingStandard.approved.txt" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureThatPrimaryAndAlternateKeyNamesMatchNamingStandard.approved.txt" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureThatPrimaryKeyColumnMatchNamingStandard.approved.txt" />
+    <Content Include="Models\CheckPrimaryNaturalAndForeignKeysTest.AssureThatThereAreNoIndexesAlreadyDefinedByPrimaryOrAlternateKey.approved.txt" />
+    <Content Include="phantomjs-license.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\css\NeptunePrint.css" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\dhtmlxcalendar.css" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\dhtmlxcalendar.js" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\dhtmlxcalendar_deprecated.js" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_arrow_left.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_arrow_right.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_clock.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_mark.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCalendar\codebase\imgs\dhxcalendar_skyblue\dhxcalendar_selector_top.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxCommon\codebase\connector.js" />
+    <Content Include="Content\dhtmlx\dhtmlxCommon\codebase\dhtmlxcommon.js" />
+    <Content Include="Content\dhtmlx\dhtmlxCommon\codebase\dhtmlxdataprocessor.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_cor.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_num.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_filter_ext.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_keymap.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_left.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_left_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_left_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_left_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_right.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_right_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_right_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\ar_right_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\combo_select_dhx_skyblue.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\dyn_.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\dyn_down.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\dyn_up.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\imageloaderror.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\item_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\item_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\item_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\item_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\paging_page.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\paging_pages.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\paging_rows.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\radio_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\radio_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\radio_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\radio_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\sort_asc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\sort_desc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\folder.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\leaf.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\line.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\line1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\line2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\line3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\line4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\minus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_skyblue\tree\plus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_left.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_left_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_left_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_left_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_right.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_right_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_right_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\ar_right_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\combo_select_dhx_terrace.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\dyn_.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\dyn_down.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\dyn_up.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\imageloaderror.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\item_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\item_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\item_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\item_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\paging_page.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\paging_pages.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\paging_rows.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\radio_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\radio_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\radio_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\radio_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\sort_asc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\sort_desc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\folder.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\leaf.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\line.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\line1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\line2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\line3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\line4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\minus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_mm\tree\plus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_left.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_left_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_left_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_left_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_right.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_right_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_right_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\ar_right_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\combo_select_dhx_terrace.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\dyn_.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\dyn_down.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\dyn_up.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\imageloaderror.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\item_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\item_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\item_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\item_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\paging_page.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\paging_pages.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\paging_rows.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\radio_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\radio_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\radio_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\radio_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\sort_asc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\sort_desc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\folder.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\leaf.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\line.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\line1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\line2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\line3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\line4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\minus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_terrace\tree\plus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_left.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_left_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_left_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_left_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_right.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_right_abs.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_right_abs_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\ar_right_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\combo_select_dhx_web.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\dyn_.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\dyn_down.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\dyn_up.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\imageloaderror.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\item_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\item_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\item_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\item_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\paging_page.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\paging_pages.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\paging_rows.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\radio_chk0.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\radio_chk0_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\radio_chk1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\radio_chk1_dis.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\separator.png" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\sort_asc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\sort_desc.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\blank.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\folder.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\leaf.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\line.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\line1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\line2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\line3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\line4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\minus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus1.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus2.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus3.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus4.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\imgs\dhxgrid_web\tree\plus5.gif" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\skins\dhtmlxgrid_dhx_terrace.css" />
+    <Content Include="Content\fancytree\jquery.fancytree-all.js" />
+    <Content Include="Content\fancytree\jquery.fancytree-all.min.js" />
+    <Content Include="Content\fancytree\jquery.fancytree.glyph.js" />
+    <Content Include="Content\fancytree\jquery.fancytree.js" />
+    <Content Include="Content\fancytree\jquery.fancytree.min.js" />
+    <Content Include="Content\fancytree\jquery.fancytree.table.js" />
+    <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.css">
+      <DependentUpon>ui.fancytree.less</DependentUpon>
+    </Content>
+    <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.min.css">
+      <DependentUpon>ui.fancytree.css</DependentUpon>
+    </Content>
+    <Content Include="Content\img\ajax-loader.gif" />
+    <Content Include="Content\img\collapsed.png" />
+    <Content Include="Content\img\expanded.png" />
+    <Content Include="Content\img\fact_sheet_teaser.gif" />
+    <Content Include="Content\img\keys.png" />
+    <Content Include="Content\img\project_stage_arrow_default.png" />
+    <Content Include="Content\img\project_stage_arrow_current.png" />
+    <Content Include="Content\img\spacer.png" />
+    <Content Include="Content\JQuery\jquery.blockUI.js" />
+    <Content Include="Content\JQuery\jquery.ui.autocomplete.html.js" />
+    <Content Include="Content\leaflet\Bing.js" />
+    <Content Include="Content\leaflet\Bing.min.js">
+      <DependentUpon>Bing.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\images\layers-2x.png" />
+    <Content Include="Content\leaflet\images\layers.png" />
+    <Content Include="Content\leaflet\images\marker-icon-2x.png" />
+    <Content Include="Content\leaflet\images\marker-icon.png" />
+    <Content Include="Content\leaflet\images\marker-shadow.png" />
+    <Content Include="Content\leaflet\leaflet-src.js" />
+    <Content Include="Content\leaflet\leaflet.css" />
+    <Content Include="Content\leaflet\leaflet.draw\images\spritesheet-2x.png" />
+    <Content Include="Content\leaflet\leaflet.draw\images\spritesheet.png" />
+    <Content Include="Content\leaflet\leaflet.draw\leaflet.draw-src.js" />
+    <Content Include="Content\leaflet\leaflet.draw\leaflet.draw.css" />
+    <Content Include="Content\leaflet\leaflet.draw\leaflet.draw.js" />
+    <Content Include="Content\leaflet\leaflet.draw\leaflet.draw.min.css">
+      <DependentUpon>leaflet.draw.css</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.js" />
+    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.js" />
+    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.min.js">
+      <DependentUpon>Leaflet.MakiMarkers.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.markercluster\leaflet.markercluster-src.js" />
+    <Content Include="Content\leaflet\leaflet.markercluster\leaflet.markercluster.js" />
+    <Content Include="Content\leaflet\leaflet.markercluster\MarkerCluster.css" />
+    <Content Include="Content\leaflet\leaflet.markercluster\MarkerCluster.Default.css" />
+    <Content Include="Content\leaflet\leaflet.min.css">
+      <DependentUpon>leaflet.css</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.pip\leaflet-pip.js" />
+    <Content Include="Content\leaflet\images\marker-icon-red.png" />
+    <Content Include="Content\lodash\lodash.min.js" />
+    <Content Include="Content\qtip\imagesloaded.pkg.min.js" />
+    <Content Include="Content\qtip\jquery.qtip.min.css" />
+    <Content Include="Content\qtip\jquery.qtip.min.js" />
+    <Content Include="Content\terraformer\terraformer-wkt-parser.js" />
+    <Content Include="Content\terraformer\terraformer-wkt-parser.min.js" />
+    <Content Include="Content\terraformer\terraformer.js" />
+    <Content Include="Content\terraformer\terraformer.min.js" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Offline\app_offline.htm" />
+    <Content Include="Scripts\jquery-ui-1.11.4.js" />
+    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Content\qtip\imagesloaded.pkg.min.js.map" />
+    <Content Include="Content\qtip\jquery.qtip.min.js.map" />
+    <Content Include="Content\angular\angular-animate.min.js.map" />
+    <Content Include="Content\angular\angular-aria.min.js.map" />
+    <Content Include="Content\angular\angular-cookies.min.js.map" />
+    <Content Include="Content\angular\angular-loader.min.js.map" />
+    <Content Include="Content\angular\angular-messages.min.js.map" />
+    <Content Include="Content\angular\angular-resource.min.js.map" />
+    <Content Include="Content\angular\angular-route.min.js.map" />
+    <Content Include="Content\angular\angular-sanitize.min.js.map" />
+    <Content Include="Content\angular\angular-touch.min.js.map" />
+    <Content Include="Content\angular\angular.min.js.map" />
+    <Content Include="Content\angular\errors.json" />
+    <Content Include="Content\angular\version.json" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-filetypes-regular.eot" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-filetypes-regular.woff" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-regular.eot" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-regular.ttf" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-regular.woff" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.eot" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.ttf" />
+    <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.woff" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\.csscomb.json" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\.csslintrc" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\alerts.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\badges.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\bootstrap.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\breadcrumbs.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\button-groups.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\buttons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\carousel.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\close.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\code.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\component-animations.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\dropdowns.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\forms.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\glyphicons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\grid.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\input-groups.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\jumbotron.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\labels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\list-group.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\media.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\alerts.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\background-variant.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\border-radius.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\buttons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\center-block.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\clearfix.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\forms.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\gradients.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\grid-framework.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\grid.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\hide-text.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\image.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\labels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\list-group.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\nav-divider.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\nav-vertical-align.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\opacity.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\pagination.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\panels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\progress-bar.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\reset-filter.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\reset-text.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\resize.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\responsive-visibility.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\size.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\tab-focus.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\table-row.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\text-emphasis.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\text-overflow.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\vendor-prefixes.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\modals.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\navbar.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\navs.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\normalize.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\pager.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\pagination.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\panels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\popovers.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\print.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\progress-bars.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\responsive-embed.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\responsive-utilities.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\scaffolding.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\tables.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\theme.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\thumbnails.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\tooltip.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\type.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\utilities.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\variables.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\wells.less" />
+    <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.min.js.map">
+      <DependentUpon>Leaflet.MakiMarkers.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\Bing.min.js.map">
+      <DependentUpon>Bing.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-select\bootstrap-select.js.map" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.css.map" />
+    <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.less" />
+    <Content Include="Content\fancytree\skin-common.less" />
+    <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.css.map">
+      <DependentUpon>ui.fancytree.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-tags\bootstrap-tags.min.js.map">
+      <DependentUpon>bootstrap-tags.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.min.js.map">
+      <DependentUpon>bootstrap3-typeahead.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.11.0.min.js.map" />
+    <Content Include="Scripts\jquery.form.min.js">
+      <DependentUpon>jquery.form.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js.map" />
+    <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.min.js.map" />
+    <Content Include="Content\angular\directives\angular-nvd3.min.js.map" />
+    <Content Include="Content\JQuery\jquery.blockUI.min.js.map">
+      <DependentUpon>jquery.blockUI.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\JQuery\jquery.ui.autocomplete.html.min.js.map">
+      <DependentUpon>jquery.ui.autocomplete.html.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.form.min.js.map">
+      <DependentUpon>jquery.form.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\LtInfoMenuItemTest.CanRenderMenuWithGroupsTest.approved.txt" />
+    <Content Include="Views\LtInfoMenuItemTest.CanRenderMultipleNestedMenuTest.approved.txt" />
+    <Content Include="Views\LtInfoMenuItemTest.CanRenderNestedMenuTest.approved.txt" />
+    <Content Include="Views\LtInfoMenuItemTest.CanRenderSimpleMenuTest.approved.txt" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.min.js.map">
+      <DependentUpon>bootstrap-select.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.legend\leaflet-legend.min.js.map">
+      <DependentUpon>leaflet-legend.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\leaflet\leaflet.pip\leaflet-pip.min.js.map">
+      <DependentUpon>leaflet-pip.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-toc\bootstrap-toc.min.js.map">
+      <DependentUpon>bootstrap-toc.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.less" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css.map">
+      <DependentUpon>glyphicons-filetypes.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.less" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css.map">
+      <DependentUpon>glyphicons-regular.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.less" />
+    <Content Include="Content\Bootstrap\neptune\glyphicons-social.css.map">
+      <DependentUpon>glyphicons-social.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\typeahead.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap-theme.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap-theme.min.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\css\bootstrap.min.css.map" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\.csscomb.json" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\.csslintrc" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\alerts.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\badges.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\bootstrap.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\breadcrumbs.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\button-groups.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\buttons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\carousel.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\close.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\code.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\component-animations.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\dropdowns.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\forms.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\glyphicons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\grid.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\input-groups.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\jumbotron.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\labels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\list-group.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\media.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\alerts.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\background-variant.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\border-radius.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\buttons.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\center-block.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\clearfix.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\forms.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\gradients.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid-framework.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\hide-text.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\image.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\labels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\list-group.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-divider.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-vertical-align.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\opacity.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\pagination.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\panels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\progress-bar.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-filter.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-text.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\resize.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\responsive-visibility.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\size.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\tab-focus.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\table-row.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-emphasis.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-overflow.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\vendor-prefixes.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\modals.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\navbar.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\navs.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\normalize.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\pager.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\pagination.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\panels.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\popovers.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\print.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\progress-bars.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\responsive-embed.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\responsive-utilities.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\scaffolding.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\tables.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\theme.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\thumbnails.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\tooltip.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\type.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\utilities.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\variables.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\wells.less" />
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\bootstrap.css.map">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\media.css.map">
+      <DependentUpon>media.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins.css.map">
+      <DependentUpon>mixins.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\background-variant.css.map">
+      <DependentUpon>background-variant.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\normalize.css.map">
+      <DependentUpon>normalize.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\print.css.map">
+      <DependentUpon>print.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\responsive-embed.css.map">
+      <DependentUpon>responsive-embed.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\variables.css.map">
+      <DependentUpon>variables.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\alerts.css.map">
+      <DependentUpon>alerts.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid-framework.css.map">
+      <DependentUpon>grid-framework.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\clearfix.css.map">
+      <DependentUpon>clearfix.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\buttons.css.map">
+      <DependentUpon>buttons.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\forms.css.map">
+      <DependentUpon>forms.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\hide-text.css.map">
+      <DependentUpon>hide-text.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\grid.css.map">
+      <DependentUpon>grid.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\image.css.map">
+      <DependentUpon>image.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\labels.css.map">
+      <DependentUpon>labels.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\center-block.css.map">
+      <DependentUpon>center-block.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\gradients.css.map">
+      <DependentUpon>gradients.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\border-radius.css.map">
+      <DependentUpon>border-radius.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-divider.css.map">
+      <DependentUpon>nav-divider.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\nav-vertical-align.css.map">
+      <DependentUpon>nav-vertical-align.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\list-group.css.map">
+      <DependentUpon>list-group.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\opacity.css.map">
+      <DependentUpon>opacity.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\pagination.css.map">
+      <DependentUpon>pagination.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\panels.css.map">
+      <DependentUpon>panels.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-filter.css.map">
+      <DependentUpon>reset-filter.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\progress-bar.css.map">
+      <DependentUpon>progress-bar.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\reset-text.css.map">
+      <DependentUpon>reset-text.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\size.css.map">
+      <DependentUpon>size.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\resize.css.map">
+      <DependentUpon>resize.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\tab-focus.css.map">
+      <DependentUpon>tab-focus.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\responsive-visibility.css.map">
+      <DependentUpon>responsive-visibility.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\table-row.css.map">
+      <DependentUpon>table-row.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-overflow.css.map">
+      <DependentUpon>text-overflow.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\text-emphasis.css.map">
+      <DependentUpon>text-emphasis.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\mixins\vendor-prefixes.css.map">
+      <DependentUpon>vendor-prefixes.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-3.3.7\less\theme.css.map">
+      <DependentUpon>theme.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.css.map" />
+    <Content Include="Content\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js">
+      <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\modernizr-2.8.3.min.js">
+      <DependentUpon>modernizr-2.8.3.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Shared\GoogleCharts.js" />
+    <Content Include="Views\PersonOrganization\PersonOrganizationController.js" />
+    <Content Include="Content\css\dhtmlxgrid_ltinfo_skin.css" />
+    <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_flat_75_E5E5E5_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_65_E5E5E5_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_highlight-soft_75_15475C_1x100.png" />
+    <Content Include="Content\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\dhtmlxgrid.css" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\dhtmlxgrid.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_acheck.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_calck.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_clist.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_cntr.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_combo.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_context.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_dec.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_dhxcalendar.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_grid.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_limit.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_link.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_liveedit.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_mro.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_passw.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_ra_str.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_sub_row.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_time.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_tree.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\excells\dhtmlxgrid_excell_wbut.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_data.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_drag.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_export.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_fast.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_filter.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_form.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_group.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_hextra.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_hmenu.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_json.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_markers.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_math.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_mcol.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_nxml.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_over.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_pgn.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_pivot.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_post.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_rowspan.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_selection.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_splt.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_srnd.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_ssc.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_start.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_undo.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\ext\dhtmlxgrid_validation.js" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\skins\dhtmlxgrid_dhx_skyblue.css" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\codebase\skins\dhtmlxgrid_dhx_web.css" />
+    <Content Include="Content\dhtmlx\dhtmlxGrid\readme.txt" />
+    <Content Include="Content\fancybox\blank.gif" />
+    <Content Include="Content\fancybox\fancybox_buttons.png" />
+    <Content Include="Content\fancybox\fancybox_loading%402x.gif" />
+    <Content Include="Content\fancybox\fancybox_loading.gif" />
+    <Content Include="Content\fancybox\fancybox_overlay.png" />
+    <Content Include="Content\fancybox\fancybox_sprite%402x.png" />
+    <Content Include="Content\fancybox\fancybox_sprite.png" />
+    <Content Include="Content\fancybox\fancybox_buttons_ltinfo.png" />
+    <Content Include="Content\img\button_icon_excel.png" />
+    <Content Include="Content\img\checkbox.png" />
+    <Content Include="Content\img\loadingAnimation.gif" />
+    <Content Include="Content\img\header_bg.png" />
+    <Content Include="Content\img\table_summary_bg.png" />
+    <Content Include="Content\img\undo.png" />
+    <Content Include="Content\jquery.fancybox-buttons.css" />
+    <Content Include="Content\jquery.fancybox-thumbs.css" />
+    <Content Include="Content\jquery.fancybox.css" />
+    <Content Include="Content\qtip\jquery.qtip.css" />
+    <Content Include="Content\qtip\jquery.qtip.js" />
+    <Content Include="Content\qtip\jquery.qtip.validation.js" />
+    <Content Include="Global.asax" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Scripts\ckeditor\adapters\jquery.js" />
+    <Content Include="Scripts\ckeditor\build-config.js" />
+    <Content Include="Scripts\ckeditor\ckeditor.js" />
+    <Content Include="Scripts\ckeditor\config.js" />
+    <Content Include="Scripts\ckeditor\contents.css" />
+    <Content Include="Scripts\ckeditor\lang\af.js" />
+    <Content Include="Scripts\ckeditor\lang\ar.js" />
+    <Content Include="Scripts\ckeditor\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\lang\bn.js" />
+    <Content Include="Scripts\ckeditor\lang\bs.js" />
+    <Content Include="Scripts\ckeditor\lang\ca.js" />
+    <Content Include="Scripts\ckeditor\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\lang\da.js" />
+    <Content Include="Scripts\ckeditor\lang\de.js" />
+    <Content Include="Scripts\ckeditor\lang\el.js" />
+    <Content Include="Scripts\ckeditor\lang\en-au.js" />
+    <Content Include="Scripts\ckeditor\lang\en-ca.js" />
+    <Content Include="Scripts\ckeditor\lang\en-gb.js" />
+    <Content Include="Scripts\ckeditor\lang\en.js" />
+    <Content Include="Scripts\ckeditor\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\lang\es.js" />
+    <Content Include="Scripts\ckeditor\lang\et.js" />
+    <Content Include="Scripts\ckeditor\lang\eu.js" />
+    <Content Include="Scripts\ckeditor\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\lang\fo.js" />
+    <Content Include="Scripts\ckeditor\lang\fr-ca.js" />
+    <Content Include="Scripts\ckeditor\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\lang\gl.js" />
+    <Content Include="Scripts\ckeditor\lang\gu.js" />
+    <Content Include="Scripts\ckeditor\lang\he.js" />
+    <Content Include="Scripts\ckeditor\lang\hi.js" />
+    <Content Include="Scripts\ckeditor\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\lang\hu.js" />
+    <Content Include="Scripts\ckeditor\lang\id.js" />
+    <Content Include="Scripts\ckeditor\lang\is.js" />
+    <Content Include="Scripts\ckeditor\lang\it.js" />
+    <Content Include="Scripts\ckeditor\lang\ja.js" />
+    <Content Include="Scripts\ckeditor\lang\ka.js" />
+    <Content Include="Scripts\ckeditor\lang\km.js" />
+    <Content Include="Scripts\ckeditor\lang\ko.js" />
+    <Content Include="Scripts\ckeditor\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\lang\lt.js" />
+    <Content Include="Scripts\ckeditor\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\lang\mk.js" />
+    <Content Include="Scripts\ckeditor\lang\mn.js" />
+    <Content Include="Scripts\ckeditor\lang\ms.js" />
+    <Content Include="Scripts\ckeditor\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\lang\no.js" />
+    <Content Include="Scripts\ckeditor\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\lang\pt.js" />
+    <Content Include="Scripts\ckeditor\lang\ro.js" />
+    <Content Include="Scripts\ckeditor\lang\ru.js" />
+    <Content Include="Scripts\ckeditor\lang\si.js" />
+    <Content Include="Scripts\ckeditor\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\lang\sl.js" />
+    <Content Include="Scripts\ckeditor\lang\sq.js" />
+    <Content Include="Scripts\ckeditor\lang\sr-latn.js" />
+    <Content Include="Scripts\ckeditor\lang\sr.js" />
+    <Content Include="Scripts\ckeditor\lang\sv.js" />
+    <Content Include="Scripts\ckeditor\lang\th.js" />
+    <Content Include="Scripts\ckeditor\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\lang\zh.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ar.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ca.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\da.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\es.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\fr-ca.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\gl.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\gu.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\hi.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\hu.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\id.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ja.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\km.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ko.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\lt.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\mk.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\mn.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\pt.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ro.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ru.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\si.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sl.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sq.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sr-latn.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\sv.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\th.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Scripts\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
+    <Content Include="Scripts\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Scripts\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Scripts\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Scripts\ckeditor\plugins\icons.png" />
+    <Content Include="Scripts\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Scripts\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Scripts\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Scripts\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Scripts\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="Scripts\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="Scripts\ckeditor\plugins\magicline\images\hidpi\icon.png" />
+    <Content Include="Scripts\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="Scripts\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ar.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ca.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\es.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\fr-ca.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\gl.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\hu.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\id.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ja.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\pt.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ru.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\si.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\sl.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\sq.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\sv.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\th.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Scripts\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Scripts\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\tmp.html" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\wsc_ie.js" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog_ie.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog_ie7.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog_ie8.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog_iequirks.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\dialog_opera.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor_gecko.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor_ie.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor_ie7.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor_ie8.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\editor_iequirks.css" />
+    <Content Include="Scripts\ckeditor\skins\moono\icons.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\icons_hidpi.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\arrow.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\close.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\hidpi\close.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\hidpi\lock-open.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\hidpi\lock.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\hidpi\refresh.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\lock-open.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\lock.png" />
+    <Content Include="Scripts\ckeditor\skins\moono\images\refresh.png" />
+    <Content Include="Scripts\ckeditor\styles.js" />
+    <Content Include="Scripts\jssor.core.js" />
+    <Content Include="Scripts\jssor.slider.js" />
+    <Content Include="Scripts\jssor.utils.js" />
+    <Content Include="Scripts\jquery.fancybox-buttons.js" />
+    <Content Include="Scripts\jquery.fancybox-media.js" />
+    <Content Include="Scripts\jquery.fancybox-thumbs.js" />
+    <Content Include="Scripts\jquery.fancybox.js" />
+    <Content Include="Scripts\jquery.fancybox.pack.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.mousewheel-3.0.6.pack.js" />
+    <EmbeddedResource Include="DatabaseEntities.csdl" />
+    <EmbeddedResource Include="DatabaseEntities.msl" />
+    <EmbeddedResource Include="DatabaseEntities.ssdl" />
+    <Content Include="Scripts\ckeditor\CHANGES.md" />
+    <Content Include="Scripts\ckeditor\LICENSE.md" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\LICENSE.md" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\README.md" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\LICENSE.md" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\README.md" />
+    <Content Include="Scripts\ckeditor\README.md" />
+    <Content Include="Scripts\ckeditor\skins\moono\readme.md" />
+    <None Include="Scripts\jquery-1.11.0.intellisense.js" />
+    <Content Include="Scripts\jquery-1.11.0.js" />
+    <Content Include="Scripts\jquery-1.11.0.min.js" />
+    <Content Include="Scripts\jquery-1.11.0.min.map" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.BuildDhtmlxGridHeaderTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateArbitraryHtmlTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateClearAllCookiesIconHtmlTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateCreateUrlHtmlTestWithCreatePopupForm.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateCreateUrlHtmlTestWithCreateUrl.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateFilteredExcelDownloadIconHtmlTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateFilteredStateHtmlWithFilterBarTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateFilterIconHtmlWithFilterBarTest.approved.txt" />
+    <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateViewingRowCountGridHeaderHtmlTest.approved.txt" />
+    <Content Include="Views\User\EditRoles.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Web.config.template">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Shared\ConfirmDialogForm.cshtml" />
+    <Content Include="Views\Shared\ImageGallery.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
+    <Content Include="Views\Shared\MapJavascriptIncludes.cshtml" />
+    <Content Include="Views\Organization\Edit.cshtml" />
+    <Content Include="Views\Organization\Index.cshtml" />
+    <Content Include="Views\Organization\Detail.cshtml" />
+    <Content Include="Views\PersonOrganization\EditPersonOrganizations.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Money.cshtml" />
+    <Content Include="Views\FieldDefinition\Index.cshtml" />
+    <Content Include="Views\Shared\FieldDefinitionDetails.cshtml" />
+    <Content Include="Views\FieldDefinition\Edit.cshtml" />
+    <Content Include="Views\Shared\TextControls\EntityNotes.cshtml" />
+    <Content Include="Views\Shared\SitkaRecaptcha.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Percentage.cshtml" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
+      <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.min.js.map" />
+    <Content Include="Views\Shared\DhtmlxGridIncludes.cshtml" />
+    <Content Include="Views\Shared\TextControls\EntityExternalLinks.cshtml" />
+    <Content Include="Scripts\modernizr-2.8.3.min.js.map">
+      <DependentUpon>modernizr-2.8.3.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Shared\SiteLayout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Shared\GoogleChartPopup.cshtml" />
+    <Content Include="Views\Shared\NeptuneIncludes.cshtml" />
+    <Content Include="Views\Shared\NeptuneLateLoadingIncludes.cshtml" />
+    <Content Include="Views\Role\Detail.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Shared\SupportForm.cshtml" />
+    <Content Include="Views\Shared\HtmlDiffSummary.cshtml" />
+    <Content Include="Views\Shared\DisplayPageContent.cshtml" />
+    <Content Include="Views\Shared\NavAndHeaderLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Folder Include="Content\img\MimeTypeIcons\" />
+    <Folder Include="Content\themes\base\minified\images\" />
+    <Folder Include="Views\Help\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Keystone.Common\Keystone.Common.csproj">
@@ -213,9 +2159,26 @@
       <Name>LtInfo.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\KeystoneDataService\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoMVCBuild|AnyCPU'">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <MvcBuildViews>false</MvcBuildViews>
+    <DebugType>none</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -229,26 +2192,47 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>55062</DevelopmentServerPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:60514/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>https://localhost.neptune.sitkatech.com</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
+          <CustomServerUrl>https://localhost.neptune.sitkatech.com</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>echo Copy web.config to output folder for unit testing
+echo copy /y "$(ProjectDir)web.config" "$(TargetPath).config"
+copy /y "$(ProjectDir)web.config" "$(TargetPath).config"
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\NuGetPackages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\NuGetPackages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\NuGetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\NuGetPackages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\NuGetPackages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\NuGetPackages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <Target Name="WriteCopyrightAndLicense" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)' != 'Release' ">
+    <PropertyGroup>
+      <PowerShellExe Condition=" '$(PowerShellExe)'=='' ">%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+      <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">.\..\AddCopyrightAndLicense.ps1</ScriptLocation>
+      <CopyrightHolder>Tahoe Regional Planning Agency</CopyrightHolder>
+    </PropertyGroup>
+    <Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy Unrestricted -command &quot;&amp; {&amp;'$(ScriptLocation)' '$(CopyrightHolder)' } &quot;" />
+  </Target>
+  <Import Project="..\NuGetPackages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\NuGetPackages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

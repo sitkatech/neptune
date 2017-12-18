@@ -1,4 +1,4 @@
-# robots.txt file for ProjectFirma, or eip.laketahoeinfo.org
+# robots.txt file for Neptune, or eip.laketahoeinfo.org
 #
 # Some tips:
 # * The lines that start with # are comments

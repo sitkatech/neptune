@@ -1,21 +1,166 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Index.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Home
+@using Neptune.Web.Views.Shared
+@using SitkaController = Neptune.Web.Common.SitkaController
+@inherits Index
+@{
+    SetLayout("~/Views/Shared/NavAndHeaderLayout.cshtml", ViewDataTyped);
 }
 
-<div class="jumbotron">
-    <h1>Neptune</h1>
-    <h2>OC Stormwater Tools</h2>
-    <p class="lead">And the mighty Roman god Neptune said, "Hello world!".</p>
-</div>
+@section JavascriptAndStylesContent
+{
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
-<div class="row">
-    <div class="col-xs-12">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+}
+
+@section BeforeBodyContainer
+{
+    @if (ViewDataTyped.NeptuneHomePageCarouselImages.Any())
+    {
+        <div class="container-fluid">
+            <div class="row">
+                @* ReSharper disable once UnknownCssClass *@
+                <div class="col-md-12 homepageCarouselFullWidthColumn">
+                    @* ReSharper disable once UnknownCssClass *@
+                    <div id="homepageCarousel" class="carousel slide" data-ride="carousel" data-interval="8000">
+                        <ol class="carousel-indicators">
+                            @if (ViewDataTyped.NeptuneHomePageCarouselImages.Count > 1)
+                            {
+                                for (var i = 0; i < ViewDataTyped.NeptuneHomePageCarouselImages.Count; i++)
+                                {
+                                    <li data-target="#homepageCarousel" data-slide-to="@(i)" class="@(i == 0 ? "active" : null)"></li>
+                                }
+                            }
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                            @for (var i = 0; i < ViewDataTyped.NeptuneHomePageCarouselImages.Count; i++)
+                            {
+                                var neptuneSiteImage = ViewDataTyped.NeptuneHomePageCarouselImages[i];
+                                <div class="item@(i == 0 ? " active" : null)" style="background-image: url('@neptuneSiteImage.FileResource.FileResourceUrl')">
+                                    <div class="carousel-caption">
+                                        <div class="container">
+                                            <div class="col-md-7 col-md-offset-5 text-right">
+                                                <p>@neptuneSiteImage.Caption</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (ViewDataTyped.NeptuneHomePageCarouselImages.Count > 1)
+                        {
+                            <a href="#homepageCarousel" class="carousel-control left" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a href="#homepageCarousel" class="carousel-control right" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        }
+
+                    </div>
+                    @* ReSharper disable once UnknownCssClass *@
+                    <div class="main-text">
+                        <div class="container">
+                            <div class="col-md-5 text-left">
+                                <h1>@ViewDataTyped.PageTitle</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="container neptuneContent">
+    @if (!ViewDataTyped.NeptuneHomePageCarouselImages.Any())
+    {
+        <h2 class="pageTitle">@ViewDataTyped.PageTitle</h2>
+    }
+
+    @if (TempData.ContainsKey(SitkaController.StatusErrorIndex))
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @Html.Raw(TempData[SitkaController.StatusErrorIndex])
+        </div>
+    }
+    @if (TempData.ContainsKey(SitkaController.StatusMessageIndex))
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @Html.Raw(TempData[SitkaController.StatusMessageIndex])
+        </div>
+    }
+    @if (TempData.ContainsKey(SitkaController.InfoMessageIndex))
+    {
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            @Html.Raw(TempData[SitkaController.InfoMessageIndex])
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageTextViewData); }
+            </div>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageAdditionalInfoTextViewData); }
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            NeptuneMaps.Map.prototype.bindPopupToFeature = function (layer, feature) {
+                if (!Sitka.Methods.isUndefinedNullOrEmpty(feature.properties["Short Name"])) {
+                    layer.bindTooltip(feature.properties["Short Name"], { direction: "auto", sticky: "true" });
+
+                    var originalFillOpacity = layer.options.fillOpacity;
+                    layer.on("mouseover",
+                        function () {
+                            layer.setStyle({ fillOpacity: Math.min(originalFillOpacity + 0.4, 1) });
+                        });
+                    layer.on("mouseout",
+                        function () {
+                            layer.setStyle({ fillOpacity: originalFillOpacity });
+                        });
+                };
+
+                return layer;
+            };
+
+            jQuery('.leaflet-container').css('cursor', 'pointer');
+        })
+    </script>
 </div>

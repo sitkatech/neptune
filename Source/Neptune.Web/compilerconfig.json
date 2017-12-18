@@ -1,0 +1,22 @@
+﻿[
+  {
+    "outputFile": "Content/Bootstrap/neptune/tmpRCDPalette.css",
+    "inputFile": "Content/Bootstrap/neptune/tmpRCDPalette.less"
+  },
+  {
+    "outputFile": "Content/Bootstrap/neptune/default.theme.css",
+    "inputFile": "Content/Bootstrap/neptune/default.theme.less"
+  },
+  {
+    "outputFile": "Content/Bootstrap/neptune/base.theme.css",
+    "inputFile": "Content/Bootstrap/neptune/base.theme.less"
+  },
+  {
+    "outputFile": "Content/Bootstrap/neptune/rcd.theme.css",
+    "inputFile": "Content/Bootstrap/neptune/rcd.theme.less"
+  },
+  {
+    "outputFile": "Content/Bootstrap/neptune/clackamas.css",
+    "inputFile": "Content/Bootstrap/neptune/clackamas.less"
+  }
+]

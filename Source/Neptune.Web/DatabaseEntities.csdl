@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Neptune.Web.Models" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AuditLog" EntityType="Neptune.Web.Models.AuditLog" />
+    <EntitySet Name="County" EntityType="Neptune.Web.Models.County" />
+    <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.FieldDefinitionData" />
+    <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.FieldDefinitionDataImage" />
+    <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.FileResource" />
+    <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.NeptuneHomePageImage" />
+    <EntitySet Name="NeptunePage" EntityType="Neptune.Web.Models.NeptunePage" />
+    <EntitySet Name="NeptunePageImage" EntityType="Neptune.Web.Models.NeptunePageImage" />
+    <EntitySet Name="Notification" EntityType="Neptune.Web.Models.Notification" />
+    <EntitySet Name="Organization" EntityType="Neptune.Web.Models.Organization" />
+    <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.OrganizationType" />
+    <EntitySet Name="Person" EntityType="Neptune.Web.Models.Person" />
+    <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.StateProvince" />
+    <EntitySet Name="SupportRequestLog" EntityType="Neptune.Web.Models.SupportRequestLog" />
+    <EntitySet Name="TenantAttribute" EntityType="Neptune.Web.Models.TenantAttribute" />
+    <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.FK_AuditLog_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="AuditLogs" EntitySet="AuditLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_County_StateProvince_StateProvinceID" Association="Neptune.Web.Models.FK_County_StateProvince_StateProvinceID">
+      <End Role="StateProvince" EntitySet="StateProvince" />
+      <End Role="Counties" EntitySet="County" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID" Association="Neptune.Web.Models.FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID">
+      <End Role="FieldDefinitionData" EntitySet="FieldDefinitionData" />
+      <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldDefinitionDataImage_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_FieldDefinitionDataImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FileResource_Person_CreatePersonID_PersonID" Association="Neptune.Web.Models.FK_FileResource_Person_CreatePersonID_PersonID">
+      <End Role="CreatePerson" EntitySet="Person" />
+      <End Role="FileResourcesWhereYouAreTheCreatePerson" EntitySet="FileResource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptuneHomePageImage_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_NeptuneHomePageImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="NeptuneHomePageImages" EntitySet="NeptuneHomePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptunePageImage_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_NeptunePageImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="NeptunePageImages" EntitySet="NeptunePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_FileResource_LogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.FK_Organization_FileResource_LogoFileResourceID_FileResourceID">
+      <End Role="LogoFileResource" EntitySet="FileResource" />
+      <End Role="OrganizationsWhereYouAreTheLogoFileResource" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID">
+      <End Role="TenantBannerLogoFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID">
+      <End Role="TenantSquareLogoFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" Association="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID">
+      <End Role="TenantStyleSheetFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptunePageImage_NeptunePage_NeptunePageID" Association="Neptune.Web.Models.FK_NeptunePageImage_NeptunePage_NeptunePageID">
+      <End Role="NeptunePage" EntitySet="NeptunePage" />
+      <End Role="NeptunePageImages" EntitySet="NeptunePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_Person_PersonID" Association="Neptune.Web.Models.FK_Notification_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="Notifications" EntitySet="Notification" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_OrganizationType_OrganizationTypeID" Association="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID">
+      <End Role="OrganizationType" EntitySet="OrganizationType" />
+      <End Role="Organizations" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_Person_PrimaryContactPersonID_PersonID" Association="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID">
+      <End Role="PrimaryContactPerson" EntitySet="Person" />
+      <End Role="OrganizationsWhereYouAreThePrimaryContactPerson" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Person_Organization_OrganizationID" Association="Neptune.Web.Models.FK_Person_Organization_OrganizationID">
+      <End Role="Organization" EntitySet="Organization" />
+      <End Role="People" EntitySet="Person" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID" Association="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID">
+      <End Role="RequestPerson" EntitySet="Person" />
+      <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" EntitySet="SupportRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" Association="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID">
+      <End Role="PrimaryContactPerson" EntitySet="Person" />
+      <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" EntitySet="TenantAttribute" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AuditLog">
+    <Key>
+      <PropertyRef Name="AuditLogID" />
+    </Key>
+    <Property Name="AuditLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <Property Name="AuditLogDate" Type="DateTime" Nullable="false" />
+    <Property Name="AuditLogEventTypeID" Type="Int32" Nullable="false" />
+    <Property Name="TableName" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+    <Property Name="RecordID" Type="Int32" Nullable="false" />
+    <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+    <Property Name="OriginalValue" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="NewValue" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="AuditDescription" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_AuditLog_Person_PersonID" FromRole="AuditLogs" ToRole="Person" />
+  </EntityType>
+  <EntityType Name="County">
+    <Key>
+      <PropertyRef Name="CountyID" />
+    </Key>
+    <Property Name="CountyID" Type="Int32" Nullable="false" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="CountyName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="StateProvinceID" Type="Int32" Nullable="false" />
+    <Property Name="CountyFeature" Type="Geometry" />
+    <NavigationProperty Name="StateProvince" Relationship="Neptune.Web.Models.FK_County_StateProvince_StateProvinceID" FromRole="Counties" ToRole="StateProvince" />
+  </EntityType>
+  <EntityType Name="FieldDefinitionData">
+    <Key>
+      <PropertyRef Name="FieldDefinitionDataID" />
+    </Key>
+    <Property Name="FieldDefinitionDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="FieldDefinitionID" Type="Int32" Nullable="false" />
+    <Property Name="FieldDefinitionDataValue" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="FieldDefinitionLabel" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="FieldDefinitionDataImages" Relationship="Neptune.Web.Models.FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID" FromRole="FieldDefinitionData" ToRole="FieldDefinitionDataImages" />
+  </EntityType>
+  <EntityType Name="FieldDefinitionDataImage">
+    <Key>
+      <PropertyRef Name="FieldDefinitionDataImageID" />
+    </Key>
+    <Property Name="FieldDefinitionDataImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="FieldDefinitionDataID" Type="Int32" Nullable="false" />
+    <Property Name="FileResourceID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FieldDefinitionData" Relationship="Neptune.Web.Models.FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID" FromRole="FieldDefinitionDataImages" ToRole="FieldDefinitionData" />
+    <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_FieldDefinitionDataImage_FileResource_FileResourceID" FromRole="FieldDefinitionDataImages" ToRole="FileResource" />
+  </EntityType>
+  <EntityType Name="FileResource">
+    <Key>
+      <PropertyRef Name="FileResourceID" />
+    </Key>
+    <Property Name="FileResourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="FileResourceMimeTypeID" Type="Int32" Nullable="false" />
+    <Property Name="OriginalBaseFilename" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="OriginalFileExtension" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="FileResourceGUID" Type="Guid" Nullable="false" />
+    <Property Name="FileResourceData" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+    <Property Name="CreatePersonID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="FieldDefinitionDataImages" Relationship="Neptune.Web.Models.FK_FieldDefinitionDataImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="FieldDefinitionDataImages" />
+    <NavigationProperty Name="CreatePerson" Relationship="Neptune.Web.Models.FK_FileResource_Person_CreatePersonID_PersonID" FromRole="FileResourcesWhereYouAreTheCreatePerson" ToRole="CreatePerson" />
+    <NavigationProperty Name="NeptuneHomePageImages" Relationship="Neptune.Web.Models.FK_NeptuneHomePageImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="NeptuneHomePageImages" />
+    <NavigationProperty Name="NeptunePageImages" Relationship="Neptune.Web.Models.FK_NeptunePageImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="NeptunePageImages" />
+    <NavigationProperty Name="OrganizationsWhereYouAreTheLogoFileResource" Relationship="Neptune.Web.Models.FK_Organization_FileResource_LogoFileResourceID_FileResourceID" FromRole="LogoFileResource" ToRole="OrganizationsWhereYouAreTheLogoFileResource" />
+    <NavigationProperty Name="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID" FromRole="TenantBannerLogoFileResource" ToRole="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" />
+    <NavigationProperty Name="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" FromRole="TenantSquareLogoFileResource" ToRole="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" />
+    <NavigationProperty Name="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" FromRole="TenantStyleSheetFileResource" ToRole="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" />
+  </EntityType>
+  <EntityType Name="NeptuneHomePageImage">
+    <Key>
+      <PropertyRef Name="NeptuneHomePageImageID" />
+    </Key>
+    <Property Name="NeptuneHomePageImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="FileResourceID" Type="Int32" Nullable="false" />
+    <Property Name="Caption" Type="String" Nullable="false" MaxLength="300" Unicode="false" FixedLength="false" />
+    <Property Name="SortOrder" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_NeptuneHomePageImage_FileResource_FileResourceID" FromRole="NeptuneHomePageImages" ToRole="FileResource" />
+  </EntityType>
+  <EntityType Name="NeptunePage">
+    <Key>
+      <PropertyRef Name="NeptunePageID" />
+    </Key>
+    <Property Name="NeptunePageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="NeptunePageTypeID" Type="Int32" Nullable="false" />
+    <Property Name="NeptunePageContent" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="NeptunePageImages" Relationship="Neptune.Web.Models.FK_NeptunePageImage_NeptunePage_NeptunePageID" FromRole="NeptunePage" ToRole="NeptunePageImages" />
+  </EntityType>
+  <EntityType Name="NeptunePageImage">
+    <Key>
+      <PropertyRef Name="NeptunePageImageID" />
+    </Key>
+    <Property Name="NeptunePageImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="NeptunePageID" Type="Int32" Nullable="false" />
+    <Property Name="FileResourceID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_NeptunePageImage_FileResource_FileResourceID" FromRole="NeptunePageImages" ToRole="FileResource" />
+    <NavigationProperty Name="NeptunePage" Relationship="Neptune.Web.Models.FK_NeptunePageImage_NeptunePage_NeptunePageID" FromRole="NeptunePageImages" ToRole="NeptunePage" />
+  </EntityType>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="NotificationTypeID" Type="Int32" Nullable="false" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <Property Name="NotificationDate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_Notification_Person_PersonID" FromRole="Notifications" ToRole="Person" />
+  </EntityType>
+  <EntityType Name="Organization">
+    <Key>
+      <PropertyRef Name="OrganizationID" />
+    </Key>
+    <Property Name="OrganizationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="OrganizationGuid" Type="Guid" />
+    <Property Name="OrganizationName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="OrganizationShortName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="PrimaryContactPersonID" Type="Int32" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="OrganizationUrl" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="LogoFileResourceID" Type="Int32" />
+    <Property Name="OrganizationTypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="LogoFileResource" Relationship="Neptune.Web.Models.FK_Organization_FileResource_LogoFileResourceID_FileResourceID" FromRole="OrganizationsWhereYouAreTheLogoFileResource" ToRole="LogoFileResource" />
+    <NavigationProperty Name="OrganizationType" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="Organizations" ToRole="OrganizationType" />
+    <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="OrganizationsWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
+    <NavigationProperty Name="People" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="Organization" ToRole="People" />
+  </EntityType>
+  <EntityType Name="OrganizationType">
+    <Key>
+      <PropertyRef Name="OrganizationTypeID" />
+    </Key>
+    <Property Name="OrganizationTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="OrganizationTypeName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="OrganizationTypeAbbreviation" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="LegendColor" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+    <Property Name="IsDefaultOrganizationType" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Organizations" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="OrganizationType" ToRole="Organizations" />
+  </EntityType>
+  <EntityType Name="Person">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="PersonGuid" Type="Guid" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="Phone" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+    <Property Name="RoleID" Type="Int32" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+    <Property Name="UpdateDate" Type="DateTime" />
+    <Property Name="LastActivityDate" Type="DateTime" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+    <Property Name="ReceiveSupportEmails" Type="Boolean" Nullable="false" />
+    <Property Name="LoginName" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="AuditLogs" Relationship="Neptune.Web.Models.FK_AuditLog_Person_PersonID" FromRole="Person" ToRole="AuditLogs" />
+    <NavigationProperty Name="FileResourcesWhereYouAreTheCreatePerson" Relationship="Neptune.Web.Models.FK_FileResource_Person_CreatePersonID_PersonID" FromRole="CreatePerson" ToRole="FileResourcesWhereYouAreTheCreatePerson" />
+    <NavigationProperty Name="Notifications" Relationship="Neptune.Web.Models.FK_Notification_Person_PersonID" FromRole="Person" ToRole="Notifications" />
+    <NavigationProperty Name="OrganizationsWhereYouAreThePrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="PrimaryContactPerson" ToRole="OrganizationsWhereYouAreThePrimaryContactPerson" />
+    <NavigationProperty Name="Organization" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="People" ToRole="Organization" />
+    <NavigationProperty Name="SupportRequestLogsWhereYouAreTheRequestPerson" Relationship="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID" FromRole="RequestPerson" ToRole="SupportRequestLogsWhereYouAreTheRequestPerson" />
+    <NavigationProperty Name="TenantAttributesWhereYouAreThePrimaryContactPerson" Relationship="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" FromRole="PrimaryContactPerson" ToRole="TenantAttributesWhereYouAreThePrimaryContactPerson" />
+  </EntityType>
+  <EntityType Name="StateProvince">
+    <Key>
+      <PropertyRef Name="StateProvinceID" />
+    </Key>
+    <Property Name="StateProvinceID" Type="Int32" Nullable="false" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="StateProvinceName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="StateProvinceAbbreviation" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+    <Property Name="StateProvinceFeature" Type="Geometry" />
+    <Property Name="StateProvinceFeatureForAnalysis" Type="Geometry" Nullable="false" />
+    <NavigationProperty Name="Counties" Relationship="Neptune.Web.Models.FK_County_StateProvince_StateProvinceID" FromRole="StateProvince" ToRole="Counties" />
+  </EntityType>
+  <EntityType Name="SupportRequestLog">
+    <Key>
+      <PropertyRef Name="SupportRequestLogID" />
+    </Key>
+    <Property Name="SupportRequestLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="RequestDate" Type="DateTime" Nullable="false" />
+    <Property Name="RequestPersonName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="RequestPersonEmail" Type="String" Nullable="false" MaxLength="256" Unicode="false" FixedLength="false" />
+    <Property Name="RequestPersonID" Type="Int32" />
+    <Property Name="SupportRequestTypeID" Type="Int32" Nullable="false" />
+    <Property Name="RequestDescription" Type="String" Nullable="false" MaxLength="2000" Unicode="false" FixedLength="false" />
+    <Property Name="RequestPersonOrganization" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+    <Property Name="RequestPersonPhone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="RequestPerson" Relationship="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID" FromRole="SupportRequestLogsWhereYouAreTheRequestPerson" ToRole="RequestPerson" />
+  </EntityType>
+  <EntityType Name="TenantAttribute">
+    <Key>
+      <PropertyRef Name="TenantAttributeID" />
+    </Key>
+    <Property Name="TenantAttributeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="DefaultBoundingBox" Type="Geometry" Nullable="false" />
+    <Property Name="MinimumYear" Type="Int32" Nullable="false" />
+    <Property Name="PrimaryContactPersonID" Type="Int32" />
+    <Property Name="TenantSquareLogoFileResourceID" Type="Int32" />
+    <Property Name="TenantBannerLogoFileResourceID" Type="Int32" />
+    <Property Name="TenantStyleSheetFileResourceID" Type="Int32" />
+    <Property Name="TenantDisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="ToolDisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="RecaptchaPublicKey" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="RecaptchaPrivateKey" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="TenantBannerLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID" FromRole="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" ToRole="TenantBannerLogoFileResource" />
+    <NavigationProperty Name="TenantSquareLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" FromRole="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" ToRole="TenantSquareLogoFileResource" />
+    <NavigationProperty Name="TenantStyleSheetFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" FromRole="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" ToRole="TenantStyleSheetFileResource" />
+    <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" FromRole="TenantAttributesWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
+  </EntityType>
+  <Association Name="FK_AuditLog_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="AuditLogs" Type="Neptune.Web.Models.AuditLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="AuditLogs">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_County_StateProvince_StateProvinceID">
+    <End Role="StateProvince" Type="Neptune.Web.Models.StateProvince" Multiplicity="1" />
+    <End Role="Counties" Type="Neptune.Web.Models.County" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateProvince">
+        <PropertyRef Name="StateProvinceID" />
+      </Principal>
+      <Dependent Role="Counties">
+        <PropertyRef Name="StateProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID">
+    <End Role="FieldDefinitionData" Type="Neptune.Web.Models.FieldDefinitionData" Multiplicity="1" />
+    <End Role="FieldDefinitionDataImages" Type="Neptune.Web.Models.FieldDefinitionDataImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FieldDefinitionData">
+        <PropertyRef Name="FieldDefinitionDataID" />
+      </Principal>
+      <Dependent Role="FieldDefinitionDataImages">
+        <PropertyRef Name="FieldDefinitionDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldDefinitionDataImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="1" />
+    <End Role="FieldDefinitionDataImages" Type="Neptune.Web.Models.FieldDefinitionDataImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="FieldDefinitionDataImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FileResource_Person_CreatePersonID_PersonID">
+    <End Role="CreatePerson" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="FileResourcesWhereYouAreTheCreatePerson" Type="Neptune.Web.Models.FileResource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CreatePerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="FileResourcesWhereYouAreTheCreatePerson">
+        <PropertyRef Name="CreatePersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptuneHomePageImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="1" />
+    <End Role="NeptuneHomePageImages" Type="Neptune.Web.Models.NeptuneHomePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="NeptuneHomePageImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptunePageImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="1" />
+    <End Role="NeptunePageImages" Type="Neptune.Web.Models.NeptunePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="NeptunePageImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_FileResource_LogoFileResourceID_FileResourceID">
+    <End Role="LogoFileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="0..1" />
+    <End Role="OrganizationsWhereYouAreTheLogoFileResource" Type="Neptune.Web.Models.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="OrganizationsWhereYouAreTheLogoFileResource">
+        <PropertyRef Name="LogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID">
+    <End Role="TenantBannerLogoFileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" Type="Neptune.Web.Models.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantBannerLogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource">
+        <PropertyRef Name="TenantBannerLogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID">
+    <End Role="TenantSquareLogoFileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" Type="Neptune.Web.Models.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantSquareLogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource">
+        <PropertyRef Name="TenantSquareLogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID">
+    <End Role="TenantStyleSheetFileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" Type="Neptune.Web.Models.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantStyleSheetFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource">
+        <PropertyRef Name="TenantStyleSheetFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptunePageImage_NeptunePage_NeptunePageID">
+    <End Role="NeptunePage" Type="Neptune.Web.Models.NeptunePage" Multiplicity="1" />
+    <End Role="NeptunePageImages" Type="Neptune.Web.Models.NeptunePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NeptunePage">
+        <PropertyRef Name="NeptunePageID" />
+      </Principal>
+      <Dependent Role="NeptunePageImages">
+        <PropertyRef Name="NeptunePageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Notification_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="Notifications" Type="Neptune.Web.Models.Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="Notifications">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_OrganizationType_OrganizationTypeID">
+    <End Role="OrganizationType" Type="Neptune.Web.Models.OrganizationType" Multiplicity="1" />
+    <End Role="Organizations" Type="Neptune.Web.Models.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrganizationType">
+        <PropertyRef Name="OrganizationTypeID" />
+      </Principal>
+      <Dependent Role="Organizations">
+        <PropertyRef Name="OrganizationTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_Person_PrimaryContactPersonID_PersonID">
+    <End Role="PrimaryContactPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
+    <End Role="OrganizationsWhereYouAreThePrimaryContactPerson" Type="Neptune.Web.Models.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PrimaryContactPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="OrganizationsWhereYouAreThePrimaryContactPerson">
+        <PropertyRef Name="PrimaryContactPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Person_Organization_OrganizationID">
+    <End Role="Organization" Type="Neptune.Web.Models.Organization" Multiplicity="1" />
+    <End Role="People" Type="Neptune.Web.Models.Person" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="People">
+        <PropertyRef Name="OrganizationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID">
+    <End Role="RequestPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
+    <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" Type="Neptune.Web.Models.SupportRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RequestPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="SupportRequestLogsWhereYouAreTheRequestPerson">
+        <PropertyRef Name="RequestPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID">
+    <End Role="PrimaryContactPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" Type="Neptune.Web.Models.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PrimaryContactPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreThePrimaryContactPerson">
+        <PropertyRef Name="PrimaryContactPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

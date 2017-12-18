@@ -370,7 +370,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
 
         public static void AddHelpToolTipPopupToHtmlTag(TagBuilder tagBuilder, string labelText, string urlToContent, int popupWidth)
         {
-            tagBuilder.Attributes.Add("onmouseover", string.Format("ProjectFirma.Views.Methods.addHelpTooltipPopup(this, {0}, {1}, {2})", labelText.ToJS(), urlToContent.ToJS(), popupWidth));
+            tagBuilder.Attributes.Add("onmouseover", string.Format("Neptune.Views.Methods.addHelpTooltipPopup(this, {0}, {1}, {2})", labelText.ToJS(), urlToContent.ToJS(), popupWidth));
         }
 
         public static MvcHtmlString GenerateHelpLink(string linkText, string popupTitleText, string urlToContent, int popupWidth)

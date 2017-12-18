@@ -43,7 +43,6 @@ namespace LtInfo.Common.Views
         public const string NotAvailableString = "Not available";
         public const string NotProvidedString = "not provided";
         public const string NoChangesRecommended = "No changes recommended";
-        public const string NotApplicablePerformanceMeasureIsInAttainment = "Not applicable.  PerformanceMeasure is in attainment.";
 
         public static string CheckedIfEqual(int? value, int testValue)
         {

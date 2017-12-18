@@ -1,0 +1,535 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Neptune.Web.Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="NeptuneWebModelsStoreContainer">
+    <EntitySet Name="AuditLog" EntityType="Neptune.Web.Models.Store.AuditLog" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="County" EntityType="Neptune.Web.Models.Store.County" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.Store.FieldDefinitionData" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.Store.FieldDefinitionDataImage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.Store.NeptuneHomePageImage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="NeptunePage" EntityType="Neptune.Web.Models.Store.NeptunePage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="NeptunePageImage" EntityType="Neptune.Web.Models.Store.NeptunePageImage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notification" EntityType="Neptune.Web.Models.Store.Notification" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Organization" EntityType="Neptune.Web.Models.Store.Organization" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.Store.OrganizationType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Person" EntityType="Neptune.Web.Models.Store.Person" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.Store.StateProvince" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SupportRequestLog" EntityType="Neptune.Web.Models.Store.SupportRequestLog" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TenantAttribute" EntityType="Neptune.Web.Models.Store.TenantAttribute" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.Store.FK_AuditLog_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="AuditLogs" EntitySet="AuditLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_County_StateProvince_StateProvinceID" Association="Neptune.Web.Models.Store.FK_County_StateProvince_StateProvinceID">
+      <End Role="StateProvince" EntitySet="StateProvince" />
+      <End Role="Counties" EntitySet="County" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID" Association="Neptune.Web.Models.Store.FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID">
+      <End Role="FieldDefinitionData" EntitySet="FieldDefinitionData" />
+      <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldDefinitionDataImage_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_FieldDefinitionDataImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FileResource_Person_CreatePersonID_PersonID" Association="Neptune.Web.Models.Store.FK_FileResource_Person_CreatePersonID_PersonID">
+      <End Role="CreatePerson" EntitySet="Person" />
+      <End Role="FileResourcesWhereYouAreTheCreatePerson" EntitySet="FileResource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptuneHomePageImage_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_NeptuneHomePageImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="NeptuneHomePageImages" EntitySet="NeptuneHomePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptunePageImage_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_NeptunePageImage_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="NeptunePageImages" EntitySet="NeptunePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NeptunePageImage_NeptunePage_NeptunePageID" Association="Neptune.Web.Models.Store.FK_NeptunePageImage_NeptunePage_NeptunePageID">
+      <End Role="NeptunePage" EntitySet="NeptunePage" />
+      <End Role="NeptunePageImages" EntitySet="NeptunePageImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_Person_PersonID" Association="Neptune.Web.Models.Store.FK_Notification_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="Notifications" EntitySet="Notification" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_FileResource_LogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.Store.FK_Organization_FileResource_LogoFileResourceID_FileResourceID">
+      <End Role="LogoFileResource" EntitySet="FileResource" />
+      <End Role="OrganizationsWhereYouAreTheLogoFileResource" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_OrganizationType_OrganizationTypeID" Association="Neptune.Web.Models.Store.FK_Organization_OrganizationType_OrganizationTypeID">
+      <End Role="OrganizationType" EntitySet="OrganizationType" />
+      <End Role="Organizations" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organization_Person_PrimaryContactPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_Organization_Person_PrimaryContactPersonID_PersonID">
+      <End Role="PrimaryContactPerson" EntitySet="Person" />
+      <End Role="OrganizationsWhereYouAreThePrimaryContactPerson" EntitySet="Organization" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Person_Organization_OrganizationID" Association="Neptune.Web.Models.Store.FK_Person_Organization_OrganizationID">
+      <End Role="Organization" EntitySet="Organization" />
+      <End Role="People" EntitySet="Person" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_SupportRequestLog_Person_RequestPersonID_PersonID">
+      <End Role="RequestPerson" EntitySet="Person" />
+      <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" EntitySet="SupportRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.Store.FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID">
+      <End Role="TenantBannerLogoFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" Association="Neptune.Web.Models.Store.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID">
+      <End Role="TenantSquareLogoFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" Association="Neptune.Web.Models.Store.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID">
+      <End Role="TenantStyleSheetFileResource" EntitySet="FileResource" />
+      <End Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID">
+      <End Role="PrimaryContactPerson" EntitySet="Person" />
+      <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" EntitySet="TenantAttribute" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AuditLog">
+    <Key>
+      <PropertyRef Name="AuditLogID" />
+    </Key>
+    <Property Name="AuditLogID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="PersonID" Type="int" Nullable="false" />
+    <Property Name="AuditLogDate" Type="datetime" Nullable="false" />
+    <Property Name="AuditLogEventTypeID" Type="int" Nullable="false" />
+    <Property Name="TableName" Type="varchar" Nullable="false" MaxLength="500" />
+    <Property Name="RecordID" Type="int" Nullable="false" />
+    <Property Name="ColumnName" Type="varchar" Nullable="false" MaxLength="500" />
+    <Property Name="OriginalValue" Type="varchar(max)" />
+    <Property Name="NewValue" Type="varchar(max)" Nullable="false" />
+    <Property Name="AuditDescription" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="County">
+    <Key>
+      <PropertyRef Name="CountyID" />
+    </Key>
+    <Property Name="CountyID" Type="int" Nullable="false" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="CountyName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="StateProvinceID" Type="int" Nullable="false" />
+    <Property Name="CountyFeature" Type="geometry" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="FieldDefinitionData">
+    <Key>
+      <PropertyRef Name="FieldDefinitionDataID" />
+    </Key>
+    <Property Name="FieldDefinitionDataID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="FieldDefinitionID" Type="int" Nullable="false" />
+    <Property Name="FieldDefinitionDataValue" Type="varchar(max)" />
+    <Property Name="FieldDefinitionLabel" Type="varchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="FieldDefinitionDataImage">
+    <Key>
+      <PropertyRef Name="FieldDefinitionDataImageID" />
+    </Key>
+    <Property Name="FieldDefinitionDataImageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="FieldDefinitionDataID" Type="int" Nullable="false" />
+    <Property Name="FileResourceID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_FieldDefinitionDataImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_NeptuneHomePageImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_NeptunePageImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_Organization_FileResource_LogoFileResourceID_TenantID_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_TenantID_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_TenantID_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_TenantID_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="FileResource">
+    <Key>
+      <PropertyRef Name="FileResourceID" />
+    </Key>
+    <Property Name="FileResourceID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="FileResourceMimeTypeID" Type="int" Nullable="false" />
+    <Property Name="OriginalBaseFilename" Type="varchar" Nullable="false" MaxLength="255" />
+    <Property Name="OriginalFileExtension" Type="varchar" Nullable="false" MaxLength="255" />
+    <Property Name="FileResourceGUID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FileResourceData" Type="varbinary(max)" Nullable="false" />
+    <Property Name="CreatePersonID" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NeptuneHomePageImage">
+    <Key>
+      <PropertyRef Name="NeptuneHomePageImageID" />
+    </Key>
+    <Property Name="NeptuneHomePageImageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="FileResourceID" Type="int" Nullable="false" />
+    <Property Name="Caption" Type="varchar" Nullable="false" MaxLength="300" />
+    <Property Name="SortOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_NeptunePageImage_NeptunePage_NeptunePageID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="NeptunePage">
+    <Key>
+      <PropertyRef Name="NeptunePageID" />
+    </Key>
+    <Property Name="NeptunePageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="NeptunePageTypeID" Type="int" Nullable="false" />
+    <Property Name="NeptunePageContent" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="NeptunePageImage">
+    <Key>
+      <PropertyRef Name="NeptunePageImageID" />
+    </Key>
+    <Property Name="NeptunePageImageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="NeptunePageID" Type="int" Nullable="false" />
+    <Property Name="FileResourceID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="NotificationID" />
+    </Key>
+    <Property Name="NotificationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="NotificationTypeID" Type="int" Nullable="false" />
+    <Property Name="PersonID" Type="int" Nullable="false" />
+    <Property Name="NotificationDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_Person_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="Organization">
+    <Key>
+      <PropertyRef Name="OrganizationID" />
+    </Key>
+    <Property Name="OrganizationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="OrganizationGuid" Type="uniqueidentifier" />
+    <Property Name="OrganizationName" Type="varchar" Nullable="false" MaxLength="200" />
+    <Property Name="OrganizationShortName" Type="varchar" MaxLength="50" />
+    <Property Name="PrimaryContactPersonID" Type="int" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="OrganizationUrl" Type="varchar" MaxLength="200" />
+    <Property Name="LogoFileResourceID" Type="int" />
+    <Property Name="OrganizationTypeID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_Organization_OrganizationType_OrganizationTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="OrganizationType">
+    <Key>
+      <PropertyRef Name="OrganizationTypeID" />
+    </Key>
+    <Property Name="OrganizationTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="OrganizationTypeName" Type="varchar" Nullable="false" MaxLength="200" />
+    <Property Name="OrganizationTypeAbbreviation" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="LegendColor" Type="varchar" Nullable="false" MaxLength="10" />
+    <Property Name="IsDefaultOrganizationType" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_AuditLog_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FileResource_Person_CreatePersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_Notification_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_Organization_Person_PrimaryContactPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_SupportRequestLog_Person_RequestPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TenantAttribute_Person_PrimaryContactPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="Person">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="PersonGuid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="LastName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="Email" Type="varchar" Nullable="false" MaxLength="255" />
+    <Property Name="Phone" Type="varchar" MaxLength="30" />
+    <Property Name="RoleID" Type="int" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="UpdateDate" Type="datetime" />
+    <Property Name="LastActivityDate" Type="datetime" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="OrganizationID" Type="int" Nullable="false" />
+    <Property Name="ReceiveSupportEmails" Type="bit" Nullable="false" />
+    <Property Name="LoginName" Type="varchar" Nullable="false" MaxLength="128" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_County_StateProvince_StateProvinceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="StateProvince">
+    <Key>
+      <PropertyRef Name="StateProvinceID" />
+    </Key>
+    <Property Name="StateProvinceID" Type="int" Nullable="false" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="StateProvinceName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="StateProvinceAbbreviation" Type="char" Nullable="false" MaxLength="2" />
+    <Property Name="StateProvinceFeature" Type="geometry" />
+    <Property Name="StateProvinceFeatureForAnalysis" Type="geometry" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SupportRequestLog">
+    <Key>
+      <PropertyRef Name="SupportRequestLogID" />
+    </Key>
+    <Property Name="SupportRequestLogID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="RequestDate" Type="datetime" Nullable="false" />
+    <Property Name="RequestPersonName" Type="varchar" Nullable="false" MaxLength="200" />
+    <Property Name="RequestPersonEmail" Type="varchar" Nullable="false" MaxLength="256" />
+    <Property Name="RequestPersonID" Type="int" />
+    <Property Name="SupportRequestTypeID" Type="int" Nullable="false" />
+    <Property Name="RequestDescription" Type="varchar" Nullable="false" MaxLength="2000" />
+    <Property Name="RequestPersonOrganization" Type="varchar" MaxLength="500" />
+    <Property Name="RequestPersonPhone" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TenantAttribute">
+    <Key>
+      <PropertyRef Name="TenantAttributeID" />
+    </Key>
+    <Property Name="TenantAttributeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="DefaultBoundingBox" Type="geometry" Nullable="false" />
+    <Property Name="MinimumYear" Type="int" Nullable="false" />
+    <Property Name="PrimaryContactPersonID" Type="int" />
+    <Property Name="TenantSquareLogoFileResourceID" Type="int" />
+    <Property Name="TenantBannerLogoFileResourceID" Type="int" />
+    <Property Name="TenantStyleSheetFileResourceID" Type="int" />
+    <Property Name="TenantDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="ToolDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="RecaptchaPublicKey" Type="varchar" MaxLength="100" />
+    <Property Name="RecaptchaPrivateKey" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <Association Name="FK_AuditLog_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
+    <End Role="AuditLogs" Type="Neptune.Web.Models.Store.AuditLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="AuditLogs">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_County_StateProvince_StateProvinceID">
+    <End Role="StateProvince" Type="Neptune.Web.Models.Store.StateProvince" Multiplicity="1" />
+    <End Role="Counties" Type="Neptune.Web.Models.Store.County" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateProvince">
+        <PropertyRef Name="StateProvinceID" />
+      </Principal>
+      <Dependent Role="Counties">
+        <PropertyRef Name="StateProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldDefinitionDataImage_FieldDefinitionData_FieldDefinitionDataID">
+    <End Role="FieldDefinitionData" Type="Neptune.Web.Models.Store.FieldDefinitionData" Multiplicity="1" />
+    <End Role="FieldDefinitionDataImages" Type="Neptune.Web.Models.Store.FieldDefinitionDataImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FieldDefinitionData">
+        <PropertyRef Name="FieldDefinitionDataID" />
+      </Principal>
+      <Dependent Role="FieldDefinitionDataImages">
+        <PropertyRef Name="FieldDefinitionDataID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldDefinitionDataImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="1" />
+    <End Role="FieldDefinitionDataImages" Type="Neptune.Web.Models.Store.FieldDefinitionDataImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="FieldDefinitionDataImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FileResource_Person_CreatePersonID_PersonID">
+    <End Role="CreatePerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
+    <End Role="FileResourcesWhereYouAreTheCreatePerson" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CreatePerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="FileResourcesWhereYouAreTheCreatePerson">
+        <PropertyRef Name="CreatePersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptuneHomePageImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="1" />
+    <End Role="NeptuneHomePageImages" Type="Neptune.Web.Models.Store.NeptuneHomePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="NeptuneHomePageImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptunePageImage_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="1" />
+    <End Role="NeptunePageImages" Type="Neptune.Web.Models.Store.NeptunePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="NeptunePageImages">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NeptunePageImage_NeptunePage_NeptunePageID">
+    <End Role="NeptunePage" Type="Neptune.Web.Models.Store.NeptunePage" Multiplicity="1" />
+    <End Role="NeptunePageImages" Type="Neptune.Web.Models.Store.NeptunePageImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="NeptunePage">
+        <PropertyRef Name="NeptunePageID" />
+      </Principal>
+      <Dependent Role="NeptunePageImages">
+        <PropertyRef Name="NeptunePageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Notification_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
+    <End Role="Notifications" Type="Neptune.Web.Models.Store.Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="Notifications">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_FileResource_LogoFileResourceID_FileResourceID">
+    <End Role="LogoFileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="0..1" />
+    <End Role="OrganizationsWhereYouAreTheLogoFileResource" Type="Neptune.Web.Models.Store.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="OrganizationsWhereYouAreTheLogoFileResource">
+        <PropertyRef Name="LogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_OrganizationType_OrganizationTypeID">
+    <End Role="OrganizationType" Type="Neptune.Web.Models.Store.OrganizationType" Multiplicity="1" />
+    <End Role="Organizations" Type="Neptune.Web.Models.Store.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrganizationType">
+        <PropertyRef Name="OrganizationTypeID" />
+      </Principal>
+      <Dependent Role="Organizations">
+        <PropertyRef Name="OrganizationTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organization_Person_PrimaryContactPersonID_PersonID">
+    <End Role="PrimaryContactPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="0..1" />
+    <End Role="OrganizationsWhereYouAreThePrimaryContactPerson" Type="Neptune.Web.Models.Store.Organization" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PrimaryContactPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="OrganizationsWhereYouAreThePrimaryContactPerson">
+        <PropertyRef Name="PrimaryContactPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Person_Organization_OrganizationID">
+    <End Role="Organization" Type="Neptune.Web.Models.Store.Organization" Multiplicity="1" />
+    <End Role="People" Type="Neptune.Web.Models.Store.Person" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="People">
+        <PropertyRef Name="OrganizationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID">
+    <End Role="RequestPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="0..1" />
+    <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" Type="Neptune.Web.Models.Store.SupportRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RequestPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="SupportRequestLogsWhereYouAreTheRequestPerson">
+        <PropertyRef Name="RequestPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantBannerLogoFileResourceID_FileResourceID">
+    <End Role="TenantBannerLogoFileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource" Type="Neptune.Web.Models.Store.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantBannerLogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantBannerLogoFileResource">
+        <PropertyRef Name="TenantBannerLogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID">
+    <End Role="TenantSquareLogoFileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" Type="Neptune.Web.Models.Store.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantSquareLogoFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource">
+        <PropertyRef Name="TenantSquareLogoFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID">
+    <End Role="TenantStyleSheetFileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" Type="Neptune.Web.Models.Store.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TenantStyleSheetFileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource">
+        <PropertyRef Name="TenantStyleSheetFileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID">
+    <End Role="PrimaryContactPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="0..1" />
+    <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" Type="Neptune.Web.Models.Store.TenantAttribute" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PrimaryContactPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="TenantAttributesWhereYouAreThePrimaryContactPerson">
+        <PropertyRef Name="PrimaryContactPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="LTrimX" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="str" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="RTrimX" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="str" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="TrimX" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="str" Type="varchar(max)" Mode="In" />
+  </Function>
+</Schema>
