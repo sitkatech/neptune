@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         protected StateProvince()
         {
             this.Counties = new HashSet<County>();
+            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -67,13 +68,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return Counties.Any();
+            return Counties.Any() || StormwaterJurisdictions.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StateProvince).Name, typeof(County).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StateProvince).Name, typeof(County).Name, typeof(StormwaterJurisdiction).Name};
 
         [Key]
         public int StateProvinceID { get; set; }
@@ -85,6 +86,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return StateProvinceID; } set { StateProvinceID = value; } }
 
         public virtual ICollection<County> Counties { get; set; }
+        public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths

@@ -38,6 +38,10 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FieldDefinitionData> FieldDefinitionDatas { get { return AllFieldDefinitionDatas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FileResource> AllFileResources { get; set; }
         public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<ModeledCatchmentGeometryStaging> AllModeledCatchmentGeometryStagings { get; set; }
+        public virtual IQueryable<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get { return AllModeledCatchmentGeometryStagings.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<ModeledCatchment> AllModeledCatchments { get; set; }
+        public virtual IQueryable<ModeledCatchment> ModeledCatchments { get { return AllModeledCatchments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<NeptuneHomePageImage> AllNeptuneHomePageImages { get; set; }
         public virtual IQueryable<NeptuneHomePageImage> NeptuneHomePageImages { get { return AllNeptuneHomePageImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<NeptunePageImage> AllNeptunePageImages { get; set; }
@@ -54,10 +58,28 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
         public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }
+        public virtual IQueryable<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get { return AllStormwaterJurisdictionPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<StormwaterJurisdiction> AllStormwaterJurisdictions { get; set; }
+        public virtual IQueryable<StormwaterJurisdiction> StormwaterJurisdictions { get { return AllStormwaterJurisdictions.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<SupportRequestLog> AllSupportRequestLogs { get; set; }
         public virtual IQueryable<SupportRequestLog> SupportRequestLogs { get { return AllSupportRequestLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TenantAttribute> AllTenantAttributes { get; set; }
         public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
+        public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
+        public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPInfiltrationReading> AllTreatmentBMPInfiltrationReadings { get; set; }
+        public virtual IQueryable<TreatmentBMPInfiltrationReading> TreatmentBMPInfiltrationReadings { get { return AllTreatmentBMPInfiltrationReadings.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPObservationDetail> AllTreatmentBMPObservationDetails { get; set; }
+        public virtual IQueryable<TreatmentBMPObservationDetail> TreatmentBMPObservationDetails { get { return AllTreatmentBMPObservationDetails.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPObservation> AllTreatmentBMPObservations { get; set; }
+        public virtual IQueryable<TreatmentBMPObservation> TreatmentBMPObservations { get { return AllTreatmentBMPObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMP> AllTreatmentBMPs { get; set; }
+        public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPTypeObservationType> AllTreatmentBMPTypeObservationTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get { return AllTreatmentBMPTypeObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -103,6 +125,12 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(measurementUnitType, "MeasurementUnitType", primaryKey);
                     return measurementUnitType;
 
+                case "ModeledCatchmentGeometryStaging":
+                    return ModeledCatchmentGeometryStagings.GetModeledCatchmentGeometryStaging(primaryKey);
+
+                case "ModeledCatchment":
+                    return ModeledCatchments.GetModeledCatchment(primaryKey);
+
                 case "NeptuneHomePageImage":
                     return NeptuneHomePageImages.GetNeptuneHomePageImage(primaryKey);
 
@@ -130,6 +158,16 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(notificationType, "NotificationType", primaryKey);
                     return notificationType;
 
+                case "ObservationType":
+                    var observationType = ObservationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationType, "ObservationType", primaryKey);
+                    return observationType;
+
+                case "ObservationValueType":
+                    var observationValueType = ObservationValueType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationValueType, "ObservationValueType", primaryKey);
+                    return observationValueType;
+
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);
 
@@ -147,6 +185,27 @@ namespace Neptune.Web.Models
                 case "StateProvince":
                     return StateProvinces.GetStateProvince(primaryKey);
 
+                case "StormwaterAssessmentType":
+                    var stormwaterAssessmentType = StormwaterAssessmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(stormwaterAssessmentType, "StormwaterAssessmentType", primaryKey);
+                    return stormwaterAssessmentType;
+
+                case "StormwaterBreadCrumbEntity":
+                    var stormwaterBreadCrumbEntity = StormwaterBreadCrumbEntity.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(stormwaterBreadCrumbEntity, "StormwaterBreadCrumbEntity", primaryKey);
+                    return stormwaterBreadCrumbEntity;
+
+                case "StormwaterJurisdictionPerson":
+                    return StormwaterJurisdictionPeople.GetStormwaterJurisdictionPerson(primaryKey);
+
+                case "StormwaterJurisdiction":
+                    return StormwaterJurisdictions.GetStormwaterJurisdiction(primaryKey);
+
+                case "StormwaterRole":
+                    var stormwaterRole = StormwaterRole.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(stormwaterRole, "StormwaterRole", primaryKey);
+                    return stormwaterRole;
+
                 case "SupportRequestLog":
                     return SupportRequestLogs.GetSupportRequestLog(primaryKey);
 
@@ -162,6 +221,37 @@ namespace Neptune.Web.Models
                     var tenant = Tenant.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(tenant, "Tenant", primaryKey);
                     return tenant;
+
+                case "TreatmentBMPAssessment":
+                    return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);
+
+                case "TreatmentBMPBenchmarkAndThreshold":
+                    return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);
+
+                case "TreatmentBMPInfiltrationReading":
+                    return TreatmentBMPInfiltrationReadings.GetTreatmentBMPInfiltrationReading(primaryKey);
+
+                case "TreatmentBMPObservationDetail":
+                    return TreatmentBMPObservationDetails.GetTreatmentBMPObservationDetail(primaryKey);
+
+                case "TreatmentBMPObservationDetailType":
+                    var treatmentBMPObservationDetailType = TreatmentBMPObservationDetailType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPObservationDetailType, "TreatmentBMPObservationDetailType", primaryKey);
+                    return treatmentBMPObservationDetailType;
+
+                case "TreatmentBMPObservation":
+                    return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
+
+                case "TreatmentBMP":
+                    return TreatmentBMPs.GetTreatmentBMP(primaryKey);
+
+                case "TreatmentBMPTypeObservationType":
+                    return TreatmentBMPTypeObservationTypes.GetTreatmentBMPTypeObservationType(primaryKey);
+
+                case "TreatmentBMPType":
+                    var treatmentBMPType = TreatmentBMPType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPType, "TreatmentBMPType", primaryKey);
+                    return treatmentBMPType;
                 default:
                     throw new NotImplementedException(string.Format("No loader for type \"{0}\"", type.FullName));
             }

@@ -1,0 +1,108 @@
+//  IMPORTANT:
+//  This file is generated. Your changes will be lost.
+//  Use the corresponding partial class for customizations.
+//  Source Table: [dbo].[TreatmentBMPTypeObservationType]
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
+using System.Linq;
+using System.Web;
+using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
+using Neptune.Web.Common;
+
+namespace Neptune.Web.Models
+{
+    [Table("[dbo].[TreatmentBMPTypeObservationType]")]
+    public partial class TreatmentBMPTypeObservationType : IHavePrimaryKey, IHaveATenantID
+    {
+        /// <summary>
+        /// Default Constructor; only used by EF
+        /// </summary>
+        protected TreatmentBMPTypeObservationType()
+        {
+
+            this.TenantID = HttpRequestStorage.Tenant.TenantID;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue) : this()
+        {
+            this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.ObservationTypeID = observationTypeID;
+            this.AssessmentScoreWeight = assessmentScoreWeight;
+            this.DefaultThresholdValue = defaultThresholdValue;
+            this.DefaultBenchmarkValue = defaultBenchmarkValue;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public TreatmentBMPTypeObservationType(int treatmentBMPTypeID, int observationTypeID, double assessmentScoreWeight) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.ObservationTypeID = observationTypeID;
+            this.AssessmentScoreWeight = assessmentScoreWeight;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
+        /// </summary>
+        public TreatmentBMPTypeObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType, double assessmentScoreWeight) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
+            this.ObservationTypeID = observationType.ObservationTypeID;
+            this.AssessmentScoreWeight = assessmentScoreWeight;
+        }
+
+        /// <summary>
+        /// Creates a "blank" object of this type and populates primitives with defaults
+        /// </summary>
+        public static TreatmentBMPTypeObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        {
+            return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType, default(double));
+        }
+
+        /// <summary>
+        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
+        /// </summary>
+        /// <returns></returns>
+        public bool HasDependentObjects()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeObservationType).Name};
+
+        [Key]
+        public int TreatmentBMPTypeObservationTypeID { get; set; }
+        public int TenantID { get; private set; }
+        public int TreatmentBMPTypeID { get; set; }
+        public int ObservationTypeID { get; set; }
+        public double AssessmentScoreWeight { get; set; }
+        public double? DefaultThresholdValue { get; set; }
+        public double? DefaultBenchmarkValue { get; set; }
+        public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
+
+        public TreatmentBMPType TreatmentBMPType { get { return TreatmentBMPType.AllLookupDictionary[TreatmentBMPTypeID]; } }
+        public ObservationType ObservationType { get { return ObservationType.AllLookupDictionary[ObservationTypeID]; } }
+
+        public static class FieldLengths
+        {
+
+        }
+    }
+}

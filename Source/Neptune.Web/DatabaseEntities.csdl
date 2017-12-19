@@ -6,6 +6,8 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.FieldDefinitionData" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.FieldDefinitionDataImage" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.FileResource" />
+    <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.ModeledCatchment" />
+    <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.ModeledCatchmentGeometryStaging" />
     <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.NeptuneHomePageImage" />
     <EntitySet Name="NeptunePage" EntityType="Neptune.Web.Models.NeptunePage" />
     <EntitySet Name="NeptunePageImage" EntityType="Neptune.Web.Models.NeptunePageImage" />
@@ -14,8 +16,17 @@
     <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.OrganizationType" />
     <EntitySet Name="Person" EntityType="Neptune.Web.Models.Person" />
     <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.StateProvince" />
+    <EntitySet Name="StormwaterJurisdiction" EntityType="Neptune.Web.Models.StormwaterJurisdiction" />
+    <EntitySet Name="StormwaterJurisdictionPerson" EntityType="Neptune.Web.Models.StormwaterJurisdictionPerson" />
     <EntitySet Name="SupportRequestLog" EntityType="Neptune.Web.Models.SupportRequestLog" />
     <EntitySet Name="TenantAttribute" EntityType="Neptune.Web.Models.TenantAttribute" />
+    <EntitySet Name="TreatmentBMP" EntityType="Neptune.Web.Models.TreatmentBMP" />
+    <EntitySet Name="TreatmentBMPAssessment" EntityType="Neptune.Web.Models.TreatmentBMPAssessment" />
+    <EntitySet Name="TreatmentBMPBenchmarkAndThreshold" EntityType="Neptune.Web.Models.TreatmentBMPBenchmarkAndThreshold" />
+    <EntitySet Name="TreatmentBMPInfiltrationReading" EntityType="Neptune.Web.Models.TreatmentBMPInfiltrationReading" />
+    <EntitySet Name="TreatmentBMPObservation" EntityType="Neptune.Web.Models.TreatmentBMPObservation" />
+    <EntitySet Name="TreatmentBMPObservationDetail" EntityType="Neptune.Web.Models.TreatmentBMPObservationDetail" />
+    <EntitySet Name="TreatmentBMPTypeObservationType" EntityType="Neptune.Web.Models.TreatmentBMPTypeObservationType" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -60,6 +71,18 @@
       <End Role="TenantStyleSheetFileResource" EntitySet="FileResource" />
       <End Role="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" EntitySet="TenantAttribute" />
     </AssociationSet>
+    <AssociationSet Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
+      <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="ModeledCatchments" EntitySet="ModeledCatchment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" Association="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID">
+      <End Role="ModeledCatchment" EntitySet="ModeledCatchment" />
+      <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ModeledCatchmentGeometryStaging_Person_PersonID" Association="Neptune.Web.Models.FK_ModeledCatchmentGeometryStaging_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="ModeledCatchmentGeometryStagings" EntitySet="ModeledCatchmentGeometryStaging" />
+    </AssociationSet>
     <AssociationSet Name="FK_NeptunePageImage_NeptunePage_NeptunePageID" Association="Neptune.Web.Models.FK_NeptunePageImage_NeptunePage_NeptunePageID">
       <End Role="NeptunePage" EntitySet="NeptunePage" />
       <End Role="NeptunePageImages" EntitySet="NeptunePageImage" />
@@ -80,6 +103,14 @@
       <End Role="Organization" EntitySet="Organization" />
       <End Role="People" EntitySet="Person" />
     </AssociationSet>
+    <AssociationSet Name="FK_StormwaterJurisdiction_Organization_OrganizationID" Association="Neptune.Web.Models.FK_StormwaterJurisdiction_Organization_OrganizationID">
+      <End Role="Organization" EntitySet="Organization" />
+      <End Role="StormwaterJurisdictions" EntitySet="StormwaterJurisdiction" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StormwaterJurisdictionPerson_Person_PersonID" Association="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="StormwaterJurisdictionPeople" EntitySet="StormwaterJurisdictionPerson" />
+    </AssociationSet>
     <AssociationSet Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID" Association="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID">
       <End Role="RequestPerson" EntitySet="Person" />
       <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" EntitySet="SupportRequestLog" />
@@ -87,6 +118,42 @@
     <AssociationSet Name="FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" Association="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID">
       <End Role="PrimaryContactPerson" EntitySet="Person" />
       <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" EntitySet="TenantAttribute" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPAssessment_Person_PersonID" Association="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StormwaterJurisdiction_StateProvince_StateProvinceID" Association="Neptune.Web.Models.FK_StormwaterJurisdiction_StateProvince_StateProvinceID">
+      <End Role="StateProvince" EntitySet="StateProvince" />
+      <End Role="StormwaterJurisdictions" EntitySet="StormwaterJurisdiction" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID">
+      <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="StormwaterJurisdictionPeople" EntitySet="StormwaterJurisdictionPerson" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID">
+      <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="TreatmentBMPBenchmarkAndThresholds" EntitySet="TreatmentBMPBenchmarkAndThreshold" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" Association="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID">
+      <End Role="TreatmentBMPAssessment" EntitySet="TreatmentBMPAssessment" />
+      <End Role="TreatmentBMPObservations" EntitySet="TreatmentBMPObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPInfiltrationReading_TreatmentBMPObservationDetail_TreatmentBMPObservationDetailID" Association="Neptune.Web.Models.FK_TreatmentBMPInfiltrationReading_TreatmentBMPObservationDetail_TreatmentBMPObservationDetailID">
+      <End Role="TreatmentBMPObservationDetail" EntitySet="TreatmentBMPObservationDetail" />
+      <End Role="TreatmentBMPInfiltrationReadings" EntitySet="TreatmentBMPInfiltrationReading" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPObservationDetail_TreatmentBMPObservation_TreatmentBMPObservationID" Association="Neptune.Web.Models.FK_TreatmentBMPObservationDetail_TreatmentBMPObservation_TreatmentBMPObservationID">
+      <End Role="TreatmentBMPObservation" EntitySet="TreatmentBMPObservation" />
+      <End Role="TreatmentBMPObservationDetails" EntitySet="TreatmentBMPObservationDetail" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AuditLog">
@@ -161,6 +228,32 @@
     <NavigationProperty Name="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" FromRole="TenantSquareLogoFileResource" ToRole="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" />
     <NavigationProperty Name="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" FromRole="TenantStyleSheetFileResource" ToRole="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" />
   </EntityType>
+  <EntityType Name="ModeledCatchment">
+    <Key>
+      <PropertyRef Name="ModeledCatchmentID" />
+    </Key>
+    <Property Name="ModeledCatchmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="ModeledCatchmentName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="ModeledCatchmentGeometry" Type="Geometry" />
+    <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="ModeledCatchments" ToRole="StormwaterJurisdiction" />
+    <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="ModeledCatchment" ToRole="TreatmentBMPs" />
+  </EntityType>
+  <EntityType Name="ModeledCatchmentGeometryStaging">
+    <Key>
+      <PropertyRef Name="ModeledCatchmentGeometryStagingID" />
+    </Key>
+    <Property Name="ModeledCatchmentGeometryStagingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <Property Name="FeatureClassName" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="GeoJson" Type="String" Nullable="false" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="SelectedProperty" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+    <Property Name="ShouldImport" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_ModeledCatchmentGeometryStaging_Person_PersonID" FromRole="ModeledCatchmentGeometryStagings" ToRole="Person" />
+  </EntityType>
   <EntityType Name="NeptuneHomePageImage">
     <Key>
       <PropertyRef Name="NeptuneHomePageImageID" />
@@ -222,6 +315,7 @@
     <NavigationProperty Name="OrganizationType" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="Organizations" ToRole="OrganizationType" />
     <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="OrganizationsWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
     <NavigationProperty Name="People" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="Organization" ToRole="People" />
+    <NavigationProperty Name="StormwaterJurisdictions" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_Organization_OrganizationID" FromRole="Organization" ToRole="StormwaterJurisdictions" />
   </EntityType>
   <EntityType Name="OrganizationType">
     <Key>
@@ -256,11 +350,14 @@
     <Property Name="LoginName" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="AuditLogs" Relationship="Neptune.Web.Models.FK_AuditLog_Person_PersonID" FromRole="Person" ToRole="AuditLogs" />
     <NavigationProperty Name="FileResourcesWhereYouAreTheCreatePerson" Relationship="Neptune.Web.Models.FK_FileResource_Person_CreatePersonID_PersonID" FromRole="CreatePerson" ToRole="FileResourcesWhereYouAreTheCreatePerson" />
+    <NavigationProperty Name="ModeledCatchmentGeometryStagings" Relationship="Neptune.Web.Models.FK_ModeledCatchmentGeometryStaging_Person_PersonID" FromRole="Person" ToRole="ModeledCatchmentGeometryStagings" />
     <NavigationProperty Name="Notifications" Relationship="Neptune.Web.Models.FK_Notification_Person_PersonID" FromRole="Person" ToRole="Notifications" />
     <NavigationProperty Name="OrganizationsWhereYouAreThePrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="PrimaryContactPerson" ToRole="OrganizationsWhereYouAreThePrimaryContactPerson" />
     <NavigationProperty Name="Organization" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="People" ToRole="Organization" />
+    <NavigationProperty Name="StormwaterJurisdictionPeople" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_Person_PersonID" FromRole="Person" ToRole="StormwaterJurisdictionPeople" />
     <NavigationProperty Name="SupportRequestLogsWhereYouAreTheRequestPerson" Relationship="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID" FromRole="RequestPerson" ToRole="SupportRequestLogsWhereYouAreTheRequestPerson" />
     <NavigationProperty Name="TenantAttributesWhereYouAreThePrimaryContactPerson" Relationship="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" FromRole="PrimaryContactPerson" ToRole="TenantAttributesWhereYouAreThePrimaryContactPerson" />
+    <NavigationProperty Name="TreatmentBMPAssessments" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="Person" ToRole="TreatmentBMPAssessments" />
   </EntityType>
   <EntityType Name="StateProvince">
     <Key>
@@ -273,6 +370,36 @@
     <Property Name="StateProvinceFeature" Type="Geometry" />
     <Property Name="StateProvinceFeatureForAnalysis" Type="Geometry" Nullable="false" />
     <NavigationProperty Name="Counties" Relationship="Neptune.Web.Models.FK_County_StateProvince_StateProvinceID" FromRole="StateProvince" ToRole="Counties" />
+    <NavigationProperty Name="StormwaterJurisdictions" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_StateProvince_StateProvinceID" FromRole="StateProvince" ToRole="StormwaterJurisdictions" />
+  </EntityType>
+  <EntityType Name="StormwaterJurisdiction">
+    <Key>
+      <PropertyRef Name="StormwaterJurisdictionID" />
+    </Key>
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterJurisdictionGeometry" Type="Geometry" />
+    <Property Name="RoadNetworkGeometry" Type="Geometry" />
+    <Property Name="RoadAreaOfInterestGeometry" Type="Geometry" />
+    <Property Name="StateProvinceID" Type="Int32" />
+    <Property Name="IsTransportationJurisdiction" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ModeledCatchments" Relationship="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="ModeledCatchments" />
+    <NavigationProperty Name="Organization" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_Organization_OrganizationID" FromRole="StormwaterJurisdictions" ToRole="Organization" />
+    <NavigationProperty Name="StateProvince" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_StateProvince_StateProvinceID" FromRole="StormwaterJurisdictions" ToRole="StateProvince" />
+    <NavigationProperty Name="StormwaterJurisdictionPeople" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="StormwaterJurisdictionPeople" />
+    <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="TreatmentBMPs" />
+  </EntityType>
+  <EntityType Name="StormwaterJurisdictionPerson">
+    <Key>
+      <PropertyRef Name="StormwaterJurisdictionPersonID" />
+    </Key>
+    <Property Name="StormwaterJurisdictionPersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_Person_PersonID" FromRole="StormwaterJurisdictionPeople" ToRole="Person" />
+    <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdictionPeople" ToRole="StormwaterJurisdiction" />
   </EntityType>
   <EntityType Name="SupportRequestLog">
     <Key>
@@ -310,6 +437,104 @@
     <NavigationProperty Name="TenantSquareLogoFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantSquareLogoFileResourceID_FileResourceID" FromRole="TenantAttributesWhereYouAreTheTenantSquareLogoFileResource" ToRole="TenantSquareLogoFileResource" />
     <NavigationProperty Name="TenantStyleSheetFileResource" Relationship="Neptune.Web.Models.FK_TenantAttribute_FileResource_TenantStyleSheetFileResourceID_FileResourceID" FromRole="TenantAttributesWhereYouAreTheTenantStyleSheetFileResource" ToRole="TenantStyleSheetFileResource" />
     <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" FromRole="TenantAttributesWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
+  </EntityType>
+  <EntityType Name="TreatmentBMP">
+    <Key>
+      <PropertyRef Name="TreatmentBMPID" />
+    </Key>
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPName" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+    <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
+    <Property Name="LocationPoint" Type="Geometry" />
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="ModeledCatchmentID" Type="Int32" />
+    <Property Name="InletCount" Type="Int32" Nullable="false" />
+    <Property Name="OutletCount" Type="Int32" Nullable="false" />
+    <Property Name="DesignDepth" Type="Double" />
+    <Property Name="Notes" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="ModeledCatchment" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="TreatmentBMPs" ToRole="ModeledCatchment" />
+    <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="TreatmentBMPs" ToRole="StormwaterJurisdiction" />
+    <NavigationProperty Name="TreatmentBMPAssessments" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPAssessments" />
+    <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPBenchmarkAndThresholds" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPAssessment">
+    <Key>
+      <PropertyRef Name="TreatmentBMPAssessmentID" />
+    </Key>
+    <Property Name="TreatmentBMPAssessmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterAssessmentTypeID" Type="Int32" Nullable="false" />
+    <Property Name="AssessmentDate" Type="DateTime" Nullable="false" />
+    <Property Name="PersonID" Type="Int32" Nullable="false" />
+    <Property Name="AlternateAssessmentScore" Type="Double" />
+    <Property Name="AlternateAssessmentRationale" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="IsPrivate" Type="Boolean" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="TreatmentBMPAssessments" ToRole="Person" />
+    <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPAssessments" ToRole="TreatmentBMP" />
+    <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPAssessment" ToRole="TreatmentBMPObservations" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPBenchmarkAndThreshold">
+    <Key>
+      <PropertyRef Name="TreatmentBMPBenchmarkAndThresholdID" />
+    </Key>
+    <Property Name="TreatmentBMPBenchmarkAndThresholdID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
+    <Property Name="BenchmarkValue" Type="Double" Nullable="false" />
+    <Property Name="ThresholdValue" Type="Double" Nullable="false" />
+    <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="TreatmentBMP" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPInfiltrationReading">
+    <Key>
+      <PropertyRef Name="TreatmentBMPInfiltrationReadingID" />
+    </Key>
+    <Property Name="TreatmentBMPInfiltrationReadingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPObservationDetailID" Type="Int32" Nullable="false" />
+    <Property Name="ReadingValue" Type="Double" Nullable="false" />
+    <Property Name="ReadingTime" Type="Double" Nullable="false" />
+    <NavigationProperty Name="TreatmentBMPObservationDetail" Relationship="Neptune.Web.Models.FK_TreatmentBMPInfiltrationReading_TreatmentBMPObservationDetail_TreatmentBMPObservationDetailID" FromRole="TreatmentBMPInfiltrationReadings" ToRole="TreatmentBMPObservationDetail" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPObservation">
+    <Key>
+      <PropertyRef Name="TreatmentBMPObservationID" />
+    </Key>
+    <Property Name="TreatmentBMPObservationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPAssessmentID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationValueTypeID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TreatmentBMPAssessment" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPAssessment" />
+    <NavigationProperty Name="TreatmentBMPObservationDetails" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservationDetail_TreatmentBMPObservation_TreatmentBMPObservationID" FromRole="TreatmentBMPObservation" ToRole="TreatmentBMPObservationDetails" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPObservationDetail">
+    <Key>
+      <PropertyRef Name="TreatmentBMPObservationDetailID" />
+    </Key>
+    <Property Name="TreatmentBMPObservationDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPObservationID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPObservationDetailTypeID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPObservationValue" Type="Double" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="TreatmentBMPInfiltrationReadings" Relationship="Neptune.Web.Models.FK_TreatmentBMPInfiltrationReading_TreatmentBMPObservationDetail_TreatmentBMPObservationDetailID" FromRole="TreatmentBMPObservationDetail" ToRole="TreatmentBMPInfiltrationReadings" />
+    <NavigationProperty Name="TreatmentBMPObservation" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservationDetail_TreatmentBMPObservation_TreatmentBMPObservationID" FromRole="TreatmentBMPObservationDetails" ToRole="TreatmentBMPObservation" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPTypeObservationType">
+    <Key>
+      <PropertyRef Name="TreatmentBMPTypeObservationTypeID" />
+    </Key>
+    <Property Name="TreatmentBMPTypeObservationTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
+    <Property Name="AssessmentScoreWeight" Type="Double" Nullable="false" />
+    <Property Name="DefaultThresholdValue" Type="Double" />
+    <Property Name="DefaultBenchmarkValue" Type="Double" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
@@ -443,6 +668,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
+    <End Role="StormwaterJurisdiction" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="1" />
+    <End Role="ModeledCatchments" Type="Neptune.Web.Models.ModeledCatchment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StormwaterJurisdiction">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Principal>
+      <Dependent Role="ModeledCatchments">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID">
+    <End Role="ModeledCatchment" Type="Neptune.Web.Models.ModeledCatchment" Multiplicity="0..1" />
+    <End Role="TreatmentBMPs" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ModeledCatchment">
+        <PropertyRef Name="ModeledCatchmentID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPs">
+        <PropertyRef Name="ModeledCatchmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ModeledCatchmentGeometryStaging_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="ModeledCatchmentGeometryStagings" Type="Neptune.Web.Models.ModeledCatchmentGeometryStaging" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="ModeledCatchmentGeometryStagings">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_NeptunePageImage_NeptunePage_NeptunePageID">
     <End Role="NeptunePage" Type="Neptune.Web.Models.NeptunePage" Multiplicity="1" />
     <End Role="NeptunePageImages" Type="Neptune.Web.Models.NeptunePageImage" Multiplicity="*" />
@@ -503,6 +764,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_StormwaterJurisdiction_Organization_OrganizationID">
+    <End Role="Organization" Type="Neptune.Web.Models.Organization" Multiplicity="1" />
+    <End Role="StormwaterJurisdictions" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="StormwaterJurisdictions">
+        <PropertyRef Name="OrganizationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StormwaterJurisdictionPerson_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="StormwaterJurisdictionPeople" Type="Neptune.Web.Models.StormwaterJurisdictionPerson" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="StormwaterJurisdictionPeople">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SupportRequestLog_Person_RequestPersonID_PersonID">
     <End Role="RequestPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
     <End Role="SupportRequestLogsWhereYouAreTheRequestPerson" Type="Neptune.Web.Models.SupportRequestLog" Multiplicity="*" />
@@ -524,6 +809,114 @@
       </Principal>
       <Dependent Role="TenantAttributesWhereYouAreThePrimaryContactPerson">
         <PropertyRef Name="PrimaryContactPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPAssessment_Person_PersonID">
+    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
+    <End Role="TreatmentBMPAssessments" Type="Neptune.Web.Models.TreatmentBMPAssessment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPAssessments">
+        <PropertyRef Name="PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StormwaterJurisdiction_StateProvince_StateProvinceID">
+    <End Role="StateProvince" Type="Neptune.Web.Models.StateProvince" Multiplicity="0..1" />
+    <End Role="StormwaterJurisdictions" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StateProvince">
+        <PropertyRef Name="StateProvinceID" />
+      </Principal>
+      <Dependent Role="StormwaterJurisdictions">
+        <PropertyRef Name="StateProvinceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID">
+    <End Role="StormwaterJurisdiction" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="1" />
+    <End Role="StormwaterJurisdictionPeople" Type="Neptune.Web.Models.StormwaterJurisdictionPerson" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StormwaterJurisdiction">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Principal>
+      <Dependent Role="StormwaterJurisdictionPeople">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID">
+    <End Role="StormwaterJurisdiction" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="1" />
+    <End Role="TreatmentBMPs" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StormwaterJurisdiction">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPs">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
+    <End Role="TreatmentBMPAssessments" Type="Neptune.Web.Models.TreatmentBMPAssessment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPAssessments">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
+    <End Role="TreatmentBMPBenchmarkAndThresholds" Type="Neptune.Web.Models.TreatmentBMPBenchmarkAndThreshold" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPBenchmarkAndThresholds">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID">
+    <End Role="TreatmentBMPAssessment" Type="Neptune.Web.Models.TreatmentBMPAssessment" Multiplicity="1" />
+    <End Role="TreatmentBMPObservations" Type="Neptune.Web.Models.TreatmentBMPObservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPAssessment">
+        <PropertyRef Name="TreatmentBMPAssessmentID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPObservations">
+        <PropertyRef Name="TreatmentBMPAssessmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPInfiltrationReading_TreatmentBMPObservationDetail_TreatmentBMPObservationDetailID">
+    <End Role="TreatmentBMPObservationDetail" Type="Neptune.Web.Models.TreatmentBMPObservationDetail" Multiplicity="1" />
+    <End Role="TreatmentBMPInfiltrationReadings" Type="Neptune.Web.Models.TreatmentBMPInfiltrationReading" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPObservationDetail">
+        <PropertyRef Name="TreatmentBMPObservationDetailID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPInfiltrationReadings">
+        <PropertyRef Name="TreatmentBMPObservationDetailID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPObservationDetail_TreatmentBMPObservation_TreatmentBMPObservationID">
+    <End Role="TreatmentBMPObservation" Type="Neptune.Web.Models.TreatmentBMPObservation" Multiplicity="1" />
+    <End Role="TreatmentBMPObservationDetails" Type="Neptune.Web.Models.TreatmentBMPObservationDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPObservation">
+        <PropertyRef Name="TreatmentBMPObservationID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPObservationDetails">
+        <PropertyRef Name="TreatmentBMPObservationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -72,6 +72,12 @@
     <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\MeasurementUnitType.Binding.cs" />
     <Compile Include="Models\Generated\MeasurementUnitTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ModeledCatchment.Binding.cs" />
+    <Compile Include="Models\Generated\ModeledCatchment.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ModeledCatchmentGeometryStaging.Binding.cs" />
+    <Compile Include="Models\Generated\ModeledCatchmentGeometryStaging.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ModeledCatchmentGeometryStagingPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ModeledCatchmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImage.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImage.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImagePrimaryKey.Binding.cs" />
@@ -90,6 +96,10 @@
     <Compile Include="Models\Generated\NotificationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NotificationType.Binding.cs" />
     <Compile Include="Models\Generated\NotificationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ObservationType.Binding.cs" />
+    <Compile Include="Models\Generated\ObservationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\ObservationValueType.Binding.cs" />
+    <Compile Include="Models\Generated\ObservationValueTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Organization.Binding.cs" />
     <Compile Include="Models\Generated\Organization.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\OrganizationPrimaryKey.Binding.cs" />
@@ -104,6 +114,18 @@
     <Compile Include="Models\Generated\StateProvince.Binding.cs" />
     <Compile Include="Models\Generated\StateProvince.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\StateProvincePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterAssessmentType.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterAssessmentTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterBreadCrumbEntity.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterBreadCrumbEntityPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdiction.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdiction.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionPerson.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionPerson.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionPersonPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterJurisdictionPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterRole.Binding.cs" />
+    <Compile Include="Models\Generated\StormwaterRolePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestLog.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\SupportRequestLogPrimaryKey.Binding.cs" />
@@ -114,6 +136,31 @@
     <Compile Include="Models\Generated\TenantAttribute.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TenantAttributePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TenantPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMP.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMP.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessment.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessment.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThresholdPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPInfiltrationReading.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPInfiltrationReading.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPInfiltrationReadingPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservation.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservation.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationDetail.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationDetail.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationDetailPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationDetailType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationDetailTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPObservationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeObservationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
     <Compile Include="Common\RouteTableBuilder.cs" />
     <Compile Include="Common\RouteTableBuilderTest.cs" />
     <Compile Include="Common\SitkaController.cs" />
