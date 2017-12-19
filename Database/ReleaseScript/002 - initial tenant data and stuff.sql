@@ -3,6 +3,19 @@ values
 (1, 'SitkaTechnologyGroup', 'projectneptune.com', 'sitka'),
 (2, 'OCStormwater', 'ocstormwatertools.org', null)
 
+insert into dbo.NeptunePageRenderType(NeptunePageRenderTypeID, NeptunePageRenderTypeName, NeptunePageRenderTypeDisplayName)
+values
+(1, 'IntroductoryText', 'Introductory Text'),
+(2, 'PageContent', 'Page Content')
+
+insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
+values
+(1, 'HomePage', 'Home Page', 2),
+(2, 'About', 'About', 2),
+(3, 'OrganizationsList', 'Organizations List', 1),
+(4, 'HomeMapInfo', 'Home Page Map Info', 2),
+(5, 'HomeAdditionalInfo', 'Home Page Additional Info', 2)
+
 insert into dbo.neptunepage(TenantID, NeptunePageTypeID)
 select 
 	t.tenantid,
