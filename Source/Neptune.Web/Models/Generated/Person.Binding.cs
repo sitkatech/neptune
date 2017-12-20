@@ -25,10 +25,13 @@ namespace Neptune.Web.Models
         {
             this.AuditLogs = new HashSet<AuditLog>();
             this.FileResourcesWhereYouAreTheCreatePerson = new HashSet<FileResource>();
+            this.ModeledCatchmentGeometryStagings = new HashSet<ModeledCatchmentGeometryStaging>();
             this.Notifications = new HashSet<Notification>();
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
+            this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.SupportRequestLogsWhereYouAreTheRequestPerson = new HashSet<SupportRequestLog>();
             this.TenantAttributesWhereYouAreThePrimaryContactPerson = new HashSet<TenantAttribute>();
+            this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -108,13 +111,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any();
+            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || (StormwaterJurisdictionPerson != null) || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPAssessments.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FileResource).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPAssessment).Name};
 
         [Key]
         public int PersonID { get; set; }
@@ -136,10 +139,14 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<AuditLog> AuditLogs { get; set; }
         public virtual ICollection<FileResource> FileResourcesWhereYouAreTheCreatePerson { get; set; }
+        public virtual ICollection<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }
+        protected virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
+        public StormwaterJurisdictionPerson StormwaterJurisdictionPerson { get { return StormwaterJurisdictionPeople.SingleOrDefault(); } set { StormwaterJurisdictionPeople = new List<StormwaterJurisdictionPerson>{value};} }
         public virtual ICollection<SupportRequestLog> SupportRequestLogsWhereYouAreTheRequestPerson { get; set; }
         public virtual ICollection<TenantAttribute> TenantAttributesWhereYouAreThePrimaryContactPerson { get; set; }
+        public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public Role Role { get { return Role.AllLookupDictionary[RoleID]; } }
         public virtual Organization Organization { get; set; }

@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         protected Organization()
         {
             this.People = new HashSet<Person>();
+            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -84,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return People.Any();
+            return People.Any() || (StormwaterJurisdiction != null);
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(Person).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name};
 
         [Key]
         public int OrganizationID { get; set; }
@@ -106,6 +107,8 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return OrganizationID; } set { OrganizationID = value; } }
 
         public virtual ICollection<Person> People { get; set; }
+        protected virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
+        public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person PrimaryContactPerson { get; set; }
         public virtual FileResource LogoFileResource { get; set; }
