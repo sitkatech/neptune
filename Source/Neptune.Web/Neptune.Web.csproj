@@ -47,6 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controllers\AssessmentController.cs" />
+    <Compile Include="Controllers\StormwaterUserController.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Models\ModeledCatchmentGeometryStaging.cs" />
     <Compile Include="Models\ModeledCatchmentModelExtensions.cs" />
     <Compile Include="Models\ModeledCatchmentUploadGisReportJsonResult.cs" />
+    <Compile Include="Models\RoleSimple.cs" />
     <Compile Include="Models\StormwaterJurisdiction.DatabaseContextExtensions.cs" />
     <Compile Include="Models\ObservationType.cs" />
     <Compile Include="Models\ObservationTypeHelper.cs" />
@@ -548,6 +550,12 @@
     <Compile Include="Views\Shared\ViewPageContent.cs" />
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
+    <Compile Include="Views\StormwaterUser\Edit.cs" />
+    <Compile Include="Views\StormwaterUser\EditViewData.cs" />
+    <Compile Include="Views\StormwaterUser\EditViewModel.cs" />
+    <Compile Include="Views\StormwaterUser\Index.cs" />
+    <Compile Include="Views\StormwaterUser\IndexGridSpec.cs" />
+    <Compile Include="Views\StormwaterUser\IndexViewData.cs" />
     <Compile Include="Views\Tenant\Detail.cs" />
     <Compile Include="Views\Home\Index.cs" />
     <Compile Include="Views\Home\IndexViewData.cs" />
@@ -729,6 +737,7 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\StormwaterUser\EditStormwaterUserController.js" />
     <Content Include="Views\TreatmentBMPAssessment\InfiltrationRateController.js" />
     <Content Include="Views\TreatmentBMPAssessment\InstallationController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ObservationAddRowSingleValueController.js" />
@@ -784,6 +793,8 @@
     <Content Include="Views\ModeledCatchment\UpdateModeledCatchmentGeometry.cshtml" />
     <Content Include="Views\ModeledCatchment\UpdateModeledCatchmentGeometryErrors.cshtml" />
     <Content Include="Views\Assessment\Index.cshtml" />
+    <Content Include="Views\StormwaterUser\Edit.cshtml" />
+    <Content Include="Views\StormwaterUser\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
