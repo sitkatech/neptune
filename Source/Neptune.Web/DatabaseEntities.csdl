@@ -380,8 +380,6 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="OrganizationID" Type="Int32" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="Geometry" />
-    <Property Name="RoadNetworkGeometry" Type="Geometry" />
-    <Property Name="RoadAreaOfInterestGeometry" Type="Geometry" />
     <Property Name="StateProvinceID" Type="Int32" />
     <Property Name="IsTransportationJurisdiction" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="ModeledCatchments" Relationship="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="ModeledCatchments" />

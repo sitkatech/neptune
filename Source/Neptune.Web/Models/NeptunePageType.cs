@@ -67,4 +67,44 @@ namespace Neptune.Web.Models
             return SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.Index());
         }
     }
+
+    public partial class NeptunePageTypeTreatmentBMP
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
+
+    public partial class NeptunePageTypeTreatmentBMPType
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
+
+    public partial class NeptunePageTypeModeledCatchment
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
+
+    public partial class NeptunePageTypeJurisdiction
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
+
+    public partial class NeptunePageTypeAssessment
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
 }

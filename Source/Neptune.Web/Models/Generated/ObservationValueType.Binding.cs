@@ -18,7 +18,10 @@ namespace Neptune.Web.Models
 {
     public abstract partial class ObservationValueType : IHavePrimaryKey
     {
-
+        public static readonly ObservationValueTypeintegerType integerType = ObservationValueTypeintegerType.Instance;
+        public static readonly ObservationValueTypestringType stringType = ObservationValueTypestringType.Instance;
+        public static readonly ObservationValueTypebooleanType booleanType = ObservationValueTypebooleanType.Instance;
+        public static readonly ObservationValueTypefloatType floatType = ObservationValueTypefloatType.Instance;
 
         public static readonly List<ObservationValueType> All;
         public static readonly ReadOnlyDictionary<int, ObservationValueType> AllLookupDictionary;
@@ -28,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationValueType()
         {
-            All = new List<ObservationValueType> {  };
+            All = new List<ObservationValueType> { integerType, stringType, booleanType, floatType };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationValueType>(All.ToDictionary(x => x.ObservationValueTypeID));
         }
 
@@ -99,7 +102,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-
+                case ObservationValueTypeEnum.booleanType:
+                    return booleanType;
+                case ObservationValueTypeEnum.floatType:
+                    return floatType;
+                case ObservationValueTypeEnum.integerType:
+                    return integerType;
+                case ObservationValueTypeEnum.stringType:
+                    return stringType;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -108,7 +118,33 @@ namespace Neptune.Web.Models
 
     public enum ObservationValueTypeEnum
     {
-
+        integerType = 1,
+        stringType = 2,
+        booleanType = 3,
+        floatType = 4
     }
 
+    public partial class ObservationValueTypeintegerType : ObservationValueType
+    {
+        private ObservationValueTypeintegerType(int observationValueTypeID, string observationValueTypeName, string observationValueTypeDisplayName, int sortOrder) : base(observationValueTypeID, observationValueTypeName, observationValueTypeDisplayName, sortOrder) {}
+        public static readonly ObservationValueTypeintegerType Instance = new ObservationValueTypeintegerType(1, @"integerType", @"Integer", 10);
+    }
+
+    public partial class ObservationValueTypestringType : ObservationValueType
+    {
+        private ObservationValueTypestringType(int observationValueTypeID, string observationValueTypeName, string observationValueTypeDisplayName, int sortOrder) : base(observationValueTypeID, observationValueTypeName, observationValueTypeDisplayName, sortOrder) {}
+        public static readonly ObservationValueTypestringType Instance = new ObservationValueTypestringType(2, @"stringType", @"Test", 20);
+    }
+
+    public partial class ObservationValueTypebooleanType : ObservationValueType
+    {
+        private ObservationValueTypebooleanType(int observationValueTypeID, string observationValueTypeName, string observationValueTypeDisplayName, int sortOrder) : base(observationValueTypeID, observationValueTypeName, observationValueTypeDisplayName, sortOrder) {}
+        public static readonly ObservationValueTypebooleanType Instance = new ObservationValueTypebooleanType(3, @"booleanType", @"Yes/No", 30);
+    }
+
+    public partial class ObservationValueTypefloatType : ObservationValueType
+    {
+        private ObservationValueTypefloatType(int observationValueTypeID, string observationValueTypeName, string observationValueTypeDisplayName, int sortOrder) : base(observationValueTypeID, observationValueTypeName, observationValueTypeDisplayName, sortOrder) {}
+        public static readonly ObservationValueTypefloatType Instance = new ObservationValueTypefloatType(4, @"floatType", @"Decimal", 40);
+    }
 }

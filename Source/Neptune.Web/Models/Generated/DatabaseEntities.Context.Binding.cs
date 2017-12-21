@@ -201,11 +201,6 @@ namespace Neptune.Web.Models
                 case "StormwaterJurisdiction":
                     return StormwaterJurisdictions.GetStormwaterJurisdiction(primaryKey);
 
-                case "StormwaterRole":
-                    var stormwaterRole = StormwaterRole.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(stormwaterRole, "StormwaterRole", primaryKey);
-                    return stormwaterRole;
-
                 case "SupportRequestLog":
                     return SupportRequestLogs.GetSupportRequestLog(primaryKey);
 

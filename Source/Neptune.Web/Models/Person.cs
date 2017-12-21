@@ -93,5 +93,16 @@ namespace Neptune.Web.Models
         }
 
         public bool IsAnonymousOrUnassigned => IsAnonymousUser || Role == Role.Unassigned;
+
+
+        public string FullNameFirstLastAndOrgAbbreviation
+        {
+            get
+            {
+                string abbreviationIfAvailable = Organization.AbbreviationIfAvailable;
+                return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
+            }
+        }
+
     }
 }

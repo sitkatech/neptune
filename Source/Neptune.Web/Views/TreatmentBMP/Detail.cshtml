@@ -1,0 +1,189 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMP.Detail
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    <script src="@Url.Content("~/Content/masonry/masonry.pkgd.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panelStormwater">
+            <div class="panel-heading ">
+                Basics
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pullRight panel-heading-right">
+                        <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    </span>
+                }                
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Name</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Number of Inlets</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.InletCount</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Number of Outlets</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OutletCount</div>
+                </div>
+                @if (TreatmentBMPType.RequiresDesignDepth(ViewDataTyped.TreatmentBMP.TreatmentBMPTypeID))
+                {
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPDesignDepth)</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.DesignDepth ft</div>
+                    </div>
+                }
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.StormwaterJurisdiction, "Jurisdiction")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+                </div>                
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Notes")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
+                </div>                
+            </div>
+        </div>
+        <div class="panel panelStormwater">
+            <div class="panel-heading ">
+                Benchmark & Threshold Values
+                <span class="pullRight panel-heading-right">
+                    @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
+                    {
+                        <a href="@ViewDataTyped.AddBenchmarkAndThresholdUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    }
+
+                </span>
+            </div>
+            <div class="panel-body">
+                @if (!ViewDataTyped.HasSettableBenchmarkAndThresholdValues)
+                {
+                    <p class="systemText">
+                        This type of treatment BMP does not have settable benchmark and threshold values.
+                    </p>
+                }                
+                else 
+                {                    
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Observation Type</th>
+                            <th>Benchmark</th>
+                            <th>Threshold</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.SortOrder))
+                        {
+                            <tr>
+                                <td>@observationType.ObservationTypeDisplayName</td>
+                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedBenchmarkValue(observationType)</td>
+                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedThresholdValue(observationType, false)</td>
+                            </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panelStormwater">
+            <div class="panel-heading ">
+                Location
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pullRight panel-heading-right">
+                        <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    </span>
+                }                
+            </div>
+            <div class="panel-body" id="mapContainer">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelStormwater">
+            <div class="panel-heading ">
+                Assessments
+                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pullRight panel-heading-right">
+                        <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
+                    </span>
+                }
+            </div>
+            <div class="panel-body"> 
+                @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                {
+                    <p class="systemText">
+                        BMP cannot be assessed until benchmark and threshold values for each observation type are entered.
+                    </p>
+                }              
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
+                {
+                    <p class="systemText">Assessments for treatment BMP that are included in an active Registration with a credit declaration cannot be deleted or edited.</p>
+                    @Html.DhtmlxGrid(ViewDataTyped.AssessmentGridSpec, ViewDataTyped.AssessmentGridName, ViewDataTyped.AssessmentGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                }
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                {
+                    <p class="systemText">
+                        BMP has not been assessed.
+                    </p>
+                }          
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function()
+    {
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        var map = new NeptuneMaps.Map(mapInitJson);
+
+    });
+</script>

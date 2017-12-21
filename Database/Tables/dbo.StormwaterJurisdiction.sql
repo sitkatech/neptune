@@ -7,8 +7,6 @@ CREATE TABLE [dbo].[StormwaterJurisdiction](
 	[TenantID] [int] NOT NULL,
 	[OrganizationID] [int] NOT NULL,
 	[StormwaterJurisdictionGeometry] [geometry] NULL,
-	[RoadNetworkGeometry] [geometry] NULL,
-	[RoadAreaOfInterestGeometry] [geometry] NULL,
 	[StateProvinceID] [int] NULL,
 	[IsTransportationJurisdiction] [bit] NOT NULL,
  CONSTRAINT [PK_StormwaterJurisdiction_StormwaterJurisdictionID] PRIMARY KEY CLUSTERED 

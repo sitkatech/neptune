@@ -1,0 +1,119 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="ScoreDetail.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.HtmlHelperExtensions
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMPAssessment.ScoreDetail
+
+
+<script type="text/javascript" src="@Url.Content("~/Areas/Stormwater/Views/TreatmentBMPAssessment/ScoreTableController.js")"></script>
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
+                };
+            });
+
+    jQuery(document).ready(function () {
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
+    });
+    // ]]>
+</script>
+
+<div ng-app="NeptuneApp" id="ScoreTableAngularApp" ng-controller="ScoreTableController">
+    <div class="table-responsive">
+        <table class="table table-condensed scoreTable">
+            <thead>
+            <tr class="row">
+                <th class="col-xs-3">@Html.Label("Observation")</th>                
+                <th class="col-xs-2 centerText">@Html.Label("Threshold")</th>
+                <th class="col-xs-2 centerText">@Html.Label("Observed")</th>
+                <th class="col-xs-2 centerText">@Html.Label("Benchmark")</th>
+                <th class="col-xs-2 centerText">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight, "Weight")</th>
+                <th class="col-xs-1 centerText">@Html.LabelWithSugarFor(FieldDefinition.ObservationScore, "Score")</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="row" ng-repeat="observationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && observationType.HasBenchmarkAndThresholds ? 'grayOut' : ''">
+                <td class="col-xs-3">{{observationType.DisplayName}}</td>   
+                
+                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(2)}">{{observationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
+                </td>
+
+                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete">
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservedValue | setDecimal:3 }}</span>
+                </td>
+                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+
+                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(5)}">{{observationType.BenchmarkValue | setDecimal:3 }}</span>
+                </td>
+
+                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">{{observationType.Weight}}</td>
+
+                <td class="text-center" colspan="4" ng-if="!observationType.HasBenchmarkAndThresholds">
+                    <span ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete" class="italic">Observation incomplete</span>
+                    <span ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(5)}" class="bold italic">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</span>
+                    <span ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(0)}" class="bold italic">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</span>
+                </td>
+
+                <td class="col-xs-1 text-center" ng-if="observationType.TreatmentBMPObservationSimple.IsComplete">
+                    <span class="bold">{{observationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
+                </td>
+                <td class="col-xs-1 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+            </tr>
+            <tr class="row totalRow">
+                <td class="col-xs-3">Assessment Total</td>
+                <td class="col-xs-2 text-center">-</td>
+                <td class="col-xs-2 text-center">-</td>
+                <td class="col-xs-2 text-center">-</td>
+                <td class="col-xs-2 text-center">1.0</td>
+                <td class="col-xs-1 text-center" ng-if="AngularViewData.TreatmentBMPAssessmentSimple.IsComplete">
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.TreatmentBMPAssessmentSimple.AssessmentScore)}">{{AngularViewData.TreatmentBMPAssessmentSimple.AssessmentScore | setDecimal:2 }}</span>
+                </td>
+                <td class="col-xs-1 text-center" ng-if="!AngularViewData.TreatmentBMPAssessmentSimple.IsComplete">-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-right pull-right legendLabel">
+            Score
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 pull-right" id="legendGradient">
+            <p style="width: 15px; text-align: left; display: inline-block">0</p>
+            <p style="width: 20px; text-align: right; display: inline-block">1</p>
+            <p style="width: 30px; text-align: right; display: inline-block">2</p>
+            <p style="width: 30px; text-align: right; display: inline-block">3</p>
+            <p style="width: 30px; text-align: right; display: inline-block">4</p>
+            <p style="width: 30px; text-align: right; display: inline-block">5</p>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    </div>

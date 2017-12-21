@@ -8,7 +8,7 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (5, 'Kilogram', 'kg', 'kg', 'Kilogram', 2),
 (6, 'Number', 'number', null, 'Each Unit', 0),
 (7, 'Pounds', 'pounds', 'lbs', 'Pound', 2),
-(8, 'Tons', 'tons', 'tons', 'Ton', 2),
+(8, 'Tons', 'tons', 'tons', 'Ton', 0),
 (9, 'Dollars', 'dollars', null, 'Dollar', 0),
 (10, 'Parcels', 'parcels', null, 'Parcel', 0),
 (11, 'Percent', '%', '%', '%', 0),
@@ -19,6 +19,7 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (16, 'NephlometricTurbidityUnit', 'NTU', 'NTU', 'Nephlometric Turbidity Unit', 1),
 (17, 'Meters', 'meters', 'meters', 'Meter', 1),
 (18, 'PeriphytonBiomassIndex', 'PBI', 'PBI', 'Periphyton biomass index', 0),
-(19, 'AcreFeet', 'acre-feet', 'acre-ft', 'Acre-Foot', 0),
-(20, 'Gallon', 'gallons', 'gallons', 'Gallon', 0),
-(21, 'CubicYards', 'cubic yards', 'cubic yards', 'Cubic Yard', 0)
+(19, 'Feet', 'feet', 'ft', 'Foot', 2),
+(20, 'InchesPerHour', 'in/hr', 'in/hr', 'Inches Per Hour', 2),
+(21, 'Seconds', 'seconds', 's', 'Second', 0),
+(22, 'YesNo', 'yes/no', '', '', 0)

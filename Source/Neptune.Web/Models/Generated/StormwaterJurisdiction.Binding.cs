@@ -32,13 +32,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, DbGeometry stormwaterJurisdictionGeometry, DbGeometry roadNetworkGeometry, DbGeometry roadAreaOfInterestGeometry, int? stateProvinceID, bool isTransportationJurisdiction) : this()
+        public StormwaterJurisdiction(int stormwaterJurisdictionID, int organizationID, DbGeometry stormwaterJurisdictionGeometry, int? stateProvinceID, bool isTransportationJurisdiction) : this()
         {
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OrganizationID = organizationID;
             this.StormwaterJurisdictionGeometry = stormwaterJurisdictionGeometry;
-            this.RoadNetworkGeometry = roadNetworkGeometry;
-            this.RoadAreaOfInterestGeometry = roadAreaOfInterestGeometry;
             this.StateProvinceID = stateProvinceID;
             this.IsTransportationJurisdiction = isTransportationJurisdiction;
         }
@@ -94,8 +92,6 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int OrganizationID { get; set; }
         public DbGeometry StormwaterJurisdictionGeometry { get; set; }
-        public DbGeometry RoadNetworkGeometry { get; set; }
-        public DbGeometry RoadAreaOfInterestGeometry { get; set; }
         public int? StateProvinceID { get; set; }
         public bool IsTransportationJurisdiction { get; set; }
         public int PrimaryKey { get { return StormwaterJurisdictionID; } set { StormwaterJurisdictionID = value; } }
