@@ -217,6 +217,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="StormwaterRole">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.StormwaterRole">
+        <MappingFragment StoreEntitySet="StormwaterRole">
+          <ScalarProperty Name="StormwaterRoleID" ColumnName="StormwaterRoleID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="StormwaterRoleName" ColumnName="StormwaterRoleName" />
+          <ScalarProperty Name="StormwaterRoleDisplayName" ColumnName="StormwaterRoleDisplayName" />
+          <ScalarProperty Name="StormwaterRoleDescription" ColumnName="StormwaterRoleDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SupportRequestLog">
       <EntityTypeMapping TypeName="Neptune.Web.Models.SupportRequestLog">
         <MappingFragment StoreEntitySet="SupportRequestLog">

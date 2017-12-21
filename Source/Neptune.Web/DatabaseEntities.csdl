@@ -18,6 +18,7 @@
     <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.StateProvince" />
     <EntitySet Name="StormwaterJurisdiction" EntityType="Neptune.Web.Models.StormwaterJurisdiction" />
     <EntitySet Name="StormwaterJurisdictionPerson" EntityType="Neptune.Web.Models.StormwaterJurisdictionPerson" />
+    <EntitySet Name="StormwaterRole" EntityType="Neptune.Web.Models.StormwaterRole" />
     <EntitySet Name="SupportRequestLog" EntityType="Neptune.Web.Models.SupportRequestLog" />
     <EntitySet Name="TenantAttribute" EntityType="Neptune.Web.Models.TenantAttribute" />
     <EntitySet Name="TreatmentBMP" EntityType="Neptune.Web.Models.TreatmentBMP" />
@@ -400,6 +401,16 @@
     <Property Name="PersonID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_Person_PersonID" FromRole="StormwaterJurisdictionPeople" ToRole="Person" />
     <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdictionPeople" ToRole="StormwaterJurisdiction" />
+  </EntityType>
+  <EntityType Name="StormwaterRole">
+    <Key>
+      <PropertyRef Name="StormwaterRoleID" />
+    </Key>
+    <Property Name="StormwaterRoleID" Type="Int32" Nullable="false" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterRoleName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="StormwaterRoleDisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="StormwaterRoleDescription" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
   </EntityType>
   <EntityType Name="SupportRequestLog">
     <Key>

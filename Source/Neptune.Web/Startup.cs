@@ -101,7 +101,7 @@ namespace Neptune.Web
                             var referrer = context.Request.UrlReferrer;
                             if (referrer != null && referrer.Host == NeptuneWebConfiguration.CanonicalHostName)
                             {
-                                n.Response.Cookies.Append("MRReturnURL", referrer.PathAndQuery);
+                                n.Response.Cookies.Append("ReturnURL", referrer.PathAndQuery);
                             }
                         }
 

@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
     /// <summary>
     /// Prevent unauthorized access, unless it has been specifically allowed using AllowAnonymousAttribute
     /// </summary>
-    public abstract class RelyingPartyAuthorizeAttribute : AuthorizeAttribute
+    public abstract class RelyingPartyAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {

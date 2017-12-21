@@ -3,11 +3,10 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[StormwaterRole]
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -16,101 +15,79 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public abstract partial class StormwaterRole : IHavePrimaryKey
+    [Table("[dbo].[StormwaterRole]")]
+    public partial class StormwaterRole : IHavePrimaryKey, IHaveATenantID
     {
-
-
-        public static readonly List<StormwaterRole> All;
-        public static readonly ReadOnlyDictionary<int, StormwaterRole> AllLookupDictionary;
-
         /// <summary>
-        /// Static type constructor to coordinate static initialization order
+        /// Default Constructor; only used by EF
         /// </summary>
-        static StormwaterRole()
+        protected StormwaterRole()
         {
-            All = new List<StormwaterRole> {  };
-            AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterRole>(All.ToDictionary(x => x.StormwaterRoleID));
+
+            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
-        /// Protected constructor only for use in instantiating the set of static lookup values that match database
+        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        protected StormwaterRole(int stormwaterRoleID, int tenantID, string stormwaterRoleName, string stormwaterRoleDisplayName, string stormwaterRoleDescription)
+        public StormwaterRole(int stormwaterRoleID, string stormwaterRoleName, string stormwaterRoleDisplayName, string stormwaterRoleDescription) : this()
         {
-            StormwaterRoleID = stormwaterRoleID;
-            TenantID = tenantID;
-            StormwaterRoleName = stormwaterRoleName;
-            StormwaterRoleDisplayName = stormwaterRoleDisplayName;
-            StormwaterRoleDescription = stormwaterRoleDescription;
+            this.StormwaterRoleID = stormwaterRoleID;
+            this.StormwaterRoleName = stormwaterRoleName;
+            this.StormwaterRoleDisplayName = stormwaterRoleDisplayName;
+            this.StormwaterRoleDescription = stormwaterRoleDescription;
         }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public StormwaterRole(string stormwaterRoleName, string stormwaterRoleDisplayName) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.StormwaterRoleID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.StormwaterRoleName = stormwaterRoleName;
+            this.StormwaterRoleDisplayName = stormwaterRoleDisplayName;
+        }
+
+
+        /// <summary>
+        /// Creates a "blank" object of this type and populates primitives with defaults
+        /// </summary>
+        public static StormwaterRole CreateNewBlank()
+        {
+            return new StormwaterRole(default(string), default(string));
+        }
+
+        /// <summary>
+        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
+        /// </summary>
+        /// <returns></returns>
+        public bool HasDependentObjects()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterRole).Name};
+
         [Key]
-        public int StormwaterRoleID { get; private set; }
+        public int StormwaterRoleID { get; set; }
         public int TenantID { get; private set; }
-        public string StormwaterRoleName { get; private set; }
-        public string StormwaterRoleDisplayName { get; private set; }
-        public string StormwaterRoleDescription { get; private set; }
-        public int PrimaryKey { get { return StormwaterRoleID; } }
+        public string StormwaterRoleName { get; set; }
+        public string StormwaterRoleDisplayName { get; set; }
+        public string StormwaterRoleDescription { get; set; }
+        public int PrimaryKey { get { return StormwaterRoleID; } set { StormwaterRoleID = value; } }
 
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public bool Equals(StormwaterRole other)
+        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+
+        public static class FieldLengths
         {
-            if (other == null)
-            {
-                return false;
-            }
-            return other.StormwaterRoleID == StormwaterRoleID;
-        }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as StormwaterRole);
-        }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override int GetHashCode()
-        {
-            return StormwaterRoleID;
-        }
-
-        public static bool operator ==(StormwaterRole left, StormwaterRole right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(StormwaterRole left, StormwaterRole right)
-        {
-            return !Equals(left, right);
-        }
-
-        public StormwaterRoleEnum ToEnum { get { return (StormwaterRoleEnum)GetHashCode(); } }
-
-        public static StormwaterRole ToType(int enumValue)
-        {
-            return ToType((StormwaterRoleEnum)enumValue);
-        }
-
-        public static StormwaterRole ToType(StormwaterRoleEnum enumValue)
-        {
-            switch (enumValue)
-            {
-
-                default:
-                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
-            }
+            public const int StormwaterRoleName = 100;
+            public const int StormwaterRoleDisplayName = 100;
+            public const int StormwaterRoleDescription = 255;
         }
     }
-
-    public enum StormwaterRoleEnum
-    {
-
-    }
-
 }

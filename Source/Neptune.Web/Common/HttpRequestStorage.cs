@@ -68,7 +68,7 @@ namespace Neptune.Web.Common
                         }
                         else
                         {
-                            return Tenant.SitkaTechnologyGroup;
+                            return Tenant.OCStormwater;
                         }
                     });
             }
@@ -90,7 +90,7 @@ namespace Neptune.Web.Common
         public static void StartContextForTest()
         {
             var context = MakeNewContext(true);
-            SetValue(TenantKey, Tenant.SitkaTechnologyGroup);
+            SetValue(TenantKey, Tenant.OCStormwater);
             SetValue(DatabaseContextKey, context);
         }
 

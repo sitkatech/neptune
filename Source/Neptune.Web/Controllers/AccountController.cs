@@ -23,6 +23,7 @@ using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security.Shared;
 using System.Web;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
@@ -52,7 +53,7 @@ namespace Neptune.Web.Controllers
             return Content("Not Authorized");
         }
 
-        [AnonymousUnclassifiedFeature]
+        [LoggedInUnclassifiedFeature]
         public ActionResult LogOn()
         {
             return Redirect(!string.IsNullOrWhiteSpace(Request["returnUrl"]) ? Request["returnUrl"] : HomeUrl);

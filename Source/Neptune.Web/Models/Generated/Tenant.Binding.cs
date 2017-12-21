@@ -18,7 +18,6 @@ namespace Neptune.Web.Models
 {
     public abstract partial class Tenant : IHavePrimaryKey
     {
-        public static readonly TenantSitkaTechnologyGroup SitkaTechnologyGroup = TenantSitkaTechnologyGroup.Instance;
         public static readonly TenantOCStormwater OCStormwater = TenantOCStormwater.Instance;
 
         public static readonly List<Tenant> All;
@@ -29,7 +28,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static Tenant()
         {
-            All = new List<Tenant> { SitkaTechnologyGroup, OCStormwater };
+            All = new List<Tenant> { OCStormwater };
             AllLookupDictionary = new ReadOnlyDictionary<int, Tenant>(All.ToDictionary(x => x.TenantID));
         }
 
@@ -44,7 +43,6 @@ namespace Neptune.Web.Models
             TenantSubdomain = tenantSubdomain;
         }
         public List<StormwaterBreadCrumbEntity> StormwaterBreadCrumbEntities { get { return StormwaterBreadCrumbEntity.All.Where(x => x.TenantID == TenantID).ToList(); } }
-        public List<StormwaterRole> StormwaterRoles { get { return StormwaterRole.All.Where(x => x.TenantID == TenantID).ToList(); } }
         [Key]
         public int TenantID { get; private set; }
         public string TenantName { get; private set; }
@@ -103,8 +101,6 @@ namespace Neptune.Web.Models
             {
                 case TenantEnum.OCStormwater:
                     return OCStormwater;
-                case TenantEnum.SitkaTechnologyGroup:
-                    return SitkaTechnologyGroup;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -113,14 +109,7 @@ namespace Neptune.Web.Models
 
     public enum TenantEnum
     {
-        SitkaTechnologyGroup = 1,
         OCStormwater = 2
-    }
-
-    public partial class TenantSitkaTechnologyGroup : Tenant
-    {
-        private TenantSitkaTechnologyGroup(int tenantID, string tenantName, string tenantDomain, string tenantSubdomain) : base(tenantID, tenantName, tenantDomain, tenantSubdomain) {}
-        public static readonly TenantSitkaTechnologyGroup Instance = new TenantSitkaTechnologyGroup(1, @"SitkaTechnologyGroup", @"projectneptune.com", @"sitka");
     }
 
     public partial class TenantOCStormwater : Tenant

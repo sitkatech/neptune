@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
 using FluentValidation.Mvc;
@@ -139,6 +140,7 @@ namespace Neptune.Web
         {
             // Require SSL from this point forward
             filters.Add(new RequireHttpsAttribute());
+            filters.Add(new OpenIDAuthorizeAttribute());
        }
 
         public override string ErrorUrl
