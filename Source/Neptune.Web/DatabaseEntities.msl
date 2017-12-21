@@ -200,8 +200,6 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
           <ScalarProperty Name="StormwaterJurisdictionGeometry" ColumnName="StormwaterJurisdictionGeometry" />
-          <ScalarProperty Name="RoadNetworkGeometry" ColumnName="RoadNetworkGeometry" />
-          <ScalarProperty Name="RoadAreaOfInterestGeometry" ColumnName="RoadAreaOfInterestGeometry" />
           <ScalarProperty Name="StateProvinceID" ColumnName="StateProvinceID" />
           <ScalarProperty Name="IsTransportationJurisdiction" ColumnName="IsTransportationJurisdiction" />
         </MappingFragment>

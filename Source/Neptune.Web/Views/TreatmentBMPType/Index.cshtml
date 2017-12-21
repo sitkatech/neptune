@@ -1,0 +1,69 @@
+﻿
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common.Views
+@using MoreLinq
+@inherits Neptune.Web.Views.TreatmentBMPType.Index
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+<div class="pageIntroText">
+    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+</div>
+
+@foreach (var batch in TreatmentBMPType.All.OrderBy(x => x.SortOrder).Batch(2))
+{
+    <div class="row">
+        @foreach (var treatmentBMPType in batch)
+        {
+            <div class="col-lg-6">
+                <div class="panel panelStormwater">
+                    <div class="panel-heading">
+                        @treatmentBMPType.TreatmentBMPTypeDisplayName
+                    </div>
+                    <div class="panel-body">
+                        @Html.Label("Number of BMPs:") @ViewDataTyped.TreatmentBMPs.Count(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
+                        <br />
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <caption>Applicable Observation Types</caption>
+                                <thead>
+                                <tr>
+                                    <th>Observation</th>
+                                    <th>Weight</th>
+                                    <th>Benchmark Default</th>
+                                    <th>Threshold Default</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.ToEnum])
+                                {
+                                    var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+                                    <tr>
+                                        <td>@observationType.ObservationTypeDisplayName</td>
+                                        <td>@(observationType.HasBenchmarkAndThreshold ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToString("0.00") : "pass/fail")</td>
+                                        @if (observationType.HasBenchmarkAndThreshold)
+                                        {
+                                            <td>@ObservationTypeHelper.FormattedDefaultBenchmarkValue(observationType, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                            <td>@ObservationTypeHelper.ApplyThresholdFormatting(observationType, treatmentBMPTypeObservationType.DefaultThresholdValue)</td>
+                                        }
+                                        else
+                                        {
+                                            <td >@ViewUtilities.NaString</td>
+                                            <td >@ViewUtilities.NaString</td>
+                                        }
+
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+}

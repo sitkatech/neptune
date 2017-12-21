@@ -1,0 +1,63 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="SummaryForMap.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.TreatmentBMP.SummaryForMap
+
+<div class="panel panelStormwater">
+    <div class="panel-heading ">
+        BMP Overview
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <label class="col-sm-6 control-label text-right">Name</label>
+            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
+            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeDisplayName</div>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.StormwaterJurisdiction, "Jurisdiction")</label>
+            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+        </div>        
+        <div class="row">
+            <label class="col-sm-6 control-label text-right">Score</label>
+            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
+        </div>
+
+    </div>
+    <div class="card">
+        <ul class="list-group list-group-flush">
+            <li>
+                <a class="list-group-item" href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()"><span class="btn cardButton viewButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search")</span>View BMP Details</a>
+            </li>
+            @if (ViewDataTyped.CurrentPerson.CanManageStormwaterJurisdiction(ViewDataTyped.TreatmentBMP.StormwaterJurisdiction) && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+            {
+                <li>
+                    <a class="list-group-item" href="@ViewDataTyped.AssessmentUrl"><span class="btn cardButton newButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</span>Start an Assessment</a>
+                </li>
+            }            
+        </ul>
+    </div>
+</div>

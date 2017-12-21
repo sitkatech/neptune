@@ -57,50 +57,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </head>
 <body>
     <div class="expandToFillScreen">
-        <div class="header">
-            
+        <div class="header">            
             <div class="headerText">
                 <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()" /><a href="@ViewDataTyped.NeptuneHomeUrl">@MultiTenantHelpers.GetTenantDisplayName()</a>
             </div>
-
-            @*<div class="col-sm-6">
-                    <div id="searchBox" class="pull-right">
-                        <span>Find Project: </span><input id="@SearchResults.ProjectSearchInputTextboxID" name="@SearchResults.ProjectSearchInputTextboxID" type="text" maxlength="200" onkeypress="return submitFormWithEnter(this, event, 4)" placeholder="project #, name, description" />
-                    </div>
-                </div>*@
         </div>
-
-        <script type="text/javascript">
-            // <![CDATA[
-            function submitFormWithEnter(myfield, e, numMinChars) {
-                var keycode;
-                if (window.event) {
-                    keycode = window.event.keyCode;
-                }
-                else if (e) {
-                    keycode = e.which;
-                }
-                else {
-                    return true;
-                }
-
-                if (keycode == 13) {
-                    if (myfield.value.trim().length >= numMinChars) {
-                        var searchUrlTemplate = new Sitka.UrlTemplate(@Html.Raw(ViewDataTyped.ProjectSearchUrl.ToJS()));
-                        document.location = searchUrlTemplate
-                            .ParameterReplace("?searchCriteria=" + encodeURIComponent(myfield.value.trim()));
-                    }
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            }
-            // ]]>
-        </script>
-
         <div id="mainnavandcontent">
-
             <nav class="navbar neptuneNavbar">
                 <div>
                     <!-- Brand and toggle get grouped for better mobile display -->
@@ -129,7 +91,6 @@ Source code is available upon request via <support@sitkatech.com>.
                                         <a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">@ViewDataTyped.CurrentPerson.FullNameFirstLast</a>
                                     </p>
                                 }
-
                             </li>
                             <li>
                                 @ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
@@ -158,8 +119,8 @@ Source code is available upon request via <support@sitkatech.com>.
     <footer id="footer">
         <div class="container">
             <p class="text-center">
-                <a href="http://sitkatech.com/products/Neptune/">Neptune</a> is a service provided by Sitka Technology Group, which builds on the Tahoe Regional Planning Agency's <a href="https://eip.laketahoeinfo.org">EIP Project Tracker</a>. 
-                This program is free software; you can redistribute it and/or modify it under the terms of the <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a> as published by the <a href="https://www.fsf.org/">Free Software Foundation</a>. 
+                O.C. Stormwater Tools is a service provided by <a href="http://sitkatech.com/">Sitka Technology Group</a>, which builds on the Tahoe Regional Planning Agency's <a href="https://stormwater.laketahoeinfo.org">Lake Tahoe Info Stormwater Tools</a>.
+                This program is free software; you can redistribute it and/or modify it under the terms of the <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a> as published by the <a href="https://www.fsf.org/">Free Software Foundation</a>.
                 Source code is available on <a href="https://github.com/sitkatech/projectneptune">GitHub</a>.
             </p>
             <p class="text-center">

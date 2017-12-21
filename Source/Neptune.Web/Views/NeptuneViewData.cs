@@ -39,6 +39,9 @@ namespace Neptune.Web.Views
         public string HtmlPageTitle;
         public string BreadCrumbTitle;
         public string EntityName;
+        public string EntityUrl;
+        public string SubEntityName;
+        public string SubEntityUrl;
         public readonly Models.NeptunePage NeptunePage;
         public readonly Person CurrentPerson;
         public readonly string NeptuneHomeUrl;
@@ -50,7 +53,7 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null)
+        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null, null)
         {
         }
      
@@ -74,6 +77,15 @@ namespace Neptune.Web.Views
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
 
+        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.NeptunePage neptunePage) : this(currentPerson, neptunePage)
+        {
+            
+        }
+
+        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity) : this(currentPerson)
+        {
+
+        }
 
         private void MakeNeptuneMenu(Person currentPerson)
         {
@@ -82,14 +94,26 @@ namespace Neptune.Web.Views
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
                 homeMenuItem,
+                BuildExploreMenu(currentPerson),
                 BuildAboutMenu(currentPerson),
                 BuildProgramInfoMenu(currentPerson),
-                //BuildResultsMenu(currentPerson),
                 BuildManageMenu(currentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
             TopLevelLtInfoMenuItems.SelectMany(x => x.ChildMenus).ToList().ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-dropdown-item" });
+        }
+
+        private static LtInfoMenuItem BuildExploreMenu(Person currentPerson)
+        {
+            var exploreMenu = new LtInfoMenuItem("Explore");
+
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(c => c.Index()), currentPerson, "Jurisdictions", "Group1"));
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ModeledCatchmentController>(c => c.Index()), currentPerson, "Catchments", "Group2"));
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.Index()), currentPerson, "Treatment BMPs", "Group3"));
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group3"));
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<AssessmentController>(c => c.Index()), currentPerson, "Assessments", "Group6"));
+            return exploreMenu;
         }
 
         private static LtInfoMenuItem BuildAboutMenu(Person currentPerson)
@@ -117,6 +141,7 @@ namespace Neptune.Web.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group2"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group2"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<StormwaterUserController>(c => c.Index()), currentPerson, "Stormwater Users", "Group2"));
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TenantController>(c => c.Detail()), currentPerson, "Tenant Configuration", "Group3"));
 

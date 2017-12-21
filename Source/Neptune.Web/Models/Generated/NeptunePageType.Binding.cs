@@ -23,6 +23,12 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeOrganizationsList OrganizationsList = NeptunePageTypeOrganizationsList.Instance;
         public static readonly NeptunePageTypeHomeMapInfo HomeMapInfo = NeptunePageTypeHomeMapInfo.Instance;
         public static readonly NeptunePageTypeHomeAdditionalInfo HomeAdditionalInfo = NeptunePageTypeHomeAdditionalInfo.Instance;
+        public static readonly NeptunePageTypeTreatmentBMP TreatmentBMP = NeptunePageTypeTreatmentBMP.Instance;
+        public static readonly NeptunePageTypeTreatmentBMPType TreatmentBMPType = NeptunePageTypeTreatmentBMPType.Instance;
+        public static readonly NeptunePageTypeModeledCatchment ModeledCatchment = NeptunePageTypeModeledCatchment.Instance;
+        public static readonly NeptunePageTypeJurisdiction Jurisdiction = NeptunePageTypeJurisdiction.Instance;
+        public static readonly NeptunePageTypeAssessment Assessment = NeptunePageTypeAssessment.Instance;
+        public static readonly NeptunePageTypeStormwaterUser StormwaterUser = NeptunePageTypeStormwaterUser.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -32,7 +38,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, StormwaterUser };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -105,14 +111,26 @@ namespace Neptune.Web.Models
             {
                 case NeptunePageTypeEnum.About:
                     return About;
+                case NeptunePageTypeEnum.Assessment:
+                    return Assessment;
                 case NeptunePageTypeEnum.HomeAdditionalInfo:
                     return HomeAdditionalInfo;
                 case NeptunePageTypeEnum.HomeMapInfo:
                     return HomeMapInfo;
                 case NeptunePageTypeEnum.HomePage:
                     return HomePage;
+                case NeptunePageTypeEnum.Jurisdiction:
+                    return Jurisdiction;
+                case NeptunePageTypeEnum.ModeledCatchment:
+                    return ModeledCatchment;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
+                case NeptunePageTypeEnum.StormwaterUser:
+                    return StormwaterUser;
+                case NeptunePageTypeEnum.TreatmentBMP:
+                    return TreatmentBMP;
+                case NeptunePageTypeEnum.TreatmentBMPType:
+                    return TreatmentBMPType;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -125,7 +143,13 @@ namespace Neptune.Web.Models
         About = 2,
         OrganizationsList = 3,
         HomeMapInfo = 4,
-        HomeAdditionalInfo = 5
+        HomeAdditionalInfo = 5,
+        TreatmentBMP = 6,
+        TreatmentBMPType = 7,
+        ModeledCatchment = 8,
+        Jurisdiction = 9,
+        Assessment = 10,
+        StormwaterUser = 11
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -156,5 +180,41 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeHomeAdditionalInfo(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeHomeAdditionalInfo Instance = new NeptunePageTypeHomeAdditionalInfo(5, @"HomeAdditionalInfo", @"Home Page Additional Info", 2);
+    }
+
+    public partial class NeptunePageTypeTreatmentBMP : NeptunePageType
+    {
+        private NeptunePageTypeTreatmentBMP(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeTreatmentBMP Instance = new NeptunePageTypeTreatmentBMP(6, @"TreatmentBMP", @"Treatment BMP", 2);
+    }
+
+    public partial class NeptunePageTypeTreatmentBMPType : NeptunePageType
+    {
+        private NeptunePageTypeTreatmentBMPType(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeTreatmentBMPType Instance = new NeptunePageTypeTreatmentBMPType(7, @"TreatmentBMPType", @"Treatment BMP Type", 2);
+    }
+
+    public partial class NeptunePageTypeModeledCatchment : NeptunePageType
+    {
+        private NeptunePageTypeModeledCatchment(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeModeledCatchment Instance = new NeptunePageTypeModeledCatchment(8, @"ModeledCatchment", @"Modeled Catchment", 2);
+    }
+
+    public partial class NeptunePageTypeJurisdiction : NeptunePageType
+    {
+        private NeptunePageTypeJurisdiction(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeJurisdiction Instance = new NeptunePageTypeJurisdiction(9, @"Jurisdiction", @"Jurisdiction", 2);
+    }
+
+    public partial class NeptunePageTypeAssessment : NeptunePageType
+    {
+        private NeptunePageTypeAssessment(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeAssessment Instance = new NeptunePageTypeAssessment(10, @"Assessment", @"Assessment", 2);
+    }
+
+    public partial class NeptunePageTypeStormwaterUser : NeptunePageType
+    {
+        private NeptunePageTypeStormwaterUser(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeStormwaterUser Instance = new NeptunePageTypeStormwaterUser(11, @"StormwaterUser", @"Stormwater User", 2);
     }
 }

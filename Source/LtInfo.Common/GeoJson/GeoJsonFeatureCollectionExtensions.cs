@@ -30,5 +30,10 @@ namespace LtInfo.Common.GeoJson
         {
             return featureCollection.Features.First().Properties.Keys.ToList();
         }
+
+        public static string ToGeoJsonString(this GeoJSON.Net.Feature.FeatureCollection featureCollection)
+        {
+            return JsonTools.SerializeObject(featureCollection);
+        }
     }
 }

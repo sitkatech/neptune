@@ -36,9 +36,10 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeNephlometricTurbidityUnit NephlometricTurbidityUnit = MeasurementUnitTypeNephlometricTurbidityUnit.Instance;
         public static readonly MeasurementUnitTypeMeters Meters = MeasurementUnitTypeMeters.Instance;
         public static readonly MeasurementUnitTypePeriphytonBiomassIndex PeriphytonBiomassIndex = MeasurementUnitTypePeriphytonBiomassIndex.Instance;
-        public static readonly MeasurementUnitTypeAcreFeet AcreFeet = MeasurementUnitTypeAcreFeet.Instance;
-        public static readonly MeasurementUnitTypeGallon Gallon = MeasurementUnitTypeGallon.Instance;
-        public static readonly MeasurementUnitTypeCubicYards CubicYards = MeasurementUnitTypeCubicYards.Instance;
+        public static readonly MeasurementUnitTypeFeet Feet = MeasurementUnitTypeFeet.Instance;
+        public static readonly MeasurementUnitTypeInchesPerHour InchesPerHour = MeasurementUnitTypeInchesPerHour.Instance;
+        public static readonly MeasurementUnitTypeSeconds Seconds = MeasurementUnitTypeSeconds.Instance;
+        public static readonly MeasurementUnitTypeYesNo YesNo = MeasurementUnitTypeYesNo.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -48,7 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, Miles, SquareFeet, LinearFeet, Kilogram, Number, Pounds, Tons, Dollars, Parcels, Percent, Therms, PartsPerMillion, PartsPerBillion, MilligamsPerLiter, NephlometricTurbidityUnit, Meters, PeriphytonBiomassIndex, AcreFeet, Gallon, CubicYards };
+            All = new List<MeasurementUnitType> { Acres, Miles, SquareFeet, LinearFeet, Kilogram, Number, Pounds, Tons, Dollars, Parcels, Percent, Therms, PartsPerMillion, PartsPerBillion, MilligamsPerLiter, NephlometricTurbidityUnit, Meters, PeriphytonBiomassIndex, Feet, InchesPerHour, Seconds, YesNo };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -123,16 +124,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case MeasurementUnitTypeEnum.AcreFeet:
-                    return AcreFeet;
                 case MeasurementUnitTypeEnum.Acres:
                     return Acres;
-                case MeasurementUnitTypeEnum.CubicYards:
-                    return CubicYards;
                 case MeasurementUnitTypeEnum.Dollars:
                     return Dollars;
-                case MeasurementUnitTypeEnum.Gallon:
-                    return Gallon;
+                case MeasurementUnitTypeEnum.Feet:
+                    return Feet;
+                case MeasurementUnitTypeEnum.InchesPerHour:
+                    return InchesPerHour;
                 case MeasurementUnitTypeEnum.Kilogram:
                     return Kilogram;
                 case MeasurementUnitTypeEnum.LinearFeet:
@@ -159,12 +158,16 @@ namespace Neptune.Web.Models
                     return PeriphytonBiomassIndex;
                 case MeasurementUnitTypeEnum.Pounds:
                     return Pounds;
+                case MeasurementUnitTypeEnum.Seconds:
+                    return Seconds;
                 case MeasurementUnitTypeEnum.SquareFeet:
                     return SquareFeet;
                 case MeasurementUnitTypeEnum.Therms:
                     return Therms;
                 case MeasurementUnitTypeEnum.Tons:
                     return Tons;
+                case MeasurementUnitTypeEnum.YesNo:
+                    return YesNo;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -191,9 +194,10 @@ namespace Neptune.Web.Models
         NephlometricTurbidityUnit = 16,
         Meters = 17,
         PeriphytonBiomassIndex = 18,
-        AcreFeet = 19,
-        Gallon = 20,
-        CubicYards = 21
+        Feet = 19,
+        InchesPerHour = 20,
+        Seconds = 21,
+        YesNo = 22
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -241,7 +245,7 @@ namespace Neptune.Web.Models
     public partial class MeasurementUnitTypeTons : MeasurementUnitType
     {
         private MeasurementUnitTypeTons(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeTons Instance = new MeasurementUnitTypeTons(8, @"Tons", @"tons", @"tons", @"Ton", 2);
+        public static readonly MeasurementUnitTypeTons Instance = new MeasurementUnitTypeTons(8, @"Tons", @"tons", @"tons", @"Ton", 0);
     }
 
     public partial class MeasurementUnitTypeDollars : MeasurementUnitType
@@ -304,21 +308,27 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypePeriphytonBiomassIndex Instance = new MeasurementUnitTypePeriphytonBiomassIndex(18, @"PeriphytonBiomassIndex", @"PBI", @"PBI", @"Periphyton biomass index", 0);
     }
 
-    public partial class MeasurementUnitTypeAcreFeet : MeasurementUnitType
+    public partial class MeasurementUnitTypeFeet : MeasurementUnitType
     {
-        private MeasurementUnitTypeAcreFeet(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeAcreFeet Instance = new MeasurementUnitTypeAcreFeet(19, @"AcreFeet", @"acre-feet", @"acre-ft", @"Acre-Foot", 0);
+        private MeasurementUnitTypeFeet(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeFeet Instance = new MeasurementUnitTypeFeet(19, @"Feet", @"feet", @"ft", @"Foot", 2);
     }
 
-    public partial class MeasurementUnitTypeGallon : MeasurementUnitType
+    public partial class MeasurementUnitTypeInchesPerHour : MeasurementUnitType
     {
-        private MeasurementUnitTypeGallon(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeGallon Instance = new MeasurementUnitTypeGallon(20, @"Gallon", @"gallons", @"gallons", @"Gallon", 0);
+        private MeasurementUnitTypeInchesPerHour(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeInchesPerHour Instance = new MeasurementUnitTypeInchesPerHour(20, @"InchesPerHour", @"in/hr", @"in/hr", @"Inches Per Hour", 2);
     }
 
-    public partial class MeasurementUnitTypeCubicYards : MeasurementUnitType
+    public partial class MeasurementUnitTypeSeconds : MeasurementUnitType
     {
-        private MeasurementUnitTypeCubicYards(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeCubicYards Instance = new MeasurementUnitTypeCubicYards(21, @"CubicYards", @"cubic yards", @"cubic yards", @"Cubic Yard", 0);
+        private MeasurementUnitTypeSeconds(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeSeconds Instance = new MeasurementUnitTypeSeconds(21, @"Seconds", @"seconds", @"s", @"Second", 0);
+    }
+
+    public partial class MeasurementUnitTypeYesNo : MeasurementUnitType
+    {
+        private MeasurementUnitTypeYesNo(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeYesNo Instance = new MeasurementUnitTypeYesNo(22, @"YesNo", @"yes/no", @"", @"", 0);
     }
 }

@@ -39,9 +39,10 @@ namespace Neptune.Web.Views.Shared
                 case MeasurementUnitTypeEnum.NephlometricTurbidityUnit:
                 case MeasurementUnitTypeEnum.Meters:
                 case MeasurementUnitTypeEnum.PeriphytonBiomassIndex:
-                case MeasurementUnitTypeEnum.AcreFeet:
-                case MeasurementUnitTypeEnum.Gallon:
-                case MeasurementUnitTypeEnum.CubicYards:
+                case MeasurementUnitTypeEnum.Feet:
+                case MeasurementUnitTypeEnum.InchesPerHour:
+                case MeasurementUnitTypeEnum.Seconds:
+                case MeasurementUnitTypeEnum.YesNo:
                 case null:
                     Source = "inline";
                     break;

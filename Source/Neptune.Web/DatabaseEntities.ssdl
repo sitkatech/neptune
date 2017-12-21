@@ -385,8 +385,6 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="OrganizationID" Type="int" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="geometry" />
-    <Property Name="RoadNetworkGeometry" Type="geometry" />
-    <Property Name="RoadAreaOfInterestGeometry" Type="geometry" />
     <Property Name="StateProvinceID" Type="int" />
     <Property Name="IsTransportationJurisdiction" Type="bit" Nullable="false" />
   </EntityType>
