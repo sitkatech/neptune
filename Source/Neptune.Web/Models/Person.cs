@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Common;
-using Keystone.Common;
+using Keystone.Common.OpenID;
 using LtInfo.Common;
 
 namespace Neptune.Web.Models

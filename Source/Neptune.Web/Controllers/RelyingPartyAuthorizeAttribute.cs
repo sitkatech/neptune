@@ -18,13 +18,13 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Neptune.Web.Security;
 using Neptune.Web.Security.Shared;
-using Keystone.Common;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Controllers
 {
@@ -39,37 +39,26 @@ namespace Neptune.Web.Controllers
             var skipAuthorization = filterContext.ActionDescriptor.IsDefined(attributeType, true)
                                     || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(attributeType, true);
 
-            if (!skipAuthorization)
+            var principal = filterContext.HttpContext.User;
+            if (principal.Identity.IsAuthenticated) // we have a token and we can determine the user.
             {
-                var neptuneBaseFeatureType = typeof(NeptuneBaseFeature);
-                var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor.GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
-                if (neptuneBaseFeatureAttribute != null && ((NeptuneBaseFeature) neptuneBaseFeatureAttribute).GrantedRoles.Any())
+                Thread.CurrentPrincipal = principal;
+                if (HttpContext.Current != null)
                 {
-
-                    if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
-                    {
-                        AuthenticateUser(filterContext);
-                    }
-                    else
+                    HttpContext.Current.User = principal;
+                }
+            }
+            else
+            {
+                if (!skipAuthorization)
+                {
+                    var neptuneBaseFeatureType = typeof(NeptuneBaseFeature);
+                    var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor.GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
+                    if (neptuneBaseFeatureAttribute != null && ((NeptuneBaseFeature)neptuneBaseFeatureAttribute).GrantedRoles.Any())
                     {
                         base.OnAuthorization(filterContext);
                     }
                 }
-            }
-        }
-
-        // use FAM to redirect to STS to initiate SSO - parameters come via <microsoft.identityModel> section in config
-        protected void AuthenticateUser(AuthorizationContext filterContext)
-        {
-            var requestContext = filterContext.RequestContext;
-            if (requestContext.HttpContext.Request.IsAjaxRequest())
-            {
-                filterContext.Result = new ContentResult() {Content = "<!-- This is the SitkaIfInPartialPageRedirectToLoginPage (marker for Javascript ajax login redirect handling) -->"};
-            }
-            else
-            {
-                var writeQueryString = KeystoneUtilities.GetSignInRedirectUrlWithReturnUrl(requestContext, SitkaRoute<AccountController>.BuildUrlFromExpression(x => x.LogOn()), HttpContext.Current.Request.Url.ToString());
-                filterContext.Result = new RedirectResult(writeQueryString);                
             }
         }
     }

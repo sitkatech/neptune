@@ -27,6 +27,7 @@ using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Models;
 using Keystone.Common;
+using Keystone.Common.OpenID;
 using LtInfo.Common.DesignByContract;
 using Person = Neptune.Web.Models.Person;
 
@@ -46,7 +47,7 @@ namespace Neptune.Web.Common
 
         public static Person Person
         {
-            get { return GetValueOrDefault(PersonKey, () => KeystoneClaimsHelpers.GetUserFromPrincipal(Thread.CurrentPrincipal, Person.GetAnonymousSitkaUser(), DatabaseEntities.People.GetPersonByPersonGuid)); }
+            get { return GetValueOrDefault(PersonKey, () => KeystoneClaimsHelpers.GetOpenIDUserFromPrincipal(Thread.CurrentPrincipal, Person.GetAnonymousSitkaUser(), DatabaseEntities.People.GetPersonByPersonGuid)); }
             set { SetValue(PersonKey, value); }
         }
 

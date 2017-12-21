@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
 using FluentValidation.Mvc;
 using LtInfo.Common;
 using Neptune.Web.Controllers;
-using Keystone.Common;
 using log4net.Config;
 using LtInfo.Common.LoggingFilters;
 using LtInfo.Common.Mvc;
-using Microsoft.IdentityModel.Web;
-using Microsoft.IdentityModel.Web.Configuration;
-using Neptune.Web.Models;
 using SitkaController = Neptune.Web.Common.SitkaController;
 using SitkaRouteTableEntry = Neptune.Web.Common.SitkaRouteTableEntry;
-using System.Web;
+using Keystone.Common.OpenID;
 
 namespace Neptune.Web
 {
@@ -73,23 +68,7 @@ namespace Neptune.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             FluentValidationModelValidatorProvider.Configure();
-
-            FederatedAuthentication.ServiceConfigurationCreated += FederatedAuthentication_ServiceConfigurationCreated;
         }
-
-        // ReSharper disable InconsistentNaming
-        protected static void FederatedAuthentication_ServiceConfigurationCreated(object sender, ServiceConfigurationCreatedEventArgs e)
-        // ReSharper restore InconsistentNaming
-        {
-            foreach (var tenant in Tenant.All.OrderBy(x => x.TenantID))
-            {
-                e.ServiceConfiguration.AudienceRestriction.AllowedAudienceUris.Add(new Uri(
-                    $"https://{NeptuneWebConfiguration.NeptuneEnvironment.GetCanonicalHostNameForEnvironment(tenant)}"));
-            }
-            var sessionHandler = new KeystoneSessionSecurityTokenHandler();
-            e.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(sessionHandler);
-        }
-
 
         // ReSharper disable InconsistentNaming
         protected void Session_Start(object sender, EventArgs e)
@@ -112,8 +91,6 @@ namespace Neptune.Web
         protected void Application_BeginRequest(object sender, EventArgs e)
         // ReSharper restore InconsistentNaming
         {
-            KeystoneUtilities.SignOutOnBadCookie(Request, Response);
-
             // Call this in Application_BeginRequest because later on it can be too late to be mucking with the Response HTTP Headers
             AddCachingHeaders(Response, Request, SitkaWebConfiguration.CacheStaticContentTimeSpan);
 
@@ -162,7 +139,7 @@ namespace Neptune.Web
         {
             // Require SSL from this point forward
             filters.Add(new RequireHttpsAttribute());
-        }
+       }
 
         public override string ErrorUrl
         {
