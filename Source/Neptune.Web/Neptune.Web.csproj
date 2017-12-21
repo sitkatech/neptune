@@ -356,43 +356,14 @@
     <Content Include="Content\Bootstrap\neptune\rcd.theme.min.css">
       <DependentUpon>rcd.theme.css</DependentUpon>
     </Content>
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-114x114.png" />
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-120x120.png" />
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-57x57.png" />
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-60x60.png" />
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-72x72.png" />
-    <Content Include="Content\img\ClackamasPartnership\apple-icon-76x76.png" />
-    <Content Include="Content\img\ClackamasPartnership\favicon-16x16.png" />
-    <Content Include="Content\img\ClackamasPartnership\favicon-32x32.png" />
-    <Content Include="Content\img\ClackamasPartnership\favicon-96x96.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-144x144.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-192x192.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-256x256.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-36x36.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-384x384.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-48x48.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-72x72.png" />
-    <Content Include="Content\img\RCDProjectTracker\android-chrome-96x96.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-114x114.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-120x120.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-144x144.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-152x152.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-180x180.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-57x57.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-60x60.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-72x72.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon-76x76.png" />
-    <Content Include="Content\img\RCDProjectTracker\apple-touch-icon.png" />
-    <Content Include="Content\img\RCDProjectTracker\browserconfig.xml" />
-    <Content Include="Content\img\RCDProjectTracker\favicon-16x16.png" />
-    <Content Include="Content\img\RCDProjectTracker\favicon-32x32.png" />
-    <Content Include="Content\img\RCDProjectTracker\favicon.ico" />
-    <Content Include="Content\img\RCDProjectTracker\mstile-144x144.png" />
-    <Content Include="Content\img\RCDProjectTracker\mstile-150x150.png" />
-    <Content Include="Content\img\RCDProjectTracker\mstile-310x150.png" />
-    <Content Include="Content\img\RCDProjectTracker\mstile-310x310.png" />
-    <Content Include="Content\img\RCDProjectTracker\mstile-70x70.png" />
-    <Content Include="Content\img\RCDProjectTracker\safari-pinned-tab.svg" />
+    <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
+    <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
+    <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
+    <Content Include="Content\img\MimeTypeIcons\pdf_48x48.png" />
+    <Content Include="Content\img\MimeTypeIcons\powerpoint_20x20.png" />
+    <Content Include="Content\img\MimeTypeIcons\powerpoint_48x48.png" />
+    <Content Include="Content\img\MimeTypeIcons\word_20x20.png" />
+    <Content Include="Content\img\MimeTypeIcons\word_48x48.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-57x57.png" />
@@ -441,7 +412,6 @@
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
     <Content Include="ScriptsCustom\unsavedChanges.min.js.map" />
     <Content Include="Content\Bootstrap\neptune\base.theme.less" />
-    <Content Include="Content\img\RCDProjectTracker\manifest.json" />
     <Content Include="Content\Bootstrap\neptune\rcd.theme.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -1107,12 +1077,7 @@
     </Content>
     <Content Include="Security\NeptuneFeatureTest.AdministratorsCanAccessAllFeaturesAndUnassignedCantAccessAnyFeatures.approved.txt" />
     <Content Include="Security\NeptuneFeatureTest.SitkaAdministratorsCanAccessAllFeaturesAndUnassignedCantAccessAnyFeatures.approved.txt" />
-    <Content Include="Content\img\built_by_ei.png" />
     <Content Include="Content\img\built_by_sitka.png" />
-    <Content Include="Content\img\funding_org_epa.png" />
-    <Content Include="Content\img\funding_org_sgc.png" />
-    <Content Include="Content\img\funding_org_trpa.png" />
-    <Content Include="Content\img\funding_org_usfs.png" />
     <Content Include="Content\leaflet\leaflet.fullscreen\fullscreen%402x.png" />
     <Content Include="Content\leaflet\leaflet.fullscreen\fullscreen.png" />
     <Content Include="Content\leaflet\leaflet.fullscreen\leaflet.fullscreen.css" />
@@ -1134,7 +1099,6 @@
       <DependentUpon>dhtmlxgrid_ltinfo_skin.css</DependentUpon>
     </Content>
     <Content Include="Content\css\jquery.ui.neptune.css" />
-    <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\qtip\jquery.qtip.neptune.css" />
     <Compile Include="Views\FieldDefinition\Edit.cs" />
     <Compile Include="Views\FieldDefinition\EditViewData.cs" />
@@ -1573,13 +1537,6 @@
       <DependentUpon>ui.fancytree.css</DependentUpon>
     </Content>
     <Content Include="Content\img\ajax-loader.gif" />
-    <Content Include="Content\img\collapsed.png" />
-    <Content Include="Content\img\expanded.png" />
-    <Content Include="Content\img\fact_sheet_teaser.gif" />
-    <Content Include="Content\img\keys.png" />
-    <Content Include="Content\img\project_stage_arrow_default.png" />
-    <Content Include="Content\img\project_stage_arrow_current.png" />
-    <Content Include="Content\img\spacer.png" />
     <Content Include="Content\JQuery\jquery.blockUI.js" />
     <Content Include="Content\JQuery\jquery.ui.autocomplete.html.js" />
     <Content Include="Content\leaflet\Bing.js" />
@@ -2081,9 +2038,6 @@
     <Content Include="Content\img\button_icon_excel.png" />
     <Content Include="Content\img\checkbox.png" />
     <Content Include="Content\img\loadingAnimation.gif" />
-    <Content Include="Content\img\header_bg.png" />
-    <Content Include="Content\img\table_summary_bg.png" />
-    <Content Include="Content\img\undo.png" />
     <Content Include="Content\jquery.fancybox-buttons.css" />
     <Content Include="Content\jquery.fancybox-thumbs.css" />
     <Content Include="Content\jquery.fancybox.css" />
@@ -2407,7 +2361,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\img\MimeTypeIcons\" />
     <Folder Include="Content\themes\base\minified\images\" />
     <Folder Include="Views\Help\" />
   </ItemGroup>
