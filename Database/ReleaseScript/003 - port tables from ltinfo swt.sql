@@ -53,7 +53,7 @@ CREATE TABLE dbo.StormwaterBreadCrumbEntity(
 )
 
 CREATE TABLE dbo.StormwaterJurisdiction(
-	StormwaterJurisdictionID int NOT NULL CONSTRAINT PK_StormwaterJurisdiction_StormwaterJurisdictionID PRIMARY KEY,
+	StormwaterJurisdictionID int NOT NULL CONSTRAINT PK_StormwaterJurisdiction_StormwaterJurisdictionID PRIMARY KEY identity(1,1),
 	TenantID int not null,
 	OrganizationID int NOT NULL CONSTRAINT AK_StormwaterJurisdiction_OrganizationID UNIQUE,
 	StormwaterJurisdictionGeometry geometry NULL,

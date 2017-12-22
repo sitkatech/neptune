@@ -381,7 +381,7 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
     <Key>
       <PropertyRef Name="StormwaterJurisdictionID" />
     </Key>
-    <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" />
+    <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="OrganizationID" Type="int" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="geometry" />

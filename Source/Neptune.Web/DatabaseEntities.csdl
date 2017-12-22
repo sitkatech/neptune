@@ -376,7 +376,7 @@
     <Key>
       <PropertyRef Name="StormwaterJurisdictionID" />
     </Key>
-    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="OrganizationID" Type="Int32" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="Geometry" />

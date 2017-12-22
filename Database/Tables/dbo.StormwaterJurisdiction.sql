@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[StormwaterJurisdiction](
-	[StormwaterJurisdictionID] [int] NOT NULL,
+	[StormwaterJurisdictionID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[OrganizationID] [int] NOT NULL,
 	[StormwaterJurisdictionGeometry] [geometry] NULL,
