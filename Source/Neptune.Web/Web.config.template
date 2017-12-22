@@ -34,10 +34,13 @@
     <add key="DefaultSupportPersonID" value="2"/>
     <add key="LogFileFolder" value="${application-root-dir}\Logs"/>
     <add key="KeystoneUrl" value="https://${keystone-base-url}"/>
-    <add key="KeystoneRegisterUserUrl" value="${keystone-register-endpoint}"/>
-    <add key="KeystoneUserProfileUrl" value="${keystone-user-profile-endpoint}"/>
-    <add key="KeystoneOrganizationEditUrl" value="${keystone-organization-edit-endpoint}"/>
-    <add key="KeystoneWebServiceApplicationGuid" value="3F675C06-1803-4A18-A0D2-8E660D7402E9"/>
+    <add key="KeystoneAboutUrl" value="https://localhost.keystone.sitkatech.com/Home/About/" />
+    <add key="KeystoneUserProfileUrl" value="${keystone-user-profile-endpoint}" />
+    <add key="KeystoneOrganizationEditUrl" value="${keystone-organization-edit-endpoint}" />
+    <add key="KeystoneRegisterUrl" value="${keystone-register-endpoint}" />
+    <add key="KeystoneOpenIDUrl" value="${keystone-openid-endpoint}" />
+    <add key="KeystoneOpenIDClientId" value="Neptune" />
+    <add key="KeystoneOpenIDClientSecret" value="864888DF-1676-4960-BE72-06A4D16B0C5C" />
     <add key="DefaultModalDialogButtonCssClasses" value="btn-neptune,btn-xs"/>
   </appSettings>
   <system.net>
@@ -106,24 +109,6 @@
       </customHeaders>
     </httpProtocol>
   </system.webServer>
-  <!-- keystone / SSO related config -->
-  <microsoft.identityModel>
-    <service>
-      <federatedAuthentication>
-        <wsFederation passiveRedirectEnabled="false" issuer="${keystone-sso-endpoint}" realm="${fq-canonical.host.name}/" requireHttps="true" reply="${fq-canonical.host.name}/Account/LogOn/" signOutReply="${fq-canonical.host.name}/"/>
-        <cookieHandler requireSsl="true"/>
-      </federatedAuthentication>
-      <certificateValidation certificateValidationMode="${cert-validation-mode}"/>
-      <issuerNameRegistry type="Microsoft.IdentityModel.Tokens.ConfigurationBasedIssuerNameRegistry, Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-        <trustedIssuers>
-          <add thumbprint="${sso-signing-cert-thumbprint}" name="${sso-signing-cert-name}"/>
-        </trustedIssuers>
-      </issuerNameRegistry>
-      <serviceCertificate>
-        <certificateReference x509FindType="FindByThumbprint" findValue="${sso-encrypt-cert-thumbprint}" storeLocation="LocalMachine" storeName="My"/>
-      </serviceCertificate>
-    </service>
-  </microsoft.identityModel>
   <log4net>
     <appender name="FileAppender" type="log4net.Appender.RollingFileAppender">
       <param name="File" value="C:\Sitka\Neptune\Logs\WEB.log"/>

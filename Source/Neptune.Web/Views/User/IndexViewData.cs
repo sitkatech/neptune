@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using LtInfo.Common;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.User
@@ -34,7 +33,6 @@ namespace Neptune.Web.Views.User
         public readonly string KeystoneUrl;
         public readonly string KeystoneRegisterUserUrl;
         
-        public readonly string PullUserFromKeystoneUrl;
         public readonly bool UserIsSitkaAdmin;
 
         public IndexViewData(Person currentPerson) : base(currentPerson)
@@ -45,9 +43,8 @@ namespace Neptune.Web.Views.User
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
             KeystoneUrl = NeptuneWebConfiguration.KeystoneUrl;
-            KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUserUrl;
+            KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
 
-            PullUserFromKeystoneUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.PullUserFromKeystone());
             UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
         }
     }
