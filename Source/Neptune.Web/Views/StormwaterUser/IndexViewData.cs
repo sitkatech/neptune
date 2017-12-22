@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.StormwaterUser
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<StormwaterUserController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
             KeystoneUrl = NeptuneWebConfiguration.KeystoneUrl;
-            KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUserUrl;
+            KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
         }
 
 

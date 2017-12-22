@@ -204,100 +204,10 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        [HttpGet]
-        [SitkaAdminFeature]
-        public PartialViewResult PullUserFromKeystone()
-        {
-            var viewModel = new PullUserFromKeystoneViewModel();
-
-            return ViewPullUserFromKeystone(viewModel);
-        }
-
-        [HttpPost]
-        [SitkaAdminFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewPullUserFromKeystone(viewModel);
-            }
-
-            var keystoneClient = new KeystoneDataClient();
-
-            UserProfile keystoneUser = keystoneClient.GetUserProfileByUsername(NeptuneWebConfiguration.KeystoneWebServiceApplicationGuid, viewModel.LoginName);
-            if (keystoneUser == null)
-            {
-                SetErrorForDisplay($"Person not added. The {FieldDefinition.Username.GetFieldDefinitionLabel()} was not found in Keystone");
-                return new ModalDialogFormJsonResult();    
-            }
-            
-            if (!keystoneUser.OrganizationGuid.HasValue)
-            {
-                SetErrorForDisplay($"Person not added. They have no {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
-            }
-
-            KeystoneDataService.Organization keystoneOrganization = null;
-            try
-            {
-                keystoneOrganization = keystoneClient.GetOrganization(keystoneUser.OrganizationGuid.Value);
-            }
-            catch (Exception)
-            {
-                SetErrorForDisplay($"Person not added. Could not find their {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
-            }
-
-            if (keystoneOrganization == null)
-            {
-                SetErrorForDisplay("Person not added. Could not find their Organization in Keystone");
-
-            }
-            else
-            {
-                var neptuneOrganization =
-                    HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(
-                        x => x.OrganizationGuid == keystoneUser.OrganizationGuid);
-                if (neptuneOrganization == null)
-                {
-                    var defaultOrganizationType = HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
-                    neptuneOrganization = new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
-                    {
-                        OrganizationGuid = keystoneOrganization.OrganizationGuid,
-                        OrganizationShortName = keystoneOrganization.ShortName,
-                        OrganizationUrl = keystoneOrganization.URL
-                    };
-                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(neptuneOrganization);
-                }
-
-                var neptunePerson =
-                    HttpRequestStorage.DatabaseEntities.People.SingleOrDefault(
-                        x => x.PersonGuid == keystoneUser.UserGuid);
-                if (neptunePerson != null)
-                {
-                    neptunePerson.OrganizationID = neptuneOrganization.OrganizationID;
-                }
-                else
-                {
-                    neptunePerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
-                        keystoneUser.Email, Role.Unassigned, DateTime.Now, true, neptuneOrganization, false,
-                        keystoneUser.LoginName);
-                    HttpRequestStorage.DatabaseEntities.AllPeople.Add(neptunePerson);
-                }
-
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-                SetMessageForDisplay($"{neptunePerson.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to <a href=\"{neptunePerson.GetDetailUrl()}\">assign them a role</a>.");
-            }
-            return new ModalDialogFormJsonResult();
-
-            
-        }
-
         private PartialViewResult ViewPullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
         {
             var viewData = new PullUserFromKeystoneViewData();
             return RazorPartialView<PullUserFromKeystone, PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>(viewData, viewModel);
         }
     }
-
 }

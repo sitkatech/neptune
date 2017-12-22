@@ -29,6 +29,7 @@ using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Models;
 using Keystone.Common;
+using Keystone.Common.OpenID;
 
 namespace Neptune.Web.Security
 {
@@ -55,7 +56,7 @@ namespace Neptune.Web.Security
             Roles = CalculateRoleNameStringFromFeature();
 
             // MR #321 - force reload of user roles onto IClaimsIdentity
-            KeystoneUtilities.AddLocalUserAccountRolesToClaims(HttpRequestStorage.Person);
+            KeystoneOpenIDUtilities.AddLocalUserAccountRolesToClaims(HttpRequestStorage.Person);
 
             // This ends up making the calls into the RoleProvider
             base.OnAuthorization(filterContext);
