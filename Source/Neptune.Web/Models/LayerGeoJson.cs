@@ -38,11 +38,12 @@ namespace Neptune.Web.Models
         public readonly string MapServerLayerName;
         public readonly string TooltipUrlTemplate;
         public readonly string LayerColor;
-        public readonly decimal LayerOpacity;
-        public readonly LayerInitialVisibility LayerInitialVisibility;
+        public decimal LayerOpacity;
+        public LayerInitialVisibility LayerInitialVisibility;
         [JsonConverter(typeof(StringEnumConverter))]
         public readonly LayerGeoJsonType LayerType;
         public readonly bool HasCustomPopups;
+        public bool EnablePopups = true;
 
         /// <summary>
         /// Constructor for LayerGeoJson with Vector Type

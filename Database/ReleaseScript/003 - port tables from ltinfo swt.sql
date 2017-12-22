@@ -46,12 +46,10 @@ CREATE TABLE dbo.StormwaterAssessmentType(
 
 CREATE TABLE dbo.StormwaterBreadCrumbEntity(
 	StormwaterBreadCrumbEntityID int NOT NULL CONSTRAINT PK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityID PRIMARY KEY,
-	TenantID int not null,
 	StormwaterBreadCrumbEntityName varchar(100) NOT NULL,
 	StormwaterBreadCrumbEntityDisplayName varchar(100) NOT NULL,
 	GlyphIconClass varchar(100) NOT NULL,
-	ColorClass varchar(100) NOT NULL,
-	constraint AK_StormwaterBreadCrumbEntity_StormwaterBreadCrumbEntityID_TenantID unique (StormwaterBreadCrumbEntityID, TenantID),
+	ColorClass varchar(100) NOT NULL
 )
 
 CREATE TABLE dbo.StormwaterJurisdiction(
@@ -59,8 +57,6 @@ CREATE TABLE dbo.StormwaterJurisdiction(
 	TenantID int not null,
 	OrganizationID int NOT NULL CONSTRAINT AK_StormwaterJurisdiction_OrganizationID UNIQUE,
 	StormwaterJurisdictionGeometry geometry NULL,
-	RoadNetworkGeometry geometry NULL,
-	RoadAreaOfInterestGeometry geometry NULL,
 	StateProvinceID int NULL,
 	IsTransportationJurisdiction bit NOT NULL,
 	constraint AK_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID unique (StormwaterJurisdictionID, TenantID),
@@ -71,20 +67,8 @@ CREATE TABLE dbo.StormwaterJurisdictionPerson(
 	StormwaterJurisdictionPersonID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_StormwaterJurisdictionPerson_StormwaterJurisdictionPersonID PRIMARY KEY,
 	TenantID int not null,
 	StormwaterJurisdictionID int NOT NULL,
-	PersonID int NOT NULL CONSTRAINT AK_StormwaterJurisdictionPerson_StormwaterJurisdictionID_PersonID UNIQUE,
-	constraint AK_StormaterJurisdictionPerson_StormwaterJurisdictionPersonID_TenantID unique (StormwaterJurisdictionPersonID, TenantID),
-	constraint AK_StormaterJurisdictionPerson_PersonID_TenantID unique (PersonID, TenantID),
-)
-
-CREATE TABLE dbo.StormwaterRole(
-	StormwaterRoleID int NOT NULL CONSTRAINT PK_StormwaterRole_StormwaterRoleID PRIMARY KEY,
-	TenantID int not null,
-	StormwaterRoleName varchar(100) NOT NULL,
-	StormwaterRoleDisplayName varchar(100) NOT NULL,
-	StormwaterRoleDescription varchar(255) NULL,
-	constraint AK_StormwaterRole_StormwaterRoleID_TenantID unique (StormwaterRoleID, TenantID),
-	constraint AK_StormwaterRole_StormwaterRoleName_TenantID unique (StormwaterRoleName, TenantID),
-	constraint AK_StormwaterRole_StormwaterRoleDisplayName_TenantID unique (StormwaterRoleDisplayName, TenantID),
+	PersonID int NOT NULL,
+	constraint AK_StormaterJurisdictionPerson_StormwaterJurisdictionPersonID_TenantID unique (StormwaterJurisdictionPersonID, TenantID)
 )
 
 CREATE TABLE dbo.TreatmentBMP(
@@ -195,10 +179,8 @@ go
 
 alter table dbo.ModeledCatchment add constraint FK_ModeledCatchment_Tenant_TenantID foreign key (TenantID) references dbo.Tenant(TenantID)
 alter table dbo.ModeledCatchmentGeometryStaging add constraint FK_ModeledCatchmentGeometryStaging_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
-alter table dbo.StormwaterBreadCrumbEntity add constraint FK_StormwaterBreadCrumbEntity_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.StormwaterJurisdiction add constraint FK_StormwaterJurisdiction_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.StormwaterJurisdictionPerson add constraint FK_StormwaterJurisdictionPerson_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
-alter table dbo.StormwaterRole add constraint FK_StormwaterRole_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.TreatmentBMP add constraint FK_TreatmentBMP_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.TreatmentBMPAssessment add constraint FK_TreatmentBMPAssessment_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMPBenchmarkAndThreshold_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)

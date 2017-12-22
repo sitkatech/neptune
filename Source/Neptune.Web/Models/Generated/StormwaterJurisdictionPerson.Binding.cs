@@ -61,6 +61,7 @@ namespace Neptune.Web.Models
             stormwaterJurisdiction.StormwaterJurisdictionPeople.Add(this);
             this.PersonID = person.PersonID;
             this.Person = person;
+            person.StormwaterJurisdictionPeople.Add(this);
         }
 
         /// <summary>

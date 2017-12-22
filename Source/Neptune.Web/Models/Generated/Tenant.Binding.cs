@@ -42,7 +42,7 @@ namespace Neptune.Web.Models
             TenantDomain = tenantDomain;
             TenantSubdomain = tenantSubdomain;
         }
-        public List<StormwaterBreadCrumbEntity> StormwaterBreadCrumbEntities { get { return StormwaterBreadCrumbEntity.All.Where(x => x.TenantID == TenantID).ToList(); } }
+
         [Key]
         public int TenantID { get; private set; }
         public string TenantName { get; private set; }

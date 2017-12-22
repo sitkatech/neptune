@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using System.Web;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -97,6 +98,11 @@ namespace Neptune.Web.Models
         public static string GetKeystoneEditLink(this Person person)
         {
             return $"{NeptuneWebConfiguration.KeystoneUserProfileUrl}{person.PersonGuid}";
+        }
+
+        public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
+        {
+            return person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
         }
     }
 }

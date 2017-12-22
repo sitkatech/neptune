@@ -1,0 +1,127 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="AssessmentInformation.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using System.Web.Mvc.Html
+@using Neptune.Web.Models
+@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+
+@inherits Neptune.Web.Views.TreatmentBMPAssessment.AssessmentInformation
+
+@{
+    SetLayout("SiteLayout.cshtml", ViewDataTyped);
+}
+<script type="text/javascript" src="@Url.Content("~/Content/bootstrap-datepicker/js/bootstrap-datepicker.min.js")"></script>
+<link rel="stylesheet" href="/Content/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<p>
+    The BMP assessment workflow allows input of treatment BMP observations to help determine maintenance urgency. A BMP assessment is a compilation of distinct rapid observations and/or measurements made at treatment BMPs, which results in a score between 0-5.
+</p>
+<p>
+    Use the navigation to the left to view and enter your assessment details in the field or after an assessment is conducted. Be sure to click Save on each page. In order to recieve an assessment score you are required to enter observations in each section. Once all required observations are completed, your score will appear on the score page.
+</p>  
+<p>You will see some icons next to some pages – here is what they mean:</p>
+
+<ul class="list-unstyled">
+    <li>
+        <span class="glyphicon glyphicon-exclamation-sign field-validation-warning displayIcon"></span> Required information has not been completely provided (section incomplete).
+    </li>
+    <li>
+        <span class="glyphicon glyphicon-ok field-validation-success displayIcon"></span> Required information has been provided (section complete).
+    </li>
+    <li>
+        <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020;font-size: 8px;margin-left: 8px;margin-right: 12px;"></span><span>User input required - Fields with this icon are required. Fields without this icon are optional or only required under certain conditions.</span>
+    </li>  
+</ul>
+<hr>
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.AssessmentPersonID)
+            </div>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m => m.AssessmentPersonID, ViewDataTyped.JurisdictionPeople, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.AssessmentDate)
+            </div>
+            <div class="col-sm-9">
+                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px" >
+                    <input type="text" name="@Html.NameFor(m => m.AssessmentDate)" class="form-control assessmentDate" value="@Model.AssessmentDate.ToStringDate()" />
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.AssessmentNotes)
+            </div>
+            <div class="col-sm-9">
+                @Html.TextAreaWithMaxLengthFor(m => m.AssessmentNotes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string>() { "form-control" })
+            </div>
+        </div>
+        @if (ViewDataTyped.CurrentPerson.Role != Role.Admin)
+        {
+            <div class="form-group">
+                <div class="col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.IsPrivate)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.IsPrivate, BooleanFormats.GetYesNoSelectList(), new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                </div>
+            </div>
+        }        
+        @if (ViewDataTyped.CurrentPerson.Role == Role.Admin)
+        {
+            <div class="form-group">
+                <div class="col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.AssessmentTypeID)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.AssessmentTypeID, ViewDataTyped.AssessmentTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                </div>
+            </div>
+        }
+    </div>
+    <div class="wizardButtonGroup">
+        <hr>
+        <button type="submit" class="btn btn-trpa" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+        <button type="submit" class="btn btn-trpa" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue</button>
+    </div>
+    @Html.HiddenFor(m => m.TreatmentBMPAssessmentID)
+    @Html.HiddenFor(m => m.TreatmentBMPID)
+    @Html.HiddenFor(m => m.CurrentPersonID)
+}
+
+
+<script type="text/javascript">
+    // <![CDATA[
+    jQuery(document).ready(function () {
+        jQuery(".sitkaDatePicker").datepicker();
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
+    });
+    // ]]>
+</script>

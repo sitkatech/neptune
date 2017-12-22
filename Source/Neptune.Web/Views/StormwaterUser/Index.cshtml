@@ -1,0 +1,41 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common.DhtmlWrappers
+@inherits Neptune.Web.Views.StormwaterUser.Index
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+<script type="text/javascript" src="@Url.Content("~/Areas/Stormwater/Views/StormwaterUser/EditStormwaterUserController.js")"></script>
+
+<div class="pageIntroText">
+    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+</div>
+<p>
+    Users listed here all have Single Sign On (SSO) accounts provisioned by <a href="@ViewDataTyped.KeystoneUrl">Sitka's Keystone service</a>. To create a new account, end users must <a href="@ViewDataTyped.KeystoneRegisterUserUrl">request an account</a>.
+</p>
+
+<div style="margin-top: 10px">
+    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+</div>
+

@@ -120,8 +120,8 @@ namespace Neptune.Web
                 Thread.CurrentPrincipal.Identity.Name,
                 Thread.CurrentPrincipal.Identity.IsAuthenticated);
 
-            var sendNewUserNotification = false;
-            var sendNewOrganizationNotification = false;
+            //var sendNewUserNotification = false;
+            //var sendNewOrganizationNotification = false;
             var person = HttpRequestStorage.DatabaseEntities.People.GetPersonByPersonGuid(keystoneUserClaims.UserGuid);
 
             if (person == null)
@@ -141,7 +141,7 @@ namespace Neptune.Web
                     false,
                     keystoneUserClaims.LoginName);
                 HttpRequestStorage.DatabaseEntities.AllPeople.Add(person);
-                sendNewUserNotification = true;
+                //sendNewUserNotification = true;
             }
             else
             {
@@ -172,7 +172,7 @@ namespace Neptune.Web
                         HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
                     organization = new Organization(keystoneUserClaims.OrganizationName, true, defaultOrganizationType);
                     HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(organization);
-                    sendNewOrganizationNotification = true;
+                    //sendNewOrganizationNotification = true;
                 }
 
                 organization.OrganizationName = keystoneUserClaims.OrganizationName;
@@ -195,17 +195,17 @@ namespace Neptune.Web
             HttpRequestStorage.Person = person;
             HttpRequestStorage.DatabaseEntities.SaveChanges(person);
 
-            var ipAddress = HttpContext.Current.Request.UserHostAddress;
-            var userAgent = HttpContext.Current.Request.UserAgent;
-            if (sendNewUserNotification)
-            {
-                SendNewUserCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
-            }
+            //var ipAddress = HttpContext.Current.Request.UserHostAddress;
+            //var userAgent = HttpContext.Current.Request.UserAgent;
+            //if (sendNewUserNotification)
+            //{
+            //    SendNewUserCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
+            //}
 
-            if (sendNewOrganizationNotification)
-            {
-                SendNewOrganizationCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
-            }
+            //if (sendNewOrganizationNotification)
+            //{
+            //    SendNewOrganizationCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
+            //}
 
             return HttpRequestStorage.Person;
 

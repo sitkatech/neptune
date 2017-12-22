@@ -62,8 +62,6 @@ namespace Neptune.Web.Models
         public virtual IQueryable<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get { return AllStormwaterJurisdictionPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StormwaterJurisdiction> AllStormwaterJurisdictions { get; set; }
         public virtual IQueryable<StormwaterJurisdiction> StormwaterJurisdictions { get { return AllStormwaterJurisdictions.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<StormwaterRole> AllStormwaterRoles { get; set; }
-        public virtual IQueryable<StormwaterRole> StormwaterRoles { get { return AllStormwaterRoles.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<SupportRequestLog> AllSupportRequestLogs { get; set; }
         public virtual IQueryable<SupportRequestLog> SupportRequestLogs { get { return AllSupportRequestLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TenantAttribute> AllTenantAttributes { get; set; }
@@ -202,9 +200,6 @@ namespace Neptune.Web.Models
 
                 case "StormwaterJurisdiction":
                     return StormwaterJurisdictions.GetStormwaterJurisdiction(primaryKey);
-
-                case "StormwaterRole":
-                    return StormwaterRoles.GetStormwaterRole(primaryKey);
 
                 case "SupportRequestLog":
                     return SupportRequestLogs.GetSupportRequestLog(primaryKey);

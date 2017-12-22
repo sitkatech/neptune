@@ -34,7 +34,7 @@ using Keystone.Common.OpenID;
 namespace Neptune.Web.Security
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public abstract class NeptuneBaseFeature : AuthorizeAttribute
+    public abstract class NeptuneBaseFeature : RelyingPartyAuthorizeAttribute
     {
         private readonly IList<IRole> _grantedRoles;
 

@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
     {
         public const string OrganizationSitka = "Sitka Technology Group";
         public const string OrganizationUnknown = "(Unknown or Unspecified Organization)";
-
+        
         public string DisplayName => IsUnknown ? "Unknown or unspecified" : $"{OrganizationName}{(!String.IsNullOrWhiteSpace(OrganizationShortName) ? $" ({OrganizationShortName})" : String.Empty)}{(!IsActive ? " (Inactive)" : String.Empty)}";
 
         public string OrganizationNamePossessive
@@ -96,5 +96,7 @@ namespace Neptune.Web.Models
         public bool IsInKeystone => OrganizationGuid.HasValue;
 
         public bool IsUnknown => !String.IsNullOrWhiteSpace(OrganizationName) && OrganizationName.Equals(OrganizationUnknown, StringComparison.InvariantCultureIgnoreCase);
+
+        public string AbbreviationIfAvailable => OrganizationShortName ?? OrganizationName;
     }
 }

@@ -140,7 +140,7 @@ namespace Neptune.Web
         {
             // Require SSL from this point forward
             filters.Add(new RequireHttpsAttribute());
-            filters.Add(new OpenIDAuthorizeAttribute());
+            filters.Add(new OpenIDNeptuneAuthorizeAttribute());
        }
 
         public override string ErrorUrl

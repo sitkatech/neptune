@@ -1,0 +1,98 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.HtmlHelperExtensions
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.StormwaterUser.Edit
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
+                    };
+            });
+
+    angular.bootstrap(jQuery("#EditStormwaterUserApp"), ["NeptuneApp"]);
+    // ]]>
+</script>
+
+<div class="validationError">
+    @Html.ValidationSummary()
+</div>
+
+<div id="EditStormwaterUserApp" ng-controller="EditStormwaterUserController">
+    <p>Use this form to set a user's role in the LT Info Stormwater Tools. Normal Users can create, assess and manage BMPs, road operations, Registrations, and Declarations within the jurisdictions asssigned below. </p>
+    <br/>
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal">
+            <div class="form-group row">
+                <label class="cols-xs-12 col-sm-4 form-label">Role</label>
+                <div class="col-xs-12 col-sm-8">
+                    <select name="RoleID" ng-model="RoleID" ng-required="true" class="form-control" style="width: auto">
+                        <option ng-repeat="stormwaterRole in AngularViewData.RolesSimple"
+                                value="{{stormwaterRole.RoleID}}"
+                                ng-selected="AngularModel.RoleID == stormwaterRole.RoleID"
+                                ng-bind="stormwaterRole.RoleDisplayName"></option>
+                    </select>
+                </div>
+            </div>            
+            <div class="form-group row">
+                <label class="col-xs-12 col-sm-4 form-label">Assign to Jurisdiction</label>
+                <div class="col-xs-11 col-sm-6">
+                    <select ng-model="StormwaterJurisdictionToAdd" ng-options="StormwaterJurisdiction.StormwaterJurisdictionDisplayName for StormwaterJurisdiction in filteredStormwaterJurisdictions()" style="width: 375px;" class="form-control">
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-xs-1 col-sm-2">
+                    <button class="btn btn-trpa" type="button" ng-click="addRow()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group row">
+                <label class="col-xs-12 col-sm-4 form-label">Assigned Jurisdictions</label>
+                <ul class="col-xs-12 col-sm-8 list-unstyled">
+                    <li style="margin-bottom: 10px;" ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionDisplayName">
+                        <span class="glyphicon glyphicon-trash blue"
+                              title="Remove row'"
+                              alt="Remove row"
+                              ng-click="deleteRow(stormwaterJurisdictionSimple)"
+                              style="cursor: pointer">
+                        </span>
+                        <span style="margin-left: 5px;" ng-bind="getStormwaterJurisdictionDisplayName(stormwaterJurisdictionSimple)"></span>
+                        <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionPersonID}}"
+                               name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionPersonID" />
+                        <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionID}}"
+                               name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionID" />
+                        <input type="hidden" value="{{stormwaterJurisdictionSimple.PersonID}}"
+                               name="StormwaterJurisdictionPersonSimples[{{$index}}].PersonID" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        @Html.HiddenFor(m => m.PersonID);
+    }
+</div>

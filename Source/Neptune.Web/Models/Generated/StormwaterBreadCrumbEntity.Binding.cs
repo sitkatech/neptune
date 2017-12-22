@@ -18,7 +18,11 @@ namespace Neptune.Web.Models
 {
     public abstract partial class StormwaterBreadCrumbEntity : IHavePrimaryKey
     {
-
+        public static readonly StormwaterBreadCrumbEntityTreatmentBMP TreatmentBMP = StormwaterBreadCrumbEntityTreatmentBMP.Instance;
+        public static readonly StormwaterBreadCrumbEntityModeledCatchment ModeledCatchment = StormwaterBreadCrumbEntityModeledCatchment.Instance;
+        public static readonly StormwaterBreadCrumbEntityJurisdiction Jurisdiction = StormwaterBreadCrumbEntityJurisdiction.Instance;
+        public static readonly StormwaterBreadCrumbEntityUsers Users = StormwaterBreadCrumbEntityUsers.Instance;
+        public static readonly StormwaterBreadCrumbEntityAssessments Assessments = StormwaterBreadCrumbEntityAssessments.Instance;
 
         public static readonly List<StormwaterBreadCrumbEntity> All;
         public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntity> AllLookupDictionary;
@@ -28,26 +32,24 @@ namespace Neptune.Web.Models
         /// </summary>
         static StormwaterBreadCrumbEntity()
         {
-            All = new List<StormwaterBreadCrumbEntity> {  };
+            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntity>(All.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
         }
 
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected StormwaterBreadCrumbEntity(int stormwaterBreadCrumbEntityID, int tenantID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass)
+        protected StormwaterBreadCrumbEntity(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass)
         {
             StormwaterBreadCrumbEntityID = stormwaterBreadCrumbEntityID;
-            TenantID = tenantID;
             StormwaterBreadCrumbEntityName = stormwaterBreadCrumbEntityName;
             StormwaterBreadCrumbEntityDisplayName = stormwaterBreadCrumbEntityDisplayName;
             GlyphIconClass = glyphIconClass;
             ColorClass = colorClass;
         }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+
         [Key]
         public int StormwaterBreadCrumbEntityID { get; private set; }
-        public int TenantID { get; private set; }
         public string StormwaterBreadCrumbEntityName { get; private set; }
         public string StormwaterBreadCrumbEntityDisplayName { get; private set; }
         public string GlyphIconClass { get; private set; }
@@ -103,7 +105,16 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-
+                case StormwaterBreadCrumbEntityEnum.Assessments:
+                    return Assessments;
+                case StormwaterBreadCrumbEntityEnum.Jurisdiction:
+                    return Jurisdiction;
+                case StormwaterBreadCrumbEntityEnum.ModeledCatchment:
+                    return ModeledCatchment;
+                case StormwaterBreadCrumbEntityEnum.TreatmentBMP:
+                    return TreatmentBMP;
+                case StormwaterBreadCrumbEntityEnum.Users:
+                    return Users;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -112,7 +123,40 @@ namespace Neptune.Web.Models
 
     public enum StormwaterBreadCrumbEntityEnum
     {
-
+        TreatmentBMP = 1,
+        ModeledCatchment = 2,
+        Jurisdiction = 3,
+        Users = 4,
+        Assessments = 5
     }
 
+    public partial class StormwaterBreadCrumbEntityTreatmentBMP : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityTreatmentBMP(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityTreatmentBMP Instance = new StormwaterBreadCrumbEntityTreatmentBMP(1, @"TreatmentBMP", @"Treatment BMP", @"glyphicon-leaf", @"treatmentBMPColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityModeledCatchment : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityModeledCatchment(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityModeledCatchment Instance = new StormwaterBreadCrumbEntityModeledCatchment(2, @"ModeledCatchment", @"Modeled Catchment", @"glyphicon-tint", @"modeledCatchmentColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityJurisdiction : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityJurisdiction(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityJurisdiction Instance = new StormwaterBreadCrumbEntityJurisdiction(3, @"Jurisdiction", @"Jurisdiction", @"glyphicon-home", @"jurisdictionColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityUsers : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityUsers(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityUsers Instance = new StormwaterBreadCrumbEntityUsers(4, @"Users", @"Users", @"glyphicon-user", @"userColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityAssessments : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityAssessments(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityAssessments Instance = new StormwaterBreadCrumbEntityAssessments(5, @"Assessments", @"Assessments", @"glyphicon-pencil", @"registrationColor");
+    }
 }

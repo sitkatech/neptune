@@ -23,6 +23,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.WebPages;
 using LtInfo.Common.Views;
 
 namespace LtInfo.Common
@@ -46,6 +47,15 @@ namespace LtInfo.Common
                 return thisString;
             
             return thisString.Substring(0, length);
+        }
+
+        public static string EncloseInParaentheses(this string value)
+        {
+            if (value == null || value.IsEmpty())
+            {
+                return String.Empty;
+            }
+            return $"({value})";
         }
 
         public static string ToStringPercent(this decimal? value)
