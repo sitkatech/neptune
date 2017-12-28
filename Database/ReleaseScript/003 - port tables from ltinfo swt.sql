@@ -57,7 +57,7 @@ CREATE TABLE dbo.StormwaterJurisdiction(
 	TenantID int not null,
 	OrganizationID int NOT NULL CONSTRAINT AK_StormwaterJurisdiction_OrganizationID UNIQUE,
 	StormwaterJurisdictionGeometry geometry NULL,
-	StateProvinceID int NULL,
+	StateProvinceID int NOT NULL,
 	IsTransportationJurisdiction bit NOT NULL,
 	constraint AK_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID unique (StormwaterJurisdictionID, TenantID),
 	constraint AK_StormwaterJurisdiction_OrganizationID_TenantID unique (OrganizationID, TenantID)

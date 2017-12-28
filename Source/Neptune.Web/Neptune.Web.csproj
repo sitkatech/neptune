@@ -394,21 +394,28 @@
     <Content Include="ScriptsCustom\DatePickerReady.min.js.map" />
     <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.Stormwater.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.Stormwater.min.js">
+      <DependentUpon>NeptuneMaps.Stormwater.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.StormwaterSearch.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js.map" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
       <DependentUpon>NeptuneMaps.js</DependentUpon>
-    </Content>
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ProjectLocationSummary.min.js">
-      <DependentUpon>NeptuneMaps.ProjectLocationSummary.js</DependentUpon>
     </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.SelectableMap.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.SelectableMap.min.js">
       <DependentUpon>NeptuneMaps.SelectableMap.js</DependentUpon>
     </Content>
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.StormwaterSearch.min.js">
+      <DependentUpon>NeptuneMaps.StormwaterSearch.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\ModalDialogForm.min.js.map" />
     <Content Include="ScriptsCustom\qtippopuphelper.min.js.map" />
     <Content Include="ScriptsCustom\sitka.grid.min.js.map" />
-    <Content Include="ScriptsCustom\sitka.min.js.map" />
+    <Content Include="ScriptsCustom\sitka.min.js">
+      <DependentUpon>sitka.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\sitkaAjax.min.js.map" />
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
     <Content Include="ScriptsCustom\unsavedChanges.min.js.map" />
@@ -451,7 +458,6 @@
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.js" />
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ProjectLocationSummary.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.min.js">
       <DependentUpon>ModalDialogForm.js</DependentUpon>
@@ -461,7 +467,6 @@
     <Content Include="ScriptsCustom\sitka.grid.js" />
     <Content Include="ScriptsCustom\sitka.grid.min.js" />
     <Content Include="ScriptsCustom\sitka.js" />
-    <Content Include="ScriptsCustom\sitka.min.js" />
     <Content Include="ScriptsCustom\sitkaAjax.js" />
     <Content Include="ScriptsCustom\sitkaAjax.min.js" />
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.js" />

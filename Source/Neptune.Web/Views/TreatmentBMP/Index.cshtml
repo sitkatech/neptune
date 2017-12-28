@@ -46,7 +46,7 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <a class="pull-right BMPButton headerButton btn cardButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
+        <a class="pull-right" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
     }    
 }
 
