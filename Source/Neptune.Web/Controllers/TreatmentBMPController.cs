@@ -161,7 +161,6 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox(), false) { AllowFullScreen = false };
             var mapFormID = "treatmentBMPLocation";
 
-
             var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, mapInitJson, mapFormID);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
