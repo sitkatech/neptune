@@ -18,5 +18,9 @@
   {
     "outputFile": "Content/Bootstrap/neptune/clackamas.css",
     "inputFile": "Content/Bootstrap/neptune/clackamas.less"
+  },
+  {
+    "outputFile": "ScriptsCustom/Maps/NeptuneMaps.Stormwater.es5.js",
+    "inputFile": "ScriptsCustom/Maps/NeptuneMaps.Stormwater.js"
   }
 ]

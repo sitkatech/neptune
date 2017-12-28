@@ -18,9 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.StormwaterUser
+namespace Neptune.Web.Views.User
 {
-    public abstract class Edit : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditViewData, EditViewModel>
+    public abstract class EditJurisdictions : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditJurisdictionsViewData, EditJurisdictionsViewModel>
     {
     }
 }

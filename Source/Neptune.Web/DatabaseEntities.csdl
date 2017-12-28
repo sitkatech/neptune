@@ -380,7 +380,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="OrganizationID" Type="Int32" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="Geometry" />
-    <Property Name="StateProvinceID" Type="Int32" />
+    <Property Name="StateProvinceID" Type="Int32" Nullable="false" />
     <Property Name="IsTransportationJurisdiction" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="ModeledCatchments" Relationship="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="ModeledCatchments" />
     <NavigationProperty Name="Organization" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_Organization_OrganizationID" FromRole="StormwaterJurisdictions" ToRole="Organization" />
@@ -823,7 +823,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_StormwaterJurisdiction_StateProvince_StateProvinceID">
-    <End Role="StateProvince" Type="Neptune.Web.Models.StateProvince" Multiplicity="0..1" />
+    <End Role="StateProvince" Type="Neptune.Web.Models.StateProvince" Multiplicity="1" />
     <End Role="StormwaterJurisdictions" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="StateProvince">

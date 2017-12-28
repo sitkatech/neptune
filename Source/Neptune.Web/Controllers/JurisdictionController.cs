@@ -62,11 +62,10 @@ namespace Neptune.Web.Controllers
             return HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
         }
 
-        [AnonymousUnclassifiedFeature]
+        [NeptuneViewFeature]
         public ViewResult Detail(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey)
         {
             var stormwaterJurisdiction = stormwaterJurisdictionPrimaryKey.EntityObject;
-
            
             var viewData = new DetailViewData(CurrentPerson, stormwaterJurisdiction);
             return RazorView<Detail, DetailViewData>(viewData);        

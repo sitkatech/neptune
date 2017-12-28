@@ -41,6 +41,8 @@ namespace Neptune.Web.Views.User
         public readonly string UserNotificationGridName;
         public readonly string UserNotificationGridDataUrl;
         public readonly string ActivateInactivateUrl;
+        public readonly HtmlString EditRolesLink;
+        public readonly HtmlString EditJurisdictionsLink;
 
         public DetailViewData(Person currentPerson,
             Person personToView,
@@ -63,7 +65,13 @@ namespace Neptune.Web.Views.User
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
             EditRolesLink = UserHasPersonManagePermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),
-                    string.Format("Edit Roles for User - {0}", personToView.FullNameFirstLast),
+                    $"Edit Roles for User - {personToView.FullNameFirstLast}",
+                    true)
+                : new HtmlString(string.Empty);
+
+            EditJurisdictionsLink = UserHasPersonManagePermissions
+                ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditJurisdiction(personToView)),
+                    $"Edit Assigned Jurisdictions for User - {personToView.FullNameFirstLast}",
                     true)
                 : new HtmlString(string.Empty);
 
@@ -73,6 +81,6 @@ namespace Neptune.Web.Views.User
             ActivateInactivateUrl = activateInactivateUrl;
         }
 
-        public readonly HtmlString EditRolesLink;
+
     }
 }

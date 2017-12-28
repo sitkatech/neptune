@@ -385,7 +385,7 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="OrganizationID" Type="int" Nullable="false" />
     <Property Name="StormwaterJurisdictionGeometry" Type="geometry" />
-    <Property Name="StateProvinceID" Type="int" />
+    <Property Name="StateProvinceID" Type="int" Nullable="false" />
     <Property Name="IsTransportationJurisdiction" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="StormwaterJurisdictionPerson">
@@ -720,7 +720,7 @@ warning 6035: The relationship 'FK_TreatmentBMPInfiltrationReading_TreatmentBMPO
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_StormwaterJurisdiction_StateProvince_StateProvinceID">
-    <End Role="StateProvince" Type="Neptune.Web.Models.Store.StateProvince" Multiplicity="0..1" />
+    <End Role="StateProvince" Type="Neptune.Web.Models.Store.StateProvince" Multiplicity="1" />
     <End Role="StormwaterJurisdictions" Type="Neptune.Web.Models.Store.StormwaterJurisdiction" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="StateProvince">

@@ -647,3 +647,9 @@ Sitka.UrlTemplate.prototype.ParameterReplace = function (param1, param2, param3,
     return url;
 };
 
+var selectFirstSuggestionFunction = function (element) {
+    var selectables = jQuery(element).siblings(".tt-menu").find(".tt-selectable");
+    if (selectables.length > 0) {
+        jQuery(selectables[0]).trigger('click');
+    }
+};

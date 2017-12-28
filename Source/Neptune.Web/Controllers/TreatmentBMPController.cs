@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -140,20 +141,27 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
-            var stormwaterJurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
-            var currentJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(viewModel.StormwaterJurisdictionID);
+            var stormwaterJurisdictions = CurrentPerson.StormwaterJurisdictionPeople
+                .Select(x => x.StormwaterJurisdiction).ToList();
 
-            if (currentJurisdiction != null && !stormwaterJurisdictions.Contains(currentJurisdiction))
+            if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
             {
-                stormwaterJurisdictions.Add(currentJurisdiction);
+                var currentJurisdiction =
+                    HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(
+                        viewModel.StormwaterJurisdictionID);
+
+                if (!stormwaterJurisdictions.Contains(currentJurisdiction))
+                {
+                    stormwaterJurisdictions.Add(currentJurisdiction);
+                }
             }
-            
+
             var treatmentBMPTypes = TreatmentBMPType.All;
             var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
             var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox(), false) { AllowFullScreen = false };
             var mapFormID = "treatmentBMPLocation";
 
-            var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID);
+            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, mapInitJson, mapFormID);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }

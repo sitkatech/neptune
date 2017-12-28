@@ -23,7 +23,7 @@ using Neptune.Web.Security.Shared;
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("View Organization")]
-    public class OrganizationViewFeature : AnonymousUnclassifiedFeature
+    public class OrganizationViewFeature : NeptuneViewFeature
     {
     }
 }
