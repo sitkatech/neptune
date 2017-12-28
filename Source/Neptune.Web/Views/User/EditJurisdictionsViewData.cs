@@ -23,27 +23,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.StormwaterUser
+namespace Neptune.Web.Views.User
 {
-    public class EditViewData : NeptuneViewData
+    public class EditJurisdictionsViewData : NeptuneViewData
     {
         
         public readonly EditViewDataForAngular ViewDataForAngular;
 
-        public EditViewData(Person currentPerson, List<Models.Role> stormwaterRoles, List<StormwaterJurisdiction> stormwaterJurisdictions)
+        public EditJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> stormwaterJurisdictions)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
-            ViewDataForAngular = new EditViewDataForAngular(stormwaterRoles, stormwaterJurisdictions);
+            ViewDataForAngular = new EditViewDataForAngular(stormwaterJurisdictions);
         }
 
         public class EditViewDataForAngular
         {
-            public readonly List<RoleSimple> RolesSimple;
             public readonly List<StormwaterJurisdictionSimple> StormwaterJurisdictionsSimple;
 
-            public EditViewDataForAngular(List<Models.Role> roles, List<StormwaterJurisdiction> stormwaterJurisdictions)
+            public EditViewDataForAngular(List<StormwaterJurisdiction> stormwaterJurisdictions)
             {
-                RolesSimple = roles.Select(x => new RoleSimple(x)).ToList();
                 StormwaterJurisdictionsSimple = stormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             }
         }

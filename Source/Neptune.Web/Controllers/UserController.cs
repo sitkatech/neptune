@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -208,6 +209,39 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new PullUserFromKeystoneViewData();
             return RazorPartialView<PullUserFromKeystone, PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
+        {
+            var person = personPrimaryKey.EntityObject;
+            var viewModel = new EditJurisdictionsViewModel(person);
+            return ViewEditJurisdiction(viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditJurisdictionsViewModel viewModel)
+        {
+            var person = personPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditJurisdiction(viewModel);
+            }
+
+            HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Load();
+
+            viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Local);
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewEditJurisdiction(EditJurisdictionsViewModel viewModel)
+        {
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
+            var viewData = new EditJurisdictionsViewData(CurrentPerson, stormwaterJurisdictions);
+            return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }
     }
 }

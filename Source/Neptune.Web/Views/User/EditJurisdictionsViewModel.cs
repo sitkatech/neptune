@@ -24,39 +24,33 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
-using Neptune.Web.Common;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.StormwaterUser
+namespace Neptune.Web.Views.User
 {
-    public class EditViewModel : FormViewModel, IValidatableObject
+    public class EditJurisdictionsViewModel : FormViewModel, IValidatableObject
     {
 
         [Required]
         public int PersonID { get; set; }
-
-        [Required]        
-        public int RoleID { get; set; }
 
         public List<StormwaterJurisdictionPersonSimple> StormwaterJurisdictionPersonSimples { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditViewModel()
+        public EditJurisdictionsViewModel()
         {
         }
 
-        public EditViewModel(Person person)
+        public EditJurisdictionsViewModel(Person person)
         {
             PersonID = person.PersonID;
-            RoleID = person.RoleID;
             StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.OrganizationDisplayName).Select(x => new StormwaterJurisdictionPersonSimple(x)).ToList();
         }
 
         public void UpdateModel(Person person, IList<StormwaterJurisdictionPerson> allStormwaterJurisdictionPeople)
         {
-            person.RoleID = RoleID;
             if (StormwaterJurisdictionPersonSimples == null)
             {
                 StormwaterJurisdictionPersonSimples = new List<StormwaterJurisdictionPersonSimple>();

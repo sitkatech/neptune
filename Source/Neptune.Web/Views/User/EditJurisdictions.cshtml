@@ -1,0 +1,84 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.HtmlHelperExtensions
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.User.EditJurisdictions
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
+                    };
+            });
+
+    angular.bootstrap(jQuery("#EditJurisdictionsApp"), ["NeptuneApp"]);
+    // ]]>
+</script>
+
+<div class="validationError">
+    @Html.ValidationSummary()
+</div>
+
+<div id="EditJurisdictionsApp" ng-controller="EditJurisdictionsController">
+    <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs, road operations, Registrations, and Declarations within the jurisdictions asssigned below. </p>
+    @using (Html.BeginForm())
+    {
+
+        <div class="form-group">
+            <label class="control-label">Jurisdiction to Add:</label>
+            <div class="input-group">
+                <select ng-model="StormwaterJurisdictionToAdd" ng-options="StormwaterJurisdiction.StormwaterJurisdictionDisplayName for StormwaterJurisdiction in filteredStormwaterJurisdictions()" class="form-control"></select>
+                <span class="input-group-btn">
+                    <button class="btn btn-neptune" type="button" ng-click="addRow()">
+                        <span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </span>
+            </div>
+        </div>
+        <table class="table table-condensed">
+            <tr>
+                <th></th>
+                <th>@Html.LabelWithSugarFor(FieldDefinition.StormwaterJurisdiction, "Jurisdiction")</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionDisplayName">
+                <td style="width:60px;">
+                    <span class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer"></span>
+                </td>
+                <td ng-bind="getStormwaterJurisdictionDisplayName(stormwaterJurisdictionSimple)"></td>
+                <td style="width:0px;">
+                    <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionPersonID}}"
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionPersonID" />
+                    <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionID}}"
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionID" />
+                    <input type="hidden" value="{{stormwaterJurisdictionSimple.PersonID}}"
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].PersonID" />
+                </td>
+            </tr>
+        </table>
+        @Html.HiddenFor(m => m.PersonID);
+    }
+</div>
