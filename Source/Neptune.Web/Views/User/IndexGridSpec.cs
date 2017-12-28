@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Linq;
 using Neptune.Web.Models;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
@@ -48,6 +50,7 @@ namespace Neptune.Web.Views.User
             Add("Active?", a => a.IsActive.ToYesNo(), 75, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Receives Support Emails?", a => a.ReceiveSupportEmails.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add($"{Models.FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for Organizations", a => a.PrimaryContactOrganizations.Count, 120);
+            Add($"Assigned {Models.FieldDefinition.StormwaterJurisdiction.GetFieldDefinitionLabelPluralized()}", a => a.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList().Count, 120);
         }
     }
 }
