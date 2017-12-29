@@ -156,7 +156,7 @@ namespace Neptune.Web.Controllers
                 }
             }
 
-            var treatmentBMPTypes = TreatmentBMPType.All;
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
             var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox(), false) { AllowFullScreen = false };
             var mapFormID = "treatmentBMPLocation";

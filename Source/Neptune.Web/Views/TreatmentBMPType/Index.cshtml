@@ -13,7 +13,7 @@
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
 
-@foreach (var batch in TreatmentBMPType.All.OrderBy(x => x.SortOrder).Batch(2))
+@foreach (var batch in ViewDataTyped.TreatmentBMPTypes.OrderBy(x => x.SortOrder).Batch(2))
 {
     <div class="row">
         @foreach (var treatmentBMPType in batch)
@@ -38,7 +38,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.ToEnum])
+                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.TreatmentBMPTypeName])
                                 {
                                     var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                     <tr>

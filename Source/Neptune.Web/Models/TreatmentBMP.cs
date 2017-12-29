@@ -71,17 +71,7 @@ namespace Neptune.Web.Models
             {
                 return null;
             }
-
-            if (observationType == ObservationType.MaterialAccumulation)
-            {
-                return ObservationTypeHelper.ThresholdValueFromThresholdPercentDeclineInDesignDepth(thresholdValue.Value, DesignDepth.Value);
-            }
-
-            if (observationType == ObservationType.WetBasinVegetativeCover)
-            {
-                return GetBenchmarkValue(observationType).Value - thresholdValue.Value;
-            }
-
+           
             return observationType.ThresholdPercentDecline
                 ? ObservationTypeHelper.ThresholdValueFromThresholdPercentDecline(GetBenchmarkValue(observationType).Value, thresholdValue.Value)
                 : thresholdValue.Value;

@@ -56,22 +56,6 @@ namespace Neptune.Web.Models
             return benchmarkValue - (thresholdPercent / 100) * benchmarkValue;
         }
 
-        public static double ThresholdValueFromThresholdPercentDeclineInDesignDepth(double thresholdPercent, double designDepth)
-        {
-            return designDepth - ThresholdValueFromThresholdPercentDecline(designDepth, thresholdPercent);
-        }
-
-        public static double ThresholdValueFromThresholdPercentDeclineInDesignDepth(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            if (treatmentBMPObservation.ObservationType != ObservationType.MaterialAccumulation)
-            {
-                throw new Exception("Incorrect method called to calculate Threshold Value");
-            }
-            var designDepth = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.DesignDepth.Value;
-            var thresholdPercent = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.GetThresholdValue(treatmentBMPObservation.ObservationType).Value;
-            return ThresholdValueFromThresholdPercentDeclineInDesignDepth(thresholdPercent, designDepth);
-        }
-
         public static string FormattedDefaultBenchmarkValue(ObservationType observationType, double? benchmarkValue)
         {
             if (!benchmarkValue.HasValue)
@@ -89,17 +73,11 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdPercentDecline || observationType == ObservationType.MaterialAccumulation
+            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdPercentDecline
                 ? String.Empty
                 : " ";
 
             var unit = observationType.ThresholdPercentDecline ? "% decline" : observationType.MeasurementUnitType.LegendDisplayName;
-
-            if (observationType == ObservationType.MaterialAccumulation)
-            {
-                unit = "% decline";
-            }
-
             var optionalPlusMinus = observationType.ThresholdPercentDeviation ? "+/- " : "";
 
             return $"{optionalPlusMinus}{thresholdValue}{optionalSpace}{unit}";

@@ -61,7 +61,11 @@ namespace Neptune.Web.Models
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
+            this.TreatmentBMPType = treatmentBMPType;
+            treatmentBMPType.TreatmentBMPTypeObservationTypes.Add(this);
             this.ObservationTypeID = observationType.ObservationTypeID;
+            this.ObservationType = observationType;
+            observationType.TreatmentBMPTypeObservationTypes.Add(this);
             this.AssessmentScoreWeight = assessmentScoreWeight;
         }
 
@@ -97,8 +101,8 @@ namespace Neptune.Web.Models
         public double? DefaultBenchmarkValue { get; set; }
         public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
 
-        public TreatmentBMPType TreatmentBMPType { get { return TreatmentBMPType.AllLookupDictionary[TreatmentBMPTypeID]; } }
-        public ObservationType ObservationType { get { return ObservationType.AllLookupDictionary[ObservationTypeID]; } }
+        public virtual TreatmentBMPType TreatmentBMPType { get; set; }
+        public virtual ObservationType ObservationType { get; set; }
 
         public static class FieldLengths
         {

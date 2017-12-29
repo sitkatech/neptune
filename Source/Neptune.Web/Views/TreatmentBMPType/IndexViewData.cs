@@ -29,18 +29,20 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly Dictionary<TreatmentBMPTypeEnum, List<ObservationType>> ObservationTypeByTreatmentBMPTypeDictionary;
+        public readonly Dictionary<string, List<ObservationType>> ObservationTypeByTreatmentBMPTypeDictionary;
         public readonly List<Models.TreatmentBMP> TreatmentBMPs;
+        public readonly List<Models.TreatmentBMPType> TreatmentBMPTypes;
         public readonly string TreatmentBMPIndexUrl;
       
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, List<Models.TreatmentBMPType> treatmentBMPTypes)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "Treatment BMP Types";
             var treatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes;
-            ObservationTypeByTreatmentBMPTypeDictionary = Models.TreatmentBMPType.All.OrderBy(x => x.SortOrder).ToDictionary(x => x.ToEnum, x => treatmentBMPTypeObservationTypes.GetObservationTypesForTreatmentType(x).OrderBy(y => y.SortOrder).ToList());
+            ObservationTypeByTreatmentBMPTypeDictionary = treatmentBMPTypes.ToDictionary(x => x.TreatmentBMPTypeName, x => treatmentBMPTypeObservationTypes.GetObservationTypesForTreatmentType(x).OrderBy(y => y.SortOrder).ToList());
             TreatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList();
-            TreatmentBMPIndexUrl = SitkaRoute<Neptune.Web.Controllers.TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            TreatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
 
         }
     }

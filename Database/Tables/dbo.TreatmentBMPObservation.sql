@@ -7,7 +7,6 @@ CREATE TABLE [dbo].[TreatmentBMPObservation](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPAssessmentID] [int] NOT NULL,
 	[ObservationTypeID] [int] NOT NULL,
-	[ObservationValueTypeID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPObservation_TreatmentBMPObservationID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPObservationID] ASC
@@ -24,11 +23,6 @@ ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_Trea
 REFERENCES [dbo].[ObservationType] ([ObservationTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_ObservationType_ObservationTypeID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_ObservationValueType_ObservationValueTypeID] FOREIGN KEY([ObservationValueTypeID])
-REFERENCES [dbo].[ObservationValueType] ([ObservationValueTypeID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_ObservationValueType_ObservationValueTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])

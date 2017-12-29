@@ -77,58 +77,6 @@ namespace Neptune.Web.Models
             Assert.That(actualThresholdValue, Is.EqualTo(expectedThresholdValue).Within(0.00001));
         }
 
-        [TestCase(ObservationTypeEnum.InfiltrationRate, 1, 20, 1, 5, null)]
-        [TestCase(ObservationTypeEnum.InfiltrationRate, 1, 20, 0.8, 2, null)]
-        [TestCase(ObservationTypeEnum.InfiltrationRate, 1, 20, 1.1, 5, null)]
-        [TestCase(ObservationTypeEnum.InfiltrationRate, 1, 20, 0.7, 0.5, null)]
-        [TestCase(ObservationTypeEnum.InfiltrationRate, 1, 20, 0.9, 3.5, null)]
-        [TestCase(ObservationTypeEnum.VegetativeCover, 0, 20, 0, 5, null)]
-        [TestCase(ObservationTypeEnum.VegetativeCover, 0, 20, 20, 2, null)]
-        [TestCase(ObservationTypeEnum.VegetativeCover, 0, 20, 10, 3.5, null)]
-        [TestCase(ObservationTypeEnum.VegetativeCover, 0, 20, 40, 0, null)]
-        [TestCase(ObservationTypeEnum.VegetativeCover, 0, 20, 40.1, 0, null)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 0, 5, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 2, 2, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 3, 0.5, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 1, 3.5, 10d)]
-        public void DryBasinScoreTest(ObservationTypeEnum observationTypeEnum, double benchmark, double threshold, double observation, double expectedScore, double? designDepth)
-        {
-            //Arrange
-            var observationType = ObservationType.ToType(observationTypeEnum);
-
-            var treatmentBMPObservation = TestFramework.TestTreatmentBMPObservation.Create(observationType, TreatmentBMPType.DryBasin, benchmark, threshold, observation, designDepth);
-
-            //Act
-            var actualScore = observationType.CalculateScore(treatmentBMPObservation);
-
-            //Assert
-            Assert.That(actualScore, Is.EqualTo(expectedScore).Within(0.001));
-        }
-
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 57.5, 5, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 63.33333, 4, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 75, 2, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 80.8333, 1, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 86.6666, 0, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 90, 0, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 40, 2, null)]
-        [TestCase(ObservationTypeEnum.WetBasinVegetativeCover, 57.5, 17.5, 10, 0, null)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 0, 5, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 2, 2, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 3, 0.5, 10d)]
-        [TestCase(ObservationTypeEnum.MaterialAccumulation, 0, 20, 1, 3.5, 10d)]
-        public void WetBasinScoreTest(ObservationTypeEnum observationTypeEnum, double benchmark, double threshold, double observation, double expectedScore, double? designDepth)
-        {
-            //Arrange
-            var observationType = ObservationType.ToType(observationTypeEnum);
-
-            var treatmentBMPObservation = TestFramework.TestTreatmentBMPObservation.Create(observationType, TreatmentBMPType.WetBasin, benchmark, threshold, observation, designDepth);
-
-            //Act
-            var actualScore = observationType.CalculateScore(treatmentBMPObservation);
-
-            //Assert
-            Assert.That(actualScore, Is.EqualTo(expectedScore).Within(0.001));
-        }
+      
     }
 }

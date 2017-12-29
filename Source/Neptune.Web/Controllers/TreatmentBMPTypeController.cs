@@ -19,7 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.TreatmentBMPType;
@@ -32,7 +34,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPType);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBMPTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
     }

@@ -65,7 +65,7 @@ namespace Neptune.Web.Models
             SingularDisplayName = singularDisplayName;
             NumberOfSignificantDigits = numberOfSignificantDigits;
         }
-        public List<ObservationType> ObservationTypes { get { return ObservationType.All.Where(x => x.MeasurementUnitTypeID == MeasurementUnitTypeID).ToList(); } }
+
         [Key]
         public int MeasurementUnitTypeID { get; private set; }
         public string MeasurementUnitTypeName { get; private set; }

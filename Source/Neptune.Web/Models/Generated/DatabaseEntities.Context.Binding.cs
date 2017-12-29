@@ -50,6 +50,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<NeptunePage> NeptunePages { get { return AllNeptunePages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Notification> AllNotifications { get; set; }
         public virtual IQueryable<Notification> Notifications { get { return AllNotifications.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<ObservationType> AllObservationTypes { get; set; }
+        public virtual IQueryable<ObservationType> ObservationTypes { get { return AllObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Organization> AllOrganizations { get; set; }
         public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
@@ -70,16 +72,14 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPInfiltrationReading> AllTreatmentBMPInfiltrationReadings { get; set; }
-        public virtual IQueryable<TreatmentBMPInfiltrationReading> TreatmentBMPInfiltrationReadings { get { return AllTreatmentBMPInfiltrationReadings.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPObservationDetail> AllTreatmentBMPObservationDetails { get; set; }
-        public virtual IQueryable<TreatmentBMPObservationDetail> TreatmentBMPObservationDetails { get { return AllTreatmentBMPObservationDetails.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPObservation> AllTreatmentBMPObservations { get; set; }
         public virtual IQueryable<TreatmentBMPObservation> TreatmentBMPObservations { get { return AllTreatmentBMPObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMP> AllTreatmentBMPs { get; set; }
         public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPTypeObservationType> AllTreatmentBMPTypeObservationTypes { get; set; }
         public virtual IQueryable<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get { return AllTreatmentBMPTypeObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPType> AllTreatmentBMPTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -159,14 +159,7 @@ namespace Neptune.Web.Models
                     return notificationType;
 
                 case "ObservationType":
-                    var observationType = ObservationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(observationType, "ObservationType", primaryKey);
-                    return observationType;
-
-                case "ObservationValueType":
-                    var observationValueType = ObservationValueType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(observationValueType, "ObservationValueType", primaryKey);
-                    return observationValueType;
+                    return ObservationTypes.GetObservationType(primaryKey);
 
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);
@@ -223,17 +216,6 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);
 
-                case "TreatmentBMPInfiltrationReading":
-                    return TreatmentBMPInfiltrationReadings.GetTreatmentBMPInfiltrationReading(primaryKey);
-
-                case "TreatmentBMPObservationDetail":
-                    return TreatmentBMPObservationDetails.GetTreatmentBMPObservationDetail(primaryKey);
-
-                case "TreatmentBMPObservationDetailType":
-                    var treatmentBMPObservationDetailType = TreatmentBMPObservationDetailType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(treatmentBMPObservationDetailType, "TreatmentBMPObservationDetailType", primaryKey);
-                    return treatmentBMPObservationDetailType;
-
                 case "TreatmentBMPObservation":
                     return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
 
@@ -244,9 +226,7 @@ namespace Neptune.Web.Models
                     return TreatmentBMPTypeObservationTypes.GetTreatmentBMPTypeObservationType(primaryKey);
 
                 case "TreatmentBMPType":
-                    var treatmentBMPType = TreatmentBMPType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(treatmentBMPType, "TreatmentBMPType", primaryKey);
-                    return treatmentBMPType;
+                    return TreatmentBMPTypes.GetTreatmentBMPType(primaryKey);
                 default:
                     throw new NotImplementedException(string.Format("No loader for type \"{0}\"", type.FullName));
             }

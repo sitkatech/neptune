@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, int inletCount, int outletCount, double? designDepth, string notes) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, int inletCount, int outletCount, string notes) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -41,7 +41,6 @@ namespace Neptune.Web.Models
             this.ModeledCatchmentID = modeledCatchmentID;
             this.InletCount = inletCount;
             this.OutletCount = outletCount;
-            this.DesignDepth = designDepth;
             this.Notes = notes;
         }
 
@@ -69,6 +68,8 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPName = treatmentBMPName;
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
+            this.TreatmentBMPType = treatmentBMPType;
+            treatmentBMPType.TreatmentBMPs.Add(this);
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.TreatmentBMPs.Add(this);
@@ -108,14 +109,13 @@ namespace Neptune.Web.Models
         public int? ModeledCatchmentID { get; set; }
         public int InletCount { get; set; }
         public int OutletCount { get; set; }
-        public double? DesignDepth { get; set; }
         public string Notes { get; set; }
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
-        public TreatmentBMPType TreatmentBMPType { get { return TreatmentBMPType.AllLookupDictionary[TreatmentBMPTypeID]; } }
+        public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual ModeledCatchment ModeledCatchment { get; set; }
 

@@ -39,7 +39,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public readonly string MapFormID;
         public readonly string TreatmentBMPInformationContainer;
         public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly List<int> RequiresDesignDepthBMPTypeIDs;
         public readonly string TreatmentBMPIndexUrl;
 
         public EditViewData(Person currentPerson,
@@ -66,7 +65,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
             TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";
-            RequiresDesignDepthBMPTypeIDs = Models.TreatmentBMPType.GetTreatmentBMPTypeIDsWhereDesignDepthIsRequired();
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());  
         }
     }

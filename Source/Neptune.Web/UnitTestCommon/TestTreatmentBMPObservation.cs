@@ -31,53 +31,20 @@ namespace Neptune.Web.UnitTestCommon
             public static TreatmentBMPObservation Create(TreatmentBMPType treatmentBMPType, ObservationType observationType)
             {
                 var treatmentBMPAssessment = TestTreatmentBMPAssessment.Create(TestTreatmentBMP.Create(treatmentBMPType));
-                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, observationType, ObservationValueType.floatType);
+                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, observationType);
             }
 
-            public static TreatmentBMPObservation Create(ObservationType observationType, TreatmentBMPType treatmentBMPType, double benchmark, double threshold, double observation, double? designDepth)
+            public static TreatmentBMPObservation Create(ObservationType observationType, TreatmentBMPType treatmentBMPType, double benchmark, double threshold, double observation)
             {
                 var treatmentBMPObservation = Create(treatmentBMPType, observationType);
 
                 var treatmentBMP = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP;
-                treatmentBMP.DesignDepth = designDepth;
-
-                var treatmentBMPObservationDetail = TreatmentBMPObservationDetail.CreateNewBlank(treatmentBMPObservation, GetDefaultTreatmentType(observationType));
-                treatmentBMPObservationDetail.TreatmentBMPObservationValue = observation;
-
-                treatmentBMPObservation.TreatmentBMPObservationDetails.Add(treatmentBMPObservationDetail);
 
                 var treatmentBMPBenchmarkAndThreshold = TestTreatmentBMPBenchmarkAndThreshold.Create(treatmentBMP, observationType);
                 treatmentBMPBenchmarkAndThreshold.BenchmarkValue = benchmark;
                 treatmentBMPBenchmarkAndThreshold.ThresholdValue = threshold;
 
                 return treatmentBMPObservation;
-            }
-
-            private static TreatmentBMPObservationDetailType GetDefaultTreatmentType(ObservationType observationType)
-            {
-                switch (observationType.ToEnum)
-                {
-                    case ObservationTypeEnum.InfiltrationRate:
-                        return TreatmentBMPObservationDetailType.ConstantHeadPermeameter;
-                    case ObservationTypeEnum.VegetativeCover:
-                        return TreatmentBMPObservationDetailType.VegetativeCoverWetlandAndRiparianSpecies;
-                    case ObservationTypeEnum.MaterialAccumulation:
-                        return TreatmentBMPObservationDetailType.StaffPlate;
-                    case ObservationTypeEnum.VaultCapacity:
-                        return TreatmentBMPObservationDetailType.VaultCapacityStadiaRod;
-                    case ObservationTypeEnum.StandingWater:
-                        return TreatmentBMPObservationDetailType.StandingWater;
-                    case ObservationTypeEnum.Runoff:
-                        return TreatmentBMPObservationDetailType.DurationOfInfiltration;
-                    case ObservationTypeEnum.SedimentTrapCapacity:
-                        return TreatmentBMPObservationDetailType.SedimentTrapCapacityStadiaRod;
-                    case ObservationTypeEnum.WetBasinVegetativeCover:
-                        return TreatmentBMPObservationDetailType.WetBasinVegetativeCoverWetlandAndRiparianSpecies;
-                    case ObservationTypeEnum.ConveyanceFunction:
-                        return TreatmentBMPObservationDetailType.Inlet;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
             }
 
         }

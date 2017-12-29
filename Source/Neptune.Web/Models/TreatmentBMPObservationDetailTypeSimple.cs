@@ -38,18 +38,7 @@ namespace Neptune.Web.Models
             TreatmentBMPObservationDetailTypeID = treatmentBMPObservationDetailTypeID;
             TreatmentBMPObservationDetailTypeName = treatmentBMPObservationDetailTypeName;
             TreatmentBMPObservationDetailTypeDisplayName = treatmentBMPObservationDetailTypeDisplayName;            
-        }
-
-        /// <summary>
-        /// Constructor for building a new simple object with the POCO class
-        /// </summary>
-        public TreatmentBMPObservationDetailTypeSimple(TreatmentBMPObservationDetailType treatmentBMPObservationDetailType)
-            : this()
-        {
-            TreatmentBMPObservationDetailTypeID = treatmentBMPObservationDetailType.TreatmentBMPObservationDetailTypeID;
-            TreatmentBMPObservationDetailTypeName = treatmentBMPObservationDetailType.TreatmentBMPObservationDetailTypeName;
-            TreatmentBMPObservationDetailTypeDisplayName = treatmentBMPObservationDetailType.TreatmentBMPObservationDetailTypeDisplayName;  
-        }
+        }        
 
         public int TreatmentBMPObservationDetailTypeID { get; set; }
         public string TreatmentBMPObservationDetailTypeName { get; set; }
