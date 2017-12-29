@@ -30,29 +30,31 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int observationTypeID) : this()
+        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int observationTypeID, string observationData) : this()
         {
             this.TreatmentBMPObservationID = treatmentBMPObservationID;
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.ObservationTypeID = observationTypeID;
+            this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int observationTypeID) : this()
+        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int observationTypeID, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.ObservationTypeID = observationTypeID;
+            this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType) : this()
+        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -62,6 +64,7 @@ namespace Neptune.Web.Models
             this.ObservationTypeID = observationType.ObservationTypeID;
             this.ObservationType = observationType;
             observationType.TreatmentBMPObservations.Add(this);
+            this.ObservationData = observationData;
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType)
         {
-            return new TreatmentBMPObservation(treatmentBMPAssessment, observationType);
+            return new TreatmentBMPObservation(treatmentBMPAssessment, observationType, default(string));
         }
 
         /// <summary>
@@ -91,6 +94,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPAssessmentID { get; set; }
         public int ObservationTypeID { get; set; }
+        public string ObservationData { get; set; }
         public int PrimaryKey { get { return TreatmentBMPObservationID; } set { TreatmentBMPObservationID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

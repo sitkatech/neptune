@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
       
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, ObservationType observationType)
         {
-            var nextObservationType = treatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.SortOrder).Where(x => x.HasBenchmarkAndThreshold).FirstOrDefault(x => x.SortOrder > observationType.SortOrder);
+            var nextObservationType = treatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).Where(x => x.HasBenchmarkAndThreshold).FirstOrDefault(x => string.Compare(x.ObservationTypeName, observationType.ObservationTypeName) > 0);
             var nextObservationTypeViewResult = nextObservationType == null
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.Detail(treatmentBMP.TreatmentBMPID)))
                 : Redirect(nextObservationType.BenchmarkAndThresholdUrl(treatmentBMP.TreatmentBMPID));

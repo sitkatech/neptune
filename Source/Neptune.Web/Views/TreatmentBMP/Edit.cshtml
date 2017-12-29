@@ -75,7 +75,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                     }
                                     else
                                     {
-                                        @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeDisplayName
+                                        @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName
                                         @Html.HiddenFor(m => m.TreatmentBMPTypeID)
                                     }
 
@@ -88,40 +88,6 @@ Source code is available upon request via <support@sitkatech.com>.
                                 <div class="col-sm-7">
                                     @Html.TextBoxFor(m => m.TreatmentBMPName, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
                                     @Html.ValidationMessageFor(m => m.TreatmentBMPName)
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-5 control-label">
-                                    @Html.LabelWithSugarFor(m => m.InletCount)
-                                </div>
-                                <div class="col-sm-7">
-                                    @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                                    {
-                                        @Html.TextBoxFor(m => m.InletCount, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
-                                        @Html.ValidationMessageFor(m => m.InletCount)
-                                    }
-                                    else
-                                    {
-                                        @ViewDataTyped.TreatmentBMP.InletCount
-                                        @Html.HiddenFor(m => m.InletCount)
-                                    }
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-5 control-label">
-                                    @Html.LabelWithSugarFor(m => m.OutletCount)
-                                </div>
-                                <div class="col-sm-7">
-                                    @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                                    {
-                                        @Html.TextBoxFor(m => m.OutletCount, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
-                                        @Html.ValidationMessageFor(m => m.OutletCount)
-                                    }
-                                    else
-                                    {
-                                        @ViewDataTyped.TreatmentBMP.OutletCount
-                                        @Html.HiddenFor(m => m.OutletCount)
-                                    }
                                 </div>
                             </div>                           
                             <div class="form-group text-center">

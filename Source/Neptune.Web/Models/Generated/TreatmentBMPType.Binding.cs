@@ -31,29 +31,21 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName, string treatmentBMPTypeDisplayName, int sortOrder, string displayColor, string glyphIconClass, bool isDistributedBMPType) : this()
+        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName) : this()
         {
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
-            this.TreatmentBMPTypeDisplayName = treatmentBMPTypeDisplayName;
-            this.SortOrder = sortOrder;
-            this.DisplayColor = displayColor;
-            this.GlyphIconClass = glyphIconClass;
-            this.IsDistributedBMPType = isDistributedBMPType;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(string treatmentBMPTypeName, string treatmentBMPTypeDisplayName, int sortOrder, bool isDistributedBMPType) : this()
+        public TreatmentBMPType(string treatmentBMPTypeName) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
-            this.TreatmentBMPTypeDisplayName = treatmentBMPTypeDisplayName;
-            this.SortOrder = sortOrder;
-            this.IsDistributedBMPType = isDistributedBMPType;
         }
 
 
@@ -62,7 +54,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPType CreateNewBlank()
         {
-            return new TreatmentBMPType(default(string), default(string), default(int), default(bool));
+            return new TreatmentBMPType(default(string));
         }
 
         /// <summary>
@@ -83,11 +75,6 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeID { get; set; }
         public int TenantID { get; private set; }
         public string TreatmentBMPTypeName { get; set; }
-        public string TreatmentBMPTypeDisplayName { get; set; }
-        public int SortOrder { get; set; }
-        public string DisplayColor { get; set; }
-        public string GlyphIconClass { get; set; }
-        public bool IsDistributedBMPType { get; set; }
         public int PrimaryKey { get { return TreatmentBMPTypeID; } set { TreatmentBMPTypeID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
@@ -97,9 +84,6 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int TreatmentBMPTypeName = 100;
-            public const int TreatmentBMPTypeDisplayName = 100;
-            public const int DisplayColor = 20;
-            public const int GlyphIconClass = 20;
         }
     }
 }

@@ -158,8 +158,28 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(notificationType, "NotificationType", primaryKey);
                     return notificationType;
 
+                case "ObservationTargetType":
+                    var observationTargetType = ObservationTargetType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationTargetType, "ObservationTargetType", primaryKey);
+                    return observationTargetType;
+
+                case "ObservationThresholdType":
+                    var observationThresholdType = ObservationThresholdType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationThresholdType, "ObservationThresholdType", primaryKey);
+                    return observationThresholdType;
+
+                case "ObservationTypeCollectionMethod":
+                    var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationTypeCollectionMethod, "ObservationTypeCollectionMethod", primaryKey);
+                    return observationTypeCollectionMethod;
+
                 case "ObservationType":
                     return ObservationTypes.GetObservationType(primaryKey);
+
+                case "ObservationTypeSpecification":
+                    var observationTypeSpecification = ObservationTypeSpecification.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
+                    return observationTypeSpecification;
 
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);

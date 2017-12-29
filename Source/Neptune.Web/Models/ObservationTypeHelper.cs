@@ -78,9 +78,8 @@ namespace Neptune.Web.Models
                 : " ";
 
             var unit = observationType.ThresholdPercentDecline ? "% decline" : observationType.MeasurementUnitType.LegendDisplayName;
-            var optionalPlusMinus = observationType.ThresholdPercentDeviation ? "+/- " : "";
 
-            return $"{optionalPlusMinus}{thresholdValue}{optionalSpace}{unit}";
+            return $"{thresholdValue}{optionalSpace}{unit}";
         }
     }
 }

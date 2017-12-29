@@ -13,7 +13,7 @@
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
 
-@foreach (var batch in ViewDataTyped.TreatmentBMPTypes.OrderBy(x => x.SortOrder).Batch(2))
+@foreach (var batch in ViewDataTyped.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).Batch(2))
 {
     <div class="row">
         @foreach (var treatmentBMPType in batch)
@@ -21,7 +21,7 @@
             <div class="col-lg-6">
                 <div class="panel panelNeptune">
                     <div class="panel-heading">
-                        @treatmentBMPType.TreatmentBMPTypeDisplayName
+                        @treatmentBMPType.TreatmentBMPTypeName
                     </div>
                     <div class="panel-body">
                         @Html.Label("Number of BMPs:") @ViewDataTyped.TreatmentBMPs.Count(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
@@ -42,7 +42,7 @@
                                 {
                                     var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                     <tr>
-                                        <td>@observationType.ObservationTypeDisplayName</td>
+                                        <td>@observationType.ObservationTypeName</td>
                                         <td>@(observationType.HasBenchmarkAndThreshold ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToString("0.00") : "pass/fail")</td>
                                         @if (observationType.HasBenchmarkAndThreshold)
                                         {

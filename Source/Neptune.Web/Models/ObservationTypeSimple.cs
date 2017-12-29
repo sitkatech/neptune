@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
         {
             ObservationTypeID = observationType.ObservationTypeID;
             HasBenchmarkAndThresholds = observationType.HasBenchmarkAndThreshold;
-            DisplayName = $"{observationType.ObservationTypeDisplayName} {observationType.MeasurementUnitType.LegendDisplayName.EncloseInParaentheses()}";            
+            DisplayName = $"{observationType.ObservationTypeName} {observationType.MeasurementUnitType.LegendDisplayName.EncloseInParaentheses()}";            
             ThresholdValueInObservedUnits = treatmentBMPAssessment.TreatmentBMP.GetThresholdValueInObservedUnits(observationType);
             BenchmarkValue = treatmentBMPAssessment.TreatmentBMP.GetBenchmarkValue(observationType);
             Weight = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight;

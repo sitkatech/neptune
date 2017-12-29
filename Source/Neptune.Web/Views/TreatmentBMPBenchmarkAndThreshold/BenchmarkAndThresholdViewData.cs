@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         }
 
         protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, ObservationType observationType)
-            : this(currentPerson, treatmentBMP, observationType.ObservationTypeDisplayName)
+            : this(currentPerson, treatmentBMP, observationType.ObservationTypeName)
         {
             var treatmentBMPTypeObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
             DefaultBenchmarkPlaceholder = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultBenchmarkValue.Value : string.Empty;

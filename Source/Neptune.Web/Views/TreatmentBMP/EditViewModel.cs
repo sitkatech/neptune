@@ -59,16 +59,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
         public double? TreatmentBMPPointY { get; set; }
 
-        [Required(ErrorMessage = "Enter number of inlets")]
-        [DisplayName("Number of Inlets")]
-        [Range(0, int.MaxValue, ErrorMessage = "Must be a positive number")]
-        public int? InletCount { get; set; }
-
-        [Required(ErrorMessage = "Enter number of outlets")]
-        [DisplayName("Number of Outlets")]
-        [Range(0, int.MaxValue, ErrorMessage = "Must be a positive number")]
-        public int? OutletCount { get; set; }
-
         [DisplayName("Notes")]
         [StringLength(Models.TreatmentBMP.FieldLengths.Notes)]
         public string Notes { get; set; }
@@ -86,8 +76,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPName = treatmentBMP.TreatmentBMPName;
             StormwaterJurisdictionID = treatmentBMP.StormwaterJurisdictionID;
             TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID;
-            InletCount = treatmentBMP.InletCount;
-            OutletCount = treatmentBMP.OutletCount;
             if (treatmentBMPPoint != null)
             {
                 TreatmentBMPPointX = treatmentBMPPoint.XCoordinate;
@@ -112,8 +100,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             {
                 treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
                 treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
-                treatmentBMP.InletCount = InletCount.Value;
-                treatmentBMP.OutletCount = OutletCount.Value;
             }
         }
 

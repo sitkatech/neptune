@@ -32,57 +32,48 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(int observationTypeID, string observationTypeName, string observationTypeDisplayName, int sortOrder, int measurementUnitTypeID, bool hasBenchmarkAndThreshold, bool thresholdPercentDecline, bool thresholdPercentDeviation) : this()
+        public ObservationType(int observationTypeID, string observationTypeName, int measurementUnitTypeID, string observationSchema, int observationTypeSpecificationID) : this()
         {
             this.ObservationTypeID = observationTypeID;
             this.ObservationTypeName = observationTypeName;
-            this.ObservationTypeDisplayName = observationTypeDisplayName;
-            this.SortOrder = sortOrder;
             this.MeasurementUnitTypeID = measurementUnitTypeID;
-            this.HasBenchmarkAndThreshold = hasBenchmarkAndThreshold;
-            this.ThresholdPercentDecline = thresholdPercentDecline;
-            this.ThresholdPercentDeviation = thresholdPercentDeviation;
+            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSpecificationID = observationTypeSpecificationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(string observationTypeName, string observationTypeDisplayName, int sortOrder, int measurementUnitTypeID, bool hasBenchmarkAndThreshold, bool thresholdPercentDecline, bool thresholdPercentDeviation) : this()
+        public ObservationType(string observationTypeName, int measurementUnitTypeID, string observationSchema, int observationTypeSpecificationID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ObservationTypeName = observationTypeName;
-            this.ObservationTypeDisplayName = observationTypeDisplayName;
-            this.SortOrder = sortOrder;
             this.MeasurementUnitTypeID = measurementUnitTypeID;
-            this.HasBenchmarkAndThreshold = hasBenchmarkAndThreshold;
-            this.ThresholdPercentDecline = thresholdPercentDecline;
-            this.ThresholdPercentDeviation = thresholdPercentDeviation;
+            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSpecificationID = observationTypeSpecificationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ObservationType(string observationTypeName, string observationTypeDisplayName, int sortOrder, MeasurementUnitType measurementUnitType, bool hasBenchmarkAndThreshold, bool thresholdPercentDecline, bool thresholdPercentDeviation) : this()
+        public ObservationType(string observationTypeName, MeasurementUnitType measurementUnitType, string observationSchema, ObservationTypeSpecification observationTypeSpecification) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.ObservationTypeName = observationTypeName;
-            this.ObservationTypeDisplayName = observationTypeDisplayName;
-            this.SortOrder = sortOrder;
             this.MeasurementUnitTypeID = measurementUnitType.MeasurementUnitTypeID;
-            this.HasBenchmarkAndThreshold = hasBenchmarkAndThreshold;
-            this.ThresholdPercentDecline = thresholdPercentDecline;
-            this.ThresholdPercentDeviation = thresholdPercentDeviation;
+            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static ObservationType CreateNewBlank(MeasurementUnitType measurementUnitType)
+        public static ObservationType CreateNewBlank(MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification)
         {
-            return new ObservationType(default(string), default(string), default(int), measurementUnitType, default(bool), default(bool), default(bool));
+            return new ObservationType(default(string), measurementUnitType, default(string), observationTypeSpecification);
         }
 
         /// <summary>
@@ -103,12 +94,9 @@ namespace Neptune.Web.Models
         public int ObservationTypeID { get; set; }
         public int TenantID { get; private set; }
         public string ObservationTypeName { get; set; }
-        public string ObservationTypeDisplayName { get; set; }
-        public int SortOrder { get; set; }
         public int MeasurementUnitTypeID { get; set; }
-        public bool HasBenchmarkAndThreshold { get; set; }
-        public bool ThresholdPercentDecline { get; set; }
-        public bool ThresholdPercentDeviation { get; set; }
+        public string ObservationSchema { get; set; }
+        public int ObservationTypeSpecificationID { get; set; }
         public int PrimaryKey { get { return ObservationTypeID; } set { ObservationTypeID = value; } }
 
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
@@ -116,11 +104,11 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID]; } }
+        public ObservationTypeSpecification ObservationTypeSpecification { get { return ObservationTypeSpecification.AllLookupDictionary[ObservationTypeSpecificationID]; } }
 
         public static class FieldLengths
         {
             public const int ObservationTypeName = 100;
-            public const int ObservationTypeDisplayName = 100;
         }
     }
 }

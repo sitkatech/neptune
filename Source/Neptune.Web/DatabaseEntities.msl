@@ -138,12 +138,9 @@
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />
-          <ScalarProperty Name="ObservationTypeDisplayName" ColumnName="ObservationTypeDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
           <ScalarProperty Name="MeasurementUnitTypeID" ColumnName="MeasurementUnitTypeID" />
-          <ScalarProperty Name="HasBenchmarkAndThreshold" ColumnName="HasBenchmarkAndThreshold" />
-          <ScalarProperty Name="ThresholdPercentDecline" ColumnName="ThresholdPercentDecline" />
-          <ScalarProperty Name="ThresholdPercentDeviation" ColumnName="ThresholdPercentDeviation" />
+          <ScalarProperty Name="ObservationSchema" ColumnName="ObservationSchema" />
+          <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -274,8 +271,6 @@
           <ScalarProperty Name="LocationPoint" ColumnName="LocationPoint" />
           <ScalarProperty Name="StormwaterJurisdictionID" ColumnName="StormwaterJurisdictionID" />
           <ScalarProperty Name="ModeledCatchmentID" ColumnName="ModeledCatchmentID" />
-          <ScalarProperty Name="InletCount" ColumnName="InletCount" />
-          <ScalarProperty Name="OutletCount" ColumnName="OutletCount" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -315,6 +310,7 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
+          <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -324,11 +320,6 @@
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPTypeName" ColumnName="TreatmentBMPTypeName" />
-          <ScalarProperty Name="TreatmentBMPTypeDisplayName" ColumnName="TreatmentBMPTypeDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-          <ScalarProperty Name="DisplayColor" ColumnName="DisplayColor" />
-          <ScalarProperty Name="GlyphIconClass" ColumnName="GlyphIconClass" />
-          <ScalarProperty Name="IsDistributedBMPType" ColumnName="IsDistributedBMPType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

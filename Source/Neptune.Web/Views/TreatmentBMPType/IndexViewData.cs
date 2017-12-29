@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             PageTitle = "Treatment BMP Types";
             var treatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes;
-            ObservationTypeByTreatmentBMPTypeDictionary = treatmentBMPTypes.ToDictionary(x => x.TreatmentBMPTypeName, x => treatmentBMPTypeObservationTypes.GetObservationTypesForTreatmentType(x).OrderBy(y => y.SortOrder).ToList());
+            ObservationTypeByTreatmentBMPTypeDictionary = treatmentBMPTypes.ToDictionary(x => x.TreatmentBMPTypeName, x => treatmentBMPTypeObservationTypes.GetObservationTypesForTreatmentType(x).OrderBy(y => y.ObservationTypeName).ToList());
             TreatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList();
             TreatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());

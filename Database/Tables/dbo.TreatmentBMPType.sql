@@ -6,18 +6,9 @@ CREATE TABLE [dbo].[TreatmentBMPType](
 	[TreatmentBMPTypeID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[TreatmentBMPTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[SortOrder] [int] NOT NULL,
-	[DisplayColor] [varchar](20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[GlyphIconClass] [varchar](20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[IsDistributedBMPType] [bit] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPType_TreatmentBMPTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPTypeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_TreatmentBMPType_TreatmentBMPTypeDisplayName] UNIQUE NONCLUSTERED 
-(
-	[TreatmentBMPTypeDisplayName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [AK_TreatmentBMPType_TreatmentBMPTypeID_TenantID] UNIQUE NONCLUSTERED 
 (

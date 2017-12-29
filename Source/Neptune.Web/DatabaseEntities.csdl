@@ -316,12 +316,9 @@
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-    <Property Name="ObservationTypeDisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-    <Property Name="SortOrder" Type="Int32" Nullable="false" />
     <Property Name="MeasurementUnitTypeID" Type="Int32" Nullable="false" />
-    <Property Name="HasBenchmarkAndThreshold" Type="Boolean" Nullable="false" />
-    <Property Name="ThresholdPercentDecline" Type="Boolean" Nullable="false" />
-    <Property Name="ThresholdPercentDeviation" Type="Boolean" Nullable="false" />
+    <Property Name="ObservationSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="ObservationTypeSpecificationID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPObservations" />
     <NavigationProperty Name="TreatmentBMPTypeObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPTypeObservationTypes" />
@@ -476,8 +473,6 @@
     <Property Name="LocationPoint" Type="Geometry" />
     <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
     <Property Name="ModeledCatchmentID" Type="Int32" />
-    <Property Name="InletCount" Type="Int32" Nullable="false" />
-    <Property Name="OutletCount" Type="Int32" Nullable="false" />
     <Property Name="Notes" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="ModeledCatchment" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="TreatmentBMPs" ToRole="ModeledCatchment" />
     <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="TreatmentBMPs" ToRole="StormwaterJurisdiction" />
@@ -524,6 +519,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPAssessmentID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationData" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="TreatmentBMPObservations" ToRole="ObservationType" />
     <NavigationProperty Name="TreatmentBMPAssessment" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPAssessment" />
   </EntityType>
@@ -534,11 +530,6 @@
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-    <Property Name="TreatmentBMPTypeDisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-    <Property Name="SortOrder" Type="Int32" Nullable="false" />
-    <Property Name="DisplayColor" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
-    <Property Name="GlyphIconClass" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
-    <Property Name="IsDistributedBMPType" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPType" ToRole="TreatmentBMPs" />
     <NavigationProperty Name="TreatmentBMPTypeObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPType" ToRole="TreatmentBMPTypeObservationTypes" />
   </EntityType>

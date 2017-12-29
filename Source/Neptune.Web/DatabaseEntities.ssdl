@@ -313,12 +313,9 @@ warning 6035: The relationship 'FK_NeptunePageImage_NeptunePage_NeptunePageID_Te
     <Property Name="ObservationTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeName" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="ObservationTypeDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="SortOrder" Type="int" Nullable="false" />
     <Property Name="MeasurementUnitTypeID" Type="int" Nullable="false" />
-    <Property Name="HasBenchmarkAndThreshold" Type="bit" Nullable="false" />
-    <Property Name="ThresholdPercentDecline" Type="bit" Nullable="false" />
-    <Property Name="ThresholdPercentDeviation" Type="bit" Nullable="false" />
+    <Property Name="ObservationSchema" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ObservationTypeSpecificationID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_Person_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -470,8 +467,6 @@ warning 6035: The relationship 'FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBM
     <Property Name="LocationPoint" Type="geometry" />
     <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" />
     <Property Name="ModeledCatchmentID" Type="int" />
-    <Property Name="InletCount" Type="int" Nullable="false" />
-    <Property Name="OutletCount" Type="int" Nullable="false" />
     <Property Name="Notes" Type="varchar" MaxLength="200" />
   </EntityType>
   <!--Errors Found During Generation:
@@ -511,6 +506,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPAssessmentID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeID" Type="int" Nullable="false" />
+    <Property Name="ObservationData" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="TreatmentBMPType">
     <Key>
@@ -519,11 +515,6 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeName" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="TreatmentBMPTypeDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="SortOrder" Type="int" Nullable="false" />
-    <Property Name="DisplayColor" Type="varchar" MaxLength="20" />
-    <Property Name="GlyphIconClass" Type="varchar" MaxLength="20" />
-    <Property Name="IsDistributedBMPType" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TreatmentBMPTypeObservationType">
     <Key>

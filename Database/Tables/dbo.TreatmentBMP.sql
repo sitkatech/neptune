@@ -10,8 +10,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[ModeledCatchmentID] [int] NULL,
-	[InletCount] [int] NOT NULL,
-	[OutletCount] [int] NOT NULL,
 	[Notes] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (

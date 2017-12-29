@@ -228,10 +228,10 @@ namespace Neptune.Web.Controllers
 
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType)
         {
-            //Null observationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.
-            var observationTypeSortOrder = observationType == null ? int.MinValue : observationType.SortOrder;
+            //Null observationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
+            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName);
 
-            var nextObservationType = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.SortOrder).FirstOrDefault(x => x.SortOrder > observationTypeSortOrder);
+            var nextObservationType = observationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x => string.Compare(x.ObservationTypeName, observationType.ObservationTypeName) > 0); 
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore
