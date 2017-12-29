@@ -78,3 +78,16 @@ alter table dbo.ObservationType add ObservationTypeSpecificationID int not null
 go
 
 ALTER TABLE dbo.ObservationType ADD CONSTRAINT FK_ObservationType_ObservationTypeSpecification_ObservationTypeSpecificationID FOREIGN KEY(ObservationTypeSpecificationID) REFERENCES dbo.ObservationTypeSpecification(ObservationTypeSpecificationID)
+
+
+insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
+values
+(11, 'ObservationTypes', 'Observation Types', 2)
+
+insert into dbo.neptunepage(TenantID, NeptunePageTypeID)
+select 
+	t.tenantid,
+	npt.NeptunePageTypeID
+from dbo.neptunepagetype npt
+cross join dbo.tenant t
+where npt.NeptunePageTypeID = 11

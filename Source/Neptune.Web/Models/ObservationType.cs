@@ -26,7 +26,7 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
-    public partial class ObservationType
+    public partial class ObservationType : IAuditableEntity
     {
         public string AssessmentUrl(int treatmentBMPAssessmentID)
         {
@@ -93,7 +93,8 @@ namespace Neptune.Web.Models
 
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
         public bool ThresholdPercentDecline => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
-        
+
+        public string AuditDescriptionString => "todo";
     }
 
    

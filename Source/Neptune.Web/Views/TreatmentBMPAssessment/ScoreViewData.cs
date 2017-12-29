@@ -44,7 +44,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             public readonly List<ObservationTypeSimple> ObservationTypeSimples;
             public readonly TreatmentBMPAssessmentSimple TreatmentBMPAssessmentSimple;
 
-            public ScoreViewDataForAngular(List<ObservationType> observationTypes, List<TreatmentBMPObservation> treatmentBMPObservations, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, List<TreatmentBMPObservation> treatmentBMPObservations, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
                 ObservationTypeSimples = observationTypes.Select(x => new ObservationTypeSimple(x, treatmentBMPAssessment)).ToList();
                 TreatmentBMPAssessmentSimple = new TreatmentBMPAssessmentSimple(treatmentBMPAssessment);

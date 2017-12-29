@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeModeledCatchment ModeledCatchment = NeptunePageTypeModeledCatchment.Instance;
         public static readonly NeptunePageTypeJurisdiction Jurisdiction = NeptunePageTypeJurisdiction.Instance;
         public static readonly NeptunePageTypeAssessment Assessment = NeptunePageTypeAssessment.Instance;
+        public static readonly NeptunePageTypeObservationTypes ObservationTypes = NeptunePageTypeObservationTypes.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -37,7 +38,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ObservationTypes };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -122,6 +123,8 @@ namespace Neptune.Web.Models
                     return Jurisdiction;
                 case NeptunePageTypeEnum.ModeledCatchment:
                     return ModeledCatchment;
+                case NeptunePageTypeEnum.ObservationTypes:
+                    return ObservationTypes;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
                 case NeptunePageTypeEnum.TreatmentBMP:
@@ -145,7 +148,8 @@ namespace Neptune.Web.Models
         TreatmentBMPType = 7,
         ModeledCatchment = 8,
         Jurisdiction = 9,
-        Assessment = 10
+        Assessment = 10,
+        ObservationTypes = 11
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -206,5 +210,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeAssessment(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeAssessment Instance = new NeptunePageTypeAssessment(10, @"Assessment", @"Assessment", 2);
+    }
+
+    public partial class NeptunePageTypeObservationTypes : NeptunePageType
+    {
+        private NeptunePageTypeObservationTypes(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeObservationTypes Instance = new NeptunePageTypeObservationTypes(11, @"ObservationTypes", @"Observation Types", 2);
     }
 }

@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly Dictionary<string, List<ObservationType>> ObservationTypeByTreatmentBMPTypeDictionary;
+        public readonly Dictionary<string, List<Models.ObservationType>> ObservationTypeByTreatmentBMPTypeDictionary;
         public readonly List<Models.TreatmentBMP> TreatmentBMPs;
         public readonly List<Models.TreatmentBMPType> TreatmentBMPTypes;
         public readonly string TreatmentBMPIndexUrl;

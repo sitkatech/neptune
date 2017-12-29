@@ -27,4 +27,5 @@ VALUES
 (22, N'ReceivesSystemCommunications', N'Receives System Communications', '', 1),
 (23, N'StormwaterJurisdiction', N'Stormwater Jurisdiction', '', 1),
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
-(25, N'TreatmentBMP', N'Treatment BMP', '', 1)
+(25, N'TreatmentBMP', N'Treatment BMP', '', 1),
+(26, N'ObservationType', N'Observation Type', '', 1)

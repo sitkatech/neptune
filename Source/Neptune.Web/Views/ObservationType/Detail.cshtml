@@ -1,0 +1,53 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.ModalDialog
+@inherits Neptune.Web.Views.ObservationType.Detail
+@section JavascriptAndStylesContent
+{
+}
+@if (ViewDataTyped.UserHasObservationTypeManagePermissions)
+{
+    <div>
+        <a class="btn backButton" href="@ViewDataTyped.ObservationTypeIndexUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left") Back to all @FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()</a>
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.ObservationType.GetEditUrl(), string.Format("Edit {0} - {1}", FieldDefinition.ObservationType.GetFieldDefinitionLabel(), ViewDataTyped.ObservationType.ObservationTypeName), ViewDataTyped.UserHasObservationTypeManagePermissions) Basics
+            </div>
+            <div class="panel-body">
+                <div class="row">                   
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-6 fieldLabel text-right">@Html.Label("Name")</div>
+                            <div class="col-xs-6">@ViewDataTyped.ObservationType.ObservationTypeName</div>
+                        </div>                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>
