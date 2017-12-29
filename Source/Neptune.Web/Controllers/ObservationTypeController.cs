@@ -112,12 +112,24 @@ namespace Neptune.Web.Controllers
                 .ToSelectListWithEmptyFirstRow(x => x.MeasurementUnitTypeID.ToString(CultureInfo.InvariantCulture),
                     x => x.MeasurementUnitTypeDisplayName);
 
-            var observationTypeSpecificationsAsSelectListItems = ObservationTypeSpecification.All
-                .OrderBy(x => x.SortOrder)
-                .ToSelectListWithEmptyFirstRow(x => x.ObservationTypeSpecificationID.ToString(CultureInfo.InvariantCulture),
-                    x => x.ObservationTypeSpecificationDisplayName);
+            var observationTypeSpecifications = ObservationTypeSpecification.All;
 
-            var viewData = new EditViewData(measurementUnitTypesAsSelectListItems, observationTypeSpecificationsAsSelectListItems);
+            var observationThresholdTypesAsSelectListItems = ObservationThresholdType.All
+                .OrderBy(x => x.SortOrder)
+                .ToSelectListWithEmptyFirstRow(x => x.ObservationThresholdTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.ObservationThresholdTypeDisplayName);
+
+            var observationTargetTypesAsSelectListItems = ObservationTargetType.All
+                .OrderBy(x => x.SortOrder)
+                .ToSelectListWithEmptyFirstRow(x => x.ObservationTargetTypeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.ObservationTargetTypeDisplayName);
+
+            var observationTypeCollectionMethodsAsSelectListItems = ObservationTypeCollectionMethod.All
+                .OrderBy(x => x.SortOrder)
+                .ToSelectListWithEmptyFirstRow(x => x.ObservationTypeCollectionMethodID.ToString(CultureInfo.InvariantCulture),
+                    x => x.ObservationTypeCollectionMethodDisplayName);
+
+            var viewData = new EditViewData(measurementUnitTypesAsSelectListItems, observationTypeSpecifications, observationThresholdTypesAsSelectListItems, observationTargetTypesAsSelectListItems, observationTypeCollectionMethodsAsSelectListItems);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

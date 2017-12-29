@@ -21,19 +21,28 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ObservationType
 {
     public class EditViewData : NeptuneUserControlViewData
     {
         public readonly IEnumerable<SelectListItem> MeasurementUnitTypes;
-        public readonly IEnumerable<SelectListItem> ObservationTypeSpecifications;
+        public readonly List<ObservationTypeSpecification> ObservationTypeSpecifications;
+        public readonly IEnumerable<SelectListItem> ObservationThresholdTypes;
+        public readonly IEnumerable<SelectListItem> ObservationTargetTypes;
+        public readonly IEnumerable<SelectListItem> ObservationTypeCollectionMethods;
 
         public EditViewData(IEnumerable<SelectListItem> measurementUnitTypes,
-            IEnumerable<SelectListItem> observationTypeSpecifications)
+            List<ObservationTypeSpecification> observationTypeSpecifications,
+            IEnumerable<SelectListItem> observationThresholdTypes, IEnumerable<SelectListItem> observationTargetTypes,
+            IEnumerable<SelectListItem> observationTypeCollectionMethods)
         {
             MeasurementUnitTypes = measurementUnitTypes;
             ObservationTypeSpecifications = observationTypeSpecifications;
+            ObservationThresholdTypes = observationThresholdTypes;
+            ObservationTargetTypes = observationTargetTypes;
+            ObservationTypeCollectionMethods = observationTypeCollectionMethods;
         }
     }
 }

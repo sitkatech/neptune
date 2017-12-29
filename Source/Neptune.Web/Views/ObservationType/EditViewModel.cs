@@ -22,6 +22,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
@@ -41,8 +43,16 @@ namespace Neptune.Web.Views.ObservationType
         public int? MeasurementUnitTypeID { get; set; }
 
         [Required]
-        [DisplayName("Observation Type Specification")]
-        public int? ObservationTypeSpecificationID { get; set; }
+        [DisplayName("Threshold Type")]
+        public int? ObservationThresholdTypeID { get; set; }
+
+        [Required]
+        [DisplayName("Observation Target Type")]
+        public int? ObservationTargetTypeID { get; set; }
+
+        [Required]
+        [DisplayName("Collection Method")]
+        public int? ObservationTypeCollectionMethodID { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -56,19 +66,38 @@ namespace Neptune.Web.Views.ObservationType
             ObservationTypeID = observationType.ObservationTypeID;
             ObservationTypeName = observationType.ObservationTypeName;
             MeasurementUnitTypeID = observationType.MeasurementUnitTypeID;
-            ObservationTypeSpecificationID = observationType.ObservationTypeSpecificationID;
+            ObservationThresholdTypeID = observationType.ObservationTypeSpecification?.ObservationThresholdTypeID;
+            ObservationTargetTypeID = observationType.ObservationTypeSpecification?.ObservationTargetTypeID;
+            ObservationTypeCollectionMethodID = observationType.ObservationTypeSpecification?.ObservationTypeCollectionMethodID;
         }
 
         public void UpdateModel(Models.ObservationType observationType, Person currentPerson)
         {
             observationType.ObservationTypeName = ObservationTypeName;
             observationType.MeasurementUnitTypeID = MeasurementUnitTypeID.Value;
-            observationType.ObservationTypeSpecificationID = ObservationTypeSpecificationID.Value;
+
+            var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x => 
+                x.ObservationTargetTypeID == ObservationTargetTypeID && 
+                x.ObservationThresholdTypeID == ObservationThresholdTypeID && 
+                x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID);
+
+            Check.Require(observationTypeSpecification != null, "No valid combination of Target Type, Threshold Type and Collection Method found");
+
+            observationType.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var validationResults = new List<ValidationResult>();           
+            var validationResults = new List<ValidationResult>();
+
+            var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x =>
+                x.ObservationTargetTypeID == ObservationTargetTypeID &&
+                x.ObservationThresholdTypeID == ObservationThresholdTypeID &&
+                x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID);
+            if (observationTypeSpecification == null)
+            {
+                validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method."));
+            }
 
             return validationResults;
         }

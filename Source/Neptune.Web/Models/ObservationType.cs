@@ -94,7 +94,7 @@ namespace Neptune.Web.Models
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
         public bool ThresholdPercentDecline => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
 
-        public string AuditDescriptionString => "todo";
+        public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";
     }
 
    
