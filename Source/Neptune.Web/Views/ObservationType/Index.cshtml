@@ -18,15 +18,25 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
+@using Neptune.Web.Security
 @inherits Neptune.Web.Views.ObservationType.Index
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+@section RightOfPageTitle
+{
+    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        <a class="pull-right" href="@ViewDataTyped.NewObservationTypeUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Observation Type</a>
+    }    
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }

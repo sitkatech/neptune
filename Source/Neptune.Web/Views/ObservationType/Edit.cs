@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.ObservationType
 {
-    public abstract class Edit : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditViewData, EditViewModel>
+    public abstract class Edit : LtInfo.Common.Mvc.TypedWebViewPage<EditViewData, EditViewModel>
     {
     }
 }

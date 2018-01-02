@@ -20,29 +20,52 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ObservationType
 {
-    public class EditViewData : NeptuneUserControlViewData
+    public class EditViewData : NeptuneViewData
     {
         public readonly IEnumerable<SelectListItem> MeasurementUnitTypes;
-        public readonly List<ObservationTypeSpecification> ObservationTypeSpecifications;
+        public readonly List<ObservationTypeSpecificationSimple> ObservationTypeSpecificationSimples;
         public readonly IEnumerable<SelectListItem> ObservationThresholdTypes;
         public readonly IEnumerable<SelectListItem> ObservationTargetTypes;
         public readonly IEnumerable<SelectListItem> ObservationTypeCollectionMethods;
+        public readonly string ObservationTypeIndexUrl;
 
-        public EditViewData(IEnumerable<SelectListItem> measurementUnitTypes,
+        public EditViewData(Person currentPerson, IEnumerable<SelectListItem> measurementUnitTypes,
             List<ObservationTypeSpecification> observationTypeSpecifications,
             IEnumerable<SelectListItem> observationThresholdTypes, IEnumerable<SelectListItem> observationTargetTypes,
-            IEnumerable<SelectListItem> observationTypeCollectionMethods)
+            IEnumerable<SelectListItem> observationTypeCollectionMethods) : base(currentPerson)
         {
+            PageTitle = "New Observation Type";
+
             MeasurementUnitTypes = measurementUnitTypes;
-            ObservationTypeSpecifications = observationTypeSpecifications;
+            ObservationTypeSpecificationSimples = observationTypeSpecifications.Select(x => new ObservationTypeSpecificationSimple(x)).ToList();
             ObservationThresholdTypes = observationThresholdTypes;
             ObservationTargetTypes = observationTargetTypes;
             ObservationTypeCollectionMethods = observationTypeCollectionMethods;
+            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
+
+    public class ObservationTypeSpecificationSimple
+    {
+        public readonly int ObservationTypeSpecificationID;
+        public readonly int ObservationTypeCollectionMethodID;
+        public readonly int ObservationTargetTypeID;
+        public readonly int ObservationThresholdTypeID;
+
+        public ObservationTypeSpecificationSimple(ObservationTypeSpecification observationTypeSpecification)
+        {
+            ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
+            ObservationTypeCollectionMethodID = observationTypeSpecification.ObservationTypeCollectionMethodID;
+            ObservationTargetTypeID = observationTypeSpecification.ObservationTargetTypeID;
+            ObservationThresholdTypeID = observationTypeSpecification.ObservationThresholdTypeID;
         }
     }
 }

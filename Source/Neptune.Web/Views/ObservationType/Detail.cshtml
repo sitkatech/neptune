@@ -20,10 +20,20 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Security
 @inherits Neptune.Web.Views.ObservationType.Detail
 @section JavascriptAndStylesContent
 {
+}
+
+@section RightOfPageTitle
+{
+    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        <a class="pull-right" href="@ViewDataTyped.ObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
+    }    
 }
 @if (ViewDataTyped.UserHasObservationTypeManagePermissions)
 {
@@ -33,19 +43,53 @@
 }
 
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.ObservationType.GetEditUrl(), string.Format("Edit {0} - {1}", FieldDefinition.ObservationType.GetFieldDefinitionLabel(), ViewDataTyped.ObservationType.ObservationTypeName), ViewDataTyped.UserHasObservationTypeManagePermissions) Basics
+               Basics
             </div>
             <div class="panel-body">
-                <div class="row">                   
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="col-xs-6 fieldLabel text-right">@Html.Label("Name")</div>
-                            <div class="col-xs-6">@ViewDataTyped.ObservationType.ObservationTypeName</div>
-                        </div>                                
-                    </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">Name</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Measurement Label")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.MeasurementLabel</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Measurement Unit")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.MeasurementUnitType.MeasurementUnitTypeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("What is Observed (Measurement Instrument or Property of BMP)")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.LabelForWhatIsObserved</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationThresholdType)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationTargetType)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Benchmark Instructions")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.BenchmarkDescription</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Threshold Instructions")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ThresholdDescription</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Assessment Instructions")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.AssessmentDescription</div>
                 </div>
             </div>
         </div>

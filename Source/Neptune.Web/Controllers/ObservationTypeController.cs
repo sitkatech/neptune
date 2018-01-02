@@ -20,11 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -58,7 +56,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public PartialViewResult New()
+        public ViewResult New()
         {
             var viewModel = new EditViewModel();
             return ViewEdit(viewModel);
@@ -73,18 +71,18 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel);
             }
-            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, String.Empty, ObservationTypeSpecification.MultipleTimeValue_HighTargetValue_Absolute);
+            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty, String.Empty, String.Empty, String.Empty);
             viewModel.UpdateModel(observationType, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllObservationTypes.Add(observationType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay($"Observation Type {observationType.ObservationTypeName} succesfully created.");
 
-            return new ModalDialogFormJsonResult();
+            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(observationType.PrimaryKey)));
         }
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public PartialViewResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
             var viewModel = new EditViewModel(observationType);
@@ -102,10 +100,11 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel);
             }
             viewModel.UpdateModel(observationType, CurrentPerson);
-            return new ModalDialogFormJsonResult();
+
+            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(observationType.PrimaryKey)));
         }
 
-        private PartialViewResult ViewEdit(EditViewModel viewModel)
+        private ViewResult ViewEdit(EditViewModel viewModel)
         {
             var measurementUnitTypesAsSelectListItems = MeasurementUnitType.All
                 .OrderBy(x => x.MeasurementUnitTypeDisplayName)
@@ -129,8 +128,8 @@ namespace Neptune.Web.Controllers
                 .ToSelectListWithEmptyFirstRow(x => x.ObservationTypeCollectionMethodID.ToString(CultureInfo.InvariantCulture),
                     x => x.ObservationTypeCollectionMethodDisplayName);
 
-            var viewData = new EditViewData(measurementUnitTypesAsSelectListItems, observationTypeSpecifications, observationThresholdTypesAsSelectListItems, observationTargetTypesAsSelectListItems, observationTypeCollectionMethodsAsSelectListItems);
-            return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+            var viewData = new EditViewData(CurrentPerson, measurementUnitTypesAsSelectListItems, observationTypeSpecifications, observationThresholdTypesAsSelectListItems, observationTargetTypesAsSelectListItems, observationTypeCollectionMethodsAsSelectListItems);
+            return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         [NeptuneAdminFeature]

@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
 {
     public abstract partial class ObservationThresholdType : IHavePrimaryKey
     {
-        public static readonly ObservationThresholdTypeAbsolute Absolute = ObservationThresholdTypeAbsolute.Instance;
+        public static readonly ObservationThresholdTypeDiscreteValue DiscreteValue = ObservationThresholdTypeDiscreteValue.Instance;
         public static readonly ObservationThresholdTypePercentFromBenchmark PercentFromBenchmark = ObservationThresholdTypePercentFromBenchmark.Instance;
         public static readonly ObservationThresholdTypeNone None = ObservationThresholdTypeNone.Instance;
 
@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationThresholdType()
         {
-            All = new List<ObservationThresholdType> { Absolute, PercentFromBenchmark, None };
+            All = new List<ObservationThresholdType> { DiscreteValue, PercentFromBenchmark, None };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdType>(All.ToDictionary(x => x.ObservationThresholdTypeID));
         }
 
@@ -103,8 +103,8 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case ObservationThresholdTypeEnum.Absolute:
-                    return Absolute;
+                case ObservationThresholdTypeEnum.DiscreteValue:
+                    return DiscreteValue;
                 case ObservationThresholdTypeEnum.None:
                     return None;
                 case ObservationThresholdTypeEnum.PercentFromBenchmark:
@@ -117,15 +117,15 @@ namespace Neptune.Web.Models
 
     public enum ObservationThresholdTypeEnum
     {
-        Absolute = 1,
+        DiscreteValue = 1,
         PercentFromBenchmark = 2,
         None = 3
     }
 
-    public partial class ObservationThresholdTypeAbsolute : ObservationThresholdType
+    public partial class ObservationThresholdTypeDiscreteValue : ObservationThresholdType
     {
-        private ObservationThresholdTypeAbsolute(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
-        public static readonly ObservationThresholdTypeAbsolute Instance = new ObservationThresholdTypeAbsolute(1, @"Absolute", @"Absolute", 10, @"Threshold is measured as an absolute value (e.g. 3 ft of sediment accumulation)");
+        private ObservationThresholdTypeDiscreteValue(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
+        public static readonly ObservationThresholdTypeDiscreteValue Instance = new ObservationThresholdTypeDiscreteValue(1, @"DiscreteValue", @"Discrete Value", 10, @"Threshold is measured as an discrete value (e.g. 3 ft of sediment accumulation)");
     }
 
     public partial class ObservationThresholdTypePercentFromBenchmark : ObservationThresholdType
@@ -137,6 +137,6 @@ namespace Neptune.Web.Models
     public partial class ObservationThresholdTypeNone : ObservationThresholdType
     {
         private ObservationThresholdTypeNone(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
-        public static readonly ObservationThresholdTypeNone Instance = new ObservationThresholdTypeNone(3, @"None", @"None", 30, @"No Threshold value for this Observation type");
+        public static readonly ObservationThresholdTypeNone Instance = new ObservationThresholdTypeNone(3, @"None", @"None", 30, @"No Threshold value for this Observation type (e.g. Observation is Pass/Fail)");
     }
 }

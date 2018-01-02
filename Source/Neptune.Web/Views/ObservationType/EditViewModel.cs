@@ -25,6 +25,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ObservationType
@@ -35,24 +36,46 @@ namespace Neptune.Web.Views.ObservationType
 
         [Required]
         [StringLength(Models.ObservationType.FieldLengths.ObservationTypeName)]
-        [DisplayName("Name")]
-        public string ObservationTypeName { get; set; }
+        [DisplayName("Name of Observation Type")]
+        public string ObservationTypeName { get; set; }      
+
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationThresholdType)]
+        public int? ObservationThresholdTypeID { get; set; }
+
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationTargetType)]
+        public int? ObservationTargetTypeID { get; set; }
+
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationCollectionMethod)]
+        public int? ObservationTypeCollectionMethodID { get; set; }
+      
+        [Required]
+        [DisplayName("Measurement Label")]
+        public string MeasurementLabel { get; set; }
+
+        [Required]
+        [DisplayName("What to Observe (Measurement Instrument or Property of BMP)")]
+        public string LabelForWhatIsObserved { get; set; }
 
         [Required]
         [DisplayName("Measurement Unit")]
         public int? MeasurementUnitTypeID { get; set; }
 
-        [Required]
-        [DisplayName("Threshold Type")]
-        public int? ObservationThresholdTypeID { get; set; }
+        [DisplayName("Benchmark Instruction Text")]
+        [StringLength(Models.ObservationType.FieldLengths.BenchmarkDescription)]
+        public string BenchmarkDescritpion { get; set; }
 
-        [Required]
-        [DisplayName("Observation Target Type")]
-        public int? ObservationTargetTypeID { get; set; }
+        [DisplayName("Threshold Instruction Text")]
+        [StringLength(Models.ObservationType.FieldLengths.ThresholdDescription)]
+        public string ThresholdDescritpion { get; set; }
 
-        [Required]
-        [DisplayName("Collection Method")]
-        public int? ObservationTypeCollectionMethodID { get; set; }
+        [DisplayName("Assessment Instruction Text")]
+        [StringLength(Models.ObservationType.FieldLengths.AssessmentDescription)]
+        public string AssessmentDescritpion { get; set; }
+
+
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -65,16 +88,31 @@ namespace Neptune.Web.Views.ObservationType
         {
             ObservationTypeID = observationType.ObservationTypeID;
             ObservationTypeName = observationType.ObservationTypeName;
-            MeasurementUnitTypeID = observationType.MeasurementUnitTypeID;
+
             ObservationThresholdTypeID = observationType.ObservationTypeSpecification?.ObservationThresholdTypeID;
             ObservationTargetTypeID = observationType.ObservationTypeSpecification?.ObservationTargetTypeID;
             ObservationTypeCollectionMethodID = observationType.ObservationTypeSpecification?.ObservationTypeCollectionMethodID;
+
+            MeasurementLabel = observationType.MeasurementLabel;
+            LabelForWhatIsObserved = observationType.LabelForWhatIsObserved;
+            MeasurementUnitTypeID = observationType.MeasurementUnitTypeID;
+
+            BenchmarkDescritpion = observationType.BenchmarkDescription;
+            ThresholdDescritpion = observationType.ThresholdDescription;
+            AssessmentDescritpion = observationType.AssessmentDescription;
         }
 
         public void UpdateModel(Models.ObservationType observationType, Person currentPerson)
         {
             observationType.ObservationTypeName = ObservationTypeName;
+            
+            observationType.MeasurementLabel = MeasurementLabel;
+            observationType.LabelForWhatIsObserved = LabelForWhatIsObserved;
             observationType.MeasurementUnitTypeID = MeasurementUnitTypeID.Value;
+
+            observationType.BenchmarkDescription = BenchmarkDescritpion;
+            observationType.ThresholdDescription = ThresholdDescritpion;
+            observationType.AssessmentDescription = AssessmentDescritpion;
 
             var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x => 
                 x.ObservationTargetTypeID == ObservationTargetTypeID && 
@@ -97,6 +135,13 @@ namespace Neptune.Web.Views.ObservationType
             if (observationTypeSpecification == null)
             {
                 validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method."));
+            }
+
+            var observationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
+            if (ObservationThresholdTypeID != observationThresholdTypeID &&
+                (string.IsNullOrEmpty(BenchmarkDescritpion) || string.IsNullOrEmpty(ThresholdDescritpion)))
+            {
+                validationResults.Add(new ValidationResult("Benchmark and Threshold Instructions are required for this Observation Type."));
             }
 
             return validationResults;

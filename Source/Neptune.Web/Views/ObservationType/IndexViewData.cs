@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.ObservationType
 {
@@ -32,19 +30,19 @@ namespace Neptune.Web.Views.ObservationType
         public readonly IndexGridSpec GridSpec;
         public readonly string GridName;
         public readonly string GridDataUrl;
+        public readonly string NewObservationTypeUrl;
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
             PageTitle = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
 
-            var contentUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
+            NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new IndexGridSpec(currentPerson)
             {
                 ObjectNameSingular = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}",
-                SaveFiltersInCookie = true,
-                CreateEntityModalDialogForm = new ModalDialogForm(contentUrl, $"Create a new {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}")
+                SaveFiltersInCookie = true                
             };
 
             GridName = "observationTypeGrid";

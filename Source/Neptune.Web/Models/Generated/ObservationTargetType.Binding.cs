@@ -18,10 +18,10 @@ namespace Neptune.Web.Models
 {
     public abstract partial class ObservationTargetType : IHavePrimaryKey
     {
-        public static readonly ObservationTargetTypeYesNo YesNo = ObservationTargetTypeYesNo.Instance;
-        public static readonly ObservationTargetTypeHighTargetValue HighTargetValue = ObservationTargetTypeHighTargetValue.Instance;
-        public static readonly ObservationTargetTypeLowTargetValue LowTargetValue = ObservationTargetTypeLowTargetValue.Instance;
-        public static readonly ObservationTargetTypeTargetValue TargetValue = ObservationTargetTypeTargetValue.Instance;
+        public static readonly ObservationTargetTypePassFail PassFail = ObservationTargetTypePassFail.Instance;
+        public static readonly ObservationTargetTypeHigh High = ObservationTargetTypeHigh.Instance;
+        public static readonly ObservationTargetTypeLow Low = ObservationTargetTypeLow.Instance;
+        public static readonly ObservationTargetTypeSpecificValue SpecificValue = ObservationTargetTypeSpecificValue.Instance;
 
         public static readonly List<ObservationTargetType> All;
         public static readonly ReadOnlyDictionary<int, ObservationTargetType> AllLookupDictionary;
@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationTargetType()
         {
-            All = new List<ObservationTargetType> { YesNo, HighTargetValue, LowTargetValue, TargetValue };
+            All = new List<ObservationTargetType> { PassFail, High, Low, SpecificValue };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTargetType>(All.ToDictionary(x => x.ObservationTargetTypeID));
         }
 
@@ -104,14 +104,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case ObservationTargetTypeEnum.HighTargetValue:
-                    return HighTargetValue;
-                case ObservationTargetTypeEnum.LowTargetValue:
-                    return LowTargetValue;
-                case ObservationTargetTypeEnum.TargetValue:
-                    return TargetValue;
-                case ObservationTargetTypeEnum.YesNo:
-                    return YesNo;
+                case ObservationTargetTypeEnum.High:
+                    return High;
+                case ObservationTargetTypeEnum.Low:
+                    return Low;
+                case ObservationTargetTypeEnum.PassFail:
+                    return PassFail;
+                case ObservationTargetTypeEnum.SpecificValue:
+                    return SpecificValue;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -120,33 +120,33 @@ namespace Neptune.Web.Models
 
     public enum ObservationTargetTypeEnum
     {
-        YesNo = 1,
-        HighTargetValue = 2,
-        LowTargetValue = 3,
-        TargetValue = 4
+        PassFail = 1,
+        High = 2,
+        Low = 3,
+        SpecificValue = 4
     }
 
-    public partial class ObservationTargetTypeYesNo : ObservationTargetType
+    public partial class ObservationTargetTypePassFail : ObservationTargetType
     {
-        private ObservationTargetTypeYesNo(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeYesNo Instance = new ObservationTargetTypeYesNo(1, @"YesNo", @"Yes/No", 10, @"Observation is pass/fail");
+        private ObservationTargetTypePassFail(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
+        public static readonly ObservationTargetTypePassFail Instance = new ObservationTargetTypePassFail(1, @"PassFail", @"Pass/Fail", 10, @"Observation is pass/fail");
     }
 
-    public partial class ObservationTargetTypeHighTargetValue : ObservationTargetType
+    public partial class ObservationTargetTypeHigh : ObservationTargetType
     {
-        private ObservationTargetTypeHighTargetValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeHighTargetValue Instance = new ObservationTargetTypeHighTargetValue(2, @"HighTargetValue", @"High Target Value", 20, @"Observing a high value is good");
+        private ObservationTargetTypeHigh(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
+        public static readonly ObservationTargetTypeHigh Instance = new ObservationTargetTypeHigh(2, @"High", @"High Target Value", 20, @"Observing a high value is good");
     }
 
-    public partial class ObservationTargetTypeLowTargetValue : ObservationTargetType
+    public partial class ObservationTargetTypeLow : ObservationTargetType
     {
-        private ObservationTargetTypeLowTargetValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeLowTargetValue Instance = new ObservationTargetTypeLowTargetValue(3, @"LowTargetValue", @"Low Target Value", 30, @"Observing a low value is good");
+        private ObservationTargetTypeLow(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
+        public static readonly ObservationTargetTypeLow Instance = new ObservationTargetTypeLow(3, @"Low", @"Low Target Value", 30, @"Observing a low value is good");
     }
 
-    public partial class ObservationTargetTypeTargetValue : ObservationTargetType
+    public partial class ObservationTargetTypeSpecificValue : ObservationTargetType
     {
-        private ObservationTargetTypeTargetValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeTargetValue Instance = new ObservationTargetTypeTargetValue(4, @"TargetValue", @"Target Value", 40, @"Observing a specific targeted value is good");
+        private ObservationTargetTypeSpecificValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
+        public static readonly ObservationTargetTypeSpecificValue Instance = new ObservationTargetTypeSpecificValue(4, @"SpecificValue", @"Specific Target Value", 40, @"Observing a specific targeted value is good");
     }
 }

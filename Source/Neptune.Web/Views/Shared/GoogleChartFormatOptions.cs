@@ -17,32 +17,18 @@ namespace Neptune.Web.Views.Shared
         {
             switch (measurementUnitTypeEnum)
             {
-                case MeasurementUnitTypeEnum.Dollars:
-                    Prefix = "$";
-                    break;
                 case MeasurementUnitTypeEnum.Percent:
                     Suffix = "%";
                     break;
                 case MeasurementUnitTypeEnum.Acres:
-                case MeasurementUnitTypeEnum.Miles:
                 case MeasurementUnitTypeEnum.SquareFeet:
-                case MeasurementUnitTypeEnum.LinearFeet:
                 case MeasurementUnitTypeEnum.Kilogram:
                 case MeasurementUnitTypeEnum.Number:
-                case MeasurementUnitTypeEnum.Pounds:
-                case MeasurementUnitTypeEnum.Tons:
-                case MeasurementUnitTypeEnum.Parcels:
-                case MeasurementUnitTypeEnum.Therms:
-                case MeasurementUnitTypeEnum.PartsPerMillion:
-                case MeasurementUnitTypeEnum.PartsPerBillion:
                 case MeasurementUnitTypeEnum.MilligamsPerLiter:
-                case MeasurementUnitTypeEnum.NephlometricTurbidityUnit:
                 case MeasurementUnitTypeEnum.Meters:
-                case MeasurementUnitTypeEnum.PeriphytonBiomassIndex:
                 case MeasurementUnitTypeEnum.Feet:
                 case MeasurementUnitTypeEnum.InchesPerHour:
                 case MeasurementUnitTypeEnum.Seconds:
-                case MeasurementUnitTypeEnum.YesNo:
                 case null:
                     Source = "inline";
                     break;

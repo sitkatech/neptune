@@ -72,8 +72,13 @@ alter table dbo.ObservationType drop column HasBenchmarkAndThreshold
 alter table dbo.ObservationType drop column ThresholdPercentDecline
 alter table dbo.ObservationType drop column ThresholdPercentDeviation
 
-alter table dbo.ObservationType add ObservationSchema nvarchar(max) not null
 alter table dbo.ObservationType add ObservationTypeSpecificationID int not null
+alter table dbo.ObservationType add BenchmarkDescription varchar(300) null
+alter table dbo.ObservationType add ThresholdDescription varchar(300) null
+alter table dbo.ObservationType add AssessmentDescription varchar(300) not null
+alter table dbo.ObservationType add MeasurementLabel varchar(50) not null
+alter table dbo.ObservationType add LabelForWhatIsObserved varchar(50) not null
+alter table dbo.ObservationType add ObservationSchema nvarchar(max) not null
 
 go
 

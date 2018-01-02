@@ -314,8 +314,13 @@ warning 6035: The relationship 'FK_NeptunePageImage_NeptunePage_NeptunePageID_Te
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeName" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="MeasurementUnitTypeID" Type="int" Nullable="false" />
-    <Property Name="ObservationSchema" Type="nvarchar(max)" Nullable="false" />
     <Property Name="ObservationTypeSpecificationID" Type="int" Nullable="false" />
+    <Property Name="BenchmarkDescription" Type="varchar" MaxLength="300" />
+    <Property Name="ThresholdDescription" Type="varchar" MaxLength="300" />
+    <Property Name="AssessmentDescription" Type="varchar" Nullable="false" MaxLength="300" />
+    <Property Name="MeasurementLabel" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="LabelForWhatIsObserved" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="ObservationSchema" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_Person_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.

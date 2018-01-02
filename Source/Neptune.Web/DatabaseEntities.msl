@@ -139,8 +139,13 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />
           <ScalarProperty Name="MeasurementUnitTypeID" ColumnName="MeasurementUnitTypeID" />
-          <ScalarProperty Name="ObservationSchema" ColumnName="ObservationSchema" />
           <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
+          <ScalarProperty Name="BenchmarkDescription" ColumnName="BenchmarkDescription" />
+          <ScalarProperty Name="ThresholdDescription" ColumnName="ThresholdDescription" />
+          <ScalarProperty Name="AssessmentDescription" ColumnName="AssessmentDescription" />
+          <ScalarProperty Name="MeasurementLabel" ColumnName="MeasurementLabel" />
+          <ScalarProperty Name="LabelForWhatIsObserved" ColumnName="LabelForWhatIsObserved" />
+          <ScalarProperty Name="ObservationSchema" ColumnName="ObservationSchema" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
