@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel);
             }
-            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty, String.Empty, String.Empty, String.Empty);
+            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty, String.Empty);
             viewModel.UpdateModel(observationType, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllObservationTypes.Add(observationType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

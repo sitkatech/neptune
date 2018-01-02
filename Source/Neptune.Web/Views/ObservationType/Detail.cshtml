@@ -52,19 +52,11 @@
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">Name</label>
                     <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeName</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("Measurement Label")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.MeasurementLabel</div>
-                </div>
+                </div>                
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.Label("Measurement Unit")</label>
                     <div class="col-sm-9">@ViewDataTyped.ObservationType.MeasurementUnitType.MeasurementUnitTypeDisplayName</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("What is Observed (Measurement Instrument or Property of BMP)")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.LabelForWhatIsObserved</div>
-                </div>
+                </div>                
                 <hr />
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</label>

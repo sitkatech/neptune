@@ -143,8 +143,6 @@
           <ScalarProperty Name="BenchmarkDescription" ColumnName="BenchmarkDescription" />
           <ScalarProperty Name="ThresholdDescription" ColumnName="ThresholdDescription" />
           <ScalarProperty Name="AssessmentDescription" ColumnName="AssessmentDescription" />
-          <ScalarProperty Name="MeasurementLabel" ColumnName="MeasurementLabel" />
-          <ScalarProperty Name="LabelForWhatIsObserved" ColumnName="LabelForWhatIsObserved" />
           <ScalarProperty Name="ObservationSchema" ColumnName="ObservationSchema" />
         </MappingFragment>
       </EntityTypeMapping>

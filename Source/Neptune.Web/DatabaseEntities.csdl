@@ -321,8 +321,6 @@
     <Property Name="BenchmarkDescription" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
     <Property Name="ThresholdDescription" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
     <Property Name="AssessmentDescription" Type="String" Nullable="false" MaxLength="300" Unicode="false" FixedLength="false" />
-    <Property Name="MeasurementLabel" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-    <Property Name="LabelForWhatIsObserved" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
     <Property Name="ObservationSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPObservations" />

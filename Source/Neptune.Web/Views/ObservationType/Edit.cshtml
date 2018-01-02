@@ -60,16 +60,7 @@
                             @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
                             @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.LabelForWhatIsObserved)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.LabelForWhatIsObserved, new { @class = "form-control", style = "width:100%" })
-                            @Html.ValidationMessageFor(m => m.LabelForWhatIsObserved)
-                        </div>
-                    </div>
+                    </div>                   
                     <br />
                     <div class="form-group">
                         <div class="col-sm-3 control-label">

@@ -54,11 +54,7 @@ namespace Neptune.Web.Views.ObservationType
         [Required]
         [DisplayName("Measurement Label")]
         public string MeasurementLabel { get; set; }
-
-        [Required]
-        [DisplayName("What to Observe (Measurement Instrument or Property of BMP)")]
-        public string LabelForWhatIsObserved { get; set; }
-
+       
         [Required]
         [DisplayName("Measurement Unit")]
         public int? MeasurementUnitTypeID { get; set; }
@@ -88,14 +84,11 @@ namespace Neptune.Web.Views.ObservationType
         {
             ObservationTypeID = observationType.ObservationTypeID;
             ObservationTypeName = observationType.ObservationTypeName;
+            MeasurementUnitTypeID = observationType.MeasurementUnitTypeID;
 
             ObservationThresholdTypeID = observationType.ObservationTypeSpecification?.ObservationThresholdTypeID;
             ObservationTargetTypeID = observationType.ObservationTypeSpecification?.ObservationTargetTypeID;
             ObservationTypeCollectionMethodID = observationType.ObservationTypeSpecification?.ObservationTypeCollectionMethodID;
-
-            MeasurementLabel = observationType.MeasurementLabel;
-            LabelForWhatIsObserved = observationType.LabelForWhatIsObserved;
-            MeasurementUnitTypeID = observationType.MeasurementUnitTypeID;
 
             BenchmarkDescritpion = observationType.BenchmarkDescription;
             ThresholdDescritpion = observationType.ThresholdDescription;
@@ -105,9 +98,7 @@ namespace Neptune.Web.Views.ObservationType
         public void UpdateModel(Models.ObservationType observationType, Person currentPerson)
         {
             observationType.ObservationTypeName = ObservationTypeName;
-            
-            observationType.MeasurementLabel = MeasurementLabel;
-            observationType.LabelForWhatIsObserved = LabelForWhatIsObserved;
+
             observationType.MeasurementUnitTypeID = MeasurementUnitTypeID.Value;
 
             observationType.BenchmarkDescription = BenchmarkDescritpion;
