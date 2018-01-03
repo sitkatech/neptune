@@ -50,14 +50,34 @@ namespace Neptune.Web.Views.ObservationType
         [Required]
         [FieldDefinitionDisplay(FieldDefinitionEnum.ObservationCollectionMethod)]
         public int? ObservationTypeCollectionMethodID { get; set; }
-      
-        [Required]
-        [DisplayName("Measurement Label")]
-        public string MeasurementLabel { get; set; }
-       
+
         [Required]
         [DisplayName("Measurement Unit")]
         public int? MeasurementUnitTypeID { get; set; }
+
+        [Required]
+        [DisplayName("Measurement Type")]
+        public string MeasurementType { get; set; }
+
+        [Required]
+        [DisplayName("Instrument Types or Properties to Observe")]
+        public List<string> PropertiesToObserve { get; set; }
+
+        [Required]
+        [DisplayName("Minimum Number of Observations")]
+        public int MinimumNumberOfObservations { get; set; }
+
+        [Required]
+        [DisplayName("Maximum Number of Observations")]
+        public int MaximumNumberOfObservations { get; set; }
+
+        [Required]
+        [DisplayName("Minimum Value of Each Observation")]
+        public int MinimumValueOfEachObservation { get; set; }
+
+        [Required]
+        [DisplayName("Maximum Value of Each Observation")]
+        public int MaximumValueOfEachObservation { get; set; }
 
         [DisplayName("Benchmark Instruction Text")]
         [StringLength(Models.ObservationType.FieldLengths.BenchmarkDescription)]

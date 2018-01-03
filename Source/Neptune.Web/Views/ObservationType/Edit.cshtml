@@ -1,29 +1,25 @@
-﻿@*-----------------------------------------------------------------------
-    <copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-    <author>Sitka Technology Group</author>
-    </copyright>
-
-    <license>
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
-
-    Source code is available upon request via <support@sitkatech.com>.
-    </license>
-    -----------------------------------------------------------------------*@
-@using LtInfo.Common.HtmlHelperExtensions
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.ObservationType.Edit
+
+<script type="text/javascript" src="@Url.Content("~/Views/ObservationType/EditObservationTypeController.js")"></script>
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularModel: @Html.Raw(JObject.FromObject(Model))
+                };
+            });
+   
+    // ]]>
+</script>
 
 @using (Html.BeginForm())
 {
-    <div class="formPage">
+    <div class="formPage" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-init="initiateWithAtLeastOneInput()">
         <div class="row">
             <div class="col-xs-12">
                 <div class="validationError">
@@ -43,24 +39,6 @@
                             @Html.ValidationMessageFor(m => m.ObservationTypeName)
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MeasurementLabel)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MeasurementLabel, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.MeasurementLabel)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MeasurementUnitTypeID)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
-                        </div>
-                    </div>                   
                     <br />
                     <div class="form-group">
                         <div class="col-sm-3 control-label">
@@ -89,16 +67,78 @@
                             @Html.ValidationMessageFor(m => m.ObservationTargetTypeID)
                         </div>
                     </div>
-                    <br/>
-
-
-
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MeasurementType)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.MeasurementType, new { @class = "form-control", style = "width:auto" })
+                            @Html.ValidationMessageFor(m => m.MeasurementType)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MeasurementUnitTypeID)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
+                            @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.PropertiesToObserve)
+                        </div>
+                        <div class="col-sm-9">
+                            <div ng-repeat="item in AngularModel.PropertiesToObserve track by $index" style="margin-bottom: 4px">
+                                <input class="form-control" ng-model="AngularModel.PropertiesToObserve[$index]" name="PropertiesToObserve[{{$index}}]" style="width: auto" type="text" value="{{AngularModel.PropertiesToObserve[$index]}}">
+                                <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                            </div>
+                            
+                            <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                            @Html.ValidationMessageFor(m => m.PropertiesToObserve)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MinimumNumberOfObservations)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.MinimumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaximumNumberOfObservations)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.MaximumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MinimumValueOfEachObservation)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.MinimumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaximumValueOfEachObservation)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.MaximumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                        </div>
+                    </div>
+                    <br />
                     <div class="form-group">
                         <div class="col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.BenchmarkDescritpion)
                         </div>
                         <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.BenchmarkDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 2), null, new List<string>() { "form-control" })
+                            @Html.TextAreaWithMaxLengthFor(m => m.BenchmarkDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -106,7 +146,7 @@
                             @Html.LabelWithSugarFor(m => m.ThresholdDescritpion)
                         </div>
                         <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.ThresholdDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 2), null, new List<string>() { "form-control" })
+                            @Html.TextAreaWithMaxLengthFor(m => m.ThresholdDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
@@ -114,7 +154,7 @@
                             @Html.LabelWithSugarFor(m => m.AssessmentDescritpion)
                         </div>
                         <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.AssessmentDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 2), null, new List<string>() { "form-control" })
+                            @Html.TextAreaWithMaxLengthFor(m => m.AssessmentDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
                         </div>
                     </div>
 
