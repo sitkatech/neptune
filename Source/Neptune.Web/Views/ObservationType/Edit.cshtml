@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.ObservationType.Edit
 
@@ -10,7 +11,8 @@
             function()
             {
                 return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model))
+                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
                 };
             });
    
@@ -39,127 +41,120 @@
                             @Html.ValidationMessageFor(m => m.ObservationTypeName)
                         </div>
                     </div>
-                    <br />
                     <div class="form-group">
                         <div class="col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.ObservationTypeCollectionMethodID)
                         </div>
                         <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.ObservationTypeCollectionMethodID, ViewDataTyped.ObservationTypeCollectionMethods, new { @class = "form-control", style = "width:auto" })
+                           
                             @Html.ValidationMessageFor(m => m.ObservationTypeCollectionMethodID)
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.ObservationThresholdTypeID)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.ObservationThresholdTypeID, ViewDataTyped.ObservationThresholdTypes, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.ObservationThresholdTypeID)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.ObservationTargetTypeID)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.ObservationTargetTypeID, ViewDataTyped.ObservationTargetTypes, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.ObservationTargetTypeID)
-                        </div>
-                    </div>
                     <br />
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MeasurementType)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MeasurementType, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.MeasurementType)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MeasurementUnitTypeID)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
-                            @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.PropertiesToObserve)
-                        </div>
-                        <div class="col-sm-9">
-                            <div ng-repeat="item in AngularModel.PropertiesToObserve track by $index" style="margin-bottom: 4px">
-                                <input class="form-control" ng-model="AngularModel.PropertiesToObserve[$index]" name="PropertiesToObserve[{{$index}}]" style="width: auto" type="text" value="{{AngularModel.PropertiesToObserve[$index]}}">
-                                <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
-                            </div>
-                            
-                            <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
-                            @Html.ValidationMessageFor(m => m.PropertiesToObserve)
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MinimumNumberOfObservations)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MinimumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MaximumNumberOfObservations)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MaximumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MinimumValueOfEachObservation)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MinimumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.MaximumValueOfEachObservation)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.MaximumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
-                        </div>
-                    </div>
+                    
                     <br />
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.BenchmarkDescritpion)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.BenchmarkDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.ThresholdDescritpion)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.ThresholdDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.AssessmentDescritpion)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.TextAreaWithMaxLengthFor(m => m.AssessmentDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-                        </div>
+                    <div id="schemaQuestions">
+                        @*<div class="form-group">
+                <div class="col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.ObservationThresholdTypeID)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.ObservationThresholdTypeID, ViewDataTyped.ObservationThresholdTypes, new { @class = "form-control", style = "width:auto" })
+                    @Html.ValidationMessageFor(m => m.ObservationThresholdTypeID)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.ObservationTargetTypeID)
+                </div>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.ObservationTargetTypeID, ViewDataTyped.ObservationTargetTypes, new { @class = "form-control", style = "width:auto" })
+                    @Html.ValidationMessageFor(m => m.ObservationTargetTypeID)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.TextBoxFor(m => m.MeasurementType, new { @class = "form-control", style = "width:auto" })
+                    @Html.ValidationMessageFor(m => m.MeasurementType)
+                </div>
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
+                    @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.PropertiesToObserve)
+                </div>
+                <div class="col-sm-9">
+                    <div ng-repeat="item in AngularModel.PropertiesToObserve track by $index" style="margin-bottom: 4px">
+                        <input class="form-control" ng-model="AngularModel.PropertiesToObserve[$index]" name="PropertiesToObserve[{{$index}}]" style="width: auto" type="text" value="{{AngularModel.PropertiesToObserve[$index]}}">
+                        <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                     </div>
 
-
-
+                    <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                    @Html.ValidationMessageFor(m => m.PropertiesToObserve)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.MinimumNumberOfObservations)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.TextBoxFor(m => m.MinimumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                </div>
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.MaximumNumberOfObservations)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.TextBoxFor(m => m.MaximumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.MinimumValueOfEachObservation)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.TextBoxFor(m => m.MinimumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                </div>
+                <div class="col-xs-3 col-sm-3 control-label">
+                    @Html.LabelWithSugarFor(m => m.MaximumValueOfEachObservation)
+                </div>
+                <div class="col-xs-9 col-sm-3">
+                    @Html.TextBoxFor(m => m.MaximumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                </div>
+                <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.BenchmarkDescritpion)
+            </div>
+            <div class="col-sm-9">
+                @Html.TextAreaWithMaxLengthFor(m => m.BenchmarkDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.ThresholdDescritpion)
+            </div>
+            <div class="col-sm-9">
+                @Html.TextAreaWithMaxLengthFor(m => m.ThresholdDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.AssessmentDescritpion)
+            </div>
+            <div class="col-sm-9">
+                @Html.TextAreaWithMaxLengthFor(m => m.AssessmentDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
+            </div>
+        </div>
+            </div>*@
+                    </div>
                 </div>                
             </div>
         </div>
@@ -173,9 +168,3 @@
         </div>
     </div>
 }
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-    });
-</script>

@@ -19,9 +19,9 @@ namespace Neptune.Web.Models
     public abstract partial class ObservationTypeCollectionMethod : IHavePrimaryKey
     {
         public static readonly ObservationTypeCollectionMethodDiscreteValue DiscreteValue = ObservationTypeCollectionMethodDiscreteValue.Instance;
-        public static readonly ObservationTypeCollectionMethodMultipleTimeValue MultipleTimeValue = ObservationTypeCollectionMethodMultipleTimeValue.Instance;
+        public static readonly ObservationTypeCollectionMethodRate Rate = ObservationTypeCollectionMethodRate.Instance;
         public static readonly ObservationTypeCollectionMethodPassFail PassFail = ObservationTypeCollectionMethodPassFail.Instance;
-        public static readonly ObservationTypeCollectionMethodPercentValue PercentValue = ObservationTypeCollectionMethodPercentValue.Instance;
+        public static readonly ObservationTypeCollectionMethodPercentage Percentage = ObservationTypeCollectionMethodPercentage.Instance;
 
         public static readonly List<ObservationTypeCollectionMethod> All;
         public static readonly ReadOnlyDictionary<int, ObservationTypeCollectionMethod> AllLookupDictionary;
@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationTypeCollectionMethod()
         {
-            All = new List<ObservationTypeCollectionMethod> { DiscreteValue, MultipleTimeValue, PassFail, PercentValue };
+            All = new List<ObservationTypeCollectionMethod> { DiscreteValue, Rate, PassFail, Percentage };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeCollectionMethod>(All.ToDictionary(x => x.ObservationTypeCollectionMethodID));
         }
 
@@ -104,12 +104,12 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return DiscreteValue;
-                case ObservationTypeCollectionMethodEnum.MultipleTimeValue:
-                    return MultipleTimeValue;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return PassFail;
-                case ObservationTypeCollectionMethodEnum.PercentValue:
-                    return PercentValue;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return Percentage;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return Rate;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -119,9 +119,9 @@ namespace Neptune.Web.Models
     public enum ObservationTypeCollectionMethodEnum
     {
         DiscreteValue = 1,
-        MultipleTimeValue = 2,
+        Rate = 2,
         PassFail = 3,
-        PercentValue = 4
+        Percentage = 4
     }
 
     public partial class ObservationTypeCollectionMethodDiscreteValue : ObservationTypeCollectionMethod
@@ -130,21 +130,21 @@ namespace Neptune.Web.Models
         public static readonly ObservationTypeCollectionMethodDiscreteValue Instance = new ObservationTypeCollectionMethodDiscreteValue(1, @"DiscreteValue", @"Measure one or many discrete values", 10);
     }
 
-    public partial class ObservationTypeCollectionMethodMultipleTimeValue : ObservationTypeCollectionMethod
+    public partial class ObservationTypeCollectionMethodRate : ObservationTypeCollectionMethod
     {
-        private ObservationTypeCollectionMethodMultipleTimeValue(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
-        public static readonly ObservationTypeCollectionMethodMultipleTimeValue Instance = new ObservationTypeCollectionMethodMultipleTimeValue(2, @"MultipleTimeValue", @"Measure one or many time/value pairs", 20);
+        private ObservationTypeCollectionMethodRate(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
+        public static readonly ObservationTypeCollectionMethodRate Instance = new ObservationTypeCollectionMethodRate(2, @"Rate", @"Measure one or many rates as discrete values or time/value pairs", 20);
     }
 
     public partial class ObservationTypeCollectionMethodPassFail : ObservationTypeCollectionMethod
     {
         private ObservationTypeCollectionMethodPassFail(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
-        public static readonly ObservationTypeCollectionMethodPassFail Instance = new ObservationTypeCollectionMethodPassFail(3, @"PassFail", @"Record Obervation as Pass/Fail", 30);
+        public static readonly ObservationTypeCollectionMethodPassFail Instance = new ObservationTypeCollectionMethodPassFail(3, @"PassFail", @"Record Observation as Pass/Fail", 30);
     }
 
-    public partial class ObservationTypeCollectionMethodPercentValue : ObservationTypeCollectionMethod
+    public partial class ObservationTypeCollectionMethodPercentage : ObservationTypeCollectionMethod
     {
-        private ObservationTypeCollectionMethodPercentValue(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
-        public static readonly ObservationTypeCollectionMethodPercentValue Instance = new ObservationTypeCollectionMethodPercentValue(4, @"PercentValue", @"Measure a single percent value", 40);
+        private ObservationTypeCollectionMethodPercentage(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
+        public static readonly ObservationTypeCollectionMethodPercentage Instance = new ObservationTypeCollectionMethodPercentage(4, @"Percentage", @"Measure one or many percent values", 40);
     }
 }

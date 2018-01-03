@@ -70,19 +70,6 @@
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationTargetType)</label>
                     <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName</div>
                 </div>
-                <hr />
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("Benchmark Instructions")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.BenchmarkDescription</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("Threshold Instructions")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ThresholdDescription</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("Assessment Instructions")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.AssessmentDescription</div>
-                </div>
             </div>
         </div>
     </div>   

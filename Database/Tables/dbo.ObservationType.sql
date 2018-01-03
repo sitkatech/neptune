@@ -8,10 +8,7 @@ CREATE TABLE [dbo].[ObservationType](
 	[ObservationTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[MeasurementUnitTypeID] [int] NOT NULL,
 	[ObservationTypeSpecificationID] [int] NOT NULL,
-	[BenchmarkDescription] [varchar](300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[ThresholdDescription] [varchar](300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[AssessmentDescription] [varchar](300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[ObservationSchema] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ObservationTypeSchema] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_ObservationType_ObservationTypeID] PRIMARY KEY CLUSTERED 
 (
 	[ObservationTypeID] ASC

@@ -9,6 +9,6 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (6, 'MilligamsPerLiter', 'mg/L', 'mg/L', 'Milligram Per Liter', 2),
 (7, 'Meters', 'meters', 'meters', 'Meter', 1),
 (8, 'Feet', 'feet', 'ft', 'Foot', 2),
-(9, 'InchesPerHour', 'in/hr', 'in/hr', 'Inches Per Hour', 2),
-(10, 'Seconds', 'seconds', 's', 'Second', 0),
-(11, 'YesNo', 'Yes/No', 'yes/no', '', 0)
+(9, 'Inches', 'inches', 'in', 'inch', 2),
+(10, 'InchesPerHour', 'in/hr', 'in/hr', 'Inches Per Hour', 2),
+(11, 'Seconds', 'seconds', 's', 'Second', 0)

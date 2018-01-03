@@ -31,4 +31,6 @@ VALUES
 (26, N'ObservationType', N'Observation Type', '', 1),
 (27, N'ObservationCollectionMethod', N'Observation Collection Method', '', 1),
 (28, N'ObservationThresholdType', N'Observation Threshold Type', '', 1),
-(29, N'ObservationTargetType', N'Observation Target Type', '', 1)
+(29, N'ObservationTargetType', N'Observation Target Type', '', 1),
+(30, N'MeasurementUnitLabel', N'Measurement Unit Label', '', 1),
+(31, N'PropertiesToObserve', N'Properties To Observe', '', 1)

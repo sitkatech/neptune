@@ -32,22 +32,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(int observationTypeID, string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string benchmarkDescription, string thresholdDescription, string assessmentDescription, string observationSchema) : this()
+        public ObservationType(int observationTypeID, string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             this.ObservationTypeID = observationTypeID;
             this.ObservationTypeName = observationTypeName;
             this.MeasurementUnitTypeID = measurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
-            this.BenchmarkDescription = benchmarkDescription;
-            this.ThresholdDescription = thresholdDescription;
-            this.AssessmentDescription = assessmentDescription;
-            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSchema = observationTypeSchema;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string assessmentDescription, string observationSchema) : this()
+        public ObservationType(string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -55,22 +52,20 @@ namespace Neptune.Web.Models
             this.ObservationTypeName = observationTypeName;
             this.MeasurementUnitTypeID = measurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
-            this.AssessmentDescription = assessmentDescription;
-            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSchema = observationTypeSchema;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ObservationType(string observationTypeName, MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification, string assessmentDescription, string observationSchema) : this()
+        public ObservationType(string observationTypeName, MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.ObservationTypeName = observationTypeName;
             this.MeasurementUnitTypeID = measurementUnitType.MeasurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
-            this.AssessmentDescription = assessmentDescription;
-            this.ObservationSchema = observationSchema;
+            this.ObservationTypeSchema = observationTypeSchema;
         }
 
         /// <summary>
@@ -78,7 +73,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static ObservationType CreateNewBlank(MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification)
         {
-            return new ObservationType(default(string), measurementUnitType, observationTypeSpecification, default(string), default(string));
+            return new ObservationType(default(string), measurementUnitType, observationTypeSpecification, default(string));
         }
 
         /// <summary>
@@ -101,10 +96,7 @@ namespace Neptune.Web.Models
         public string ObservationTypeName { get; set; }
         public int MeasurementUnitTypeID { get; set; }
         public int ObservationTypeSpecificationID { get; set; }
-        public string BenchmarkDescription { get; set; }
-        public string ThresholdDescription { get; set; }
-        public string AssessmentDescription { get; set; }
-        public string ObservationSchema { get; set; }
+        public string ObservationTypeSchema { get; set; }
         public int PrimaryKey { get { return ObservationTypeID; } set { ObservationTypeID = value; } }
 
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
@@ -117,9 +109,6 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int ObservationTypeName = 100;
-            public const int BenchmarkDescription = 300;
-            public const int ThresholdDescription = 300;
-            public const int AssessmentDescription = 300;
         }
     }
 }

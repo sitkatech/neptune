@@ -47,6 +47,8 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionObservationCollectionMethod ObservationCollectionMethod = FieldDefinitionObservationCollectionMethod.Instance;
         public static readonly FieldDefinitionObservationThresholdType ObservationThresholdType = FieldDefinitionObservationThresholdType.Instance;
         public static readonly FieldDefinitionObservationTargetType ObservationTargetType = FieldDefinitionObservationTargetType.Instance;
+        public static readonly FieldDefinitionMeasurementUnitLabel MeasurementUnitLabel = FieldDefinitionMeasurementUnitLabel.Instance;
+        public static readonly FieldDefinitionPropertiesToObserve PropertiesToObserve = FieldDefinitionPropertiesToObserve.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -56,7 +58,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -151,6 +153,8 @@ namespace Neptune.Web.Models
                     return IsPrimaryContactOrganization;
                 case FieldDefinitionEnum.MeasurementUnit:
                     return MeasurementUnit;
+                case FieldDefinitionEnum.MeasurementUnitLabel:
+                    return MeasurementUnitLabel;
                 case FieldDefinitionEnum.ModeledCatchment:
                     return ModeledCatchment;
                 case FieldDefinitionEnum.ObservationCollectionMethod:
@@ -177,6 +181,8 @@ namespace Neptune.Web.Models
                     return PhotoTiming;
                 case FieldDefinitionEnum.PrimaryContact:
                     return PrimaryContact;
+                case FieldDefinitionEnum.PropertiesToObserve:
+                    return PropertiesToObserve;
                 case FieldDefinitionEnum.ReceivesSystemCommunications:
                     return ReceivesSystemCommunications;
                 case FieldDefinitionEnum.RoleName:
@@ -229,7 +235,9 @@ namespace Neptune.Web.Models
         ObservationType = 26,
         ObservationCollectionMethod = 27,
         ObservationThresholdType = 28,
-        ObservationTargetType = 29
+        ObservationTargetType = 29,
+        MeasurementUnitLabel = 30,
+        PropertiesToObserve = 31
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -404,5 +412,17 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionObservationTargetType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionObservationTargetType Instance = new FieldDefinitionObservationTargetType(29, @"ObservationTargetType", @"Observation Target Type", @"", true);
+    }
+
+    public partial class FieldDefinitionMeasurementUnitLabel : FieldDefinition
+    {
+        private FieldDefinitionMeasurementUnitLabel(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMeasurementUnitLabel Instance = new FieldDefinitionMeasurementUnitLabel(30, @"MeasurementUnitLabel", @"Measurement Unit Label", @"", true);
+    }
+
+    public partial class FieldDefinitionPropertiesToObserve : FieldDefinition
+    {
+        private FieldDefinitionPropertiesToObserve(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionPropertiesToObserve Instance = new FieldDefinitionPropertiesToObserve(31, @"PropertiesToObserve", @"Properties To Observe", @"", true);
     }
 }

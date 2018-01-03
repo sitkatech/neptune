@@ -26,9 +26,9 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeMilligamsPerLiter MilligamsPerLiter = MeasurementUnitTypeMilligamsPerLiter.Instance;
         public static readonly MeasurementUnitTypeMeters Meters = MeasurementUnitTypeMeters.Instance;
         public static readonly MeasurementUnitTypeFeet Feet = MeasurementUnitTypeFeet.Instance;
+        public static readonly MeasurementUnitTypeInches Inches = MeasurementUnitTypeInches.Instance;
         public static readonly MeasurementUnitTypeInchesPerHour InchesPerHour = MeasurementUnitTypeInchesPerHour.Instance;
         public static readonly MeasurementUnitTypeSeconds Seconds = MeasurementUnitTypeSeconds.Instance;
-        public static readonly MeasurementUnitTypeYesNo YesNo = MeasurementUnitTypeYesNo.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Number, Percent, MilligamsPerLiter, Meters, Feet, InchesPerHour, Seconds, YesNo };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Number, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -117,6 +117,8 @@ namespace Neptune.Web.Models
                     return Acres;
                 case MeasurementUnitTypeEnum.Feet:
                     return Feet;
+                case MeasurementUnitTypeEnum.Inches:
+                    return Inches;
                 case MeasurementUnitTypeEnum.InchesPerHour:
                     return InchesPerHour;
                 case MeasurementUnitTypeEnum.Kilogram:
@@ -133,8 +135,6 @@ namespace Neptune.Web.Models
                     return Seconds;
                 case MeasurementUnitTypeEnum.SquareFeet:
                     return SquareFeet;
-                case MeasurementUnitTypeEnum.YesNo:
-                    return YesNo;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -151,9 +151,9 @@ namespace Neptune.Web.Models
         MilligamsPerLiter = 6,
         Meters = 7,
         Feet = 8,
-        InchesPerHour = 9,
-        Seconds = 10,
-        YesNo = 11
+        Inches = 9,
+        InchesPerHour = 10,
+        Seconds = 11
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -204,21 +204,21 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeFeet Instance = new MeasurementUnitTypeFeet(8, @"Feet", @"feet", @"ft", @"Foot", 2);
     }
 
+    public partial class MeasurementUnitTypeInches : MeasurementUnitType
+    {
+        private MeasurementUnitTypeInches(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeInches Instance = new MeasurementUnitTypeInches(9, @"Inches", @"inches", @"in", @"inch", 2);
+    }
+
     public partial class MeasurementUnitTypeInchesPerHour : MeasurementUnitType
     {
         private MeasurementUnitTypeInchesPerHour(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeInchesPerHour Instance = new MeasurementUnitTypeInchesPerHour(9, @"InchesPerHour", @"in/hr", @"in/hr", @"Inches Per Hour", 2);
+        public static readonly MeasurementUnitTypeInchesPerHour Instance = new MeasurementUnitTypeInchesPerHour(10, @"InchesPerHour", @"in/hr", @"in/hr", @"Inches Per Hour", 2);
     }
 
     public partial class MeasurementUnitTypeSeconds : MeasurementUnitType
     {
         private MeasurementUnitTypeSeconds(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeSeconds Instance = new MeasurementUnitTypeSeconds(10, @"Seconds", @"seconds", @"s", @"Second", 0);
-    }
-
-    public partial class MeasurementUnitTypeYesNo : MeasurementUnitType
-    {
-        private MeasurementUnitTypeYesNo(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeYesNo Instance = new MeasurementUnitTypeYesNo(11, @"YesNo", @"Yes/No", @"yes/no", @"", 0);
+        public static readonly MeasurementUnitTypeSeconds Instance = new MeasurementUnitTypeSeconds(11, @"Seconds", @"seconds", @"s", @"Second", 0);
     }
 }

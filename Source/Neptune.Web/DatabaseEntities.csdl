@@ -318,10 +318,7 @@
     <Property Name="ObservationTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="MeasurementUnitTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeSpecificationID" Type="Int32" Nullable="false" />
-    <Property Name="BenchmarkDescription" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
-    <Property Name="ThresholdDescription" Type="String" MaxLength="300" Unicode="false" FixedLength="false" />
-    <Property Name="AssessmentDescription" Type="String" Nullable="false" MaxLength="300" Unicode="false" FixedLength="false" />
-    <Property Name="ObservationSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="ObservationTypeSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPObservations" />
     <NavigationProperty Name="TreatmentBMPTypeObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPTypeObservationTypes" />

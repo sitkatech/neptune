@@ -181,6 +181,7 @@
     <Compile Include="Models\ModeledCatchmentGeometryStaging.cs" />
     <Compile Include="Models\ModeledCatchmentModelExtensions.cs" />
     <Compile Include="Models\ModeledCatchmentUploadGisReportJsonResult.cs" />
+    <Compile Include="Models\ObservationTypeCollectionMethod.cs" />
     <Compile Include="Models\ObservationTypeModelExtensions.cs" />
     <Compile Include="Models\RoleSimple.cs" />
     <Compile Include="Models\StormwaterJurisdiction.DatabaseContextExtensions.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
     <Compile Include="Views\ObservationType\Detail.cs" />
     <Compile Include="Views\ObservationType\DetailViewData.cs" />
+    <Compile Include="Views\ObservationType\DiscreteValueSchema.cs" />
     <Compile Include="Views\ObservationType\Edit.cs" />
     <Compile Include="Views\ObservationType\EditViewData.cs" />
     <Compile Include="Views\ObservationType\EditViewModel.cs" />

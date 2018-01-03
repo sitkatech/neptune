@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel);
             }
-            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty, String.Empty);
+            var observationType = new ObservationType(String.Empty, MeasurementUnitType.Feet, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty);
             viewModel.UpdateModel(observationType, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllObservationTypes.Add(observationType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -106,29 +106,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
-            var measurementUnitTypesAsSelectListItems = MeasurementUnitType.All
-                .OrderBy(x => x.MeasurementUnitTypeDisplayName)
-                .ToSelectListWithEmptyFirstRow(x => x.MeasurementUnitTypeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.MeasurementUnitTypeDisplayName);
-
-            var observationTypeSpecifications = ObservationTypeSpecification.All;
-
-            var observationThresholdTypesAsSelectListItems = ObservationThresholdType.All
-                .OrderBy(x => x.SortOrder)
-                .ToSelectListWithEmptyFirstRow(x => x.ObservationThresholdTypeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.ObservationThresholdTypeDisplayName);
-
-            var observationTargetTypesAsSelectListItems = ObservationTargetType.All
-                .OrderBy(x => x.SortOrder)
-                .ToSelectListWithEmptyFirstRow(x => x.ObservationTargetTypeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.ObservationTargetTypeDisplayName);
-
-            var observationTypeCollectionMethodsAsSelectListItems = ObservationTypeCollectionMethod.All
-                .OrderBy(x => x.SortOrder)
-                .ToSelectListWithEmptyFirstRow(x => x.ObservationTypeCollectionMethodID.ToString(CultureInfo.InvariantCulture),
-                    x => x.ObservationTypeCollectionMethodDisplayName);
-
-            var viewData = new EditViewData(CurrentPerson, measurementUnitTypesAsSelectListItems, observationTypeSpecifications, observationThresholdTypesAsSelectListItems, observationTargetTypesAsSelectListItems, observationTypeCollectionMethodsAsSelectListItems);
+            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
