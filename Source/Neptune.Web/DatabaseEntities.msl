@@ -138,7 +138,6 @@
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />
-          <ScalarProperty Name="MeasurementUnitTypeID" ColumnName="MeasurementUnitTypeID" />
           <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
           <ScalarProperty Name="ObservationTypeSchema" ColumnName="ObservationTypeSchema" />
         </MappingFragment>

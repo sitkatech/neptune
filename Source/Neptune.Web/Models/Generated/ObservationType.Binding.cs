@@ -32,11 +32,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(int observationTypeID, string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public ObservationType(int observationTypeID, string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             this.ObservationTypeID = observationTypeID;
             this.ObservationTypeName = observationTypeName;
-            this.MeasurementUnitTypeID = measurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
             this.ObservationTypeSchema = observationTypeSchema;
         }
@@ -44,13 +43,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(string observationTypeName, int measurementUnitTypeID, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public ObservationType(string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ObservationTypeName = observationTypeName;
-            this.MeasurementUnitTypeID = measurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
             this.ObservationTypeSchema = observationTypeSchema;
         }
@@ -58,12 +56,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ObservationType(string observationTypeName, MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
+        public ObservationType(string observationTypeName, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.ObservationTypeName = observationTypeName;
-            this.MeasurementUnitTypeID = measurementUnitType.MeasurementUnitTypeID;
             this.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
             this.ObservationTypeSchema = observationTypeSchema;
         }
@@ -71,9 +68,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static ObservationType CreateNewBlank(MeasurementUnitType measurementUnitType, ObservationTypeSpecification observationTypeSpecification)
+        public static ObservationType CreateNewBlank(ObservationTypeSpecification observationTypeSpecification)
         {
-            return new ObservationType(default(string), measurementUnitType, observationTypeSpecification, default(string));
+            return new ObservationType(default(string), observationTypeSpecification, default(string));
         }
 
         /// <summary>
@@ -94,7 +91,6 @@ namespace Neptune.Web.Models
         public int ObservationTypeID { get; set; }
         public int TenantID { get; private set; }
         public string ObservationTypeName { get; set; }
-        public int MeasurementUnitTypeID { get; set; }
         public int ObservationTypeSpecificationID { get; set; }
         public string ObservationTypeSchema { get; set; }
         public int PrimaryKey { get { return ObservationTypeID; } set { ObservationTypeID = value; } }
@@ -103,7 +99,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public virtual ICollection<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
-        public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID]; } }
         public ObservationTypeSpecification ObservationTypeSpecification { get { return ObservationTypeSpecification.AllLookupDictionary[ObservationTypeSpecificationID]; } }
 
         public static class FieldLengths

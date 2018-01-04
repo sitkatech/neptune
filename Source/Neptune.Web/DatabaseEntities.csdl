@@ -316,7 +316,6 @@
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
-    <Property Name="MeasurementUnitTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeSpecificationID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />

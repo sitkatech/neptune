@@ -52,6 +52,10 @@ go
 ALTER TABLE dbo.ObservationTypeSpecification ADD CONSTRAINT FK_ObservationTypeSpecification_ObservationTypeCollectionMethod_ObservationTypeCollectionMethodID FOREIGN KEY(ObservationTypeCollectionMethodID) REFERENCES dbo.ObservationTypeCollectionMethod(ObservationTypeCollectionMethodID)
 ALTER TABLE dbo.ObservationTypeSpecification ADD CONSTRAINT FK_ObservationTypeSpecification_ObservationTargetType_ObservationTargetTypeID FOREIGN KEY(ObservationTargetTypeID) REFERENCES dbo.ObservationTargetType(ObservationTargetTypeID)
 ALTER TABLE dbo.ObservationTypeSpecification ADD CONSTRAINT FK_ObservationTypeSpecification_ObservationThresholdType_ObservationThresholdTypeID FOREIGN KEY(ObservationThresholdTypeID) REFERENCES dbo.ObservationThresholdType(ObservationThresholdTypeID)
+ALTER TABLE dbo.ObservationType DROP CONSTRAINT FK_ObservationType_MeasurementUnitType_MeasurementUnitTypeID
+GO
+
+
 
 go
 
@@ -71,6 +75,7 @@ alter table dbo.ObservationType drop column sortOrder
 alter table dbo.ObservationType drop column HasBenchmarkAndThreshold
 alter table dbo.ObservationType drop column ThresholdPercentDecline
 alter table dbo.ObservationType drop column ThresholdPercentDeviation
+alter table dbo.ObservationType drop column MeasurementUnitTypeID
 
 alter table dbo.ObservationType add ObservationTypeSpecificationID int not null
 alter table dbo.ObservationType add ObservationTypeSchema nvarchar(max) not null

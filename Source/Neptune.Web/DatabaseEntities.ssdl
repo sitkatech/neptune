@@ -313,7 +313,6 @@ warning 6035: The relationship 'FK_NeptunePageImage_NeptunePage_NeptunePageID_Te
     <Property Name="ObservationTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeName" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="MeasurementUnitTypeID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeSpecificationID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeSchema" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
