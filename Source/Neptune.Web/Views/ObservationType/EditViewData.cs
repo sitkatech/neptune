@@ -32,15 +32,18 @@ namespace Neptune.Web.Views.ObservationType
     {
         public ViewDataForAngular ViewDataForAngular { get; } 
         public string ObservationTypeIndexUrl { get; }
+        public string SubmitUrl { get; }
 
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<ObservationTypeSpecification> observationTypeSpecifications,
-            List<ObservationThresholdType> observationThresholdTypes, List<ObservationTargetType> observationTargetTypes,
-            List<ObservationTypeCollectionMethod> observationTypeCollectionMethods) : base(currentPerson)
+            List<ObservationThresholdType> observationThresholdTypes,
+            List<ObservationTargetType> observationTargetTypes,
+            List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl) : base(currentPerson)
         {
-            PageTitle = "New Observation Type";
+            PageTitle = "Observation Type";
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
             ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            SubmitUrl = submitUrl;
         }
     }
 
@@ -48,7 +51,7 @@ namespace Neptune.Web.Views.ObservationType
     {
        
         public List<ObservationTypeSpecificationSimple> ObservationTypeSpecificationSimples { get; }
-        public List<SelectItemSimple> ObservationTypeCollectionMethods { get; }
+        public List<ObservationTypeCollectionMethodSimple> ObservationTypeCollectionMethods { get; }
         public List<SelectItemSimple> ObservationThresholdTypes { get; }
         public List<SelectItemSimple> ObservationTargetTypes { get; }
         public List<SelectItemSimple> MeasurementUnitTypes { get; }
@@ -59,22 +62,36 @@ namespace Neptune.Web.Views.ObservationType
             List<ObservationTargetType> observationTargetTypes, List<MeasurementUnitType> measurementUnitTypes)
         {
             ObservationTypeSpecificationSimples = observationTypeSpecifications.Select(x => new ObservationTypeSpecificationSimple(x)).ToList();
-            ObservationTypeCollectionMethods = observationTypeCollectionMethods.Select(x => new SelectItemSimple(x.ObservationTypeCollectionMethodID, x.ObservationTypeCollectionMethodDisplayName)).ToList();
+            ObservationTypeCollectionMethods = observationTypeCollectionMethods.Select(x => new ObservationTypeCollectionMethodSimple(x)).ToList();
             ObservationThresholdTypes = observationThresholdTypes.Select(x => new SelectItemSimple(x.ObservationThresholdTypeID, x.ObservationThresholdTypeDisplayName)).ToList();
             ObservationTargetTypes = observationTargetTypes.Select(x => new SelectItemSimple(x.ObservationTargetTypeID, x.ObservationTargetTypeDisplayName)).ToList();
             MeasurementUnitTypes = measurementUnitTypes.Select(x => new SelectItemSimple(x.MeasurementUnitTypeID, x.MeasurementUnitTypeDisplayName)).ToList();
         }
     }
 
+    public class ObservationTypeCollectionMethodSimple
+    {
+        public int ID { get; }
+        public string DisplayName { get; }
+        public bool HasBenchmarkAndThresholds { get; }
+
+        public ObservationTypeCollectionMethodSimple(ObservationTypeCollectionMethod observationTypeCollectionMethod)
+        {
+            ID = observationTypeCollectionMethod.ObservationTypeCollectionMethodID;
+            DisplayName = observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName;
+            HasBenchmarkAndThresholds = observationTypeCollectionMethod != ObservationTypeCollectionMethod.PassFail;
+        }
+    }
+
     public class SelectItemSimple
     {
-        public int SelectItemSimpleID { get; }
-        public string SelectItemSimpleDisplayName { get; }
+        public int ID { get; }
+        public string DisplayName { get; }
 
         public SelectItemSimple(int id, string displayName)
         {
-            SelectItemSimpleID = id;
-            SelectItemSimpleDisplayName = displayName;
+            ID = id;
+            DisplayName = displayName;
         }
     }
 
@@ -83,7 +100,7 @@ namespace Neptune.Web.Views.ObservationType
         public int ObservationTypeCollectionMethodID { get; }
         public int ObservationTargetTypeID { get; }
         public int ObservationThresholdTypeID { get; }
-
+        
         public ObservationTypeSpecificationSimple(ObservationTypeSpecification observationTypeSpecification)
         {
             ObservationTypeCollectionMethodID = observationTypeSpecification.ObservationTypeCollectionMethodID;

@@ -1,20 +1,150 @@
 ﻿angular.module("NeptuneApp").controller("EditObservationTypeController", function ($scope, $timeout, angularModelAndViewData) {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
-    $scope.AngularViewData = angularModelAndViewData.AngularViewData;
+    $scope.AngularViewData = angularModelAndViewData.AngularViewData;   
 
-    $scope.initiateWithAtLeastOneInput = function () {
-        if ($scope.AngularModel.PropertiesToObserve == undefined) {
-            $scope.AngularModel.PropertiesToObserve = [""];
+    var newDiscreteObservationTypeSchema = {
+        MeasurementUnitLabel: null,
+        MeasurementUnitTypeID: null,
+        PropertiesToObserve: [],
+        MinimumNumberOfObservations: null,
+        MaximumNumberOfObservations: null,
+        MinimumValueOfObservations: null,
+        MaximumValueOfObservations: null,
+        BenchmarkDescritpion: null,
+        ThresholdDescritpion: null,
+        AssessmentDescritpion: null
+    };
+    var newRateObservationTypeSchema = {
+        DiscreteRateMeasurementUnitLabel: null,
+        DiscreteRateMeasurementUnitTypeID: null,
+        TimeMeasurementUnitLabel: null,
+        TimeMeasurementUnitTypeID: null,
+        ReadingMeasurementUnitLabel: null,
+        ReadingMeasurementUnitTypeID: null,
+        PropertiesToObserve: [],
+        DiscretRateMinimumNumberOfObservations: null,
+        DiscretRateMaximumNumberOfObservations: null,
+        DiscretRateMinimumValueOfObservations: null,
+        DiscretRateMaximumValueOfObservations: null,
+        TimeReadingMinimumNumberOfObservations: null,
+        TimeReadingMaximumNumberOfObservations: null,
+        TimeReadingMinimumValueOfObservations: null,
+        TimeReadingMaximumValueOfObservations: null,
+        BenchmarkDescritpion: null,
+        ThresholdDescritpion: null,
+        AssessmentDescritpion: null
+    };
+    var newPassFailObservationTypeSchema = {
+        PropertiesToObserve: [],
+        AssessmentDescritpion: null
+    };
+    var newPercentageObservationTypeSchema = {
+        MeasurementUnitLabel: null,
+        PropertiesToObserve: [],
+        BenchmarkDescritpion: null,
+        ThresholdDescritpion: null,
+        AssessmentDescritpion: null
+    };
+    
+
+    $scope.getObservationCollectionMethod = function(idToFind) {
+        return Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods,"ID",idToFind);
+     }
+    
+    $scope.updateCollectionMethod = function () {
+        var observationCollectionMethod = $scope.getObservationCollectionMethod($scope.ObservationTypeCollectionMethodID);
+        $scope.ObservationTypeCollectionMethodSelected = observationCollectionMethod;
+
+
+        if ($scope.selectedCollectionMethodIsDiscrete()) {
+            $scope.ObservationTypeSchema = newDiscreteObservationTypeSchema;
         }
+        else if ($scope.selectedCollectionMethodIsRate()) {
+            $scope.ObservationTypeSchema = newRateObservationTypeSchema;
+        }
+        else if ($scope.selectedCollectionMethodIsPassFail()) {
+            $scope.ObservationTypeSchema = newPassFailObservationTypeSchema;
+        }
+        else if ($scope.selectedCollectionMethodIsPercentage()) {
+            $scope.ObservationTypeSchema = newPercentageObservationTypeSchema;
+        } else {
+            $scope.ObservationTypeSchema = {};
+        }
+
+        $scope.addInput();
     }
 
+    $scope.selectedCollectionMethodHasBenchmarkAndThresholds = function() {
+        return $scope.ObservationTypeCollectionMethodSelected != null &&
+            $scope.ObservationTypeCollectionMethodSelected.HasBenchmarkAndThresholds;
+    }
+
+    $scope.selectedCollectionMethodIsDiscrete = function () {
+        return $scope.ObservationTypeCollectionMethodSelected != null &&
+            $scope.ObservationTypeCollectionMethodSelected.ID === 1;
+    }
+
+    $scope.selectedCollectionMethodIsRate = function () {
+        return $scope.ObservationTypeCollectionMethodSelected != null &&
+            $scope.ObservationTypeCollectionMethodSelected.ID === 2;
+    }
+
+    $scope.selectedCollectionMethodIsPassFail = function () {
+        return $scope.ObservationTypeCollectionMethodSelected != null &&
+            $scope.ObservationTypeCollectionMethodSelected.ID === 3;
+    }
+
+    $scope.selectedCollectionMethodIsPercentage = function () {
+        return $scope.ObservationTypeCollectionMethodSelected != null &&
+            $scope.ObservationTypeCollectionMethodSelected.ID === 4;
+    }
+
+
+
+    $scope.filteredTargetTypes = function() {
+        var compatibleTargetTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function (f) {            
+            return f.ObservationTypeCollectionMethodID == $scope.ObservationTypeCollectionMethodSelected.ID;
+        }).value().map(function(f) {
+            return f.ObservationTargetTypeID;
+            });
+
+        return _($scope.AngularViewData.ObservationTargetTypes).filter(function (f) {
+            return _.includes(compatibleTargetTypeIDs, f.ID);
+        }).value();
+    }
+
+    $scope.filteredThresholdTypes = function () {
+        var compatibleThresholdTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function (f) {
+            return f.ObservationTypeCollectionMethodID == $scope.ObservationTypeCollectionMethodSelected.ID;
+        }).value().map(function (f) {
+            return f.ObservationThresholdTypeID;
+        });
+
+        return _($scope.AngularViewData.ObservationThresholdTypes).filter(function (f) {
+            return _.includes(compatibleThresholdTypeIDs, f.ID);
+        }).value();
+    }
+
+
     $scope.addInput = function () {
-        console.log($scope.AngularModel.PropertiesToObserve);
-        $scope.AngularModel.PropertiesToObserve.push("");
+        $scope.ObservationTypeSchema.PropertiesToObserve.push("");
     }
 
     $scope.removeInput = function (index) {
-        console.log(index);
-        $scope.AngularModel.PropertiesToObserve.splice(index, 1);
+        $scope.ObservationTypeSchema.PropertiesToObserve.splice(index, 1);
     }
+
+    $scope.submit = function() {
+        var test = $scope.ObservationTypeSchema;
+        $scope.ObservationTypeSchema = JSON.stringify(test);
+        console.log($scope.ObservationTypeSchema);
+    }
+
+    $scope.ObservationTypeSchema = JSON.parse($scope.AngularModel.ObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.ObservationTypeSchema);
+    $scope.ObservationTypeCollectionMethodSelected = $scope.AngularModel.ObservationTypeCollectionMethodID != null
+        ? Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods,
+            "ID",
+            $scope.AngularModel.ObservationTypeCollectionMethodID)
+        : null;
+
 });

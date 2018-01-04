@@ -1,4 +1,6 @@
 ﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Common
+@using Neptune.Web.Controllers
 @using Neptune.Web.Models
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.ObservationType.Edit
@@ -19,9 +21,8 @@
     // ]]>
 </script>
 
-@using (Html.BeginForm())
-{
-    <div class="formPage" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-init="initiateWithAtLeastOneInput()">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-submit="submit()">
+    <div class="formPage">
         <div class="row">
             <div class="col-xs-12">
                 <div class="validationError">
@@ -46,116 +47,274 @@
                             @Html.LabelWithSugarFor(m => m.ObservationTypeCollectionMethodID)
                         </div>
                         <div class="col-sm-9">
-                           
-                            @Html.ValidationMessageFor(m => m.ObservationTypeCollectionMethodID)
+                            <select class="form-control"
+                                    style="width: auto"
+                                    name="ObservationTypeCollectionMethodID"
+                                    ng-model="ObservationTypeCollectionMethodID"                                    
+                                    ng-change="updateCollectionMethod()">
+                                <option ng-repeat="observationTypeCollectionMethod in AngularViewData.ObservationTypeCollectionMethods"
+                                        ng-selected="AngularModel.ObservationTypeCollectionMethodID == observationTypeCollectionMethod.ID"
+                                        ng-value="observationTypeCollectionMethod.ID">{{observationTypeCollectionMethod.DisplayName}}</option>
+                            </select>
                         </div>
                     </div>
+
                     <br />
-                    
-                    <br />
-                    <div id="schemaQuestions">
-                        @*<div class="form-group">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.ObservationThresholdTypeID)
-                </div>
-                <div class="col-sm-9">
-                    @Html.DropDownListFor(m => m.ObservationThresholdTypeID, ViewDataTyped.ObservationThresholdTypes, new { @class = "form-control", style = "width:auto" })
-                    @Html.ValidationMessageFor(m => m.ObservationThresholdTypeID)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.ObservationTargetTypeID)
-                </div>
-                <div class="col-sm-9">
-                    @Html.DropDownListFor(m => m.ObservationTargetTypeID, ViewDataTyped.ObservationTargetTypes, new { @class = "form-control", style = "width:auto" })
-                    @Html.ValidationMessageFor(m => m.ObservationTargetTypeID)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.TextBoxFor(m => m.MeasurementType, new { @class = "form-control", style = "width:auto" })
-                    @Html.ValidationMessageFor(m => m.MeasurementType)
-                </div>
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
-                    @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.PropertiesToObserve)
-                </div>
-                <div class="col-sm-9">
-                    <div ng-repeat="item in AngularModel.PropertiesToObserve track by $index" style="margin-bottom: 4px">
-                        <input class="form-control" ng-model="AngularModel.PropertiesToObserve[$index]" name="PropertiesToObserve[{{$index}}]" style="width: auto" type="text" value="{{AngularModel.PropertiesToObserve[$index]}}">
-                        <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                    <div ng-if="selectedCollectionMethodHasBenchmarkAndThresholds()">
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(m => m.ObservationThresholdTypeID)
+                            </div>
+                            <div class="col-sm-9">
+                                <select style="width: auto" ng-model="AngularModel.ObservationThresholdTypeID"
+                                        name="@Html.NameFor(m => m.ObservationThresholdTypeID)"
+                                        class="form-control"
+                                        ng-required="true">
+                                    <option ng-repeat="type in filteredThresholdTypes()"
+                                            ng-selected="AngularModel.ObservationThresholdTypeID == type.ID"
+                                            ng-bind="type.DisplayName"
+                                            value="{{type.ID}}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(m => m.ObservationTargetTypeID)
+                            </div>
+                            <div class="col-sm-9">
+                                <select style="width: auto" ng-model="AngularModel.ObservationTargetTypeID"
+                                        name="@Html.NameFor(m => m.ObservationTargetTypeID)"
+                                        class="form-control"
+                                        ng-required="true">
+                                    <option ng-repeat="type in filteredTargetTypes()"
+                                            ng-selected="AngularModel.ObservationTargetTypeID == type.ID"
+                                            ng-bind="type.DisplayName"
+                                            value="{{type.ID}}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.Label("Benchmark Instructions")
+                            </div>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" data-val="true"
+                                          data-val-length-max="300"
+                                          ng-model="ObservationTypeSchema.BenchmarkDescritpion"
+                                          onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescritpion', 'Characters Remaining: ');"
+                                          onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescritpion', 'Characters Remaining: ')"
+                                          rows="3"
+                                          style="width: 100%; resize: none;"></textarea>
+                                <div id="CharactersRemaining_BenchmarkDescritpion" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.Label("Threshold Instructions")
+                            </div>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" data-val="true"
+                                          data-val-length-max="300"
+                                          ng-model="ObservationTypeSchema.ThresholdDescritpion"
+                                          onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescritpion', 'Characters Remaining: ');"
+                                          onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescritpion', 'Characters Remaining: ')"
+                                          rows="3"
+                                          style="width: 100%; resize: none;"></textarea>
+                                <div id="CharactersRemaining_ThresholdDescritpion" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
-                    @Html.ValidationMessageFor(m => m.PropertiesToObserve)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.MinimumNumberOfObservations)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.TextBoxFor(m => m.MinimumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
-                </div>
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.MaximumNumberOfObservations)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.TextBoxFor(m => m.MaximumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.MinimumValueOfEachObservation)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.TextBoxFor(m => m.MinimumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
-                </div>
-                <div class="col-xs-3 col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.MaximumValueOfEachObservation)
-                </div>
-                <div class="col-xs-9 col-sm-3">
-                    @Html.TextBoxFor(m => m.MaximumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
-                </div>
-                <div class="form-group">
-            <div class="col-sm-3 control-label">
-                @Html.LabelWithSugarFor(m => m.BenchmarkDescritpion)
-            </div>
-            <div class="col-sm-9">
-                @Html.TextAreaWithMaxLengthFor(m => m.BenchmarkDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-3 control-label">
-                @Html.LabelWithSugarFor(m => m.ThresholdDescritpion)
-            </div>
-            <div class="col-sm-9">
-                @Html.TextAreaWithMaxLengthFor(m => m.ThresholdDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-3 control-label">
-                @Html.LabelWithSugarFor(m => m.AssessmentDescritpion)
-            </div>
-            <div class="col-sm-9">
-                @Html.TextAreaWithMaxLengthFor(m => m.AssessmentDescritpion, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string>() { "form-control" })
-            </div>
-        </div>
-            </div>*@
+                    <div ng-if="ObservationTypeCollectionMethodSelected != null">
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.Label("Assessment Instructions")
+                            </div>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" data-val="true"
+                                          data-val-length-max="300"
+                                          ng-model="ObservationTypeSchema.AssessmentDescritpion"
+                                          onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescritpion', 'Characters Remaining: ');"
+                                          onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescritpion', 'Characters Remaining: ')"
+                                          rows="3"
+                                          style="width: 100%; resize: none;"></textarea>
+                                <div id="CharactersRemaining_AssessmentDescritpion" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
+                            </div>
+                        </div>
                     </div>
-                </div>                
+
+                    <div ng-if="selectedCollectionMethodIsDiscrete()">
+                        <p>discrete</p>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)                                
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel)
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" />
+                            </div>
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <select style="width: auto" ng-model="ObservationTypeSchema.MeasurementUnitTypeID"
+                                        class="form-control"
+                                        ng-required="true">
+                                    <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
+                                            ng-selected="ObservationTypeSchema.MeasurementUnitTypeID == type.ID"
+                                            ng-bind="type.DisplayName"
+                                            value="{{type.ID}}"></option>
+                                </select>
+                            </div>
+                        </div>                       
+                        <div class="form-group">
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.Label("Minimum Number of Observations")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumNumberOfObservations" step="1" min="0" />
+                            </div>
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.Label("Maximum Number of Observations")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumNumberOfObservations" step="1" min="0" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.Label("Minimum Value of Each Observation")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumValueOfObservations" />
+                            </div>
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.Label("Maximum Value of Each Observation")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumValueOfObservations" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="selectedCollectionMethodIsRate()">
+                        <p>Rate</p>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)
+                            </div>
+                            <div class="col-sm-9">
+                                <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px">
+                                    <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                    <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                                </div>
+
+                                <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="selectedCollectionMethodIsPassFail()">
+                        <p>Pass/Fail</p>
+                        <input type="hidden" name="@Html.NameFor(m => m.ObservationThresholdTypeID)" value="3" />
+                        <input type="hidden" name="@Html.NameFor(m => m.ObservationTargetTypeID)" value="1" />
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)
+                            </div>
+                            <div class="col-sm-9">
+                                <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px">
+                                    <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                    <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                                </div>
+
+                                <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="selectedCollectionMethodIsPercentage()">
+                        <p>Percentage</p>
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)
+                            </div>
+                            <div class="col-sm-9">
+                                <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px">
+                                    <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                    <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                                </div>
+                                <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span>Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="schemaQuestions">
+                        @*
+                            <div class="form-group">
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.TextBoxFor(m => m.MeasurementType, new { @class = "form-control", style = "width:auto" })
+                                    @Html.ValidationMessageFor(m => m.MeasurementType)
+                                </div>
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.DropDownListFor(m => m.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new { @class = "form-control", style = "width:auto" })
+                                    @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(m => m.MinimumNumberOfObservations)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.TextBoxFor(m => m.MinimumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                                </div>
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(m => m.MaximumNumberOfObservations)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.TextBoxFor(m => m.MaximumNumberOfObservations, new { @class = "form-control", style = "width:auto" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(m => m.MinimumValueOfEachObservation)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.TextBoxFor(m => m.MinimumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                                </div>
+                                <div class="col-xs-3 col-sm-3 control-label">
+                                    @Html.LabelWithSugarFor(m => m.MaximumValueOfEachObservation)
+                                </div>
+                                <div class="col-xs-9 col-sm-3">
+                                    @Html.TextBoxFor(m => m.MaximumValueOfEachObservation, new { @class = "form-control", style = "width:auto" })
+                                </div>
+
+
+                            </div>*@
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -165,6 +324,7 @@
                 <button type="submit" class="btn btn-neptune">Save</button>
             </div>
             @Html.HiddenFor(m => m.ObservationTypeID)
+            <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="ObservationTypeSchema" />
         </div>
     </div>
-}
+</form>

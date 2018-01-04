@@ -49,6 +49,12 @@ namespace Neptune.Web.Views.ObservationType
         public string AssessmentDescritpion { get; set; }
     }
 
+    public class PassFailSchema
+    {
+        public List<string> PropertiesToObserve { get; set; }
+        public string AssessmentDescritpion { get; set; }
+    }
+
     public class PercentageSchema
     {
         public string MeasurementUnitLabel { get; set; }
@@ -59,10 +65,6 @@ namespace Neptune.Web.Views.ObservationType
         public string AssessmentDescritpion { get; set; }
     }
 
-    public class PassFailSchema
-    {
-        public List<string> PropertiesToObserve { get; set; }
-        public string AssessmentDescritpion { get; set; }
-    }
+ 
 
 }

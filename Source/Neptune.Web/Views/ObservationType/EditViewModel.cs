@@ -75,6 +75,7 @@ namespace Neptune.Web.Views.ObservationType
             ObservationTypeSchema = observationType.ObservationTypeSchema;
         }
 
+
         public void UpdateModel(Models.ObservationType observationType, Person currentPerson)
         {
             observationType.ObservationTypeName = ObservationTypeName;
