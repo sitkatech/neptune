@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
         }
         public override string ViewSchemaDetailUrl(ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(observationType));
         }
     }
 
@@ -75,7 +75,7 @@ namespace Neptune.Web.Models
 
         public override string ViewSchemaDetailUrl(ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(observationType));
         }
     }
 
@@ -96,7 +96,7 @@ namespace Neptune.Web.Models
         }
         public override string ViewSchemaDetailUrl(ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(observationType));
         }
     }
 }

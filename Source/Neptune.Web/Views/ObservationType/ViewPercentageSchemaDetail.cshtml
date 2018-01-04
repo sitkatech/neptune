@@ -1,7 +1,7 @@
 ﻿
 @using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Models
-@inherits Neptune.Web.Views.ObservationType.ViewDiscreteValueSchemaDetail
+@inherits Neptune.Web.Views.ObservationType.ViewPercentageSchemaDetail
 
 <div class="col-xs-12 col-sm-12">
     <div class="panel panelNeptune">
@@ -11,17 +11,17 @@
         <div class="panel-body">
             <div class="row">
                 <label class="col-sm-3 control-label text-right">Assessment Instructions</label>
-                <div class="col-sm-9">@ViewDataTyped.DiscreteValueSchema.AssessmentDescription</div>
+                <div class="col-sm-9">@ViewDataTyped.PercentageSchema.AssessmentDescription</div>
             </div>
             <br/>
             <div class="row">
                 <label class="col-sm-3 control-label text-right">Benchmark Instructions</label>
-                <div class="col-sm-9">@ViewDataTyped.DiscreteValueSchema.BenchmarkDescription</div>
+                <div class="col-sm-9">@ViewDataTyped.PercentageSchema.BenchmarkDescription</div>
             </div>
             <br/>
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">Threshold Instructions</label>
-                    <div class="col-sm-9">@ViewDataTyped.DiscreteValueSchema.ThresholdDescription</div>
+                    <div class="col-sm-9">@ViewDataTyped.PercentageSchema.ThresholdDescription</div>
                 </div>
         </div>
     </div>
@@ -38,22 +38,10 @@
                 </div>
                 <div class="row">
                     <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel)</label>
-                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteValueSchema.MeasurementUnitLabel</div>
+                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.PercentageSchema.MeasurementUnitLabel</div>
                     <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</label>
                     <div class="col-xs-9 col-sm-3">@ViewDataTyped.MeasurementUnitType.MeasurementUnitTypeDisplayName</div>
-                </div>
-                <div class="row">
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MinimumNumberOfObservations)</label>
-                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteValueSchema.MinimumNumberOfObservations</div>
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)</label>
-                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteValueSchema.MaximumNumberOfObservations</div>
-                </div>
-                <div class="row">
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation)</label>
-                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteValueSchema.MinimumValueOfObservations</div>
-                    <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)</label>
-                    <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteValueSchema.MaximumValueOfObservations</div>
-                </div>           
+                </div>                           
         </div>
     </div>
 </div>

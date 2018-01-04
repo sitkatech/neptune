@@ -274,7 +274,13 @@
     <Compile Include="Views\ObservationType\Index.cs" />
     <Compile Include="Views\ObservationType\IndexGridSpec.cs" />
     <Compile Include="Views\ObservationType\IndexViewData.cs" />
+    <Compile Include="Views\ObservationType\ViewPercentageSchemaDetail.cs" />
+    <Compile Include="Views\ObservationType\ViewPercentageSchemaDetailViewData.cs" />
+    <Compile Include="Views\ObservationType\ViewPassFailSchemaDetail.cs" />
+    <Compile Include="Views\ObservationType\ViewRateSchemaDetail .cs" />
     <Compile Include="Views\ObservationType\ViewDiscreteValueSchemaDetail.cs" />
+    <Compile Include="Views\ObservationType\ViewPassFailSchemaDetailViewData.cs" />
+    <Compile Include="Views\ObservationType\ViewRateSchemaDetailViewData.cs" />
     <Compile Include="Views\ObservationType\ViewDiscreteValueSchemaDetailViewData.cs" />
     <Compile Include="Views\Shared\GoogleChartAnnotations.cs" />
     <Compile Include="Views\Shared\GoogleChartAxis.cs" />
@@ -711,6 +717,9 @@
     <Content Include="Views\ObservationType\Detail.cshtml" />
     <Content Include="Views\ObservationType\Edit.cshtml" />
     <Content Include="Views\ObservationType\ViewDiscreteValueSchemaDetail.cshtml" />
+    <Content Include="Views\ObservationType\ViewRateSchemaDetail.cshtml" />
+    <Content Include="Views\ObservationType\ViewPassFailSchemaDetail.cshtml" />
+    <Content Include="Views\ObservationType\ViewPercentageSchemaDetail.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

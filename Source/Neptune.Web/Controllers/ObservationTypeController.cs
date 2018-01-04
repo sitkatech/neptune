@@ -167,5 +167,35 @@ namespace Neptune.Web.Controllers
             var viewData = new ViewDiscreteValueSchemaDetailViewData(schema);
             return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult RateDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var observationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<RateSchema>(observationType.ObservationTypeSchema);
+            var viewData = new ViewRateSchemaDetailViewData(schema);
+            return RazorPartialView<ViewRateSchemaDetail, ViewRateSchemaDetailViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult PassFailDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var observationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<PassFailSchema>(observationType.ObservationTypeSchema);
+            var viewData = new ViewPassFailSchemaDetailViewData(schema);
+            return RazorPartialView<ViewPassFailSchemaDetail, ViewPassFailSchemaDetailViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult PercentageDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var observationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<PercentageSchema>(observationType.ObservationTypeSchema);
+            var viewData = new ViewPercentageSchemaDetailViewData(schema);
+            return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
+        }
     }
 }
