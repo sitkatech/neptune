@@ -81,9 +81,8 @@ namespace Neptune.Web.Models
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
                 feature.Properties.Add("Name", x.TreatmentBMPName);
-                feature.Properties.Add("FeatureColor", x.TreatmentBMPType.DisplayColor);
-                feature.Properties.Add("FeatureGlyph", x.TreatmentBMPType.GlyphIconClass);
-                feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeDisplayName);
+                feature.Properties.Add("FeatureColor", "#935F59");
+                feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("MapSummaryUrl", x.GetMapSummaryUrl() );
                 return feature;
             }));
@@ -97,8 +96,7 @@ namespace Neptune.Web.Models
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
                 feature.Properties.Add("FeatureColor", "#935F59");
-                feature.Properties.Add("FeatureGlyph", x.TreatmentBMPType.GlyphIconClass);
-                feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeDisplayName);
+                feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 return feature;
             }));
             return featureCollection;

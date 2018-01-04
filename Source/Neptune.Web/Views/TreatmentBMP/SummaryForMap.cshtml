@@ -23,7 +23,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @using LtInfo.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.TreatmentBMP.SummaryForMap
 
-<div class="panel panelStormwater">
+<div class="panel panelNeptune">
     <div class="panel-heading ">
         BMP Overview
     </div>
@@ -34,7 +34,7 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
         <div class="row">
             <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeDisplayName</div>
+            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
         </div>
 
         <div class="row">

@@ -13,15 +13,15 @@
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
 
-@foreach (var batch in TreatmentBMPType.All.OrderBy(x => x.SortOrder).Batch(2))
+@foreach (var batch in ViewDataTyped.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).Batch(2))
 {
     <div class="row">
         @foreach (var treatmentBMPType in batch)
         {
             <div class="col-lg-6">
-                <div class="panel panelStormwater">
+                <div class="panel panelNeptune">
                     <div class="panel-heading">
-                        @treatmentBMPType.TreatmentBMPTypeDisplayName
+                        @treatmentBMPType.TreatmentBMPTypeName
                     </div>
                     <div class="panel-body">
                         @Html.Label("Number of BMPs:") @ViewDataTyped.TreatmentBMPs.Count(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
@@ -38,11 +38,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.ToEnum])
+                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.TreatmentBMPTypeName])
                                 {
                                     var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                     <tr>
-                                        <td>@observationType.ObservationTypeDisplayName</td>
+                                        <td>@observationType.ObservationTypeName</td>
                                         <td>@(observationType.HasBenchmarkAndThreshold ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToString("0.00") : "pass/fail")</td>
                                         @if (observationType.HasBenchmarkAndThreshold)
                                         {

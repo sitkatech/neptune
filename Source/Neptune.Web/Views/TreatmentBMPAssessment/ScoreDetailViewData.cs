@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         
         public ScoreDetailViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            ViewDataForAngular = new ScoreViewData.ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.SortOrder).ToList(),
+            ViewDataForAngular = new ScoreViewData.ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),
                 treatmentBMPAssessment.TreatmentBMPObservations.ToList(),
                 treatmentBMPAssessment);
         

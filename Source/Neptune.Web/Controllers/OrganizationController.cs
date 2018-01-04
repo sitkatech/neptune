@@ -44,7 +44,7 @@ namespace Neptune.Web.Controllers
 {
     public class OrganizationController : NeptuneBaseController
     {
-        [OrganizationViewFeature]
+        [OrganizationManageFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.OrganizationsList);
@@ -52,7 +52,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Index, IndexViewData>(viewData);
         }
 
-        [OrganizationViewFeature]
+        [OrganizationManageFeature]
         public GridJsonNetJObjectResult<Organization> IndexGridJsonData()
         {
             var hasDeleteOrganizationPermission = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);

@@ -10,9 +10,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[ModeledCatchmentID] [int] NULL,
-	[InletCount] [int] NOT NULL,
-	[OutletCount] [int] NOT NULL,
-	[DesignDepth] [float] NULL,
 	[Notes] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
@@ -65,7 +62,3 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Tr
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID]
-GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMP_DesignDepthForTreatmentBMPType127] CHECK  ((([TreatmentBMPTypeID]=(7) OR [TreatmentBMPTypeID]=(2) OR [TreatmentBMPTypeID]=(1)) AND [DesignDepth] IS NOT NULL OR [DesignDepth] IS NULL))
-GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [CK_TreatmentBMP_DesignDepthForTreatmentBMPType127]

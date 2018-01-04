@@ -96,7 +96,6 @@ namespace Neptune.Web.Views
                 homeMenuItem,
                 BuildExploreMenu(currentPerson),
                 BuildAboutMenu(currentPerson),
-                BuildProgramInfoMenu(currentPerson),
                 BuildManageMenu(currentPerson)
             };
 
@@ -123,15 +122,6 @@ namespace Neptune.Web.Views
             return aboutMenu;
         }
 
-        private static LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
-        {
-            var programInfoMenu = new LtInfoMenuItem("Program Info");
-            programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}", "Group3"));
-
-            return programInfoMenu;
-        }
-
-
         private LtInfoMenuItem BuildManageMenu(Person currentPerson)
         {
             var manageMenu = new LtInfoMenuItem("Manage");
@@ -140,10 +130,12 @@ namespace Neptune.Web.Views
 
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group2"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group2"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group2"));
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<StormwaterUserController>(c => c.Index()), currentPerson, "Stormwater Users", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}", "Group3"));
 
-            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TenantController>(c => c.Detail()), currentPerson, "Tenant Configuration", "Group3"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group4"));
+
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TenantController>(c => c.Detail()), currentPerson, "Tenant Configuration", "Group5"));
 
             return manageMenu;
         }

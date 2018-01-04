@@ -128,7 +128,7 @@ namespace Neptune.Web.Controllers
         public JsonResult FindByName(string term)
         {
             var searchString = term.Trim();
-            var allModeledCatchmentsMatchingSearchString = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Where(x => x.ModeledCatchmentName.Contains(searchString)).ToList();
+            var allModeledCatchmentsMatchingSearchString = HttpRequestStorage.DatabaseEntities.AllModeledCatchments.Where(x => x.ModeledCatchmentName.Contains(searchString)).ToList();
 
             var listItems = allModeledCatchmentsMatchingSearchString.OrderBy(x => x.ModeledCatchmentName).Take(20).Select(mc =>
             {

@@ -41,41 +41,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
         }
 
-        protected ObservationViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment, ObservationTypeEnum observationTypeEnum)            
+        protected ObservationViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)            
         {
            TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-           var treatmentBMPObservationDetails = treatmentBMPAssessment.TreatmentBMPObservations.Where(x => x.ObservationType.ToEnum == observationTypeEnum).SelectMany(x => x.TreatmentBMPObservationDetails).ToList();
-           TreatmentBMPObservationDetailSimples = treatmentBMPObservationDetails.Select(x => new TreatmentBMPObservationDetailSimple(x)).ToList();
-           
+           TreatmentBMPObservationDetailSimples = new List<TreatmentBMPObservationDetailSimple>();           
         }
 
-        public virtual void UpdateModel(TreatmentBMPObservation treatmentBMPObservation, IList<TreatmentBMPObservationDetail> allTreatmentBMPObservationDetails)
+        public virtual void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
         {
-            if (TreatmentBMPObservationDetailSimples == null)
-            {
-                TreatmentBMPObservationDetailSimples = new List<TreatmentBMPObservationDetailSimple>();
-            }
-
-            var treatmentBMPObservationDetailUpdated =
-                TreatmentBMPObservationDetailSimples.Select(x =>
-                    {
-                        var treatmentBMPObservationDetail = new TreatmentBMPObservationDetail(x.TreatmentBMPObservationDetailID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue(),
-                            treatmentBMPObservation.TreatmentBMPObservationID,
-                            x.TreatmentBMPObservationDetailTypeID,
-                            x.TreatmentBMPObservationValue.Value,
-                            x.Notes);
-                        return treatmentBMPObservationDetail;
-                    })
-                    .ToList();
-
-            treatmentBMPObservation.TreatmentBMPObservationDetails.Merge(treatmentBMPObservationDetailUpdated,
-                allTreatmentBMPObservationDetails,
-                (x, y) => x.TreatmentBMPObservationDetailID == y.TreatmentBMPObservationDetailID,
-                (x, y) =>
-                {
-                    x.TreatmentBMPObservationValue = y.TreatmentBMPObservationValue;
-                    x.Notes = y.Notes;
-                });
             
         }
 

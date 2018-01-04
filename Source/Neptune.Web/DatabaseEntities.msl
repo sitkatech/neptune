@@ -132,6 +132,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ObservationType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.ObservationType">
+        <MappingFragment StoreEntitySet="ObservationType">
+          <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />
+          <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
+          <ScalarProperty Name="ObservationTypeSchema" ColumnName="ObservationTypeSchema" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Organization">
       <EntityTypeMapping TypeName="Neptune.Web.Models.Organization">
         <MappingFragment StoreEntitySet="Organization">
@@ -259,9 +270,6 @@
           <ScalarProperty Name="LocationPoint" ColumnName="LocationPoint" />
           <ScalarProperty Name="StormwaterJurisdictionID" ColumnName="StormwaterJurisdictionID" />
           <ScalarProperty Name="ModeledCatchmentID" ColumnName="ModeledCatchmentID" />
-          <ScalarProperty Name="InletCount" ColumnName="InletCount" />
-          <ScalarProperty Name="OutletCount" ColumnName="OutletCount" />
-          <ScalarProperty Name="DesignDepth" ColumnName="DesignDepth" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -294,17 +302,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPInfiltrationReading">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPInfiltrationReading">
-        <MappingFragment StoreEntitySet="TreatmentBMPInfiltrationReading">
-          <ScalarProperty Name="TreatmentBMPInfiltrationReadingID" ColumnName="TreatmentBMPInfiltrationReadingID" />
-          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
-          <ScalarProperty Name="TreatmentBMPObservationDetailID" ColumnName="TreatmentBMPObservationDetailID" />
-          <ScalarProperty Name="ReadingValue" ColumnName="ReadingValue" />
-          <ScalarProperty Name="ReadingTime" ColumnName="ReadingTime" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="TreatmentBMPObservation">
       <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPObservation">
         <MappingFragment StoreEntitySet="TreatmentBMPObservation">
@@ -312,19 +309,16 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
-          <ScalarProperty Name="ObservationValueTypeID" ColumnName="ObservationValueTypeID" />
+          <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPObservationDetail">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPObservationDetail">
-        <MappingFragment StoreEntitySet="TreatmentBMPObservationDetail">
-          <ScalarProperty Name="TreatmentBMPObservationDetailID" ColumnName="TreatmentBMPObservationDetailID" />
+    <EntitySetMapping Name="TreatmentBMPType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPType">
+        <MappingFragment StoreEntitySet="TreatmentBMPType">
+          <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
-          <ScalarProperty Name="TreatmentBMPObservationID" ColumnName="TreatmentBMPObservationID" />
-          <ScalarProperty Name="TreatmentBMPObservationDetailTypeID" ColumnName="TreatmentBMPObservationDetailTypeID" />
-          <ScalarProperty Name="TreatmentBMPObservationValue" ColumnName="TreatmentBMPObservationValue" />
-          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="TreatmentBMPTypeName" ColumnName="TreatmentBMPTypeName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

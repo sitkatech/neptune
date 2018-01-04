@@ -23,38 +23,38 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPObservation()
         {
-            this.TreatmentBMPObservationDetails = new HashSet<TreatmentBMPObservationDetail>();
+
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int observationTypeID, int observationValueTypeID) : this()
+        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int observationTypeID, string observationData) : this()
         {
             this.TreatmentBMPObservationID = treatmentBMPObservationID;
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.ObservationTypeID = observationTypeID;
-            this.ObservationValueTypeID = observationValueTypeID;
+            this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int observationTypeID, int observationValueTypeID) : this()
+        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int observationTypeID, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.ObservationTypeID = observationTypeID;
-            this.ObservationValueTypeID = observationValueTypeID;
+            this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, ObservationValueType observationValueType) : this()
+        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -62,15 +62,17 @@ namespace Neptune.Web.Models
             this.TreatmentBMPAssessment = treatmentBMPAssessment;
             treatmentBMPAssessment.TreatmentBMPObservations.Add(this);
             this.ObservationTypeID = observationType.ObservationTypeID;
-            this.ObservationValueTypeID = observationValueType.ObservationValueTypeID;
+            this.ObservationType = observationType;
+            observationType.TreatmentBMPObservations.Add(this);
+            this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, ObservationValueType observationValueType)
+        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType)
         {
-            return new TreatmentBMPObservation(treatmentBMPAssessment, observationType, observationValueType);
+            return new TreatmentBMPObservation(treatmentBMPAssessment, observationType, default(string));
         }
 
         /// <summary>
@@ -79,27 +81,25 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPObservationDetails.Any();
+            return false;
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPObservationDetail).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPObservation).Name};
 
         [Key]
         public int TreatmentBMPObservationID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPAssessmentID { get; set; }
         public int ObservationTypeID { get; set; }
-        public int ObservationValueTypeID { get; set; }
+        public string ObservationData { get; set; }
         public int PrimaryKey { get { return TreatmentBMPObservationID; } set { TreatmentBMPObservationID = value; } }
 
-        public virtual ICollection<TreatmentBMPObservationDetail> TreatmentBMPObservationDetails { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPAssessment TreatmentBMPAssessment { get; set; }
-        public ObservationType ObservationType { get { return ObservationType.AllLookupDictionary[ObservationTypeID]; } }
-        public ObservationValueType ObservationValueType { get { return ObservationValueType.AllLookupDictionary[ObservationValueTypeID]; } }
+        public virtual ObservationType ObservationType { get; set; }
 
         public static class FieldLengths
         {

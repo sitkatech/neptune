@@ -45,7 +45,7 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessments.Count.Equals(0);
         }
        
-        public string AuditDescriptionString => TreatmentBMPName; public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeDisplayName})";
+        public string AuditDescriptionString => TreatmentBMPName; public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
 
         public double? GetBenchmarkValue(ObservationType observationType)
         {
@@ -71,18 +71,8 @@ namespace Neptune.Web.Models
             {
                 return null;
             }
-
-            if (observationType == ObservationType.MaterialAccumulation)
-            {
-                return ObservationTypeHelper.ThresholdValueFromThresholdPercentDeclineInDesignDepth(thresholdValue.Value, DesignDepth.Value);
-            }
-
-            if (observationType == ObservationType.WetBasinVegetativeCover)
-            {
-                return GetBenchmarkValue(observationType).Value - thresholdValue.Value;
-            }
-
-            return observationType.ThresholdPercentDecline
+           
+            return observationType.ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark
                 ? ObservationTypeHelper.ThresholdValueFromThresholdPercentDecline(GetBenchmarkValue(observationType).Value, thresholdValue.Value)
                 : thresholdValue.Value;
         }

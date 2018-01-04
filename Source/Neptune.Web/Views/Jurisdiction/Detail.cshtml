@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @using Neptune.Web.Security
 @using Neptune.Web.Views
@@ -29,105 +29,59 @@ Source code is available upon request via <support@sitkatech.com>.
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
-    <style>
-        ul.creditProgressDetails > li > .glyphicon
-        {
-            margin-right: 8px;
-        }
-    </style>
 }
-<p>This page displays the Lake Clarity Crediting Program achievements for a jurisdiction. Users with an LT Info account are able to see details of the jurisdiction's registrations and stormwater asset inventory.</p>
 <div class="row">
-    <div class="col-sm-12 col-md-6">
-        @if (ViewDataTyped.CanViewJurisdictionDetails)
-        {
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="panel panelStormwater">
-                        <div class="panel-heading panelTitle">
-                            Users
-                        </div>
-                        <div class="panel-body">
-                            <p>The following people are assigned to manage the Lake Clarity Crediting Program for @ViewDataTyped.StormwaterJurisdiction.OrganizationDisplayName.</p>
-                            <p>Normal Users can create, edit, and assess BMPs, road classes and road segments, and register/declare credits for this jurisdiction. Admin Users can perform all the functions of Normal Users, plus review and accept Registrations and Declarations.</p>
-                            <h4>Normal Users</h4>
-                            @if (ViewDataTyped.NormalUsers.Any())
-                            {
-                                <ul class="list-unstyled">
-                                    @foreach (var person in ViewDataTyped.NormalUsers.OrderBy(x => x.FullNameLastFirst))
-                                    {
-                                        <li>
-                                            @if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
-                                            {
-                                                @person.GetFullNameFirstLastAndOrgAsUrl()
-                                            }
-                                            else
-                                            {
-                                                @person.GetFullNameFirstLastAsStringAndOrgAsUrl()
-                                            }
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p>No Normal Users assigned to this jurisdiction.</p>
-                            }
-                            <h4>Admin Users</h4>
-                            @if (ViewDataTyped.NormalUsers.Any())
-                            {
-                                <ul class="list-unstyled">
-                                    @foreach (var person in ViewDataTyped.AdminUsers.OrderBy(x => x.FullNameLastFirst))
-                                    {
-                                        <li>
-                                            @if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
-                                            {
-                                                @person.GetFullNameFirstLastAndOrgAsUrl()
-                                            }
-                                            else
-                                            {
-                                                @person.GetFullNameFirstLastAsStringAndOrgAsUrl()
-                                            }
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p>No Admin Users assigned to this jurisdiction.</p>
-                            }
-                        </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panelNeptune">
+                    <div class="panel-heading panelTitle">
+                        Users Assigned to Manage @ViewDataTyped.StormwaterJurisdiction.OrganizationDisplayName
                     </div>
-                </div>
-            </div>
-        }
-    </div>    
-</div>
-
-@if (ViewDataTyped.CanViewJurisdictionDetails)
-{   
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panelStormwater">
-                <div class="panel-heading panelTitle">
-                    BMPs
-                </div>
-                <div class="panel-body">
-                    @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPGridSpec, ViewDataTyped.TreatmentBMPGridName, ViewDataTyped.TreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
-                </div>
-            </div>
-        </div>
-    </div>    
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panelStormwater">
-                <div class="panel-heading panelTitle">
-                    Catchments
-                </div>
-                <div class="panel-body">
-                    @Html.DhtmlxGrid(ViewDataTyped.JurisdictionModeledCatchmentsGridSpec, ViewDataTyped.JurisdictionModeledCatchmentsGridName, ViewDataTyped.JurisdictionModeledCatchmentsGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                    <div class="panel-body">
+                        @if (ViewDataTyped.UsersAssignedToJurisdiction.Any())
+                        {
+                            <p>The following people can create, edit, and assess BMPs for @ViewDataTyped.StormwaterJurisdiction.OrganizationDisplayName.</p>
+                            <ul>
+                                @foreach (var person in ViewDataTyped.UsersAssignedToJurisdiction.OrderBy(x => x.FullNameLastFirst))
+                                {
+                                    <li>
+                                        @(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission ? person.GetFullNameFirstLastAndOrgAsUrl() : person.GetFullNameFirstLastAsStringAndOrgAsUrl())
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="systemText">No Users assigned to this jurisdiction.</p>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-}
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                BMPs
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPGridSpec, ViewDataTyped.TreatmentBMPGridName, ViewDataTyped.TreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Catchments
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.JurisdictionModeledCatchmentsGridSpec, ViewDataTyped.JurisdictionModeledCatchmentsGridName, ViewDataTyped.JurisdictionModeledCatchmentsGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>

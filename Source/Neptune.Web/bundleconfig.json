@@ -18,12 +18,6 @@
     ]
   },
   {
-    "outputFileName": "ScriptsCustom/Maps/NeptuneMaps.ProjectLocationSummary.min.js",
-    "inputFiles": [
-      "ScriptsCustom/Maps/NeptuneMaps.ProjectLocationSummary.js"
-    ]
-  },
-  {
     "outputFileName": "Content/typeahead/typeahead.min.js",
     "inputFiles": [
       "Content/typeahead/typeahead.js"
@@ -33,6 +27,36 @@
     "outputFileName": "ScriptsCustom/ModalDialogForm.min.js",
     "inputFiles": [
       "ScriptsCustom/ModalDialogForm.js"
+    ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/CorralMaps.Stormwater.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/CorralMaps.Stormwater.js"
+    ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/CorralMaps.StormwaterSearch.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/CorralMaps.StormwaterSearch.js"
+    ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/NeptuneMaps.Stormwater.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/NeptuneMaps.Stormwater.js"
+    ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js"
+    ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/sitka.min.js",
+    "inputFiles": [
+      "ScriptsCustom/sitka.js"
     ]
   }
 ]

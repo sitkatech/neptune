@@ -28,7 +28,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeModeledCatchment ModeledCatchment = NeptunePageTypeModeledCatchment.Instance;
         public static readonly NeptunePageTypeJurisdiction Jurisdiction = NeptunePageTypeJurisdiction.Instance;
         public static readonly NeptunePageTypeAssessment Assessment = NeptunePageTypeAssessment.Instance;
-        public static readonly NeptunePageTypeStormwaterUser StormwaterUser = NeptunePageTypeStormwaterUser.Instance;
+        public static readonly NeptunePageTypeObservationTypes ObservationTypes = NeptunePageTypeObservationTypes.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, StormwaterUser };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ObservationTypes };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -123,10 +123,10 @@ namespace Neptune.Web.Models
                     return Jurisdiction;
                 case NeptunePageTypeEnum.ModeledCatchment:
                     return ModeledCatchment;
+                case NeptunePageTypeEnum.ObservationTypes:
+                    return ObservationTypes;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
-                case NeptunePageTypeEnum.StormwaterUser:
-                    return StormwaterUser;
                 case NeptunePageTypeEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case NeptunePageTypeEnum.TreatmentBMPType:
@@ -149,7 +149,7 @@ namespace Neptune.Web.Models
         ModeledCatchment = 8,
         Jurisdiction = 9,
         Assessment = 10,
-        StormwaterUser = 11
+        ObservationTypes = 11
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -212,9 +212,9 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeAssessment Instance = new NeptunePageTypeAssessment(10, @"Assessment", @"Assessment", 2);
     }
 
-    public partial class NeptunePageTypeStormwaterUser : NeptunePageType
+    public partial class NeptunePageTypeObservationTypes : NeptunePageType
     {
-        private NeptunePageTypeStormwaterUser(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeStormwaterUser Instance = new NeptunePageTypeStormwaterUser(11, @"StormwaterUser", @"Stormwater User", 2);
+        private NeptunePageTypeObservationTypes(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeObservationTypes Instance = new NeptunePageTypeObservationTypes(11, @"ObservationTypes", @"Observation Types", 2);
     }
 }

@@ -31,8 +31,8 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.Stormwater.min.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.Stormwater.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
 }
@@ -51,12 +51,12 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <div class="row">
     <div class="col-sm-4">
-        <div class="panel panelStormwater">
+        <div class="panel panelNeptune">
             <div class="panel-heading ">
                 Catchment Search
             </div>
             <div class="panel-body">
-                <p>Search for a Catchment by name, click a Catchment polygon on the map, or see a list of all Catchments in the grid at the bottom of the page.</p>
+                <p>Search for a Catchment by name, click a Catchment polygon on the map, or view a list of all Catchments in the grid at the bottom of the page.</p>
                 <div class="input-group">
                     <input type="text" id="catchmentFinder" class="typeahead form-control" placeholder="Enter the name of a Catchment" autocomplete="off" />
                     <span class="input-group-btn">
@@ -70,7 +70,7 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
     </div>
     <div class="col-sm-8">
-        <div class="panel panelStormwater">
+        <div class="panel panelNeptune">
             <div class="panel-heading ">
                 Map View
             </div>
@@ -84,7 +84,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </div>
 <div class="row">
     <div class="col-xs-12 col-sm-12">
-        <div class="panel panelStormwater">
+        <div class="panel panelNeptune">
             <div class="panel-heading">
                 Table View
             </div>

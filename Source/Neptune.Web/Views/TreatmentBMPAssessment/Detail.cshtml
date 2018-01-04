@@ -39,7 +39,7 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
     }    
     <div class="col-xs-12 col-md-6">
-        <div class="panel panelStormwater">
+        <div class="panel panelNeptune">
             <div class="panel-heading ">
                 Assessment Overview
                 @if (ViewDataTyped.CanEdit)
@@ -74,7 +74,7 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
     </div>
     <div class="col-xs-12 col-md-6">
-        <div class="panel panelStormwater">
+        <div class="panel panelNeptune">
             <div class="panel-heading ">
                 Score
                 @if (ViewDataTyped.CanEdit)
@@ -129,9 +129,9 @@ Source code is available upon request via <support@sitkatech.com>.
         @foreach (var observationType in observationTypeBatch)
         {
             <div class="col-md-6">
-                <div class="panel panelStormwater">
+                <div class="panel panelNeptune">
                     <div class="panel-heading">
-                        @observationType.ObservationTypeDisplayName
+                        @observationType.ObservationTypeName
                         @if (ViewDataTyped.CanEdit)
                         {
                             <span class="pullRight panel-heading-right">
@@ -157,15 +157,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var treatmentBMPObservationDetail in treatmentBMPObservation.TreatmentBMPObservationDetails.OrderBy(x => x.TreatmentBMPObservationDetailType.SortOrder))
-                                        {
-
-                                            <tr class="row">
-                                                <td class="col-xs-4">@treatmentBMPObservationDetail.TreatmentBMPObservationDetailType.TreatmentBMPObservationDetailTypeDisplayName</td>
-                                                <td class="col-xs-4">@treatmentBMPObservationDetail.ObservedValueFormatted</td>
-                                                <td class="col-xs-4">@treatmentBMPObservationDetail.Notes</td>
-                                            </tr>
-                                        }
+                                        
                                     </tbody>
                                 </table>
                             </div>

@@ -11,7 +11,7 @@ namespace Neptune.Web.Models
                 var observationType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes.GetTreatmentBMPTypeObservationType(ObservationTypeID);
                 var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(TreatmentBMPID);
 
-                return $"Treatment BMP: {treatmentBMP.TreatmentBMPName}, Observation Type: {observationType.ObservationType.ObservationTypeDisplayName}, Benchmark Value: {BenchmarkValue}, Threshold Value: {ThresholdValue}";
+                return $"Treatment BMP: {treatmentBMP.TreatmentBMPName}, Observation Type: {observationType.ObservationType.ObservationTypeName}, Benchmark Value: {BenchmarkValue}, Threshold Value: {ThresholdValue}";
             }
         }
     }

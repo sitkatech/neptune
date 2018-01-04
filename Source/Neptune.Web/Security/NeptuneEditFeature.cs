@@ -29,7 +29,7 @@ namespace Neptune.Web.Security
     public class NeptuneEditFeature : NeptuneFeature
     {
         public NeptuneEditFeature()
-            : base(new List<Role> { Role.Normal, Role.Admin })
+            : base(new List<Role> { Role.Normal, Role.Admin, Role.SitkaAdmin })
         {
         }
 
@@ -42,12 +42,7 @@ namespace Neptune.Web.Security
                 return false;
             }
 
-            if (new NeptuneAdminFeature().HasPermissionByPerson(person))
-            {
-                return true;
-            }
-
-            return person.StormwaterJurisdictionPeople.Any();
+            return new NeptuneAdminFeature().HasPermissionByPerson(person) || person.StormwaterJurisdictionPeople.Any();
         }
     }
 }

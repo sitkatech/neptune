@@ -20,7 +20,8 @@ CREATE TABLE dbo.ModeledCatchmentGeometryStaging(
 )
 
 CREATE TABLE dbo.ObservationType(
-	ObservationTypeID int NOT NULL CONSTRAINT PK_ObservationType_ObservationTypeID PRIMARY KEY,
+	ObservationTypeID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_ObservationType_ObservationTypeID PRIMARY KEY,
+	TenantID int not null,
 	ObservationTypeName varchar(100) NOT NULL CONSTRAINT AK_ObservationType_ObservationTypeName UNIQUE (ObservationTypeName),
 	ObservationTypeDisplayName varchar(100) NOT NULL,
 	SortOrder int NOT NULL,
@@ -28,6 +29,7 @@ CREATE TABLE dbo.ObservationType(
 	HasBenchmarkAndThreshold bit NOT NULL,
 	ThresholdPercentDecline bit NOT NULL,
 	ThresholdPercentDeviation bit NOT NULL,
+	constraint AK_ObservationType_ObservationTypeID_TenantID unique (ObservationTypeID, TenantID),
 )
 
 CREATE TABLE dbo.ObservationValueType(
@@ -53,11 +55,11 @@ CREATE TABLE dbo.StormwaterBreadCrumbEntity(
 )
 
 CREATE TABLE dbo.StormwaterJurisdiction(
-	StormwaterJurisdictionID int NOT NULL CONSTRAINT PK_StormwaterJurisdiction_StormwaterJurisdictionID PRIMARY KEY,
+	StormwaterJurisdictionID int NOT NULL CONSTRAINT PK_StormwaterJurisdiction_StormwaterJurisdictionID PRIMARY KEY identity(1,1),
 	TenantID int not null,
 	OrganizationID int NOT NULL CONSTRAINT AK_StormwaterJurisdiction_OrganizationID UNIQUE,
 	StormwaterJurisdictionGeometry geometry NULL,
-	StateProvinceID int NULL,
+	StateProvinceID int NOT NULL,
 	IsTransportationJurisdiction bit NOT NULL,
 	constraint AK_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID unique (StormwaterJurisdictionID, TenantID),
 	constraint AK_StormwaterJurisdiction_OrganizationID_TenantID unique (OrganizationID, TenantID)
@@ -81,10 +83,8 @@ CREATE TABLE dbo.TreatmentBMP(
 	ModeledCatchmentID int NULL,
 	InletCount int NOT NULL,
 	OutletCount int NOT NULL,
-	DesignDepth float NULL,
 	Notes varchar(200) NULL,
 	CONSTRAINT AK_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID UNIQUE (TreatmentBMPID, TreatmentBMPTypeID),
-	CONSTRAINT CK_TreatmentBMP_DesignDepthForTreatmentBMPType127 CHECK (((TreatmentBMPTypeID=(7) OR TreatmentBMPTypeID=(2) OR TreatmentBMPTypeID=(1)) AND DesignDepth IS NOT NULL OR DesignDepth IS NULL)),
 	constraint AK_TreatmentBMP_TreatmentBMPID_TenantID unique (TreatmentBMPID, TenantID),
 	constraint AK_TreatmentBMP_TreatmentBMPName_TenantID unique (TreatmentBMPName, TenantID),
 )
@@ -153,13 +153,15 @@ CREATE TABLE dbo.TreatmentBMPObservationDetailType(
 )
 
 CREATE TABLE dbo.TreatmentBMPType(
-	TreatmentBMPTypeID int NOT NULL CONSTRAINT PK_TreatmentBMPType_TreatmentBMPTypeID PRIMARY KEY,
+	TreatmentBMPTypeID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_TreatmentBMPType_TreatmentBMPTypeID PRIMARY KEY,
+	TenantID int not null,
 	TreatmentBMPTypeName varchar(100) NOT NULL CONSTRAINT AK_TreatmentBMPType_TreatmentBMPTypeName UNIQUE,
 	TreatmentBMPTypeDisplayName varchar(100) NOT NULL CONSTRAINT AK_TreatmentBMPType_TreatmentBMPTypeDisplayName UNIQUE,
 	SortOrder int NOT NULL,
 	DisplayColor varchar(20) NULL,
 	GlyphIconClass varchar(20) NULL,
 	IsDistributedBMPType bit NOT NULL,
+	constraint AK_TreatmentBMPType_TreatmentBMPTypeID_TenantID unique (TreatmentBMPTypeID, TenantID),
 )
 
 CREATE TABLE dbo.TreatmentBMPTypeObservationType(
@@ -187,6 +189,8 @@ alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMP
 alter table dbo.TreatmentBMPInfiltrationReading add constraint FK_TreatmentBMPInfiltrationReading_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.TreatmentBMPObservation add constraint FK_TreatmentBMPObservation_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 alter table dbo.TreatmentBMPObservationDetail add constraint FK_TreatmentBMPObservationDetail_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
+alter table dbo.TreatmentBMPType add constraint FK_TreatmentBMPType_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
+alter table dbo.ObservationType add constraint FK_ObservationType_Tenant_TenantID FOREIGN KEY (TenantID) REFERENCES dbo.Tenant(TenantID)
 
 ALTER TABLE dbo.ModeledCatchment ADD CONSTRAINT FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID FOREIGN KEY(StormwaterJurisdictionID) REFERENCES dbo.StormwaterJurisdiction (StormwaterJurisdictionID)
 

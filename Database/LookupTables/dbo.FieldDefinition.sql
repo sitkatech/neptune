@@ -27,4 +27,14 @@ VALUES
 (22, N'ReceivesSystemCommunications', N'Receives System Communications', '', 1),
 (23, N'StormwaterJurisdiction', N'Stormwater Jurisdiction', '', 1),
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
-(25, N'TreatmentBMP', N'Treatment BMP', '', 1)
+(25, N'TreatmentBMP', N'Treatment BMP', '', 1),
+(26, N'ObservationType', N'Observation Type', '', 1),
+(27, N'ObservationCollectionMethod', N'Observation Collection Method', '', 1),
+(28, N'ObservationThresholdType', N'Observation Threshold Type', '', 1),
+(29, N'ObservationTargetType', N'Observation Target Type', '', 1),
+(30, N'MeasurementUnitLabel', N'Measurement Unit Label', '', 1),
+(31, N'PropertiesToObserve', N'Properties To Observe', '', 1),
+(32, N'MinimumNumberOfObservations', N'Minimum Number of Observations', '', 1),
+(33, N'MaximumNumberOfObservations', N'Maximum Number of Observations', '', 1),
+(34, N'MinimumValueOfEachObservation', N'Minimum Value of Each Observation', '', 1),
+(35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1)

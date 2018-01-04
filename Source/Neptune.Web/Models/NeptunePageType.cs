@@ -108,11 +108,11 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class NeptunePageTypeStormwaterUser
+    public partial class NeptunePageTypeObservationTypes
     {
         public override string GetViewUrl()
         {
-            return SitkaRoute<StormwaterUserController>.BuildUrlFromExpression(x => x.Index());
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
         }
     }
 }
