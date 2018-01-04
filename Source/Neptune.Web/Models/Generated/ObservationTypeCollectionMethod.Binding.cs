@@ -134,7 +134,6 @@ namespace Neptune.Web.Models
     {
         private ObservationTypeCollectionMethodRate(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
         public static readonly ObservationTypeCollectionMethodRate Instance = new ObservationTypeCollectionMethodRate(2, @"Rate", @"Measure one or many rates as discrete values or time/value pairs", 20);
-       
     }
 
     public partial class ObservationTypeCollectionMethodPassFail : ObservationTypeCollectionMethod
@@ -147,6 +146,5 @@ namespace Neptune.Web.Models
     {
         private ObservationTypeCollectionMethodPercentage(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder) {}
         public static readonly ObservationTypeCollectionMethodPercentage Instance = new ObservationTypeCollectionMethodPercentage(4, @"Percentage", @"Measure one or many percent values", 40);
-       
     }
 }

@@ -1,69 +1,45 @@
-﻿
-@using Neptune.Web.Models
+﻿@*-----------------------------------------------------------------------
+<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@using LtInfo.Common.Views
-@using MoreLinq
+@using LtInfo.Common.DhtmlWrappers
+@using Neptune.Web.Security
 @inherits Neptune.Web.Views.TreatmentBMPType.Index
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
-<div class="pageIntroText">
-    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
-</div>
-
-@foreach (var batch in ViewDataTyped.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).Batch(2))
+@section RightOfPageTitle
 {
-    <div class="row">
-        @foreach (var treatmentBMPType in batch)
-        {
-            <div class="col-lg-6">
-                <div class="panel panelNeptune">
-                    <div class="panel-heading">
-                        @treatmentBMPType.TreatmentBMPTypeName
-                    </div>
-                    <div class="panel-body">
-                        @Html.Label("Number of BMPs:") @ViewDataTyped.TreatmentBMPs.Count(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID)
-                        <br />
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <caption>Applicable Observation Types</caption>
-                                <thead>
-                                <tr>
-                                    <th>Observation</th>
-                                    <th>Weight</th>
-                                    <th>Benchmark Default</th>
-                                    <th>Threshold Default</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var observationType in ViewDataTyped.ObservationTypeByTreatmentBMPTypeDictionary[treatmentBMPType.TreatmentBMPTypeName])
-                                {
-                                    var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
-                                    <tr>
-                                        <td>@observationType.ObservationTypeName</td>
-                                        <td>@(observationType.HasBenchmarkAndThreshold ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToString("0.00") : "pass/fail")</td>
-                                        @if (observationType.HasBenchmarkAndThreshold)
-                                        {
-                                            <td>@ObservationTypeHelper.FormattedDefaultBenchmarkValue(observationType, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                            <td>@ObservationTypeHelper.ApplyThresholdFormatting(observationType, treatmentBMPTypeObservationType.DefaultThresholdValue)</td>
-                                        }
-                                        else
-                                        {
-                                            <td >@ViewUtilities.NaString</td>
-                                            <td >@ViewUtilities.NaString</td>
-                                        }
-
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        }
-    </div>
+    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        <a class="pull-right" href="@ViewDataTyped.NewTreatmentBMPTypeUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP Type</a>
+    }    
 }
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+
+<div style="margin-top: 10px;">
+    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+</div>

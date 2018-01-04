@@ -1,0 +1,58 @@
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Common
+@using Neptune.Web.Controllers
+@using Neptune.Web.Models
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMPType.Edit
+
+<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPType/EditTreatmentBMPTypeController.js")"></script>
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
+                };
+            });
+
+    // ]]>
+</script>
+
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditTreatmentBMPTypeControllerApp" ng-controller="EditTreatmentBMPTypeController" ng-submit="submit()" name="treatmentBMPTypeForm">
+    <div class="formPage">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="validationError">
+                    @Html.ValidationSummary()
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.TreatmentBMPTypeName)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(m => m.TreatmentBMPTypeName, new { @class = "form-control", style = "width:100%" })
+                            @Html.ValidationMessageFor(m => m.TreatmentBMPTypeName)
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12" style="text-align: right">
+            <hr />
+            <a href="@ViewDataTyped.TreatmentBMPTypeIndexUrl" class="btn btn-neptune">Cancel</a>
+            <button type="submit" class="btn btn-neptune">Save</button>
+        </div>
+        @Html.HiddenFor(m => m.TreatmentBMPTypeID)
+    </div>
+</form>
