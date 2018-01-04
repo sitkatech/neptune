@@ -31,6 +31,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.ObservationType;
 using Neptune.Web.Views.Shared;
+using Newtonsoft.Json;
 using IndexGridSpec = Neptune.Web.Views.ObservationType.IndexGridSpec;
 
 namespace Neptune.Web.Controllers
@@ -154,6 +155,17 @@ namespace Neptune.Web.Controllers
             }
             observationType.DeleteObservationType();
             return new ModalDialogFormJsonResult();
+        }
+
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public PartialViewResult DiscreteDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var observationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<DiscreteValueSchema>(observationType.ObservationTypeSchema);
+            var viewData = new ViewDiscreteValueSchemaDetailViewData(schema);
+            return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
     }
 }

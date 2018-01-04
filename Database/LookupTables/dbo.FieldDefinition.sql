@@ -33,4 +33,8 @@ VALUES
 (28, N'ObservationThresholdType', N'Observation Threshold Type', '', 1),
 (29, N'ObservationTargetType', N'Observation Target Type', '', 1),
 (30, N'MeasurementUnitLabel', N'Measurement Unit Label', '', 1),
-(31, N'PropertiesToObserve', N'Properties To Observe', '', 1)
+(31, N'PropertiesToObserve', N'Properties To Observe', '', 1),
+(32, N'MinimumNumberOfObservations', N'Minimum Number of Observations', '', 1),
+(33, N'MaximumNumberOfObservations', N'Maximum Number of Observations', '', 1),
+(34, N'MinimumValueOfEachObservation', N'Minimum Value of Each Observation', '', 1),
+(35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1)

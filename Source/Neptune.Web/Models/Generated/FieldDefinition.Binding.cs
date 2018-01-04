@@ -49,6 +49,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionObservationTargetType ObservationTargetType = FieldDefinitionObservationTargetType.Instance;
         public static readonly FieldDefinitionMeasurementUnitLabel MeasurementUnitLabel = FieldDefinitionMeasurementUnitLabel.Instance;
         public static readonly FieldDefinitionPropertiesToObserve PropertiesToObserve = FieldDefinitionPropertiesToObserve.Instance;
+        public static readonly FieldDefinitionMinimumNumberOfObservations MinimumNumberOfObservations = FieldDefinitionMinimumNumberOfObservations.Instance;
+        public static readonly FieldDefinitionMaximumNumberOfObservations MaximumNumberOfObservations = FieldDefinitionMaximumNumberOfObservations.Instance;
+        public static readonly FieldDefinitionMinimumValueOfEachObservation MinimumValueOfEachObservation = FieldDefinitionMinimumValueOfEachObservation.Instance;
+        public static readonly FieldDefinitionMaximumValueOfEachObservation MaximumValueOfEachObservation = FieldDefinitionMaximumValueOfEachObservation.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -58,7 +62,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -151,10 +155,18 @@ namespace Neptune.Web.Models
                     return ExternalLinks;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
                     return IsPrimaryContactOrganization;
+                case FieldDefinitionEnum.MaximumNumberOfObservations:
+                    return MaximumNumberOfObservations;
+                case FieldDefinitionEnum.MaximumValueOfEachObservation:
+                    return MaximumValueOfEachObservation;
                 case FieldDefinitionEnum.MeasurementUnit:
                     return MeasurementUnit;
                 case FieldDefinitionEnum.MeasurementUnitLabel:
                     return MeasurementUnitLabel;
+                case FieldDefinitionEnum.MinimumNumberOfObservations:
+                    return MinimumNumberOfObservations;
+                case FieldDefinitionEnum.MinimumValueOfEachObservation:
+                    return MinimumValueOfEachObservation;
                 case FieldDefinitionEnum.ModeledCatchment:
                     return ModeledCatchment;
                 case FieldDefinitionEnum.ObservationCollectionMethod:
@@ -237,7 +249,11 @@ namespace Neptune.Web.Models
         ObservationThresholdType = 28,
         ObservationTargetType = 29,
         MeasurementUnitLabel = 30,
-        PropertiesToObserve = 31
+        PropertiesToObserve = 31,
+        MinimumNumberOfObservations = 32,
+        MaximumNumberOfObservations = 33,
+        MinimumValueOfEachObservation = 34,
+        MaximumValueOfEachObservation = 35
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -424,5 +440,29 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionPropertiesToObserve(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionPropertiesToObserve Instance = new FieldDefinitionPropertiesToObserve(31, @"PropertiesToObserve", @"Properties To Observe", @"", true);
+    }
+
+    public partial class FieldDefinitionMinimumNumberOfObservations : FieldDefinition
+    {
+        private FieldDefinitionMinimumNumberOfObservations(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMinimumNumberOfObservations Instance = new FieldDefinitionMinimumNumberOfObservations(32, @"MinimumNumberOfObservations", @"Minimum Number of Observations", @"", true);
+    }
+
+    public partial class FieldDefinitionMaximumNumberOfObservations : FieldDefinition
+    {
+        private FieldDefinitionMaximumNumberOfObservations(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMaximumNumberOfObservations Instance = new FieldDefinitionMaximumNumberOfObservations(33, @"MaximumNumberOfObservations", @"Maximum Number of Observations", @"", true);
+    }
+
+    public partial class FieldDefinitionMinimumValueOfEachObservation : FieldDefinition
+    {
+        private FieldDefinitionMinimumValueOfEachObservation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMinimumValueOfEachObservation Instance = new FieldDefinitionMinimumValueOfEachObservation(34, @"MinimumValueOfEachObservation", @"Minimum Value of Each Observation", @"", true);
+    }
+
+    public partial class FieldDefinitionMaximumValueOfEachObservation : FieldDefinition
+    {
+        private FieldDefinitionMaximumValueOfEachObservation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMaximumValueOfEachObservation Instance = new FieldDefinitionMaximumValueOfEachObservation(35, @"MaximumValueOfEachObservation", @"Maximum Value of Each Observation", @"", true);
     }
 }

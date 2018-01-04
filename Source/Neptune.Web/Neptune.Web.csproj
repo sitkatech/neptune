@@ -274,6 +274,8 @@
     <Compile Include="Views\ObservationType\Index.cs" />
     <Compile Include="Views\ObservationType\IndexGridSpec.cs" />
     <Compile Include="Views\ObservationType\IndexViewData.cs" />
+    <Compile Include="Views\ObservationType\ViewDiscreteValueSchemaDetail.cs" />
+    <Compile Include="Views\ObservationType\ViewDiscreteValueSchemaDetailViewData.cs" />
     <Compile Include="Views\Shared\GoogleChartAnnotations.cs" />
     <Compile Include="Views\Shared\GoogleChartAxis.cs" />
     <Compile Include="Views\Shared\GoogleChartAxisLabelFormat.cs" />
@@ -708,6 +710,7 @@
     <Content Include="Views\ObservationType\Index.cshtml" />
     <Content Include="Views\ObservationType\Detail.cshtml" />
     <Content Include="Views\ObservationType\Edit.cshtml" />
+    <Content Include="Views\ObservationType\ViewDiscreteValueSchemaDetail.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

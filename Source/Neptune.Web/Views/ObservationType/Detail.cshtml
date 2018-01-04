@@ -22,6 +22,7 @@
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
+@using Microsoft.Web.Mvc
 @using Neptune.Web.Security
 @inherits Neptune.Web.Views.ObservationType.Detail
 @section JavascriptAndStylesContent
@@ -50,14 +51,9 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <label class="col-sm-3 control-label text-right">Name</label>
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Name")</label>
                     <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeName</div>
                 </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.Label("Measurement Unit")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.MeasurementUnitType.MeasurementUnitTypeDisplayName</div>
-                </div>
-                <hr />
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</label>
                     <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</div>
@@ -73,62 +69,12 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Instructions
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">Assessment Instructions</label>
-                    <div class="col-sm-9"></div>
-                </div>
-                @if (ViewDataTyped.ObservationType.HasBenchmarkAndThreshold)
-                {
-                    <div class="row">
-                        <label class="col-sm-3 control-label text-right">Benchmark Instructions</label>
-                        <div class="col-sm-9"></div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-3 control-label text-right">Threshold Instructions</label>
-                        <div class="col-sm-9"></div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Labels and Units
-            </div>
-            <div class="panel-body">
-                @if (ViewDataTyped.ObservationType.IsObservationTypeCollectionMethodDiscreteValue)
-                {
-                    <div class="row">
-                        <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)</label>
-                        <div class="col-sm-9"></div>
-                    </div>
-                    <div class="row">
-                        <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)</label>
-                        <div class="col-xs-9 col-sm-3"></div>
-                        <label class="col-xs-3 col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)</label>
-                        <div class="col-xs-9 col-sm-3"></div>
-                    </div>
-                }
-                else if (ViewDataTyped.ObservationType.IsObservationTypeCollectionMethodRate)
-                {
+    <div id="schemaDetails"></div>
 
-                }
-                else if (ViewDataTyped.ObservationType.IsObservationTypeCollectionMethodPassFail)
-                {
-
-                }
-                else if (ViewDataTyped.ObservationType.IsObservationTypeCollectionMethodPercentage)
-                {
-
-                }
-            </div>
-        </div>
-    </div>
 </div>
+
+<script type="text/javascript">  
+    $(document).ready(function () {
+        $("#schemaDetails").load('@(Url.Content(ViewDataTyped.ViewSchemaDetailUrl))');
+    });
+</script>  

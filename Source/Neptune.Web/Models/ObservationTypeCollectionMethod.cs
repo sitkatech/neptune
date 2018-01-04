@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
 using Newtonsoft.Json;
 
@@ -8,6 +10,8 @@ namespace Neptune.Web.Models
     public partial class ObservationTypeCollectionMethod
     {
         public abstract bool ValidateJson(string json);
+
+        public abstract string ViewSchemaDetailUrl(ObservationType observationType);
     }
 
     public partial class ObservationTypeCollectionMethodDiscreteValue
@@ -24,6 +28,11 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+
+        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        {
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(observationType));
         }
     }
 
@@ -42,6 +51,10 @@ namespace Neptune.Web.Models
 
             return true;
         }
+        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public partial class ObservationTypeCollectionMethodPassFail
@@ -59,6 +72,11 @@ namespace Neptune.Web.Models
 
             return true;
         }
+
+        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public partial class ObservationTypeCollectionMethodPercentage
@@ -75,6 +93,10 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

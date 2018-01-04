@@ -16,9 +16,9 @@ namespace Neptune.Web.Views.ObservationType
         public double MinimumValueOfObservations { get; set; }
         public double? MaximumValueOfObservations { get; set; }
 
-        public string BenchmarkDescritpion { get; set; }
-        public string ThresholdDescritpion { get; set; }
-        public string AssessmentDescritpion { get; set; }
+        public string BenchmarkDescription { get; set; }
+        public string ThresholdDescription { get; set; }
+        public string AssessmentDescription { get; set; }
     }
     public class RateSchema
     {
@@ -44,15 +44,15 @@ namespace Neptune.Web.Views.ObservationType
 
         public double TimeReadingMinimumValueOfObservations { get; set; }
         public double? TimeReadingMaximumValueOfObservations { get; set; }
-        public string BenchmarkDescritpion { get; set; }
-        public string ThresholdDescritpion { get; set; }
-        public string AssessmentDescritpion { get; set; }
+        public string BenchmarkDescription { get; set; }
+        public string ThresholdDescription { get; set; }
+        public string AssessmentDescription { get; set; }
     }
 
     public class PassFailSchema
     {
         public List<string> PropertiesToObserve { get; set; }
-        public string AssessmentDescritpion { get; set; }
+        public string AssessmentDescription { get; set; }
     }
 
     public class PercentageSchema
@@ -60,9 +60,9 @@ namespace Neptune.Web.Views.ObservationType
         public string MeasurementUnitLabel { get; set; }
 
         public List<string> PropertiesToObserve { get; set; }
-        public string BenchmarkDescritpion { get; set; }
-        public string ThresholdDescritpion { get; set; }
-        public string AssessmentDescritpion { get; set; }
+        public string BenchmarkDescription { get; set; }
+        public string ThresholdDescription { get; set; }
+        public string AssessmentDescription { get; set; }
     }
 
  
