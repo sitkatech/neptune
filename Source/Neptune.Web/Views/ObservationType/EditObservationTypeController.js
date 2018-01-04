@@ -10,9 +10,9 @@
         MaximumNumberOfObservations: null,
         MinimumValueOfObservations: null,
         MaximumValueOfObservations: null,
-        BenchmarkDescritpion: null,
-        ThresholdDescritpion: null,
-        AssessmentDescritpion: null
+        BenchmarkDescription: null,
+        ThresholdDescription: null,
+        AssessmentDescription: null
     };
     var newRateObservationTypeSchema = {
         DiscreteRateMeasurementUnitLabel: null,
@@ -30,20 +30,20 @@
         TimeReadingMaximumNumberOfObservations: null,
         TimeReadingMinimumValueOfObservations: null,
         TimeReadingMaximumValueOfObservations: null,
-        BenchmarkDescritpion: null,
-        ThresholdDescritpion: null,
-        AssessmentDescritpion: null
+        BenchmarkDescription: null,
+        ThresholdDescription: null,
+        AssessmentDescription: null
     };
     var newPassFailObservationTypeSchema = {
         PropertiesToObserve: [],
-        AssessmentDescritpion: null
+        AssessmentDescription: null
     };
     var newPercentageObservationTypeSchema = {
         MeasurementUnitLabel: null,
         PropertiesToObserve: [],
-        BenchmarkDescritpion: null,
-        ThresholdDescritpion: null,
-        AssessmentDescritpion: null
+        BenchmarkDescription: null,
+        ThresholdDescription: null,
+        AssessmentDescription: null
     };
     
 
@@ -134,10 +134,8 @@
         $scope.ObservationTypeSchema.PropertiesToObserve.splice(index, 1);
     }
 
-    $scope.submit = function() {
-        var test = $scope.ObservationTypeSchema;
-        $scope.ObservationTypeSchema = JSON.stringify(test);
-        console.log($scope.ObservationTypeSchema);
+    $scope.submit = function () {
+        $scope.AngularModel.ObservationTypeSchema = JSON.stringify($scope.ObservationTypeSchema);
     }
 
     $scope.ObservationTypeSchema = JSON.parse($scope.AngularModel.ObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.ObservationTypeSchema);
