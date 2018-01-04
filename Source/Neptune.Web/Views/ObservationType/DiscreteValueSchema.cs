@@ -14,7 +14,7 @@ namespace Neptune.Web.Views.ObservationType
         public int? MaximumNumberOfObservations { get; set; }
 
         public double MinimumValueOfObservations { get; set; }
-        public double MaximumValueOfObservations { get; set; }
+        public double? MaximumValueOfObservations { get; set; }
 
         public string BenchmarkDescritpion { get; set; }
         public string ThresholdDescritpion { get; set; }
@@ -37,13 +37,13 @@ namespace Neptune.Web.Views.ObservationType
         public int? DiscretRateMaximumNumberOfObservations { get; set; }
 
         public double DiscretRateMinimumValueOfObservations { get; set; }
-        public double DiscretRateMaximumValueOfObservations { get; set; }
+        public double? DiscretRateMaximumValueOfObservations { get; set; }
 
         public int TimeReadingMinimumNumberOfObservations { get; set; }
         public int? TimeReadingMaximumNumberOfObservations { get; set; }
 
         public double TimeReadingMinimumValueOfObservations { get; set; }
-        public double TimeReadingMaximumValueOfObservations { get; set; }
+        public double? TimeReadingMaximumValueOfObservations { get; set; }
         public string BenchmarkDescritpion { get; set; }
         public string ThresholdDescritpion { get; set; }
         public string AssessmentDescritpion { get; set; }

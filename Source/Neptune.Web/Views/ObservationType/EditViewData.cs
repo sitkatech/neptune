@@ -34,6 +34,9 @@ namespace Neptune.Web.Views.ObservationType
         public string ObservationTypeIndexUrl { get; }
         public string SubmitUrl { get; }
 
+        public int PassFailObservationThresholdTypeID { get; }
+        public int PassFailObservationTargetTypeID { get; }
+
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<ObservationTypeSpecification> observationTypeSpecifications,
             List<ObservationThresholdType> observationThresholdTypes,
@@ -44,6 +47,9 @@ namespace Neptune.Web.Views.ObservationType
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
             ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
             SubmitUrl = submitUrl;
+
+            PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
+            PassFailObservationTargetTypeID = ObservationTargetType.PassFail.ObservationTargetTypeID;
         }
     }
 
@@ -55,6 +61,10 @@ namespace Neptune.Web.Views.ObservationType
         public List<SelectItemSimple> ObservationThresholdTypes { get; }
         public List<SelectItemSimple> ObservationTargetTypes { get; }
         public List<SelectItemSimple> MeasurementUnitTypes { get; }
+        public int DiscreteObservationTypeCollectionMethodID { get; }
+        public int RateObservationTypeCollectionMethodID { get; }
+        public int PassFailObservationTypeCollectionMethodID { get; }
+        public int PercentageObservationTypeCollectionMethodID { get; }
 
         public ViewDataForAngular(List<ObservationTypeSpecification> observationTypeSpecifications,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods,
@@ -66,6 +76,11 @@ namespace Neptune.Web.Views.ObservationType
             ObservationThresholdTypes = observationThresholdTypes.Select(x => new SelectItemSimple(x.ObservationThresholdTypeID, x.ObservationThresholdTypeDisplayName)).ToList();
             ObservationTargetTypes = observationTargetTypes.Select(x => new SelectItemSimple(x.ObservationTargetTypeID, x.ObservationTargetTypeDisplayName)).ToList();
             MeasurementUnitTypes = measurementUnitTypes.Select(x => new SelectItemSimple(x.MeasurementUnitTypeID, x.MeasurementUnitTypeDisplayName)).ToList();
+
+            DiscreteObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.DiscreteValue.ObservationTypeCollectionMethodID;
+            RateObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Rate.ObservationTypeCollectionMethodID;
+            PassFailObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID;
+            PercentageObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Percentage.ObservationTypeCollectionMethodID;
         }
     }
 

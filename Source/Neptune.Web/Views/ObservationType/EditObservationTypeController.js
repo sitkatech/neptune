@@ -81,25 +81,23 @@
 
     $scope.selectedCollectionMethodIsDiscrete = function () {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === 1;
+            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.DiscreteObservationTypeCollectionMethodID;
     }
 
     $scope.selectedCollectionMethodIsRate = function () {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === 2;
+            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.RateObservationTypeCollectionMethodID;
     }
 
     $scope.selectedCollectionMethodIsPassFail = function () {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === 3;
+            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.PassFailObservationTypeCollectionMethodID;
     }
 
     $scope.selectedCollectionMethodIsPercentage = function () {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === 4;
+            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.PercentageObservationTypeCollectionMethodID;
     }
-
-
 
     $scope.filteredTargetTypes = function() {
         var compatibleTargetTypeIDs = _($scope.AngularViewData.ObservationTypeSpecificationSimples).filter(function (f) {            

@@ -94,6 +94,11 @@ namespace Neptune.Web.Models
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
         public bool ThresholdPercentDecline => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
 
+        public bool IsObservationTypeCollectionMethodDiscreteValue => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.DiscreteValue;
+        public bool IsObservationTypeCollectionMethodRate => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Rate;
+        public bool IsObservationTypeCollectionMethodPassFail => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail;
+        public bool IsObservationTypeCollectionMethodPercentage => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Percentage;
+
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";
     }
 
