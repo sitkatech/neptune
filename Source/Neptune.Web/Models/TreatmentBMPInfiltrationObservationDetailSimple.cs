@@ -57,21 +57,6 @@ namespace Neptune.Web.Models
             HasReadings = treatmentBMPInfiltrationReadingSimples.Any();
         }
 
-        /// <summary>
-        /// Constructor for building a new simple object with the POCO class
-        /// </summary>
-        public TreatmentBMPInfiltrationObservationDetailSimple(TreatmentBMPObservationDetail treatmentBMPObservationDetail)
-        {
-            TreatmentBMPObservationDetailID = treatmentBMPObservationDetail.TreatmentBMPObservationDetailID;
-            TreatmentBMPObservationDetailTypeID = treatmentBMPObservationDetail.TreatmentBMPObservationDetailTypeID;
-
-            TreatmentBMPObservationValue = treatmentBMPObservationDetail.TreatmentBMPObservationValue;
-            Notes = treatmentBMPObservationDetail.Notes;  
-
-            TreatmentBMPInfiltrationReadingSimples = treatmentBMPObservationDetail.TreatmentBMPInfiltrationReadings.Select(x => new TreatmentBMPInfiltrationReadingSimple(x)).OrderBy(x => x.ReadingTime).ToList();
-            HasReadings = treatmentBMPObservationDetail.TreatmentBMPInfiltrationReadings.Any();
-        }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();           

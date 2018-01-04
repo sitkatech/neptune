@@ -50,17 +50,6 @@ namespace Neptune.Web.Models
             TreatmentBMPObservationDetailID = treatmentBMPObservationDetailID;
             ReadingValue = readingValue;
             ReadingTime = readingTime;
-        } 
-        /// <summary>
-        /// Constructor for building a new simple object with the POCO class
-        /// </summary>
-        public TreatmentBMPInfiltrationReadingSimple(TreatmentBMPInfiltrationReading treatmentBMPInfiltrationReading)
-            : this()
-        {
-            TreatmentBMPInfiltrationReadingID = treatmentBMPInfiltrationReading.TreatmentBMPInfiltrationReadingID;
-            TreatmentBMPObservationDetailID = treatmentBMPInfiltrationReading.TreatmentBMPObservationDetailID;
-            ReadingValue = treatmentBMPInfiltrationReading.ReadingValue;
-            ReadingTime = treatmentBMPInfiltrationReading.ReadingTime;
-        }
+        }        
     }
 }

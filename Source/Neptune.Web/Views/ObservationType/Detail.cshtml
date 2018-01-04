@@ -1,0 +1,80 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
+@using Microsoft.Web.Mvc
+@using Neptune.Web.Security
+@inherits Neptune.Web.Views.ObservationType.Detail
+@section JavascriptAndStylesContent
+{
+}
+
+@section RightOfPageTitle
+{
+    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        <a class="pull-right" href="@ViewDataTyped.ObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
+    }
+}
+@if (ViewDataTyped.UserHasObservationTypeManagePermissions)
+{
+    <div>
+        <a class="btn backButton" href="@ViewDataTyped.ObservationTypeIndexUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left") Back to all @FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()</a>
+    </div>
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Basics
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Name")</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationThresholdType)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationTargetType)</label>
+                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="schemaDetails"></div>
+
+</div>
+
+<script type="text/javascript">  
+    $(document).ready(function () {
+        $("#schemaDetails").load('@(Url.Content(ViewDataTyped.ViewSchemaDetailUrl))');
+    });
+</script>  

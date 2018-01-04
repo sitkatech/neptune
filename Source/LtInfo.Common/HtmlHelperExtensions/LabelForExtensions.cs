@@ -168,6 +168,21 @@ namespace LtInfo.Common.HtmlHelperExtensions
             return LabelWithSugarFor(html, fieldDefinition, DefaultPopupWidth);
         }
 
+        public static MvcHtmlString LabelWithSugarFor(this HtmlHelper html, IFieldDefinition fieldDefinition, bool hasRequiredAttribute)
+        {
+            var labelText = fieldDefinition.GetFieldDefinitionLabel();
+            var fullHtmlFieldID = labelText.Replace(" ", "");
+            // in this case, we are not trying to tie it to an actual viewmodel; we only want it to be safe as an id to find by jquery
+            return LabelWithSugarFor(fieldDefinition, fullHtmlFieldID, DefaultPopupWidth, DisplayStyle.HelpIconWithLabel, hasRequiredAttribute, labelText);
+        }
+
+        private static MvcHtmlString LabelWithSugarFor(IFieldDefinition fieldDefinition, string fullHtmlFieldID, int popupWidth, DisplayStyle displayStyle, bool hasRequiredAttribute, string labelText)
+        {
+            var fieldDefinitionData = fieldDefinition.GetFieldDefinitionData();
+            var urlToContent = fieldDefinition.GetContentUrl();
+            return LabelWithFieldDefinitionForImpl(labelText, fullHtmlFieldID, fieldDefinitionData, urlToContent, popupWidth, displayStyle, hasRequiredAttribute);
+        }
+
         /// <summary>
         /// Does what LabelWithHelpFor does and adds a help icon and with custom label text
         /// </summary>

@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
             var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(observationType);
 
             Check.Assert(treatmentBMPTypeObservationType != null,
-                $"The Observation Type '{observationType.ObservationTypeDisplayName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeDisplayName}'.");
+                $"The Observation Type '{observationType.ObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
             return treatmentBMPTypeObservationType;
         }
 

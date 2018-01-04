@@ -28,16 +28,6 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPType
     {
-        public static List<int> GetTreatmentBMPTypeIDsWhereDesignDepthIsRequired()
-        {
-            var treatmentBMPTypes = All.Where(x => x.GetTreatmentBMPTypeObservationTypeOrDefault(ObservationType.MaterialAccumulation) != null);
-            return treatmentBMPTypes.Select(x => x.TreatmentBMPTypeID).ToList();
-        }
-
-        public static bool RequiresDesignDepth(int treatmentBMPTypeID)
-        {
-            return GetTreatmentBMPTypeIDsWhereDesignDepthIsRequired().Contains(treatmentBMPTypeID);
-        }
 
         public List<ObservationType> GetObservationTypes()
         {
@@ -46,108 +36,5 @@ namespace Neptune.Web.Models
         }
         
     }
-
-    public partial class TreatmentBMPTypeDryBasin
-    {
-       
-    }
-
-    public partial class TreatmentBMPTypeWetBasin
-    {
-        public double CalculateVegetativeCoverMaxThresholdFromBenchmarkAndDeviation(double benchmark, double deviation)
-        {
-            if (benchmark <= 0)
-            {
-                throw new ArgumentException("Benchmark value was less than or equal to zero");
-            }
-            if (deviation <= 0 || deviation > 100)
-            {
-                throw new ArgumentException("Threshold Deviation value was less than or equal to zero");
-            }
-
-            return benchmark + deviation;
-        }
-
-        public double CalculateVegetativeCoverMinThresholdFromBenchmarkAndDeviation(double benchmark, double deviation)
-        {
-            if (benchmark <= 0)
-            {
-                throw new ArgumentException("Benchmark value was less than or equal to zero");
-            }
-            if (deviation <= 0 || deviation > 100)
-            {
-                throw new ArgumentException("Threshold Deviation value was less than or equal to zero");
-            }
-
-            return benchmark - deviation;        
-        }
-
-        public double CalculateVegetativeCoverBenchmarkFromMinAndMaxThresholds(double minThreshold, double maxThreshold)
-        {
-            return (minThreshold + maxThreshold)/2;
-        }
-
-        public double CalculateVegetativeCoverDeviationFromMinAndMaxThresholds(double minThreshold, double maxThreshold)
-        {
-            if (maxThreshold <= minThreshold)
-            {
-                throw new ArgumentException("Maximum Threshold value was greater than or equal to the Minimum Threshold value");
-            }
-            var benchmark = CalculateVegetativeCoverBenchmarkFromMinAndMaxThresholds(minThreshold, maxThreshold);
-
-            //return (benchmark - minThreshold)/benchmark*100;
-            return benchmark - minThreshold;
-        }
-        
-    }
-
-    public partial class TreatmentBMPTypeInfiltrationBasin
-    {
-       
-    }
-
-    public partial class TreatmentBMPTypeTreatmentVault
-    {
-
-    }
-
-    public partial class TreatmentBMPTypeCartridgeFilter
-    {
-        
-    }
-
-    public partial class TreatmentBMPTypeBedFilter
-    {
-       
-    }
-
-    public partial class TreatmentBMPTypeBioFilter
-    {
-       
-    }
-
-    public partial class TreatmentBMPTypePorousPavement
-    {
-        
-    }
-
-    public partial class TreatmentBMPTypeSedimentTrap
-    {
-        
-    }
-
-    public partial class TreatmentBMPTypeDropInlet
-    {
-        
-    }
-
-    public partial class TreatmentBMPTypeSettlingBasin
-    {
-        
-    }
-
-    public partial class TreatmentBMPTypeInfiltrationFeature
-    {
-        
-    }
+    
 }

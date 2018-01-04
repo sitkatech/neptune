@@ -107,4 +107,12 @@ namespace Neptune.Web.Models
             return SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());
         }
     }
+
+    public partial class NeptunePageTypeObservationTypes
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+        }
+    }
 }

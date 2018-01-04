@@ -39,7 +39,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public readonly string MapFormID;
         public readonly string TreatmentBMPInformationContainer;
         public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly List<int> RequiresDesignDepthBMPTypeIDs;
         public readonly string TreatmentBMPIndexUrl;
 
         public EditViewData(Person currentPerson,
@@ -62,11 +61,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
-            TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeDisplayName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeDisplayName);
+            TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
             TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";
-            RequiresDesignDepthBMPTypeIDs = Models.TreatmentBMPType.GetTreatmentBMPTypeIDsWhereDesignDepthIsRequired();
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());  
         }
     }

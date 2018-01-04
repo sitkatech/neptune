@@ -64,6 +64,8 @@ namespace Neptune.Web.Models
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(this);
             this.ObservationTypeID = observationType.ObservationTypeID;
+            this.ObservationType = observationType;
+            observationType.TreatmentBMPBenchmarkAndThresholds.Add(this);
             this.BenchmarkValue = benchmarkValue;
             this.ThresholdValue = thresholdValue;
         }
@@ -101,7 +103,7 @@ namespace Neptune.Web.Models
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        public ObservationType ObservationType { get { return ObservationType.AllLookupDictionary[ObservationTypeID]; } }
+        public virtual ObservationType ObservationType { get; set; }
 
         public static class FieldLengths
         {

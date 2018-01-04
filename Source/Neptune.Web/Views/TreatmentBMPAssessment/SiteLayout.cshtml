@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @inherits Neptune.Web.Views.TreatmentBMPAssessment.SiteLayout
 
 @{
-    SetLayout("~/Areas/Stormwater/Views/Shared/SiteLayout.cshtml", ViewDataTyped);
+    SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped);
 }
 
 <div>
@@ -33,9 +33,9 @@ Source code is available upon request via <support@sitkatech.com>.
                     <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
                         <a  href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
                     </li>
-                    @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.SortOrder))
+                    @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
                     {
-                        <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeDisplayName ? "active" : string.Empty)">
+                        <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
                             <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPAssessmentID))">                                
                                 @if (observationType.IsComplete(ViewDataTyped.TreatmentBMPAssessment))
                                 {
@@ -45,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                 {
                                     <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
                                 }
-                                <span>@observationType.ObservationTypeDisplayName</span>
+                                <span>@observationType.ObservationTypeName</span>
                             </a>
                         </li>
                     }

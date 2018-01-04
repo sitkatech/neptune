@@ -36,7 +36,7 @@ namespace Neptune.Web.Models
                 var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
-                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeDisplayName}) on Assessment Dated {assessmentDate}";            
+                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";            
             } 
         }
     }

@@ -108,7 +108,7 @@ namespace Neptune.Web.Controllers
 
         private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, 0, 0);
+            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID);
         }
 
         [HttpGet]
@@ -156,7 +156,7 @@ namespace Neptune.Web.Controllers
                 }
             }
 
-            var treatmentBMPTypes = TreatmentBMPType.All;
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
             var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox(), false) { AllowFullScreen = false };
             var mapFormID = "treatmentBMPLocation";

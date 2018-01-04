@@ -84,11 +84,7 @@ namespace Neptune.Web.Views.Shared
             if (measurementUnitType == MeasurementUnitType.Percent)
             {
                 return $"{actualValue:F2}%";
-            }
-            if (measurementUnitType == MeasurementUnitType.Dollars)
-            {
-                return actualValue.ToString("C0");
-            }
+            }           
             var unitLabel = measurementUnitType.LegendDisplayName == null ? String.Empty : $" {measurementUnitType.LegendDisplayName}";
             return $"{actualValue.ToString(CultureInfo.InvariantCulture)}{unitLabel}";
         }

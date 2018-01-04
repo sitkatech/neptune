@@ -55,23 +55,8 @@ Source code is available upon request via <support@sitkatech.com>.
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeDisplayName</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-5 control-label text-right">Number of Inlets</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.InletCount</div>
-                </div>
-                <div class="row">
-                    <label class="col-sm-5 control-label text-right">Number of Outlets</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OutletCount</div>
-                </div>
-                @if (TreatmentBMPType.RequiresDesignDepth(ViewDataTyped.TreatmentBMP.TreatmentBMPTypeID))
-                {
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPDesignDepth)</label>
-                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.DesignDepth ft</div>
-                    </div>
-                }
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
+                </div>                        
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.StormwaterJurisdiction, "Jurisdiction")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
@@ -111,10 +96,10 @@ Source code is available upon request via <support@sitkatech.com>.
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.SortOrder))
+                        @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.ObservationTypeName))
                         {
                             <tr>
-                                <td>@observationType.ObservationTypeDisplayName</td>
+                                <td>@observationType.ObservationTypeName</td>
                                 <td>@ViewDataTyped.TreatmentBMP.GetFormattedBenchmarkValue(observationType)</td>
                                 <td>@ViewDataTyped.TreatmentBMP.GetFormattedThresholdValue(observationType, false)</td>
                             </tr>
