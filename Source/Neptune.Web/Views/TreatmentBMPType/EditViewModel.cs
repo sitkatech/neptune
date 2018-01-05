@@ -41,6 +41,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string TreatmentBMPTypeName { get; set; }
 
         [Required]
+        [StringLength(Models.TreatmentBMPType.FieldLengths.TreatmentBMPTypeDescription)]
+        [DisplayName("Description")]
+        public string TreatmentBMPTypeDescription { get; set; }
+
+        [Required]
         public List<TreatmentBMPTypeObservationTypeSimple> TreatmentBMPTypeObservationTypeSimples { get; set; }
 
 
@@ -55,21 +60,33 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
+            TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
             TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes
                 .Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
         }
 
 
-        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType, List<TreatmentBMPTypeObservationType> currentTreatmentBMPTypeObservationTypes,
+        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType, List<TreatmentBMPTypeObservationType> 
+            currentTreatmentBMPTypeObservationTypes,
             IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
+            treatmentBMPType.TreatmentBMPTypeDescription = TreatmentBMPTypeDescription;
 
             var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
             if (TreatmentBMPTypeObservationTypeSimples != null)
             {
                 // Completely rebuild the list
-                updatedTreatmentBMPTypeObservationTypes = TreatmentBMPTypeObservationTypeSimples.Select(x => new TreatmentBMPTypeObservationType(treatmentBMPType.TreatmentBMPTypeID, x.ObservationTypeID, x.AssessmentScoreWeight)).ToList();
+                updatedTreatmentBMPTypeObservationTypes = TreatmentBMPTypeObservationTypeSimples.Select(x =>
+                {
+                    return new TreatmentBMPTypeObservationType(ModelObjectHelpers.NotYetAssignedID,
+                        treatmentBMPType.TreatmentBMPTypeID,
+                        x.ObservationTypeID,
+                        x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value ? null : x.AssessmentScoreWeight,
+                        x.DefaultThresholdValue,
+                        x.DefaultBenchmarkValue,
+                        x.OverrideAssessmentScoreIfFailing);
+                }).ToList();
             }
 
             currentTreatmentBMPTypeObservationTypes.Merge(updatedTreatmentBMPTypeObservationTypes,
@@ -78,14 +95,23 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 (x, y) =>
                 {
                     x.AssessmentScoreWeight = y.AssessmentScoreWeight;
+                    x.DefaultThresholdValue = y.DefaultThresholdValue;
+                    x.DefaultBenchmarkValue = y.DefaultBenchmarkValue;
+                    x.OverrideAssessmentScoreIfFailing = y.OverrideAssessmentScoreIfFailing;
                 });
-
-
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+
+            if (!TreatmentBMPTypeObservationTypeSimples.Any())
+            {
+                validationResults.Add(new ValidationResult("A Treatment BMP Type must have at least one Observation Type."));
+            }
+
+            var notPassFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID);
+            var passFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
 
 
             return validationResults;
@@ -96,12 +122,18 @@ namespace Neptune.Web.Views.TreatmentBMPType
     {
         public int TreatmentBMPTypeID { get; }
         public int ObservationTypeID { get; }
-        public double AssessmentScoreWeight { get; }
+        public double? AssessmentScoreWeight { get; }
+        public double? DefaultThresholdValue { get; }
+        public double? DefaultBenchmarkValue { get; }
+        public bool? OverrideAssessmentScoreIfFailing { get; }
         public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeObservationType treatmentBMPTypeObservationType)
         {
             TreatmentBMPTypeID = treatmentBMPTypeObservationType.TreatmentBMPTypeID;
             ObservationTypeID = treatmentBMPTypeObservationType.ObservationTypeID;
             AssessmentScoreWeight = treatmentBMPTypeObservationType.AssessmentScoreWeight;
+            DefaultThresholdValue = treatmentBMPTypeObservationType.DefaultThresholdValue;
+            DefaultBenchmarkValue = treatmentBMPTypeObservationType.DefaultBenchmarkValue;
+            OverrideAssessmentScoreIfFailing = treatmentBMPTypeObservationType.OverrideAssessmentScoreIfFailing;
         }
     }
 }

@@ -16,7 +16,13 @@
         return observationTypeToFind.ObservationTypeName;
     };
 
-    $scope.getObservationType = function (observationTypeID) { return _.find($scope.AngularViewData.ObservationTypes, function (f) { return observationTypeID == f.ObservationTypeID; }); };
+    $scope.getObservationType = function(observationTypeID) {
+         return _.find($scope.AngularViewData.ObservationTypes, function (f) { return observationTypeID == f.ObservationTypeID; });
+    };
+
+    $scope.observationTypeHasBenchmarkAndThresholds = function(observationTypeID) {
+        return $scope.getObservationType(observationTypeID).HasBenchmarkAndThresholds;
+    }
 
     $scope.getWeightTotal = function () {
         return _.reduce($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (m, x) { return m + x.AssessmentScoreWeight; }, 0);
@@ -37,7 +43,10 @@
     $scope.createNewRow = function (observationTypeID) {
         var newTreatmentBMPTypeObservationTypeSimple = {
             ObservationTypeID: observationTypeID,
-            AssessmentScoreWeight: null
+            AssessmentScoreWeight: null,
+            DefaultThresholdValue: null,
+            DefaultBenchmarkValue: null,
+            OverrideAssessmentScoreWeight: null
         };
         return newTreatmentBMPTypeObservationTypeSimple;
     };

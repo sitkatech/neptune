@@ -53,6 +53,9 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionMaximumNumberOfObservations MaximumNumberOfObservations = FieldDefinitionMaximumNumberOfObservations.Instance;
         public static readonly FieldDefinitionMinimumValueOfEachObservation MinimumValueOfEachObservation = FieldDefinitionMinimumValueOfEachObservation.Instance;
         public static readonly FieldDefinitionMaximumValueOfEachObservation MaximumValueOfEachObservation = FieldDefinitionMaximumValueOfEachObservation.Instance;
+        public static readonly FieldDefinitionDefaultThresholdValue DefaultThresholdValue = FieldDefinitionDefaultThresholdValue.Instance;
+        public static readonly FieldDefinitionDefaultBenchmarkValue DefaultBenchmarkValue = FieldDefinitionDefaultBenchmarkValue.Instance;
+        public static readonly FieldDefinitionOverrideScoreIfObservationFails OverrideScoreIfObservationFails = FieldDefinitionOverrideScoreIfObservationFails.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -62,7 +65,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, OverrideScoreIfObservationFails };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -151,6 +154,10 @@ namespace Neptune.Web.Models
                     return ChartLastUpdatedDate;
                 case FieldDefinitionEnum.ConveyanceFunctionsAsIntended:
                     return ConveyanceFunctionsAsIntended;
+                case FieldDefinitionEnum.DefaultBenchmarkValue:
+                    return DefaultBenchmarkValue;
+                case FieldDefinitionEnum.DefaultThresholdValue:
+                    return DefaultThresholdValue;
                 case FieldDefinitionEnum.ExternalLinks:
                     return ExternalLinks;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
@@ -183,6 +190,8 @@ namespace Neptune.Web.Models
                     return Organization;
                 case FieldDefinitionEnum.OrganizationType:
                     return OrganizationType;
+                case FieldDefinitionEnum.OverrideScoreIfObservationFails:
+                    return OverrideScoreIfObservationFails;
                 case FieldDefinitionEnum.Password:
                     return Password;
                 case FieldDefinitionEnum.PhotoCaption:
@@ -253,7 +262,10 @@ namespace Neptune.Web.Models
         MinimumNumberOfObservations = 32,
         MaximumNumberOfObservations = 33,
         MinimumValueOfEachObservation = 34,
-        MaximumValueOfEachObservation = 35
+        MaximumValueOfEachObservation = 35,
+        DefaultThresholdValue = 36,
+        DefaultBenchmarkValue = 37,
+        OverrideScoreIfObservationFails = 38
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -464,5 +476,23 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionMaximumValueOfEachObservation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionMaximumValueOfEachObservation Instance = new FieldDefinitionMaximumValueOfEachObservation(35, @"MaximumValueOfEachObservation", @"Maximum Value of Each Observation", @"", true);
+    }
+
+    public partial class FieldDefinitionDefaultThresholdValue : FieldDefinition
+    {
+        private FieldDefinitionDefaultThresholdValue(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDefaultThresholdValue Instance = new FieldDefinitionDefaultThresholdValue(36, @"DefaultThresholdValue", @"Default Threshold Value", @"", true);
+    }
+
+    public partial class FieldDefinitionDefaultBenchmarkValue : FieldDefinition
+    {
+        private FieldDefinitionDefaultBenchmarkValue(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDefaultBenchmarkValue Instance = new FieldDefinitionDefaultBenchmarkValue(37, @"DefaultBenchmarkValue", @"Default Benchmark Value", @"", true);
+    }
+
+    public partial class FieldDefinitionOverrideScoreIfObservationFails : FieldDefinition
+    {
+        private FieldDefinitionOverrideScoreIfObservationFails(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionOverrideScoreIfObservationFails Instance = new FieldDefinitionOverrideScoreIfObservationFails(38, @"OverrideScoreIfObservationFails", @"Override Score if Observation Fails", @"", true);
     }
 }

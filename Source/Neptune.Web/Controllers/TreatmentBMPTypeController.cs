@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -70,15 +71,16 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel);
             }
-            var treatmentBMPType = new TreatmentBMPType(String.Empty);
+            var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription);
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.Add(treatmentBMPType);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes.Load();
-            var treatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeObservationTypes.ToList();
+            var treatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
             var allTreatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Local;
 
             viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes);
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.Add(treatmentBMPType);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+           
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} succesfully created.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(c => c.Detail(treatmentBMPType.PrimaryKey)));

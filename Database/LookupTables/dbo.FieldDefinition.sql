@@ -37,4 +37,7 @@ VALUES
 (32, N'MinimumNumberOfObservations', N'Minimum Number of Observations', '', 1),
 (33, N'MaximumNumberOfObservations', N'Maximum Number of Observations', '', 1),
 (34, N'MinimumValueOfEachObservation', N'Minimum Value of Each Observation', '', 1),
-(35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1)
+(35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1),
+(36, N'DefaultThresholdValue', N'Default Threshold Value', '', 1),
+(37, N'DefaultBenchmarkValue', N'Default Benchmark Value', '', 1),
+(38, N'OverrideScoreIfObservationFails', N'Override Score if Observation Fails', '', 1)

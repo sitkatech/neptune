@@ -23,6 +23,8 @@ using System;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Views.ObservationType;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
 {
@@ -101,8 +103,68 @@ namespace Neptune.Web.Models
         public bool IsObservationTypeCollectionMethodPassFail => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail;
         public bool IsObservationTypeCollectionMethodPercentage => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Percentage;
 
+        public DiscreteValueSchema DiscreteValueSchema => JsonConvert.DeserializeObject<DiscreteValueSchema>(ObservationTypeSchema);
+        public RateSchema RateSchema => JsonConvert.DeserializeObject<RateSchema>(ObservationTypeSchema);
+        public PassFailSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailSchema>(ObservationTypeSchema);
+        public PercentageSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageSchema>(ObservationTypeSchema);
+
+        public MeasurementUnitType BenchmarkMeasurementUnitType()
+        {
+            var observationTypeCollectionMethod = ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return MeasurementUnitType.All
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteValueSchema.MeasurementUnitTypeID);
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return MeasurementUnitType.All
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateSchema.DiscreteRateMeasurementUnitTypeID);
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return null;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return MeasurementUnitType.Percent;
+                default:
+                    return null;
+            }
+        }
+
+        public MeasurementUnitType ThresholdMeasurementUnitType()
+        {
+            
+            var observationThresholdType = ObservationTypeSpecification.ObservationThresholdType;
+            switch (observationThresholdType.ToEnum)
+            {
+                case ObservationThresholdTypeEnum.DiscreteValue:
+                    return BenchmarkMeasurementUnitType();
+                case ObservationThresholdTypeEnum.PercentFromBenchmark:
+                    return ThresholdMeasurementUnitForPercentFromBenchmark();
+                case ObservationThresholdTypeEnum.None:
+                    return null;
+                default:
+                    return null;
+            }
+        }
+
+        private MeasurementUnitType ThresholdMeasurementUnitForPercentFromBenchmark()
+        {
+            var observationTargetType = ObservationTypeSpecification.ObservationTargetType;
+            switch (observationTargetType.ToEnum)
+            {
+                case ObservationTargetTypeEnum.PassFail:
+                    return null;
+                case ObservationTargetTypeEnum.High:
+                    return MeasurementUnitType.PercentDecline;
+                case ObservationTargetTypeEnum.Low:
+                    return MeasurementUnitType.PercentIncrease;
+                case ObservationTargetTypeEnum.SpecificValue:
+                    return MeasurementUnitType.PercentDeviation;
+                default:
+                    return null;
+            }
+        }
+
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";
     }
 
-   
+
 }
