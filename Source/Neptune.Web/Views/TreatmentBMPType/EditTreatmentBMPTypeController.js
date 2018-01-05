@@ -28,11 +28,7 @@
         if ($scope.ObservationTypeToAdd == null) {
             return;
         }
-        var newTreatmentBMPTypeObservationTypeSimple = $scope.createNewRow($scope.ObservationTypeToAdd.ObservationTypeID);
-
-        if ($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples == null) {
-            $scope.AngularModel.TreatmentBMPTypeObservationTypeSimples = [];
-        }
+        var newTreatmentBMPTypeObservationTypeSimple = $scope.createNewRow($scope.ObservationTypeToAdd.ObservationTypeID);       
 
         $scope.AngularModel.TreatmentBMPTypeObservationTypeSimples.push(newTreatmentBMPTypeObservationTypeSimple);
         $scope.resetObservationTypeToAdd();
@@ -41,8 +37,7 @@
     $scope.createNewRow = function (observationTypeID) {
         var newTreatmentBMPTypeObservationTypeSimple = {
             ObservationTypeID: observationTypeID,
-            SecuredAmount: null,
-            UnsecuredAmount: null
+            AssessmentScoreWeight: null
         };
         return newTreatmentBMPTypeObservationTypeSimple;
     };
@@ -51,5 +46,9 @@
 
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
+
+    if ($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples == null) {
+        $scope.AngularModel.TreatmentBMPTypeObservationTypeSimples = [];
+    }
     $scope.resetObservationTypeToAdd();
 });

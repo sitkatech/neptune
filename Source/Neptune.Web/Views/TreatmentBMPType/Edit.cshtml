@@ -50,11 +50,10 @@
             <label class="control-label">Observation Type to Add:</label>
             <div class="input-group">
                 <select ng-model="ObservationTypeToAdd"
-                        data-live-search="true"
-                        data-container="body"
+                        class="form-control"
                         data-title="Select an Observation Type to Add"
-                        data-width="100%" selectpicker
-                        data-ng-options="observationType as observationType.ObservationTypeName for observationType in filteredObservationTypes() track by observationType.ObservationTypeID">
+                        style="width: 100%"
+                        ng-options="observationType as observationType.ObservationTypeName for observationType in filteredObservationTypes() track by observationType.ObservationTypeID">
                     <option value="null" disabled selected>Select an Observation Type to Add</option>
                 </select>
                 <span class="input-group-btn">

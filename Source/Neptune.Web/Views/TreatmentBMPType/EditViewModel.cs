@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -59,9 +60,26 @@ namespace Neptune.Web.Views.TreatmentBMPType
         }
 
 
-        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType, Person currentPerson)
+        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType, List<TreatmentBMPTypeObservationType> currentTreatmentBMPTypeObservationTypes,
+            IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
+
+            var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
+            if (TreatmentBMPTypeObservationTypeSimples != null)
+            {
+                // Completely rebuild the list
+                updatedTreatmentBMPTypeObservationTypes = TreatmentBMPTypeObservationTypeSimples.Select(x => new TreatmentBMPTypeObservationType(treatmentBMPType.TreatmentBMPTypeID, x.ObservationTypeID, x.AssessmentScoreWeight)).ToList();
+            }
+
+            currentTreatmentBMPTypeObservationTypes.Merge(updatedTreatmentBMPTypeObservationTypes,
+                allTreatmentBMPTypeObservationTypes,
+                (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.ObservationTypeID == y.ObservationTypeID,
+                (x, y) =>
+                {
+                    x.AssessmentScoreWeight = y.AssessmentScoreWeight;
+                });
+
 
         }
 
