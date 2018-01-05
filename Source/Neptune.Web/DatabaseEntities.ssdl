@@ -514,6 +514,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="TreatmentBMPTypeDescription" Type="varchar" Nullable="false" MaxLength="1000" />
   </EntityType>
   <EntityType Name="TreatmentBMPTypeObservationType">
     <Key>
@@ -523,9 +524,10 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeID" Type="int" Nullable="false" />
-    <Property Name="AssessmentScoreWeight" Type="float" Nullable="false" />
+    <Property Name="AssessmentScoreWeight" Type="float" />
     <Property Name="DefaultThresholdValue" Type="float" />
     <Property Name="DefaultBenchmarkValue" Type="float" />
+    <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />

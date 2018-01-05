@@ -319,6 +319,7 @@
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPTypeName" ColumnName="TreatmentBMPTypeName" />
+          <ScalarProperty Name="TreatmentBMPTypeDescription" ColumnName="TreatmentBMPTypeDescription" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -332,6 +333,7 @@
           <ScalarProperty Name="AssessmentScoreWeight" ColumnName="AssessmentScoreWeight" />
           <ScalarProperty Name="DefaultThresholdValue" ColumnName="DefaultThresholdValue" />
           <ScalarProperty Name="DefaultBenchmarkValue" ColumnName="DefaultBenchmarkValue" />
+          <ScalarProperty Name="OverrideAssessmentScoreIfFailing" ColumnName="OverrideAssessmentScoreIfFailing" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -11,4 +11,7 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (8, 'Feet', 'feet', 'ft', 'Foot', 2),
 (9, 'Inches', 'inches', 'in', 'inch', 2),
 (10, 'InchesPerHour', 'in/hr', 'in/hr', 'Inches Per Hour', 2),
-(11, 'Seconds', 'seconds', 's', 'Second', 0)
+(11, 'Seconds', 'seconds', 's', 'Second', 0),
+(12, 'PercentDecline', '% decline', '% decline', '% decline', 0),
+(13, 'PercentIncrease', '% increase', '% increase', '% increase', 0),
+(14, 'PercentDeviation', '% deviation', '% deviation', '% deviation', 0)

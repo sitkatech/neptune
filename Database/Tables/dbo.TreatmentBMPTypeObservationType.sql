@@ -7,9 +7,10 @@ CREATE TABLE [dbo].[TreatmentBMPTypeObservationType](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[ObservationTypeID] [int] NOT NULL,
-	[AssessmentScoreWeight] [float] NOT NULL,
+	[AssessmentScoreWeight] [float] NULL,
 	[DefaultThresholdValue] [float] NULL,
 	[DefaultBenchmarkValue] [float] NULL,
+	[OverrideAssessmentScoreIfFailing] [bit] NULL,
  CONSTRAINT [PK_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPTypeObservationTypeID] ASC
@@ -31,3 +32,7 @@ ALTER TABLE [dbo].[TreatmentBMPTypeObservationType]  WITH CHECK ADD  CONSTRAINT 
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPTypeObservationType] CHECK CONSTRAINT [FK_TreatmentBMPTypeObservationType_TreatmentBMPType_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPTypeObservationType]  WITH CHECK ADD  CONSTRAINT [CK_AssessmentScoreWeightNullIfOverrideNotNull] CHECK  (([AssessmentScoreWeight] IS NOT NULL AND [OverrideAssessmentScoreIfFailing] IS NULL OR [AssessmentScoreWeight] IS NULL AND [OverrideAssessmentScoreIfFailing] IS NOT NULL))
+GO
+ALTER TABLE [dbo].[TreatmentBMPTypeObservationType] CHECK CONSTRAINT [CK_AssessmentScoreWeightNullIfOverrideNotNull]

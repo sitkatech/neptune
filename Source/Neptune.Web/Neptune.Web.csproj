@@ -210,6 +210,8 @@
     <Compile Include="Models\TreatmentBMPObservationDetailSimple.cs" />
     <Compile Include="Models\TreatmentBMPObservationDetailTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPType.cs" />
+    <Compile Include="Models\TreatmentBMPTypeModelExtensions.cs" />
+    <Compile Include="Models\TreatmentBMPTypeObservationType.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Security\LoggedInAndNotUnassignedRoleUnclassifiedFeature.cs" />
     <Compile Include="Security\NeptuneViewFeature.cs" />
@@ -546,6 +548,15 @@
     <Compile Include="Models\ObservationTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPObservationSimple.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentSimple.cs" />
+    <Compile Include="Views\TreatmentBMPType\Detail.cs" />
+    <Compile Include="Views\TreatmentBMPType\DetailViewData.cs" />
+    <Compile Include="Views\TreatmentBMPType\Edit.cs" />
+    <Compile Include="Views\TreatmentBMPType\EditViewData.cs" />
+    <Compile Include="Views\TreatmentBMPType\EditViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPType\Index.cs" />
+    <Compile Include="Views\TreatmentBMPType\IndexGridSpec.cs" />
+    <Compile Include="Views\TreatmentBMPType\IndexViewData.cs" />
+    <Compile Include="Models\TreatmentBMPTypeObservationTypeSimple.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -634,8 +645,6 @@
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\Instructions.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\InstructionsViewData.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\SiteLayout.cs" />
-    <Compile Include="Views\TreatmentBMPType\Index.cs" />
-    <Compile Include="Views\TreatmentBMPType\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\Detail.cs" />
     <Compile Include="Views\TreatmentBMP\DetailViewData.cs" />
     <Compile Include="Views\TreatmentBMP\Edit.cs" />
@@ -678,6 +687,7 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
     <Content Include="Views\User\PullUserFromKeystone.cshtml" />
@@ -688,7 +698,6 @@
     <Content Include="Views\Shared\ViewGoogleChart.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MoneyWholeNumber.cshtml" />
     <Compile Include="Views\GoogleChart\DownloadChartDataViewModel.cs" />
-    <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\AssessmentInformation.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\Detail.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\Score.cshtml" />
@@ -720,6 +729,9 @@
     <Content Include="Views\ObservationType\ViewRateSchemaDetail.cshtml" />
     <Content Include="Views\ObservationType\ViewPassFailSchemaDetail.cshtml" />
     <Content Include="Views\ObservationType\ViewPercentageSchemaDetail.cshtml" />
+    <Content Include="Views\TreatmentBMPType\Detail.cshtml" />
+    <Content Include="Views\TreatmentBMPType\Edit.cshtml" />
+    <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

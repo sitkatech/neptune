@@ -31,21 +31,23 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName) : this()
+        public TreatmentBMPType(int treatmentBMPTypeID, string treatmentBMPTypeName, string treatmentBMPTypeDescription) : this()
         {
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
+            this.TreatmentBMPTypeDescription = treatmentBMPTypeDescription;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPType(string treatmentBMPTypeName) : this()
+        public TreatmentBMPType(string treatmentBMPTypeName, string treatmentBMPTypeDescription) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeName = treatmentBMPTypeName;
+            this.TreatmentBMPTypeDescription = treatmentBMPTypeDescription;
         }
 
 
@@ -54,7 +56,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPType CreateNewBlank()
         {
-            return new TreatmentBMPType(default(string));
+            return new TreatmentBMPType(default(string), default(string));
         }
 
         /// <summary>
@@ -75,6 +77,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeID { get; set; }
         public int TenantID { get; private set; }
         public string TreatmentBMPTypeName { get; set; }
+        public string TreatmentBMPTypeDescription { get; set; }
         public int PrimaryKey { get { return TreatmentBMPTypeID; } set { TreatmentBMPTypeID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
@@ -84,6 +87,7 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int TreatmentBMPTypeName = 100;
+            public const int TreatmentBMPTypeDescription = 1000;
         }
     }
 }

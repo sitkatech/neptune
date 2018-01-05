@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue) : this()
+        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool? overrideAssessmentScoreIfFailing) : this()
         {
             this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
@@ -38,25 +38,25 @@ namespace Neptune.Web.Models
             this.AssessmentScoreWeight = assessmentScoreWeight;
             this.DefaultThresholdValue = defaultThresholdValue;
             this.DefaultBenchmarkValue = defaultBenchmarkValue;
+            this.OverrideAssessmentScoreIfFailing = overrideAssessmentScoreIfFailing;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeObservationType(int treatmentBMPTypeID, int observationTypeID, double assessmentScoreWeight) : this()
+        public TreatmentBMPTypeObservationType(int treatmentBMPTypeID, int observationTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.ObservationTypeID = observationTypeID;
-            this.AssessmentScoreWeight = assessmentScoreWeight;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPTypeObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType, double assessmentScoreWeight) : this()
+        public TreatmentBMPTypeObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -66,7 +66,6 @@ namespace Neptune.Web.Models
             this.ObservationTypeID = observationType.ObservationTypeID;
             this.ObservationType = observationType;
             observationType.TreatmentBMPTypeObservationTypes.Add(this);
-            this.AssessmentScoreWeight = assessmentScoreWeight;
         }
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPTypeObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, ObservationType observationType)
         {
-            return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType, default(double));
+            return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType);
         }
 
         /// <summary>
@@ -96,9 +95,10 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int ObservationTypeID { get; set; }
-        public double AssessmentScoreWeight { get; set; }
+        public double? AssessmentScoreWeight { get; set; }
         public double? DefaultThresholdValue { get; set; }
         public double? DefaultBenchmarkValue { get; set; }
+        public bool? OverrideAssessmentScoreIfFailing { get; set; }
         public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
 
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

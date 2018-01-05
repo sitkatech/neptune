@@ -529,6 +529,7 @@
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="TreatmentBMPTypeDescription" Type="String" Nullable="false" MaxLength="1000" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPType" ToRole="TreatmentBMPs" />
     <NavigationProperty Name="TreatmentBMPTypeObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPType" ToRole="TreatmentBMPTypeObservationTypes" />
   </EntityType>
@@ -540,9 +541,10 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
-    <Property Name="AssessmentScoreWeight" Type="Double" Nullable="false" />
+    <Property Name="AssessmentScoreWeight" Type="Double" />
     <Property Name="DefaultThresholdValue" Type="Double" />
     <Property Name="DefaultBenchmarkValue" Type="Double" />
+    <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" />
     <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_ObservationType_ObservationTypeID" FromRole="TreatmentBMPTypeObservationTypes" ToRole="ObservationType" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPTypeObservationTypes" ToRole="TreatmentBMPType" />
   </EntityType>

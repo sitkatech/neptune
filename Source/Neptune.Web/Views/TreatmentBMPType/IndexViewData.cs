@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="IndexViewData.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<copyright file="IndexViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -29,21 +27,26 @@ namespace Neptune.Web.Views.TreatmentBMPType
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly Dictionary<string, List<Models.ObservationType>> ObservationTypeByTreatmentBMPTypeDictionary;
-        public readonly List<Models.TreatmentBMP> TreatmentBMPs;
-        public readonly List<Models.TreatmentBMPType> TreatmentBMPTypes;
-        public readonly string TreatmentBMPIndexUrl;
-      
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, List<Models.TreatmentBMPType> treatmentBMPTypes)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
-        {
-            PageTitle = "Treatment BMP Types";
-            var treatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes;
-            ObservationTypeByTreatmentBMPTypeDictionary = treatmentBMPTypes.ToDictionary(x => x.TreatmentBMPTypeName, x => treatmentBMPTypeObservationTypes.GetObservationTypesForTreatmentType(x).OrderBy(y => y.ObservationTypeName).ToList());
-            TreatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList();
-            TreatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
-            TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+        public readonly IndexGridSpec GridSpec;
+        public readonly string GridName;
+        public readonly string GridDataUrl;
+        public readonly string NewTreatmentBMPTypeUrl;
 
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
+            : base(currentPerson, neptunePage)
+        {
+            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+
+            NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(t => t.New());
+            GridSpec = new IndexGridSpec(currentPerson)
+            {
+                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                SaveFiltersInCookie = true                
+            };
+
+            GridName = "treatmentBMPTypeGrid";
+            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
         }
     }
 }

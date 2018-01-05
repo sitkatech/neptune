@@ -29,6 +29,9 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeInches Inches = MeasurementUnitTypeInches.Instance;
         public static readonly MeasurementUnitTypeInchesPerHour InchesPerHour = MeasurementUnitTypeInchesPerHour.Instance;
         public static readonly MeasurementUnitTypeSeconds Seconds = MeasurementUnitTypeSeconds.Instance;
+        public static readonly MeasurementUnitTypePercentDecline PercentDecline = MeasurementUnitTypePercentDecline.Instance;
+        public static readonly MeasurementUnitTypePercentIncrease PercentIncrease = MeasurementUnitTypePercentIncrease.Instance;
+        public static readonly MeasurementUnitTypePercentDeviation PercentDeviation = MeasurementUnitTypePercentDeviation.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -38,7 +41,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Number, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Number, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -131,6 +134,12 @@ namespace Neptune.Web.Models
                     return Number;
                 case MeasurementUnitTypeEnum.Percent:
                     return Percent;
+                case MeasurementUnitTypeEnum.PercentDecline:
+                    return PercentDecline;
+                case MeasurementUnitTypeEnum.PercentDeviation:
+                    return PercentDeviation;
+                case MeasurementUnitTypeEnum.PercentIncrease:
+                    return PercentIncrease;
                 case MeasurementUnitTypeEnum.Seconds:
                     return Seconds;
                 case MeasurementUnitTypeEnum.SquareFeet:
@@ -153,7 +162,10 @@ namespace Neptune.Web.Models
         Feet = 8,
         Inches = 9,
         InchesPerHour = 10,
-        Seconds = 11
+        Seconds = 11,
+        PercentDecline = 12,
+        PercentIncrease = 13,
+        PercentDeviation = 14
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -220,5 +232,23 @@ namespace Neptune.Web.Models
     {
         private MeasurementUnitTypeSeconds(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
         public static readonly MeasurementUnitTypeSeconds Instance = new MeasurementUnitTypeSeconds(11, @"Seconds", @"seconds", @"s", @"Second", 0);
+    }
+
+    public partial class MeasurementUnitTypePercentDecline : MeasurementUnitType
+    {
+        private MeasurementUnitTypePercentDecline(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypePercentDecline Instance = new MeasurementUnitTypePercentDecline(12, @"PercentDecline", @"% decline", @"% decline", @"% decline", 0);
+    }
+
+    public partial class MeasurementUnitTypePercentIncrease : MeasurementUnitType
+    {
+        private MeasurementUnitTypePercentIncrease(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypePercentIncrease Instance = new MeasurementUnitTypePercentIncrease(13, @"PercentIncrease", @"% increase", @"% increase", @"% increase", 0);
+    }
+
+    public partial class MeasurementUnitTypePercentDeviation : MeasurementUnitType
+    {
+        private MeasurementUnitTypePercentDeviation(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypePercentDeviation Instance = new MeasurementUnitTypePercentDeviation(14, @"PercentDeviation", @"% deviation", @"% deviation", @"% deviation", 0);
     }
 }
