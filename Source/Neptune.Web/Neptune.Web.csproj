@@ -685,6 +685,7 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
     <Content Include="Views\User\PullUserFromKeystone.cshtml" />

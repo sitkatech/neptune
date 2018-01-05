@@ -37,9 +37,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
         [Required]
         [StringLength(Models.TreatmentBMPType.FieldLengths.TreatmentBMPTypeName)]
         [DisplayName("Name of Treatment BMP Type")]
-        public string TreatmentBMPTypeName { get; set; }      
+        public string TreatmentBMPTypeName { get; set; }
 
-      
+        [Required]
+        public List<TreatmentBMPTypeObservationTypeSimple> TreatmentBMPTypeObservationTypeSimples { get; set; }
+
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -52,6 +54,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
+            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes
+                .Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
         }
 
 
@@ -67,6 +71,19 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
 
             return validationResults;
+        }
+    }
+
+    public class TreatmentBMPTypeObservationTypeSimple
+    {
+        public int TreatmentBMPTypeID { get; }
+        public int ObservationTypeID { get; }
+        public double AssessmentScoreWeight { get; }
+        public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeObservationType treatmentBMPTypeObservationType)
+        {
+            TreatmentBMPTypeID = treatmentBMPTypeObservationType.TreatmentBMPTypeID;
+            ObservationTypeID = treatmentBMPTypeObservationType.ObservationTypeID;
+            AssessmentScoreWeight = treatmentBMPTypeObservationType.AssessmentScoreWeight;
         }
     }
 }

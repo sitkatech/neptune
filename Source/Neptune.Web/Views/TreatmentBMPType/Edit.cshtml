@@ -42,9 +42,50 @@
                             @Html.ValidationMessageFor(m => m.TreatmentBMPTypeName)
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Observation Type to Add:</label>
+            <div class="input-group">
+                <select ng-model="ObservationTypeToAdd"
+                        data-live-search="true"
+                        data-container="body"
+                        data-title="Select an Observation Type to Add"
+                        data-width="100%" selectpicker
+                        data-ng-options="observationType as observationType.ObservationTypeName for observationType in filteredObservationTypes() track by observationType.ObservationTypeID">
+                    <option value="null" disabled selected>Select an Observation Type to Add</option>
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-neptune" type="button" ng-click="addRow()">
+                        <span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div style="overflow-x: auto" class="form-inline">
+            <table class="table" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypeSimples.length > 0">
+                <tr>
+                    <th></th>
+                    <th>@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
+                    <th style="text-align: right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
+                </tr>
+                <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
+                    <td>
+                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer"></span>
+                    </td>
+                    <td ng-bind="getObservationTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
+                    <td style="text-align: right">
+                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control " />
+                    </td>                    
+                </tr>
+                <tr>
+                    <th colspan="2">Total</th>
+                    <th style="text-align: right" ng-bind="getWeightTotal()">
+                    </th>                   
+                </tr>
+            </table>
         </div>
     </div>
     <div class="row">
