@@ -45,7 +45,6 @@ namespace Neptune.Web.Views.TreatmentBMPType
         [DisplayName("Description")]
         public string TreatmentBMPTypeDescription { get; set; }
 
-        [Required]
         public List<TreatmentBMPTypeObservationTypeSimple> TreatmentBMPTypeObservationTypeSimples { get; set; }
 
 
@@ -105,35 +104,37 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             var validationResults = new List<ValidationResult>();
 
-            if (!TreatmentBMPTypeObservationTypeSimples.Any())
+            if (TreatmentBMPTypeObservationTypeSimples == null || !TreatmentBMPTypeObservationTypeSimples.Any())
             {
                 validationResults.Add(new ValidationResult("A Treatment BMP Type must have at least one Observation Type."));
+                return validationResults;
             }
 
             var notPassFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID);
             var passFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
 
+            var notPassFailTreatmentBMPTypeObservationTypeSimples = TreatmentBMPTypeObservationTypeSimples.Where(x => notPassFailObservationTypes.Contains(x.ObservationTypeID)).ToList();
+
+            var passFailTreatmentBMPTypeObservationTypeSimples = TreatmentBMPTypeObservationTypeSimples.Where(x => passFailObservationTypes.Contains(x.ObservationTypeID)).ToList();
+
+            if (notPassFailTreatmentBMPTypeObservationTypeSimples.Any(x =>
+                    x.DefaultBenchmarkValue == null || x.DefaultThresholdValue == null))
+            {
+                validationResults.Add(new ValidationResult("Each Observation Type that has Benchmark and Thresholds must have Default Benchmark and Thresholds."));
+            }
+
+            if (notPassFailTreatmentBMPTypeObservationTypeSimples.Any(x =>x.AssessmentScoreWeight == null) || 
+                passFailTreatmentBMPTypeObservationTypeSimples.Any(x => (!x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value) && !x.AssessmentScoreWeight.HasValue))
+            {
+                validationResults.Add(new ValidationResult("Each Observation Type that does not override the Assessment Score if failing must have an Assessment Score Weight."));
+            }
+
+            if (TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 1)
+            {
+                validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 1."));
+            }
 
             return validationResults;
-        }
-    }
-
-    public class TreatmentBMPTypeObservationTypeSimple
-    {
-        public int TreatmentBMPTypeID { get; }
-        public int ObservationTypeID { get; }
-        public double? AssessmentScoreWeight { get; }
-        public double? DefaultThresholdValue { get; }
-        public double? DefaultBenchmarkValue { get; }
-        public bool? OverrideAssessmentScoreIfFailing { get; }
-        public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeObservationType treatmentBMPTypeObservationType)
-        {
-            TreatmentBMPTypeID = treatmentBMPTypeObservationType.TreatmentBMPTypeID;
-            ObservationTypeID = treatmentBMPTypeObservationType.ObservationTypeID;
-            AssessmentScoreWeight = treatmentBMPTypeObservationType.AssessmentScoreWeight;
-            DefaultThresholdValue = treatmentBMPTypeObservationType.DefaultThresholdValue;
-            DefaultBenchmarkValue = treatmentBMPTypeObservationType.DefaultBenchmarkValue;
-            OverrideAssessmentScoreIfFailing = treatmentBMPTypeObservationType.OverrideAssessmentScoreIfFailing;
         }
     }
 }

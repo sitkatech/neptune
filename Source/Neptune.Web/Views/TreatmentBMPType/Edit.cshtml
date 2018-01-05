@@ -101,10 +101,16 @@
 
                     @*if observation type is not pass/fail*@
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue" class="form-control" />
+                        <div class="input-group">
+                            <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue" class="form-control" aria-describedby="benchmarkUnit{{$index}}" />
+                            <span class="input-group-addon" id="benchmarkUnit{{$index}}" ng-bind="getObservationTypeBenchmarkUnit(treatmentBMPTypeObservationTypeSimple)"></span>
+                        </div>
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue" class="form-control" />
+                        <div class="input-group">
+                            <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue" class="form-control" aria-describedby="thresholdUnit{{$index}}" />
+                            <span class="input-group-addon" id="thresholdUnit{{$index}}" ng-bind="getObservationTypeThresholdUnit(treatmentBMPTypeObservationTypeSimple)"></span>
+                        </div>
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
                         <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control " />
@@ -115,10 +121,10 @@
 
                     @*if observation type is pass/fail*@
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input disabled="disabled" placeholder="Not Applicable" class="form-control" />
+
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input disabled="disabled" placeholder="Not Applicable" class="form-control" />
+
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
                         <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" />

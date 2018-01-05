@@ -16,6 +16,16 @@
         return observationTypeToFind.ObservationTypeName;
     };
 
+    $scope.getObservationTypeBenchmarkUnit = function (treatmentBMPTypeObservationTypeSimple) {
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        return observationTypeToFind.BenchmarkUnitLegendDisplayName;
+    };
+
+    $scope.getObservationTypeThresholdUnit = function (treatmentBMPTypeObservationTypeSimple) {
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        return observationTypeToFind.ThresholdUnitLegendDisplayName;
+    };
+
     $scope.getObservationType = function(observationTypeID) {
          return _.find($scope.AngularViewData.ObservationTypes, function (f) { return observationTypeID == f.ObservationTypeID; });
     };

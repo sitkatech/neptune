@@ -555,6 +555,7 @@
     <Compile Include="Views\TreatmentBMPType\Index.cs" />
     <Compile Include="Views\TreatmentBMPType\IndexGridSpec.cs" />
     <Compile Include="Views\TreatmentBMPType\IndexViewData.cs" />
+    <Compile Include="Models\TreatmentBMPTypeObservationTypeSimple.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
