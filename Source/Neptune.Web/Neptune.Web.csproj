@@ -211,6 +211,7 @@
     <Compile Include="Models\TreatmentBMPObservationDetailTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPType.cs" />
     <Compile Include="Models\TreatmentBMPTypeModelExtensions.cs" />
+    <Compile Include="Models\TreatmentBMPTypeObservationType.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Security\LoggedInAndNotUnassignedRoleUnclassifiedFeature.cs" />
     <Compile Include="Security\NeptuneViewFeature.cs" />

@@ -104,32 +104,39 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             var validationResults = new List<ValidationResult>();
 
+            var treatmentBMPTypesWithSameName = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Where(x => x.TreatmentBMPTypeName == TreatmentBMPTypeName);
+
+            if (treatmentBMPTypesWithSameName.Any(x => x.TreatmentBMPTypeID != TreatmentBMPTypeID))
+            {
+                validationResults.Add(new SitkaValidationResult<EditViewModel, string>("A Treatment BMP Type with this name already exists.", x => x.TreatmentBMPTypeName));
+            }
+
             if (TreatmentBMPTypeObservationTypeSimples == null || !TreatmentBMPTypeObservationTypeSimples.Any())
             {
                 validationResults.Add(new ValidationResult("A Treatment BMP Type must have at least one Observation Type."));
                 return validationResults;
             }
 
-            var notPassFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID);
-            var passFailObservationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
 
-            var notPassFailTreatmentBMPTypeObservationTypeSimples = TreatmentBMPTypeObservationTypeSimples.Where(x => notPassFailObservationTypes.Contains(x.ObservationTypeID)).ToList();
+            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID).Contains(y.ObservationTypeID)).ToList();
 
-            var passFailTreatmentBMPTypeObservationTypeSimples = TreatmentBMPTypeObservationTypeSimples.Where(x => passFailObservationTypes.Contains(x.ObservationTypeID)).ToList();
+            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList().Contains(y.ObservationTypeID)).ToList();
 
-            if (notPassFailTreatmentBMPTypeObservationTypeSimples.Any(x =>
-                    x.DefaultBenchmarkValue == null || x.DefaultThresholdValue == null))
+            var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeSimple>();
+            requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);
+            requiresAssessmentWeightSimples.AddRange(noBenchmarkAndThresholdsSimples.Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value));
+
+            if (hasBenchmarkAndThresholdsSimples.Any(x => x.DefaultBenchmarkValue == null || x.DefaultThresholdValue == null))
             {
                 validationResults.Add(new ValidationResult("Each Observation Type that has Benchmark and Thresholds must have Default Benchmark and Thresholds."));
             }
 
-            if (notPassFailTreatmentBMPTypeObservationTypeSimples.Any(x =>x.AssessmentScoreWeight == null) || 
-                passFailTreatmentBMPTypeObservationTypeSimples.Any(x => (!x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value) && !x.AssessmentScoreWeight.HasValue))
+            if (requiresAssessmentWeightSimples.Any(x => x.AssessmentScoreWeight == null))
             {
                 validationResults.Add(new ValidationResult("Each Observation Type that does not override the Assessment Score if failing must have an Assessment Score Weight."));
             }
 
-            if (TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 1)
+            if (requiresAssessmentWeightSimples.Any() && TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 1)
             {
                 validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 1."));
             }

@@ -144,7 +144,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPType(TreatmentBMPType treatmentBMPType, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !treatmentBMPType.HasDependentObjects();
+            var canDelete = !treatmentBMPType.TreatmentBMPs.Any();
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete this {FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}'?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}", SitkaRoute<TreatmentBMPTypeController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPType), "here"));
@@ -163,6 +163,8 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteTreatmentBMPType(treatmentBMPType, viewModel);
             }
+
+            treatmentBMPType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();
             treatmentBMPType.DeleteTreatmentBMPType();
             return new ModalDialogFormJsonResult();
         }

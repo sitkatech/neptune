@@ -2,12 +2,12 @@
 {
     public class TreatmentBMPTypeObservationTypeSimple
     {
-        public int TreatmentBMPTypeID { get; }
-        public int ObservationTypeID { get; }
-        public double? AssessmentScoreWeight { get; }
-        public double? DefaultThresholdValue { get; }
-        public double? DefaultBenchmarkValue { get; }
-        public bool? OverrideAssessmentScoreIfFailing { get; }
+        public int TreatmentBMPTypeID { get; set; }
+        public int ObservationTypeID { get; set; }
+        public double? AssessmentScoreWeight { get; set; }
+        public double? DefaultThresholdValue { get; set; }
+        public double? DefaultBenchmarkValue { get; set; }
+        public bool? OverrideAssessmentScoreIfFailing { get; set; }
 
         public TreatmentBMPTypeObservationTypeSimple()
         {

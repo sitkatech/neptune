@@ -26,7 +26,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public partial class TreatmentBMPType
+    public partial class TreatmentBMPType : IAuditableEntity
     {
 
         public List<ObservationType> GetObservationTypes()
@@ -34,7 +34,8 @@ namespace Neptune.Web.Models
             var treatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID).ToList();
             return treatmentBMPTypeObservationTypes.Select(x => x.ObservationType).ToList();
         }
-        
+
+        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
     }
     
 }
