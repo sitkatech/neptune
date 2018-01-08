@@ -35,9 +35,9 @@ namespace Neptune.Web.Models
             throw new NotImplementedException();
         }
 
-        public string BenchmarkAndThresholdUrl(int treatmentBMPID)
+        public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
         {
-            throw new NotImplementedException();
+            return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
         }
 
         public bool IsComplete(TreatmentBMPAssessment treatmentBMPAssessment)

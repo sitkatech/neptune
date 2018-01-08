@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="InstructionsViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="InfiltrationRateViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,26 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Person = Neptune.Web.Models.Person;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
-    public class InstructionsViewData : BenchmarkAndThresholdViewData
+    public class PercentFromBenchmarkThresholdViewData : BenchmarkAndThresholdViewData
     {
-        public const string InstructionsSectionName = "Instructions";
-        public readonly string NextSectionUrl;
-
-        public InstructionsViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP)
-            : base(currentPerson, treatmentBMP)
+        public PercentFromBenchmarkThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
+            : base(currentPerson, treatmentBMP, observationType)
         {
-
-            NextSectionUrl = treatmentBMP.HasSettableBenchmarkAndThresholdValues()
-                ? TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).First(x => x.HasBenchmarkAndThreshold).BenchmarkAndThresholdUrl(treatmentBMP)
-                : SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
-        
+            
         }
     }
 }

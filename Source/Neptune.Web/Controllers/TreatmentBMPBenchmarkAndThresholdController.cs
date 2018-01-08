@@ -38,13 +38,98 @@ namespace Neptune.Web.Controllers
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
-      
+
+        [HttpGet]
+        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        public ViewResult DiscreteThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var viewModel = new DiscreteThresholdViewModel(treatmentBMP, observationType);
+            return ViewDiscreteThreshold(treatmentBMP, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult DiscreteThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, DiscreteThresholdViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
+                return ViewDiscreteThreshold(treatmentBMP, observationType, viewModel);
+            }
+
+            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID) ??
+                                        new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, observationType, viewModel.BenchmarkValue.Value, viewModel.ThresholdValue.Value);
+
+            viewModel.UpdateModel(benchmarkAndThreshold, CurrentPerson);
+            SetMessageForDisplay("DiscreteThreshold benchmark and threshold values successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMP, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(c => c.DiscreteThreshold(treatmentBMPPrimaryKey, observationTypePrimaryKey)));
+        }
+
+        private ViewResult ViewDiscreteThreshold(TreatmentBMP treatmentBMP, ObservationType observationType, DiscreteThresholdViewModel viewModel)
+        {
+            var viewData = new DiscreteThresholdViewData(CurrentPerson, treatmentBMP, observationType);
+            return RazorView<DiscreteThreshold, DiscreteThresholdViewData, DiscreteThresholdViewModel>(viewData, viewModel);
+        }
+
+
+        [HttpGet]
+        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        public ViewResult PercentFromBenchmarkThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var viewModel = new PercentFromBenchmarkThresholdViewModel(treatmentBMP, observationType);
+            return ViewPercentFromBenchmarkThreshold(treatmentBMP, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult PercentFromBenchmarkThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, PercentFromBenchmarkThresholdViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
+                return ViewPercentFromBenchmarkThreshold(treatmentBMP, observationType, viewModel);
+            }
+
+            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID) ??
+                                        new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, observationType, viewModel.BenchmarkValue.Value, viewModel.ThresholdValue.Value);
+
+            viewModel.UpdateModel(benchmarkAndThreshold, CurrentPerson);
+            SetMessageForDisplay("PercentFromBenchmarkThreshold benchmark and threshold values successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMP, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(c => c.PercentFromBenchmarkThreshold(treatmentBMPPrimaryKey, observationTypePrimaryKey)));
+        }
+
+        private ViewResult ViewPercentFromBenchmarkThreshold(TreatmentBMP treatmentBMP, ObservationType observationType, PercentFromBenchmarkThresholdViewModel viewModel)
+        {
+            var viewData = new PercentFromBenchmarkThresholdViewData(CurrentPerson, treatmentBMP, observationType);
+            return RazorView<PercentFromBenchmarkThreshold, PercentFromBenchmarkThresholdViewData, PercentFromBenchmarkThresholdViewModel>(viewData, viewModel);
+        }
+
+
+
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, ObservationType observationType)
         {
             var nextObservationType = treatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).Where(x => x.HasBenchmarkAndThreshold).FirstOrDefault(x => string.Compare(x.ObservationTypeName, observationType.ObservationTypeName) > 0);
             var nextObservationTypeViewResult = nextObservationType == null
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.Detail(treatmentBMP.TreatmentBMPID)))
-                : Redirect(nextObservationType.BenchmarkAndThresholdUrl(treatmentBMP.TreatmentBMPID));
+                : Redirect(nextObservationType.BenchmarkAndThresholdUrl(treatmentBMP));
             return nextObservationTypeViewResult;
         }
 

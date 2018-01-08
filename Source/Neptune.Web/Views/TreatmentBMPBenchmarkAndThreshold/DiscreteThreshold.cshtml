@@ -1,0 +1,73 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Runoff.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using System.Web.Mvc.Html
+@using LtInfo.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold.DiscreteThreshold
+
+@using (Html.BeginForm())
+{
+    <p>The Benchmark and Threshold values are the time it takes for 1 liter of water poured rapidly from a height of 4 inches to infiltrate the surface.</p>
+    <div class="form-horizontal">
+        <h4>Benchmark</h4>
+        <div class="systemText">
+            Benchmark runoff values are the amount of time need for a known volume of water to infiltrate into the soil. @ViewDataTyped.DefaultBenchmarkText
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 control-label">
+                @Html.LabelWithSugarFor(m => m.BenchmarkValue)
+            </div>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.BenchmarkValue, new { placeholder = ViewDataTyped.DefaultBenchmarkPlaceholder })
+                @Html.ValidationMessageFor(m => m.BenchmarkValue)
+            </div>
+        </div>
+        <h4>Threshold</h4>
+        <div class="systemText">
+            Threshold values are maximum time acceptable for a known volume of water to infiltrate into the soil. @ViewDataTyped.DefaultThresholdText
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 control-label">
+                @Html.LabelWithSugarFor(m => m.ThresholdValue)
+            </div>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.ThresholdValue, new { placeholder = ViewDataTyped.DefaultThresholdPlaceholder })
+                @Html.ValidationMessageFor(m => m.ThresholdValue)
+            </div>
+        </div>
+    </div>
+    <div class="wizardButtonGroup">
+        <hr>
+        <button type="submit" class="btn btn-trpa" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+        <button type="submit" class="btn btn-trpa" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue</button>
+    </div>
+    @Html.HiddenFor(m => m.TreatmentBMPID)
+}
+
+<script type="text/javascript">
+    // <![CDATA[
+
+    jQuery(document).ready(function () {
+        jQuery('input').addClass("form-control");
+        jQuery('input').css("width", "auto");
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
+    });
+    // ]]>
+</script>
