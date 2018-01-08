@@ -32,24 +32,23 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.ObservationType;
 using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
-using IndexGridSpec = Neptune.Web.Views.ObservationType.IndexGridSpec;
 
 namespace Neptune.Web.Controllers
 {
     public class ObservationTypeController : NeptuneBaseController
     {
         [NeptuneAdminFeature]
-        public ViewResult Index()
+        public ViewResult Manage()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ObservationTypes);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
-            return RazorView<Index, IndexViewData>(viewData);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypes);
+            var viewData = new ManageViewData(CurrentPerson, neptunePage);
+            return RazorView<Manage, ManageViewData>(viewData);
         }
 
         [NeptuneAdminFeature]
-        public GridJsonNetJObjectResult<ObservationType> IndexGridJsonData()
+        public GridJsonNetJObjectResult<ObservationType> ObservationTypeGridJsonData()
         {
-            var gridSpec = new IndexGridSpec(CurrentPerson);
+            var gridSpec = new ObservationTypeGridSpec(CurrentPerson);
             var observationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().OrderBy(x => x.ObservationTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<ObservationType>(observationTypes, gridSpec);
             return gridJsonNetJObjectResult;

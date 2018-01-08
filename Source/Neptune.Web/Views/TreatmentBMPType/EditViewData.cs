@@ -36,9 +36,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl) : base(currentPerson)
         {
-            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
+            PageTitle = $"Manage {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
             ViewDataForAngular = new ViewDataForAngular(observationTypes);
-            TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Index());
+            TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
         }
     }

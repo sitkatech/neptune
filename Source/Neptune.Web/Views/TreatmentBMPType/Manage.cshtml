@@ -18,11 +18,28 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@inherits Neptune.Web.Views.TreatmentBMPType.Index
+@using LtInfo.Common.DhtmlWrappers
+@using Neptune.Web.Security
+@inherits Neptune.Web.Views.TreatmentBMPType.Manage
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
+@section RightOfPageTitle
+{
+    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        <a class="pull-right" href="@ViewDataTyped.NewTreatmentBMPTypeUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP Type</a>
+    }    
+}
+
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+
+<div style="margin-top: 10px;">
+    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+</div>

@@ -80,7 +80,7 @@ namespace Neptune.Web.Models
     {
         public override string GetViewUrl()
         {
-            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Index());
+            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
         }
     }
 
@@ -108,11 +108,19 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class NeptunePageTypeObservationTypes
+    public partial class NeptunePageTypeManageObservationTypes
     {
         public override string GetViewUrl()
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
+        }
+    }
+
+    public partial class NeptunePageTypeManageTreatmentBMPTypes
+    {
+        public override string GetViewUrl()
+        {
+            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
         }
     }
 }

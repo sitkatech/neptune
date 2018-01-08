@@ -43,9 +43,9 @@ namespace Neptune.Web.Views.ObservationType
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl) : base(currentPerson)
         {
-            PageTitle = "Observation Type";
+            PageTitle = $"Manage {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
-            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;

@@ -52,12 +52,12 @@ namespace Neptune.Web.Views.TreatmentBMP
             {
                 SubEntityName = treatmentBMP.TreatmentBMPName;
                 SubEntityUrl = treatmentBMP.GetDetailUrl();
-                PageTitle = "Edit Treament BMP";
+                PageTitle = "Edit Treatment BMP";
                 TreatmentBMP = treatmentBMP;
             }
             else
             {
-                PageTitle = "New Treament BMP";
+                PageTitle = "New Tretament BMP";
             }
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);

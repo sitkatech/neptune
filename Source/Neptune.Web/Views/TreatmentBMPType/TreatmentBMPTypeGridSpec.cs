@@ -27,9 +27,9 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {
-    public class IndexGridSpec : GridSpec<Models.TreatmentBMPType>
+    public class TreatmentBMPTypeGridSpec : GridSpec<Models.TreatmentBMPType>
     {
-        public IndexGridSpec(Person currentPerson)
+        public TreatmentBMPTypeGridSpec(Person currentPerson)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);

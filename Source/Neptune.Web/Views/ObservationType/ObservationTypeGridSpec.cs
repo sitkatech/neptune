@@ -29,9 +29,9 @@ using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.ObservationType
 {
-    public class IndexGridSpec : GridSpec<Models.ObservationType>
+    public class ObservationTypeGridSpec : GridSpec<Models.ObservationType>
     {
-        public IndexGridSpec(Person currentPerson)
+        public ObservationTypeGridSpec(Person currentPerson)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);

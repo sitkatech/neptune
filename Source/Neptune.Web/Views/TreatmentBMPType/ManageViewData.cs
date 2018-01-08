@@ -23,30 +23,30 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPType
 {
-    public class IndexViewData : NeptuneViewData
+    public class ManageViewData : NeptuneViewData
     {
-        public readonly IndexGridSpec GridSpec;
+        public readonly TreatmentBMPTypeGridSpec GridSpec;
         public readonly string GridName;
         public readonly string GridDataUrl;
-        public readonly string NewObservationTypeUrl;
+        public readonly string NewTreatmentBMPTypeUrl;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
 
-            NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
-            GridSpec = new IndexGridSpec(currentPerson)
+            NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(t => t.New());
+            GridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true                
             };
 
-            GridName = "observationTypeGrid";
-            GridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
+            GridName = "treatmentBMPTypeGrid";
+            GridDataUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData());
         }
     }
 }

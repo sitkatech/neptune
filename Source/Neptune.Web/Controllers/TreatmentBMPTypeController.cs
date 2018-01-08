@@ -37,17 +37,17 @@ namespace Neptune.Web.Controllers
     public class TreatmentBMPTypeController : NeptuneBaseController
     {
         [NeptuneAdminFeature]
-        public ViewResult Index()
+        public ViewResult Manage()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPType);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
-            return RazorView<Index, IndexViewData>(viewData);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypes);
+            var viewData = new ManageViewData(CurrentPerson, neptunePage);
+            return RazorView<Manage, ManageViewData>(viewData);
         }
 
         [NeptuneAdminFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPType> IndexGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData()
         {
-            var gridSpec = new IndexGridSpec(CurrentPerson);
+            var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList().OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
@@ -123,7 +123,17 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
+        public ViewResult Index()
+        {
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPType);
+
+            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            return RazorView<Index, IndexViewData>(viewData);
+        }
+
+        [NeptuneViewFeature]
         public ViewResult Detail(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;

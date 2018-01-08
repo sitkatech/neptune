@@ -23,22 +23,30 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPType
+namespace Neptune.Web.Views.ObservationType
 {
-    public class IndexViewData : NeptuneViewData
+    public class ManageViewData : NeptuneViewData
     {
-        public readonly TreatmentBMPTypeGridSpec GridSpec;
+        public readonly ObservationTypeGridSpec GridSpec;
         public readonly string GridName;
         public readonly string GridDataUrl;
-        public readonly string NewTreatmentBMPTypeUrl;
+        public readonly string NewObservationTypeUrl;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
 
-            NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(t => t.New());
-           
+            NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
+            GridSpec = new ObservationTypeGridSpec(currentPerson)
+            {
+                ObjectNameSingular = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}",
+                SaveFiltersInCookie = true                
+            };
+
+            GridName = "observationTypeGrid";
+            GridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.ObservationTypeGridJsonData());
         }
     }
 }
