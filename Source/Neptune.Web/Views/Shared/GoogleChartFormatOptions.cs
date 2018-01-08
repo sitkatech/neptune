@@ -23,7 +23,7 @@ namespace Neptune.Web.Views.Shared
                 case MeasurementUnitTypeEnum.Acres:
                 case MeasurementUnitTypeEnum.SquareFeet:
                 case MeasurementUnitTypeEnum.Kilogram:
-                case MeasurementUnitTypeEnum.Number:
+                case MeasurementUnitTypeEnum.Count:
                 case MeasurementUnitTypeEnum.MilligamsPerLiter:
                 case MeasurementUnitTypeEnum.Meters:
                 case MeasurementUnitTypeEnum.Feet:

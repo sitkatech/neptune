@@ -117,19 +117,13 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 return validationResults;
             }
 
-
             var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID).Contains(y.ObservationTypeID)).ToList();
 
             var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList().Contains(y.ObservationTypeID)).ToList();
 
             var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeSimple>();
             requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);
-            requiresAssessmentWeightSimples.AddRange(noBenchmarkAndThresholdsSimples.Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value));
-
-            if (hasBenchmarkAndThresholdsSimples.Any(x => x.DefaultBenchmarkValue == null || x.DefaultThresholdValue == null))
-            {
-                validationResults.Add(new ValidationResult("Each Observation Type that has Benchmark and Thresholds must have Default Benchmark and Thresholds."));
-            }
+            requiresAssessmentWeightSimples.AddRange(noBenchmarkAndThresholdsSimples.Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value));           
 
             if (requiresAssessmentWeightSimples.Any(x => x.AssessmentScoreWeight == null))
             {

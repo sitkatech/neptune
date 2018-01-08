@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="IndexViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="Index.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,27 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-
 namespace Neptune.Web.Views.TreatmentBMPType
 {
-    public class IndexViewData : NeptuneViewData
+    public abstract class Manage : LtInfo.Common.Mvc.TypedWebViewPage<ManageViewData>
     {
-
-        public List<Models.TreatmentBMPType> TreatmentBMPTypes { get; }
-
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
-            List<Models.TreatmentBMPType> treatmentBMPTypes)
-            : base(currentPerson, neptunePage)
-        {
-            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
-
-            TreatmentBMPTypes = treatmentBMPTypes;
-
-        }
     }
 }

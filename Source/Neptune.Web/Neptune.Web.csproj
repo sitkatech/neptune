@@ -273,9 +273,9 @@
     <Compile Include="Views\ObservationType\Edit.cs" />
     <Compile Include="Views\ObservationType\EditViewData.cs" />
     <Compile Include="Views\ObservationType\EditViewModel.cs" />
-    <Compile Include="Views\ObservationType\Index.cs" />
-    <Compile Include="Views\ObservationType\IndexGridSpec.cs" />
-    <Compile Include="Views\ObservationType\IndexViewData.cs" />
+    <Compile Include="Views\ObservationType\Manage.cs" />
+    <Compile Include="Views\ObservationType\ObservationTypeGridSpec.cs" />
+    <Compile Include="Views\ObservationType\ManageViewData.cs" />
     <Compile Include="Views\ObservationType\ViewPercentageSchemaDetail.cs" />
     <Compile Include="Views\ObservationType\ViewPercentageSchemaDetailViewData.cs" />
     <Compile Include="Views\ObservationType\ViewPassFailSchemaDetail.cs" />
@@ -554,8 +554,10 @@
     <Compile Include="Views\TreatmentBMPType\EditViewData.cs" />
     <Compile Include="Views\TreatmentBMPType\EditViewModel.cs" />
     <Compile Include="Views\TreatmentBMPType\Index.cs" />
-    <Compile Include="Views\TreatmentBMPType\IndexGridSpec.cs" />
+    <Compile Include="Views\TreatmentBMPType\Manage.cs" />
     <Compile Include="Views\TreatmentBMPType\IndexViewData.cs" />
+    <Compile Include="Views\TreatmentBMPType\TreatmentBMPTypeGridSpec.cs" />
+    <Compile Include="Views\TreatmentBMPType\ManageViewData.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationTypeSimple.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
@@ -722,7 +724,7 @@
     <Content Include="Views\ModeledCatchment\UpdateModeledCatchmentGeometryErrors.cshtml" />
     <Content Include="Views\Assessment\Index.cshtml" />
     <Content Include="Views\User\EditJurisdictions.cshtml" />
-    <Content Include="Views\ObservationType\Index.cshtml" />
+    <Content Include="Views\ObservationType\Manage.cshtml" />
     <Content Include="Views\ObservationType\Detail.cshtml" />
     <Content Include="Views\ObservationType\Edit.cshtml" />
     <Content Include="Views\ObservationType\ViewDiscreteValueSchemaDetail.cshtml" />
@@ -731,6 +733,7 @@
     <Content Include="Views\ObservationType\ViewPercentageSchemaDetail.cshtml" />
     <Content Include="Views\TreatmentBMPType\Detail.cshtml" />
     <Content Include="Views\TreatmentBMPType\Edit.cshtml" />
+    <Content Include="Views\TreatmentBMPType\Manage.cshtml" />
     <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>

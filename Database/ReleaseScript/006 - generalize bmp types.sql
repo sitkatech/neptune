@@ -6,3 +6,15 @@ alter table dbo.TreatmentBMPTypeObservationType alter column AssessmentScoreWeig
 go
 
 alter table dbo.TreatmentBMPTypeObservationType add constraint CK_AssessmentScoreWeightNullIfOverrideNotNull CHECK ((AssessmentScoreWeight IS NOT NULL AND OverrideAssessmentScoreIfFailing IS NULL) OR (AssessmentScoreWeight IS NULL AND OverrideAssessmentScoreIfFailing IS NOT NULL))
+
+insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
+values
+(12, 'ManageTreatmentBMPTypes', 'Manage Treatment BMP Types', 2)
+
+insert into dbo.neptunepage(TenantID, NeptunePageTypeID)
+select 
+	t.tenantid,
+	npt.NeptunePageTypeID
+from dbo.neptunepagetype npt
+cross join dbo.tenant t
+where npt.NeptunePageTypeID = 12

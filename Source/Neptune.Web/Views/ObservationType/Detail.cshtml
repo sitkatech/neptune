@@ -31,7 +31,7 @@
 
 @section RightOfPageTitle
 {
-    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    @if (new NeptuneAdminFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
         <a class="pull-right" href="@ViewDataTyped.ObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
     }
