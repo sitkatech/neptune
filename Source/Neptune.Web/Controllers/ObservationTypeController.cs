@@ -112,7 +112,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public ViewResult Detail(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;

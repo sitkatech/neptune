@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.ObservationType
 
             ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Manage());
 
-            UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);           
 
             ViewSchemaDetailUrl = observationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(observationType);
         }

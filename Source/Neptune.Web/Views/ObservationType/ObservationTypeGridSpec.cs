@@ -35,7 +35,11 @@ namespace Neptune.Web.Views.ObservationType
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
-            Add(Models.FieldDefinition.ObservationType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.ObservationTypeName), 400, DhtmlxGridColumnFilterType.Html);            
+            Add(Models.FieldDefinition.ObservationType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.ObservationTypeName), 200, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.ObservationCollectionMethod.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.ObservationTargetType.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.ObservationThresholdType.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            
         }
     }
 }

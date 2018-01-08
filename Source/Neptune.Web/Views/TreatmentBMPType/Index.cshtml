@@ -60,7 +60,7 @@
                                     {
                                         var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                         <tr>
-                                            <td>@observationType.ObservationTypeName</td>
+                                            <td>@observationType.GetDisplayNameAsUrl()</td>
                                             <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
                                             @if (observationType.HasBenchmarkAndThreshold)
                                             {

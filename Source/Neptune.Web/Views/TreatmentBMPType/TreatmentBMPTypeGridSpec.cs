@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -34,6 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPTypeName), 400, DhtmlxGridColumnFilterType.Html);
+            Add($"Number of {Models.FieldDefinition.ObservationType.ToGridHeaderStringPlural("Observation Types")}", a => a.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType).Count(), 100);
+            Add($"Number of {Models.FieldDefinition.TreatmentBMP.ToGridHeaderStringPlural("Treatment BMP Types")}", a => a.TreatmentBMPs.Count, 100, DhtmlxGridColumnAggregationType.Total);
         }
     }
 }
