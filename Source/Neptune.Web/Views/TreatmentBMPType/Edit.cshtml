@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.HtmlHelperExtensions
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Common
 @using Neptune.Web.Controllers
 @using Neptune.Web.Models
@@ -155,8 +156,11 @@
 
     </div>
     <div class="row">
-        <div class="col-xs-12" style="text-align: right">
-            <hr />
+        <hr/>
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
             <a href="@ViewDataTyped.TreatmentBMPTypeIndexUrl" class="btn btn-neptune">Cancel</a>
             <button type="submit" class="btn btn-neptune">Save</button>
         </div>

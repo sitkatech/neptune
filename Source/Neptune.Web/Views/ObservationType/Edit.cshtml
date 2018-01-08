@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.HtmlHelperExtensions
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Common
 @using Neptune.Web.Controllers
 @using Neptune.Web.Models
@@ -203,7 +204,7 @@
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations, true)
+                                @Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumNumberOfObservations" step="1" min="0" />
@@ -217,7 +218,7 @@
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation, true)
+                                @Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation)
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumValueOfObservations" />
@@ -372,28 +373,28 @@
 
                     </div>
 
-                <div ng-if="selectedCollectionMethodIsPassFail()">
-                    <hr />
-                    <h4>Labels and Units for Data Collection</h4>
-                    <input type="hidden" name="@Html.NameFor(m => m.ObservationThresholdTypeID)" value="@ViewDataTyped.PassFailObservationThresholdTypeID"/>
-                    <input type="hidden" name="@Html.NameFor(m => m.ObservationTargetTypeID)" value="@ViewDataTyped.PassFailObservationTargetTypeID"/>
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve)
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="row">
-                                <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                    <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
-                                    <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
-                                </div>
-                                <div class="col-xs-12 col-sm-4">
-                                    <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                    <div ng-if="selectedCollectionMethodIsPassFail()">
+                        <hr />
+                        <h4>Labels and Units for Data Collection</h4>
+                        <input type="hidden" name="@Html.NameFor(m => m.ObservationThresholdTypeID)" value="@ViewDataTyped.PassFailObservationThresholdTypeID" />
+                        <input type="hidden" name="@Html.NameFor(m => m.ObservationTargetTypeID)" value="@ViewDataTyped.PassFailObservationTargetTypeID" />
+                        <div class="form-group">
+                            <div class="col-sm-3 control-label">
+                                @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
+                                        <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                     <div ng-if="selectedCollectionMethodIsPercentage()">
                         <hr />
@@ -427,14 +428,17 @@
             </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-xs-12" style="text-align: right">
-            <hr />
+        <hr />
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
             <a href="@ViewDataTyped.ObservationTypeIndexUrl" class="btn btn-neptune">Cancel</a>
             <button type="submit" class="btn btn-neptune">Save</button>
         </div>
         @Html.HiddenFor(m => m.ObservationTypeID)
         <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="AngularModel.ObservationTypeSchema" />
-    </div>
-    </div>
+    </div>    
 </form>
