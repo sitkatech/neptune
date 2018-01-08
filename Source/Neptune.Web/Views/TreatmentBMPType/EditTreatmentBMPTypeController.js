@@ -34,8 +34,15 @@
         return $scope.getObservationType(observationTypeID).HasBenchmarkAndThresholds;
     }
 
+    $scope.checkOverrideIfFailing = function (treatmentBMPTypeObservationTypeSimple) {
+        treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight = 0;
+        getWeightTotal();
+    }
+
     $scope.getWeightTotal = function () {
-        return _.reduce($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (m, x) { return m + x.AssessmentScoreWeight; }, 0);
+        return _.reduce($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function(m, x) {
+             return m + x.AssessmentScoreWeight;
+        }, 0);
     };
 
     $scope.findTreatmentBMPTypeObservationTypeSimpleRow = function (observationTypeID) { return _.find($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (pfse) { return pfse.ObservationTypeID == observationTypeID; }); }

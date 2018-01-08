@@ -4,7 +4,7 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (1, 'Acres', 'acres', 'acres', 'Acre', 2),
 (2, 'SquareFeet', 'square feet', 'sq ft', 'Square Foot', 2),
 (3, 'Kilogram', 'kg', 'kg', 'Kilogram', 2),
-(4, 'Number', 'number', null, 'Each Unit', 0),
+(4, 'Count', 'count', 'count', 'Each Unit', 0),
 (5, 'Percent', '%', '%', '%', 0),
 (6, 'MilligamsPerLiter', 'mg/L', 'mg/L', 'Milligram Per Liter', 2),
 (7, 'Meters', 'meters', 'meters', 'Meter', 1),

@@ -134,7 +134,7 @@
                         @Html.Label("or")
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-center">
-                        <input ng-model="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" type="checkbox" />
+                        <input ng-model="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" ng-change="checkOverrideIfFailing(treatmentBMPTypeObservationTypeSimple)" type="checkbox" />
                     </td>
                 </tr>
                 <tr>

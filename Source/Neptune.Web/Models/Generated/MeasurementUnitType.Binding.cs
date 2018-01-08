@@ -21,7 +21,7 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeAcres Acres = MeasurementUnitTypeAcres.Instance;
         public static readonly MeasurementUnitTypeSquareFeet SquareFeet = MeasurementUnitTypeSquareFeet.Instance;
         public static readonly MeasurementUnitTypeKilogram Kilogram = MeasurementUnitTypeKilogram.Instance;
-        public static readonly MeasurementUnitTypeNumber Number = MeasurementUnitTypeNumber.Instance;
+        public static readonly MeasurementUnitTypeCount Count = MeasurementUnitTypeCount.Instance;
         public static readonly MeasurementUnitTypePercent Percent = MeasurementUnitTypePercent.Instance;
         public static readonly MeasurementUnitTypeMilligamsPerLiter MilligamsPerLiter = MeasurementUnitTypeMilligamsPerLiter.Instance;
         public static readonly MeasurementUnitTypeMeters Meters = MeasurementUnitTypeMeters.Instance;
@@ -41,7 +41,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Number, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -118,6 +118,8 @@ namespace Neptune.Web.Models
             {
                 case MeasurementUnitTypeEnum.Acres:
                     return Acres;
+                case MeasurementUnitTypeEnum.Count:
+                    return Count;
                 case MeasurementUnitTypeEnum.Feet:
                     return Feet;
                 case MeasurementUnitTypeEnum.Inches:
@@ -130,8 +132,6 @@ namespace Neptune.Web.Models
                     return Meters;
                 case MeasurementUnitTypeEnum.MilligamsPerLiter:
                     return MilligamsPerLiter;
-                case MeasurementUnitTypeEnum.Number:
-                    return Number;
                 case MeasurementUnitTypeEnum.Percent:
                     return Percent;
                 case MeasurementUnitTypeEnum.PercentDecline:
@@ -155,7 +155,7 @@ namespace Neptune.Web.Models
         Acres = 1,
         SquareFeet = 2,
         Kilogram = 3,
-        Number = 4,
+        Count = 4,
         Percent = 5,
         MilligamsPerLiter = 6,
         Meters = 7,
@@ -186,10 +186,10 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeKilogram Instance = new MeasurementUnitTypeKilogram(3, @"Kilogram", @"kg", @"kg", @"Kilogram", 2);
     }
 
-    public partial class MeasurementUnitTypeNumber : MeasurementUnitType
+    public partial class MeasurementUnitTypeCount : MeasurementUnitType
     {
-        private MeasurementUnitTypeNumber(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
-        public static readonly MeasurementUnitTypeNumber Instance = new MeasurementUnitTypeNumber(4, @"Number", @"number", null, @"Each Unit", 0);
+        private MeasurementUnitTypeCount(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits) {}
+        public static readonly MeasurementUnitTypeCount Instance = new MeasurementUnitTypeCount(4, @"Count", @"count", @"count", @"Each Unit", 0);
     }
 
     public partial class MeasurementUnitTypePercent : MeasurementUnitType
