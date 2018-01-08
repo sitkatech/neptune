@@ -92,10 +92,7 @@
                                             <td class="text-right">@ViewUtilities.NaString</td>
                                             <td class="text-right">@ViewUtilities.NaString</td>
                                         }
-                                        <td class="text-right">
-                                            @(treatmentBMPTypeObservationType.AssessmentScoreWeight != null ?
-                                  treatmentBMPTypeObservationType.AssessmentScoreWeight.ToString() : "pass/fail")
-                                        </td>
+                                        <td class="text-right">@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
                                     </tr>
                                 }
                             </tbody>

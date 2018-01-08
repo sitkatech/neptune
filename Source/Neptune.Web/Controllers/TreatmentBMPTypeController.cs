@@ -129,7 +129,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPType);
 
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBMPTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
