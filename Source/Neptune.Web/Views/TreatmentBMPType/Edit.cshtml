@@ -38,7 +38,7 @@
                         <div class="col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.TreatmentBMPTypeName)
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-5">
                             @Html.TextBoxFor(m => m.TreatmentBMPTypeName, new { @class = "form-control", style = "width:100%" })
                             @Html.ValidationMessageFor(m => m.TreatmentBMPTypeName)
                         </div>
@@ -47,7 +47,7 @@
                         <div class="col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.TreatmentBMPTypeDescription)
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-5">
                             @Html.TextAreaWithMaxLengthFor(m => m.TreatmentBMPTypeDescription, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string>() { "form-control" })
                             @Html.ValidationMessageFor(m => m.TreatmentBMPTypeName)
                         </div>
@@ -63,7 +63,7 @@
                         <div class="col-sm-3 control-label">
                             @Html.Label("Observation Type to Add")
                         </div>
-                        <div class="col-sm-9">
+                        <div class="col-sm-5">
                             <div class="input-group">
                                 <select ng-model="ObservationTypeToAdd"
                                         class="form-control"
@@ -84,7 +84,7 @@
             </div>
         </div>
         <div style="overflow-x: auto" class="form-inline">
-            <table class="table" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypeSimples.length > 0">
+            <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypeSimples.length > 0">
                 <tr>
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
@@ -114,7 +114,7 @@
                         </div>
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control " />
+                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control input-group" />
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
@@ -128,7 +128,7 @@
 
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" />
+                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control input-group" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" />
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"class="text-center">
                         @Html.Label("or")

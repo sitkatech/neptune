@@ -34,7 +34,7 @@
 {
     @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <a class="pull-right" href="@ViewDataTyped.TreatmentBMPType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Treatment BMP Type</a>
+        <a class="btn btn-neptune headerButtonText treatmentBMPTypeButton" href="@ViewDataTyped.TreatmentBMPType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Treatment BMP Type</a>
     }
 }
 @if (ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)
