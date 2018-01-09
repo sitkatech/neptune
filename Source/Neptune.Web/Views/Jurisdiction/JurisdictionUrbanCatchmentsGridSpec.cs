@@ -34,8 +34,8 @@ namespace Neptune.Web.Views.Jurisdiction
         {
             var userHasEditPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson); 
 
-            Add(Models.FieldDefinition.ModeledCatchment.ToGridHeaderString(),x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.ModeledCatchmentName), 200, DhtmlxGridColumnFilterType.Html);
-            Add("Notes",x => x.Notes, 300, DhtmlxGridColumnFilterType.Text);
+            Add(Models.FieldDefinition.ModeledCatchment.ToGridHeaderString(),x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.ModeledCatchmentName), 225, DhtmlxGridColumnFilterType.Html);
+            Add("Notes",x => x.Notes, 325, DhtmlxGridColumnFilterType.Text);
         }
     }
 }

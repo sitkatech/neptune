@@ -41,7 +41,7 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {       
-        <a style="width: 170px" class="btn headerButtonText modeledCatchmentButton cardButton" href="@ViewDataTyped.UpdateModeledCatchmentGeometryUrl" title="Update Catchments" alt="Update Catchments">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Update Catchments</a>
+        <a style="width: 170px" class="btn btn-neptune headerButtonText modeledCatchmentButton" href="@ViewDataTyped.UpdateModeledCatchmentGeometryUrl" title="Update Catchments" alt="Update Catchments">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Update Catchments</a>
     }    
 }
 
@@ -52,7 +52,7 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-sm-4">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
+            <div class="panel-heading panelTitle">
                 Catchment Search
             </div>
             <div class="panel-body">
@@ -71,8 +71,8 @@ Source code is available upon request via <support@sitkatech.com>.
     </div>
     <div class="col-sm-8">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
-                Map View
+            <div class="panel-heading panelTitle">
+                Catchment Map
             </div>
             <div id="mapContainer" class="panel-body">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 600px; margin: 0">
@@ -85,8 +85,8 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
-            <div class="panel-heading">
-                Table View
+            <div class="panel-heading panelTitle">
+                Catchment Table
             </div>
             <div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)

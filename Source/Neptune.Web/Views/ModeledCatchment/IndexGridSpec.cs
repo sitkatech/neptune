@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.ModeledCatchment
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.ModeledCatchment.ToGridHeaderString("Catchment Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.ModeledCatchmentName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.StormwaterJurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.OrganizationDisplayName), 300, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Notes", x => x.Notes, 400, DhtmlxGridColumnFilterType.Text);
+            Add("Notes", x => x.Notes, 575, DhtmlxGridColumnFilterType.Text);
         }
     }
 }
