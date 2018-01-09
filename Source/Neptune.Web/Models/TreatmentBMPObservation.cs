@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
 
@@ -38,6 +39,32 @@ namespace Neptune.Web.Models
 
                 return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";            
             } 
+        }
+
+        public double CalculateScoreForObservationType()
+        {
+            throw new NotImplementedException();
+        }
+
+        public double GetObservationValue(ObservationType observationType)
+        {
+            return GetObservationValueImpl();
+        }
+
+        public double GetObservationValueImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string FormattedScoreForObservationType()
+        {
+            var score = CalculateScoreForObservationType();
+            return score.ToString("0.0");
+        }
+
+        public bool IsComplete()
+        {
+            throw new NotImplementedException();
         }
     }
 }

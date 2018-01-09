@@ -11,11 +11,11 @@
         public TreatmentBMPObservationSimple(TreatmentBMPObservation treatmentBMPObservation)
         {
             var observationType = treatmentBMPObservation.ObservationType;
-            IsComplete = observationType.IsComplete(treatmentBMPObservation);
-            OverrideScore = !observationType.HasBenchmarkAndThreshold && IsComplete ? observationType.CalculateScore(treatmentBMPObservation) == 2 : false;
+            IsComplete = treatmentBMPObservation.IsComplete();
+            OverrideScore = !observationType.HasBenchmarkAndThreshold && IsComplete ? treatmentBMPObservation.CalculateScoreForObservationType() == 2 : false;
             OverrideScoreText = string.Empty;
-            ObservedValue = IsComplete ? (double?)observationType.GetObservationValue(treatmentBMPObservation) : null;
-            ObservationScore = IsComplete ? observationType.FormattedScore(treatmentBMPObservation) : "-";
+            ObservedValue = IsComplete ? (double?)treatmentBMPObservation.GetObservationValue(observationType) : null;
+            ObservationScore = IsComplete ? treatmentBMPObservation.FormattedScoreForObservationType() : "-";
         }
     }
 }

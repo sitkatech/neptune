@@ -53,12 +53,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             ObservationTypeID = observationType.ObservationTypeID;
             var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID);
 
-            if (benchmarkAndThreshold != null)
-            {
-                BenchmarkValue = benchmarkAndThreshold.BenchmarkValue;
-                ThresholdValue = benchmarkAndThreshold.ThresholdValue;    
-            }
-            
+            BenchmarkValue = benchmarkAndThreshold?.BenchmarkValue;
+            ThresholdValue = benchmarkAndThreshold?.ThresholdValue;             
         }
 
         public void UpdateModel(Models.TreatmentBMPBenchmarkAndThreshold benchmarkAndThreshold, Person currentPerson)
@@ -72,7 +68,6 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             var validationResults = new List<ValidationResult>();
 
             
-
             return validationResults;
         }
     }

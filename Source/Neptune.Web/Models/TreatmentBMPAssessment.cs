@@ -48,7 +48,7 @@ namespace Neptune.Web.Models
 
         public bool IsAssessmentComplete()
         {
-            return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(x => x.IsComplete(this));
+            return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(IsComplete);
         }
 
         public bool HasCalculatedOrAlternateScore()
@@ -65,7 +65,7 @@ namespace Neptune.Web.Models
         {
             if (TreatmentBMPObservations.SingleOrDefault(x => x.ObservationType == observationType) != null)
             {
-                if (Math.Abs(observationType.CalculateScore(this) - 2) < 0.01)
+                if (Math.Abs(CalculateScoreForObservationType(observationType) - 2) < 0.01)
                 {
                     return true;
                 }
@@ -80,6 +80,7 @@ namespace Neptune.Web.Models
                 return null;
             }
 
+            //todo this needs to use override score not has benchmark and thresholds
             if (TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => !x.HasBenchmarkAndThreshold).Select(OverrideScore).Any(x => x))
             {
                 return 2;
@@ -91,11 +92,10 @@ namespace Neptune.Web.Models
 
             var score = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Sum(x =>
             {
-                var treatmentBMPType = TreatmentBMP.TreatmentBMPType;
                 var observationType = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).ObservationType;
-                var observationScore = observationType.CalculateScore(this);
+                var observationScore = CalculateScoreForObservationType(observationType);
                 
-                var observationWeight = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value;
+                var observationWeight = TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value;
                 return observationScore * observationWeight;
             });
             return Math.Round(score, 1);
@@ -105,6 +105,24 @@ namespace Neptune.Web.Models
         {
             var score = CalculateAssessmentScore();
             return score?.ToString("0.0") ?? "-";
+        }
+
+        public double CalculateScoreForObservationType(ObservationType observationType)
+        {
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+
+            if (!treatmentBMPObservation.IsComplete())
+            {
+                throw new Exception("Observation not complete, cannot calculate score");
+            }
+            return treatmentBMPObservation.CalculateScoreForObservationType();
+        }
+
+        public bool IsComplete(ObservationType observationType)
+        {
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+
+            return treatmentBMPObservation != null && treatmentBMPObservation.IsComplete();
         }
     }
 }

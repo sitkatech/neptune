@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System;
 using LtInfo.Common;
 using LtInfo.Common.Views;
 
@@ -25,7 +27,119 @@ namespace Neptune.Web.Models
 {
     public partial class MeasurementUnitType
     {
+        public abstract bool IncludeSpaceBeforeLegendLabel();
+    }
 
+    public partial class MeasurementUnitTypeAcres : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeSquareFeet : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeKilogram : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeCount : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypePercent : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return true;
+        }
+    }
+
+    public partial class MeasurementUnitTypeMilligamsPerLiter : MeasurementUnitType
+    {
+       public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeMeters : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeFeet : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeInches : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeInchesPerHour : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypeSeconds : MeasurementUnitType
+    {
+       public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return false;
+        }
+    }
+
+    public partial class MeasurementUnitTypePercentDecline : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return true;
+        }
+    }
+
+    public partial class MeasurementUnitTypePercentIncrease : MeasurementUnitType
+    {
+        public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return true;
+        }
+    }
+
+    public partial class MeasurementUnitTypePercentDeviation : MeasurementUnitType
+    {
+       public override bool IncludeSpaceBeforeLegendLabel()
+        {
+            return true;
+        }
     }
 
 }

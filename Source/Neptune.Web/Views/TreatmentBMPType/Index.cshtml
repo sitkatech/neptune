@@ -64,8 +64,8 @@
                                             <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
                                             @if (observationType.HasBenchmarkAndThreshold)
                                             {
-                                                <td>@ObservationTypeHelper.FormattedDefaultBenchmarkValue(observationType, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                                <td>@ObservationTypeHelper.ApplyThresholdFormatting(observationType, treatmentBMPTypeObservationType.DefaultThresholdValue)</td>
+                                                <td>@observationType.GetFormattedBenchmarkValue(treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                                <td>@observationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
                                             }
                                             else
                                             {
