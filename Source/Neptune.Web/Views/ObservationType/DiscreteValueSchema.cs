@@ -20,6 +20,7 @@ namespace Neptune.Web.Views.ObservationType
         public string ThresholdDescription { get; set; }
         public string AssessmentDescription { get; set; }
     }
+
     public class RateSchema
     {
         public string DiscreteRateMeasurementUnitLabel { get; set; }

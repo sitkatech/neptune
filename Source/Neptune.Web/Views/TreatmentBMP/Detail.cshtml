@@ -101,7 +101,7 @@ Source code is available upon request via <support@sitkatech.com>.
                             <tr>
                                 <td>@observationType.ObservationTypeName</td>
                                 <td>@ViewDataTyped.TreatmentBMP.GetFormattedBenchmarkValue(observationType)</td>
-                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedThresholdValue(observationType, false)</td>
+                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedThresholdValue(observationType, !observationType.ThresholdIsPercentFromBenchmark)</td>
                             </tr>
                         }
 

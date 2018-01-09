@@ -31,10 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public string InstructionsUrl;
         public string SectionName;
 
-        public string DefaultBenchmarkText;
-        public string DefaultThresholdText;
-        public string DefaultBenchmarkPlaceholder;
-        public string DefaultThresholdPlaceholder;
+       
 
         protected BenchmarkAndThresholdViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP)
@@ -58,13 +55,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 
         protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
             : this(currentPerson, treatmentBMP, observationType.ObservationTypeName)
-        {
-            var treatmentBMPTypeObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
-            DefaultBenchmarkPlaceholder = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultBenchmarkValue.Value : string.Empty;
-            DefaultBenchmarkText = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? "The default value is " + ObservationTypeHelper.FormattedDefaultBenchmarkValue(observationType, treatmentBMPTypeObservationType.DefaultBenchmarkValue.Value) + "." : string.Empty;
-            
-            DefaultThresholdPlaceholder = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultThresholdValue.Value : string.Empty;
-            DefaultThresholdText = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? "The default value is " + ObservationTypeHelper.ApplyThresholdFormatting(observationType, treatmentBMPTypeObservationType.DefaultThresholdValue.Value) + "." : string.Empty;    
+        {            
         }
     }
 

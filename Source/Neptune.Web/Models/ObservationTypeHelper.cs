@@ -73,11 +73,11 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdPercentDecline
-                ? String.Empty
+            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdIsPercentFromBenchmark
+                ? string.Empty
                 : " ";
 
-            var unit = observationType.ThresholdPercentDecline ? "% decline" : observationType.MeasurementUnitType.LegendDisplayName;
+            var unit = observationType.ThresholdIsPercentFromBenchmark ? observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName : observationType.MeasurementUnitType.LegendDisplayName;
 
             return $"{thresholdValue}{optionalSpace}{unit}";
         }

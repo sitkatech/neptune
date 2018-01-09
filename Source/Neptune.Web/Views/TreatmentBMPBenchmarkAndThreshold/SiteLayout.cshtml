@@ -18,9 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Neptune.Web.Models
 @using Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
-@inherits Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold.SiteLayout
+@inherits SiteLayout
 
 @{
     SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped);
@@ -37,7 +36,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).Where(x => x.HasBenchmarkAndThreshold))
                     {
                         <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
-                            <a href="@observationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP.TreatmentBMPID)">                                
+                            <a href="@observationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
                                 @if (observationType.IsBenchmarkAndThresholdComplete(ViewDataTyped.TreatmentBMP))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
