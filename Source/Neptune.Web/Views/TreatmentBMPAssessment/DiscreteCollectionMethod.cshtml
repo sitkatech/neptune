@@ -45,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
     // ]]>
 </script>
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="DiscreteCollectionMethodControllerApp" ng-controller="DiscreteCollectionMethodController" ng-init="initializeWithEmptyRows()">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="DiscreteCollectionMethodControllerApp" ng-controller="DiscreteCollectionMethodController" ng-init="initializeWithEmptyRows()" ng-submit="submit()" name="observationForm">
     <div class="row">
         <div class="col-xs-12">
             <div class="form-horizontal">
@@ -76,13 +76,13 @@ Source code is available upon request via <support@sitkatech.com>.
                                 <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved"></span>
                             </td>
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length > 1">
-                                <select style="width: 100%" ng-model="observation.PropertyObserved"
+                                <select style="width: 100%" ng-model="ObservationData.SingleValueObservations[$index].PropertyObserved"
                                         class="form-control"
                                         ng-required="true">
                                     <option ng-repeat="type in AngularViewData.PropertiesToObserve"
                                             ng-selected="observation.PropertyObserved == type.DisplayName"
                                             ng-bind="type.DisplayName"
-                                            value="{{type.ID}}"></option>
+                                            value="{{type.DisplayName}}"></option>
                                 </select>
                             </td>
                             <td class="col-xs-2">

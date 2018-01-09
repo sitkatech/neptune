@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
         public void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
         {
-
+            treatmentBMPObservation.ObservationData = ObservationData;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

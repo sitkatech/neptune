@@ -109,9 +109,9 @@ namespace Neptune.Web.Models
 
         public double CalculateScoreForObservationType(ObservationType observationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
 
-            if (!treatmentBMPObservation.IsComplete())
+            if (treatmentBMPObservation == null)
             {
                 throw new Exception("Observation not complete, cannot calculate score");
             }
@@ -120,9 +120,9 @@ namespace Neptune.Web.Models
 
         public bool IsComplete(ObservationType observationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
 
-            return treatmentBMPObservation != null && treatmentBMPObservation.IsComplete();
+            return treatmentBMPObservation != null;
         }
     }
 }

@@ -74,14 +74,6 @@ namespace Neptune.Web.Models
         {
             var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.AssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
             return latestAssessment;
-        }     
-
-        public double? GetWetBasinThresholdValueInObservedUnits(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            var observationValue = treatmentBMPObservation.GetObservationValue(treatmentBMPObservation.ObservationType);
-            var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(this).Value;
-            var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(this).Value;
-            return observationValue < benchmarkValue ? benchmarkValue - thresholdValue : benchmarkValue + thresholdValue;
         }
 
         public bool HasDependentObjectsBesidesBenchmarksAndThresholds()
