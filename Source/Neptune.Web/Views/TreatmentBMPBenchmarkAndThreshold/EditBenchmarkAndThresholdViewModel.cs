@@ -29,7 +29,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
-    public class DiscreteThresholdViewModel : FormViewModel, IValidatableObject
+    public class EditBenchmarkAndThresholdViewModel : FormViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
         public int ObservationTypeID { get; set; }
@@ -43,11 +43,11 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public DiscreteThresholdViewModel()
+        public EditBenchmarkAndThresholdViewModel()
         {
         }
 
-        public DiscreteThresholdViewModel(Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
+        public EditBenchmarkAndThresholdViewModel(Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             ObservationTypeID = observationType.ObservationTypeID;

@@ -23,7 +23,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
-    public class DiscreteThresholdViewData : BenchmarkAndThresholdViewData
+    public class EditBenchmarkAndThresholdViewData : BenchmarkAndThresholdViewData
     {
         public string BenchmarkMeasurementUnitTypeDisplayName { get; }
         public string ThresholdMeasurementUnitTypeDisplayName { get; }
@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public string DefaultBenchmarkPlaceholder { get; }
         public string DefaultThresholdPlaceholder { get; }
 
-        public DiscreteThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
+        public EditBenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             Models.ObservationType observationType)
             : base(currentPerson, treatmentBMP, observationType)
         {

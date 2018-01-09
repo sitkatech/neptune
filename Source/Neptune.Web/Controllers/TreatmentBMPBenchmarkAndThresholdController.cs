@@ -41,26 +41,26 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPBenchmarkAndThresholdsManageFeature]
-        public ViewResult DiscreteThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var observationType = observationTypePrimaryKey.EntityObject;
 
-            var viewModel = new DiscreteThresholdViewModel(treatmentBMP, observationType);
-            return ViewDiscreteThreshold(treatmentBMP, observationType, viewModel);
+            var viewModel = new EditBenchmarkAndThresholdViewModel(treatmentBMP, observationType);
+            return ViewEditBenchmarkAndThreshold(treatmentBMP, observationType, viewModel);
         }
 
         [HttpPost]
         [TreatmentBMPBenchmarkAndThresholdsManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult DiscreteThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, DiscreteThresholdViewModel viewModel)
+        public ActionResult EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, EditBenchmarkAndThresholdViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var observationType = observationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 SetErrorForDisplay("Could not save benchmark and threshold values: Please fix validation errors to proceed.");
-                return ViewDiscreteThreshold(treatmentBMP, observationType, viewModel);
+                return ViewEditBenchmarkAndThreshold(treatmentBMP, observationType, viewModel);
             }
 
             var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID) ??
@@ -71,13 +71,13 @@ namespace Neptune.Web.Controllers
 
             return viewModel.AutoAdvance
                 ? GetNextObservationTypeViewResult(treatmentBMP, observationType)
-                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(c => c.DiscreteThreshold(treatmentBMPPrimaryKey, observationTypePrimaryKey)));
+                : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(c => c.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, observationTypePrimaryKey)));
         }
 
-        private ViewResult ViewDiscreteThreshold(TreatmentBMP treatmentBMP, ObservationType observationType, DiscreteThresholdViewModel viewModel)
+        private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, ObservationType observationType, EditBenchmarkAndThresholdViewModel viewModel)
         {
-            var viewData = new DiscreteThresholdViewData(CurrentPerson, treatmentBMP, observationType);
-            return RazorView<DiscreteThreshold, DiscreteThresholdViewData, DiscreteThresholdViewModel>(viewData, viewModel);
+            var viewData = new EditBenchmarkAndThresholdViewData(CurrentPerson, treatmentBMP, observationType);
+            return RazorView<EditBenchmarkAndThreshold, EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>(viewData, viewModel);
         }
 
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, ObservationType observationType)

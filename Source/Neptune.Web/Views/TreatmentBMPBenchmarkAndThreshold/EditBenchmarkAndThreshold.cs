@@ -23,7 +23,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
-    public abstract class DiscreteThreshold : TypedWebViewPage<DiscreteThresholdViewData, DiscreteThresholdViewModel>
+    public abstract class EditBenchmarkAndThreshold : TypedWebViewPage<EditBenchmarkAndThresholdViewData, EditBenchmarkAndThresholdViewModel>
     {
     }
 }
