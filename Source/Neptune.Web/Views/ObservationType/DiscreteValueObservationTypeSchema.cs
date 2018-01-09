@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Neptune.Web.Views.ObservationType
 {
-    public class DiscreteValueSchema
+    public class DiscreteObservationTypeSchema
     {
         public string MeasurementUnitLabel { get; set; }
         public int MeasurementUnitTypeID { get; set; }
@@ -21,7 +21,7 @@ namespace Neptune.Web.Views.ObservationType
         public string AssessmentDescription { get; set; }
     }
 
-    public class RateSchema
+    public class RateObservationTypeSchema
     {
         public string DiscreteRateMeasurementUnitLabel { get; set; }
         public int DiscreteRateMeasurementUnitTypeID { get; set; }
@@ -50,13 +50,13 @@ namespace Neptune.Web.Views.ObservationType
         public string AssessmentDescription { get; set; }
     }
 
-    public class PassFailSchema
+    public class PassFailObservationTypeSchema
     {
         public List<string> PropertiesToObserve { get; set; }
         public string AssessmentDescription { get; set; }
     }
 
-    public class PercentageSchema
+    public class PercentageObservationTypeSchema
     {
         public string MeasurementUnitLabel { get; set; }
 
@@ -66,6 +66,16 @@ namespace Neptune.Web.Views.ObservationType
         public string AssessmentDescription { get; set; }
     }
 
- 
+    public class DiscreteObservationSchema {
+        public List<SingleValueObservation> SingleValueObservations { get; set; }
+    }
+
+    public class SingleValueObservation
+    {
+        public string PropertyObserved { get; set; }
+        public double ObservationValue { get; set; }
+        public string Notes { get; set; }
+    }
+
 
 }

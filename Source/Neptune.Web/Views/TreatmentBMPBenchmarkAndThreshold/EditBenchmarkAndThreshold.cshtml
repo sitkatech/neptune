@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-xs-10 col-sm-5">
                         <div class="input-group">
-                            <input type="number" name="@Html.NameFor(m => m.BenchmarkValue)" placeholder="@ViewDataTyped.DefaultBenchmarkPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="benchmarkUnit" />
+                            <input type="number" name="@Html.NameFor(m => m.BenchmarkValue)" value="@Model.BenchmarkValue" placeholder="@ViewDataTyped.DefaultBenchmarkPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="benchmarkUnit" />
                             <span class="input-group-addon" id="benchmarkUnit">@ViewDataTyped.BenchmarkMeasurementUnitTypeDisplayName</span>
                         </div>
                         @Html.ValidationMessageFor(m => m.BenchmarkValue)
@@ -56,7 +56,7 @@
                     </div>
                     <div class="col-xs-10 col-sm-5">
                         <div class="input-group">
-                            <input type="number" name="@Html.NameFor(m => m.ThresholdValue)" placeholder="@ViewDataTyped.DefaultThresholdPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="thresholdUnit" />
+                            <input type="number" name="@Html.NameFor(m => m.ThresholdValue)" value="@Model.ThresholdValue" placeholder="@ViewDataTyped.DefaultThresholdPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="thresholdUnit" />
                             <span class="input-group-addon" id="thresholdUnit">@ViewDataTyped.ThresholdMeasurementUnitTypeDisplayName</span>
                         </div>
                         @Html.ValidationMessageFor(m => m.ThresholdValue)

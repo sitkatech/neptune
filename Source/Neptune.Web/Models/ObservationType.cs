@@ -31,9 +31,9 @@ namespace Neptune.Web.Models
 {
     public partial class ObservationType : IAuditableEntity
     {
-        public string AssessmentUrl(int treatmentBMPAssessmentID)
+        public string AssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            throw new NotImplementedException();
+            return ObservationTypeSpecification.ObservationTypeCollectionMethod.GetAssessmentUrl(treatmentBMPAssessment, this);
         }
 
         public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
@@ -45,10 +45,10 @@ namespace Neptune.Web.Models
         public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
 
         public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
-        public DiscreteValueSchema DiscreteValueSchema => JsonConvert.DeserializeObject<DiscreteValueSchema>(ObservationTypeSchema);
-        public RateSchema RateSchema => JsonConvert.DeserializeObject<RateSchema>(ObservationTypeSchema);
-        public PassFailSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailSchema>(ObservationTypeSchema);
-        public PercentageSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageSchema>(ObservationTypeSchema);
+        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
+        public RateObservationTypeSchema RateObservationTypeSchema => JsonConvert.DeserializeObject<RateObservationTypeSchema>(ObservationTypeSchema);
+        public PassFailObservationTypeSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(ObservationTypeSchema);
+        public PercentageObservationTypeSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(ObservationTypeSchema);
 
         public MeasurementUnitType BenchmarkMeasurementUnitType()
         {
@@ -57,10 +57,10 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteValueSchema.MeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteObservationTypeSchema.MeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.Rate:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateSchema.DiscreteRateMeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateObservationTypeSchema.DiscreteRateMeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -76,9 +76,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.MeasurementUnitLabel;
+                    return DiscreteObservationTypeSchema.MeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.DiscreteRateMeasurementUnitLabel;
+                    return RateObservationTypeSchema.DiscreteRateMeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -94,9 +94,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.BenchmarkDescription;
+                    return DiscreteObservationTypeSchema.BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.BenchmarkDescription;
+                    return RateObservationTypeSchema.BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -144,9 +144,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.ThresholdDescription;
+                    return DiscreteObservationTypeSchema.ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.ThresholdDescription;
+                    return RateObservationTypeSchema.ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:

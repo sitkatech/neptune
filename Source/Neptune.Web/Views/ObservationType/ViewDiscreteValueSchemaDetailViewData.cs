@@ -5,15 +5,15 @@ namespace Neptune.Web.Views.ObservationType
 {
     public class ViewDiscreteValueSchemaDetailViewData
     {
-        public DiscreteValueSchema DiscreteValueSchema { get; }
+        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema { get; }
         public string PropertiesToObserveFormatted { get; }
         public MeasurementUnitType MeasurementUnitType { get; }
-        public ViewDiscreteValueSchemaDetailViewData(DiscreteValueSchema discreteValueSchema)
+        public ViewDiscreteValueSchemaDetailViewData(DiscreteObservationTypeSchema schema)
         {
-            DiscreteValueSchema = discreteValueSchema;
-            PropertiesToObserveFormatted = string.Join(", ", discreteValueSchema.PropertiesToObserve.OrderBy(x => x));
+            DiscreteObservationTypeSchema = schema;
+            PropertiesToObserveFormatted = string.Join(", ", schema.PropertiesToObserve.OrderBy(x => x));
             MeasurementUnitType = MeasurementUnitType.All.Find(x =>
-                x.MeasurementUnitTypeID == discreteValueSchema.MeasurementUnitTypeID);
+                x.MeasurementUnitTypeID == schema.MeasurementUnitTypeID);
         }        
     }
 }

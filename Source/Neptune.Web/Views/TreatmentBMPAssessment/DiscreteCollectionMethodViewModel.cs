@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -20,39 +20,38 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class ObservationViewModel : FormViewModel, IValidatableObject
+    public class DiscreteCollectionMethodViewModel : FormViewModel, IValidatableObject
     {
-        public int TreatmentBMPAssessmentID { get; set; }
-        public List<TreatmentBMPObservationDetailSimple> TreatmentBMPObservationDetailSimples { get; set; }
+        public int? TreatmentBMPAssessmentID { get; set; }
+        public int? ObservationTypeID { get; set; }
+        public string ObservationData { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        protected ObservationViewModel()
-        {
+        public DiscreteCollectionMethodViewModel()
+        {            
         }
 
-        protected ObservationViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)            
+        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation)              
         {
-           TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-           TreatmentBMPObservationDetailSimples = new List<TreatmentBMPObservationDetailSimple>();           
+            TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
+            ObservationTypeID = treatmentBMPObservation?.ObservationTypeID;
+            ObservationData = treatmentBMPObservation?.ObservationData;
         }
 
-        public virtual void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
+        public void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
         {
-            
+
         }
 
-        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
 
