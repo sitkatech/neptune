@@ -25,12 +25,38 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
     public class DiscreteThresholdViewData : BenchmarkAndThresholdViewData
     {
+        public string BenchmarkMeasurementUnitTypeDisplayName { get; }
+        public string ThresholdMeasurementUnitTypeDisplayName { get; }
+        public string BenchmarkMeasurementUnitLabel { get; }
+        public string ThresholdMeasurementUnitLabel { get; }
+        public string BenchmarkDescription { get; }
+        public string ThresholdDescription { get; }
+
+        public string DefaultBenchmarkText { get; }
+        public string DefaultThresholdText { get; }
+        public string DefaultBenchmarkPlaceholder { get; }
+        public string DefaultThresholdPlaceholder { get; }
 
         public DiscreteThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             Models.ObservationType observationType)
             : base(currentPerson, treatmentBMP, observationType)
         {
-            
+            BenchmarkMeasurementUnitTypeDisplayName = observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
+            ThresholdMeasurementUnitTypeDisplayName = observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;
+
+            BenchmarkMeasurementUnitLabel = observationType.BenchmarkMeasurementUnitLabel();
+            ThresholdMeasurementUnitLabel = observationType.ThresholdMeasurementUnitLabel();
+
+            BenchmarkDescription = observationType.BenchmarkDescription();
+            ThresholdDescription = observationType.ThresholdDescription();
+
+            var treatmentBMPTypeObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+
+            DefaultBenchmarkPlaceholder = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultBenchmarkValue.Value : string.Empty;
+            DefaultBenchmarkText = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {treatmentBMPTypeObservationType.DefaultBenchmarkValue} {observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
+
+            DefaultThresholdPlaceholder = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultThresholdValue.Value : string.Empty;
+            DefaultThresholdText = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? $"The default value is {treatmentBMPTypeObservationType.DefaultThresholdValue} {observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
         }
     }
 }

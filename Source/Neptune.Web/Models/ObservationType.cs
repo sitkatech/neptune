@@ -94,9 +94,9 @@ namespace Neptune.Web.Models
         }
 
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        public bool ThresholdPercentDecline => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
+        public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
 
-        public MeasurementUnitType MeasurementUnitType => MeasurementUnitType.Feet; //todo
+        public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();
 
         public bool IsObservationTypeCollectionMethodDiscreteValue => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.DiscreteValue;
         public bool IsObservationTypeCollectionMethodRate => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Rate;
@@ -128,9 +128,60 @@ namespace Neptune.Web.Models
             }
         }
 
-        public MeasurementUnitType ThresholdMeasurementUnitType()
+        public string BenchmarkMeasurementUnitLabel()
         {
-            
+            var observationTypeCollectionMethod = ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return DiscreteValueSchema.MeasurementUnitLabel;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return RateSchema.DiscreteRateMeasurementUnitLabel;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return null;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return PercentageSchema.MeasurementUnitLabel;
+                default:
+                    return null;
+            }
+        }
+
+        public string BenchmarkDescription()
+        {
+            var observationTypeCollectionMethod = ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return DiscreteValueSchema.BenchmarkDescription;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return RateSchema.BenchmarkDescription;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return null;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return PercentageSchema.BenchmarkDescription;
+                default:
+                    return null;
+            }
+        }
+
+        public string ThresholdMeasurementUnitLabel()
+        {
+            var observationThresholdType = ObservationTypeSpecification.ObservationThresholdType;
+            switch (observationThresholdType.ToEnum)
+            {
+                case ObservationThresholdTypeEnum.DiscreteValue:
+                    return BenchmarkMeasurementUnitLabel();
+                case ObservationThresholdTypeEnum.PercentFromBenchmark:
+                    return ThresholdMeasurementUnitForPercentFromBenchmark().MeasurementUnitTypeDisplayName;
+                case ObservationThresholdTypeEnum.None:
+                    return null;
+                default:
+                    return null;
+            }
+        }
+
+        public MeasurementUnitType ThresholdMeasurementUnitType()
+        {            
             var observationThresholdType = ObservationTypeSpecification.ObservationThresholdType;
             switch (observationThresholdType.ToEnum)
             {
@@ -140,6 +191,24 @@ namespace Neptune.Web.Models
                     return ThresholdMeasurementUnitForPercentFromBenchmark();
                 case ObservationThresholdTypeEnum.None:
                     return null;
+                default:
+                    return null;
+            }
+        }
+
+        public string ThresholdDescription()
+        {
+            var observationTypeCollectionMethod = ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return DiscreteValueSchema.ThresholdDescription;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return RateSchema.ThresholdDescription;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return null;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return PercentageSchema.ThresholdDescription;
                 default:
                     return null;
             }

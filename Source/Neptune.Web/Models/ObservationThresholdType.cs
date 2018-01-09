@@ -21,7 +21,7 @@ namespace Neptune.Web.Models
     {
         public override string GetBenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP, ObservationType observationType)
         {
-            return SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(c => c.PercentFromBenchmarkThreshold(treatmentBMP, observationType));
+            return SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(c => c.DiscreteThreshold(treatmentBMP, observationType));
         }
     }
 

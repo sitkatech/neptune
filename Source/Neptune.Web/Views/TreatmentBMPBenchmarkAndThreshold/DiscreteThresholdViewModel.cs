@@ -32,15 +32,12 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
     public class DiscreteThresholdViewModel : FormViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
+        public int ObservationTypeID { get; set; }
 
         [Required]
-        [DisplayName("Duration (s)")]
-        [Range(0, int.MaxValue, ErrorMessage = "Must be a positive number")]
         public double? BenchmarkValue { get; set; }
 
         [Required]
-        [DisplayName("Duration (s)")]
-        [Range(0, int.MaxValue, ErrorMessage = "Must be a positive number")]
         public double? ThresholdValue { get; set; }
 
         /// <summary>
@@ -53,6 +50,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public DiscreteThresholdViewModel(Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
+            ObservationTypeID = observationType.ObservationTypeID;
             var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID);
 
             if (benchmarkAndThreshold != null)
