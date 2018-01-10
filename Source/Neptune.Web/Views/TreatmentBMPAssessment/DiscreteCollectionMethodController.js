@@ -42,8 +42,11 @@ angular.module("NeptuneApp").controller("DiscreteCollectionMethodController", fu
     }
 
     $scope.addObservation = function () {
-        var singleValueObservation = newSingleValueObservation;
-        $scope.ObservationData.SingleValueObservations.push(singleValueObservation);        
+        $scope.ObservationData.SingleValueObservations.push({
+            PropertyObserved: null,
+            ObservationValue: null,
+            Notes: null
+        });        
     };
 
     $scope.deleteObservation = function (observation) {

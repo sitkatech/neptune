@@ -73,10 +73,10 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </span>
                             </td>
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length == 1">
-                                <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved"></span>
+                                <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved" value="{{AngularViewData.PropertiesToObserve[0].DisplayName}}"></span>
                             </td>
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length > 1">
-                                <select style="width: 100%" ng-model="ObservationData.SingleValueObservations[$index].PropertyObserved"
+                                <select style="width: 100%" ng-model="observation.PropertyObserved"
                                         class="form-control"
                                         ng-required="true">
                                     <option ng-repeat="type in AngularViewData.PropertiesToObserve"
@@ -86,10 +86,10 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </select>
                             </td>
                             <td class="col-xs-2">
-                                <input class="form-control " type="text" ng-model="observation.ObservationValue" style="width: 100%" required />
+                                <input class="form-control" type="text" ng-model="observation.ObservationValue" style="width: 100%" required />
                             </td>
                             <td class="col-xs-6">
-                                <input class="form-control " type="text" ng-model="observation.Notes" style="width: 100%" />
+                                <input class="form-control" type="text" ng-model="observation.Notes" style="width: 100%" />
                             </td>
                         </tr>
                     </table>
