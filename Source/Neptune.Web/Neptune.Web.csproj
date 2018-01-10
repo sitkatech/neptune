@@ -1003,7 +1003,6 @@
     <Compile Include="Models\FileResourceTest.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\OrganizationSimple.cs" />
-    <Compile Include="Models\MeasurementUnitType.cs" />
     <Compile Include="Models\PersonModelExtensions.cs" />
     <Compile Include="Models\PersonSimple.cs" />
     <Compile Include="Models\Point.cs" />

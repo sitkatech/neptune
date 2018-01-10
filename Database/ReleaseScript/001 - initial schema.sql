@@ -243,7 +243,8 @@ CREATE TABLE dbo.MeasurementUnitType(
 	MeasurementUnitTypeDisplayName varchar(100) NOT NULL CONSTRAINT AK_MeasurementUnitType_MeasurementUnitTypeDisplayName UNIQUE,
 	LegendDisplayName varchar(50) NULL,
 	SingularDisplayName varchar(50) NULL,
-	NumberOfSignificantDigits int NOT NULL
+	NumberOfSignificantDigits int NOT NULL,
+	IncludeSpaceBeforeLegendLabel bit NOT NULL
 )
 
 

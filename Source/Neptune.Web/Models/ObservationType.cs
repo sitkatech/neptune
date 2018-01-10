@@ -258,7 +258,7 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel() ? "" : " ";
+            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? "" : " ";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
             if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
