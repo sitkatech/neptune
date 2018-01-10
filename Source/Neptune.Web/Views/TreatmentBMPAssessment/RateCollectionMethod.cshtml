@@ -1,0 +1,119 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="MaterialAccumulation.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMPAssessment.RateCollectionMethod
+
+@{
+    SetLayout("SiteLayout.cshtml", ViewDataTyped);
+}
+
+<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessment/RateCollectionMethodController.js")"></script>
+<script type="text/javascript">
+    // <![CDATA[
+    angular.module("NeptuneApp")
+        .factory("angularModelAndViewData",
+            function()
+            {
+                return {
+                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
+                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
+                    };
+            });
+
+    jQuery(document).ready(function () {       
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
+    });
+    // ]]>
+</script>
+
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="RateCollectionMethodControllerApp" ng-controller="RateCollectionMethodController" ng-init="initializeWithEmptyRows()" ng-submit="submit()" name="observationForm">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-horizontal">
+                <div>
+                    @ViewDataTyped.AssessmentDescription
+                </div>
+                <br />
+                <div>
+                    Not yet implemented, check back soon!
+                    @*<table class="table observationList" ng-hide="ObservationData.SingleValueObservations.length === 0">
+                        <thead>
+                            <tr class="row">
+                                <th class="col-xs-1"></th>
+                                <th class="col-xs-3">@Html.Label("Measurement Type")</th>
+                                <th class="col-xs-2">@Html.Label(ViewDataTyped.MeasurementUnitLabelAndUnit)</th>
+                                <th class="col-xs-6">@Html.Label("Notes")</th>
+                            </tr>
+                        </thead>
+                        <tr class="row" ng-repeat="observation in ObservationData.SingleValueObservations track by $index">
+                            <td class="col-xs-1">
+                                <span class="glyphicon glyphicon-trash blue"
+                                      title="Remove Observation"
+                                      alt="Remove Observation"
+                                      ng-click="deleteObservation(observation)"
+                                      style="cursor: pointer">
+                                </span>
+                            </td>
+                            <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length == 1">
+                                <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved" ng-init="observation.PropertyObserved = AngularViewData.PropertiesToObserve[0].DisplayName"></span>
+                            </td>
+                            <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length > 1">
+                                <select style="width: 100%" ng-model="observation.PropertyObserved"
+                                        class="form-control"
+                                        ng-required="true">
+                                    <option ng-repeat="type in AngularViewData.PropertiesToObserve"
+                                            ng-selected="observation.PropertyObserved == type.DisplayName"
+                                            ng-bind="type.DisplayName"
+                                            value="{{type.DisplayName}}"></option>
+                                </select>
+                            </td>
+                            <td class="col-xs-2">
+                                <input class="form-control" ng-model="observation.ObservationValue" style="width: 100%" required />
+                            </td>
+                            <td class="col-xs-6">
+                                <input class="form-control" type="text" ng-model="observation.Notes" style="width: 100%" />
+                            </td>
+                        </tr>                        
+                    </table>
+                    <button class="btn btn-neptune pull-right" type="button" ng-click="addObservation()">
+                        <span class="glyphicon glyphicon-plus"></span>Add Observation
+                    </button>
+                    <div class="clearfix"></div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <hr />
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)" disabled>Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)" disabled>Save &amp; Continue</button>
+        </div>
+
+        @Html.HiddenFor(m => m.TreatmentBMPAssessmentID)
+        @Html.HiddenFor(m => m.ObservationTypeID)
+        <input type="hidden" name="@Html.NameFor(m => m.ObservationData)" ng-value="AngularModel.ObservationData" />
+    </div>
+</form>

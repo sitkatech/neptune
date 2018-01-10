@@ -39,7 +39,7 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
+            <div class="panel-heading panelTitle">
                 Basics
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
@@ -68,7 +68,7 @@ Source code is available upon request via <support@sitkatech.com>.
             </div>
         </div>
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
+            <div class="panel-heading panelTitle">
                 Benchmark & Threshold Values
                 <span class="pullRight panel-heading-right">
                     @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
@@ -100,8 +100,8 @@ Source code is available upon request via <support@sitkatech.com>.
                         {
                             <tr>
                                 <td>@observationType.ObservationTypeName</td>
-                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedBenchmarkValue(observationType)</td>
-                                <td>@ViewDataTyped.TreatmentBMP.GetFormattedThresholdValue(observationType, !observationType.ThresholdIsPercentFromBenchmark)</td>
+                                <td>@observationType.GetFormattedBenchmarkValue(observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                <td>@observationType.GetFormattedThresholdValue(observationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
                             </tr>
                         }
 
@@ -113,7 +113,7 @@ Source code is available upon request via <support@sitkatech.com>.
     </div>
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
+            <div class="panel-heading panelTitle">
                 Location
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
@@ -132,7 +132,7 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-md-12">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
+            <div class="panel-heading panelTitle">
                 Assessments
                 @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
                 {

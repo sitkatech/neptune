@@ -5,13 +5,13 @@ namespace Neptune.Web.Views.ObservationType
 {
     public class ViewPercentageSchemaDetailViewData
     {
-        public PercentageSchema PercentageSchema { get; }
+        public PercentageObservationTypeSchema PercentageSchema { get; }
         public string PropertiesToObserveFormatted { get; }
         public MeasurementUnitType MeasurementUnitType { get; }
-        public ViewPercentageSchemaDetailViewData(PercentageSchema discreteValueSchema)
+        public ViewPercentageSchemaDetailViewData(PercentageObservationTypeSchema schema)
         {
-            PercentageSchema = discreteValueSchema;
-            PropertiesToObserveFormatted = string.Join(", ", discreteValueSchema.PropertiesToObserve.OrderBy(x => x));
+            PercentageSchema = schema;
+            PropertiesToObserveFormatted = string.Join(", ", schema.PropertiesToObserve.OrderBy(x => x));
             MeasurementUnitType = MeasurementUnitType.Percent;
         }        
     }

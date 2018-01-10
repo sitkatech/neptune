@@ -51,8 +51,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public ViewDataForAngular(List<Models.ObservationType> observationTypes)
         {
-            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();
-           
+            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();           
         }
     }
 

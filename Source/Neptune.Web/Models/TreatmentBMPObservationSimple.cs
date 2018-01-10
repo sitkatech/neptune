@@ -1,21 +1,27 @@
-﻿namespace Neptune.Web.Models
+﻿using System.Linq;
+
+namespace Neptune.Web.Models
 {
     public class TreatmentBMPObservationSimple
-    {
-        public bool IsComplete { get; set; }
-        public bool OverrideScore { get; set; }
-        public string OverrideScoreText { get; set; }
-        public double? ObservedValue { get; set; }
-        public string ObservationScore { get; set; }
-
+    {       
+        public string ObservationScore { get; }
+        public double? ObservationValue { get; }
+        public bool IsComplete { get; }
+        public string OverrideScoreText { get; }
+        public bool OverrideScore { get; }
         public TreatmentBMPObservationSimple(TreatmentBMPObservation treatmentBMPObservation)
-        {
+        {           
+            ObservationScore = treatmentBMPObservation.FormattedObservationScore();
+            ObservationValue = treatmentBMPObservation.CalculateObservationValue();
+            IsComplete = treatmentBMPObservation.IsComplete();
+
             var observationType = treatmentBMPObservation.ObservationType;
-            IsComplete = observationType.IsComplete(treatmentBMPObservation);
-            OverrideScore = !observationType.HasBenchmarkAndThreshold && IsComplete ? observationType.CalculateScore(treatmentBMPObservation) == 2 : false;
-            OverrideScoreText = string.Empty;
-            ObservedValue = IsComplete ? (double?)observationType.GetObservationValue(treatmentBMPObservation) : null;
-            ObservationScore = IsComplete ? observationType.FormattedScore(treatmentBMPObservation) : "-";
+            var treatmentBMPType = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
+
+            var overrideAssessmentScoreIfFailing = observationType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x => x.TreatmentBMPType == treatmentBMPType)?.OverrideAssessmentScoreIfFailing ?? false;
+
+            OverrideScore = overrideAssessmentScoreIfFailing && IsComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(observationType);
+            OverrideScoreText = "One or more observations resulted in a failing score";
         }
     }
 }

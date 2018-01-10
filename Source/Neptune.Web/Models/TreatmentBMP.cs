@@ -47,73 +47,6 @@ namespace Neptune.Web.Models
        
         public string AuditDescriptionString => TreatmentBMPName; public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
 
-        public double? GetBenchmarkValue(ObservationType observationType)
-        {
-            var treatmentBMPBenchmarkAndThreshold = TreatmentBMPBenchmarkAndThresholds
-               .SingleOrDefault(x => x.ObservationType == observationType);
-
-            return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
-        }
-
-        public double? GetThresholdValue(ObservationType observationType)
-        {
-            var treatmentBMPBenchmarkAndThreshold = TreatmentBMPBenchmarkAndThresholds
-                .SingleOrDefault(x => x.ObservationType == observationType);
-
-            return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;
-        }
-
-        public double? GetThresholdValueInObservedUnits(ObservationType observationType)
-        {
-            var thresholdValue = GetThresholdValue(observationType);
-
-            if (thresholdValue == null)
-            {
-                return null;
-            }
-           
-            return observationType.ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark
-                ? ObservationTypeHelper.ThresholdValueFromThresholdPercentDecline(GetBenchmarkValue(observationType).Value, thresholdValue.Value)
-                : thresholdValue.Value;
-        }
-
-        public string GetFormattedBenchmarkValue(ObservationType observationType)
-        {
-            if (!observationType.HasBenchmarkAndThreshold)
-            {
-                return ViewUtilities.NaString;
-            }
-
-            var benchmarkValue = GetBenchmarkValue(observationType);
-            if (benchmarkValue == null)
-            {
-                return "-";
-            }
-
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent ? "" : " ";
-            return $"{benchmarkValue}{optionalSpace}{observationType.MeasurementUnitType.LegendDisplayName}";
-        }
-
-        public string GetFormattedThresholdValue(ObservationType observationType, bool inObservedUnits)
-        {
-            if (!observationType.HasBenchmarkAndThreshold)
-            {
-                return ViewUtilities.NaString;
-            }
-
-            var valueInObservedUnits = GetThresholdValueInObservedUnits(observationType);
-            var formattedThresholdValueInObservedUnits = $"{valueInObservedUnits} {observationType.MeasurementUnitType.LegendDisplayName}";
-            if (inObservedUnits)
-            {
-                return formattedThresholdValueInObservedUnits;
-            }
-
-            var formattedThresholdValueAsPercent = ObservationTypeHelper.ApplyThresholdFormatting(observationType, GetThresholdValue(observationType));
-            var optionalFormattedValueInObservedUnits = valueInObservedUnits.HasValue && observationType.MeasurementUnitType != MeasurementUnitType.Percent ? $" ({formattedThresholdValueInObservedUnits})"
-                : string.Empty;
-            return $"{formattedThresholdValueAsPercent}{optionalFormattedValueInObservedUnits}";
-        }
-
         public bool IsBenchmarkAndThresholdsComplete()
         {
             var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
@@ -141,19 +74,17 @@ namespace Neptune.Web.Models
         {
             var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.AssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
             return latestAssessment;
-        }     
-
-        public double? GetWetBasinThresholdValueInObservedUnits(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            var observationValue = treatmentBMPObservation.ObservationType.GetObservationValue(treatmentBMPObservation);
-            var benchmarkValue = GetBenchmarkValue(treatmentBMPObservation.ObservationType).Value;
-            var thresholdValue = GetThresholdValue(treatmentBMPObservation.ObservationType).Value;
-            return observationValue < benchmarkValue ? benchmarkValue - thresholdValue : benchmarkValue + thresholdValue;
         }
 
         public bool HasDependentObjectsBesidesBenchmarksAndThresholds()
         {
             return TreatmentBMPAssessments.Any();
+        }
+
+        public bool IsBenchmarkAndThresholdCompleteForObservationType(ObservationType observationType)
+        {
+            return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
+                       x.ObservationTypeID == observationType.ObservationTypeID) != null;
         }
     }
 }

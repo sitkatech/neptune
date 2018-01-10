@@ -20,6 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -51,35 +54,20 @@ namespace Neptune.Web.Models
             return score < 0 ? 0 : (score > 5 ? 5 : score);
         }
 
-        public static double ThresholdValueFromThresholdPercentDecline(double benchmarkValue, double thresholdPercent)
+        public static void ValidatePropertiesToObserveAreUnique(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
         {
-            return benchmarkValue - (thresholdPercent / 100) * benchmarkValue;
+            if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
+            {
+                validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
+            }
         }
 
-        public static string FormattedDefaultBenchmarkValue(ObservationType observationType, double? benchmarkValue)
+        public static void ValidateMinimumNumberOfObservationsGreaterThanZero(int minimumNumberOfObservations, List<ValidationResult> validationErrors)
         {
-            if (!benchmarkValue.HasValue)
+            if (minimumNumberOfObservations == 0)
             {
-                return "-";
+                validationErrors.Add(new ValidationResult("Minimum Number of Observations must be greater than 0"));
             }
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent ? "" : " ";
-            return $"{benchmarkValue}{optionalSpace}{observationType.MeasurementUnitType.LegendDisplayName}";
-        }
-
-        public static string ApplyThresholdFormatting(ObservationType observationType, double? thresholdValue)
-        {
-            if (thresholdValue == null)
-            {
-                return "-";
-            }
-
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdIsPercentFromBenchmark
-                ? string.Empty
-                : " ";
-
-            var unit = observationType.ThresholdIsPercentFromBenchmark ? observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName : observationType.MeasurementUnitType.LegendDisplayName;
-
-            return $"{thresholdValue}{optionalSpace}{unit}";
         }
     }
 }

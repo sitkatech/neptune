@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[MeasurementUnitType](
 	[LegendDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[SingularDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[NumberOfSignificantDigits] [int] NOT NULL,
+	[IncludeSpaceBeforeLegendLabel] [bit] NOT NULL,
  CONSTRAINT [PK_MeasurementUnitType_MeasurementUnitTypeID] PRIMARY KEY CLUSTERED 
 (
 	[MeasurementUnitTypeID] ASC

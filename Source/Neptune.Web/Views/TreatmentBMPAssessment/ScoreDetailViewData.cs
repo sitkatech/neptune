@@ -19,20 +19,34 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
     public class ScoreDetailViewData
     {
-        public readonly ScoreViewData.ScoreViewDataForAngular ViewDataForAngular;
+        public readonly ScoreViewDataForAngular ViewDataForAngular;
         
         public ScoreDetailViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            ViewDataForAngular = new ScoreViewData.ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),
-                treatmentBMPAssessment.TreatmentBMPObservations.ToList(),
-                treatmentBMPAssessment);
-        
+            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),                
+                treatmentBMPAssessment);        
+        }
+
+        public class ScoreViewDataForAngular
+        {
+            public List<TreatmentBMPAssessmentObservationTypeSimple> ObservationTypeSimples { get; }            
+            public bool AssessmentIsComplete { get; }
+            public string AssessmentScore { get; }
+
+            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+            {
+                ObservationTypeSimples = observationTypes.Select(x => new TreatmentBMPAssessmentObservationTypeSimple(x, treatmentBMPAssessment)).ToList();
+                AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
+                AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;
+            }
         }
     }
 }

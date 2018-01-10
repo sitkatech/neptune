@@ -19,14 +19,75 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
+using System.Linq;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
+using Neptune.Web.Views.ObservationType;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPObservation : IAuditableEntity
     {
-        
+        public DiscreteObservationSchema DiscreteObservationData => JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
+
+        public bool IsComplete()
+        {
+            return true; //todo
+        }
+        public double? CalculateObservationScore()
+        {
+            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return observationTypeCollectionMethod.CalculateScore(this);
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return 0;
+                default:
+                    return null;
+            }
+        }
+
+        public string FormattedObservationScore()
+        {
+            var score = CalculateObservationScore();
+            return score?.ToString("0.0") ?? "-";
+        }
+
+        public double? CalculateObservationValue()
+        {
+            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return 0;
+                default:
+                    return null;
+            }
+        }
+
+        public bool OverrideScoreForFailingObservation(ObservationType observationType)
+        {
+            var score = CalculateObservationScore();
+            if (score == null)
+            {
+                return false;
+            }
+            return Math.Abs(score.Value - 2) < 0.01;
+        }
+
         public string AuditDescriptionString
         {
             get
@@ -36,8 +97,8 @@ namespace Neptune.Web.Models
                 var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
-                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";            
-            } 
+                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";
+            }
         }
     }
 }

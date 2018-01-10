@@ -65,18 +65,7 @@ namespace Neptune.Web.Models
             //Assert
             Assert.That(actualScore, Is.EqualTo(expectedScore).Within(0.00001));
         }
-
-        [TestCase(100, 25, 75)]
-        [TestCase(20, 50, 10)]
-        public void TestThresholdValueFromThresholdPercentDecline(double benchmarkValue, double thresholdPercent, double expectedThresholdValue)
-        {
-            //Act
-            var actualThresholdValue = ObservationTypeHelper.ThresholdValueFromThresholdPercentDecline(benchmarkValue, thresholdPercent);
-
-            //Assert
-            Assert.That(actualThresholdValue, Is.EqualTo(expectedThresholdValue).Within(0.00001));
-        }
-
+       
       
     }
 }

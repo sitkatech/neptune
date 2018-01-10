@@ -1,60 +1,49 @@
-﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationViewModel.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
-
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
-
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*/
-
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using LtInfo.Common;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class ObservationViewModel : FormViewModel, IValidatableObject
+    public class ObservationViewModel : FormViewModel, IValidatableObject
     {
-        public int TreatmentBMPAssessmentID { get; set; }
-        public List<TreatmentBMPObservationDetailSimple> TreatmentBMPObservationDetailSimples { get; set; }
+        public int? TreatmentBMPAssessmentID { get; set; }
+        public int? ObservationTypeID { get; set; }
+        public string ObservationData { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        protected ObservationViewModel()
+        public ObservationViewModel()
         {
         }
 
-        protected ObservationViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)            
+        public ObservationViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType)
         {
-           TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-           TreatmentBMPObservationDetailSimples = new List<TreatmentBMPObservationDetailSimple>();           
+            TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
+            ObservationTypeID = observationType.ObservationTypeID;
+            ObservationData = treatmentBMPObservation?.ObservationData;
         }
 
-        public virtual void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
+        public void UpdateModel(TreatmentBMPObservation treatmentBMPObservation)
         {
-            
+            treatmentBMPObservation.ObservationData = ObservationData;
         }
 
-        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+
+            var observationType =
+                HttpRequestStorage.DatabaseEntities.ObservationTypes.SingleOrDefault(x =>
+                    x.ObservationTypeID == ObservationTypeID);
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[observationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+            if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
+            {
+                validationResults.Add(new ValidationResult("Schema invalid."));
+            }
 
             return validationResults;
         }

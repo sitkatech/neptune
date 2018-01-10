@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TreatmentBMPType.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,23 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Common;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public partial class TreatmentBMPType : IAuditableEntity
+    public class PercentageCollectionMethodViewModel : ObservationViewModel
     {
-
-        public List<ObservationType> GetObservationTypes()
-        {
-            return TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType).ToList();
+       
+        /// <summary>
+        /// Needed by the ModelBinder
+        /// </summary>
+        public PercentageCollectionMethodViewModel()
+        {            
         }
 
-        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
+        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)     
+        {         
+        }
+
     }
-    
 }

@@ -37,7 +37,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     {
                         <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
                             <a href="@observationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
-                                @if (observationType.IsBenchmarkAndThresholdComplete(ViewDataTyped.TreatmentBMP))
+                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(observationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }

@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MeasurementUnitType.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -18,14 +18,24 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using LtInfo.Common;
-using LtInfo.Common.Views;
 
-namespace Neptune.Web.Models
+using Neptune.Web.Models;
+
+namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public partial class MeasurementUnitType
-    {
+    public class DiscreteCollectionMethodViewModel : ObservationViewModel
+    {    
+        /// <summary>
+        /// Needed by the ModelBinder
+        /// </summary>
+        public DiscreteCollectionMethodViewModel()
+        {            
+        }
+
+        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)         
+        {            
+        }
+
 
     }
-
 }
