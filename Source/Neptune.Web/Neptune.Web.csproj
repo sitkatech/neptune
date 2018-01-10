@@ -547,8 +547,18 @@
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
     <Compile Include="Models\ObservationTypeSimple.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\ObservationViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethodViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethodViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewModel.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThresholdViewData.cs" />
@@ -693,6 +703,9 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController .js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
@@ -742,6 +755,9 @@
     <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Content Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

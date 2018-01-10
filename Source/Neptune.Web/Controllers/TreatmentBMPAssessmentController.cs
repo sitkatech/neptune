@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -94,7 +95,7 @@ namespace Neptune.Web.Controllers
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
             {
 
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Add(treatmentBMPAssessment);
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
 
@@ -137,7 +138,7 @@ namespace Neptune.Web.Controllers
             var observationType = observationTypePrimaryKey.EntityObject;
 
             var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-            var viewModel = new DiscreteCollectionMethodViewModel(existingObservation);
+            var viewModel = new DiscreteCollectionMethodViewModel(existingObservation, observationType);
             return ViewDiscreteCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
         }
 
@@ -169,6 +170,134 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new DiscreteCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
             return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
+        }
+
+
+        [HttpGet]
+        [TreatmentBMPAssessmentManageFeature]
+        public ViewResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var viewModel = new RateCollectionMethodViewModel(existingObservation, observationType);
+            return ViewRateCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPAssessmentManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, RateCollectionMethodViewModel viewModel)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRateCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+            }
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
+
+            viewModel.UpdateModel(treatmentBMPObservation);
+
+            SetMessageForDisplay("Assessment Information successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.RateCollectionMethod(treatmentBMPAssessment, observationType)));
+        }
+
+        private ViewResult ViewRateCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, RateCollectionMethodViewModel viewModel)
+        {
+            var viewData = new RateCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            return RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [TreatmentBMPAssessmentManageFeature]
+        public ViewResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var viewModel = new PassFailCollectionMethodViewModel(existingObservation, observationType);
+            return ViewPassFailCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPAssessmentManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, PassFailCollectionMethodViewModel viewModel)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewPassFailCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+            }
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
+
+            viewModel.UpdateModel(treatmentBMPObservation);
+
+            SetMessageForDisplay("Assessment Information successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.PassFailCollectionMethod(treatmentBMPAssessment, observationType)));
+        }
+
+        private ViewResult ViewPassFailCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, PassFailCollectionMethodViewModel viewModel)
+        {
+            var viewData = new PassFailCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            return RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(viewData, viewModel);
+        }
+
+
+        [HttpGet]
+        [TreatmentBMPAssessmentManageFeature]
+        public ViewResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var viewModel = new PercentageCollectionMethodViewModel(existingObservation, observationType);
+            return ViewPercentageCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPAssessmentManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, PercentageCollectionMethodViewModel viewModel)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewPercentageCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+            }
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
+
+            viewModel.UpdateModel(treatmentBMPObservation);
+
+            SetMessageForDisplay("Assessment Information successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.PercentageCollectionMethod(treatmentBMPAssessment, observationType)));
+        }
+
+        private ViewResult ViewPercentageCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, PercentageCollectionMethodViewModel viewModel)
+        {
+            var viewData = new PercentageCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            return RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
         }
 
         [HttpGet]

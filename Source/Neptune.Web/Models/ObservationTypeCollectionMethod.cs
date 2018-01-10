@@ -103,7 +103,17 @@ namespace Neptune.Web.Models
 
         public override bool ValidateObservationDataJson(string json)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                RateObservationSchema schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override string ViewSchemaDetailUrl(ObservationType observationType)
@@ -114,12 +124,13 @@ namespace Neptune.Web.Models
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
             ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.RateCollectionMethod(treatmentBMPAssessment, observationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            throw new NotImplementedException();
+            RateObservationSchema observation = JsonConvert.DeserializeObject<RateObservationSchema>(observationData);
+            return 0; //todo
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
@@ -146,7 +157,17 @@ namespace Neptune.Web.Models
 
         public override bool ValidateObservationDataJson(string json)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                PassFailObservationSchema schema = JsonConvert.DeserializeObject<PassFailObservationSchema>(json);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override string ViewSchemaDetailUrl(ObservationType observationType)
@@ -157,12 +178,13 @@ namespace Neptune.Web.Models
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
             ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(treatmentBMPAssessment, observationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            throw new NotImplementedException();
+            PassFailObservationSchema observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
+            return 0; //todo
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
@@ -189,7 +211,16 @@ namespace Neptune.Web.Models
 
         public override bool ValidateObservationDataJson(string json)
         {
-            throw new NotImplementedException();
+            try
+            {
+                PercentageObservationSchema schema = JsonConvert.DeserializeObject<PercentageObservationSchema>(json);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override string ViewSchemaDetailUrl(ObservationType observationType)
@@ -200,12 +231,13 @@ namespace Neptune.Web.Models
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
             ObservationType observationType)
         {
-            throw new NotImplementedException();
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            throw new NotImplementedException();
+            PercentageObservationSchema observation = JsonConvert.DeserializeObject<PercentageObservationSchema>(observationData);
+            return 0; //todo
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)

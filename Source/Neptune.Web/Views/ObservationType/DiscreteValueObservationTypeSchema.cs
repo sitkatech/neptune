@@ -34,11 +34,11 @@ namespace Neptune.Web.Views.ObservationType
 
         public List<string> PropertiesToObserve { get; set; }
 
-        public int DiscretRateMinimumNumberOfObservations { get; set; }
-        public int? DiscretRateMaximumNumberOfObservations { get; set; }
+        public int DiscreteRateMinimumNumberOfObservations { get; set; }
+        public int? DiscreteRateMaximumNumberOfObservations { get; set; }
 
-        public double DiscretRateMinimumValueOfObservations { get; set; }
-        public double? DiscretRateMaximumValueOfObservations { get; set; }
+        public double DiscreteRateMinimumValueOfObservations { get; set; }
+        public double? DiscreteRateMaximumValueOfObservations { get; set; }
 
         public int TimeReadingMinimumNumberOfObservations { get; set; }
         public int? TimeReadingMaximumNumberOfObservations { get; set; }
@@ -70,6 +70,23 @@ namespace Neptune.Web.Views.ObservationType
         public List<SingleValueObservation> SingleValueObservations { get; set; }
     }
 
+    public class RateObservationSchema
+    {
+        public List<SingleValueObservation> SingleValueObservations { get; set; }
+        public List<TimeValuePairObservation> TimeValuePairObservations { get; set; }
+    }
+
+    public class PassFailObservationSchema
+    {
+        public List<PassFailObservation> PassFailObservations { get; set; }
+    }
+
+
+    public class PercentageObservationSchema
+    {
+        public List<SingleValueObservation> SingleValueObservations { get; set; }
+    }
+
     public class SingleValueObservation
     {
         public string PropertyObserved { get; set; }
@@ -77,5 +94,19 @@ namespace Neptune.Web.Views.ObservationType
         public string Notes { get; set; }
     }
 
+    public class TimeValuePairObservation
+    {
+        public string PropertyObserved { get; set; }
+        public double ObservationValue { get; set; }
+        public double ObservationTime { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class PassFailObservation
+    {
+        public string PropertyObserved { get; set; }
+        public bool ObservationValue { get; set; }
+        public string Notes { get; set; }
+    }
 
 }
