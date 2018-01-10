@@ -53,6 +53,10 @@ angular.module("NeptuneApp").controller("DiscreteCollectionMethodController", fu
         Sitka.Methods.removeFromJsonArray($scope.ObservationData.SingleValueObservations, observation);
     };
 
+    $scope.disableAddObservation = function() {
+        return $scope.ObservationData.SingleValueObservations.length >= $scope.AngularViewData.MaximumNumberOfObservations;
+    }
+
     $scope.submit = function () {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
     }

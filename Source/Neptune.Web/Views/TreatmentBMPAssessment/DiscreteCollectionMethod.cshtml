@@ -86,14 +86,14 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </select>
                             </td>
                             <td class="col-xs-2">
-                                <input class="form-control" ng-model="observation.ObservationValue" style="width: 100%" required />
+                                <input class="form-control" type="number" min="{{AngularViewData.MinimumValueOfObservations}}" max="{{AngularViewData.MaximumValueOfObservations}}" ng-model="observation.ObservationValue" style="width: 100%; text-align: right" required />
                             </td>
                             <td class="col-xs-6">
                                 <input class="form-control" type="text" ng-model="observation.Notes" style="width: 100%" />
                             </td>
                         </tr>                        
                     </table>
-                    <button class="btn btn-neptune pull-right" type="button" ng-click="addObservation()">
+                    <button class="btn btn-neptune pull-right" type="button" ng-click="addObservation()" ng-disabled="disableAddObservation()">
                         <span class="glyphicon glyphicon-plus"></span>Add Observation
                     </button>
                     <div class="clearfix"></div>
