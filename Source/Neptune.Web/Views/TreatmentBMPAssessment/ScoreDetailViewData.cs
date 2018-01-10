@@ -31,10 +31,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         
         public ScoreDetailViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),
-                treatmentBMPAssessment.TreatmentBMPObservations.ToList(),
-                treatmentBMPAssessment);
-        
+            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),                
+                treatmentBMPAssessment);        
         }
 
         public class ScoreViewDataForAngular
@@ -43,9 +41,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             public bool AssessmentIsComplete { get; }
             public string AssessmentScore { get; }
 
-            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, List<TreatmentBMPObservation> treatmentBMPObservations, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
-                ObservationTypeSimples = observationTypes.Select(x => new TreatmentBMPAssessmentObservationTypeSimple(x, treatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == x.ObservationTypeID))).ToList();
+                ObservationTypeSimples = observationTypes.Select(x => new TreatmentBMPAssessmentObservationTypeSimple(x, treatmentBMPAssessment)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
                 AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;
             }

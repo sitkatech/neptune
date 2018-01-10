@@ -59,18 +59,7 @@ namespace Neptune.Web.Models
         public bool IsPublicRegularAssessment()
         {
             return StormwaterAssessmentType == StormwaterAssessmentType.Regular && !IsPrivate;
-        }
-
-        private bool OverrideScoreForFailingObservation(ObservationType observationType)
-        {
-            var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(x => x.ObservationType == observationType);
-            if (treatmentBMPObservation == null)
-            {
-                return false;
-            }
-                
-            return Math.Abs(treatmentBMPObservation.CalculateObservationScore() - 2) < 0.01;
-        }
+        }        
 
         public double? CalculateAssessmentScore()
         {
@@ -82,7 +71,11 @@ namespace Neptune.Web.Models
             //if any observations that override the score have a failing score, return 2
             if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing.HasValue && x.OverrideAssessmentScoreIfFailing.Value)
-                .ToList().Select(x => x.ObservationType).Select(x => OverrideScoreForFailingObservation(x)).Any(x => x))
+                .ToList().Select(x => x.ObservationType).Select(x =>
+                {
+                    var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType == x);
+                    return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
+                }).Any(x => x))
             {
                 return 2;
             }

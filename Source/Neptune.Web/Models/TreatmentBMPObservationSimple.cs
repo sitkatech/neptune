@@ -1,4 +1,6 @@
-﻿namespace Neptune.Web.Models
+﻿using System.Linq;
+
+namespace Neptune.Web.Models
 {
     public class TreatmentBMPObservationSimple
     {       
@@ -12,8 +14,14 @@
             ObservationScore = treatmentBMPObservation.FormattedObservationScore();
             ObservationValue = treatmentBMPObservation.CalculateObservationScore();
             IsComplete = treatmentBMPObservation.IsComplete();
-            OverrideScore = true;
-            OverrideScoreText = "test";
+
+            var observationType = treatmentBMPObservation.ObservationType;
+            var treatmentBMPType = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
+
+            var overrideAssessmentScoreIfFailing = observationType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x => x.TreatmentBMPType == treatmentBMPType)?.OverrideAssessmentScoreIfFailing ?? false;
+
+            OverrideScore = overrideAssessmentScoreIfFailing && IsComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(observationType);
+            OverrideScoreText = "One or more observations resulted in a failing score";
         }
     }
 }

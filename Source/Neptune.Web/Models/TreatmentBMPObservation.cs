@@ -42,6 +42,11 @@ namespace Neptune.Web.Models
             return score.ToString("0.0");
         }
 
+        public bool OverrideScoreForFailingObservation(ObservationType observationType)
+        {            
+            return Math.Abs(CalculateObservationScore() - 2) < 0.01;
+        }
+
         public string AuditDescriptionString
         {
             get

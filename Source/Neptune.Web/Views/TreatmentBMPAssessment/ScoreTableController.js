@@ -24,8 +24,8 @@ angular.module("NeptuneApp").controller("ScoreTableController", function ($scope
 
     $scope.overrideScore = function()
     {
-        var overridingObservationTypes = $scope.AngularViewData.ObservationTypeSimples.filter(function(observationTypeSimple)
-        {
+        var overridingObservationTypes = $scope.AngularViewData.ObservationTypeSimples.filter(function(observationTypeSimple) {
+            console.log(observationTypeSimple);
             return observationTypeSimple.TreatmentBMPObservationSimple == null ? null : observationTypeSimple.TreatmentBMPObservationSimple.OverrideScore;
         });
         return overridingObservationTypes.length !== 0;
