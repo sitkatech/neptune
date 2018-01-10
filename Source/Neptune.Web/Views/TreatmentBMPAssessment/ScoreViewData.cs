@@ -37,19 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
             CalculatedAssessmentScoreFormatted = treatmentBMPAssessment.FormattedScore();
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
-        }
-
-        public class ScoreViewDataForAngular
-        {
-            public readonly List<ObservationTypeSimple> ObservationTypeSimples;
-            public readonly TreatmentBMPAssessmentSimple TreatmentBMPAssessmentSimple;
-
-            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, List<TreatmentBMPObservation> treatmentBMPObservations, Models.TreatmentBMPAssessment treatmentBMPAssessment)
-            {
-                ObservationTypeSimples = null; //todo
-                TreatmentBMPAssessmentSimple = new TreatmentBMPAssessmentSimple(treatmentBMPAssessment);
-            }
-        }
+        }       
 
     }
 }

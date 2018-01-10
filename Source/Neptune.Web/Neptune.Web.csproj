@@ -202,12 +202,14 @@
     <Compile Include="Models\TreatmentBMP.DatabaseContextExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessment.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentModelExtensions.cs" />
+    <Compile Include="Models\TreatmentBMPAssessmentObservationTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentTest.cs" />
     <Compile Include="Models\TreatmentBMPBenchmarkAndThreshold.cs" />
     <Compile Include="Models\TreatmentBMPInfiltrationObservationDetailSimple.cs" />
     <Compile Include="Models\TreatmentBMPInfiltrationReadingSimple.cs" />
     <Compile Include="Models\TreatmentBMPModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPObservation.cs" />
+    <Compile Include="Models\TreatmentBMPObservationSimple.cs" />
     <Compile Include="Models\TreatmentBMPType.cs" />
     <Compile Include="Models\TreatmentBMPTypeModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationType.cs" />
@@ -545,7 +547,6 @@
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
     <Compile Include="Models\ObservationTypeSimple.cs" />
-    <Compile Include="Models\TreatmentBMPAssessmentSimple.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewModel.cs" />

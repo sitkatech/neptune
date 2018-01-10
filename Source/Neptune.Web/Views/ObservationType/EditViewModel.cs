@@ -109,6 +109,8 @@ namespace Neptune.Web.Views.ObservationType
             {
                 validationResults.Add(new ValidationResult("Schema invalid."));
             }
+
+            //todo validate that each Property to Observe is unique
             return validationResults;
         }
     }

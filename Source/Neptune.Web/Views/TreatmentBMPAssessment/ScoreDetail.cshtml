@@ -23,8 +23,41 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMPAssessment.ScoreDetail
 
+<style>
+    
+    #legendGradient {
+        background: white;
+        background: linear-gradient(to right, hsl(0,100%,59%), hsl(0,100%,59%), hsl(60,100%,59%), hsl(120,100%,59%));
+        height: 20px;
+        width: 175px;
+        padding: 0px;
+        margin-right: 10px;
+        margin-bottom: 30px;}
+    #legendGradient p {
+        line-height: 60px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+        #legendGradient .alignleft {
+            float: left;
+        }
 
-<script type="text/javascript" src="@Url.Content("~/Areas/Stormwater/Views/TreatmentBMPAssessment/ScoreTableController.js")"></script>
+        #legendGradient .alignright {
+            float: right;
+        }
+    
+    .legendLabel {
+        margin-right: 65px;
+        font-weight: bold;
+    }
+
+    .scoreText {
+        font-weight: bold;
+        font-size: 16px;
+    }
+</style>
+
+<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessment/ScoreTableController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp")
@@ -91,10 +124,10 @@ Source code is available upon request via <support@sitkatech.com>.
                 <td class="col-xs-2 text-center">-</td>
                 <td class="col-xs-2 text-center">-</td>
                 <td class="col-xs-2 text-center">1.0</td>
-                <td class="col-xs-1 text-center" ng-if="AngularViewData.TreatmentBMPAssessmentSimple.IsComplete">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.TreatmentBMPAssessmentSimple.AssessmentScore)}">{{AngularViewData.TreatmentBMPAssessmentSimple.AssessmentScore | setDecimal:2 }}</span>
+                <td class="col-xs-1 text-center" ng-if="AngularViewData.AssessmentIsComplete">
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.AssessmentScore)}">{{AngularViewData.AssessmentIsComplete | setDecimal:2 }}</span>
                 </td>
-                <td class="col-xs-1 text-center" ng-if="!AngularViewData.TreatmentBMPAssessmentSimple.IsComplete">-</td>
+                <td class="col-xs-1 text-center" ng-if="!AngularViewData.AssessmentIsComplete">-</td>
             </tr>
             </tbody>
         </table>

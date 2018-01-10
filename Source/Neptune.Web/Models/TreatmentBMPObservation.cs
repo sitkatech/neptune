@@ -26,17 +26,22 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPObservation : IAuditableEntity
-    {              
-        public double CalculateScoreForObservationType()
+    {
+        public bool IsComplete()
+        {
+            return true; //todo
+        }
+        public double CalculateObservationScore()
         {
             return 0; //todo
         }
 
-        public string FormattedScoreForObservationType()
+        public string FormattedObservationScore()
         {
-            var score = CalculateScoreForObservationType();
+            var score = CalculateObservationScore();
             return score.ToString("0.0");
         }
+
         public string AuditDescriptionString
         {
             get
