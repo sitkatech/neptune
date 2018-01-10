@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common.DesignByContract;
@@ -12,6 +13,7 @@ namespace Neptune.Web.Models
     public partial class ObservationTypeCollectionMethod
     {
         public abstract bool ValidateObservationTypeJson(string json);
+        public abstract List<ValidationResult> ValidateObservationType(string json);
         public abstract bool ValidateObservationDataJson(string json);
 
         public abstract string ViewSchemaDetailUrl(ObservationType observationType);
@@ -36,6 +38,18 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+
+        public override List<ValidationResult> ValidateObservationType(string json)
+        {
+            var validationErrors = new List<ValidationResult>();
+            DiscreteObservationTypeSchema schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
+
+            var propertiesToObserve = schema.PropertiesToObserve;
+            ObservationTypeHelper.ValidatePropertiesToObserveAreUnique(propertiesToObserve, validationErrors);
+            ObservationTypeHelper.ValidateMinimumNumberOfObservationsGreaterThanZero(schema.MinimumNumberOfObservations, validationErrors);
+
+            return validationErrors;
         }
 
         public override bool ValidateObservationDataJson(string json)
@@ -101,6 +115,19 @@ namespace Neptune.Web.Models
             return true;
         }
 
+        public override List<ValidationResult> ValidateObservationType(string json)
+        {
+            var validationErrors = new List<ValidationResult>();
+            RateObservationTypeSchema schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
+
+            var propertiesToObserve = schema.PropertiesToObserve;
+            ObservationTypeHelper.ValidatePropertiesToObserveAreUnique(propertiesToObserve, validationErrors);
+            ObservationTypeHelper.ValidateMinimumNumberOfObservationsGreaterThanZero(schema.DiscreteRateMinimumNumberOfObservations, validationErrors);
+            ObservationTypeHelper.ValidateMinimumNumberOfObservationsGreaterThanZero(schema.TimeReadingMinimumNumberOfObservations, validationErrors);
+
+            return validationErrors;
+        }
+
         public override bool ValidateObservationDataJson(string json)
         {
 
@@ -155,6 +182,17 @@ namespace Neptune.Web.Models
             return true;
         }
 
+        public override List<ValidationResult> ValidateObservationType(string json)
+        {
+            var validationErrors = new List<ValidationResult>();
+            PassFailObservationTypeSchema schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
+
+            var propertiesToObserve = schema.PropertiesToObserve;
+            ObservationTypeHelper.ValidatePropertiesToObserveAreUnique(propertiesToObserve, validationErrors);
+
+            return validationErrors;
+        }
+
         public override bool ValidateObservationDataJson(string json)
         {
 
@@ -207,6 +245,17 @@ namespace Neptune.Web.Models
             }
 
             return true;
+        }
+
+        public override List<ValidationResult> ValidateObservationType(string json)
+        {
+            var validationErrors = new List<ValidationResult>();
+            PercentageObservationTypeSchema schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
+
+            var propertiesToObserve = schema.PropertiesToObserve;
+            ObservationTypeHelper.ValidatePropertiesToObserveAreUnique(propertiesToObserve, validationErrors);
+
+            return validationErrors;
         }
 
         public override bool ValidateObservationDataJson(string json)

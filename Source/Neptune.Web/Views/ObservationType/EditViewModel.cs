@@ -108,9 +108,11 @@ namespace Neptune.Web.Views.ObservationType
             if (!observationTypeCollectionMethod.ValidateObservationTypeJson(ObservationTypeSchema))
             {
                 validationResults.Add(new ValidationResult("Schema invalid."));
-            }
+                return validationResults;
+            }            
 
-            //todo validate that each Property to Observe is unique
+            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationType(ObservationTypeSchema));
+
             return validationResults;
         }
     }
