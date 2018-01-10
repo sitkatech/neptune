@@ -61,7 +61,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 HttpRequestStorage.DatabaseEntities.ObservationTypes.SingleOrDefault(x =>
                     x.ObservationTypeID == ObservationTypeID);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[observationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
-            if (!observationTypeCollectionMethod.ValidateObservationTypeJson(ObservationData))
+            if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
             {
                 validationResults.Add(new ValidationResult("Schema invalid."));
             }

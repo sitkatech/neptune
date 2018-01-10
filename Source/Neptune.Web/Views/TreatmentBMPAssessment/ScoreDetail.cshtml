@@ -130,7 +130,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 <td class="col-xs-2 text-center">-</td>
                 <td class="col-xs-2 text-center">1.0</td>
                 <td class="col-xs-1 text-center" ng-if="AngularViewData.AssessmentIsComplete">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.AssessmentScore)}">{{AngularViewData.AssessmentIsComplete | setDecimal:2 }}</span>
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.AssessmentScore)}">{{AngularViewData.AssessmentScore | setDecimal:2 }}</span>
                 </td>
                 <td class="col-xs-1 text-center" ng-if="!AngularViewData.AssessmentIsComplete">-</td>
             </tr>

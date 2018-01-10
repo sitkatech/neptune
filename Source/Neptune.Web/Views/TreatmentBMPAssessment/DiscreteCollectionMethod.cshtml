@@ -73,7 +73,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </span>
                             </td>
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length == 1">
-                                <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved" value="{{AngularViewData.PropertiesToObserve[0].DisplayName}}"></span>
+                                <span ng-bind="AngularViewData.PropertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved" ng-init="observation.PropertyObserved = AngularViewData.PropertiesToObserve[0].DisplayName"></span>
                             </td>
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length > 1">
                                 <select style="width: 100%" ng-model="observation.PropertyObserved"

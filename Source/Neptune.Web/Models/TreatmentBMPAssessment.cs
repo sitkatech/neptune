@@ -27,7 +27,7 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPAssessment : IAuditableEntity
     {
-        public bool CanEdit(Person currentPerson, int waterYear)
+        public bool CanEdit(Person currentPerson)
         {
             var canManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
             return canManageStormwaterJurisdiction;
@@ -69,9 +69,11 @@ namespace Neptune.Web.Models
             }
 
             //if any observations that override the score have a failing score, return 2
-            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing.HasValue && x.OverrideAssessmentScoreIfFailing.Value)
-                .ToList().Select(x => x.ObservationType).Select(x =>
+                .ToList().Select(x => x.ObservationType);
+
+            if (observationTypesThatPotentiallyOverrideScore.Select(x =>
                 {
                     var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType == x);
                     return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
