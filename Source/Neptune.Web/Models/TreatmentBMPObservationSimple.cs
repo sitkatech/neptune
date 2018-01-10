@@ -5,14 +5,14 @@ namespace Neptune.Web.Models
     public class TreatmentBMPObservationSimple
     {       
         public string ObservationScore { get; }
-        public double ObservationValue { get; }
+        public double? ObservationValue { get; }
         public bool IsComplete { get; }
         public string OverrideScoreText { get; }
         public bool OverrideScore { get; }
         public TreatmentBMPObservationSimple(TreatmentBMPObservation treatmentBMPObservation)
         {           
             ObservationScore = treatmentBMPObservation.FormattedObservationScore();
-            ObservationValue = treatmentBMPObservation.CalculateObservationScore();
+            ObservationValue = treatmentBMPObservation.CalculateObservationValue();
             IsComplete = treatmentBMPObservation.IsComplete();
 
             var observationType = treatmentBMPObservation.ObservationType;

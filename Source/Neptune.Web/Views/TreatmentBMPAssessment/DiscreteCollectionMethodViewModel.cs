@@ -21,7 +21,9 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
@@ -54,6 +56,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+
+            var observationType =
+                HttpRequestStorage.DatabaseEntities.ObservationTypes.SingleOrDefault(x =>
+                    x.ObservationTypeID == ObservationTypeID);
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[observationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+            if (!observationTypeCollectionMethod.ValidateObservationTypeJson(ObservationData))
+            {
+                validationResults.Add(new ValidationResult("Schema invalid."));
+            }
 
             return validationResults;
         }

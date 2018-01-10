@@ -55,6 +55,10 @@ Source code is available upon request via <support@sitkatech.com>.
         font-weight: bold;
         font-size: 16px;
     }
+
+    .grayOut {
+        opacity: 0.4;
+    }
 </style>
 
 <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessment/ScoreTableController.js")"></script>
@@ -89,7 +93,7 @@ Source code is available upon request via <support@sitkatech.com>.
             </tr>
             </thead>
             <tbody>
-            <tr class="row" ng-repeat="observationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && observationType.HasBenchmarkAndThresholds ? 'grayOut' : ''">
+            <tr class="row" ng-repeat="observationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && !observationType.TreatmentBMPObservationSimple.OverrideScore ? 'grayOut' : ''">
                 <td class="col-xs-3">{{observationType.DisplayName}}</td>   
                 
                 <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
@@ -97,7 +101,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </td>
 
                 <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservedValue | setDecimal:3 }}</span>
+                    <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
                 </td>
                 <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
 
@@ -106,6 +110,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </td>
 
                 <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">{{observationType.Weight}}</td>
+                
 
                 <td class="text-center" colspan="4" ng-if="!observationType.HasBenchmarkAndThresholds">
                     <span ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete" class="italic">Observation incomplete</span>

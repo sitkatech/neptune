@@ -20,13 +20,18 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Linq;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
+using Neptune.Web.Views.ObservationType;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPObservation : IAuditableEntity
     {
+        public DiscreteObservationSchema DiscreteObservationData => JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
+
         public bool IsComplete()
         {
             return true; //todo
@@ -40,6 +45,24 @@ namespace Neptune.Web.Models
         {
             var score = CalculateObservationScore();
             return score.ToString("0.0");
+        }
+
+        public double? CalculateObservationValue()
+        {
+            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return 0;
+                default:
+                    return null;
+            }
         }
 
         public bool OverrideScoreForFailingObservation(ObservationType observationType)
