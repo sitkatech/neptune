@@ -175,7 +175,7 @@ namespace Neptune.Web.Models
             }
         }
 
-        public double? ThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
+        public double? GetThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
         {
             if (benchmarkValue == null || thresholdValue == null)
             {
@@ -268,12 +268,12 @@ namespace Neptune.Web.Models
 
             if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation)
             {
-                var upperValueInBenchmarkUnits = ThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
-                var lowerValueInBenchmarkUnits = ThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
+                var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
+                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
                 return $"{formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
             }
 
-            var thresholdValueInBenchmarkUnits = ThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
+            var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
 
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
         }

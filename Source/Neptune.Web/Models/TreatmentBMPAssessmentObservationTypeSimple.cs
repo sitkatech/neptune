@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
             var thresholdValue = observationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);
             var assessmentScoreWeight = observationType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeID)?.AssessmentScoreWeight;
 
-            ThresholdValueInObservedUnits = observationType.ThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease) ?? 0;
+            ThresholdValueInObservedUnits = observationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease) ?? 0;
             BenchmarkValue = benchmarkValue ?? 0;            
             Weight = assessmentScoreWeight?.ToString("0.0") ?? "pass/fail";
 

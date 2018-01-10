@@ -36,15 +36,28 @@ namespace Neptune.Web.Models
         {
             return true; //todo
         }
-        public double CalculateObservationScore()
+        public double? CalculateObservationScore()
         {
-            return 0; //todo
+            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    return observationTypeCollectionMethod.CalculateScore(this);
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    return 0;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    return 0;
+                default:
+                    return null;
+            }
         }
 
         public string FormattedObservationScore()
         {
             var score = CalculateObservationScore();
-            return score.ToString("0.0");
+            return score?.ToString("0.0") ?? "-";
         }
 
         public double? CalculateObservationValue()
@@ -66,8 +79,13 @@ namespace Neptune.Web.Models
         }
 
         public bool OverrideScoreForFailingObservation(ObservationType observationType)
-        {            
-            return Math.Abs(CalculateObservationScore() - 2) < 0.01;
+        {
+            var score = CalculateObservationScore();
+            if (score == null)
+            {
+                return false;
+            }
+            return Math.Abs(score.Value - 2) < 0.01;
         }
 
         public string AuditDescriptionString

@@ -99,7 +99,7 @@ namespace Neptune.Web.Models
                     return observationScore * observationWeight;
                 });
 
-            return Math.Round(score, 1);
+            return Math.Round(score.Value, 1);
         }
 
         public string FormattedScore()

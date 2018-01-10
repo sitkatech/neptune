@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
@@ -17,6 +18,8 @@ namespace Neptune.Web.Models
         public abstract string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType);
 
         public abstract double? GetObservationValueFromObservationData(string observationData);
+
+        public abstract double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation);
     }
 
     public partial class ObservationTypeCollectionMethodDiscreteValue
@@ -65,6 +68,21 @@ namespace Neptune.Web.Models
             DiscreteObservationSchema observation = JsonConvert.DeserializeObject<DiscreteObservationSchema>(observationData);
             return observation.SingleValueObservations.Average(x => x.ObservationValue);
         }
+
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
+        {            
+            var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
+            var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
+
+            if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
+            {
+                return null;
+            }
+
+            return ObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
+        }
     }
 
     public partial class ObservationTypeCollectionMethodRate
@@ -100,6 +118,11 @@ namespace Neptune.Web.Models
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
             throw new NotImplementedException();
         }
@@ -141,6 +164,11 @@ namespace Neptune.Web.Models
         {
             throw new NotImplementedException();
         }
+
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public partial class ObservationTypeCollectionMethodPercentage
@@ -176,6 +204,11 @@ namespace Neptune.Web.Models
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
             throw new NotImplementedException();
         }
