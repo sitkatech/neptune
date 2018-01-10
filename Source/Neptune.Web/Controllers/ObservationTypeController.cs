@@ -162,7 +162,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult DiscreteDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<DiscreteValueSchema>(observationType.ObservationTypeSchema);
+            var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(observationType.ObservationTypeSchema);
             var viewData = new ViewDiscreteValueSchemaDetailViewData(schema);
             return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
@@ -172,7 +172,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult RateDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<RateSchema>(observationType.ObservationTypeSchema);
+            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(observationType.ObservationTypeSchema);
             var viewData = new ViewRateSchemaDetailViewData(schema);
             return RazorPartialView<ViewRateSchemaDetail, ViewRateSchemaDetailViewData>(viewData);
         }
@@ -182,7 +182,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult PassFailDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PassFailSchema>(observationType.ObservationTypeSchema);
+            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(observationType.ObservationTypeSchema);
             var viewData = new ViewPassFailSchemaDetailViewData(schema);
             return RazorPartialView<ViewPassFailSchemaDetail, ViewPassFailSchemaDetailViewData>(viewData);
         }
@@ -192,7 +192,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult PercentageDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PercentageSchema>(observationType.ObservationTypeSchema);
+            var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(observationType.ObservationTypeSchema);
             var viewData = new ViewPercentageSchemaDetailViewData(schema);
             return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
         }

@@ -50,36 +50,5 @@ namespace Neptune.Web.Models
             var score = observation < benchmark ? PositiveLinearInterpolation(observation, benchmark, threshold) : NegativeLinearInterpolation(observation, benchmark, threshold);
             return score < 0 ? 0 : (score > 5 ? 5 : score);
         }
-
-        public static double ThresholdValueFromThresholdPercentDecline(double benchmarkValue, double thresholdPercent)
-        {
-            return benchmarkValue - (thresholdPercent / 100) * benchmarkValue;
-        }
-
-        public static string FormattedDefaultBenchmarkValue(ObservationType observationType, double? benchmarkValue)
-        {
-            if (!benchmarkValue.HasValue)
-            {
-                return "-";
-            }
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent ? "" : " ";
-            return $"{benchmarkValue}{optionalSpace}{observationType.MeasurementUnitType.LegendDisplayName}";
-        }
-
-        public static string ApplyThresholdFormatting(ObservationType observationType, double? thresholdValue)
-        {
-            if (thresholdValue == null)
-            {
-                return "-";
-            }
-
-            var optionalSpace = observationType.MeasurementUnitType == MeasurementUnitType.Percent || observationType.ThresholdIsPercentFromBenchmark
-                ? string.Empty
-                : " ";
-
-            var unit = observationType.ThresholdIsPercentFromBenchmark ? observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName : observationType.MeasurementUnitType.LegendDisplayName;
-
-            return $"{thresholdValue}{optionalSpace}{unit}";
-        }
     }
 }

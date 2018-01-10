@@ -19,14 +19,24 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPObservation : IAuditableEntity
-    {
-        
+    {              
+        public double CalculateScoreForObservationType()
+        {
+            return 0; //todo
+        }
+
+        public string FormattedScoreForObservationType()
+        {
+            var score = CalculateScoreForObservationType();
+            return score.ToString("0.0");
+        }
         public string AuditDescriptionString
         {
             get
@@ -36,8 +46,8 @@ namespace Neptune.Web.Models
                 var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
-                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";            
-            } 
+                return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";
+            }
         }
     }
 }

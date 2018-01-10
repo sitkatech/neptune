@@ -11,17 +11,17 @@
         <div class="panel-body">
             <div class="row">
                 <label class="col-sm-3 control-label text-right">Assessment Instructions</label>
-                <div class="col-sm-9">@ViewDataTyped.RateSchema.AssessmentDescription</div>
+                <div class="col-sm-9">@ViewDataTyped.RateObservationTypeSchema.AssessmentDescription</div>
             </div>
             <br/>
             <div class="row">
                 <label class="col-sm-3 control-label text-right">Benchmark Instructions</label>
-                <div class="col-sm-9">@ViewDataTyped.RateSchema.BenchmarkDescription</div>
+                <div class="col-sm-9">@ViewDataTyped.RateObservationTypeSchema.BenchmarkDescription</div>
             </div>
             <br/>
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">Threshold Instructions</label>
-                    <div class="col-sm-9">@ViewDataTyped.RateSchema.ThresholdDescription</div>
+                    <div class="col-sm-9">@ViewDataTyped.RateObservationTypeSchema.ThresholdDescription</div>
                 </div>
         </div>
     </div>
@@ -40,47 +40,47 @@
             <h4>Labels and Units for Rate Data</h4>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Label for Data Entered as Rate")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.DiscreteRateMeasurementUnitLabel</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.DiscreteRateMeasurementUnitLabel</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Unit for Data Entered as Rate")</label>
                 <div class="col-xs-9 col-sm-3">@ViewDataTyped.DiscreteRateMeasurementUnit.MeasurementUnitTypeDisplayName</div>
             </div>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Minimum Number of Rate Observations")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.DiscretRateMinimumNumberOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.DiscretRateMinimumNumberOfObservations</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Maximum Number of Rate Observations")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.DiscretRateMaximumNumberOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.DiscretRateMaximumNumberOfObservations</div>
             </div>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Minimum Value of Each Rate Observation")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.DiscretRateMinimumValueOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.DiscretRateMinimumValueOfObservations</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Maximum Value of Each Rate Observation")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.DiscretRateMaximumValueOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.DiscretRateMaximumValueOfObservations</div>
             </div>
             <br />
             <h4>Labels and Units for Time/Reading Data</h4>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Label for Reading")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.ReadingMeasurementUnitLabel</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.ReadingMeasurementUnitLabel</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Unit of Reading")</label>
                 <div class="col-xs-9 col-sm-3">@ViewDataTyped.ReadingMeasurementUnit.MeasurementUnitTypeDisplayName</div>
             </div>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Label for Time")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.ReadingMeasurementUnitLabel</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.ReadingMeasurementUnitLabel</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Unit of Time")</label>
                 <div class="col-xs-9 col-sm-3">@ViewDataTyped.TimeMeasurementUnit.MeasurementUnitTypeDisplayName</div>
             </div>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Minimum Number of Time/Reading Observations")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.TimeReadingMinimumNumberOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.TimeReadingMinimumNumberOfObservations</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Maximum Number of Time/Reading Observations")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.TimeReadingMaximumValueOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.TimeReadingMaximumValueOfObservations</div>
             </div>
             <div class="row">
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Minimum Value of Each Reading")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.TimeReadingMinimumValueOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.TimeReadingMinimumValueOfObservations</div>
                 <label class="col-xs-3 col-sm-3 control-label text-right">@Html.Label("Maximum Value of Each Reading")</label>
-                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateSchema.TimeReadingMaximumValueOfObservations</div>
+                <div class="col-xs-9 col-sm-3">@ViewDataTyped.RateObservationTypeSchema.TimeReadingMaximumValueOfObservations</div>
             </div>
         </div>
     </div>

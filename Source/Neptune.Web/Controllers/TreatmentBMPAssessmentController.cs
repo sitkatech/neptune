@@ -126,7 +126,50 @@ namespace Neptune.Web.Controllers
 
             var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList, assessmentTypes);
             return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
-        }        
+        }
+
+
+        [HttpGet]
+        [TreatmentBMPAssessmentManageFeature]
+        public ViewResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var viewModel = new DiscreteCollectionMethodViewModel(existingObservation);
+            return ViewDiscreteCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPAssessmentManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, DiscreteCollectionMethodViewModel viewModel)
+        {
+            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+            var observationType = observationTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDiscreteCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
+            }
+
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
+            
+            viewModel.UpdateModel(treatmentBMPObservation);
+
+            SetMessageForDisplay("Assessment Information successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, observationType)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, observationType)));
+        }
+
+        private ViewResult ViewDiscreteCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, DiscreteCollectionMethodViewModel viewModel)
+        {
+            var viewData = new DiscreteCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
+        }
 
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
@@ -236,7 +279,7 @@ namespace Neptune.Web.Controllers
 
             var nextObservationTypeViewResult = isNextPageScore
                 ? RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(x => x.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
-                : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment.TreatmentBMPAssessmentID));
+                : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment));
             return nextObservationTypeViewResult;
         }
 

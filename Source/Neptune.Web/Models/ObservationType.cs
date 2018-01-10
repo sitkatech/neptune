@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Linq;
+using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
@@ -30,9 +31,9 @@ namespace Neptune.Web.Models
 {
     public partial class ObservationType : IAuditableEntity
     {
-        public string AssessmentUrl(int treatmentBMPAssessmentID)
+        public string AssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            throw new NotImplementedException();
+            return ObservationTypeSpecification.ObservationTypeCollectionMethod.GetAssessmentUrl(treatmentBMPAssessment, this);
         }
 
         public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
@@ -40,73 +41,14 @@ namespace Neptune.Web.Models
             return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
         }
 
-        public bool IsComplete(TreatmentBMPAssessment treatmentBMPAssessment)
-        {
-            var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == ObservationTypeID);
-
-            if (treatmentBMPObservation == null)
-            {
-                return false;
-            }
-
-            return IsComplete(treatmentBMPObservation);
-        }
-        public bool IsComplete(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double CalculateScore(TreatmentBMPAssessment treatmentBMPAssessment)
-        {
-            var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == ObservationTypeID);
-
-            if (!IsComplete(treatmentBMPObservation))
-            {
-                throw new Exception("Observation not complete, cannot calculate score");
-            }
-            return CalculateScore(treatmentBMPObservation);
-        }
-
-        public string FormattedScore(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            var score = CalculateScore(treatmentBMPObservation);
-            return score.ToString("0.0");
-        }
-
-        public double CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetObservationValue(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            return GetObservationValueImpl(treatmentBMPObservation);
-        }
-
-        protected double GetObservationValueImpl(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsBenchmarkAndThresholdComplete(TreatmentBMP treatmentBMP)
-        {
-            return treatmentBMP.TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x => x.ObservationTypeID == ObservationTypeID) != null;
-        }
-
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
         public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
 
-        public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();
-
-        public bool IsObservationTypeCollectionMethodDiscreteValue => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.DiscreteValue;
-        public bool IsObservationTypeCollectionMethodRate => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Rate;
-        public bool IsObservationTypeCollectionMethodPassFail => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail;
-        public bool IsObservationTypeCollectionMethodPercentage => ObservationTypeSpecification.ObservationTypeCollectionMethod == ObservationTypeCollectionMethod.Percentage;
-
-        public DiscreteValueSchema DiscreteValueSchema => JsonConvert.DeserializeObject<DiscreteValueSchema>(ObservationTypeSchema);
-        public RateSchema RateSchema => JsonConvert.DeserializeObject<RateSchema>(ObservationTypeSchema);
-        public PassFailSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailSchema>(ObservationTypeSchema);
-        public PercentageSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageSchema>(ObservationTypeSchema);
+        public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
+        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
+        public RateObservationTypeSchema RateObservationTypeSchema => JsonConvert.DeserializeObject<RateObservationTypeSchema>(ObservationTypeSchema);
+        public PassFailObservationTypeSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(ObservationTypeSchema);
+        public PercentageObservationTypeSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(ObservationTypeSchema);
 
         public MeasurementUnitType BenchmarkMeasurementUnitType()
         {
@@ -115,10 +57,10 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteValueSchema.MeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteObservationTypeSchema.MeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.Rate:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateSchema.DiscreteRateMeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateObservationTypeSchema.DiscreteRateMeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -134,9 +76,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.MeasurementUnitLabel;
+                    return DiscreteObservationTypeSchema.MeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.DiscreteRateMeasurementUnitLabel;
+                    return RateObservationTypeSchema.DiscreteRateMeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -152,9 +94,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.BenchmarkDescription;
+                    return DiscreteObservationTypeSchema.BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.BenchmarkDescription;
+                    return RateObservationTypeSchema.BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -202,9 +144,9 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteValueSchema.ThresholdDescription;
+                    return DiscreteObservationTypeSchema.ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateSchema.ThresholdDescription;
+                    return RateObservationTypeSchema.ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -230,6 +172,85 @@ namespace Neptune.Web.Models
                 default:
                     return null;
             }
+        }
+       
+
+        public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
+        {
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
+                .SingleOrDefault(x => x.ObservationType == this);
+
+            return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
+        }
+
+        public double? GetThresholdValue(TreatmentBMP treatmentBMP)
+        {
+            var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
+                .SingleOrDefault(x => x.ObservationType == this);
+
+            return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;
+        }
+
+        public string GetFormattedBenchmarkValue(double? benchmarkValue)
+        {
+            if (!HasBenchmarkAndThreshold)
+            {
+                return ViewUtilities.NaString;
+            }
+
+            if (benchmarkValue == null)
+            {
+                return "-";
+            }
+
+            var optionalSpace = MeasurementUnitType == MeasurementUnitType.Percent ? "" : " ";
+            return $"{benchmarkValue}{optionalSpace}{MeasurementUnitType.LegendDisplayName}";
+        }
+
+        public string GetFormattedThresholdValue(double? thresholdValue, double? benchmarkValue)
+        {
+
+            if (!HasBenchmarkAndThreshold)
+            {
+                return ViewUtilities.NaString;
+            }
+
+            if (thresholdValue == null)
+            {
+                return "-";
+            }
+
+            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel() ? "" : " ";
+            var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
+
+            if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
+            {                
+                return formattedThresholdValue;
+            }
+
+            //todo % decline
+            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDecline)
+            {
+                var thresholdValueInBenchmarkUnits = benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
+            }
+
+            //todo % increase
+            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease)
+            {
+                var thresholdValueInBenchmarkUnits = benchmarkValue + (thresholdValue / 100) * benchmarkValue;
+                return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
+            }
+
+            //todo % deviation
+            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation)
+            {
+                var upperValueInBenchmarkUnits = benchmarkValue + (thresholdValue / 100) * benchmarkValue;
+                var lowerValueInBenchmarkUnits = benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                return $"{formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+            }
+
+            return string.Empty;
         }
 
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";

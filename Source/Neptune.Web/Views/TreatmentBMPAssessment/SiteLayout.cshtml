@@ -36,8 +36,8 @@ Source code is available upon request via <support@sitkatech.com>.
                     @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
                     {
                         <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
-                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPAssessmentID))">                                
-                                @if (observationType.IsComplete(ViewDataTyped.TreatmentBMPAssessment))
+                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">                                
+                                @if (ViewDataTyped.TreatmentBMPAssessment.IsComplete(observationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }

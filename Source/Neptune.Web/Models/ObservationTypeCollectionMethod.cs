@@ -12,6 +12,7 @@ namespace Neptune.Web.Models
         public abstract bool ValidateJson(string json);
 
         public abstract string ViewSchemaDetailUrl(ObservationType observationType);
+        public abstract string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType);
     }
 
     public partial class ObservationTypeCollectionMethodDiscreteValue
@@ -20,7 +21,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                DiscreteValueSchema schema = JsonConvert.DeserializeObject<DiscreteValueSchema>(json);
+                DiscreteObservationTypeSchema schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -34,6 +35,12 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(observationType));
         }
+
+        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
+            ObservationType observationType)
+        {
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, observationType));
+        }
     }
 
     public partial class ObservationTypeCollectionMethodRate
@@ -42,7 +49,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                RateSchema schema = JsonConvert.DeserializeObject<RateSchema>(json);
+                RateObservationTypeSchema schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -55,6 +62,12 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(observationType));
         }
+
+        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
+            ObservationType observationType)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public partial class ObservationTypeCollectionMethodPassFail
@@ -63,7 +76,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                PassFailSchema schema = JsonConvert.DeserializeObject<PassFailSchema>(json);
+                PassFailObservationTypeSchema schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -77,6 +90,12 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(observationType));
         }
+
+        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
+            ObservationType observationType)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public partial class ObservationTypeCollectionMethodPercentage
@@ -85,7 +104,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                PercentageSchema schema = JsonConvert.DeserializeObject<PercentageSchema>(json);
+                PercentageObservationTypeSchema schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -97,6 +116,12 @@ namespace Neptune.Web.Models
         public override string ViewSchemaDetailUrl(ObservationType observationType)
         {
             return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(observationType));
+        }
+
+        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
+            ObservationType observationType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

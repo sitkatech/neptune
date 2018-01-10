@@ -5,13 +5,13 @@ namespace Neptune.Web.Views.ObservationType
 {
     public class ViewPassFailSchemaDetailViewData
     {
-        public PassFailSchema PassFailSchema { get; }
+        public PassFailObservationTypeSchema PassFailSchema { get; }
         public string PropertiesToObserveFormatted { get; }
         public MeasurementUnitType MeasurementUnitType { get; }
-        public ViewPassFailSchemaDetailViewData(PassFailSchema discreteValueSchema)
+        public ViewPassFailSchemaDetailViewData(PassFailObservationTypeSchema schema)
         {
-            PassFailSchema = discreteValueSchema;
-            PropertiesToObserveFormatted = string.Join(", ", discreteValueSchema.PropertiesToObserve.OrderBy(x => x));            
+            PassFailSchema = schema;
+            PropertiesToObserveFormatted = string.Join(", ", schema.PropertiesToObserve.OrderBy(x => x));            
         }        
     }
 }
