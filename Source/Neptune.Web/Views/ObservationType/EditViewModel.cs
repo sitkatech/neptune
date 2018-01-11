@@ -100,7 +100,7 @@ namespace Neptune.Web.Views.ObservationType
 
             if (observationTypesWithSameName.Any(x => x.ObservationTypeID != ObservationTypeID))
             {
-                validationResults.Add(new ValidationResult("An Observation Type with this name already exists."));
+                validationResults.Add(new ValidationResult("An Observation Type with this name already exists"));
             }
 
             var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x =>
@@ -109,13 +109,13 @@ namespace Neptune.Web.Views.ObservationType
                 x.ObservationTypeCollectionMethodID == ObservationTypeCollectionMethodID);
             if (observationTypeSpecification == null)
             {
-                validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method."));
+                validationResults.Add(new ValidationResult("Enter a valid combination of Target Type, Threshold Type and Collection Method"));
             }
            
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[ObservationTypeCollectionMethodID.Value];
             if (!observationTypeCollectionMethod.ValidateObservationTypeJson(ObservationTypeSchema))
             {
-                validationResults.Add(new ValidationResult("Schema invalid."));
+                validationResults.Add(new ValidationResult("Schema is invalid, cannot save Observation Type"));
                 return validationResults;
             }            
 

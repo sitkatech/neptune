@@ -54,19 +54,42 @@ namespace Neptune.Web.Models
             return score < 0 ? 0 : (score > 5 ? 5 : score);
         }
 
-        public static void ValidatePropertiesToObserveAreUnique(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
+        public static void ValidatePropertiesToObserve(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
         {
             if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
             {
                 validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
             }
+
+            if (propertiesToObserve.Any(x => string.IsNullOrWhiteSpace(x)))
+            {
+                validationErrors.Add(new ValidationResult("Each Property to Observe must have a name and cannot be blank"));
+            }
+
+            if (propertiesToObserve.Count.Equals(0))
+            {
+                validationErrors.Add(new ValidationResult("At least one Property to Observe is required"));
+            }
         }
 
-        public static void ValidateMinimumNumberOfObservationsGreaterThanZero(int minimumNumberOfObservations, List<ValidationResult> validationErrors)
-        {
+        public static void ValidateNumberOfObservations(int minimumNumberOfObservations, int? maximumNumberOfObservations, List<ValidationResult> validationErrors)
+        {            
             if (minimumNumberOfObservations == 0)
             {
                 validationErrors.Add(new ValidationResult("Minimum Number of Observations must be greater than 0"));
+            }
+
+            if (maximumNumberOfObservations != null && minimumNumberOfObservations >= maximumNumberOfObservations)
+            {
+                validationErrors.Add(new ValidationResult("Minimum Number of Observations must less than the Maximum Number of Observations"));
+            }
+        }
+
+        public static void ValidateValueOfObservations(double minimumValueOfObservations, double? maximumValueOfObservations, List<ValidationResult> validationErrors)
+        {           
+            if (maximumValueOfObservations != null && minimumValueOfObservations > maximumValueOfObservations)
+            {
+                validationErrors.Add(new ValidationResult("Minimum Value of Each Observation must less than the Maximum Value of Each Observation"));
             }
         }
     }
