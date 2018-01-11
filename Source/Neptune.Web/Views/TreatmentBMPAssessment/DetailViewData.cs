@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
             CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson);
 
-            PageTitle = "Assessed On: " + treatmentBMPAssessment.AssessmentDate.ToShortDateString();
+            PageTitle = $"{treatmentBMPAssessment.TreatmentBMP.FormattedNameAndType} Assessment on " + treatmentBMPAssessment.AssessmentDate.ToShortDateString();
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMPAssessment.TreatmentBMP.GetDetailUrl();
 

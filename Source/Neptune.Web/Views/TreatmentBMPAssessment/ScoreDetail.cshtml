@@ -113,9 +113,9 @@ Source code is available upon request via <support@sitkatech.com>.
                 
 
                 <td class="text-center" colspan="4" ng-if="!observationType.HasBenchmarkAndThresholds">
-                    <span ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete" class="italic">Observation incomplete</span>
-                    <span ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(5)}" class="bold italic">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</span>
-                    <span ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(0)}" class="bold italic">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</span>
+                    <em ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete">Observation incomplete</em>
+                    <em ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(5)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
+                    <em ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(0)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
                 </td>
 
                 <td class="col-xs-1 text-center" ng-if="observationType.TreatmentBMPObservationSimple.IsComplete">

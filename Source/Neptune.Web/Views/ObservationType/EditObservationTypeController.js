@@ -71,7 +71,10 @@
             $scope.ObservationTypeSchema = {};
         }
 
-        $scope.addInput();
+        if ($scope.ObservationTypeSchema.PropertiesToObserve.length == 0) {
+            $scope.addInput();
+        }
+        
     }
 
     $scope.selectedCollectionMethodHasBenchmarkAndThresholds = function() {

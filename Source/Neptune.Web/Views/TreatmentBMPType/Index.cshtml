@@ -42,42 +42,42 @@
                         @treatmentBMPType.TreatmentBMPTypeName
                     </div>
                     <div class="panel-body">
+                        @Html.Label("Description:") @treatmentBMPType.TreatmentBMPTypeDescription
+                        <br />
                         @Html.Label("Number of BMPs:") @treatmentBMPType.TreatmentBMPs.Count
                         <br />
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <caption>Applicable Observation Types</caption>
-                                <thead>
+                        <table class="table table-striped table-responsive">
+                            @Html.Label("Applicable Observation Types:")
+                            <thead>
+                                <tr>
+                                    <th class="col-xs-4">Observation</th>
+                                    <th class="col-xs-2">Weight</th>
+                                    <th class="col-xs-3">Benchmark Default</th>
+                                    <th class="col-xs-3">Threshold Default</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var observationType in treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType))
+                                {
+                                    var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                     <tr>
-                                        <th>Observation</th>
-                                        <th>Weight</th>
-                                        <th>Benchmark Default</th>
-                                        <th>Threshold Default</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var observationType in treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType))
-                                    {
-                                        var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
-                                        <tr>
-                                            <td>@observationType.GetDisplayNameAsUrl()</td>
-                                            <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
-                                            @if (observationType.HasBenchmarkAndThreshold)
-                                            {
-                                                <td>@observationType.GetFormattedBenchmarkValue(treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                                <td>@observationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                            }
-                                            else
-                                            {
-                                                <td>@ViewUtilities.NaString</td>
-                                                <td>@ViewUtilities.NaString</td>
-                                            }
+                                        <td>@observationType.GetDisplayNameAsUrl()</td>
+                                        <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
+                                        @if (observationType.HasBenchmarkAndThreshold)
+                                        {
+                                            <td>@observationType.GetFormattedBenchmarkValue(treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                            <td>@observationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@ViewUtilities.NaString</td>
+                                            <td>@ViewUtilities.NaString</td>
+                                        }
 
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

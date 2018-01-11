@@ -241,7 +241,7 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = MeasurementUnitType == MeasurementUnitType.Percent ? "" : " ";
+            var optionalSpace = MeasurementUnitType.IncludeSpaceBeforeLegendLabel ? " " : "";
             return $"{benchmarkValue}{optionalSpace}{MeasurementUnitType.LegendDisplayName}";
         }
 
@@ -258,7 +258,7 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? "" : " ";
+            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
             if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
@@ -275,7 +275,8 @@ namespace Neptune.Web.Models
 
             var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
 
-            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
+            var otherOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
+            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{otherOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";

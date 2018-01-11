@@ -17,8 +17,8 @@ namespace Neptune.Web.Models
             ObservationTypeID = observationType.ObservationTypeID;
             HasBenchmarkAndThresholds = observationType.HasBenchmarkAndThreshold;
            
-            var unitDisplayName = observationType.MeasurementUnitType?.LegendDisplayName ?? string.Empty;
-            DisplayName = $"{observationType.ObservationTypeName} ({unitDisplayName})";
+            var unitDisplayName = observationType.MeasurementUnitType != null ? $" ({observationType.MeasurementUnitType.LegendDisplayName})" : string.Empty;
+            DisplayName = $"{observationType.ObservationTypeName}{unitDisplayName}";
 
             var benchmarkValue = observationType.GetBenchmarkValue(treatmentBMPAssessment.TreatmentBMP);
             var thresholdValue = observationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);

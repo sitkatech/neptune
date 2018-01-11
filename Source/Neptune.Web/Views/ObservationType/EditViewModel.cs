@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -94,6 +95,13 @@ namespace Neptune.Web.Views.ObservationType
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+
+            var observationTypesWithSameName = HttpRequestStorage.DatabaseEntities.ObservationTypes.Where(x => x.ObservationTypeName == ObservationTypeName);
+
+            if (observationTypesWithSameName.Any(x => x.ObservationTypeID != ObservationTypeID))
+            {
+                validationResults.Add(new ValidationResult("An Observation Type with this name already exists."));
+            }
 
             var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x =>
                 x.ObservationTargetTypeID == ObservationTargetTypeID &&

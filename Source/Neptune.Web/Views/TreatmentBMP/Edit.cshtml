@@ -90,8 +90,9 @@ Source code is available upon request via <support@sitkatech.com>.
                                     @Html.ValidationMessageFor(m => m.TreatmentBMPName)
                                 </div>
                             </div>                           
-                            <div class="form-group text-center">
-                                <em>Click the map to set the location of the Treatment BMP</em>
+                            <div class="form-group">
+                                <div class="col-sm-offset-5 col-sm-7 col-xs-12"><em>Click the map to set the location of the Treatment BMP, or enter latitude and longitude below</em></div>
+                                
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-5 control-label">
@@ -110,15 +111,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                     @Html.TextBoxFor(x => x.TreatmentBMPPointY, new { type = "number", @class = "form-control", style = "width: auto;", step = "0.001" })
                                     @Html.ValidationMessageFor(x => x.TreatmentBMPPointY)
                                 </div>
-                            </div>
-                            <div class="form-group locationInformation">
-                                <div class="col-sm-5 control-label">
-                                    <label>Location Information</label>
-                                </div>
-                                <div class="col-sm-7">
-                                    <span id="@ViewDataTyped.TreatmentBMPInformationContainer"></span>
-                                </div>
-                            </div>
+                            </div>                           
                             <div class="form-group">
                                 <div class="col-sm-5 control-label">
                                     <label>Notes</label>
@@ -249,7 +242,7 @@ Source code is available upon request via <support@sitkatech.com>.
             }
 
         });
-        jQuery('#@Html.IdFor(x => x.TreatmentBMPTypeID)').trigger('change');
+        
 
         HookupCheckIfFormIsDirtyNoDisable(undefined);
     });

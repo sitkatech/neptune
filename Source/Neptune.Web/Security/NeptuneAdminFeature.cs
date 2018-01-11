@@ -28,4 +28,10 @@ namespace Neptune.Web.Security
     {
         public NeptuneAdminFeature() : base(new List<Role> { Role.SitkaAdmin, Role.Admin }) { }
     }
+
+    [SecurityFeatureDescription("_Admin for Neptune")]
+    public class NeptuneTestFeature : NeptuneFeature
+    {
+        public NeptuneTestFeature() : base(new List<Role> { Role.SitkaAdmin, Role.Admin }) { }
+    }
 }

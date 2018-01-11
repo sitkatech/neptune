@@ -24,20 +24,14 @@ Source code is available upon request via <support@sitkatech.com>.
 @using LtInfo.Common.HtmlHelperExtensions
 @using MoreLinq
 @using Neptune.Web.Views.TreatmentBMPAssessment
-@inherits Neptune.Web.Views.TreatmentBMPAssessment.Detail
+@inherits Detail
 
 @section JavascriptAndStylesContent
 {
 
 }
 
-<div class="row">
-    @if (!ViewDataTyped.CanEdit)
-    {
-        <div class="col-xs-12">
-            <p class="systemText">This assessment is for a treatment BMP that is included in an active Registration with a credit declaration and cannot be deleted or edited.</p>
-        </div>
-    }    
+<div class="row">    
     <div class="col-xs-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
