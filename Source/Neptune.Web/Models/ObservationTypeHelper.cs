@@ -20,6 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -49,6 +52,22 @@ namespace Neptune.Web.Models
         {
             var score = observation < benchmark ? PositiveLinearInterpolation(observation, benchmark, threshold) : NegativeLinearInterpolation(observation, benchmark, threshold);
             return score < 0 ? 0 : (score > 5 ? 5 : score);
+        }
+
+        public static void ValidatePropertiesToObserveAreUnique(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
+        {
+            if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
+            {
+                validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
+            }
+        }
+
+        public static void ValidateMinimumNumberOfObservationsGreaterThanZero(int minimumNumberOfObservations, List<ValidationResult> validationErrors)
+        {
+            if (minimumNumberOfObservations == 0)
+            {
+                validationErrors.Add(new ValidationResult("Minimum Number of Observations must be greater than 0"));
+            }
         }
     }
 }

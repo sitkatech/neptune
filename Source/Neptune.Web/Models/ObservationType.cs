@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Linq;
 using LtInfo.Common.Views;
+using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
@@ -173,7 +174,44 @@ namespace Neptune.Web.Models
                     return null;
             }
         }
-       
+
+        public double? GetThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
+        {
+            if (benchmarkValue == null || thresholdValue == null)
+            {
+                return null;
+            }
+
+            var thresholdMeasurementUnitType = ThresholdMeasurementUnitType();
+            switch (thresholdMeasurementUnitType.ToEnum)
+            {
+                case MeasurementUnitTypeEnum.Acres:
+                case MeasurementUnitTypeEnum.SquareFeet:
+                case MeasurementUnitTypeEnum.Kilogram:
+                case MeasurementUnitTypeEnum.Count:
+                case MeasurementUnitTypeEnum.Percent:
+                case MeasurementUnitTypeEnum.MilligamsPerLiter:
+                case MeasurementUnitTypeEnum.Meters:
+                case MeasurementUnitTypeEnum.Feet:
+                case MeasurementUnitTypeEnum.Inches:
+                case MeasurementUnitTypeEnum.InchesPerHour:
+                case MeasurementUnitTypeEnum.Seconds:                    
+                    return thresholdValue;
+                case MeasurementUnitTypeEnum.PercentDecline:
+                    return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                case MeasurementUnitTypeEnum.PercentIncrease:
+                    return benchmarkValue + (thresholdValue / 100) * benchmarkValue;
+                case MeasurementUnitTypeEnum.PercentDeviation:
+                    if (useUpperValue)
+                    {
+                        return benchmarkValue + (thresholdValue / 100) * benchmarkValue;
+                    }
+                   return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                default:
+                   return null;
+            }
+        }
+
 
         public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
         {
@@ -220,7 +258,7 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel() ? "" : " ";
+            var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? "" : " ";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
             if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
@@ -228,29 +266,16 @@ namespace Neptune.Web.Models
                 return formattedThresholdValue;
             }
 
-            //todo % decline
-            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDecline)
-            {
-                var thresholdValueInBenchmarkUnits = benchmarkValue - (thresholdValue / 100) * benchmarkValue;
-                return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
-            }
-
-            //todo % increase
-            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease)
-            {
-                var thresholdValueInBenchmarkUnits = benchmarkValue + (thresholdValue / 100) * benchmarkValue;
-                return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
-            }
-
-            //todo % deviation
             if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation)
             {
-                var upperValueInBenchmarkUnits = benchmarkValue + (thresholdValue / 100) * benchmarkValue;
-                var lowerValueInBenchmarkUnits = benchmarkValue - (thresholdValue / 100) * benchmarkValue;
+                var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
+                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
                 return $"{formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
             }
 
-            return string.Empty;
+            var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
+
+            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits} {BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";

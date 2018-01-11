@@ -18,7 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-angular.module("NeptuneApp").controller("DiscreteCollectionMethodController", function ($scope, $timeout, angularModelAndViewData)
+angular.module("NeptuneApp").controller("PercentageCollectionMethodController", function ($scope, $timeout, angularModelAndViewData)
 {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
@@ -52,10 +52,6 @@ angular.module("NeptuneApp").controller("DiscreteCollectionMethodController", fu
     $scope.deleteObservation = function (observation) {
         Sitka.Methods.removeFromJsonArray($scope.ObservationData.SingleValueObservations, observation);
     };
-
-    $scope.disableAddObservation = function() {
-        return $scope.ObservationData.SingleValueObservations.length >= $scope.AngularViewData.MaximumNumberOfObservations;
-    }
 
     $scope.submit = function () {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);

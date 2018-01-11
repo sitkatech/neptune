@@ -6,6 +6,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Index = Neptune.Web.Views.Assessment.Index;
 using IndexViewData = Neptune.Web.Views.Assessment.IndexViewData;
+using TreatmentBMPAssessmentGridSpec = Neptune.Web.Views.Assessment.TreatmentBMPAssessmentGridSpec;
 
 namespace Neptune.Web.Controllers
 {

@@ -27,7 +27,7 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPAssessment : IAuditableEntity
     {
-        public bool CanEdit(Person currentPerson, int waterYear)
+        public bool CanEdit(Person currentPerson)
         {
             var canManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
             return canManageStormwaterJurisdiction;
@@ -48,7 +48,7 @@ namespace Neptune.Web.Models
 
         public bool IsAssessmentComplete()
         {
-            return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(IsComplete);
+            return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(IsObservationComplete);
         }
 
         public bool HasCalculatedOrAlternateScore()
@@ -59,19 +59,7 @@ namespace Neptune.Web.Models
         public bool IsPublicRegularAssessment()
         {
             return StormwaterAssessmentType == StormwaterAssessmentType.Regular && !IsPrivate;
-        }
-
-        private bool OverrideScore(ObservationType observationType)
-        {
-            if (TreatmentBMPObservations.SingleOrDefault(x => x.ObservationType == observationType) != null)
-            {
-                if (Math.Abs(CalculateScoreForObservationType(observationType) - 2) < 0.01)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        }        
 
         public double? CalculateAssessmentScore()
         {
@@ -80,25 +68,40 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            //todo this needs to use override score not has benchmark and thresholds
-            if (TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => !x.HasBenchmarkAndThreshold).Select(OverrideScore).Any(x => x))
+            //if any observations that override the score have a failing score, return 2
+            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+                .Where(x => x.OverrideAssessmentScoreIfFailing.HasValue && x.OverrideAssessmentScoreIfFailing.Value)
+                .ToList().Select(x => x.ObservationType);
+
+            if (observationTypesThatPotentiallyOverrideScore.Select(x =>
+                {
+                    var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType == x);
+                    return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
+                }).Any(x => x))
             {
                 return 2;
             }
-            if (!TreatmentBMP.TreatmentBMPType.GetObservationTypes().Any(x => x.HasBenchmarkAndThreshold))
+
+            //if all observations override the score and all are passing, return 5
+            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+                .All(x => x.OverrideAssessmentScoreIfFailing.HasValue && x.OverrideAssessmentScoreIfFailing.Value))
             {
                 return 5;
             }
 
-            var score = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Sum(x =>
-            {
-                var observationType = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).ObservationType;
-                var observationScore = CalculateScoreForObservationType(observationType);
-                
-                var observationWeight = TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value;
-                return observationScore * observationWeight;
-            });
-            return Math.Round(score, 1);
+            //otherwise calculate the score
+            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+                .Where(x => !x.OverrideAssessmentScoreIfFailing.HasValue || !x.OverrideAssessmentScoreIfFailing.Value)
+                .Select(x => x.ObservationType).ToList().Sum(x =>
+                {
+                    var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).CalculateObservationScore();
+
+                    var observationType = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).ObservationType;
+                    var observationWeight = TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value;
+                    return observationScore * observationWeight;
+                });
+
+            return Math.Round(score.Value, 1);
         }
 
         public string FormattedScore()
@@ -107,18 +110,7 @@ namespace Neptune.Web.Models
             return score?.ToString("0.0") ?? "-";
         }
 
-        public double CalculateScoreForObservationType(ObservationType observationType)
-        {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-
-            if (treatmentBMPObservation == null)
-            {
-                throw new Exception("Observation not complete, cannot calculate score");
-            }
-            return treatmentBMPObservation.CalculateScoreForObservationType();
-        }
-
-        public bool IsComplete(ObservationType observationType)
+        public bool IsObservationComplete(ObservationType observationType)
         {
             var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
 

@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             CurrentPersonCanManage = CurrentPerson.CanManageStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
 
-            CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson, treatmentBMPAssessment.GetWaterYear());
+            CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson);
 
             PageTitle = "Assessed On: " + treatmentBMPAssessment.AssessmentDate.ToShortDateString();
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName;

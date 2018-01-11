@@ -202,12 +202,14 @@
     <Compile Include="Models\TreatmentBMP.DatabaseContextExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAssessment.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentModelExtensions.cs" />
+    <Compile Include="Models\TreatmentBMPAssessmentObservationTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAssessmentTest.cs" />
     <Compile Include="Models\TreatmentBMPBenchmarkAndThreshold.cs" />
     <Compile Include="Models\TreatmentBMPInfiltrationObservationDetailSimple.cs" />
     <Compile Include="Models\TreatmentBMPInfiltrationReadingSimple.cs" />
     <Compile Include="Models\TreatmentBMPModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPObservation.cs" />
+    <Compile Include="Models\TreatmentBMPObservationSimple.cs" />
     <Compile Include="Models\TreatmentBMPType.cs" />
     <Compile Include="Models\TreatmentBMPTypeModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationType.cs" />
@@ -545,9 +547,18 @@
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
     <Compile Include="Models\ObservationTypeSimple.cs" />
-    <Compile Include="Models\TreatmentBMPAssessmentSimple.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\ObservationViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethodViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\RateCollectionMethodViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodViewModel.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThresholdViewData.cs" />
@@ -692,6 +703,9 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
+    <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController .js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
@@ -741,6 +755,9 @@
     <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Content Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -986,7 +1003,6 @@
     <Compile Include="Models\FileResourceTest.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\OrganizationSimple.cs" />
-    <Compile Include="Models\MeasurementUnitType.cs" />
     <Compile Include="Models\PersonModelExtensions.cs" />
     <Compile Include="Models\PersonSimple.cs" />
     <Compile Include="Models\Point.cs" />

@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public TreatmentBMPAssessmentGridSpec(Person currentPerson)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, x.CanDelete(currentPerson, x.GetWaterYear())), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson, x.GetWaterYear())), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("Conducted By", x => x.Person.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Date", x => x.AssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
