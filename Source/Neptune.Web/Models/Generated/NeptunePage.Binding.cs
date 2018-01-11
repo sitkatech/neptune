@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected NeptunePage()
         {
-            this.NeptunePageImages = new HashSet<NeptunePageImage>();
+            this.NeptunePageImages = new List<NeptunePageImage>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -84,13 +84,14 @@ namespace Neptune.Web.Models
         public int NeptunePageID { get; set; }
         public int TenantID { get; private set; }
         public int NeptunePageTypeID { get; set; }
+        public string NeptunePageContent { get; set; }
         [NotMapped]
-        private string NeptunePageContent { get; set; }
         public HtmlString NeptunePageContentHtmlString
         { 
             get { return NeptunePageContent == null ? null : new HtmlString(NeptunePageContent); }
             set { NeptunePageContent = value?.ToString(); }
         }
+        [NotMapped]
         public int PrimaryKey { get { return NeptunePageID; } set { NeptunePageID = value; } }
 
         public virtual ICollection<NeptunePageImage> NeptunePageImages { get; set; }

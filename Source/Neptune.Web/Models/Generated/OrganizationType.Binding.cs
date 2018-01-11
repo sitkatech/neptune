@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected OrganizationType()
         {
-            this.Organizations = new HashSet<Organization>();
+            this.Organizations = new List<Organization>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -83,6 +83,7 @@ namespace Neptune.Web.Models
         public string OrganizationTypeAbbreviation { get; set; }
         public string LegendColor { get; set; }
         public bool IsDefaultOrganizationType { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return OrganizationTypeID; } set { OrganizationTypeID = value; } }
 
         public virtual ICollection<Organization> Organizations { get; set; }

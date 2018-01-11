@@ -47,6 +47,7 @@ namespace Neptune.Web.Models
         public int NeptunePageRenderTypeID { get; private set; }
         public string NeptunePageRenderTypeName { get; private set; }
         public string NeptunePageRenderTypeDisplayName { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return NeptunePageRenderTypeID; } }
 
         /// <summary>

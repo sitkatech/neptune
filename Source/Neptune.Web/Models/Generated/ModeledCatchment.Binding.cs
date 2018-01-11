@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected ModeledCatchment()
         {
-            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.TreatmentBMPs = new List<TreatmentBMP>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -93,6 +93,7 @@ namespace Neptune.Web.Models
         public int StormwaterJurisdictionID { get; set; }
         public string Notes { get; set; }
         public DbGeometry ModeledCatchmentGeometry { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return ModeledCatchmentID; } set { ModeledCatchmentID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }

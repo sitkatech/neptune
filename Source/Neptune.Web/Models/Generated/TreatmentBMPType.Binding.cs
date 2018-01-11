@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPType()
         {
-            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
-            this.TreatmentBMPTypeObservationTypes = new HashSet<TreatmentBMPTypeObservationType>();
+            this.TreatmentBMPs = new List<TreatmentBMP>();
+            this.TreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -78,6 +78,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public string TreatmentBMPTypeName { get; set; }
         public string TreatmentBMPTypeDescription { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeID; } set { TreatmentBMPTypeID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }

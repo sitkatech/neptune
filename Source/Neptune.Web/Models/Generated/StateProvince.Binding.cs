@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected StateProvince()
         {
-            this.Counties = new HashSet<County>();
-            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
+            this.Counties = new List<County>();
+            this.StormwaterJurisdictions = new List<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -83,6 +83,7 @@ namespace Neptune.Web.Models
         public string StateProvinceAbbreviation { get; set; }
         public DbGeometry StateProvinceFeature { get; set; }
         public DbGeometry StateProvinceFeatureForAnalysis { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return StateProvinceID; } set { StateProvinceID = value; } }
 
         public virtual ICollection<County> Counties { get; set; }

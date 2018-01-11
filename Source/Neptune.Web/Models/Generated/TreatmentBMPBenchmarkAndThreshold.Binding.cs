@@ -99,6 +99,7 @@ namespace Neptune.Web.Models
         public int ObservationTypeID { get; set; }
         public double BenchmarkValue { get; set; }
         public double ThresholdValue { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPBenchmarkAndThresholdID; } set { TreatmentBMPBenchmarkAndThresholdID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

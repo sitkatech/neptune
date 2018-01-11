@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Organization()
         {
-            this.People = new HashSet<Person>();
-            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
+            this.People = new List<Person>();
+            this.StormwaterJurisdictions = new List<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -104,10 +104,12 @@ namespace Neptune.Web.Models
         public string OrganizationUrl { get; set; }
         public int? LogoFileResourceID { get; set; }
         public int OrganizationTypeID { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return OrganizationID; } set { OrganizationID = value; } }
 
         public virtual ICollection<Person> People { get; set; }
         protected virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
+        [NotMapped]
         public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person PrimaryContactPerson { get; set; }

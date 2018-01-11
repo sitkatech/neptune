@@ -95,6 +95,7 @@ namespace Neptune.Web.Models
         public string ToolDisplayName { get; set; }
         public string RecaptchaPublicKey { get; set; }
         public string RecaptchaPrivateKey { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TenantAttributeID; } set { TenantAttributeID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

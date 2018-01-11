@@ -99,6 +99,7 @@ namespace Neptune.Web.Models
         public double? DefaultThresholdValue { get; set; }
         public double? DefaultBenchmarkValue { get; set; }
         public bool? OverrideAssessmentScoreIfFailing { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
 
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

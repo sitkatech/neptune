@@ -95,6 +95,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPAssessmentID { get; set; }
         public int ObservationTypeID { get; set; }
         public string ObservationData { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPObservationID; } set { TreatmentBMPObservationID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

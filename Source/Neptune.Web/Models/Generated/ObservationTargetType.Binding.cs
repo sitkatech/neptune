@@ -53,6 +53,7 @@ namespace Neptune.Web.Models
         public string ObservationTargetTypeDisplayName { get; private set; }
         public int SortOrder { get; private set; }
         public string ObservationTargetTypeDescription { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return ObservationTargetTypeID; } }
 
         /// <summary>

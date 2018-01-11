@@ -51,6 +51,7 @@ namespace Neptune.Web.Models
         public string ObservationTypeCollectionMethodName { get; private set; }
         public string ObservationTypeCollectionMethodDisplayName { get; private set; }
         public int SortOrder { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return ObservationTypeCollectionMethodID; } }
 
         /// <summary>

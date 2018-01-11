@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPAssessment()
         {
-            this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
+            this.TreatmentBMPObservations = new List<TreatmentBMPObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -109,6 +109,7 @@ namespace Neptune.Web.Models
         public string AlternateAssessmentRationale { get; set; }
         public bool IsPrivate { get; set; }
         public string Notes { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
 
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }

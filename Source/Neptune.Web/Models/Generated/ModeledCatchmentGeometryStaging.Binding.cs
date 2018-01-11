@@ -99,6 +99,7 @@ namespace Neptune.Web.Models
         public string GeoJson { get; set; }
         public string SelectedProperty { get; set; }
         public bool ShouldImport { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return ModeledCatchmentGeometryStagingID; } set { ModeledCatchmentGeometryStagingID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

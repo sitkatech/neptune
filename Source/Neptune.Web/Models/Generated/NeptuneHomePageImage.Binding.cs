@@ -93,6 +93,7 @@ namespace Neptune.Web.Models
         public int FileResourceID { get; set; }
         public string Caption { get; set; }
         public int SortOrder { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return NeptuneHomePageImageID; } set { NeptuneHomePageImageID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

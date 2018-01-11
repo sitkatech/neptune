@@ -52,6 +52,7 @@ namespace Neptune.Web.Models
         public string ObservationThresholdTypeDisplayName { get; private set; }
         public int SortOrder { get; private set; }
         public string ObservationThresholdTypeDescription { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return ObservationThresholdTypeID; } }
 
         /// <summary>

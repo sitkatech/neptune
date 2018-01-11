@@ -53,6 +53,7 @@ namespace Neptune.Web.Models
         public string SupportRequestTypeName { get; private set; }
         public string SupportRequestTypeDisplayName { get; private set; }
         public int SupportRequestTypeSortOrder { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return SupportRequestTypeID; } }
 
         /// <summary>

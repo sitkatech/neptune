@@ -67,6 +67,7 @@ namespace Neptune.Web.Models
         public string SingularDisplayName { get; private set; }
         public int NumberOfSignificantDigits { get; private set; }
         public bool IncludeSpaceBeforeLegendLabel { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return MeasurementUnitTypeID; } }
 
         /// <summary>

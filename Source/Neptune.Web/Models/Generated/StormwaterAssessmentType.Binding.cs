@@ -49,6 +49,7 @@ namespace Neptune.Web.Models
         public string StormwaterAssessmentTypeName { get; private set; }
         public string StormwaterAssessmentTypeDisplayName { get; private set; }
         public int SortOrder { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return StormwaterAssessmentTypeID; } }
 
         /// <summary>

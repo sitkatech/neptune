@@ -91,6 +91,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int StormwaterJurisdictionID { get; set; }
         public int PersonID { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return StormwaterJurisdictionPersonID; } set { StormwaterJurisdictionPersonID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMP()
         {
-            this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
-            this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
+            this.TreatmentBMPAssessments = new List<TreatmentBMPAssessment>();
+            this.TreatmentBMPBenchmarkAndThresholds = new List<TreatmentBMPBenchmarkAndThreshold>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -102,6 +102,7 @@ namespace Neptune.Web.Models
         public int StormwaterJurisdictionID { get; set; }
         public int? ModeledCatchmentID { get; set; }
         public string Notes { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }

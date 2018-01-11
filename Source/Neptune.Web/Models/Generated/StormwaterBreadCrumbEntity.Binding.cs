@@ -54,6 +54,7 @@ namespace Neptune.Web.Models
         public string StormwaterBreadCrumbEntityDisplayName { get; private set; }
         public string GlyphIconClass { get; private set; }
         public string ColorClass { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return StormwaterBreadCrumbEntityID; } }
 
         /// <summary>

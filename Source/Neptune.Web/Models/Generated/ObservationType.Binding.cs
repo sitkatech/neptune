@@ -23,9 +23,9 @@ namespace Neptune.Web.Models
         /// </summary>
         protected ObservationType()
         {
-            this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
-            this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
-            this.TreatmentBMPTypeObservationTypes = new HashSet<TreatmentBMPTypeObservationType>();
+            this.TreatmentBMPBenchmarkAndThresholds = new List<TreatmentBMPBenchmarkAndThreshold>();
+            this.TreatmentBMPObservations = new List<TreatmentBMPObservation>();
+            this.TreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -93,6 +93,7 @@ namespace Neptune.Web.Models
         public string ObservationTypeName { get; set; }
         public int ObservationTypeSpecificationID { get; set; }
         public string ObservationTypeSchema { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return ObservationTypeID; } set { ObservationTypeID = value; } }
 
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }

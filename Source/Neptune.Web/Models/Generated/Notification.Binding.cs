@@ -93,6 +93,7 @@ namespace Neptune.Web.Models
         public int NotificationTypeID { get; set; }
         public int PersonID { get; set; }
         public DateTime NotificationDate { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return NotificationID; } set { NotificationID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

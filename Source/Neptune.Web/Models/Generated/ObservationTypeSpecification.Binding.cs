@@ -74,6 +74,7 @@ namespace Neptune.Web.Models
         public int ObservationTypeCollectionMethodID { get; private set; }
         public int ObservationTargetTypeID { get; private set; }
         public int ObservationThresholdTypeID { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return ObservationTypeSpecificationID; } }
 
         /// <summary>

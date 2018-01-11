@@ -51,6 +51,7 @@ namespace Neptune.Web.Models
         public string RoleName { get; private set; }
         public string RoleDisplayName { get; private set; }
         public string RoleDescription { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return RoleID; } }
 
         /// <summary>

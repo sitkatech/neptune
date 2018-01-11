@@ -113,6 +113,7 @@ namespace Neptune.Web.Models
         public string OriginalValue { get; set; }
         public string NewValue { get; set; }
         public string AuditDescription { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return AuditLogID; } set { AuditLogID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

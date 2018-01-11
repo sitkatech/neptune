@@ -46,6 +46,7 @@ namespace Neptune.Web.Models
         public int NotificationTypeID { get; private set; }
         public string NotificationTypeName { get; private set; }
         public string NotificationTypeDisplayName { get; private set; }
+        [NotMapped]
         public int PrimaryKey { get { return NotificationTypeID; } }
 
         /// <summary>

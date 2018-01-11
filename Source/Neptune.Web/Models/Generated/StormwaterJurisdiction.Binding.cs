@@ -23,9 +23,9 @@ namespace Neptune.Web.Models
         /// </summary>
         protected StormwaterJurisdiction()
         {
-            this.ModeledCatchments = new HashSet<ModeledCatchment>();
-            this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
-            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.ModeledCatchments = new List<ModeledCatchment>();
+            this.StormwaterJurisdictionPeople = new List<StormwaterJurisdictionPerson>();
+            this.TreatmentBMPs = new List<TreatmentBMP>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -98,6 +98,7 @@ namespace Neptune.Web.Models
         public DbGeometry StormwaterJurisdictionGeometry { get; set; }
         public int StateProvinceID { get; set; }
         public bool IsTransportationJurisdiction { get; set; }
+        [NotMapped]
         public int PrimaryKey { get { return StormwaterJurisdictionID; } set { StormwaterJurisdictionID = value; } }
 
         public virtual ICollection<ModeledCatchment> ModeledCatchments { get; set; }
