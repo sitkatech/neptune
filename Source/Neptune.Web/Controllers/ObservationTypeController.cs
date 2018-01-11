@@ -82,7 +82,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneTestFeature]
+        [NeptuneAdminFeature]
         public ViewResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
@@ -91,7 +91,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneTestFeature]
+        [NeptuneAdminFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey, EditViewModel viewModel)
         {
