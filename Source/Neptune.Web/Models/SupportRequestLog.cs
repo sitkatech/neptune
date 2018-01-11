@@ -62,7 +62,7 @@ namespace Neptune.Web.Models
     <strong>Subject:</strong> {5}<br />
     <br />
     <strong>Description:</strong><br />
-    {76}
+    {6}
     <br />
     <br />
     <br />
@@ -74,7 +74,7 @@ namespace Neptune.Web.Models
     URL FROM: {10}<br />
     <br />
     </div>
-    <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {12}</div>.
+    <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {11}</div>.
 </div>
 ",
                 subject,

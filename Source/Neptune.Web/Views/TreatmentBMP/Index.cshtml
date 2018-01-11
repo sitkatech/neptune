@@ -46,7 +46,7 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <a class="pull-right" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
+        <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
     }    
 }
 
@@ -57,8 +57,8 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-sm-4">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
-                BMP Search
+            <div class="panel-heading panelTitle">
+                Treatment BMP Search
             </div>
             <div class="panel-body">
                 <p >Search for a BMP by name, click a BMP icon on the map, or see all BMPs in the grid at the bottom of the page.</p>
@@ -75,8 +75,8 @@ Source code is available upon request via <support@sitkatech.com>.
     </div>
     <div class="col-sm-8">
         <div class="panel panelNeptune">
-            <div class="panel-heading ">
-                Map View
+            <div class="panel-heading panelTitle">
+                Treatment BMP Map
             </div>
             <div id="mapContainer" class="panel-body">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 600px; margin: 0">
@@ -91,11 +91,11 @@ Source code is available upon request via <support@sitkatech.com>.
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
-            <div class="panel-heading">
-                Table View
+            <div class="panel-heading panelTitle">
+                Treatment BMP Table
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl,"height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
     </div>

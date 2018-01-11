@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.Assessment
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, StormwaterBreadCrumbEntity.Assessments, neptunePage)
         {
-            PageTitle = "All Assessments";
+            PageTitle = "Treatment BMP Assessments";
 
             BMPAssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson) { ObjectNameSingular = "BMP Assessment", ObjectNamePlural = "BMP Assessments", SaveFiltersInCookie = true };
             BMPAssessmentGridName = "bmpAssessmentGrid";

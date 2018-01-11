@@ -29,6 +29,7 @@ namespace Neptune.Web.Views.Home
 
         public ManageHomePageImagesViewData(Person currentPerson, ImageGalleryViewData imageGalleryViewData) : base(currentPerson)
         {
+            PageTitle = "Manage Home Page Images";
             ImageGalleryViewData = imageGalleryViewData;
         }
 

@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Latest Assessment Date", x => x.GetMostRecentAssessment()?.AssessmentDate, 130);
             Add("Latest Assessment Score", x => x.GetMostRecentScoreAsString(), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesOrEmpty(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Notes", x => x.Notes, 150);
+            Add("Notes", x => x.Notes, 195);
             Add("Number of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
         }
     }

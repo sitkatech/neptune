@@ -4,7 +4,6 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.TreatmentBMPAssessment;
 using Index = Neptune.Web.Views.Assessment.Index;
 using IndexViewData = Neptune.Web.Views.Assessment.IndexViewData;
 using TreatmentBMPAssessmentGridSpec = Neptune.Web.Views.Assessment.TreatmentBMPAssessmentGridSpec;
@@ -24,7 +23,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
-            var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson);
+            var gridSpec = new Views.Assessment.TreatmentBMPAssessmentGridSpec(CurrentPerson);
             var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList().Where(x => x.IsPublicRegularAssessment()).OrderByDescending(x => x.AssessmentDate).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
             return gridJsonNetJObjectResult;
