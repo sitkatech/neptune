@@ -54,6 +54,37 @@ namespace Neptune.Web.Models
             return score < 0 ? 0 : (score > 5 ? 5 : score);
         }
 
+        public static void ValidateAssessmentDescription(string assessmentDescription, List<ValidationResult> validationErrors)
+        {
+
+            if (string.IsNullOrWhiteSpace(assessmentDescription))
+            {
+                validationErrors.Add(new ValidationResult("Assessment Instructions cannot be blank"));
+            }
+        }
+
+        public static void ValidateBenchmarkAndThresholdDescription(string benchmarkDescription, string thresholdDescription, List<ValidationResult> validationErrors)
+        {
+
+            if (string.IsNullOrWhiteSpace(benchmarkDescription))
+            {
+                validationErrors.Add(new ValidationResult("Benchmark Instructions cannot be blank"));
+            }
+            if (string.IsNullOrWhiteSpace(thresholdDescription))
+            {
+                validationErrors.Add(new ValidationResult("Threshold Instructions cannot be blank"));
+            }
+        }
+
+        public static void ValidateMeasurementUnitLabel(string measurementUnitLabel, List<ValidationResult> validationErrors)
+        {
+            
+            if (string.IsNullOrWhiteSpace(measurementUnitLabel))
+            {
+                validationErrors.Add(new ValidationResult("Measurement Unit Label must have a name and cannot be blank"));
+            }          
+        }
+
         public static void ValidatePropertiesToObserve(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
         {
             if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
@@ -90,6 +121,14 @@ namespace Neptune.Web.Models
             if (maximumValueOfObservations != null && minimumValueOfObservations > maximumValueOfObservations)
             {
                 validationErrors.Add(new ValidationResult("Minimum Value of Each Observation must less than the Maximum Value of Each Observation"));
+            }
+        }
+
+        public static void ValidateMeasurementUnitTypeID(int measurementUnitTypeID, List<ValidationResult> validationErrors)
+        {
+            if (MeasurementUnitType.All.SingleOrDefault(x => x.MeasurementUnitTypeID == measurementUnitTypeID) == null)
+            {
+                validationErrors.Add(new ValidationResult("A valid Measurement Unit Type is required"));
             }
         }
     }

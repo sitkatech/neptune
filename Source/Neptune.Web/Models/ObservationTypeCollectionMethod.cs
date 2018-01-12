@@ -49,6 +49,10 @@ namespace Neptune.Web.Models
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
             ObservationTypeHelper.ValidateNumberOfObservations(schema.MinimumNumberOfObservations, schema.MaximumNumberOfObservations, validationErrors);
             ObservationTypeHelper.ValidateValueOfObservations(schema.MinimumValueOfObservations, schema.MaximumValueOfObservations, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.MeasurementUnitTypeID, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }
@@ -127,6 +131,14 @@ namespace Neptune.Web.Models
             ObservationTypeHelper.ValidateNumberOfObservations(schema.TimeReadingMinimumNumberOfObservations, schema.TimeReadingMaximumNumberOfObservations, validationErrors);
             ObservationTypeHelper.ValidateValueOfObservations(schema.DiscreteRateMinimumValueOfObservations, schema.DiscreteRateMaximumValueOfObservations, validationErrors);
             ObservationTypeHelper.ValidateValueOfObservations(schema.TimeReadingMinimumValueOfObservations, schema.TimeReadingMaximumValueOfObservations, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.DiscreteRateMeasurementUnitLabel, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.ReadingMeasurementUnitLabel, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.TimeMeasurementUnitLabel, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.DiscreteRateMeasurementUnitTypeID, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.TimeMeasurementUnitTypeID, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.ReadingMeasurementUnitTypeID, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }
@@ -192,6 +204,7 @@ namespace Neptune.Web.Models
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
 
             return validationErrors;
         }
@@ -257,6 +270,9 @@ namespace Neptune.Web.Models
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }

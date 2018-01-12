@@ -112,7 +112,6 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-required="true"
                                           ng-model="ObservationTypeSchema.AssessmentDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ')"
@@ -130,7 +129,6 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-required="true"
                                           ng-model="ObservationTypeSchema.BenchmarkDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ')"
@@ -146,7 +144,6 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-required="true"
                                           ng-model="ObservationTypeSchema.ThresholdDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ')"
@@ -191,8 +188,7 @@
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="ObservationTypeSchema.MeasurementUnitTypeID"
-                                        class="form-control"
-                                        ng-required="true">
+                                        class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
                                             ng-selected="ObservationTypeSchema.MeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
@@ -265,8 +261,7 @@
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="ObservationTypeSchema.DiscreteRateMeasurementUnitTypeID"
-                                        class="form-control"
-                                        ng-required="true">
+                                        class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
                                             ng-selected="ObservationTypeSchema.DiscreteRateMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
@@ -316,8 +311,7 @@
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="ObservationTypeSchema.ReadingMeasurementUnitTypeID"
-                                        class="form-control"
-                                        ng-required="true">
+                                        class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
                                             ng-selected="ObservationTypeSchema.ReadingMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
@@ -337,8 +331,7 @@
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="ObservationTypeSchema.TimeMeasurementUnitTypeID"
-                                        class="form-control"
-                                        ng-required="true">
+                                        class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
                                             ng-selected="ObservationTypeSchema.TimeMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
