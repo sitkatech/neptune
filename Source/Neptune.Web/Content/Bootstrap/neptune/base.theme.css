@@ -52,7 +52,7 @@ h6 {
 }
 .rightFloatingInfo {
   float: right;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 .hoverEditButton {
   position: absolute;
@@ -470,7 +470,7 @@ table.summaryLayout td {
 .firstArrow.default {
   background-color: #ddd;
   border-left-color: #ddd;
-  color: #fff;
+  color: #193D5B;
 }
 .firstArrow:after {
   content: '';
@@ -498,7 +498,7 @@ table.summaryLayout td {
 .middleArrow.default {
   background-color: #ddd;
   border-left-color: #ddd;
-  color: #fff;
+  color: #193D5B;
 }
 .middleArrow:before {
   content: '';
@@ -544,7 +544,7 @@ table.summaryLayout td {
 .lastArrow.default {
   background-color: #ddd;
   border-left-color: #ddd;
-  color: #fff;
+  color: #193D5B;
 }
 .lastArrow:before {
   content: '';
