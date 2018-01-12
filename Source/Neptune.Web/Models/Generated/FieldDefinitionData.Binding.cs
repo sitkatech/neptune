@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected FieldDefinitionData()
         {
-            this.FieldDefinitionDataImages = new List<FieldDefinitionDataImage>();
+            this.FieldDefinitionDataImages = new HashSet<FieldDefinitionDataImage>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

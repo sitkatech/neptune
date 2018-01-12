@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected OrganizationType()
         {
-            this.Organizations = new List<Organization>();
+            this.Organizations = new HashSet<Organization>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPAssessment()
         {
-            this.TreatmentBMPObservations = new List<TreatmentBMPObservation>();
+            this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

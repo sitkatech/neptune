@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected NeptunePage()
         {
-            this.NeptunePageImages = new List<NeptunePageImage>();
+            this.NeptunePageImages = new HashSet<NeptunePageImage>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

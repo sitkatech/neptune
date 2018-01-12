@@ -23,9 +23,9 @@ namespace Neptune.Web.Models
         /// </summary>
         protected StormwaterJurisdiction()
         {
-            this.ModeledCatchments = new List<ModeledCatchment>();
-            this.StormwaterJurisdictionPeople = new List<StormwaterJurisdictionPerson>();
-            this.TreatmentBMPs = new List<TreatmentBMP>();
+            this.ModeledCatchments = new HashSet<ModeledCatchment>();
+            this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
+            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

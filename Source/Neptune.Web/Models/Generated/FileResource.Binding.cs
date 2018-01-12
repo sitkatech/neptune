@@ -23,13 +23,13 @@ namespace Neptune.Web.Models
         /// </summary>
         protected FileResource()
         {
-            this.FieldDefinitionDataImages = new List<FieldDefinitionDataImage>();
-            this.NeptuneHomePageImages = new List<NeptuneHomePageImage>();
-            this.NeptunePageImages = new List<NeptunePageImage>();
-            this.OrganizationsWhereYouAreTheLogoFileResource = new List<Organization>();
-            this.TenantAttributesWhereYouAreTheTenantBannerLogoFileResource = new List<TenantAttribute>();
-            this.TenantAttributesWhereYouAreTheTenantSquareLogoFileResource = new List<TenantAttribute>();
-            this.TenantAttributesWhereYouAreTheTenantStyleSheetFileResource = new List<TenantAttribute>();
+            this.FieldDefinitionDataImages = new HashSet<FieldDefinitionDataImage>();
+            this.NeptuneHomePageImages = new HashSet<NeptuneHomePageImage>();
+            this.NeptunePageImages = new HashSet<NeptunePageImage>();
+            this.OrganizationsWhereYouAreTheLogoFileResource = new HashSet<Organization>();
+            this.TenantAttributesWhereYouAreTheTenantBannerLogoFileResource = new HashSet<TenantAttribute>();
+            this.TenantAttributesWhereYouAreTheTenantSquareLogoFileResource = new HashSet<TenantAttribute>();
+            this.TenantAttributesWhereYouAreTheTenantStyleSheetFileResource = new HashSet<TenantAttribute>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

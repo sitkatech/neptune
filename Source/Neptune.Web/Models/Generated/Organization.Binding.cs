@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Organization()
         {
-            this.People = new List<Person>();
-            this.StormwaterJurisdictions = new List<StormwaterJurisdiction>();
+            this.People = new HashSet<Person>();
+            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

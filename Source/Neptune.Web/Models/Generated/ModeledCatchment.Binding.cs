@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected ModeledCatchment()
         {
-            this.TreatmentBMPs = new List<TreatmentBMP>();
+            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

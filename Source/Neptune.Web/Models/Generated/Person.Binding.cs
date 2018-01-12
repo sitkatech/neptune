@@ -23,15 +23,15 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Person()
         {
-            this.AuditLogs = new List<AuditLog>();
-            this.FileResourcesWhereYouAreTheCreatePerson = new List<FileResource>();
-            this.ModeledCatchmentGeometryStagings = new List<ModeledCatchmentGeometryStaging>();
-            this.Notifications = new List<Notification>();
-            this.OrganizationsWhereYouAreThePrimaryContactPerson = new List<Organization>();
-            this.StormwaterJurisdictionPeople = new List<StormwaterJurisdictionPerson>();
-            this.SupportRequestLogsWhereYouAreTheRequestPerson = new List<SupportRequestLog>();
-            this.TenantAttributesWhereYouAreThePrimaryContactPerson = new List<TenantAttribute>();
-            this.TreatmentBMPAssessments = new List<TreatmentBMPAssessment>();
+            this.AuditLogs = new HashSet<AuditLog>();
+            this.FileResourcesWhereYouAreTheCreatePerson = new HashSet<FileResource>();
+            this.ModeledCatchmentGeometryStagings = new HashSet<ModeledCatchmentGeometryStaging>();
+            this.Notifications = new HashSet<Notification>();
+            this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
+            this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
+            this.SupportRequestLogsWhereYouAreTheRequestPerson = new HashSet<SupportRequestLog>();
+            this.TenantAttributesWhereYouAreThePrimaryContactPerson = new HashSet<TenantAttribute>();
+            this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

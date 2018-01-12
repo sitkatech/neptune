@@ -23,9 +23,9 @@ namespace Neptune.Web.Models
         /// </summary>
         protected ObservationType()
         {
-            this.TreatmentBMPBenchmarkAndThresholds = new List<TreatmentBMPBenchmarkAndThreshold>();
-            this.TreatmentBMPObservations = new List<TreatmentBMPObservation>();
-            this.TreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
+            this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
+            this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
+            this.TreatmentBMPTypeObservationTypes = new HashSet<TreatmentBMPTypeObservationType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

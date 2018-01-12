@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected StateProvince()
         {
-            this.Counties = new List<County>();
-            this.StormwaterJurisdictions = new List<StormwaterJurisdiction>();
+            this.Counties = new HashSet<County>();
+            this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 

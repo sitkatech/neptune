@@ -23,8 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPType()
         {
-            this.TreatmentBMPs = new List<TreatmentBMP>();
-            this.TreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
+            this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.TreatmentBMPTypeObservationTypes = new HashSet<TreatmentBMPTypeObservationType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
