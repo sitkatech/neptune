@@ -31,13 +31,14 @@ namespace Neptune.Web.Controllers
     /// <summary>
     /// Prevent unauthorized access, unless it has been specifically allowed using AllowAnonymousAttribute
     /// </summary>
-    public abstract class RelyingPartyAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
+    public abstract class RelyingPartyAuthorizeAttribute : AuthorizeAttribute
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var attributeType = typeof(AnonymousUnclassifiedFeature);
             var skipAuthorization = filterContext.ActionDescriptor.IsDefined(attributeType, true)
-                                    || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(attributeType, true);
+                                    || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(attributeType,
+                                        true);
 
             var principal = filterContext.HttpContext.User;
             if (principal.Identity.IsAuthenticated) // we have a token and we can determine the user.
@@ -48,16 +49,16 @@ namespace Neptune.Web.Controllers
                     HttpContext.Current.User = principal;
                 }
             }
-            else
+
+            if (!skipAuthorization)
             {
-                if (!skipAuthorization)
+                var neptuneBaseFeatureType = typeof(NeptuneBaseFeature);
+                var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor
+                    .GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
+                if (neptuneBaseFeatureAttribute != null &&
+                    ((NeptuneBaseFeature) neptuneBaseFeatureAttribute).GrantedRoles.Any())
                 {
-                    var neptuneBaseFeatureType = typeof(NeptuneBaseFeature);
-                    var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor.GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
-                    if (neptuneBaseFeatureAttribute != null && ((NeptuneBaseFeature)neptuneBaseFeatureAttribute).GrantedRoles.Any())
-                    {
-                        base.OnAuthorization(filterContext);
-                    }
+                    base.OnAuthorization(filterContext);
                 }
             }
         }
