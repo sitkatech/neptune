@@ -13,5 +13,9 @@ values
 (8, 'ModeledCatchment', 'Modeled Catchment', 2),
 (9, 'Jurisdiction', 'Jurisdiction', 2),
 (10, 'Assessment', 'Assessment', 2),
-(11, 'ManageObservationTypes', 'Manage Observation Types', 2),
-(12, 'ManageTreatmentBMPTypes', 'Manage Treatment BMP Types', 2)
+(11, 'ManageObservationTypesList', 'Manage Observation Types List', 2),
+(12, 'ManageTreatmentBMPTypesList', 'Manage Treatment BMP Types List', 2),
+(13, 'ManageObservationTypeInstructions', 'Manage Observation Type Instructions', 2),
+(14, 'ManageObservationTypeObservationInstructions', 'Manage Observation Type Instructions for Observation Instructions', 2),
+(15, 'ManageObservationTypeLabelsAndUnitsInstructions', 'Manage Observation Type Labels and Units Instructions', 2),
+(16, 'ManageTreatmentBMPTypeInstructions', 'Manage Treatment BMP Type Instructions', 2)

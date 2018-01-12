@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         }
 
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.PercentFromBenchmark;
+        public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
 
         public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
         public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
@@ -112,9 +112,9 @@ namespace Neptune.Web.Models
             var observationThresholdType = ObservationTypeSpecification.ObservationThresholdType;
             switch (observationThresholdType.ToEnum)
             {
-                case ObservationThresholdTypeEnum.DiscreteValue:
+                case ObservationThresholdTypeEnum.SpecificValue:
                     return BenchmarkMeasurementUnitLabel();
-                case ObservationThresholdTypeEnum.PercentFromBenchmark:
+                case ObservationThresholdTypeEnum.RelativeToBenchmark:
                     return ThresholdMeasurementUnitForPercentFromBenchmark().MeasurementUnitTypeDisplayName;
                 case ObservationThresholdTypeEnum.None:
                     return null;
@@ -128,9 +128,9 @@ namespace Neptune.Web.Models
             var observationThresholdType = ObservationTypeSpecification.ObservationThresholdType;
             switch (observationThresholdType.ToEnum)
             {
-                case ObservationThresholdTypeEnum.DiscreteValue:
+                case ObservationThresholdTypeEnum.SpecificValue:
                     return BenchmarkMeasurementUnitType();
-                case ObservationThresholdTypeEnum.PercentFromBenchmark:
+                case ObservationThresholdTypeEnum.RelativeToBenchmark:
                     return ThresholdMeasurementUnitForPercentFromBenchmark();
                 case ObservationThresholdTypeEnum.None:
                     return null;

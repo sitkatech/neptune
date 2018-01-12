@@ -18,8 +18,8 @@ namespace Neptune.Web.Models
 {
     public abstract partial class ObservationThresholdType : IHavePrimaryKey
     {
-        public static readonly ObservationThresholdTypeDiscreteValue DiscreteValue = ObservationThresholdTypeDiscreteValue.Instance;
-        public static readonly ObservationThresholdTypePercentFromBenchmark PercentFromBenchmark = ObservationThresholdTypePercentFromBenchmark.Instance;
+        public static readonly ObservationThresholdTypeSpecificValue SpecificValue = ObservationThresholdTypeSpecificValue.Instance;
+        public static readonly ObservationThresholdTypeRelativeToBenchmark RelativeToBenchmark = ObservationThresholdTypeRelativeToBenchmark.Instance;
         public static readonly ObservationThresholdTypeNone None = ObservationThresholdTypeNone.Instance;
 
         public static readonly List<ObservationThresholdType> All;
@@ -30,20 +30,19 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationThresholdType()
         {
-            All = new List<ObservationThresholdType> { DiscreteValue, PercentFromBenchmark, None };
+            All = new List<ObservationThresholdType> { SpecificValue, RelativeToBenchmark, None };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationThresholdType>(All.ToDictionary(x => x.ObservationThresholdTypeID));
         }
 
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected ObservationThresholdType(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription)
+        protected ObservationThresholdType(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder)
         {
             ObservationThresholdTypeID = observationThresholdTypeID;
             ObservationThresholdTypeName = observationThresholdTypeName;
             ObservationThresholdTypeDisplayName = observationThresholdTypeDisplayName;
             SortOrder = sortOrder;
-            ObservationThresholdTypeDescription = observationThresholdTypeDescription;
         }
         public List<ObservationTypeSpecification> ObservationTypeSpecifications { get { return ObservationTypeSpecification.All.Where(x => x.ObservationThresholdTypeID == ObservationThresholdTypeID).ToList(); } }
         [Key]
@@ -51,7 +50,6 @@ namespace Neptune.Web.Models
         public string ObservationThresholdTypeName { get; private set; }
         public string ObservationThresholdTypeDisplayName { get; private set; }
         public int SortOrder { get; private set; }
-        public string ObservationThresholdTypeDescription { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return ObservationThresholdTypeID; } }
 
@@ -104,12 +102,12 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case ObservationThresholdTypeEnum.DiscreteValue:
-                    return DiscreteValue;
                 case ObservationThresholdTypeEnum.None:
                     return None;
-                case ObservationThresholdTypeEnum.PercentFromBenchmark:
-                    return PercentFromBenchmark;
+                case ObservationThresholdTypeEnum.RelativeToBenchmark:
+                    return RelativeToBenchmark;
+                case ObservationThresholdTypeEnum.SpecificValue:
+                    return SpecificValue;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -118,26 +116,26 @@ namespace Neptune.Web.Models
 
     public enum ObservationThresholdTypeEnum
     {
-        DiscreteValue = 1,
-        PercentFromBenchmark = 2,
+        SpecificValue = 1,
+        RelativeToBenchmark = 2,
         None = 3
     }
 
-    public partial class ObservationThresholdTypeDiscreteValue : ObservationThresholdType
+    public partial class ObservationThresholdTypeSpecificValue : ObservationThresholdType
     {
-        private ObservationThresholdTypeDiscreteValue(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
-        public static readonly ObservationThresholdTypeDiscreteValue Instance = new ObservationThresholdTypeDiscreteValue(1, @"DiscreteValue", @"Discrete Value", 10, @"Threshold is measured as an discrete value (e.g. 3 ft of sediment accumulation)");
+        private ObservationThresholdTypeSpecificValue(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder) {}
+        public static readonly ObservationThresholdTypeSpecificValue Instance = new ObservationThresholdTypeSpecificValue(1, @"SpecificValue", @"Threshold is a specific value", 10);
     }
 
-    public partial class ObservationThresholdTypePercentFromBenchmark : ObservationThresholdType
+    public partial class ObservationThresholdTypeRelativeToBenchmark : ObservationThresholdType
     {
-        private ObservationThresholdTypePercentFromBenchmark(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
-        public static readonly ObservationThresholdTypePercentFromBenchmark Instance = new ObservationThresholdTypePercentFromBenchmark(2, @"PercentFromBenchmark", @"Percent From Benchmark", 20, @"Threshold is measured as a departure from the Benchmark value (e.g. 10% less vegetative cover than the Benchmark value)");
+        private ObservationThresholdTypeRelativeToBenchmark(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder) {}
+        public static readonly ObservationThresholdTypeRelativeToBenchmark Instance = new ObservationThresholdTypeRelativeToBenchmark(2, @"RelativeToBenchmark", @"Threshold is a relative percent of the benchmark value", 20);
     }
 
     public partial class ObservationThresholdTypeNone : ObservationThresholdType
     {
-        private ObservationThresholdTypeNone(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder, string observationThresholdTypeDescription) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder, observationThresholdTypeDescription) {}
-        public static readonly ObservationThresholdTypeNone Instance = new ObservationThresholdTypeNone(3, @"None", @"None", 30, @"No Threshold value for this Observation type (e.g. Observation is Pass/Fail)");
+        private ObservationThresholdTypeNone(int observationThresholdTypeID, string observationThresholdTypeName, string observationThresholdTypeDisplayName, int sortOrder) : base(observationThresholdTypeID, observationThresholdTypeName, observationThresholdTypeDisplayName, sortOrder) {}
+        public static readonly ObservationThresholdTypeNone Instance = new ObservationThresholdTypeNone(3, @"None", @"None", 30);
     }
 }

@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionMaximumValueOfEachObservation MaximumValueOfEachObservation = FieldDefinitionMaximumValueOfEachObservation.Instance;
         public static readonly FieldDefinitionDefaultThresholdValue DefaultThresholdValue = FieldDefinitionDefaultThresholdValue.Instance;
         public static readonly FieldDefinitionDefaultBenchmarkValue DefaultBenchmarkValue = FieldDefinitionDefaultBenchmarkValue.Instance;
-        public static readonly FieldDefinitionOverrideScoreIfObservationFails OverrideScoreIfObservationFails = FieldDefinitionOverrideScoreIfObservationFails.Instance;
+        public static readonly FieldDefinitionAssessmentFailsIfObservationFails AssessmentFailsIfObservationFails = FieldDefinitionAssessmentFailsIfObservationFails.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -65,7 +65,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, OverrideScoreIfObservationFails };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -147,6 +147,8 @@ namespace Neptune.Web.Models
             {
                 case FieldDefinitionEnum.AlternativeScore:
                     return AlternativeScore;
+                case FieldDefinitionEnum.AssessmentFailsIfObservationFails:
+                    return AssessmentFailsIfObservationFails;
                 case FieldDefinitionEnum.AssessmentForInternalUseOnly:
                     return AssessmentForInternalUseOnly;
                 case FieldDefinitionEnum.AssessmentScoreWeight:
@@ -191,8 +193,6 @@ namespace Neptune.Web.Models
                     return Organization;
                 case FieldDefinitionEnum.OrganizationType:
                     return OrganizationType;
-                case FieldDefinitionEnum.OverrideScoreIfObservationFails:
-                    return OverrideScoreIfObservationFails;
                 case FieldDefinitionEnum.Password:
                     return Password;
                 case FieldDefinitionEnum.PhotoCaption:
@@ -266,7 +266,7 @@ namespace Neptune.Web.Models
         MaximumValueOfEachObservation = 35,
         DefaultThresholdValue = 36,
         DefaultBenchmarkValue = 37,
-        OverrideScoreIfObservationFails = 38
+        AssessmentFailsIfObservationFails = 38
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -428,19 +428,19 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionObservationCollectionMethod : FieldDefinition
     {
         private FieldDefinitionObservationCollectionMethod(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationCollectionMethod Instance = new FieldDefinitionObservationCollectionMethod(27, @"ObservationCollectionMethod", @"Observation Collection Method", @"", true);
+        public static readonly FieldDefinitionObservationCollectionMethod Instance = new FieldDefinitionObservationCollectionMethod(27, @"ObservationCollectionMethod", @"Collection Method", @"", true);
     }
 
     public partial class FieldDefinitionObservationThresholdType : FieldDefinition
     {
         private FieldDefinitionObservationThresholdType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationThresholdType Instance = new FieldDefinitionObservationThresholdType(28, @"ObservationThresholdType", @"Observation Threshold Type", @"", true);
+        public static readonly FieldDefinitionObservationThresholdType Instance = new FieldDefinitionObservationThresholdType(28, @"ObservationThresholdType", @"Threshold Type", @"", true);
     }
 
     public partial class FieldDefinitionObservationTargetType : FieldDefinition
     {
         private FieldDefinitionObservationTargetType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationTargetType Instance = new FieldDefinitionObservationTargetType(29, @"ObservationTargetType", @"Observation Target Type", @"", true);
+        public static readonly FieldDefinitionObservationTargetType Instance = new FieldDefinitionObservationTargetType(29, @"ObservationTargetType", @"Target Type", @"", true);
     }
 
     public partial class FieldDefinitionMeasurementUnitLabel : FieldDefinition
@@ -491,9 +491,9 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionDefaultBenchmarkValue Instance = new FieldDefinitionDefaultBenchmarkValue(37, @"DefaultBenchmarkValue", @"Default Benchmark Value", @"", true);
     }
 
-    public partial class FieldDefinitionOverrideScoreIfObservationFails : FieldDefinition
+    public partial class FieldDefinitionAssessmentFailsIfObservationFails : FieldDefinition
     {
-        private FieldDefinitionOverrideScoreIfObservationFails(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionOverrideScoreIfObservationFails Instance = new FieldDefinitionOverrideScoreIfObservationFails(38, @"OverrideScoreIfObservationFails", @"Override Score if Observation Fails", @"", true);
+        private FieldDefinitionAssessmentFailsIfObservationFails(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionAssessmentFailsIfObservationFails Instance = new FieldDefinitionAssessmentFailsIfObservationFails(38, @"AssessmentFailsIfObservationFails", @"Assessment Fails if Observation Fails", @"", true);
     }
 }

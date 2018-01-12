@@ -28,8 +28,12 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeModeledCatchment ModeledCatchment = NeptunePageTypeModeledCatchment.Instance;
         public static readonly NeptunePageTypeJurisdiction Jurisdiction = NeptunePageTypeJurisdiction.Instance;
         public static readonly NeptunePageTypeAssessment Assessment = NeptunePageTypeAssessment.Instance;
-        public static readonly NeptunePageTypeManageObservationTypes ManageObservationTypes = NeptunePageTypeManageObservationTypes.Instance;
-        public static readonly NeptunePageTypeManageTreatmentBMPTypes ManageTreatmentBMPTypes = NeptunePageTypeManageTreatmentBMPTypes.Instance;
+        public static readonly NeptunePageTypeManageObservationTypesList ManageObservationTypesList = NeptunePageTypeManageObservationTypesList.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPTypesList ManageTreatmentBMPTypesList = NeptunePageTypeManageTreatmentBMPTypesList.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeInstructions ManageObservationTypeInstructions = NeptunePageTypeManageObservationTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeObservationInstructions ManageObservationTypeObservationInstructions = NeptunePageTypeManageObservationTypeObservationInstructions.Instance;
+        public static readonly NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions ManageObservationTypeLabelsAndUnitsInstructions = NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions ManageTreatmentBMPTypeInstructions = NeptunePageTypeManageTreatmentBMPTypeInstructions.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -39,7 +43,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypes, ManageTreatmentBMPTypes };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -123,10 +127,18 @@ namespace Neptune.Web.Models
                     return HomePage;
                 case NeptunePageTypeEnum.Jurisdiction:
                     return Jurisdiction;
-                case NeptunePageTypeEnum.ManageObservationTypes:
-                    return ManageObservationTypes;
-                case NeptunePageTypeEnum.ManageTreatmentBMPTypes:
-                    return ManageTreatmentBMPTypes;
+                case NeptunePageTypeEnum.ManageObservationTypeInstructions:
+                    return ManageObservationTypeInstructions;
+                case NeptunePageTypeEnum.ManageObservationTypeLabelsAndUnitsInstructions:
+                    return ManageObservationTypeLabelsAndUnitsInstructions;
+                case NeptunePageTypeEnum.ManageObservationTypeObservationInstructions:
+                    return ManageObservationTypeObservationInstructions;
+                case NeptunePageTypeEnum.ManageObservationTypesList:
+                    return ManageObservationTypesList;
+                case NeptunePageTypeEnum.ManageTreatmentBMPTypeInstructions:
+                    return ManageTreatmentBMPTypeInstructions;
+                case NeptunePageTypeEnum.ManageTreatmentBMPTypesList:
+                    return ManageTreatmentBMPTypesList;
                 case NeptunePageTypeEnum.ModeledCatchment:
                     return ModeledCatchment;
                 case NeptunePageTypeEnum.OrganizationsList:
@@ -153,8 +165,12 @@ namespace Neptune.Web.Models
         ModeledCatchment = 8,
         Jurisdiction = 9,
         Assessment = 10,
-        ManageObservationTypes = 11,
-        ManageTreatmentBMPTypes = 12
+        ManageObservationTypesList = 11,
+        ManageTreatmentBMPTypesList = 12,
+        ManageObservationTypeInstructions = 13,
+        ManageObservationTypeObservationInstructions = 14,
+        ManageObservationTypeLabelsAndUnitsInstructions = 15,
+        ManageTreatmentBMPTypeInstructions = 16
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -217,15 +233,39 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeAssessment Instance = new NeptunePageTypeAssessment(10, @"Assessment", @"Assessment", 2);
     }
 
-    public partial class NeptunePageTypeManageObservationTypes : NeptunePageType
+    public partial class NeptunePageTypeManageObservationTypesList : NeptunePageType
     {
-        private NeptunePageTypeManageObservationTypes(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeManageObservationTypes Instance = new NeptunePageTypeManageObservationTypes(11, @"ManageObservationTypes", @"Manage Observation Types", 2);
+        private NeptunePageTypeManageObservationTypesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageObservationTypesList Instance = new NeptunePageTypeManageObservationTypesList(11, @"ManageObservationTypesList", @"Manage Observation Types List", 2);
     }
 
-    public partial class NeptunePageTypeManageTreatmentBMPTypes : NeptunePageType
+    public partial class NeptunePageTypeManageTreatmentBMPTypesList : NeptunePageType
     {
-        private NeptunePageTypeManageTreatmentBMPTypes(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeManageTreatmentBMPTypes Instance = new NeptunePageTypeManageTreatmentBMPTypes(12, @"ManageTreatmentBMPTypes", @"Manage Treatment BMP Types", 2);
+        private NeptunePageTypeManageTreatmentBMPTypesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageTreatmentBMPTypesList Instance = new NeptunePageTypeManageTreatmentBMPTypesList(12, @"ManageTreatmentBMPTypesList", @"Manage Treatment BMP Types List", 2);
+    }
+
+    public partial class NeptunePageTypeManageObservationTypeInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageObservationTypeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageObservationTypeInstructions Instance = new NeptunePageTypeManageObservationTypeInstructions(13, @"ManageObservationTypeInstructions", @"Manage Observation Type Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageObservationTypeObservationInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageObservationTypeObservationInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageObservationTypeObservationInstructions Instance = new NeptunePageTypeManageObservationTypeObservationInstructions(14, @"ManageObservationTypeObservationInstructions", @"Manage Observation Type Instructions for Observation Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions Instance = new NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions(15, @"ManageObservationTypeLabelsAndUnitsInstructions", @"Manage Observation Type Labels and Units Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageTreatmentBMPTypeInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageTreatmentBMPTypeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions Instance = new NeptunePageTypeManageTreatmentBMPTypeInstructions(16, @"ManageTreatmentBMPTypeInstructions", @"Manage Treatment BMP Type Instructions", 2);
     }
 }

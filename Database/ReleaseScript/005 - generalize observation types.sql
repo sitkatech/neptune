@@ -16,16 +16,14 @@ CREATE TABLE dbo.ObservationThresholdType(
 	ObservationThresholdTypeID int NOT NULL CONSTRAINT PK_ObservationThresholdType_ObservationThresholdTypeID PRIMARY KEY,
 	ObservationThresholdTypeName varchar(100) NOT NULL CONSTRAINT AK_ObservationThresholdType_ObservationThresholdTypeName UNIQUE,
 	ObservationThresholdTypeDisplayName varchar(100) NOT NULL CONSTRAINT AK_ObservationThresholdType_ObservationThresholdTypeDisplayName UNIQUE,
-	SortOrder int NOT NULL,
-	ObservationThresholdTypeDescription varchar(max) null
+	SortOrder int NOT NULL
 )
 
 CREATE TABLE dbo.ObservationTargetType(
 	ObservationTargetTypeID int NOT NULL CONSTRAINT PK_ObservationTargetType_ObservationTargetTypeID PRIMARY KEY,
 	ObservationTargetTypeName varchar(100) NOT NULL CONSTRAINT AK_ObservationTargetType_ObservationTargetTypeName UNIQUE,
 	ObservationTargetTypeDisplayName varchar(100) NOT NULL CONSTRAINT AK_ObservationTargetType_ObservationTargetTypeDisplayName UNIQUE,
-	SortOrder int NOT NULL,
-	ObservationTargetTypeDescription varchar(max) null
+	SortOrder int NOT NULL
 )
 
 CREATE TABLE dbo.ObservationTypeCollectionMethod(
@@ -33,6 +31,7 @@ CREATE TABLE dbo.ObservationTypeCollectionMethod(
 	ObservationTypeCollectionMethodName varchar(100) NOT NULL CONSTRAINT AK_ObservationTypeCollectionMethod_ObservationTypeCollectionMethodName UNIQUE,
 	ObservationTypeCollectionMethodDisplayName varchar(100) NOT NULL CONSTRAINT AK_ObservationTypeCollectionMethod_ObservationTypeCollectionMethodDisplayName UNIQUE,
 	SortOrder int NOT NULL,
+	ObservationTypeCollectionMethodDescription varchar(max) NOT NULL
 )
 
 go

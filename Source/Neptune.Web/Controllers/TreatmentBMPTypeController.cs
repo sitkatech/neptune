@@ -39,7 +39,7 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Manage()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypes);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypesList);
             var viewData = new ManageViewData(CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
@@ -117,9 +117,11 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
+            var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypeInstructions);
+
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPTypeID) ? SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPTypeID)) : SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.New());
             var observationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList();
-            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl);
+            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

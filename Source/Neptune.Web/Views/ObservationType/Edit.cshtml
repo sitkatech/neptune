@@ -3,6 +3,7 @@
 @using Neptune.Web.Common
 @using Neptune.Web.Controllers
 @using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.ObservationType.Edit
 
@@ -22,6 +23,8 @@
     // ]]>
 </script>
 
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewInstructionsNeptunePage); }
+
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-submit="submit()" name="observationTypeForm">
     <div class="formPage">
         <div class="row">
@@ -38,8 +41,8 @@
                         <div class="col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.ObservationTypeName)
                         </div>
-                        <div class="col-sm-9">
-                            @Html.TextBoxFor(m => m.ObservationTypeName, new { @class = "form-control", style = "width:474px" })
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ObservationTypeName, new { @class = "form-control", style = "width:100%" })
                             @Html.ValidationMessageFor(m => m.ObservationTypeName)
                         </div>
                     </div>
@@ -57,11 +60,16 @@
                                 <option value=""></option>
                                 <option ng-repeat="observationTypeCollectionMethod in AngularViewData.ObservationTypeCollectionMethods"
                                         ng-selected="AngularModel.ObservationTypeCollectionMethodID == observationTypeCollectionMethod.ID"
-                                        ng-value="observationTypeCollectionMethod.ID">
+                                        ng-value="observationTypeCollectionMethod.ID"
+                                        title="{{observationTypeCollectionMethod.Definition}}">
                                     {{observationTypeCollectionMethod.DisplayName}}
                                 </option>
                             </select>
                             @Html.ValidationMessageFor(m => m.ObservationTypeCollectionMethodID)
+                            <div class="help-block">
+                                <span ng-if="ObservationTypeCollectionMethodSelected == null">The @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() is the template used to define the Observation Type.</span>
+                                <span ng-if="ObservationTypeCollectionMethodSelected != null">{{getObservationCollectionMethod(ObservationTypeCollectionMethodID).Definition}}</span>
+                            </div>
                         </div>
                     </div>
                     <div ng-if="selectedCollectionMethodHasBenchmarkAndThresholds()">
@@ -102,9 +110,15 @@
                             </div>
                         </div>
                     </div>
+                    <hr />
+                    <h4>Enter Data Collection Instructions</h4>
+                    <div ng-if="ObservationTypeCollectionMethodSelected == null">
+                        <div class="help-block">
+                            Select a @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Instructions
+                        </div>
+                    </div>                    
                     <div ng-if="ObservationTypeCollectionMethodSelected != null">
-                        <hr />
-                        <h4>Observation Instructions</h4>
+                        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewObservationInstructionsNeptunePage); }
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Assessment Instructions")
@@ -116,7 +130,8 @@
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ')"
                                           rows="3"
-                                          style="width: 100%; resize: none;"></textarea>
+                                          style="width: 100%; resize: none;"
+                                          placeholder="Assessment instructions will appear when a user is entering observed values for this observation type"></textarea>
                                 <div id="CharactersRemaining_AssessmentDescription" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
                             </div>
                         </div>
@@ -133,7 +148,8 @@
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ')"
                                           rows="3"
-                                          style="width: 100%; resize: none;"></textarea>
+                                          style="width: 100%; resize: none;"
+                                          placeholder="Benchmark instructions will appear when setting the Benchmark Value for a BMP that uses this Observation Type"></textarea>
                                 <div id="CharactersRemaining_BenchmarkDescription" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
                             </div>
                         </div>
@@ -148,14 +164,23 @@
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ')"
                                           rows="3"
-                                          style="width: 100%; resize: none;"></textarea>
+                                          style="width: 100%; resize: none;"
+                                          placeholder="Threshold instructions will appear when setting the Theshold Value for a BMP that uses this Observation Type"></textarea>
                                 <div id="CharactersRemaining_ThresholdDescription" style="font-size: 10px; text-align: right; color: #666666;">Characters Remaining: 300</div>
                             </div>
                         </div>
                     </div>
-                    <div ng-if="selectedCollectionMethodIsDiscrete()">
-                        <hr />
-                        <h4>Labels and Units for Data Collection</h4>
+                    <hr />
+                    <h4>Enter Labels and Units for Data Collection</h4>
+                <div ng-if="ObservationTypeCollectionMethodSelected == null">
+                    <div class="help-block">
+                        Select a @FieldDefinition.ObservationCollectionMethod.GetFieldDefinitionLabel() to enter the required Labels and Units
+                    </div>
+                </div>
+                <div ng-if="ObservationTypeCollectionMethodSelected != null">
+                    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewLabelsAndUnitsInstructionsNeptunePage); }
+                </div>
+                    <div ng-if="selectedCollectionMethodIsDiscrete()">                        
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
@@ -163,11 +188,12 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" 
-                                               ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" 
-                                               style="width: auto" 
-                                               type="text" 
-                                               value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <input class="form-control"
+                                               ng-model="ObservationTypeSchema.PropertiesToObserve[$index]"
+                                               style="width: 85%"
+                                               type="text"
+                                               value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}"
+                                               placeholder="e.g. Staff Plate, Number of Trees">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
@@ -181,7 +207,7 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" />
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Height, Count"/>
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit, true)
@@ -226,8 +252,6 @@
                         </div>
                     </div>
                     <div ng-if="selectedCollectionMethodIsRate()">
-                        <hr />
-                        <h4>Labels and Units for Data Collection</h4>
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
@@ -235,7 +259,12 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <input class="form-control" 
+                                               ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" 
+                                               style="width: 85%" 
+                                               type="text" 
+                                               value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}"
+                                               placeholder="e.g. Infiltrometer, CHP">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
@@ -244,17 +273,14 @@
                                 </div>
                             </div>
                         </div>
-
-                        <br />
-                        <p class="systemText">Data can be entered two ways - as rates or as time/reading pairs that can be used to calculate a rate</p>
-
-                        <h5>Labels and Units for Rate Data</h5>
+                        <br />                        
+                        <h5>Label and units for data to be collected as rates</h5>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Label for Data Entered as Rate")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.DiscreteRateMeasurementUnitLabel" />
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.DiscreteRateMeasurementUnitLabel" placeholder="e.g. Infiltration Rate"/>
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Unit for Data Entered as Rate")
@@ -298,16 +324,16 @@
                             </div>
                         </div>
                         <br />
-                        <h5>Labels and Units for Time/Reading Data</h5>
+                        <h5>Labels and units for data to be collected as time/value pairs</h5>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithRequiredTagFor("Label for Reading")
+                                @Html.LabelWithRequiredTagFor("Label for Value Observed")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.ReadingMeasurementUnitLabel" />
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.ReadingMeasurementUnitLabel" placeholder="e.g. Instrument Reading"/>
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithRequiredTagFor("Unit of Reading")
+                                @Html.LabelWithRequiredTagFor("Unit of Data Value Observed")
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <select style="width: auto" ng-model="ObservationTypeSchema.ReadingMeasurementUnitTypeID"
@@ -324,7 +350,7 @@
                                 @Html.LabelWithRequiredTagFor("Label for Time")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.TimeMeasurementUnitLabel" />
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.TimeMeasurementUnitLabel" placeholder="e.g. Elapsed Time"/>
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Unit of Time")
@@ -371,8 +397,6 @@
                     </div>
 
                     <div ng-if="selectedCollectionMethodIsPassFail()">
-                        <hr />
-                        <h4>Labels and Units for Data Collection</h4>
                         <input type="hidden" name="@Html.NameFor(m => m.ObservationThresholdTypeID)" value="@ViewDataTyped.PassFailObservationThresholdTypeID" />
                         <input type="hidden" name="@Html.NameFor(m => m.ObservationTargetTypeID)" value="@ViewDataTyped.PassFailObservationTargetTypeID" />
                         <div class="form-group">
@@ -382,20 +406,18 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Standing Water Present">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
                                         <button class="btn btn-neptune" type="button" ng-click="addInput()"><span class="glyphicon glyphicon-plus"></span> Add</button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div>                            
+                        </div>                       
                     </div>
 
                     <div ng-if="selectedCollectionMethodIsPercentage()">
-                        <hr />
-                        <h4>Labels and Units for Data Collection</h4>
                         <div class="form-group">
                             <div class="col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.PropertiesToObserve, true)
@@ -403,7 +425,7 @@
                             <div class="col-sm-9">
                                 <div class="row">
                                     <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: auto" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}">
+                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Grass Species Cover">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
@@ -417,7 +439,7 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" />
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Percent Coverage"/>
                             </div>
                         </div>
                     </div>
@@ -437,5 +459,5 @@
         </div>
         @Html.HiddenFor(m => m.ObservationTypeID)
         <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="AngularModel.ObservationTypeSchema" />
-    </div>    
+    </div>
 </form>

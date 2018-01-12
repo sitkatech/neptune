@@ -24,6 +24,7 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {
@@ -32,14 +33,16 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public ViewDataForAngular ViewDataForAngular { get; } 
         public string TreatmentBMPTypeIndexUrl { get; }
         public string SubmitUrl { get; }
+        public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-
-        public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl) : base(currentPerson)
+        public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl,
+            Models.NeptunePage instructionsNeptunePage) : base(currentPerson)
         {
             PageTitle = $"Manage {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
             ViewDataForAngular = new ViewDataForAngular(observationTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
         }
     }
 

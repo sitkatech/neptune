@@ -9,7 +9,11 @@ alter table dbo.TreatmentBMPTypeObservationType add constraint CK_AssessmentScor
 
 insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
 values
-(12, 'ManageTreatmentBMPTypes', 'Manage Treatment BMP Types', 2)
+(12, 'ManageTreatmentBMPTypesList', 'Manage Treatment BMP Types List', 2),
+(13, 'ManageObservationTypeInstructions', 'Manage Observation Type Instructions', 2),
+(14, 'ManageObservationTypeObservationInstructions', 'Manage Observation Type Instructions for Observation Instructions', 2),
+(15, 'ManageObservationTypeLabelsAndUnitsInstructions', 'Manage Observation Type Labels and Units Instructions', 2),
+(16, 'ManageTreatmentBMPTypeInstructions', 'Manage Treatment BMP Type Instructions', 2)
 
 insert into dbo.neptunepage(TenantID, NeptunePageTypeID)
 select 
@@ -17,4 +21,4 @@ select
 	npt.NeptunePageTypeID
 from dbo.neptunepagetype npt
 cross join dbo.tenant t
-where npt.NeptunePageTypeID = 12
+where npt.NeptunePageTypeID in (12, 13, 14, 15, 16)

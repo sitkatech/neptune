@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
         public abstract string GetBenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP, ObservationType observationType);
        
     }
-    public partial class ObservationThresholdTypeDiscreteValue : ObservationThresholdType
+    public partial class ObservationThresholdTypeSpecificValue : ObservationThresholdType
     {
         public override string GetBenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP, ObservationType observationType)
         {
@@ -17,7 +17,7 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class ObservationThresholdTypePercentFromBenchmark : ObservationThresholdType
+    public partial class ObservationThresholdTypeRelativeToBenchmark : ObservationThresholdType
     {
         public override string GetBenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP, ObservationType observationType)
         {

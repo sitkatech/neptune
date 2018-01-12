@@ -3,6 +3,7 @@
 @using Neptune.Web.Common
 @using Neptune.Web.Controllers
 @using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMPType.Edit
 
@@ -21,6 +22,9 @@
 
     // ]]>
 </script>
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewInstructionsNeptunePage); }
+
 
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditTreatmentBMPTypeControllerApp" ng-controller="EditTreatmentBMPTypeController" ng-submit="submit()" name="treatmentBMPTypeForm">
     <div class="formPage">
@@ -92,7 +96,7 @@
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                     <th style="width: 32px"></th>
-                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.OverrideScoreIfObservationFails) </th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.AssessmentFailsIfObservationFails) </th>
                 </tr>
                 <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
                     <td>
@@ -118,19 +122,15 @@
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
-                    
+
 
                     @*if observation type is pass/fail*@
-                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-
-                    </td>
-                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-
-                    </td>
+                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right"></td>
+                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right"></td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
                         <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control input-group" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" />
                     </td>
-                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"class="text-center">
+                    <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-center">
                         @Html.Label("or")
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-center">
@@ -145,18 +145,18 @@
                 </tr>
             </table>
         </div>
-        
+
         <div ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].ObservationTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.ObservationTypeID}}"/>
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].DefaultBenchmarkValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue}}"/>
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].DefaultThresholdValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue}}"/>
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].AssessmentScoreWeight).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight}}"/>
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].OverrideAssessmentScoreIfFailing).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing}}"/>
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].ObservationTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.ObservationTypeID}}" />
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].DefaultBenchmarkValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue}}" />
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].DefaultThresholdValue).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue}}" />
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].AssessmentScoreWeight).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight}}" />
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeObservationTypeSimples[0].OverrideAssessmentScoreIfFailing).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing}}" />
         </div>
 
     </div>
     <div class="row">
-        <hr/>
+        <hr />
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>

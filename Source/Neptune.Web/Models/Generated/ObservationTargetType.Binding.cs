@@ -38,13 +38,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected ObservationTargetType(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription)
+        protected ObservationTargetType(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder)
         {
             ObservationTargetTypeID = observationTargetTypeID;
             ObservationTargetTypeName = observationTargetTypeName;
             ObservationTargetTypeDisplayName = observationTargetTypeDisplayName;
             SortOrder = sortOrder;
-            ObservationTargetTypeDescription = observationTargetTypeDescription;
         }
         public List<ObservationTypeSpecification> ObservationTypeSpecifications { get { return ObservationTypeSpecification.All.Where(x => x.ObservationTargetTypeID == ObservationTargetTypeID).ToList(); } }
         [Key]
@@ -52,7 +51,6 @@ namespace Neptune.Web.Models
         public string ObservationTargetTypeName { get; private set; }
         public string ObservationTargetTypeDisplayName { get; private set; }
         public int SortOrder { get; private set; }
-        public string ObservationTargetTypeDescription { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return ObservationTargetTypeID; } }
 
@@ -129,25 +127,25 @@ namespace Neptune.Web.Models
 
     public partial class ObservationTargetTypePassFail : ObservationTargetType
     {
-        private ObservationTargetTypePassFail(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypePassFail Instance = new ObservationTargetTypePassFail(1, @"PassFail", @"Pass/Fail", 10, @"Observation is pass/fail");
+        private ObservationTargetTypePassFail(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder) {}
+        public static readonly ObservationTargetTypePassFail Instance = new ObservationTargetTypePassFail(1, @"PassFail", @"Observation is Pass/Fail", 10);
     }
 
     public partial class ObservationTargetTypeHigh : ObservationTargetType
     {
-        private ObservationTargetTypeHigh(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeHigh Instance = new ObservationTargetTypeHigh(2, @"High", @"High Target Value", 20, @"Observing a high value is good");
+        private ObservationTargetTypeHigh(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder) {}
+        public static readonly ObservationTargetTypeHigh Instance = new ObservationTargetTypeHigh(2, @"High", @"Higher observed values result in higher score", 20);
     }
 
     public partial class ObservationTargetTypeLow : ObservationTargetType
     {
-        private ObservationTargetTypeLow(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeLow Instance = new ObservationTargetTypeLow(3, @"Low", @"Low Target Value", 30, @"Observing a low value is good");
+        private ObservationTargetTypeLow(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder) {}
+        public static readonly ObservationTargetTypeLow Instance = new ObservationTargetTypeLow(3, @"Low", @"Lower observed values result in higher score", 30);
     }
 
     public partial class ObservationTargetTypeSpecificValue : ObservationTargetType
     {
-        private ObservationTargetTypeSpecificValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder, string observationTargetTypeDescription) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder, observationTargetTypeDescription) {}
-        public static readonly ObservationTargetTypeSpecificValue Instance = new ObservationTargetTypeSpecificValue(4, @"SpecificValue", @"Specific Target Value", 40, @"Observing a specific targeted value is good");
+        private ObservationTargetTypeSpecificValue(int observationTargetTypeID, string observationTargetTypeName, string observationTargetTypeDisplayName, int sortOrder) : base(observationTargetTypeID, observationTargetTypeName, observationTargetTypeDisplayName, sortOrder) {}
+        public static readonly ObservationTargetTypeSpecificValue Instance = new ObservationTargetTypeSpecificValue(4, @"SpecificValue", @"Observed values exactly equal to the benchmark result in highest score", 40);
     }
 }

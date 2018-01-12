@@ -29,9 +29,9 @@ VALUES
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
 (25, N'TreatmentBMP', N'Treatment BMP', '', 1),
 (26, N'ObservationType', N'Observation Type', '', 1),
-(27, N'ObservationCollectionMethod', N'Observation Collection Method', '', 1),
-(28, N'ObservationThresholdType', N'Observation Threshold Type', '', 1),
-(29, N'ObservationTargetType', N'Observation Target Type', '', 1),
+(27, N'ObservationCollectionMethod', N'Collection Method', '', 1),
+(28, N'ObservationThresholdType', N'Threshold Type', '', 1),
+(29, N'ObservationTargetType', N'Target Type', '', 1),
 (30, N'MeasurementUnitLabel', N'Measurement Unit Label', '', 1),
 (31, N'PropertiesToObserve', N'Properties To Observe', '', 1),
 (32, N'MinimumNumberOfObservations', N'Minimum Number of Observations', '', 1),
@@ -40,4 +40,4 @@ VALUES
 (35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1),
 (36, N'DefaultThresholdValue', N'Default Threshold Value', '', 1),
 (37, N'DefaultBenchmarkValue', N'Default Benchmark Value', '', 1),
-(38, N'OverrideScoreIfObservationFails', N'Override Score if Observation Fails', '', 1)
+(38, N'AssessmentFailsIfObservationFails', N'Assessment Fails if Observation Fails', '', 1)

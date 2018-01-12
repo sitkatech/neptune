@@ -25,6 +25,7 @@ using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.ObservationType
 {
@@ -37,11 +38,17 @@ namespace Neptune.Web.Views.ObservationType
         public int PassFailObservationThresholdTypeID { get; }
         public int PassFailObservationTargetTypeID { get; }
 
+        public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
+        public ViewPageContentViewData ViewObservationInstructionsNeptunePage { get; }
+        public ViewPageContentViewData ViewLabelsAndUnitsInstructionsNeptunePage { get; }
+
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<ObservationTypeSpecification> observationTypeSpecifications,
             List<ObservationThresholdType> observationThresholdTypes,
             List<ObservationTargetType> observationTargetTypes,
-            List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl) : base(currentPerson)
+            List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
+            Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
+            Models.NeptunePage labelAndUnitsInstructionsNeptunePage) : base(currentPerson)
         {
             PageTitle = $"Manage {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
@@ -50,6 +57,10 @@ namespace Neptune.Web.Views.ObservationType
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
             PassFailObservationTargetTypeID = ObservationTargetType.PassFail.ObservationTargetTypeID;
+
+            ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
+            ViewObservationInstructionsNeptunePage = new ViewPageContentViewData(observationInstructionsNeptunePage, currentPerson);
+            ViewLabelsAndUnitsInstructionsNeptunePage = new ViewPageContentViewData(labelAndUnitsInstructionsNeptunePage, currentPerson);
         }
     }
 
@@ -89,12 +100,14 @@ namespace Neptune.Web.Views.ObservationType
         public int ID { get; }
         public string DisplayName { get; }
         public bool HasBenchmarkAndThresholds { get; }
+        public string Definition { get; }
 
         public ObservationTypeCollectionMethodSimple(ObservationTypeCollectionMethod observationTypeCollectionMethod)
         {
             ID = observationTypeCollectionMethod.ObservationTypeCollectionMethodID;
             DisplayName = observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName;
             HasBenchmarkAndThresholds = observationTypeCollectionMethod != ObservationTypeCollectionMethod.PassFail;
+            Definition = observationTypeCollectionMethod.ObservationTypeCollectionMethodDescription;
         }
     }
 

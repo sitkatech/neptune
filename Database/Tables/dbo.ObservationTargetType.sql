@@ -7,7 +7,6 @@ CREATE TABLE [dbo].[ObservationTargetType](
 	[ObservationTargetTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[ObservationTargetTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SortOrder] [int] NOT NULL,
-	[ObservationTargetTypeDescription] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_ObservationTargetType_ObservationTargetTypeID] PRIMARY KEY CLUSTERED 
 (
 	[ObservationTargetTypeID] ASC
@@ -20,4 +19,4 @@ CREATE TABLE [dbo].[ObservationTargetType](
 (
 	[ObservationTargetTypeName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]

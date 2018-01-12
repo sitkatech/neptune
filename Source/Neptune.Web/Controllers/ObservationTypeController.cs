@@ -40,7 +40,7 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult Manage()
         {
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypes);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypesList);
             var viewData = new ManageViewData(CurrentPerson, neptunePage);
             return RazorView<Manage, ManageViewData>(viewData);
         }
@@ -107,8 +107,12 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
+            var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeInstructions);
+            var observationInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeObservationInstructions);
+            var labelAndUnitsInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeLabelsAndUnitsInstructions);
+
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.ObservationTypeID) ? SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.ObservationTypeID)) : SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.New());
-            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All, submitUrl);
+            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All, submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
