@@ -37,12 +37,14 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <div class="container neptuneContent">
     <div class="mainPageHeader">
-        <div class="rightFloatingInfo">
-            @RenderSection("RightOfPageTitle", false)
-        </div>
-
+        
+        @* TODO: I'm not happy about the duplication of the RightOfPageTitle section here, but I need to conditionally put the withBreadcrumbTitle class on it and this was the fastest way *@
         @if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle) && !string.IsNullOrWhiteSpace(ViewDataTyped.EntityName))
         {
+            <div class="rightFloatingInfo withBreadcrumbTitle">
+                @RenderSection("RightOfPageTitle", false)
+            </div>
+
             <div class="breadcrumbTitle arrow firstArrow current">
                 <a href="@ViewDataTyped.EntityUrl">@ViewDataTyped.EntityName</a>
             </div>
@@ -50,6 +52,10 @@ Source code is available upon request via <support@sitkatech.com>.
         }
         else if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle))
         {
+            <div class="rightFloatingInfo">
+                @RenderSection("RightOfPageTitle", false)
+            </div>
+
             <h2>@ViewDataTyped.PageTitle</h2>
         }
     </div>

@@ -52,6 +52,8 @@ h6 {
 }
 .rightFloatingInfo {
   float: right;
+}
+.rightFloatingInfo.withBreadcrumbTitle {
   margin-top: 5px;
 }
 .hoverEditButton {
