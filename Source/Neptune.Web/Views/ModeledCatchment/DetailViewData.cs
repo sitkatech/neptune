@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ModeledCatchment
@@ -33,6 +35,8 @@ namespace Neptune.Web.Views.ModeledCatchment
         {
             ModeledCatchment = modeledCatchment;
             PageTitle = modeledCatchment.ModeledCatchmentName;
+            EntityName = $"{Models.FieldDefinition.StormwaterJurisdiction.GetFieldDefinitionLabelPluralized()}";
+            EntityUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
             CurrentPersonCanManage = CurrentPerson.CanManageStormwaterJurisdiction(ModeledCatchment.StormwaterJurisdiction);
         }

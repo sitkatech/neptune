@@ -37,7 +37,8 @@ namespace Neptune.Web.Views.User
 
         public IndexViewData(Person currentPerson) : base(currentPerson)
         {
-            PageTitle = "Users";
+            PageTitle = "All Users";
+            EntityName = "Users";
             var hasDeletePermission = new UserEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
             GridName = "UserGrid";

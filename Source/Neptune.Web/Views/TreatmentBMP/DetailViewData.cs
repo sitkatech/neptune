@@ -46,6 +46,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             TreatmentBMP = treatmentBMP;
             PageTitle = treatmentBMP.FormattedNameAndType;
+            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
             NewAssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));

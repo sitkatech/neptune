@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.User
     {
         public readonly Person Person;
         public readonly string EditPersonOrganizationPrimaryContactUrl;
-        public readonly string Index;
+        public readonly string IndexUrl;
 
         public readonly bool UserHasPersonViewPermissions;
         public readonly bool UserHasPersonManagePermissions;
@@ -54,14 +54,20 @@ namespace Neptune.Web.Views.User
         {
             Person = personToView;
             PageTitle = personToView.FullNameFirstLast + (!personToView.IsActive ? " (inactive)" : string.Empty);
-            EntityName = "User";
+            EntityName = "Users";
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
-            Index = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Index());
+            IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Index());
 
             UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserHasPersonManagePermissions = new UserEditFeature().HasPermissionByPerson(currentPerson);
             UserHasViewEverythingPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+
+            if (UserHasPersonManagePermissions)
+            {
+                EntityUrl = IndexUrl;
+            }
+
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
             EditRolesLink = UserHasPersonManagePermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),

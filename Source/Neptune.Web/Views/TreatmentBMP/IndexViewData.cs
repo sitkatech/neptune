@@ -39,7 +39,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
-            PageTitle = "Treatment BMPs";
+            PageTitle = "All Treatment BMPs";
+            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             GridSpec = new TreatmentBMPGridSpec(currentPerson) {ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true};
             GridName = "treatmentBMPsGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPGridJsonData());

@@ -38,7 +38,8 @@ namespace Neptune.Web.Views.ModeledCatchment
             : base(currentPerson, StormwaterBreadCrumbEntity.ModeledCatchment, neptunePage)
         {
             MapInitJson = mapInitJson;
-            PageTitle = "Catchments";
+            PageTitle = "All Catchments";
+            EntityName = $"{Models.FieldDefinition.ModeledCatchment.GetFieldDefinitionLabelPluralized()}";
 
             GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "Catchment", ObjectNamePlural = "Catchments", SaveFiltersInCookie = true};
             GridName = "catchmentsGrid";
