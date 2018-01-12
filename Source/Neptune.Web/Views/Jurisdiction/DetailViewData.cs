@@ -52,6 +52,8 @@ namespace Neptune.Web.Views.Jurisdiction
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
             PageTitle = stormwaterJurisdiction.OrganizationDisplayName;
+            EntityName = $"{Models.FieldDefinition.StormwaterJurisdiction.GetFieldDefinitionLabelPluralized()}";
+            EntityUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
             
             JurisdictionModeledCatchmentsGridSpec = new JurisdictionModeledCatchmentsGridSpec(currentPerson)
             {

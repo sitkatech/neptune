@@ -35,7 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
             List<Models.TreatmentBMPType> treatmentBMPTypes)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = "All BMP Types";
 
             TreatmentBMPTypes = treatmentBMPTypes;
 

@@ -36,12 +36,6 @@
         <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.ObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
     }
 }
-@if (ViewDataTyped.UserHasObservationTypeManagePermissions)
-{
-    <div>
-        <a class="btn backButton" href="@ViewDataTyped.ObservationTypeIndexUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left") Back to all @FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()</a>
-    </div>
-}
 
 <div class="row">
     <div class="col-xs-12 col-sm-12">

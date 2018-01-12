@@ -112,7 +112,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .rightFloatingInfo {
     float: right;
-    margin-top: 20px;
+    &.withBreadcrumbTitle
+    {
+        margin-top: 5px;
+    }
 }
 
 // neptune page edit
@@ -612,7 +615,7 @@ table.summaryLayout td {
     &.default {
         background-color: @neptune-inactive-arrow-color;
         border-left-color: @neptune-inactive-arrow-color;
-        color: @neptune-white;
+        color: @neptune-text-color;
     }
 
     border-top-left-radius: .25rem;
@@ -648,7 +651,7 @@ table.summaryLayout td {
     &.default {
         background-color: @neptune-inactive-arrow-color;
         border-left-color: @neptune-inactive-arrow-color;
-        color: @neptune-white;
+        color: @neptune-text-color;
     }
 }
 
@@ -696,7 +699,7 @@ table.summaryLayout td {
     &.default {
         background-color: @neptune-inactive-arrow-color;
         border-left-color: @neptune-inactive-arrow-color;
-        color: @neptune-contentBackground-color;
+        color: @neptune-text-color;
     }
 
     border-top-right-radius: .25rem;

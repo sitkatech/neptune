@@ -35,34 +35,58 @@ Source code is available upon request via <support@sitkatech.com>.
     @RenderSection("BeforeBodyContainer", false)
 }
 
-<div class="container neptuneContent">  
-    <div class="rightFloatingInfo">
-        @RenderSection("RightOfPageTitle", false)
+<div class="container neptuneContent">
+    <div class="mainPageHeader">
+        
+        @* TODO: I'm not happy about the duplication of the RightOfPageTitle section here, but I need to conditionally put the withBreadcrumbTitle class on it and this was the most straightforward way to write it*@
+        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle) && !string.IsNullOrWhiteSpace(ViewDataTyped.EntityName))
+        {
+            <div class="rightFloatingInfo withBreadcrumbTitle">
+                @RenderSection("RightOfPageTitle", false)
+            </div>
+
+            <div class="breadcrumbTitle arrow firstArrow current">
+                <a href="@ViewDataTyped.EntityUrl">@ViewDataTyped.EntityName</a>
+            </div>
+            <div class="breadcrumbTitle arrow lastArrow default" title="@ViewDataTyped.PageTitle">@ViewDataTyped.PageTitle</div>
+        }
+        else if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle))
+        {
+            <div class="rightFloatingInfo">
+                @RenderSection("RightOfPageTitle", false)
+            </div>
+
+            <h2>@ViewDataTyped.PageTitle</h2>
+        }
     </div>
 
-    <h2 class="pageTitle">@ViewDataTyped.PageTitle</h2>
-    
     @if (TempData.ContainsKey(SitkaController.StatusErrorIndex))
     {
         <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             @Html.Raw(TempData[SitkaController.StatusErrorIndex])
         </div>
     }
     @if (TempData.ContainsKey(SitkaController.StatusMessageIndex))
     {
         <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             @Html.Raw(TempData[SitkaController.StatusMessageIndex])
         </div>
     }
     @if (TempData.ContainsKey(SitkaController.InfoMessageIndex))
     {
         <div class="alert alert-info alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             @Html.Raw(TempData[SitkaController.InfoMessageIndex])
         </div>
     }
-    
+
     @RenderBody()
 </div>

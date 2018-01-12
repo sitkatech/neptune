@@ -37,12 +37,6 @@
         <a class="btn btn-neptune headerButtonText treatmentBMPTypeButton" href="@ViewDataTyped.TreatmentBMPType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Treatment BMP Type</a>
     }
 }
-@if (ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)
-{
-    <div>
-        <a class="btn backButton" href="@ViewDataTyped.TreatmentBMPTypeIndexUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left") Back to all @FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()</a>
-    </div>
-}
 
 <div class="row">
     <div class="col-xs-12 col-sm-12">

@@ -35,7 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
+            PageTitle = $"Manage {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
 
             NewTreatmentBMPTypeUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
