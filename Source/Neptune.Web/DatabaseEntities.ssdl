@@ -527,7 +527,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="AssessmentScoreWeight" Type="float" />
     <Property Name="DefaultThresholdValue" Type="float" />
     <Property Name="DefaultBenchmarkValue" Type="float" />
-    <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" />
+    <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" Nullable="false" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />

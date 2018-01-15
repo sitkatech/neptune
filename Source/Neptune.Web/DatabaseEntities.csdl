@@ -544,7 +544,7 @@
     <Property Name="AssessmentScoreWeight" Type="Double" />
     <Property Name="DefaultThresholdValue" Type="Double" />
     <Property Name="DefaultBenchmarkValue" Type="Double" />
-    <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" />
+    <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_ObservationType_ObservationTypeID" FromRole="TreatmentBMPTypeObservationTypes" ToRole="ObservationType" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeObservationType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPTypeObservationTypes" ToRole="TreatmentBMPType" />
   </EntityType>

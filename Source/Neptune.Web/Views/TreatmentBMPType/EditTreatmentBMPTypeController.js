@@ -35,7 +35,7 @@
     }
 
     $scope.checkOverrideIfFailing = function (treatmentBMPTypeObservationTypeSimple) {
-        treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight = 0;
+        treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight = null;
         getWeightTotal();
     }
 

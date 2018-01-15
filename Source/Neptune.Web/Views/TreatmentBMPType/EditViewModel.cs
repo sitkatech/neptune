@@ -84,7 +84,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
                         x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value ? null : x.AssessmentScoreWeight,
                         x.DefaultThresholdValue,
                         x.DefaultBenchmarkValue,
-                        x.OverrideAssessmentScoreIfFailing);
+                        x.OverrideAssessmentScoreIfFailing ?? false);
                 }).ToList();
             }
 
