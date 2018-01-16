@@ -97,7 +97,7 @@ namespace Neptune.Web.Models
                     var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).CalculateObservationScore();
 
                     var observationType = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).ObservationType;
-                    var observationWeight = TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value;
+                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value);
                     return observationScore * observationWeight;
                 });
 

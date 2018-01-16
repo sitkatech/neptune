@@ -78,10 +78,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 // Completely rebuild the list
                 updatedTreatmentBMPTypeObservationTypes = TreatmentBMPTypeObservationTypeSimples.Select(x =>
                 {
+                    var overrideWeight = x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value;
+
                     return new TreatmentBMPTypeObservationType(ModelObjectHelpers.NotYetAssignedID,
                         treatmentBMPType.TreatmentBMPTypeID,
                         x.ObservationTypeID,
-                        x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value ? null : x.AssessmentScoreWeight,
+                        overrideWeight ? null : x.AssessmentScoreWeight/100,
                         x.DefaultThresholdValue,
                         x.DefaultBenchmarkValue,
                         x.OverrideAssessmentScoreIfFailing ?? false);
@@ -130,9 +132,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 validationResults.Add(new ValidationResult("Each Observation Type that does not override the Assessment Score if failing must have an Assessment Score Weight."));
             }
 
-            if (requiresAssessmentWeightSimples.Any() && TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 1)
+            if (requiresAssessmentWeightSimples.Any() && TreatmentBMPTypeObservationTypeSimples.Sum(x => x.AssessmentScoreWeight) != 100)
             {
-                validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 1."));
+                validationResults.Add(new ValidationResult("The total Assessment Score Weight for all Observation Types must equal 100%."));
             }
 
             return validationResults;

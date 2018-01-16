@@ -16,6 +16,11 @@
         return observationTypeToFind.ObservationTypeName;
     };
 
+    $scope.getObservationCollectionMethodTypeName = function (treatmentBMPTypeObservationTypeSimple) {
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        return observationTypeToFind.CollectionMethodDisplayName;
+    };
+
     $scope.getObservationTypeBenchmarkUnit = function (treatmentBMPTypeObservationTypeSimple) {
         var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
         return observationTypeToFind.BenchmarkUnitLegendDisplayName;

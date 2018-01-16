@@ -524,7 +524,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="ObservationTypeID" Type="int" Nullable="false" />
-    <Property Name="AssessmentScoreWeight" Type="float" />
+    <Property Name="AssessmentScoreWeight" Type="decimal" Precision="9" Scale="6" />
     <Property Name="DefaultThresholdValue" Type="float" />
     <Property Name="DefaultBenchmarkValue" Type="float" />
     <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" Nullable="false" />

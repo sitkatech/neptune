@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
@@ -67,6 +68,7 @@
                         <table class="table">
                             <tr>
                                 <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
@@ -76,17 +78,10 @@
                                 {
                                     <tr>
                                         <td class="text-left">@treatmentBMPTypeObservationType.ObservationType.GetDisplayNameAsUrl()</td>
-                                        @if (treatmentBMPTypeObservationType.ObservationType.HasBenchmarkAndThreshold)
-                                        {
-                                            <td class="text-right">@treatmentBMPTypeObservationType.DefaultBenchmarkValue @treatmentBMPTypeObservationType.ObservationType.BenchmarkMeasurementUnitType().LegendDisplayName</td>
-                                            <td class="text-right">@treatmentBMPTypeObservationType.DefaultThresholdValue @treatmentBMPTypeObservationType.ObservationType.ThresholdMeasurementUnitType().LegendDisplayName</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-right">@ViewUtilities.NaString</td>
-                                            <td class="text-right">@ViewUtilities.NaString</td>
-                                        }
-                                        <td class="text-right">@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToString("0.00") : "pass/fail")</td>
+                                        <td class="text-left">@treatmentBMPTypeObservationType.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
+                                        <td class="text-right">@treatmentBMPTypeObservationType.ObservationType.GetFormattedBenchmarkValue(@treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-right">@treatmentBMPTypeObservationType.ObservationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-right">@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
                                     </tr>
                                 }
                             </tbody>

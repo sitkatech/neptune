@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using LtInfo.Common;
 
 namespace Neptune.Web.Models
 {
@@ -26,7 +27,7 @@ namespace Neptune.Web.Models
 
             ThresholdValueInObservedUnits = observationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease) ?? 0;
             BenchmarkValue = benchmarkValue ?? 0;            
-            Weight = assessmentScoreWeight?.ToString("0.0") ?? "pass/fail";
+            Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";
 
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == observationType.ObservationTypeID);
             TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation) : null;

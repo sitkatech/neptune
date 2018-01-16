@@ -541,7 +541,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
-    <Property Name="AssessmentScoreWeight" Type="Double" />
+    <Property Name="AssessmentScoreWeight" Type="Decimal" Precision="9" Scale="6" />
     <Property Name="DefaultThresholdValue" Type="Double" />
     <Property Name="DefaultBenchmarkValue" Type="Double" />
     <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" Nullable="false" />

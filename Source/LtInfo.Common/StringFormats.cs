@@ -161,6 +161,11 @@ namespace LtInfo.Common
             return value.ToString("0%");
         }
 
+        public static string ToStringShortPercent(this decimal? value)
+        {
+            return value.HasValue ? value.Value.ToString("0%") : "null";
+        }
+
         public static string ToNotProvidedIfNull(this string value)
         {
             if (string.IsNullOrWhiteSpace(value))

@@ -92,6 +92,7 @@
                 <tr>
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
@@ -103,6 +104,7 @@
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer"></span>
                     </td>
                     <td class="text-left" ng-bind="getObservationTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getObservationCollectionMethodTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
 
                     @*if observation type is not pass/fail*@
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
@@ -118,7 +120,10 @@
                         </div>
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control input-group" />
+                        <div class="input-group">
+                            <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control" aria-describedby="assessmentWeight{{$index}}" />
+                            <span class="input-group-addon" id="assessmentWeight{{$index}}">%</span>
+                        </div>
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)"></td>
@@ -128,7 +133,10 @@
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right"></td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right"></td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
-                        <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" class="form-control input-group" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" />
+                        <div class="input-group">
+                            <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight" ng-disabled="treatmentBMPTypeObservationTypeSimple.OverrideAssessmentScoreIfFailing" class="form-control" aria-describedby="assessmentWeight{{$index}}" />
+                            <span class="input-group-addon" id="assessmentWeight{{$index}}">%</span>
+                        </div>
                     </td>
                     <td ng-if="!observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-center">
                         @Html.Label("or")
@@ -138,8 +146,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <th colspan="4">Total</th>
-                    <th style="text-align: right" ng-bind="getWeightTotal()"></th>
+                    <th colspan="5">Total</th>
+                    <th style="text-align: right" ><span ng-bind="getWeightTotal()"></span>%</th>
                     <th></th>
                     <th></th>
                 </tr>

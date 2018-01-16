@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[TreatmentBMPTypeObservationType](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[ObservationTypeID] [int] NOT NULL,
-	[AssessmentScoreWeight] [float] NULL,
+	[AssessmentScoreWeight] [decimal](9, 6) NULL,
 	[DefaultThresholdValue] [float] NULL,
 	[DefaultBenchmarkValue] [float] NULL,
 	[OverrideAssessmentScoreIfFailing] [bit] NOT NULL,

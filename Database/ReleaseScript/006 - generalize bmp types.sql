@@ -1,7 +1,7 @@
 alter table dbo.TreatmentBMPType add TreatmentBMPTypeDescription varchar(1000) not null
 
 alter table dbo.TreatmentBMPTypeObservationType add OverrideAssessmentScoreIfFailing bit not null
-alter table dbo.TreatmentBMPTypeObservationType alter column AssessmentScoreWeight float null
+alter table dbo.TreatmentBMPTypeObservationType alter column AssessmentScoreWeight decimal(9,6) null
 
 go
 

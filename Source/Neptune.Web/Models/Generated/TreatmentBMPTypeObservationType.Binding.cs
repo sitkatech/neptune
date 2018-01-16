@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, decimal? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing) : this()
         {
             this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
@@ -97,7 +97,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int ObservationTypeID { get; set; }
-        public double? AssessmentScoreWeight { get; set; }
+        public decimal? AssessmentScoreWeight { get; set; }
         public double? DefaultThresholdValue { get; set; }
         public double? DefaultBenchmarkValue { get; set; }
         public bool OverrideAssessmentScoreIfFailing { get; set; }
