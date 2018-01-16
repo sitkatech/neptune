@@ -300,13 +300,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum Number of Rate Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscretRateMinimumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum Number of Rate Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscretRateMaximumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMaximumNumberOfObservations" step="1" min="0" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -314,13 +314,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum Value of Each Rate Observation")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscretRateMinimumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum Value of Each Rate Observation")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscretRateMaximumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMaximumValueOfObservations" />
                             </div>
                         </div>
                         <br />
@@ -367,13 +367,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithRequiredTagFor("Minimum Number of Time/Reading Observations")
+                                @Html.LabelWithRequiredTagFor("Minimum Number of Time/Value Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.Label("Maximum Number Time/Reading Observations")
+                                @Html.Label("Maximum Number Time/Value Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMaximumNumberOfObservations" step="1" min="0" />
@@ -381,13 +381,13 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.LabelWithRequiredTagFor("Minimum Value of Each Reading")
+                                @Html.LabelWithRequiredTagFor("Minimum of Each Data Value")
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
-                                @Html.Label("Maximum Value of Each Reading")
+                                @Html.Label("Maximum of Each Data Value")
                             </div>
                             <div class="col-xs-9 col-sm-3">
                                 <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMaximumValueOfObservations" />
