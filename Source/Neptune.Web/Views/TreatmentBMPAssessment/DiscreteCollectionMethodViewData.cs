@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Common;
@@ -51,9 +52,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
             public List<SelectItemSimple> PropertiesToObserve { get; }
             public int MinimumNumberOfObservations { get; }
-            public int? MaximumNumberOfObservations { get; }
+            public int MaximumNumberOfObservations { get; }
             public double MinimumValueOfObservations { get; }
-            public double? MaximumValueOfObservations { get; }
+            public double MaximumValueOfObservations { get; }
 
             public DiscreteCollectionMethodViewDataForAngular(DiscreteObservationTypeSchema discreteObservationTypeSchema)
             {
@@ -66,9 +67,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 });
 
                 MinimumNumberOfObservations = discreteObservationTypeSchema.MinimumNumberOfObservations;
-                MaximumNumberOfObservations = discreteObservationTypeSchema.MaximumNumberOfObservations;
+                MaximumNumberOfObservations = discreteObservationTypeSchema.MaximumNumberOfObservations ?? Int32.MaxValue;
                 MinimumValueOfObservations = discreteObservationTypeSchema.MinimumValueOfObservations;
-                MaximumValueOfObservations = discreteObservationTypeSchema.MaximumValueOfObservations;
+                MaximumValueOfObservations = discreteObservationTypeSchema.MaximumValueOfObservations ?? Double.MaxValue;
             }
         }
     }
