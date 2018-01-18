@@ -440,7 +440,6 @@
     </Content>
     <Content Include="ScriptsCustom\sitkaAjax.min.js.map" />
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
-    <Content Include="ScriptsCustom\unsavedChanges.min.js.map" />
     <Content Include="Content\Bootstrap\neptune\base.theme.less" />
     <Content Include="Content\Bootstrap\neptune\rcd.theme.less" />
     <None Include="compilerconfig.json" />
@@ -494,7 +493,9 @@
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.js" />
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js" />
     <Content Include="ScriptsCustom\unsavedChanges.js" />
-    <Content Include="ScriptsCustom\unsavedChanges.min.js" />
+    <Content Include="ScriptsCustom\unsavedChanges.min.js">
+      <DependentUpon>unsavedChanges.js</DependentUpon>
+    </Content>
     <Content Include="Service References\KeystoneDataService\Neptune.Web.KeystoneDataService.Organization.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>

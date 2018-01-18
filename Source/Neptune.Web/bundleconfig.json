@@ -58,5 +58,11 @@
     "inputFiles": [
       "ScriptsCustom/sitka.js"
     ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/unsavedChanges.min.js",
+    "inputFiles": [
+      "ScriptsCustom/unsavedChanges.js"
+    ]
   }
 ]
