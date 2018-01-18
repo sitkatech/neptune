@@ -130,26 +130,24 @@
     }
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div>
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageTextViewData); }
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <div>
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageAdditionalInfoTextViewData); }
             </div>
         </div>
-    </div>
     
-    @*TODO: put it in the right kind of container*@
-    <div>
-        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
-    </div>
-    <div>
-        @{ JurisdictionsMap.RenderPartialView(Html, ViewDataTyped.JurisdictionsMapViewData); }
+        <div class="col-md-4" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 5px;">Jurisdiction Map</h4>
+            <div>
+                @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
+            </div>
+            <div>
+                @{ JurisdictionsMap.RenderPartialView(Html, ViewDataTyped.JurisdictionsMapViewData); }
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript">
