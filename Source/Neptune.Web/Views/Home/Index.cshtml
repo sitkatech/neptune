@@ -20,9 +20,9 @@
     -----------------------------------------------------------------------*@
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.JurisdictionControls
 @using SitkaController = Neptune.Web.Common.SitkaController
 @inherits Index
 @{
@@ -34,6 +34,10 @@
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+
+    <style>
+        #@ViewDataTyped.JurisdictionsMapInitJson.MapDivID { height: 400px; }
+    </style>
 }
 
 @section BeforeBodyContainer
@@ -126,16 +130,22 @@
     }
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div>
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageTextViewData); }
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
             <div>
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageAdditionalInfoTextViewData); }
+            </div>
+        </div>
+    
+        <div class="col-md-4" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 5px;">Jurisdiction Map</h4>
+            <div>
+                @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
+            </div>
+            <div>
+                @{ JurisdictionsMap.RenderPartialView(Html, ViewDataTyped.JurisdictionsMapViewData); }
             </div>
         </div>
     </div>
@@ -159,6 +169,13 @@
 
                 return layer;
             };
+
+            var jurisdictionsMapJson =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.JurisdictionsMapInitJson).ToString(Formatting.None));
+            var map = window.Sitka.map = new NeptuneMaps.Map(jurisdictionsMapJson);
+
+            map.initializeJurisdictions(jurisdictionsMapJson);
+            //map.disableUserInteraction();
 
             jQuery('.leaflet-container').css('cursor', 'pointer');
         })

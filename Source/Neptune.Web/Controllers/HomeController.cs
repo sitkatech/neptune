@@ -27,6 +27,8 @@ using Neptune.Web.Common;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Home;
+using Neptune.Web.Views.Map;
+using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Controllers
 {
@@ -53,7 +55,22 @@ namespace Neptune.Web.Controllers
 
             var neptuneHomePageImages = HttpRequestStorage.DatabaseEntities.NeptuneHomePageImages.ToList().OrderBy(x => x.SortOrder).ToList();
 
-            var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage, neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo, neptuneHomePageImages);
+            // map stuff
+
+            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson(true).Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show).ToList();
+
+            var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
+            {
+                AllowFullScreen = false,
+                Layers = layerGeoJsons
+            };
+            var projectLocationsMapViewData = new JurisdictionsMapViewData(projectLocationsMapInitJson.MapDivID);
+
+
+            var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,
+                neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo,
+                neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson);
+
             return RazorView<Index, IndexViewData>(viewData);
         }
 

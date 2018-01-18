@@ -237,6 +237,7 @@
     <Compile Include="Views\Jurisdiction\IndexGridSpec.cs" />
     <Compile Include="Views\Jurisdiction\IndexViewData.cs" />
     <Compile Include="Views\Jurisdiction\JurisdictionUrbanCatchmentsGridSpec.cs" />
+    <Compile Include="Views\Map\JurisdictionsMapInitJson.cs" />
     <Compile Include="Views\ModeledCatchment\ApproveModeledCatchmentGisUpload.cs" />
     <Compile Include="Views\ModeledCatchment\ApproveModeledCatchmentGisUploadViewData.cs" />
     <Compile Include="Views\ModeledCatchment\ApproveModeledCatchmentGisUploadViewModel.cs" />
@@ -309,6 +310,8 @@
     <Compile Include="Views\Shared\GoogleChartViewWindow.cs" />
     <Compile Include="Views\Shared\GooglePieChartConfiguration.cs" />
     <Compile Include="Views\Shared\GooglePieChartSlice.cs" />
+    <Compile Include="Views\Shared\JurisdictionControls\JurisdictionsMap.cs" />
+    <Compile Include="Views\Shared\JurisdictionControls\JurisdictionsMapViewData.cs" />
     <Compile Include="Views\Shared\SearchMapInitJson.cs" />
     <Compile Include="Views\Shared\SearchMapSummaryData.cs" />
     <Compile Include="Views\Shared\TreatmentBMPTypeLegend.cs" />
@@ -758,6 +761,7 @@
     <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethod.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cshtml" />
+    <Content Include="Views\Shared\JurisdictionControls\JurisdictionsMap.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

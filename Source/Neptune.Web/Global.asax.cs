@@ -12,7 +12,6 @@ using LtInfo.Common.LoggingFilters;
 using LtInfo.Common.Mvc;
 using SitkaController = Neptune.Web.Common.SitkaController;
 using SitkaRouteTableEntry = Neptune.Web.Common.SitkaRouteTableEntry;
-using Keystone.Common.OpenID;
 
 namespace Neptune.Web
 {
@@ -49,7 +48,7 @@ namespace Neptune.Web
                 "~/Views/Shared/ExpenditureAndBudgetControls/{0}.cshtml",
                 "~/Views/Shared/PerformanceMeasureControls/{0}.cshtml",
                 "~/Views/Shared/ProjectControls/{0}.cshtml",
-                "~/Views/Shared/ProjectLocationControls/{0}.cshtml",
+                "~/Views/Shared/JurisdictionControls/{0}.cshtml",
                 "~/Views/Shared/ProjectWatershedControls/{0}.cshtml",
                 "~/Views/Shared/ProjectUpdateDiffControls/{0}.cshtml"
             } };
