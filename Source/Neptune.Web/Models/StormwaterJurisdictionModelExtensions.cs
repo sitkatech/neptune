@@ -77,7 +77,7 @@ namespace Neptune.Web.Models
                     {
                         var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(jurisdiction.StormwaterJurisdictionGeometry);
                         feature.Properties.Add("Organization Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
-                        feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationShortName).ToHtmlString());
+                        feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
                         return feature;
                     }).ToList()),
                     organizationType.LegendColor, 1,

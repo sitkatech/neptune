@@ -97,7 +97,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
     NeptuneMaps.Map.prototype.addLocationLayers = function()
     {
-        this.projectLocationsLayer = this.addProjectLocationsToMap(this.projectLocations, this.projectLocationsLayer, "Mapped Projects", true);
+        // this line should be doing nothing since there are no project locations, since there are no projects
+        //this.projectLocationsLayer = this.addProjectLocationsToMap(this.projectLocations, this.projectLocationsLayer, "Mapped Projects", true);
     }
 
     NeptuneMaps.Map.prototype.addProjectLocationsToMap = function(points, layer, layerName, showByDefault)
