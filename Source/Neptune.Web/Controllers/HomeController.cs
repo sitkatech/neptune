@@ -57,7 +57,7 @@ namespace Neptune.Web.Controllers
 
             // map stuff
 
-            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson().Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show).ToList();
+            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson(true).Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show).ToList();
 
             var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
             {

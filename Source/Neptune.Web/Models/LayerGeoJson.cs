@@ -43,12 +43,19 @@ namespace Neptune.Web.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public readonly LayerGeoJsonType LayerType;
         public readonly bool HasCustomPopups;
+        public readonly bool HasClickThrough;
         public bool EnablePopups = true;
+
+        public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor,
+            decimal layerOpacity, LayerInitialVisibility layerInitialVisibility) : this(layerName,
+            geoJsonFeatureCollection, layerColor, layerOpacity, layerInitialVisibility, false)
+        {
+        }
 
         /// <summary>
         /// Constructor for LayerGeoJson with Vector Type
         /// </summary>
-        public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility)
+        public LayerGeoJson(string layerName, FeatureCollection geoJsonFeatureCollection, string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, bool clickThrough)
         {
             LayerName = layerName;
             GeoJsonFeatureCollection = geoJsonFeatureCollection;
@@ -57,6 +64,7 @@ namespace Neptune.Web.Models
             LayerInitialVisibility = layerInitialVisibility;
             LayerType = LayerGeoJsonType.Vector;
             HasCustomPopups = geoJsonFeatureCollection.Features.Any(x => x.Properties.ContainsKey("PopupUrl"));
+            HasClickThrough = clickThrough;
         }
         /// <summary>
         /// Constructor for LayerGeoJson with WMS Type

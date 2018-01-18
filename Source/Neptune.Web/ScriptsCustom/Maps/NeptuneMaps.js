@@ -123,9 +123,14 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
     if (currentLayer.LayerInitialVisibility === 1) {
         layerGroup.addTo(this.map);
     }
-    if (!currentLayer.HasCustomPopups) {
-        layerGeoJson.on("click", function (e) { self.getFeatureInfo(e); });
+
+    if (currentLayer.HasClickThrough) {
+        layerGeoJson.on("click", function (e) { self.clickThroughFeature(e); });
     }
+    else if (!currentLayer.HasCustomPopups) {
+        layerGeoJson.on("click", function(e) { self.getFeatureInfo(e); });
+    }
+
     overlayLayers[currentLayer.LayerName] = layerGroup;
     this.vectorLayers.push(layerGeoJson);
 };
@@ -257,6 +262,30 @@ NeptuneMaps.Map.prototype.getFeatureInfo = function (e)
 
     this.map.openPopup(L.popup({minWidth: 200, maxWidth: 350}).setLatLng(latlng).setContent(html).openOn(this.map));   
 };
+
+NeptuneMaps.Map.prototype.clickThroughFeature = function(e) {
+    var self = this,
+        latlng = e.latlng;
+
+    var match = _(this.vectorLayers)
+        .filter(function (layer) {
+            return typeof layer.eachLayer !== "undefined" && self.map.hasLayer(layer);
+        })
+        .map(function (currentLayer) {
+            return leafletPip.pointInLayer(latlng, currentLayer, true);
+        })
+        .flatten()
+        .value();
+
+    // Map should be such that no two features overlap, otherwise possible unexpected effects.
+    var feature = match.pop().feature;
+    var targetUrl = feature.properties["Target URL"];
+
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(targetUrl))
+    {
+        window.location.href = targetUrl;
+    }
+}
 
 NeptuneMaps.Map.prototype.formatLayerProperty = function (propertyName, propertyValue)
 {

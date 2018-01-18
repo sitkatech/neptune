@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
             return stormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdiction().ToList();
         }
         
-        public static List<LayerGeoJson> GetBoundaryLayerGeoJson(this IEnumerable<StormwaterJurisdiction> jurisdictions)
+        public static List<LayerGeoJson> GetBoundaryLayerGeoJson(this IEnumerable<StormwaterJurisdiction> jurisdictions, bool clickThrough)
         {
             var jurisdictionsToShow =
                 jurisdictions?.Where(x => x.StormwaterJurisdictionGeometry != null)
@@ -75,10 +75,12 @@ namespace Neptune.Web.Models
                         var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(jurisdiction.StormwaterJurisdictionGeometry);
                         feature.Properties.Add("Organization Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
                         feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
+                        feature.Properties.Add("Target URL", jurisdiction.GetDetailUrl());
                         return feature;
                     }).ToList()),
                     organizationType.LegendColor, 1,
-                    LayerInitialVisibility.Show);
+                    LayerInitialVisibility.Show,
+                    clickThrough);
             }).ToList();
         }
     }
