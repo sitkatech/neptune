@@ -28,7 +28,7 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Home;
 using Neptune.Web.Views.Map;
-using Neptune.Web.Views.Shared.ProjectLocationControls;
+using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Controllers
 {
@@ -59,12 +59,12 @@ namespace Neptune.Web.Controllers
 
             var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson().Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show).ToList();
 
-            var projectLocationsMapInitJson = new ProjectLocationsMapInitJson("JurisdictionsMap")
+            var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
             {
                 AllowFullScreen = false,
                 Layers = layerGeoJsons
             };
-            var projectLocationsMapViewData = new ProjectLocationsMapViewData(projectLocationsMapInitJson.MapDivID);
+            var projectLocationsMapViewData = new JurisdictionsMapViewData(projectLocationsMapInitJson.MapDivID);
 
 
             var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,

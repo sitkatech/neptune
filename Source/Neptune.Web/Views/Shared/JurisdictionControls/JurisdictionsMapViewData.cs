@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ProjectLocationsMap.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="JurisdictionsMapViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,17 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.Shared.ProjectLocationControls
+namespace Neptune.Web.Views.Shared.JurisdictionControls
 {
-    public abstract class ProjectLocationsMap : TypedWebPartialViewPage<ProjectLocationsMapViewData>
-    {
-        public static void RenderPartialView(HtmlHelper html, ProjectLocationsMapViewData viewData)
+    public class JurisdictionsMapViewData : NeptuneUserControlViewData
+    {        
+        public readonly string MapDivID;
+        
+        public JurisdictionsMapViewData(string mapDivID)
         {
-            html.RenderRazorSitkaPartial<ProjectLocationsMap, ProjectLocationsMapViewData>(viewData);
+            MapDivID = mapDivID;
         }
+
     }
 }

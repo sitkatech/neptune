@@ -23,7 +23,7 @@
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
-@using Neptune.Web.Views.Shared.ProjectLocationControls
+@using Neptune.Web.Views.Shared.JurisdictionControls
 @using SitkaController = Neptune.Web.Common.SitkaController
 @inherits Index
 @{
@@ -37,7 +37,7 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 
     <style>
-        #@ViewDataTyped.ProjectLocationsMapInitJson.MapDivID { height: 400px; }
+        #@ViewDataTyped.JurisdictionsMapInitJson.MapDivID { height: 400px; }
     </style>
 }
 
@@ -150,9 +150,7 @@
         @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
     </div>
     <div>
-        <a href="@ViewDataTyped.FullMapUrl">
-            @{ ProjectLocationsMap.RenderPartialView(Html, ViewDataTyped.ProjectLocationsMapViewData); }
-        </a>
+        @{ JurisdictionsMap.RenderPartialView(Html, ViewDataTyped.JurisdictionsMapViewData); }
     </div>
 
     <script type="text/javascript">
@@ -175,12 +173,12 @@
                 return layer;
             };
 
-            var projectLocationsMapInitJson =
-                @Html.Raw(JObject.FromObject(ViewDataTyped.ProjectLocationsMapInitJson).ToString(Formatting.None));
-            var map = window.Sitka.map = new NeptuneMaps.Map(projectLocationsMapInitJson);
+            var jurisdictionsMapJson =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.JurisdictionsMapInitJson).ToString(Formatting.None));
+            var map = window.Sitka.map = new NeptuneMaps.Map(jurisdictionsMapJson);
 
-            map.initializeProjectLocations(projectLocationsMapInitJson);
-            map.disableUserInteraction();
+            map.initializeJurisdictions(jurisdictionsMapJson);
+            //map.disableUserInteraction();
 
             jQuery('.leaflet-container').css('cursor', 'pointer');
         })

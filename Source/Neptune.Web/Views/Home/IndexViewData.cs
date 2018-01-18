@@ -24,7 +24,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Map;
 using Neptune.Web.Views.Shared;
-using Neptune.Web.Views.Shared.ProjectLocationControls;
+using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Views.Home
 {
@@ -34,22 +34,22 @@ namespace Neptune.Web.Views.Home
         public readonly ViewPageContentViewData CustomHomePageAdditionalInfoTextViewData;
         public readonly ViewPageContentViewData CustomHomePageMapTextViewData;
         
-        public readonly ProjectLocationsMapViewData ProjectLocationsMapViewData;
-        public readonly ProjectLocationsMapInitJson ProjectLocationsMapInitJson;
+        public readonly JurisdictionsMapViewData JurisdictionsMapViewData;
+        public readonly JurisdictionsMapInitJson JurisdictionsMapInitJson;
         
         // todo: ?
         public readonly string FullMapUrl = string.Empty;
         public readonly List<Models.NeptuneHomePageImage> NeptuneHomePageCarouselImages;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePageHomePage, Models.NeptunePage neptunePageAdditionalInfo, Models.NeptunePage neptunePageMapInfo, List<Models.NeptuneHomePageImage> neptuneHomePageImages, ProjectLocationsMapViewData projectLocationsMapViewData, ProjectLocationsMapInitJson projectLocationsMapInitJson) : base(currentPerson, neptunePageHomePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePageHomePage, Models.NeptunePage neptunePageAdditionalInfo, Models.NeptunePage neptunePageMapInfo, List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData, JurisdictionsMapInitJson jurisdictionsMapInitJson) : base(currentPerson, neptunePageHomePage)
         {
             PageTitle = MultiTenantHelpers.GetToolDisplayName();
 
             CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson);
             CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson);
             CustomHomePageMapTextViewData = new ViewPageContentViewData(neptunePageMapInfo, currentPerson);
-            ProjectLocationsMapViewData = projectLocationsMapViewData;
-            ProjectLocationsMapInitJson = projectLocationsMapInitJson;
+            JurisdictionsMapViewData = jurisdictionsMapViewData;
+            JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;
         }
     }

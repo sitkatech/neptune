@@ -1,7 +1,5 @@
-﻿// todo: this is now just a wrapper around MapInitJson
-
-/*-----------------------------------------------------------------------
-<copyright file="ProjectLocationsMapInitJson.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+﻿/*-----------------------------------------------------------------------
+<copyright file="JurisdictionsMapInitJson.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -23,13 +21,12 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using Neptune.Web.Models;
-using Neptune.Web.Views.Shared.ProjectLocationControls;
 
 namespace Neptune.Web.Views.Map
 {
-    public class ProjectLocationsMapInitJson : MapInitJson
+    public class JurisdictionsMapInitJson : MapInitJson
     {
-        public ProjectLocationsMapInitJson(string mapDivID)
+        public JurisdictionsMapInitJson(string mapDivID)
             : base(mapDivID, DefaultZoomLevel, new List<LayerGeoJson>(), BoundingBox.MakeNewDefaultBoundingBox())
         {
         }

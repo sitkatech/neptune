@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="ProjectLocationsMap.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="JurisdictionsMap.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
-@inherits Neptune.Web.Views.Shared.ProjectLocationControls.ProjectLocationsMap
+@* TODO: A lot of this code was specifically used in ProjectFirma to overlay project location points on a map, and may not be necessary at all here.*@
+
+@inherits Neptune.Web.Views.Shared.JurisdictionControls.JurisdictionsMap
 
 <style>
     .mapLegendContainer {
@@ -63,18 +63,15 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <script type="text/javascript">
     // we are extending Neptune Maps here with functionality specific to this partial view
-    NeptuneMaps.Map.prototype.initializeProjectLocations = function(projectLocationsMapInitJson)
+    NeptuneMaps.Map.prototype.initializeJurisdictions = function(jurisdictionsMapInitJson)
     {
-        
-        
-
         // default to no clustering
         this.areLocationsClustered = false;
         // set the project locations
-        this.projectLocations = projectLocationsMapInitJson.ProjectLocationsLayerGeoJson;
+        this.projectLocations = jurisdictionsMapInitJson.ProjectLocationsLayerGeoJson;
 
         // initialize to no filters
-        this.mapCustomizationObject = projectLocationsMapInitJson.ProjectMapCustomization;
+        this.mapCustomizationObject = jurisdictionsMapInitJson.ProjectMapCustomization;
         // draw the project locations
         this.addLocationLayers();
     };
