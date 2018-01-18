@@ -12,7 +12,6 @@ using LtInfo.Common.LoggingFilters;
 using LtInfo.Common.Mvc;
 using SitkaController = Neptune.Web.Common.SitkaController;
 using SitkaRouteTableEntry = Neptune.Web.Common.SitkaRouteTableEntry;
-using Keystone.Common.OpenID;
 
 namespace Neptune.Web
 {
