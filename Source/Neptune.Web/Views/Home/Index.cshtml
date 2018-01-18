@@ -23,6 +23,7 @@
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.ProjectLocationControls
 @using SitkaController = Neptune.Web.Common.SitkaController
 @inherits Index
 @{
@@ -34,6 +35,10 @@
     <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
 
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+
+    <style>
+        #@ViewDataTyped.ProjectLocationsMapInitJson.MapDivID { height: 400px; }
+    </style>
 }
 
 @section BeforeBodyContainer
@@ -139,6 +144,16 @@
             </div>
         </div>
     </div>
+    
+    @*TODO: put it in the right kind of container*@
+    <div>
+        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
+    </div>
+    <div>
+        <a href="@ViewDataTyped.FullMapUrl">
+            @{ ProjectLocationsMap.RenderPartialView(Html, ViewDataTyped.ProjectLocationsMapViewData); }
+        </a>
+    </div>
 
     <script type="text/javascript">
         jQuery(document).ready(function () {
@@ -159,6 +174,13 @@
 
                 return layer;
             };
+
+            var projectLocationsMapInitJson =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.ProjectLocationsMapInitJson).ToString(Formatting.None));
+            var map = window.Sitka.map = new NeptuneMaps.Map(projectLocationsMapInitJson);
+
+            map.initializeProjectLocations(projectLocationsMapInitJson);
+            map.disableUserInteraction();
 
             jQuery('.leaflet-container').css('cursor', 'pointer');
         })

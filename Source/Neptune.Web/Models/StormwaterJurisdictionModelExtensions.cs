@@ -24,7 +24,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.Shared;
@@ -55,6 +57,32 @@ namespace Neptune.Web.Models
         {
             return stormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdiction().ToList();
         }
+        
+        public static List<LayerGeoJson> GetBoundaryLayerGeoJson(this IEnumerable<StormwaterJurisdiction> jurisdictions)
+        {
+            var jurisdictionsToShow =
+                jurisdictions?.Where(x => x.StormwaterJurisdictionGeometry != null)
+                    .ToList();
+            if (jurisdictionsToShow == null || !jurisdictionsToShow.Any())
+            {
+                return new List<LayerGeoJson>();
+            }
 
+
+            return jurisdictionsToShow.GroupBy(x => x.Organization.OrganizationType, (organizationType, jurisdictionList) =>
+            {
+                return new LayerGeoJson(
+                    $"{organizationType.OrganizationTypeName} {FieldDefinition.StormwaterJurisdiction.GetFieldDefinitionLabelPluralized()}",
+                    new FeatureCollection(jurisdictionList.Select(jurisdiction =>
+                    {
+                        var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(jurisdiction.StormwaterJurisdictionGeometry);
+                        feature.Properties.Add("Organization Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationName).ToHtmlString());
+                        feature.Properties.Add("Short Name", UrlTemplate.MakeHrefString(jurisdiction.GetDetailUrl(), jurisdiction.Organization.OrganizationShortName).ToHtmlString());
+                        return feature;
+                    }).ToList()),
+                    organizationType.LegendColor, 1,
+                    LayerInitialVisibility.Show);
+            }).ToList();
+        }
     }
 }
