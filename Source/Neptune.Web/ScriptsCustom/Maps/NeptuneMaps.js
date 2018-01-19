@@ -112,7 +112,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
                 color: feature.properties.FeatureColor == null ? currentLayer.LayerColor : feature.properties.FeatureColor,
                 weight: feature.properties.FeatureWeight == null ? 2 : feature.properties.FeatureWeight,
                 fill: feature.properties.FillPolygon == null ? fillPolygonByDefault : feature.properties.FillPolygon,
-                fillOpacity: feature.properties.FillOpacity == null ? 0.2 : feature.properties.FillOpacity
+                fillOpacity: feature.properties.FillOpacity == null ? 0.0 : feature.properties.FillOpacity
             };
         },
         onEachFeature: function(feature, layer) {

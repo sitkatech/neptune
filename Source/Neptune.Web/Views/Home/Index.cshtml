@@ -140,7 +140,7 @@
         </div>
     
         <div class="col-md-4" style="margin-top: 20px;">
-            <h4 style="margin-bottom: 5px;">Jurisdiction Map</h4>
+            <h4 style="margin-bottom: 5px;">Participating Jurisdictions</h4>
             <div>
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageMapTextViewData); }
             </div>
@@ -159,7 +159,7 @@
                     var originalFillOpacity = layer.options.fillOpacity;
                     layer.on("mouseover",
                         function () {
-                            layer.setStyle({ fillOpacity: Math.min(originalFillOpacity + 0.4, 1) });
+                            layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
                         });
                     layer.on("mouseout",
                         function () {
