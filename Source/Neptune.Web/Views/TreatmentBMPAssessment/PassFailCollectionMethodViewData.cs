@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -31,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
     public class PassFailCollectionMethodViewData : AssessmentViewData
     {
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
-        public string MeasurementUnitLabelAndUnit { get; }
+        public string PassFailLabel { get; }
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
@@ -39,7 +38,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
-            MeasurementUnitLabelAndUnit = "Yes/No";
+            PassFailLabel = "Yes/No";
             AssessmentDescription = observationType.PassFailSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
@@ -57,7 +56,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 passFailObservationTypeSchema.PropertiesToObserve.ForEach(x =>
                 {
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
-                    count += 1;
+                    count++;
                 });
 
             }

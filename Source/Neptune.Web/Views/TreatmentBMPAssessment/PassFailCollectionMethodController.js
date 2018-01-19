@@ -23,35 +23,26 @@ angular.module("NeptuneApp").controller("PassFailCollectionMethodController", fu
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    var newSingleValueObservation = {
-        PropertyObserved: null,
-        ObservationValue: null,
-        Notes: null
-    }
-
-    var newObservationData = {
-        SingleValueObservations: []
-    }
-
-
     $scope.initializeWithEmptyRows = function () {
-        $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData) == null ? newObservationData : JSON.parse($scope.AngularModel.ObservationData);
-        while ($scope.ObservationData.SingleValueObservations.length < $scope.AngularViewData.MinimumNumberOfObservations) {
-            $scope.addObservation();
+        if (JSON.parse($scope.AngularModel.ObservationData) == null)
+        {
+            var newObservationData = {
+                SingleValueObservations: []
+            }
+            for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
+                newObservationData.SingleValueObservations.push({
+                    PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
+                    ObservationValue: null,
+                    Notes: null
+                });        
+            }
+            $scope.ObservationData = newObservationData;
+        }
+        else
+        {
+            $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData);
         }
     }
-
-    $scope.addObservation = function () {
-        $scope.ObservationData.SingleValueObservations.push({
-            PropertyObserved: null,
-            ObservationValue: null,
-            Notes: null
-        });        
-    };
-
-    $scope.deleteObservation = function (observation) {
-        Sitka.Methods.removeFromJsonArray($scope.ObservationData.SingleValueObservations, observation);
-    };
 
     $scope.submit = function () {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
