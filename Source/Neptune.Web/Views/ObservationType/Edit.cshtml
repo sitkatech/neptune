@@ -414,7 +414,21 @@
                                     </div>
                                 </div>
                             </div>                            
-                        </div>                       
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.LabelWithRequiredTagFor("Label for Passing Score")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.PassingScoreLabel" placeholder="e.g. Pass" />
+                            </div>
+                            <div class="col-xs-3 col-sm-3 control-label">
+                                @Html.LabelWithRequiredTagFor("Label for Failing Score")
+                            </div>
+                            <div class="col-xs-9 col-sm-3">
+                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.FailingScoreLabel" placeholder="e.g. Fail" />
+                            </div>
+                        </div>
                     </div>
 
                     <div ng-if="selectedCollectionMethodIsPercentage()">

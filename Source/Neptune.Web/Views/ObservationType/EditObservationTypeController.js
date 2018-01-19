@@ -43,7 +43,9 @@
         PropertiesToObserve: [],
         BenchmarkDescription: null,
         ThresholdDescription: null,
-        AssessmentDescription: null
+        AssessmentDescription: null,
+        PassingScoreLabel: null,
+        FailingScoreLabel: null
     };
     
 

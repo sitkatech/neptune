@@ -58,7 +58,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         <thead>
                             <tr class="row">
                                 <th class="col-xs-3">@Html.Label("Measurement Type")</th>
-                                <th class="col-xs-3">@Html.Label(ViewDataTyped.PassFailLabel)</th>
+                                <th class="col-xs-3">@Html.Label(string.Format("{0}/{1}", ViewDataTyped.PassingScoreLabel, ViewDataTyped.FailingScoreLabel))</th>
                                 <th class="col-xs-6">@Html.Label("Notes")</th>
                             </tr>
                         </thead>
@@ -68,10 +68,10 @@ Source code is available upon request via <support@sitkatech.com>.
                             </td>
                             <td class="col-xs-3">
                                 <label class="form-check-inline" style="margin-right: 10px">
-                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="1" required /> Yes
+                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="1" required /> @ViewDataTyped.PassingScoreLabel
                                 </label>
                                 <label class="form-check-inline">
-                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="0" required /> No
+                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="0" required /> @ViewDataTyped.FailingScoreLabel
                                 </label>
                             </td>
                             <td class="col-xs-6">

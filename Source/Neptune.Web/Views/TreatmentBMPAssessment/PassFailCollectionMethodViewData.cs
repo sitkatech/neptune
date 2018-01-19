@@ -30,7 +30,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
     public class PassFailCollectionMethodViewData : AssessmentViewData
     {
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
-        public string PassFailLabel { get; }
+        public string PassingScoreLabel { get; }
+        public string FailingScoreLabel { get; }
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
@@ -38,7 +39,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
-            PassFailLabel = "Yes/No";
+            PassingScoreLabel = observationType.PassFailSchema.PassingScoreLabel;
+            FailingScoreLabel = observationType.PassFailSchema.FailingScoreLabel;
             AssessmentDescription = observationType.PassFailSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>

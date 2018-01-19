@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
@@ -30,7 +29,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                DiscreteObservationTypeSchema schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
+                var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -43,7 +42,7 @@ namespace Neptune.Web.Models
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            DiscreteObservationTypeSchema schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
+            var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
@@ -51,7 +50,7 @@ namespace Neptune.Web.Models
             ObservationTypeHelper.ValidateValueOfObservations(schema.MinimumValueOfObservations, schema.MaximumValueOfObservations, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.MeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
             ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
@@ -61,7 +60,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                DiscreteObservationSchema schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
+                var schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
             }
             catch (Exception)
             {
@@ -84,7 +83,7 @@ namespace Neptune.Web.Models
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            DiscreteObservationSchema observation = JsonConvert.DeserializeObject<DiscreteObservationSchema>(observationData);
+            var observation = JsonConvert.DeserializeObject<DiscreteObservationSchema>(observationData);
             return observation.SingleValueObservations.Average(x => x.ObservationValue);
         }
 
@@ -110,7 +109,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                RateObservationTypeSchema schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
+                var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -123,7 +122,7 @@ namespace Neptune.Web.Models
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            RateObservationTypeSchema schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
+            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
@@ -137,7 +136,7 @@ namespace Neptune.Web.Models
             ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.DiscreteRateMeasurementUnitTypeID, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.TimeMeasurementUnitTypeID, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.ReadingMeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
             ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
@@ -148,7 +147,7 @@ namespace Neptune.Web.Models
 
             try
             {
-                RateObservationSchema schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
+                var schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
             }
             catch (Exception)
             {
@@ -171,7 +170,7 @@ namespace Neptune.Web.Models
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            RateObservationSchema observation = JsonConvert.DeserializeObject<RateObservationSchema>(observationData);
+            var observation = JsonConvert.DeserializeObject<RateObservationSchema>(observationData);
             return 0; //todo
         }
 
@@ -187,7 +186,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                PassFailObservationTypeSchema schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
+                var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -200,11 +199,13 @@ namespace Neptune.Web.Models
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            PassFailObservationTypeSchema schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
+            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateRequiredStringField(schema.PassingScoreLabel, "Passing Score Label must have a name and cannot be blank", validationErrors);
+            ObservationTypeHelper.ValidateRequiredStringField(schema.FailingScoreLabel, "Failing Score Label must have a name and cannot be blank", validationErrors);
 
             return validationErrors;
         }
@@ -214,7 +215,7 @@ namespace Neptune.Web.Models
 
             try
             {
-                PassFailObservationSchema schema = JsonConvert.DeserializeObject<PassFailObservationSchema>(json);
+                var schema = JsonConvert.DeserializeObject<PassFailObservationSchema>(json);
             }
             catch (Exception)
             {
@@ -237,7 +238,7 @@ namespace Neptune.Web.Models
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            PassFailObservationSchema observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
+            var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
             return 0; //todo
         }
 
@@ -253,7 +254,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                PercentageObservationTypeSchema schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
+                var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
             }
             catch (Exception)
             {
@@ -266,12 +267,12 @@ namespace Neptune.Web.Models
         public override List<ValidationResult> ValidateObservationType(string json)
         {
             var validationErrors = new List<ValidationResult>();
-            PercentageObservationTypeSchema schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
+            var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
             ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentDescription(schema.AssessmentDescription, validationErrors);
+            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
             ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
@@ -281,7 +282,7 @@ namespace Neptune.Web.Models
         {
             try
             {
-                PercentageObservationSchema schema = JsonConvert.DeserializeObject<PercentageObservationSchema>(json);
+                var schema = JsonConvert.DeserializeObject<PercentageObservationSchema>(json);
             }
             catch (Exception)
             {
@@ -304,7 +305,7 @@ namespace Neptune.Web.Models
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
-            PercentageObservationSchema observation = JsonConvert.DeserializeObject<PercentageObservationSchema>(observationData);
+            var observation = JsonConvert.DeserializeObject<PercentageObservationSchema>(observationData);
             return 0; //todo
         }
 

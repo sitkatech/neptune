@@ -54,6 +54,8 @@ namespace Neptune.Web.Views.ObservationType
     {
         public List<string> PropertiesToObserve { get; set; }
         public string AssessmentDescription { get; set; }
+        public string PassingScoreLabel { get; set; }
+        public string FailingScoreLabel { get; set; }
     }
 
     public class PercentageObservationTypeSchema

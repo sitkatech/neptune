@@ -54,35 +54,20 @@ namespace Neptune.Web.Models
             return score < 0 ? 0 : (score > 5 ? 5 : score);
         }
 
-        public static void ValidateAssessmentDescription(string assessmentDescription, List<ValidationResult> validationErrors)
+        public static void ValidateAssessmentInstructions(string assessmentInstructions, List<ValidationResult> validationErrors)
         {
-
-            if (string.IsNullOrWhiteSpace(assessmentDescription))
-            {
-                validationErrors.Add(new ValidationResult("Assessment Instructions cannot be blank"));
-            }
+            ValidateRequiredStringField(assessmentInstructions, "Assessment Instructions cannot be blank", validationErrors);
         }
 
         public static void ValidateBenchmarkAndThresholdDescription(string benchmarkDescription, string thresholdDescription, List<ValidationResult> validationErrors)
         {
-
-            if (string.IsNullOrWhiteSpace(benchmarkDescription))
-            {
-                validationErrors.Add(new ValidationResult("Benchmark Instructions cannot be blank"));
-            }
-            if (string.IsNullOrWhiteSpace(thresholdDescription))
-            {
-                validationErrors.Add(new ValidationResult("Threshold Instructions cannot be blank"));
-            }
+            ValidateRequiredStringField(benchmarkDescription, "Benchmark Instructions cannot be blank", validationErrors);
+            ValidateRequiredStringField(thresholdDescription, "Threshold Instructions cannot be blank", validationErrors);
         }
 
         public static void ValidateMeasurementUnitLabel(string measurementUnitLabel, List<ValidationResult> validationErrors)
         {
-            
-            if (string.IsNullOrWhiteSpace(measurementUnitLabel))
-            {
-                validationErrors.Add(new ValidationResult("Measurement Unit Label must have a name and cannot be blank"));
-            }          
+            ValidateRequiredStringField(measurementUnitLabel, "Measurement Unit Label must have a name and cannot be blank", validationErrors);
         }
 
         public static void ValidatePropertiesToObserve(List<string> propertiesToObserve, List<ValidationResult> validationErrors)
@@ -92,7 +77,7 @@ namespace Neptune.Web.Models
                 validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
             }
 
-            if (propertiesToObserve.Any(x => string.IsNullOrWhiteSpace(x)))
+            if (propertiesToObserve.Any(string.IsNullOrWhiteSpace))
             {
                 validationErrors.Add(new ValidationResult("Each Property to Observe must have a name and cannot be blank"));
             }
@@ -129,6 +114,14 @@ namespace Neptune.Web.Models
             if (MeasurementUnitType.All.SingleOrDefault(x => x.MeasurementUnitTypeID == measurementUnitTypeID) == null)
             {
                 validationErrors.Add(new ValidationResult("A valid Measurement Unit Type is required"));
+            }
+        }
+
+        public static void ValidateRequiredStringField(string propertyToValidate, string passingScoreLabelMustHaveANameAndCannotBeBlank, List<ValidationResult> validationErrors)
+        {
+            if (string.IsNullOrWhiteSpace(propertyToValidate))
+            {
+                validationErrors.Add(new ValidationResult(passingScoreLabelMustHaveANameAndCannotBeBlank));
             }
         }
     }
