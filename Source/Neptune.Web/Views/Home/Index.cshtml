@@ -159,7 +159,7 @@
                     var originalFillOpacity = layer.options.fillOpacity;
                     layer.on("mouseover",
                         function () {
-                            layer.setStyle({ fillOpacity: Math.min(originalFillOpacity + 0.4, 1) });
+                            layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
                         });
                     layer.on("mouseout",
                         function () {
