@@ -239,12 +239,14 @@ namespace Neptune.Web.Models
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
-            return 0; //todo
+            var conveyanceFails = observation.PassFailObservations.Any(x => !x.ObservationValue);
+            return conveyanceFails ? 2 : 5;
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
-            throw new NotImplementedException();
+            var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
+            return observationValue;
         }
     }
 

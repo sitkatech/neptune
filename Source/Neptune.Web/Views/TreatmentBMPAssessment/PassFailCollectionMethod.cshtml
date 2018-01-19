@@ -45,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
     // ]]>
 </script>
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="PassFailCollectionMethodControllerApp" ng-controller="PassFailCollectionMethodController" ng-init="initializeWithEmptyRows()" ng-submit="submit()" name="observationForm">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="PassFailCollectionMethodControllerApp" ng-controller="PassFailCollectionMethodController" ng-init="initializeData()" ng-submit="submit()" name="observationForm">
     <div class="row">
         <div class="col-xs-12">
             <div class="form-horizontal">
@@ -54,7 +54,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </div>
                 <br />
                 <div>
-                    <table class="table observationList" ng-hide="ObservationData.SingleValueObservations.length === 0">
+                    <table class="table observationList" ng-hide="ObservationData.PassFailObservations.length === 0">
                         <thead>
                             <tr class="row">
                                 <th class="col-xs-3">@Html.Label("Measurement Type")</th>
@@ -62,17 +62,17 @@ Source code is available upon request via <support@sitkatech.com>.
                                 <th class="col-xs-6">@Html.Label("Notes")</th>
                             </tr>
                         </thead>
-                        <tr class="row" ng-repeat="observation in ObservationData.SingleValueObservations track by $index">
+                        <tr class="row" ng-repeat="observation in ObservationData.PassFailObservations track by $index">
                             <td class="col-xs-3" ng-if="AngularViewData.PropertiesToObserve.length > 1">
                                 <span ng-bind="observation.PropertyObserved"></span>
                             </td>
                             <td class="col-xs-3">
                                 <label class="form-check-inline" style="margin-right: 10px">
-                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="1" required /> @ViewDataTyped.PassingScoreLabel
+                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="true" required /> @ViewDataTyped.PassingScoreLabel
                                 </label>
                                 <label class="form-check-inline">
-                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="0" required /> @ViewDataTyped.FailingScoreLabel
-                                </label>
+                                    <input name="observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="false" required /> @ViewDataTyped.FailingScoreLabel
+                            </label>
                             </td>
                             <td class="col-xs-6">
                                 <input class="form-control" type="text" ng-model="observation.Notes" style="width: 100%" />

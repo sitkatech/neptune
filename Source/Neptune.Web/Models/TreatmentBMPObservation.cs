@@ -46,7 +46,7 @@ namespace Neptune.Web.Models
                 case ObservationTypeCollectionMethodEnum.Rate:
                     return 0;
                 case ObservationTypeCollectionMethodEnum.PassFail:
-                    return 0;
+                    return observationTypeCollectionMethod.CalculateScore(this);
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     return 0;
                 default:

@@ -23,30 +23,33 @@ angular.module("NeptuneApp").controller("PassFailCollectionMethodController", fu
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    $scope.initializeWithEmptyRows = function () {
-        if (JSON.parse($scope.AngularModel.ObservationData) == null)
-        {
-            var newObservationData = {
-                SingleValueObservations: []
-            }
-            for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
-                newObservationData.SingleValueObservations.push({
-                    PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
-                    ObservationValue: null,
-                    Notes: null
-                });        
-            }
-            $scope.ObservationData = newObservationData;
+    $scope.initializeWithEmptyRows = function() {
+        var newObservationData = {
+            PassFailObservations: []
         }
-        else
-        {
+        for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
+            newObservationData.PassFailObservations.push({
+                PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
+                ObservationValue: null,
+                Notes: null
+            });
+        }
+        $scope.ObservationData = newObservationData;
+    };
+
+    $scope.initializeData = function() {
+        if (JSON.parse($scope.AngularModel.ObservationData) == null) {
+            $scope.initializeWithEmptyRows();
+        } else {
             $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData);
+            if ($scope.ObservationData.PassFailObservations == null) {
+                $scope.initializeWithEmptyRows();
+            }
         }
-    }
+    };
 
-    $scope.submit = function () {
+
+    $scope.submit = function() {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
-    }
-
-    
+    };
 });
