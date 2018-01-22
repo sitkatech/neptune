@@ -218,11 +218,11 @@ namespace Neptune.Web.Controllers
             var searchString = term.Trim();
             var allTreatmentBMPsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
-                    x => (x.TreatmentBMPName).Contains(searchString)).ToList();
+                    x => x.TreatmentBMPName.Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
-                var treatmentBMPMapSummaryData = new Neptune.Web.Views.Shared.SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.Value, bmp.LocationPoint.XCoordinate.Value, bmp.TreatmentBMPID);
+                var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.Value, bmp.LocationPoint.XCoordinate.Value, bmp.TreatmentBMPID);
                 var listItem = new ListItem(bmp.TreatmentBMPName, JsonConvert.SerializeObject(treatmentBMPMapSummaryData));
                 return listItem;
             }).ToList();

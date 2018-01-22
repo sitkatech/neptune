@@ -18,23 +18,24 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly TreatmentBMPGridSpec GridSpec;
-        public readonly string GridName;
-        public readonly string GridDataUrl;
-        public readonly MapInitJson MapInitJson;
-        public readonly TreatmentBMPTypeLegendViewData TreatmentBMPTypeLegendViewData;
-        public readonly string FindTreatmentBMPByNameUrl;
-        public readonly string NewUrl;
+        public TreatmentBMPGridSpec GridSpec { get; }
+        public string GridName { get; }
+        public string GridDataUrl { get; }
+        public MapInitJson MapInitJson { get; }
+        public TreatmentBMPTypeLegendViewData TreatmentBMPTypeLegendViewData { get; }
+        public string FindTreatmentBMPByNameUrl { get; }
+        public string NewUrl { get; }
+        public bool HasManagePermissions { get; }
 
         public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
@@ -49,6 +50,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPTypeLegendViewData = new TreatmentBMPTypeLegendViewData();
             FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindByName(null));
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
+            HasManagePermissions = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }

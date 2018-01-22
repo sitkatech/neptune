@@ -64,5 +64,11 @@
     "inputFiles": [
       "ScriptsCustom/unsavedChanges.js"
     ]
+  },
+  {
+    "outputFileName": "Content/bootstrap-typeahead/bootstrap3-typeahead.min.js",
+    "inputFiles": [
+      "Content/bootstrap-typeahead/bootstrap3-typeahead.js"
+    ]
   }
 ]

@@ -74,8 +74,7 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
 
 NeptuneMaps.StormwaterSearch.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Stormwater.prototype);
 
-NeptuneMaps.StormwaterSearch.prototype.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl)
-{
+NeptuneMaps.StormwaterSearch.prototype.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
     var self = this;
 
     var finder = jQuery(typeaheadSelector);

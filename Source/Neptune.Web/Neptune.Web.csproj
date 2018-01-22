@@ -1365,10 +1365,6 @@
     <Content Include="Content\bootstrap-tags\bootstrap-tags.min.js">
       <DependentUpon>bootstrap-tags.js</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.js" />
-    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.min.js">
-      <DependentUpon>bootstrap3-typeahead.js</DependentUpon>
-    </Content>
     <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.js" />
     <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.min.js" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-filetypes-regular.svg" />
@@ -1733,9 +1729,6 @@
     </Content>
     <Content Include="Content\bootstrap-tags\bootstrap-tags.min.js.map">
       <DependentUpon>bootstrap-tags.min.js</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.min.js.map">
-      <DependentUpon>bootstrap3-typeahead.min.js</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.11.0.min.js.map" />
     <Content Include="Scripts\jquery.form.min.js">
