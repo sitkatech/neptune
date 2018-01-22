@@ -1,10 +1,10 @@
 ﻿// This file is for any custom theming of Bootstrap
 //
 // Core variables and mixins - allows reuse of any Bootstrap or custom variables
-@import "../bootstrap-3.3.5/less/variables.less";
+@import "../bootstrap-3.3.7/less/variables.less";
 @import "bootstrap.neptune.variables.less";
-@import "../bootstrap-3.3.5/less/mixins.less";
-@import (reference) "../bootstrap-3.3.5/less/glyphicons.less";
+@import "../bootstrap-3.3.7/less/mixins.less";
+@import (reference) "../bootstrap-3.3.7/less/glyphicons.less";
 
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Basic);
@@ -55,6 +55,23 @@
 @neptune-inactive-arrow-color: #ddd;
 
 @z-index-arrow: 900;
+
+@success-color: #5cb85c;
+@warning-color: #f0ad4e;
+
+
+@stormwater-white: white;
+@stormwater-light-gray: #eee;
+@stormwater-lightest-gray: #F9F9F9;
+@stormwater-med-gray: #949494;
+@stormwater-mint: #9ed4c8;
+@stormwater-blue: #7E8D98;
+@stormwater-green: #389085;
+@stormwater-gray: #405d74;
+@stormwater-teal: #0b6e8b;
+@stormwater-dark: #02161B;
+@stormwater-orange: #ce7451;
+
 
 @disabled-color: LightGray;
 // Global
@@ -1367,4 +1384,107 @@ input[type=checkbox] {
 
 .observationTypeTable .input-group {
     width: 75%;
+}
+
+// Wizard
+.wizardHeader {
+    margin: 0 15px 0 15px;
+
+    h2 {
+        font-size: 20px;
+        color: @stormwater-gray;
+        font-weight: 600;
+    }
+}
+
+nav#wizardNav ul {
+    li {
+        a {
+            background-color: transparent;
+            border-radius: 0;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        a:hover {
+            background-color: @stormwater-blue;
+            color: @stormwater-white;
+        }
+
+        &.active {
+
+            a, span {
+                color: @stormwater-white;
+                background: @stormwater-blue;
+                cursor: pointer;
+
+                .field-validation-success {
+                    color: @success-color;
+                }
+
+                .field-validation-warning {
+                    color: @warning-color;
+                }
+            }
+        }
+
+
+        @media only screen and (min-width: 768px) {
+            &.active:after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                margin-top: -10px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: 8px solid @stormwater-blue;
+                z-index: @z-index-arrow;
+            }
+        }
+
+        a.disabled {
+            cursor: not-allowed;
+            font-style: italic;
+            color: #999;
+            background-color: transparent;
+        }
+    }
+}
+
+#wizardContent {
+    background-color: @stormwater-lightest-gray;
+
+    @media screen and (min-width: 768px) {
+        margin-left: -15px;
+    }
+}
+
+.wizardButtonGroup {
+    margin-bottom: 20px;
+    float: right;
+}
+
+.wizardMain {
+    margin: 0 15px 25px 15px;
+
+    form {
+        .form-group {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group-condensed {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    }
+
+    h4 {
+        font-weight: 600;
+    }
 }
