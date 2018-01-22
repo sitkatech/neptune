@@ -35,8 +35,8 @@ namespace Neptune.Web.Views.Jurisdiction
             : base(currentPerson, StormwaterBreadCrumbEntity.Jurisdiction, neptunePage)
         {
             PageTitle = "All Jurisdictions";
-            EntityName = $"{Models.FieldDefinition.StormwaterJurisdiction.GetFieldDefinitionLabelPluralized()}";
-            GridSpec = new IndexGridSpec() {ObjectNameSingular = "Jurisdiction", ObjectNamePlural = "Jurisdictions", SaveFiltersInCookie = true};
+            EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
+            GridSpec = new IndexGridSpec {ObjectNameSingular = "Jurisdiction", ObjectNamePlural = "Jurisdictions", SaveFiltersInCookie = true};
             GridName = "jurisdictionsGrid";
             GridDataUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(j => j.IndexGridJsonData());
         }

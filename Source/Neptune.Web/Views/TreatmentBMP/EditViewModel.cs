@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TreatmentBMPName { get; set; }
 
         [Required]
-        [FieldDefinitionDisplay(FieldDefinitionEnum.StormwaterJurisdiction)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.Jurisdiction)]
         public int StormwaterJurisdictionID { get; set; }
 
         [Required(ErrorMessage = "Choose a BMP Type")]

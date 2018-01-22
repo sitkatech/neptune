@@ -40,7 +40,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionAssessmentForInternalUseOnly AssessmentForInternalUseOnly = FieldDefinitionAssessmentForInternalUseOnly.Instance;
         public static readonly FieldDefinitionTreatmentBMPDesignDepth TreatmentBMPDesignDepth = FieldDefinitionTreatmentBMPDesignDepth.Instance;
         public static readonly FieldDefinitionReceivesSystemCommunications ReceivesSystemCommunications = FieldDefinitionReceivesSystemCommunications.Instance;
-        public static readonly FieldDefinitionStormwaterJurisdiction StormwaterJurisdiction = FieldDefinitionStormwaterJurisdiction.Instance;
+        public static readonly FieldDefinitionJurisdiction Jurisdiction = FieldDefinitionJurisdiction.Instance;
         public static readonly FieldDefinitionModeledCatchment ModeledCatchment = FieldDefinitionModeledCatchment.Instance;
         public static readonly FieldDefinitionTreatmentBMP TreatmentBMP = FieldDefinitionTreatmentBMP.Instance;
         public static readonly FieldDefinitionObservationType ObservationType = FieldDefinitionObservationType.Instance;
@@ -65,7 +65,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, StormwaterJurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -165,6 +165,8 @@ namespace Neptune.Web.Models
                     return ExternalLinks;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
                     return IsPrimaryContactOrganization;
+                case FieldDefinitionEnum.Jurisdiction:
+                    return Jurisdiction;
                 case FieldDefinitionEnum.MaximumNumberOfObservations:
                     return MaximumNumberOfObservations;
                 case FieldDefinitionEnum.MaximumValueOfEachObservation:
@@ -209,8 +211,6 @@ namespace Neptune.Web.Models
                     return ReceivesSystemCommunications;
                 case FieldDefinitionEnum.RoleName:
                     return RoleName;
-                case FieldDefinitionEnum.StormwaterJurisdiction:
-                    return StormwaterJurisdiction;
                 case FieldDefinitionEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case FieldDefinitionEnum.TreatmentBMPDesignDepth:
@@ -251,7 +251,7 @@ namespace Neptune.Web.Models
         AssessmentForInternalUseOnly = 20,
         TreatmentBMPDesignDepth = 21,
         ReceivesSystemCommunications = 22,
-        StormwaterJurisdiction = 23,
+        Jurisdiction = 23,
         ModeledCatchment = 24,
         TreatmentBMP = 25,
         ObservationType = 26,
@@ -401,10 +401,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionReceivesSystemCommunications Instance = new FieldDefinitionReceivesSystemCommunications(22, @"ReceivesSystemCommunications", @"Receives System Communications", @"", true);
     }
 
-    public partial class FieldDefinitionStormwaterJurisdiction : FieldDefinition
+    public partial class FieldDefinitionJurisdiction : FieldDefinition
     {
-        private FieldDefinitionStormwaterJurisdiction(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionStormwaterJurisdiction Instance = new FieldDefinitionStormwaterJurisdiction(23, @"StormwaterJurisdiction", @"Stormwater Jurisdiction", @"", true);
+        private FieldDefinitionJurisdiction(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionJurisdiction Instance = new FieldDefinitionJurisdiction(23, @"Jurisdiction", @"Jurisdiction", @"", true);
     }
 
     public partial class FieldDefinitionModeledCatchment : FieldDefinition

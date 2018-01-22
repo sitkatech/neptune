@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.Jurisdiction
     {
         public IndexGridSpec()
         {
-            Add(Models.FieldDefinition.StormwaterJurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.DisplayName), 400, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.Organization.DisplayName), 400, DhtmlxGridColumnFilterType.Html);
             Add("Number of Users", x => x.StormwaterJurisdictionPeople.Count, 80);
             Add("Number of BMPs", x => x.TreatmentBMPs.Count, 80, DhtmlxGridColumnAggregationType.Total);
             Add("Number of Catchments", x => x.ModeledCatchments.Count, 80, DhtmlxGridColumnAggregationType.Total);

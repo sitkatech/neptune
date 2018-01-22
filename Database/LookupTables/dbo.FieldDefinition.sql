@@ -25,7 +25,7 @@ VALUES
 (20, N'AssessmentForInternalUseOnly', N'Assessment for Internal Use Only', '', 1),
 (21, N'TreatmentBMPDesignDepth', N'Treatment BMP Design Depth', '', 1),
 (22, N'ReceivesSystemCommunications', N'Receives System Communications', '', 1),
-(23, N'StormwaterJurisdiction', N'Stormwater Jurisdiction', '', 1),
+(23, N'Jurisdiction', N'Jurisdiction', '', 1),
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
 (25, N'TreatmentBMP', N'Treatment BMP', '', 1),
 (26, N'ObservationType', N'Observation Type', '', 1),
