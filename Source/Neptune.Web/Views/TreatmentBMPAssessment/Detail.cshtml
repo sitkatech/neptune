@@ -31,17 +31,21 @@ Source code is available upon request via <support@sitkatech.com>.
 
 }
 
+@section RightOfPageTitle
+{
+    @if (ViewDataTyped.CanEdit)
+    {
+        <span class="pullRight panel-heading-right">
+            <a class="btn btn-neptune headerButtonText treatmentBMPTypeButton" href="@ViewDataTyped.TreatmentBMPAssessment.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Edit Assessment</a>
+        </span>
+    }
+}
+
 <div class="row">    
     <div class="col-xs-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Assessment Overview
-                @if (ViewDataTyped.CanEdit)
-                {
-                    <span class="pullRight panel-heading-right">
-                        <a href="@ViewDataTyped.TreatmentBMPAssessment.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                    </span>
-                }
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -70,19 +74,10 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="col-xs-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Score
-                @if (ViewDataTyped.CanEdit)
-                {
-                    <span class="pullRight panel-heading-right">
-                        <a href="@ViewDataTyped.TreatmentBMPAssessment.GetEditScoreUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                    </span>
-                }
+                Score Details
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <label class="col-sm-3 control-label text-right">
-                        Score
-                    </label>
                     @if (ViewDataTyped.TreatmentBMPAssessment.IsAssessmentComplete())
                     {
                         <div class="col-sm-9">
@@ -125,13 +120,7 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="col-md-6">
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
-                        @observationType.ObservationTypeName
-                        @if (ViewDataTyped.CanEdit)
-                        {
-                            <span class="pullRight panel-heading-right">
-                                <a href="@observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment)">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                            </span>
-                        }
+                        Observation: @observationType.ObservationTypeName
                     </div>
                     <div class="panel-body">
                         @{ var treatmentBMPObservation = ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID); }
