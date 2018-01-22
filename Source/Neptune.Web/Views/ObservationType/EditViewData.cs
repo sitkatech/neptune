@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -48,9 +47,18 @@ namespace Neptune.Web.Views.ObservationType
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
-            Models.NeptunePage labelAndUnitsInstructionsNeptunePage) : base(currentPerson)
+            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.ObservationType observationType) : base(currentPerson)
         {
-            PageTitle = $"Manage {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
+            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
+            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
+            PageTitle = $"{(observationType != null ? "Edit" : "New")} {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
+
+            if (observationType != null)
+            {
+                SubEntityName = observationType.ObservationTypeName;
+                SubEntityUrl = observationType.GetDetailUrl();
+            }
+
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
             ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;

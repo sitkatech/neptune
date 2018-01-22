@@ -23,44 +23,26 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Common;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.Organization
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly Models.Organization Organization;
-        public readonly bool UserHasOrganizationManagePermissions;
-        public readonly string EditOrganizationUrl;
-        public readonly string EditBoundaryUrl;
-        public readonly string DeleteOrganizationBoundaryUrl;
+        public Models.Organization Organization { get; }
+        public bool UserHasOrganizationManagePermissions { get; }
+        public string EditOrganizationUrl { get; }
 
-        public readonly string ManageFundingSourcesUrl;
-        public readonly string IndexUrl;
-
-        public readonly MapInitJson MapInitJson;
-        public readonly bool HasSpatialData;
-        
-        public readonly string NewFundingSourceUrl;
-        public readonly bool CanCreateNewFundingSource;
-
-        public DetailViewData(Person currentPerson,
-            Models.Organization organization,
-            MapInitJson mapInitJson,
-            bool hasSpatialData) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.Organization organization) : base(currentPerson)
         {
             Organization = organization;
+            EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = organization.DisplayName;
-            EntityName = $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabel()}";
             UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
-
+            if (UserHasOrganizationManagePermissions)
+            {
+                EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Index());
+            }
             EditOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Edit(organization));
-            
-            IndexUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Index());
-
-            MapInitJson = mapInitJson;
-            HasSpatialData = hasSpatialData;
         }
-
     }
 }

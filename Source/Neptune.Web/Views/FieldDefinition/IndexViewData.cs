@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using LtInfo.Common;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.FieldDefinition
@@ -34,6 +33,7 @@ namespace Neptune.Web.Views.FieldDefinition
 
         public IndexViewData(Person currentPerson) : base(currentPerson)
         {
+            EntityName = "Field Definitions";
             PageTitle = "Manage Field Definitions";
 
             GridSpec = new FieldDefinitionGridSpec(new FieldDefinitionViewListFeature().HasPermissionByPerson(currentPerson))

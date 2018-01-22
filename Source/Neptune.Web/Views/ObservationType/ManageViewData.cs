@@ -35,7 +35,8 @@ namespace Neptune.Web.Views.ObservationType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
+            PageTitle = $"All {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
 
             NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new ObservationTypeGridSpec(currentPerson)

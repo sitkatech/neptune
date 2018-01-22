@@ -37,27 +37,21 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <div class="container neptuneContent">
     <div class="mainPageHeader">
-        
-        @* TODO: I'm not happy about the duplication of the RightOfPageTitle section here, but I need to conditionally put the withBreadcrumbTitle class on it and this was the most straightforward way to write it*@
-        @if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle) && !string.IsNullOrWhiteSpace(ViewDataTyped.EntityName))
-        {
-            <div class="rightFloatingInfo withBreadcrumbTitle">
-                @RenderSection("RightOfPageTitle", false)
-            </div>
+    @* TODO: I'm not happy about the duplication of the RightOfPageTitle section here, but I need to conditionally put the withBreadcrumbTitle class on it and this was the most straightforward way to write it*@
+        <div class="rightFloatingInfo withBreadcrumbTitle">
+            @RenderSection("RightOfPageTitle", false)
+        </div>
 
-            <div class="breadcrumbTitle arrow firstArrow current">
-                <a href="@ViewDataTyped.EntityUrl">@ViewDataTyped.EntityName</a>
-            </div>
-            <div class="breadcrumbTitle arrow lastArrow default" title="@ViewDataTyped.PageTitle">@ViewDataTyped.PageTitle</div>
-        }
-        else if (!string.IsNullOrWhiteSpace(ViewDataTyped.PageTitle))
+        <div class="breadcrumbTitle arrow firstArrow current">
+            <a href="@ViewDataTyped.EntityUrl">@ViewDataTyped.EntityName</a>
+        </div>
+        @if (ViewDataTyped.SubEntityName != null)
         {
-            <div class="rightFloatingInfo">
-                @RenderSection("RightOfPageTitle", false)
+            <div class="breadcrumbTitle arrow middleArrow default">
+                <a href="@ViewDataTyped.SubEntityUrl" title="@ViewDataTyped.SubEntityName">@ViewDataTyped.SubEntityName</a>
             </div>
-
-            <h2>@ViewDataTyped.PageTitle</h2>
         }
+        <div class="breadcrumbTitle arrow lastArrow default" title="@ViewDataTyped.PageTitle">@ViewDataTyped.PageTitle</div>
     </div>
 
     @if (TempData.ContainsKey(SitkaController.StatusErrorIndex))

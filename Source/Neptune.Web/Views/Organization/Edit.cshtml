@@ -18,7 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using LtInfo.Common
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
 @using LtInfo.Common.Mvc
@@ -124,11 +123,3 @@ Source code is available upon request via <support@sitkatech.com>.
     </div>
     @Html.HiddenFor(m => m.OrganizationID)
 }
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function ()
-    {
-        HookupCheckIfFormIsDirty(undefined, ".submitProposal");
-    });
-</script>

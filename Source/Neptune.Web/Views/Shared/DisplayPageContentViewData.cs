@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared
@@ -28,6 +30,7 @@ namespace Neptune.Web.Views.Shared
 
         public DisplayPageContentViewData(Person currentPerson, NeptunePageType neptunePageType) : base(currentPerson, Models.NeptunePage.GetNeptunePageByPageType(neptunePageType))
         {
+            EntityName = MultiTenantHelpers.GetTenantDisplayName();
             PageTitle = neptunePageType.NeptunePageTypeDisplayName;
             var neptunePageByPageType = Models.NeptunePage.GetNeptunePageByPageType(neptunePageType);
 

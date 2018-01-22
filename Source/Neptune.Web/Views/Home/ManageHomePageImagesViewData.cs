@@ -18,7 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
@@ -29,6 +28,7 @@ namespace Neptune.Web.Views.Home
 
         public ManageHomePageImagesViewData(Person currentPerson, ImageGalleryViewData imageGalleryViewData) : base(currentPerson)
         {
+            EntityName = "Home Page Configuration";
             PageTitle = "Manage Home Page Images";
             ImageGalleryViewData = imageGalleryViewData;
         }

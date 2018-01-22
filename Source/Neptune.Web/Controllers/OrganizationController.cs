@@ -136,7 +136,7 @@ namespace Neptune.Web.Controllers
 
             var mapInitJson = GetMapInitJson(organization, out var hasSpatialData, CurrentPerson);
 
-            var viewData = new DetailViewData(CurrentPerson, organization, mapInitJson, hasSpatialData);
+            var viewData = new DetailViewData(CurrentPerson, organization);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

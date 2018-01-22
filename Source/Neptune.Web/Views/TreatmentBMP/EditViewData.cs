@@ -33,13 +33,13 @@ namespace Neptune.Web.Views.TreatmentBMP
     public class EditViewData : NeptuneViewData
     {
 
-        public readonly IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems;
-        public readonly IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems;
-        public readonly MapInitJson MapInitJson;
-        public readonly string MapFormID;
-        public readonly string TreatmentBMPInformationContainer;
-        public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly string TreatmentBMPIndexUrl;
+        public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
+        public IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems { get; }
+        public MapInitJson MapInitJson { get; }
+        public string MapFormID { get; }
+        public string TreatmentBMPInformationContainer { get; }
+        public Models.TreatmentBMP TreatmentBMP { get; }
+        public string TreatmentBMPIndexUrl { get; }
 
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
@@ -48,24 +48,23 @@ namespace Neptune.Web.Views.TreatmentBMP
             MapInitJson mapInitJson,
             string mapFormID) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
+            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            EntityUrl = treatmentBMPIndexUrl;
             if (treatmentBMP != null)
             {
                 SubEntityName = treatmentBMP.TreatmentBMPName;
                 SubEntityUrl = treatmentBMP.GetDetailUrl();
-                PageTitle = "Edit Treatment BMP";
                 TreatmentBMP = treatmentBMP;
             }
-            else
-            {
-                PageTitle = "New Tretament BMP";
-            }
+            PageTitle = $"{(treatmentBMP != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
             TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";
-            TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());  
+            TreatmentBMPIndexUrl = treatmentBMPIndexUrl;  
         }
     }
 }

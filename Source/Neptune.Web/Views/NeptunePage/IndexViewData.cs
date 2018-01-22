@@ -35,6 +35,7 @@ namespace Neptune.Web.Views.NeptunePage
 
         public IndexViewData(Person currentPerson) : base(currentPerson, null, null)
         {
+            EntityName = "Page Content";
             PageTitle = "Manage Page Content";
 
             GridSpec = new NeptunePageGridSpec(new NeptunePageViewListFeature().HasPermissionByPerson(currentPerson))

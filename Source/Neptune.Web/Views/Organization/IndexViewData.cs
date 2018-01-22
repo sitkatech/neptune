@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Security;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using LtInfo.Common;
 using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 
@@ -39,7 +38,8 @@ namespace Neptune.Web.Views.Organization
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            PageTitle = $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}";
+            EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
+            PageTitle = "All Organizations";
 
             var hasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new IndexGridSpec(currentPerson, hasOrganizationManagePermissions)

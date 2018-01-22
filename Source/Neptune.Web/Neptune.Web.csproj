@@ -321,6 +321,82 @@
     <Compile Include="Models\LayerGeoJsonType.cs" />
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.min.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.standalone.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.standalone.min.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.min.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.css" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css" />
+    <Content Include="Content\bootstrap-datepicker\js\bootstrap-datepicker.js" />
+    <Content Include="Content\bootstrap-datepicker\js\bootstrap-datepicker.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.en-AU.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.eo.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ko.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.mn.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
+    <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="Content\Bootstrap\neptune\base.theme.css">
       <DependentUpon>base.theme.less</DependentUpon>
     </Content>
@@ -361,24 +437,12 @@
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css">
       <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\clackamas.css">
-      <DependentUpon>clackamas.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\clackamas.min.css">
-      <DependentUpon>clackamas.css</DependentUpon>
-    </Content>
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.min.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.min.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.min.css" />
-    <Content Include="Content\Bootstrap\neptune\rcd.theme.css">
-      <DependentUpon>rcd.theme.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\rcd.theme.min.css">
-      <DependentUpon>rcd.theme.css</DependentUpon>
-    </Content>
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
@@ -441,12 +505,10 @@
     <Content Include="ScriptsCustom\sitkaAjax.min.js.map" />
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
     <Content Include="Content\Bootstrap\neptune\base.theme.less" />
-    <Content Include="Content\Bootstrap\neptune\rcd.theme.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\Bootstrap\neptune\clackamas.less" />
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -462,6 +524,14 @@
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.less" />
     <Content Include="Content\Bootstrap\neptune\typeahead.less" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.min.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.standalone.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.standalone.min.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.min.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.css.map" />
+    <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css.map" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
@@ -1299,14 +1369,6 @@
     <Content Include="Content\bootstrap-typeahead\bootstrap3-typeahead.min.js">
       <DependentUpon>bootstrap3-typeahead.js</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.css" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.min.css" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.css" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.min.css" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\bootstrap.js" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\bootstrap.min.js" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\js\npm.js" />
     <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.js" />
     <Content Include="Content\Bootstrap\bootstrap-hover-dropdown.min.js" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-filetypes-regular.svg" />
@@ -1656,85 +1718,6 @@
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.eot" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.ttf" />
     <Content Include="Content\Bootstrap\fonts\glyphicons\glyphicons-social-regular.woff" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap-theme.css.map" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\css\bootstrap.css.map" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\.csscomb.json" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\.csslintrc" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\alerts.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\badges.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\bootstrap.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\breadcrumbs.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\button-groups.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\buttons.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\carousel.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\close.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\code.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\component-animations.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\dropdowns.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\forms.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\glyphicons.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\grid.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\input-groups.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\jumbotron.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\labels.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\list-group.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\media.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\alerts.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\background-variant.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\border-radius.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\buttons.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\center-block.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\clearfix.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\forms.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\gradients.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\grid-framework.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\grid.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\hide-text.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\image.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\labels.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\list-group.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\nav-divider.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\nav-vertical-align.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\opacity.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\pagination.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\panels.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\progress-bar.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\reset-filter.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\reset-text.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\resize.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\responsive-visibility.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\size.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\tab-focus.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\table-row.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\text-emphasis.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\text-overflow.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\mixins\vendor-prefixes.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\modals.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\navbar.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\navs.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\normalize.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\pager.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\pagination.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\panels.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\popovers.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\print.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\progress-bars.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\responsive-embed.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\responsive-utilities.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\scaffolding.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\tables.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\theme.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\thumbnails.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\tooltip.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\type.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\utilities.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\variables.less" />
-    <Content Include="Content\Bootstrap\bootstrap-3.3.5\less\wells.less" />
     <Content Include="Content\leaflet\leaflet.MakiMarkers\Leaflet.MakiMarkers.min.js.map">
       <DependentUpon>Leaflet.MakiMarkers.min.js</DependentUpon>
     </Content>

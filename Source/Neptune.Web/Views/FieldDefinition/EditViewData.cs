@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using Neptune.Web.Controllers;
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
@@ -33,6 +32,11 @@ namespace Neptune.Web.Views.FieldDefinition
 
         public EditViewData(Person currentPerson, Models.FieldDefinition fieldDefinition) : base(currentPerson)
         {
+            EntityName = "Field Definitions";
+            EntityUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());
+            SubEntityName = fieldDefinition.FieldDefinitionDisplayName;
+            PageTitle = "Manage";
+
             FieldDefinition = fieldDefinition;
             FileBrowserImageUploadUrl = SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.CkEditorUploadFileResourceForFieldDefinition(FieldDefinition, null));
             CancelUrl = SitkaRoute<FieldDefinitionController>.BuildUrlFromExpression(x => x.Index());

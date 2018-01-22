@@ -23,7 +23,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Newtonsoft.Json;
 
 namespace Neptune.Web.Views.ObservationType
 {
@@ -31,23 +30,20 @@ namespace Neptune.Web.Views.ObservationType
     {
         public Models.ObservationType ObservationType { get; }
         public bool UserHasObservationTypeManagePermissions { get; }
-        public string ObservationTypeIndexUrl { get; }
         public string ViewSchemaDetailUrl { get; }
 
         public DetailViewData(Person currentPerson,
             Models.ObservationType observationType) : base(currentPerson)
         {
             ObservationType = observationType;
+            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
             PageTitle = observationType.ObservationTypeName;
-            EntityName = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
-
-            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Manage());
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             if (UserHasObservationTypeManagePermissions)
             {
-                EntityUrl = ObservationTypeIndexUrl;
+                EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Manage());
             }
 
             ViewSchemaDetailUrl = observationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(observationType);

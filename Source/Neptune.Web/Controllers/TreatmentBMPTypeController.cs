@@ -18,8 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -59,7 +57,7 @@ namespace Neptune.Web.Controllers
         public ViewResult New()
         {
             var viewModel = new EditViewModel();
-            return ViewEdit(viewModel);
+            return ViewEdit(viewModel, null);
         }
 
         [HttpPost]
@@ -69,7 +67,7 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewEdit(viewModel, null);
             }
             var treatmentBMPType = new TreatmentBMPType(viewModel.TreatmentBMPTypeName, viewModel.TreatmentBMPTypeDescription);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.Add(treatmentBMPType);
@@ -92,7 +90,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
             var viewModel = new EditViewModel(treatmentBMPType);
-            return ViewEdit(viewModel);
+            return ViewEdit(viewModel, treatmentBMPType);
         }
 
         [HttpPost]
@@ -103,7 +101,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewEdit(viewModel, treatmentBMPType);
             }
 
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes.Load();
@@ -115,13 +113,13 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(c => c.Detail(treatmentBMPType.PrimaryKey)));
         }
 
-        private ViewResult ViewEdit(EditViewModel viewModel)
+        private ViewResult ViewEdit(EditViewModel viewModel, TreatmentBMPType treatmentBMPType)
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypeInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPTypeID) ? SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPTypeID)) : SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.New());
             var observationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList();
-            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage);
+            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

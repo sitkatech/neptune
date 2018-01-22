@@ -60,7 +60,7 @@ namespace Neptune.Web.Controllers
         public ViewResult New()
         {
             var viewModel = new EditViewModel();
-            return ViewEdit(viewModel);
+            return ViewEdit(viewModel, null);
         }
 
         [HttpPost]
@@ -70,7 +70,7 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewEdit(viewModel, null);
             }
             var observationType = new ObservationType(String.Empty, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty);
             viewModel.UpdateModel(observationType, CurrentPerson);
@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         {
             var observationType = observationTypePrimaryKey.EntityObject;
             var viewModel = new EditViewModel(observationType);
-            return ViewEdit(viewModel);
+            return ViewEdit(viewModel, observationType);
         }
 
         [HttpPost]
@@ -98,21 +98,21 @@ namespace Neptune.Web.Controllers
             var observationType = observationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewEdit(viewModel, observationType);
             }
             viewModel.UpdateModel(observationType, CurrentPerson);
 
             return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(observationType.PrimaryKey)));
         }
 
-        private ViewResult ViewEdit(EditViewModel viewModel)
+        private ViewResult ViewEdit(EditViewModel viewModel, ObservationType observationType)
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeInstructions);
             var observationInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeObservationInstructions);
             var labelAndUnitsInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeLabelsAndUnitsInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.ObservationTypeID) ? SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.ObservationTypeID)) : SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.New());
-            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All, submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage);
+            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All, submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, observationType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

@@ -18,7 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using LtInfo.Common;
+
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -47,6 +47,7 @@ namespace Neptune.Web.Views.Tenant
         public DetailViewData(Person currentPerson, Models.Tenant tenant, TenantAttribute tenantAttribute, string editBasicsUrl, string editBoundingBoxUrl, string deleteTenantStyleSheetFileResourceUrl, string deleteTenantSquareLogoFileResourceUrl, string deleteTenantBannerLogoFileResourceUrl, string editBoundingBoxFormID, MapInitJson mapInitJson, DetailGridSpec gridSpec, string gridName, string gridDataUrl)
             : base(currentPerson)
         {
+            EntityName = "Tenant Configuration";
             PageTitle = tenantAttribute.TenantDisplayName;
             Tenant = tenant;
             TenantAttribute = tenantAttribute;

@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -55,11 +56,11 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
             SectionName = sectionName;
 
-
-            SubEntityName = TreatmentBMP.FormattedNameAndType;
-            SubEntityUrl = TreatmentBMP.GetDetailUrl();
-           
-            PageTitle = "Assessment";
+            EntityName = "Treatment BMP Assessments";
+            EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());
+            SubEntityName = treatmentBMPAssessment.TreatmentBMP.FormattedNameAndType;
+            SubEntityUrl = treatmentBMPAssessment.TreatmentBMP.GetDetailUrl();
+            PageTitle = treatmentBMPAssessment.AssessmentDate.ToStringDate();
         }
     }
 }

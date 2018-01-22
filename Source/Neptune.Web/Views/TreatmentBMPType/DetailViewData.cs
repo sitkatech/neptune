@@ -35,8 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
             Models.TreatmentBMPType treatmentBMPType) : base(currentPerson)
         {
             TreatmentBMPType = treatmentBMPType;
+            EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             PageTitle = treatmentBMPType.TreatmentBMPTypeName;
-            EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
 
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             if (UserHasTreatmentBMPTypeManagePermissions)

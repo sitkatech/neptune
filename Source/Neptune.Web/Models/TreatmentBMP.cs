@@ -45,7 +45,8 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessments.Count.Equals(0);
         }
        
-        public string AuditDescriptionString => TreatmentBMPName; public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
+        public string AuditDescriptionString => TreatmentBMPName;
+        public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
