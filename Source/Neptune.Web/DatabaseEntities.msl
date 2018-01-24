@@ -271,6 +271,9 @@
           <ScalarProperty Name="StormwaterJurisdictionID" ColumnName="StormwaterJurisdictionID" />
           <ScalarProperty Name="ModeledCatchmentID" ColumnName="ModeledCatchmentID" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="SystemOfRecordID" ColumnName="SystemOfRecordID" />
+          <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
+          <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -302,6 +305,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPDocument">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPDocument">
+        <MappingFragment StoreEntitySet="TreatmentBMPDocument">
+          <ScalarProperty Name="TreatmentBMPDocumentID" ColumnName="TreatmentBMPDocumentID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+          <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="TreatmentBMPObservation">
       <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPObservation">
         <MappingFragment StoreEntitySet="TreatmentBMPObservation">
@@ -310,6 +326,19 @@
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPPhoto">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPPhoto">
+        <MappingFragment StoreEntitySet="TreatmentBMPPhoto">
+          <ScalarProperty Name="TreatmentBMPPhotoID" ColumnName="TreatmentBMPPhotoID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+          <ScalarProperty Name="PhotoDescription" ColumnName="PhotoDescription" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

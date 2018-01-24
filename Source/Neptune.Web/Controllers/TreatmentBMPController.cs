@@ -96,7 +96,7 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel);
             }
             
-            var treatmentBMP = MakePlaceholderTreatmentBMP(viewModel);
+            var treatmentBMP = MakePlaceholderTreatmentBMP(viewModel, CurrentPerson);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
@@ -106,9 +106,9 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
-        private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel)
+        private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel, Person currentPerson)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID);
+            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, null, currentPerson.OrganizationID);
         }
 
         [HttpGet]
@@ -162,7 +162,8 @@ namespace Neptune.Web.Controllers
             var mapFormID = "treatmentBMPLocation";
 
             var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
-            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, mapInitJson, mapFormID);
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
+            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, mapInitJson, mapFormID, organizations);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

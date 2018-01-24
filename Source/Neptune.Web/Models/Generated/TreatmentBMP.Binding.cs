@@ -25,13 +25,15 @@ namespace Neptune.Web.Models
         {
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
+            this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
+            this.TreatmentBMPPhotos = new HashSet<TreatmentBMPPhoto>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -40,12 +42,15 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.ModeledCatchmentID = modeledCatchmentID;
             this.Notes = notes;
+            this.SystemOfRecordID = systemOfRecordID;
+            this.YearBuilt = yearBuilt;
+            this.OwnerOrganizationID = ownerOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID) : this()
+        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, string systemOfRecordID, int ownerOrganizationID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -53,12 +58,14 @@ namespace Neptune.Web.Models
             this.TreatmentBMPName = treatmentBMPName;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
+            this.SystemOfRecordID = systemOfRecordID;
+            this.OwnerOrganizationID = ownerOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction) : this()
+        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, string systemOfRecordID, Organization ownerOrganization) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -69,14 +76,18 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.TreatmentBMPs.Add(this);
+            this.SystemOfRecordID = systemOfRecordID;
+            this.OwnerOrganizationID = ownerOrganization.OrganizationID;
+            this.OwnerOrganization = ownerOrganization;
+            ownerOrganization.TreatmentBMPsWhereYouAreTheOwnerOrganization.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction)
+        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization)
         {
-            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction);
+            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, default(string), ownerOrganization);
         }
 
         /// <summary>
@@ -85,13 +96,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any();
+            return TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPPhotos.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPPhoto).Name};
 
         [Key]
         public int TreatmentBMPID { get; set; }
@@ -102,20 +113,27 @@ namespace Neptune.Web.Models
         public int StormwaterJurisdictionID { get; set; }
         public int? ModeledCatchmentID { get; set; }
         public string Notes { get; set; }
+        public string SystemOfRecordID { get; set; }
+        public int? YearBuilt { get; set; }
+        public int OwnerOrganizationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
+        public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
+        public virtual ICollection<TreatmentBMPPhoto> TreatmentBMPPhotos { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual ModeledCatchment ModeledCatchment { get; set; }
+        public virtual Organization OwnerOrganization { get; set; }
 
         public static class FieldLengths
         {
             public const int TreatmentBMPName = 30;
             public const int Notes = 200;
+            public const int SystemOfRecordID = 100;
         }
     }
 }

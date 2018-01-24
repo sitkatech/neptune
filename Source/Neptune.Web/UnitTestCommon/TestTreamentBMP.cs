@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.UnitTestCommon
@@ -29,11 +30,9 @@ namespace Neptune.Web.UnitTestCommon
         {
             public static TreatmentBMP Create(TreatmentBMPType treatmentBMPType)
             { 
-                var treatmentBMP = TreatmentBMP.CreateNewBlank(treatmentBMPType, TestStormwaterJurisdiction.Create());
+                var treatmentBMP = new TreatmentBMP(string.Empty, treatmentBMPType.TreatmentBMPTypeID, ModelObjectHelpers.NotYetAssignedID, null, ModelObjectHelpers.NotYetAssignedID);
                 return treatmentBMP;
             }
         }
     }
-
-
 }

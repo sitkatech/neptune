@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
@@ -46,7 +46,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <span class="pullRight panel-heading panelTitle-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
-                }                
+                }
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -54,22 +54,30 @@ Source code is available upon request via <support@sitkatech.com>.
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType,"Type")</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
-                </div>                        
+                </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction,"Jurisdiction")</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
-                </div>                
+                </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.Label("Notes")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
-                </div>                
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("ID in System of Record")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.SystemOfRecordID</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Owner")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
+                </div>
             </div>
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Benchmark & Threshold Values
+                Benchmark &amp; Threshold Values
                 <span class="pullRight panel-heading panelTitle-right">
                     @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
                     {
@@ -84,26 +92,26 @@ Source code is available upon request via <support@sitkatech.com>.
                     <p class="systemText">
                         This type of treatment BMP does not have settable benchmark and threshold values.
                     </p>
-                }                
-                else 
-                {                    
+                }
+                else
+                {
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Observation Type</th>
-                            <th>Benchmark</th>
-                            <th>Threshold</th>
-                        </tr>
+                            <tr>
+                                <th>Observation Type</th>
+                                <th>Benchmark</th>
+                                <th>Threshold</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.ObservationTypeName))
-                        {
-                            <tr>
-                                <td>@observationType.ObservationTypeName</td>
-                                <td>@observationType.GetFormattedBenchmarkValue(observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                                <td>@observationType.GetFormattedThresholdValue(observationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                            </tr>
-                        }
+                            @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.ObservationTypeName))
+                            {
+                                <tr>
+                                    <td>@observationType.ObservationTypeName</td>
+                                    <td>@observationType.GetFormattedBenchmarkValue(observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                    <td>@observationType.GetFormattedThresholdValue(observationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                </tr>
+                            }
 
                         </tbody>
                     </table>
@@ -120,7 +128,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <span class="pullRight panel-heading panelTitle-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
-                }                
+                }
             </div>
             <div class="panel-body" id="mapContainer">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
@@ -141,13 +149,13 @@ Source code is available upon request via <support@sitkatech.com>.
                     </span>
                 }
             </div>
-            <div class="panel-body"> 
+            <div class="panel-body">
                 @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
                 {
                     <p class="systemText">
                         BMP cannot be assessed until benchmark and threshold values for each observation type are entered.
                     </p>
-                }              
+                }
                 @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
                 {
                     <p class="systemText">Assessments for treatment BMP that are included in an active Registration with a credit declaration cannot be deleted or edited.</p>
@@ -158,7 +166,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <p class="systemText">
                         BMP has not been assessed.
                     </p>
-                }          
+                }
             </div>
         </div>
     </div>

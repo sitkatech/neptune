@@ -63,6 +63,17 @@ namespace Neptune.Web.Views.TreatmentBMP
         [StringLength(Models.TreatmentBMP.FieldLengths.Notes)]
         public string Notes { get; set; }
 
+        [Required(ErrorMessage = "Must specify the ID in System of Record")]
+        [DisplayName("ID in System of Record")]
+        [StringLength(Models.TreatmentBMP.FieldLengths.SystemOfRecordID)]
+        public string SystemOfRecordID { get; set; }
+
+        [Required(ErrorMessage = "Must specify Owner")]
+        [DisplayName("Owner")]
+        public int? OwnerOrganizationID { get; set; }
+
+
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -88,6 +99,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             Notes = treatmentBMP.Notes;
+            SystemOfRecordID = treatmentBMP.SystemOfRecordID;
+            OwnerOrganizationID = treatmentBMP.OwnerOrganizationID;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -101,6 +114,9 @@ namespace Neptune.Web.Views.TreatmentBMP
                 treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
                 treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
             }
+
+            treatmentBMP.SystemOfRecordID = SystemOfRecordID;
+            treatmentBMP.OwnerOrganizationID = OwnerOrganizationID.Value;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

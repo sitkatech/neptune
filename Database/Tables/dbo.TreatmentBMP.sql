@@ -11,6 +11,9 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[ModeledCatchmentID] [int] NULL,
 	[Notes] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[YearBuilt] [int] NULL,
+	[OwnerOrganizationID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -42,6 +45,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Mo
 REFERENCES [dbo].[ModeledCatchment] ([ModeledCatchmentID], [TenantID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID_TenantID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID] FOREIGN KEY([OwnerOrganizationID])
+REFERENCES [dbo].[Organization] ([OrganizationID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
