@@ -318,6 +318,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPImage">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPImage">
+        <MappingFragment StoreEntitySet="TreatmentBMPImage">
+          <ScalarProperty Name="TreatmentBMPImageID" ColumnName="TreatmentBMPImageID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="TreatmentBMPObservation">
       <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPObservation">
         <MappingFragment StoreEntitySet="TreatmentBMPObservation">
@@ -326,19 +338,6 @@
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPPhoto">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPPhoto">
-        <MappingFragment StoreEntitySet="TreatmentBMPPhoto">
-          <ScalarProperty Name="TreatmentBMPPhotoID" ColumnName="TreatmentBMPPhotoID" />
-          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
-          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
-          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
-          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
-          <ScalarProperty Name="PhotoDescription" ColumnName="PhotoDescription" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

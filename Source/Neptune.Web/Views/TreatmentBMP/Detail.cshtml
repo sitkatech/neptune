@@ -24,6 +24,7 @@
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMP.Detail
@@ -72,6 +73,10 @@
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.Label("Owner")</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Year Built")</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.YearBuilt</div>
                 </div>
             </div>
         </div>
@@ -135,9 +140,7 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
     <div class="col-md-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
@@ -170,7 +173,65 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">Documents</div>
+            <div class="panel-body">
+                <div class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink("<span class=\'glyphicon glyphicon-plus-sign\' style=\'margin-right: 3px\'></span>Add Document", ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string> { "btn", "btn-trpa", "btn-sm" }, ViewDataTyped.CurrentPersonCanManage)
+                </div>
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
+                {
+                    foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
+                    {
+                        if (ViewDataTyped.CurrentPersonCanManage)
+                        {
+                            <span>
+                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
+                                @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
+                            </span>
+                        }
+
+                        <a href="@treatmentBMPDocument.FileResource.FileResourceUrl">@treatmentBMPDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i></a>
+
+                        <dl class="dl-horizontal">
+                            <dt>@Html.Label("Uploaded On")</dt>
+                            <dd>@treatmentBMPDocument.UploadDate.ToShortDateString()</dd>
+                            <dt>@Html.Label("File Type")</dt>
+                            <dd>@treatmentBMPDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                            <dt>@Html.Label("Description")</dt>
+                            <dd>@treatmentBMPDocument.DocumentDescription</dd>
+                        </dl>
+                        <hr />
+                    }
+
+                }
+                else
+                {
+                    <p class="systemText">No documents have been uploaded for this Treatment BMP.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Images
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPImageUrl, "Upload New Treatment BMP Image", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditTreatmentBMPImagesUrl, "Edit Treatment BMP Images", new List<string>(), ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPImages.Any())
+                </span>
+            </div>
+            <div class="panel-body">
+                @{ ImageCarousel.RenderPartialView(Html, ViewDataTyped.ImageCarouselViewData); }
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 <script type="text/javascript">
     jQuery(document).ready(function()

@@ -74,10 +74,10 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPDocument> AllTreatmentBMPDocuments { get; set; }
         public virtual IQueryable<TreatmentBMPDocument> TreatmentBMPDocuments { get { return AllTreatmentBMPDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPImage> AllTreatmentBMPImages { get; set; }
+        public virtual IQueryable<TreatmentBMPImage> TreatmentBMPImages { get { return AllTreatmentBMPImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPObservation> AllTreatmentBMPObservations { get; set; }
         public virtual IQueryable<TreatmentBMPObservation> TreatmentBMPObservations { get { return AllTreatmentBMPObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPPhoto> AllTreatmentBMPPhotos { get; set; }
-        public virtual IQueryable<TreatmentBMPPhoto> TreatmentBMPPhotos { get { return AllTreatmentBMPPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMP> AllTreatmentBMPs { get; set; }
         public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPTypeObservationType> AllTreatmentBMPTypeObservationTypes { get; set; }
@@ -243,11 +243,11 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPDocument":
                     return TreatmentBMPDocuments.GetTreatmentBMPDocument(primaryKey);
 
+                case "TreatmentBMPImage":
+                    return TreatmentBMPImages.GetTreatmentBMPImage(primaryKey);
+
                 case "TreatmentBMPObservation":
                     return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
-
-                case "TreatmentBMPPhoto":
-                    return TreatmentBMPPhotos.GetTreatmentBMPPhoto(primaryKey);
 
                 case "TreatmentBMP":
                     return TreatmentBMPs.GetTreatmentBMP(primaryKey);

@@ -74,8 +74,10 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap");
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
+            var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
+            var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
 
-            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson);
+            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

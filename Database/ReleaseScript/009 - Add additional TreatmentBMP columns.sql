@@ -11,17 +11,16 @@ CREATE TABLE dbo.TreatmentBMPDocument(
 	CONSTRAINT FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID_TenantID FOREIGN KEY(TreatmentBMPID, TenantID) REFERENCES dbo.TreatmentBMP (TreatmentBMPID, TenantID)
 )
 
-CREATE TABLE dbo.TreatmentBMPPhoto(
-	TreatmentBMPPhotoID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_TreatmentBMPPhoto_TreatmentBMPPhotoID PRIMARY KEY,
-	TenantID int NOT NULL CONSTRAINT FK_TreatmentBMPPhoto_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
-	FileResourceID int NOT NULL CONSTRAINT FK_TreatmentBMPPhoto_FileResource_FileResourceID FOREIGN KEY REFERENCES dbo.FileResource (FileResourceID),
-	TreatmentBMPID int NOT NULL CONSTRAINT FK_TreatmentBMPPhoto_TreatmentBMP_TreatmentBMPID FOREIGN KEY REFERENCES dbo.TreatmentBMP (TreatmentBMPID),
-	DisplayName varchar(200) NOT NULL,
+CREATE TABLE dbo.TreatmentBMPImage(
+	TreatmentBMPImageID int IDENTITY(1,1) NOT NULL CONSTRAINT PK_TreatmentBMPImage_TreatmentBMPImageID PRIMARY KEY,
+	TenantID int NOT NULL CONSTRAINT FK_TreatmentBMPImage_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
+	FileResourceID int NOT NULL CONSTRAINT FK_TreatmentBMPImage_FileResource_FileResourceID FOREIGN KEY REFERENCES dbo.FileResource (FileResourceID),
+	TreatmentBMPID int NOT NULL CONSTRAINT FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID FOREIGN KEY REFERENCES dbo.TreatmentBMP (TreatmentBMPID),
+	Caption varchar(500) not null,
 	UploadDate date NOT NULL,
-	PhotoDescription varchar(500) null,
-	CONSTRAINT AK_TreatmentBMPPhoto_FileResourceID_TreatmentBMPID UNIQUE (FileResourceID, TreatmentBMPID),
-	CONSTRAINT FK_TreatmentBMPPhoto_FileResource_FileResourceID_TenantID FOREIGN KEY(FileResourceID, TenantID) REFERENCES dbo.FileResource (FileResourceID, TenantID),
-	CONSTRAINT FK_TreatmentBMPPhoto_TreatmentBMP_TreatmentBMPID_TenantID FOREIGN KEY(TreatmentBMPID, TenantID) REFERENCES dbo.TreatmentBMP (TreatmentBMPID, TenantID)
+	CONSTRAINT AK_TreatmentBMPImage_FileResourceID_TreatmentBMPID UNIQUE (FileResourceID, TreatmentBMPID),
+	CONSTRAINT FK_TreatmentBMPImage_FileResource_FileResourceID_TenantID FOREIGN KEY(FileResourceID, TenantID) REFERENCES dbo.FileResource (FileResourceID, TenantID),
+	CONSTRAINT FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID_TenantID FOREIGN KEY(TreatmentBMPID, TenantID) REFERENCES dbo.TreatmentBMP (TreatmentBMPID, TenantID)
 )
 
 

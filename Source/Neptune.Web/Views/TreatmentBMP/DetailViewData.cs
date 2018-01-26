@@ -22,26 +22,33 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly MapInitJson MapInitJson;
-        public readonly string AddBenchmarkAndThresholdUrl;
-        public readonly string NewAssessmentUrl;
-        public readonly bool HasSettableBenchmarkAndThresholdValues;
-        public readonly bool CurrentPersonCanManage;
+        public Models.TreatmentBMP TreatmentBMP { get; }
+        public MapInitJson MapInitJson { get; }
+        public string AddBenchmarkAndThresholdUrl { get; }
+        public string NewAssessmentUrl { get; }
+        public bool HasSettableBenchmarkAndThresholdValues { get; }
+        public bool CurrentPersonCanManage { get; }
 
-        public readonly bool CanEditBenchmarkAndThresholds;
+        public bool CanEditBenchmarkAndThresholds { get; }
 
-        public readonly TreatmentBMPAssessmentGridSpec AssessmentGridSpec;
-        public readonly string AssessmentGridName;
-        public readonly string AssessmentGridDataUrl;
+        public TreatmentBMPAssessmentGridSpec AssessmentGridSpec { get; }
+        public string AssessmentGridName { get; }
+        public string AssessmentGridDataUrl { get; }
 
-        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson)
+        public string NewTreatmentBMPDocumentUrl { get; }
+        public string NewTreatmentBMPImageUrl { get; }
+        public string EditTreatmentBMPImagesUrl { get; }
+
+        public ImageCarouselViewData ImageCarouselViewData { get; }
+
+        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
         {
             TreatmentBMP = treatmentBMP;
@@ -49,6 +56,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
+            ImageCarouselViewData = imageCarouselViewData;
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
             NewAssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
@@ -59,6 +67,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             AssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson);
             AssessmentGridName = "Assessment";
             AssessmentGridDataUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.AssessmentGridJsonData(treatmentBMP));
+            NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
+            NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
+            EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
-            this.TreatmentBMPPhotos = new HashSet<TreatmentBMPPhoto>();
+            this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -96,13 +96,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPPhotos.Any();
+            return TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPPhoto).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name};
 
         [Key]
         public int TreatmentBMPID { get; set; }
@@ -122,7 +122,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
-        public virtual ICollection<TreatmentBMPPhoto> TreatmentBMPPhotos { get; set; }
+        public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

@@ -72,6 +72,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Owner")]
         public int? OwnerOrganizationID { get; set; }
 
+        [DisplayName("Year Built")]
+        [Range(1980, 2050, ErrorMessage = "Please enter a valid year range")]
+        public int? YearBuilt { get; set; }
+
 
 
         /// <summary>
@@ -101,6 +105,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Notes = treatmentBMP.Notes;
             SystemOfRecordID = treatmentBMP.SystemOfRecordID;
             OwnerOrganizationID = treatmentBMP.OwnerOrganizationID;
+            YearBuilt = treatmentBMP.YearBuilt;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -117,6 +122,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             treatmentBMP.SystemOfRecordID = SystemOfRecordID;
             treatmentBMP.OwnerOrganizationID = OwnerOrganizationID.Value;
+            treatmentBMP.YearBuilt = YearBuilt;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

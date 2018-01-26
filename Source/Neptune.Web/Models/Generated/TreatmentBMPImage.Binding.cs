@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TreatmentBMPPhoto]
+//  Source Table: [dbo].[TreatmentBMPImage]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[TreatmentBMPPhoto]")]
-    public partial class TreatmentBMPPhoto : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[TreatmentBMPImage]")]
+    public partial class TreatmentBMPImage : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TreatmentBMPPhoto()
+        protected TreatmentBMPImage()
         {
 
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -30,53 +30,52 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPPhoto(int treatmentBMPPhotoID, int fileResourceID, int treatmentBMPID, string displayName, DateTime uploadDate, string photoDescription) : this()
+        public TreatmentBMPImage(int treatmentBMPImageID, int fileResourceID, int treatmentBMPID, string caption, DateTime uploadDate) : this()
         {
-            this.TreatmentBMPPhotoID = treatmentBMPPhotoID;
+            this.TreatmentBMPImageID = treatmentBMPImageID;
             this.FileResourceID = fileResourceID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.DisplayName = displayName;
+            this.Caption = caption;
             this.UploadDate = uploadDate;
-            this.PhotoDescription = photoDescription;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPPhoto(int fileResourceID, int treatmentBMPID, string displayName, DateTime uploadDate) : this()
+        public TreatmentBMPImage(int fileResourceID, int treatmentBMPID, string caption, DateTime uploadDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPPhotoID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPImageID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FileResourceID = fileResourceID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.DisplayName = displayName;
+            this.Caption = caption;
             this.UploadDate = uploadDate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPPhoto(FileResource fileResource, TreatmentBMP treatmentBMP, string displayName, DateTime uploadDate) : this()
+        public TreatmentBMPImage(FileResource fileResource, TreatmentBMP treatmentBMP, string caption, DateTime uploadDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPPhotoID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPImageID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.FileResourceID = fileResource.FileResourceID;
             this.FileResource = fileResource;
-            fileResource.TreatmentBMPPhotos.Add(this);
+            fileResource.TreatmentBMPImages.Add(this);
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
-            treatmentBMP.TreatmentBMPPhotos.Add(this);
-            this.DisplayName = displayName;
+            treatmentBMP.TreatmentBMPImages.Add(this);
+            this.Caption = caption;
             this.UploadDate = uploadDate;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPPhoto CreateNewBlank(FileResource fileResource, TreatmentBMP treatmentBMP)
+        public static TreatmentBMPImage CreateNewBlank(FileResource fileResource, TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPPhoto(fileResource, treatmentBMP, default(string), default(DateTime));
+            return new TreatmentBMPImage(fileResource, treatmentBMP, default(string), default(DateTime));
         }
 
         /// <summary>
@@ -91,18 +90,17 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPPhoto).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPImage).Name};
 
         [Key]
-        public int TreatmentBMPPhotoID { get; set; }
+        public int TreatmentBMPImageID { get; set; }
         public int TenantID { get; private set; }
         public int FileResourceID { get; set; }
         public int TreatmentBMPID { get; set; }
-        public string DisplayName { get; set; }
+        public string Caption { get; set; }
         public DateTime UploadDate { get; set; }
-        public string PhotoDescription { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TreatmentBMPPhotoID; } set { TreatmentBMPPhotoID = value; } }
+        public int PrimaryKey { get { return TreatmentBMPImageID; } set { TreatmentBMPImageID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FileResource FileResource { get; set; }
@@ -110,8 +108,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int DisplayName = 200;
-            public const int PhotoDescription = 500;
+            public const int Caption = 500;
         }
     }
 }

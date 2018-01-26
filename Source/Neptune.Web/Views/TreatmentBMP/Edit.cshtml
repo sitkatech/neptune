@@ -139,6 +139,15 @@ else
                                     @Html.ValidationMessageFor(m => m.OwnerOrganizationID)
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-sm-5 control-label">
+                                    @Html.LabelWithSugarFor(m => m.YearBuilt)
+                                </div>
+                                <div class="col-sm-7">
+                                    @Html.TextBoxFor(m => m.YearBuilt, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" }, { "type", "number" } })
+                                    @Html.ValidationMessageFor(m => m.YearBuilt)
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-6" id="mapContainer">
