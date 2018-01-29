@@ -40,6 +40,7 @@
     <add key="KeystoneOpenIDUrl" value="${keystone-openid-endpoint}" />
     <add key="KeystoneOpenIDClientId" value="Neptune" />
     <add key="KeystoneOpenIDClientSecret" value="864888DF-1676-4960-BE72-06A4D16B0C5C" />
+    <add key="KeystoneWebServiceApplicationGuid" value="3F675C06-1803-4A18-A0D2-8E660D7402E9"/>
     <add key="DefaultModalDialogButtonCssClasses" value="btn-neptune,btn-xs"/>
   </appSettings>
   <system.net>

@@ -27,13 +27,14 @@ namespace Neptune.Web.Views.User
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly IndexGridSpec GridSpec;
-        public readonly string GridName;
-        public readonly string GridDataUrl;
-        public readonly string KeystoneUrl;
-        public readonly string KeystoneRegisterUserUrl;
-        
-        public readonly bool UserIsSitkaAdmin;
+        public IndexGridSpec GridSpec { get; }
+        public string GridName { get; }
+        public string GridDataUrl { get; }
+        public string KeystoneUrl { get; }
+        public string KeystoneRegisterUserUrl { get; }
+
+        public string PullUserFromKeystoneUrl { get; }
+        public bool UserIsAdmin { get; }
 
         public IndexViewData(Person currentPerson) : base(currentPerson)
         {
@@ -46,7 +47,8 @@ namespace Neptune.Web.Views.User
             KeystoneUrl = NeptuneWebConfiguration.KeystoneUrl;
             KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
 
-            UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
+            PullUserFromKeystoneUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.PullUserFromKeystone());
+            UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }

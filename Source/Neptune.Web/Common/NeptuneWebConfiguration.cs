@@ -51,7 +51,8 @@ namespace Neptune.Web.Common
         public static readonly string KeystoneOpenIDClientId = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDClientId");
         public static readonly string KeystoneOpenIDUrl = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDUrl");
         public static readonly string KeystoneOpenIDClientSecret = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDClientSecret");
-       
+        public static readonly Guid KeystoneWebServiceApplicationGuid = Guid.Parse(SitkaConfiguration.GetRequiredAppSetting("KeystoneWebServiceApplicationGuid"));
+
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));

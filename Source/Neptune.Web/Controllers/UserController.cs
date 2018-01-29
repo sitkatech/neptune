@@ -18,6 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
 using System;
 using System.Data.Entity;
 using System.Globalization;
@@ -205,12 +206,6 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewPullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
-        {
-            var viewData = new PullUserFromKeystoneViewData();
-            return RazorPartialView<PullUserFromKeystone, PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>(viewData, viewModel);
-        }
-
         [HttpGet]
         [NeptuneAdminFeature]
         public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
@@ -242,6 +237,101 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var viewData = new EditJurisdictionsViewData(CurrentPerson, stormwaterJurisdictions);
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public PartialViewResult PullUserFromKeystone()
+        {
+            var viewModel = new PullUserFromKeystoneViewModel();
+
+            return ViewPullUserFromKeystone(viewModel);
+        }
+
+        [HttpPost]
+        [SitkaAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult PullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewPullUserFromKeystone(viewModel);
+            }
+
+            var keystoneClient = new KeystoneDataClient();
+
+            UserProfile keystoneUser = keystoneClient.GetUserProfileByUsername(NeptuneWebConfiguration.KeystoneWebServiceApplicationGuid, viewModel.LoginName);
+            if (keystoneUser == null)
+            {
+                SetErrorForDisplay($"Person not added. The {FieldDefinition.Username.GetFieldDefinitionLabel()} was not found in Keystone");
+                return new ModalDialogFormJsonResult();
+            }
+
+            if (!keystoneUser.OrganizationGuid.HasValue)
+            {
+                SetErrorForDisplay($"Person not added. They have no {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
+            }
+
+            KeystoneDataService.Organization keystoneOrganization = null;
+            try
+            {
+                keystoneOrganization = keystoneClient.GetOrganization(keystoneUser.OrganizationGuid.Value);
+            }
+            catch (Exception)
+            {
+                SetErrorForDisplay($"Person not added. Could not find their {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
+            }
+
+            if (keystoneOrganization == null)
+            {
+                SetErrorForDisplay("Person not added. Could not find their Organization in Keystone");
+
+            }
+            else
+            {
+                var firmaOrganization =
+                    HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(
+                        x => x.OrganizationGuid == keystoneUser.OrganizationGuid);
+                if (firmaOrganization == null)
+                {
+                    var defaultOrganizationType = HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
+                    firmaOrganization = new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
+                    {
+                        OrganizationGuid = keystoneOrganization.OrganizationGuid,
+                        OrganizationShortName = keystoneOrganization.ShortName,
+                        OrganizationUrl = keystoneOrganization.URL
+                    };
+                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(firmaOrganization);
+                }
+
+                var firmaPerson =
+                    HttpRequestStorage.DatabaseEntities.People.SingleOrDefault(
+                        x => x.PersonGuid == keystoneUser.UserGuid);
+                if (firmaPerson != null)
+                {
+                    firmaPerson.OrganizationID = firmaOrganization.OrganizationID;
+                }
+                else
+                {
+                    firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
+                        keystoneUser.Email, Role.Unassigned, DateTime.Now, true, firmaOrganization, false,
+                        keystoneUser.LoginName);
+                    HttpRequestStorage.DatabaseEntities.AllPeople.Add(firmaPerson);
+                }
+
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                SetMessageForDisplay($"{firmaPerson.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to <a href=\"{firmaPerson.GetDetailUrl()}\">assign them a role</a>.");
+            }
+            return new ModalDialogFormJsonResult();
+
+
+        }
+
+        private PartialViewResult ViewPullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
+        {
+            var viewData = new PullUserFromKeystoneViewData();
+            return RazorPartialView<PullUserFromKeystone, PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>(viewData, viewModel);
         }
     }
 }
