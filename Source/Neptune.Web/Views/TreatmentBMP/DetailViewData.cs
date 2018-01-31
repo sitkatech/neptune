@@ -47,6 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditTreatmentBMPImagesUrl { get; }
 
         public ImageCarouselViewData ImageCarouselViewData { get; }
+        public string EditTreatmentBMPAttributesUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
@@ -70,6 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
             NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
+            EditTreatmentBMPAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP));
         }
     }
 }

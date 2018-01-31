@@ -40,4 +40,6 @@ VALUES
 (35, N'MaximumValueOfEachObservation', N'Maximum Value of Each Observation', '', 1),
 (36, N'DefaultThresholdValue', N'Default Threshold Value', '', 1),
 (37, N'DefaultBenchmarkValue', N'Default Benchmark Value', '', 1),
-(38, N'AssessmentFailsIfObservationFails', N'Assessment Fails if Observation Fails', '', 1)
+(38, N'AssessmentFailsIfObservationFails', N'Assessment Fails if Observation Fails', '', 1),
+(39, N'TreatmentBMPAttributeType', N'Treatment BMP Attribute Type', '', 1),
+(40, N'TreatmentBMPAttributeDataType', N'Data Type', '', 1)

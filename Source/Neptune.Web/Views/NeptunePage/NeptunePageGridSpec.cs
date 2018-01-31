@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.NeptunePage
                         $"Edit Intro Content for '{a.NeptunePageType.NeptunePageTypeDisplayName}'")),
                     30);
             }
-            Add("Page Name", a => UrlTemplate.MakeHrefString(a.NeptunePageType.GetViewUrl(), a.NeptunePageType.NeptunePageTypeDisplayName), 180, DhtmlxGridColumnFilterType.Text);
+            Add("Page Name", a => a.NeptunePageType.NeptunePageTypeDisplayName, 180);
             Add("Has Content", a => a.HasNeptunePageContent.ToYesNo(), 85, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Type", a => a.NeptunePageType.NeptunePageRenderType.NeptunePageRenderTypeDisplayName, 110, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("NeptunePageID", a => a.NeptunePageID, 0);

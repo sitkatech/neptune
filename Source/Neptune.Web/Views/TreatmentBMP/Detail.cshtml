@@ -123,6 +123,36 @@
                 }
             </div>
         </div>
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Additional Data
+                <span class="pullRight panel-heading panelTitle-right">
+                    @if (ViewDataTyped.CurrentPersonCanManage)
+                    {
+                        <a href="@ViewDataTyped.EditTreatmentBMPAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    }
+
+                </span>
+            </div>
+            <div class="panel-body">
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                {
+                    <p class="systemText">
+                        This type of treatment BMP does not have any additional attributes.
+                    </p>
+                }
+                else
+                {
+                    foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes)
+                    {
+                        <div class="row">
+                            <label class="col-sm-5 control-label text-right">@Html.Label(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName)</label>
+                            <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValue(treatmentBMPTypeAttributeType)</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
     </div>
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">

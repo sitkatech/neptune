@@ -70,6 +70,10 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
         public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAttribute> AllTreatmentBMPAttributes { get; set; }
+        public virtual IQueryable<TreatmentBMPAttribute> TreatmentBMPAttributes { get { return AllTreatmentBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAttributeType> AllTreatmentBMPAttributeTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPAttributeType> TreatmentBMPAttributeTypes { get { return AllTreatmentBMPAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPDocument> AllTreatmentBMPDocuments { get; set; }
@@ -80,6 +84,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPObservation> TreatmentBMPObservations { get { return AllTreatmentBMPObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMP> AllTreatmentBMPs { get; set; }
         public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPTypeAttributeType> AllTreatmentBMPTypeAttributeTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get { return AllTreatmentBMPTypeAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPTypeObservationType> AllTreatmentBMPTypeObservationTypes { get; set; }
         public virtual IQueryable<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get { return AllTreatmentBMPTypeObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPType> AllTreatmentBMPTypes { get; set; }
@@ -237,6 +243,17 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);
 
+                case "TreatmentBMPAttributeDataType":
+                    var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPAttributeDataType, "TreatmentBMPAttributeDataType", primaryKey);
+                    return treatmentBMPAttributeDataType;
+
+                case "TreatmentBMPAttribute":
+                    return TreatmentBMPAttributes.GetTreatmentBMPAttribute(primaryKey);
+
+                case "TreatmentBMPAttributeType":
+                    return TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(primaryKey);
+
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);
 
@@ -251,6 +268,9 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMP":
                     return TreatmentBMPs.GetTreatmentBMP(primaryKey);
+
+                case "TreatmentBMPTypeAttributeType":
+                    return TreatmentBMPTypeAttributeTypes.GetTreatmentBMPTypeAttributeType(primaryKey);
 
                 case "TreatmentBMPTypeObservationType":
                     return TreatmentBMPTypeObservationTypes.GetTreatmentBMPTypeObservationType(primaryKey);

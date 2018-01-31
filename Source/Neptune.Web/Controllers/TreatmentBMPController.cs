@@ -232,5 +232,37 @@ namespace Neptune.Web.Controllers
 
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        [TreatmentBMPManageFeature]
+        public ViewResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
+            var viewModel = new EditAttributesViewModel(treatmentBMP);
+            return ViewEditAttributes(viewModel, treatmentBMP);
+        }
+
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditAttributesViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditAttributes(viewModel, treatmentBMP);
+            }
+
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+            SetMessageForDisplay("Treatment BMP Attributes successfully saved.");
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
+        }
+
+        private ViewResult ViewEditAttributes(EditAttributesViewModel viewModel, TreatmentBMP getTreatmentBMP)
+        {
+            var viewData = new EditAttributesViewData(CurrentPerson, getTreatmentBMP);
+            return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
+        }
     }
 }

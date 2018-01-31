@@ -20,11 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -46,6 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string TreatmentBMPTypeDescription { get; set; }
 
         public List<TreatmentBMPTypeObservationTypeSimple> TreatmentBMPTypeObservationTypeSimples { get; set; }
+        public List<TreatmentBMPTypeAttributeTypeSimple> TreatmentBMPTypeAttributeTypeSimples { get; set; }
 
 
         /// <summary>
@@ -60,14 +61,16 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
             TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
-            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes
-                .Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
+            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
+            TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
         }
 
 
-        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType, List<TreatmentBMPTypeObservationType> 
-            currentTreatmentBMPTypeObservationTypes,
-            IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes)
+        public void UpdateModel(Models.TreatmentBMPType treatmentBMPType,
+            List<TreatmentBMPTypeObservationType> currentTreatmentBMPTypeObservationTypes,
+            IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes,
+            List<TreatmentBMPTypeAttributeType> currentTreatmentBMPTypeAttributeTypes,
+            ObservableCollection<TreatmentBMPTypeAttributeType> allTreatmentBMPTypeAttributeTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
             treatmentBMPType.TreatmentBMPTypeDescription = TreatmentBMPTypeDescription;
@@ -100,6 +103,15 @@ namespace Neptune.Web.Views.TreatmentBMPType
                     x.DefaultBenchmarkValue = y.DefaultBenchmarkValue;
                     x.OverrideAssessmentScoreIfFailing = y.OverrideAssessmentScoreIfFailing;
                 });
+
+            var updatedTreatmentBMPTypeAttributeTypes = new List<TreatmentBMPTypeAttributeType>();
+            if (TreatmentBMPTypeAttributeTypeSimples != null)
+            {
+                // Completely rebuild the list
+                updatedTreatmentBMPTypeAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID)).ToList();
+            }
+
+            currentTreatmentBMPTypeAttributeTypes.Merge(updatedTreatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

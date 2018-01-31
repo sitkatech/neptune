@@ -24,6 +24,8 @@ namespace Neptune.Web.Models
         protected TreatmentBMPType()
         {
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.TreatmentBMPAttributes = new HashSet<TreatmentBMPAttribute>();
+            this.TreatmentBMPTypeAttributeTypes = new HashSet<TreatmentBMPTypeAttributeType>();
             this.TreatmentBMPTypeObservationTypes = new HashSet<TreatmentBMPTypeObservationType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
@@ -65,13 +67,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPs.Any() || TreatmentBMPTypeObservationTypes.Any();
+            return TreatmentBMPs.Any() || TreatmentBMPAttributes.Any() || TreatmentBMPTypeAttributeTypes.Any() || TreatmentBMPTypeObservationTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPType).Name, typeof(TreatmentBMP).Name, typeof(TreatmentBMPTypeObservationType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPType).Name, typeof(TreatmentBMP).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPTypeAttributeType).Name, typeof(TreatmentBMPTypeObservationType).Name};
 
         [Key]
         public int TreatmentBMPTypeID { get; set; }
@@ -82,6 +84,8 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return TreatmentBMPTypeID; } set { TreatmentBMPTypeID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
+        public virtual ICollection<TreatmentBMPAttribute> TreatmentBMPAttributes { get; set; }
+        public virtual ICollection<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
         public virtual ICollection<TreatmentBMPTypeObservationType> TreatmentBMPTypeObservationTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 

@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         protected TreatmentBMP()
         {
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
+            this.TreatmentBMPAttributes = new HashSet<TreatmentBMPAttribute>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
@@ -96,13 +97,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any();
+            return TreatmentBMPAssessments.Any() || TreatmentBMPAttributes.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name};
 
         [Key]
         public int TreatmentBMPID { get; set; }
@@ -120,6 +121,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
+        public virtual ICollection<TreatmentBMPAttribute> TreatmentBMPAttributes { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }

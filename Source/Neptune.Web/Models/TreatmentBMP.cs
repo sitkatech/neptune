@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Linq;
+using LtInfo.Common.Views;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
@@ -82,6 +83,20 @@ namespace Neptune.Web.Models
         {
             return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
                        x.ObservationTypeID == observationType.ObservationTypeID) != null;
+        }
+
+        public string GetTreatmentBMPAttributeValue(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        {
+            if (TreatmentBMPAttributes.Any())
+            {
+                var treatmentBMPAttribute = TreatmentBMPAttributes.SingleOrDefault(x =>
+                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
+                if (treatmentBMPAttribute != null)
+                {
+                    return treatmentBMPAttribute.TreatmentBMPAttributeValue;
+                }
+            }
+            return ViewUtilities.NotProvidedString;
         }
     }
 }

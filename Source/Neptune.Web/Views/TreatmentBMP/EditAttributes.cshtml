@@ -1,0 +1,71 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@inherits Neptune.Web.Views.TreatmentBMP.EditAttributes
+
+@using (Html.BeginForm())
+{
+    <div class="formPage">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="validationError">
+                    @Html.ValidationSummary()
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-horizontal">                            
+                            @for (var i = 0; i < ViewDataTyped.TreatmentBMPTypeAttributeTypes.Count; i++)
+                            {
+                                var attribute = ViewDataTyped.TreatmentBMPTypeAttributeTypes[i];
+                                var currentMetadata = Model.TreatmentBMPAttributes.SingleOrDefault(x => x.TreatmentBMPAttributeTypeID == attribute.TreatmentBMPAttributeTypeID);
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">
+                                        @attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName
+                                        @if (attribute.TreatmentBMPAttributeType.IsRequired)
+                                        {
+                                            <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span>
+                                        }
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID" />
+                                        <input class="form-control" style="width: 50%; min-width: 200px;"
+                                               type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12" style="text-align: right">
+                        <hr />
+                        <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
+                        <button action="p" type="submit" class="btn btn-neptune">Save</button>
+                    </div>
+                    @Html.HiddenFor(x => x.TreatmentBMPTypeID)
+                </div>
+            </div>
+        </div>
+    </div>
+}

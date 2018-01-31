@@ -18,4 +18,7 @@ values
 (13, 'ManageObservationTypeInstructions', 'Manage Observation Type Instructions', 2),
 (14, 'ManageObservationTypeObservationInstructions', 'Manage Observation Type Instructions for Observation Instructions', 2),
 (15, 'ManageObservationTypeLabelsAndUnitsInstructions', 'Manage Observation Type Labels and Units Instructions', 2),
-(16, 'ManageTreatmentBMPTypeInstructions', 'Manage Treatment BMP Type Instructions', 2)
+(16, 'ManageTreatmentBMPTypeInstructions', 'Manage Treatment BMP Type Instructions', 2),
+(17, 'ManageTreatmentBMPAttributeTypeInstructions', 'Manage Treatment BMP Attribute Type Instructions', 2),
+(18, 'ManageTreatmentBMPAttributeInstructions', 'Manage Treatment BMP Attribute Instructions', 2),
+(19, 'ManageTreatmentBMPAttributeTypesList', 'Manage Treatment BMP Attribute Types List', 2)

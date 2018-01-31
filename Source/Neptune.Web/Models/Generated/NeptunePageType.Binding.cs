@@ -34,6 +34,9 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeManageObservationTypeObservationInstructions ManageObservationTypeObservationInstructions = NeptunePageTypeManageObservationTypeObservationInstructions.Instance;
         public static readonly NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions ManageObservationTypeLabelsAndUnitsInstructions = NeptunePageTypeManageObservationTypeLabelsAndUnitsInstructions.Instance;
         public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions ManageTreatmentBMPTypeInstructions = NeptunePageTypeManageTreatmentBMPTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions ManageTreatmentBMPAttributeTypeInstructions = NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeInstructions ManageTreatmentBMPAttributeInstructions = NeptunePageTypeManageTreatmentBMPAttributeInstructions.Instance;
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypesList ManageTreatmentBMPAttributeTypesList = NeptunePageTypeManageTreatmentBMPAttributeTypesList.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -43,7 +46,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageTreatmentBMPAttributeTypeInstructions, ManageTreatmentBMPAttributeInstructions, ManageTreatmentBMPAttributeTypesList };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -135,6 +138,12 @@ namespace Neptune.Web.Models
                     return ManageObservationTypeObservationInstructions;
                 case NeptunePageTypeEnum.ManageObservationTypesList:
                     return ManageObservationTypesList;
+                case NeptunePageTypeEnum.ManageTreatmentBMPAttributeInstructions:
+                    return ManageTreatmentBMPAttributeInstructions;
+                case NeptunePageTypeEnum.ManageTreatmentBMPAttributeTypeInstructions:
+                    return ManageTreatmentBMPAttributeTypeInstructions;
+                case NeptunePageTypeEnum.ManageTreatmentBMPAttributeTypesList:
+                    return ManageTreatmentBMPAttributeTypesList;
                 case NeptunePageTypeEnum.ManageTreatmentBMPTypeInstructions:
                     return ManageTreatmentBMPTypeInstructions;
                 case NeptunePageTypeEnum.ManageTreatmentBMPTypesList:
@@ -170,7 +179,10 @@ namespace Neptune.Web.Models
         ManageObservationTypeInstructions = 13,
         ManageObservationTypeObservationInstructions = 14,
         ManageObservationTypeLabelsAndUnitsInstructions = 15,
-        ManageTreatmentBMPTypeInstructions = 16
+        ManageTreatmentBMPTypeInstructions = 16,
+        ManageTreatmentBMPAttributeTypeInstructions = 17,
+        ManageTreatmentBMPAttributeInstructions = 18,
+        ManageTreatmentBMPAttributeTypesList = 19
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -267,5 +279,23 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeManageTreatmentBMPTypeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeManageTreatmentBMPTypeInstructions Instance = new NeptunePageTypeManageTreatmentBMPTypeInstructions(16, @"ManageTreatmentBMPTypeInstructions", @"Manage Treatment BMP Type Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions Instance = new NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions(17, @"ManageTreatmentBMPAttributeTypeInstructions", @"Manage Treatment BMP Attribute Type Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageTreatmentBMPAttributeInstructions : NeptunePageType
+    {
+        private NeptunePageTypeManageTreatmentBMPAttributeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeInstructions Instance = new NeptunePageTypeManageTreatmentBMPAttributeInstructions(18, @"ManageTreatmentBMPAttributeInstructions", @"Manage Treatment BMP Attribute Instructions", 2);
+    }
+
+    public partial class NeptunePageTypeManageTreatmentBMPAttributeTypesList : NeptunePageType
+    {
+        private NeptunePageTypeManageTreatmentBMPAttributeTypesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypesList Instance = new NeptunePageTypeManageTreatmentBMPAttributeTypesList(19, @"ManageTreatmentBMPAttributeTypesList", @"Manage Treatment BMP Attribute Types List", 2);
     }
 }

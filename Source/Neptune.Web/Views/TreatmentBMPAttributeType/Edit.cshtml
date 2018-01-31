@@ -1,0 +1,74 @@
+﻿@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Views.Shared
+@using Newtonsoft.Json.Linq
+@inherits Neptune.Web.Views.TreatmentBMPAttributeType.Edit
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewInstructionsNeptunePage); }
+
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditTreatmentBMPAttributeTypeControllerApp" ng-controller="EditTreatmentBMPAttributeTypeController" ng-submit="submit()" name="treatmentBMPAttributeTypeForm">
+    <div class="formPage">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="validationError">
+                    @Html.ValidationSummary()
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.TreatmentBMPAttributeTypeName)
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.TreatmentBMPAttributeTypeName, new { @class = "form-control", style = "width:100%" })
+                            @Html.ValidationMessageFor(m => m.TreatmentBMPAttributeTypeName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.TreatmentBMPAttributeDataTypeID)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(x => x.TreatmentBMPAttributeDataTypeID, ViewDataTyped.TreatmentBMPAttributeDataTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                            @Html.ValidationMessageFor(m => m.TreatmentBMPAttributeDataTypeID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MeasurementUnitTypeID)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(x => x.MeasurementUnitTypeID, ViewDataTyped.MeasurementUnitTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                            @Html.ValidationMessageFor(m => m.MeasurementUnitTypeID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.IsRequired)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(m => m.IsRequired, BooleanFormats.GetYesNoSelectList(), new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
+                            @Html.ValidationMessageFor(m => m.IsRequired)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <hr />
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <a href="@ViewDataTyped.TreatmentBMPAttributeTypeIndexUrl" class="btn btn-neptune">Cancel</a>
+            <button type="submit" class="btn btn-neptune">Save</button>
+        </div>
+        @Html.HiddenFor(m => m.TreatmentBMPAttributeTypeID)
+    </div>
+</form>

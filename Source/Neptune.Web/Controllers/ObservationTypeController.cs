@@ -20,11 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;

@@ -10,11 +10,6 @@ CREATE TABLE [dbo].[StormwaterJurisdictionPerson](
  CONSTRAINT [PK_StormwaterJurisdictionPerson_StormwaterJurisdictionPersonID] PRIMARY KEY CLUSTERED 
 (
 	[StormwaterJurisdictionPersonID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_StormaterJurisdictionPerson_StormwaterJurisdictionPersonID_TenantID] UNIQUE NONCLUSTERED 
-(
-	[StormwaterJurisdictionPersonID] ASC,
-	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

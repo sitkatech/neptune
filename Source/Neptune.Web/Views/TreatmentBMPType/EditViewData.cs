@@ -36,7 +36,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
         public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl,
-            Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType) : base(currentPerson)
+            Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType,
+            List<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
@@ -47,7 +48,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
             PageTitle = $"{(treatmentBMPType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
 
-            ViewDataForAngular = new ViewDataForAngular(observationTypes);
+            ViewDataForAngular = new ViewDataForAngular(observationTypes, treatmentBMPAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
@@ -58,12 +59,13 @@ namespace Neptune.Web.Views.TreatmentBMPType
     {
        
         public List<ObservationTypeSimple> ObservationTypes { get; }
-       
+        public List<TreatmentBMPAttributeTypeSimple> TreatmentBMPAttributeTypes { get; }
 
-        public ViewDataForAngular(List<Models.ObservationType> observationTypes)
+
+        public ViewDataForAngular(IEnumerable<Models.ObservationType> observationTypes, IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes)
         {
-            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();           
+            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();
+            TreatmentBMPAttributeTypes = treatmentBMPAttributeTypes.Select(x => new TreatmentBMPAttributeTypeSimple(x)).ToList();
         }
     }
-
 }

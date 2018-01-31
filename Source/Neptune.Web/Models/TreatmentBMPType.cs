@@ -19,10 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
@@ -36,5 +34,4 @@ namespace Neptune.Web.Models
 
         public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
     }
-    
 }

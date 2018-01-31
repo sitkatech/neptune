@@ -77,7 +77,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
             var allTreatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Local;
 
-            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Load();
+            var treatmentBMPTypeAttributeTypes = new List<TreatmentBMPTypeAttributeType>();
+            var allTreatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAttributeTypes.Local;
+
+            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
            
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} succesfully created.");
 
@@ -108,7 +112,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeObservationTypes.ToList();
             var allTreatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Local;
 
-            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Load();
+            var treatmentBMPTypeAttributeTypes = treatmentBMPType.TreatmentBMPTypeAttributeTypes.ToList();
+            var allTreatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAttributeTypes.Local;
+
+            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(c => c.Detail(treatmentBMPType.PrimaryKey)));
         }
@@ -116,10 +124,10 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEdit(EditViewModel viewModel, TreatmentBMPType treatmentBMPType)
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypeInstructions);
-
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPTypeID) ? SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPTypeID)) : SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.New());
             var observationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList();
-            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType);
+            var treatmentBMPAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAttributeTypes.ToList();
+            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, treatmentBMPAttributeTypes);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -128,7 +136,6 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMPType);
-
             var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBMPTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -137,7 +144,6 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
-
             var viewData = new DetailViewData(CurrentPerson, treatmentBMPType);
             return RazorView<Detail, DetailViewData>(viewData);
         }

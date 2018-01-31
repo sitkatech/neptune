@@ -1,0 +1,21 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TreatmentBMPAttributeDataType](
+	[TreatmentBMPAttributeDataTypeID] [int] NOT NULL,
+	[TreatmentBMPAttributeDataTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[TreatmentBMPAttributeDataTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+ CONSTRAINT [PK_TreatmentBMPAttributeDataType_TreatmentBMPAttributeDataTypeID] PRIMARY KEY CLUSTERED 
+(
+	[TreatmentBMPAttributeDataTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPAttributeDataType_TreatmentBMPAttributeDataTypeDisplayName] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPAttributeDataTypeDisplayName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPAttributeDataType_TreatmentBMPAttributeDataTypeName] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPAttributeDataTypeName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

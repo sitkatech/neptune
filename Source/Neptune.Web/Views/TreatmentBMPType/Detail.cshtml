@@ -88,4 +88,36 @@
             </div>
         </div>
     </div>
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Applicable BMP Attribute Types
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table">
+                            <tr>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeType)</th>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</th>
+                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
+                                <th class="text-right">@Html.Label("Required?")</th>
+                            </tr>
+                            <tbody>
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAttributeTypes)
+                                {
+                                    <tr>
+                                        <td class="text-left">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl()</td>
+                                        <td class="text-left">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName</td>
+                                        <td class="text-right">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</td>
+                                        <td class="text-right">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.IsRequired.ToYesNo()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
