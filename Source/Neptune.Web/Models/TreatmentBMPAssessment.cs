@@ -68,18 +68,18 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            //if any observations that override the score have a failing score, return 2
+            //if any observations that override the score have a failing score, return 0
             var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing)
                 .ToList().Select(x => x.ObservationType);
 
-            if (observationTypesThatPotentiallyOverrideScore.Select(x =>
+            if (observationTypesThatPotentiallyOverrideScore.Any(x =>
                 {
                     var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType == x);
                     return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
-                }).Any(x => x))
+                }))
             {
-                return 2;
+                return 0;
             }
 
             //if all observations override the score and all are passing, return 5

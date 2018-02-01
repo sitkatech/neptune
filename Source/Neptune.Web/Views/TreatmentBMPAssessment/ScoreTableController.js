@@ -31,7 +31,7 @@ angular.module("NeptuneApp").controller("ScoreTableController", function ($scope
     }
 
     $scope.getHue = function (value) {
-        if (value <= 2)
+        if (Sitka.Methods.isUndefinedNullOrEmpty(value) || value <= 2)
         {
             return "hsl(0,100%,59%";
         }
@@ -41,7 +41,7 @@ angular.module("NeptuneApp").controller("ScoreTableController", function ($scope
 
 }).filter('setDecimal', function ($filter) {
     return function (input, places) {
-        if (isNaN(input)) return input;
+        if (Sitka.Methods.isUndefinedNullOrEmpty(input)) return input;
         // If we want 1 decimal place, we want to mult/div by 10
         // If we want 2 decimal places, we want to mult/div by 100, etc
         // So use the following to create that factor

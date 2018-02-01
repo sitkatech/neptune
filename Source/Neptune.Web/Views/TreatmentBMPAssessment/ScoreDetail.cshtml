@@ -83,46 +83,52 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="table-responsive">
         <table class="table table-condensed scoreTable">
             <thead>
-            <tr class="row">
-                <th class="col-xs-3">@Html.Label("Observation")</th>                
-                <th class="col-xs-2 centerText">@Html.Label("Threshold")</th>
-                <th class="col-xs-2 centerText">@Html.Label("Observed")</th>
-                <th class="col-xs-2 centerText">@Html.Label("Benchmark")</th>
-                <th class="col-xs-2 centerText">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight, "Weight")</th>
-                <th class="col-xs-1 centerText">@Html.LabelWithSugarFor(FieldDefinition.ObservationScore, "Score")</th>
-            </tr>
+                <tr class="row">
+                    <th class="col-xs-3">@Html.Label("Observation")</th>
+                    <th class="col-xs-2 centerText">@Html.Label("Threshold")</th>
+                    <th class="col-xs-2 centerText">@Html.Label("Observed")</th>
+                    <th class="col-xs-2 centerText">@Html.Label("Benchmark")</th>
+                    <th class="col-xs-2 centerText">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight, "Weight")</th>
+                    <th class="col-xs-1 centerText">@Html.LabelWithSugarFor(FieldDefinition.ObservationScore, "Score")</th>
+                </tr>
             </thead>
             <tbody>
-            <tr class="row" ng-repeat="observationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && !observationType.TreatmentBMPObservationSimple.OverrideScore ? 'grayOut' : ''">
-                <td class="col-xs-3">{{observationType.DisplayName}}</td>   
-                
-                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(2)}">{{observationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
-                </td>
+                <tr class="row" ng-repeat="observationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && !observationType.TreatmentBMPObservationSimple.OverrideScore ? 'grayOut' : ''">
+                    <td class="col-xs-3">{{observationType.DisplayName}}</td>
 
-                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
-                </td>
-                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+                    <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
+                        <span class="badge colorBadge" ng-style="{'background-color': getHue(2)}">{{observationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
+                    </td>
 
-                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(5)}">{{observationType.BenchmarkValue | setDecimal:3 }}</span>
-                </td>
+                    <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete">
+                        <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
+                    </td>
+                    
+                    <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+                    
+                    <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
+                        <span class="badge colorBadge" ng-style="{'background-color': getHue(5)}">{{observationType.BenchmarkValue | setDecimal:3 }}</span>
+                    </td>
 
-                <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">{{observationType.Weight}}</td>
-                
+                    <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete">
+                        <em>Observation incomplete</em>
+                    </td>
 
-                <td class="text-center" colspan="4" ng-if="!observationType.HasBenchmarkAndThresholds">
-                    <em ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete">Observation incomplete</em>
-                    <em ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(5)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
-                    <em ng-if="observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore" ng-style="{'color': getHue(0)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
-                </td>
+                    <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore">
+                        <em ng-style="{'color': getHue(observationType.TreatmentBMPObservationSimple.ObservationValue)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
+                    </td>
 
-                <td class="col-xs-1 text-center" ng-if="observationType.TreatmentBMPObservationSimple.IsComplete">
-                    <span class="bold">{{observationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
-                </td>
-                <td class="col-xs-1 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
-            </tr>
+                    <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore">
+                        <em ng-style="{'color': getHue(0)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
+                    </td>
+
+                    <td class="col-xs-2 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.OverrideScore">{{observationType.Weight}}</td>
+
+                    <td class="col-xs-1 text-center" ng-if="observationType.TreatmentBMPObservationSimple.IsComplete">
+                        <span class="bold">{{observationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
+                    </td>
+                    <td class="col-xs-1 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+                </tr>
             <tr class="row totalRow">
                 <td class="col-xs-3">Assessment Total</td>
                 <td class="col-xs-2 text-center">-</td>

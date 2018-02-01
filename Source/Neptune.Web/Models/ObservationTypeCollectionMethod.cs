@@ -21,6 +21,11 @@ namespace Neptune.Web.Models
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
         public abstract double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation);
+
+        public virtual string CalculateOverrideScoreText(string assessmentScoreIfFailing, string observationTypeSchema, bool overrideAssessmentScoreIfFailing)
+        {
+            return string.Empty;
+        }
     }
 
     public partial class ObservationTypeCollectionMethodDiscreteValue
@@ -144,7 +149,6 @@ namespace Neptune.Web.Models
 
         public override bool ValidateObservationDataJson(string json)
         {
-
             try
             {
                 var schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
@@ -240,13 +244,23 @@ namespace Neptune.Web.Models
         {
             var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
             var conveyanceFails = observation.PassFailObservations.Any(x => !x.ObservationValue);
-            return conveyanceFails ? 2 : 5;
+            return conveyanceFails ? 0 : 5;
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             return observationValue;
+        }
+
+        public override string CalculateOverrideScoreText(string observationData,
+            string observationTypeSchema,
+            bool overrideAssessmentScoreIfFailing)
+        {
+            var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
+            var conveyanceFails = observation.PassFailObservations.Any(x => !x.ObservationValue);
+            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(observationTypeSchema);
+            return conveyanceFails ? schema.FailingScoreLabel : schema.PassingScoreLabel;
         }
     }
 

@@ -31,8 +31,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         
         public ScoreDetailViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).ToList(),                
-                treatmentBMPAssessment);        
+            var treatmentBMPType = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
+            var treatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeObservationTypes;
+            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPTypeObservationTypes, treatmentBMPAssessment);
         }
 
         public class ScoreViewDataForAngular
@@ -41,9 +42,12 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             public bool AssessmentIsComplete { get; }
             public string AssessmentScore { get; }
 
-            public ScoreViewDataForAngular(List<Models.ObservationType> observationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+            public ScoreViewDataForAngular(IEnumerable<TreatmentBMPTypeObservationType> treatmentBMPTypeObservationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
-                ObservationTypeSimples = observationTypes.Select(x => new TreatmentBMPAssessmentObservationTypeSimple(x, treatmentBMPAssessment)).ToList();
+                ObservationTypeSimples = treatmentBMPTypeObservationTypes
+                    .OrderBy(x => x.ObservationType.ObservationTypeName).Select(x =>
+                        new TreatmentBMPAssessmentObservationTypeSimple(x.ObservationType, treatmentBMPAssessment,
+                            x.OverrideAssessmentScoreIfFailing)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
                 AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;
             }

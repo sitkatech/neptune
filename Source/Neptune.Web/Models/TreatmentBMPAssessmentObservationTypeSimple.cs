@@ -13,7 +13,8 @@ namespace Neptune.Web.Models
         public string Weight { get; }
         public TreatmentBMPObservationSimple TreatmentBMPObservationSimple { get; set; }
 
-        public TreatmentBMPAssessmentObservationTypeSimple(ObservationType observationType, TreatmentBMPAssessment treatmentBMPAssessment)
+        public TreatmentBMPAssessmentObservationTypeSimple(ObservationType observationType,
+            TreatmentBMPAssessment treatmentBMPAssessment, bool overrideAssessmentScoreIfFailing)
         {
             ObservationTypeID = observationType.ObservationTypeID;
             HasBenchmarkAndThresholds = observationType.HasBenchmarkAndThreshold;
@@ -30,7 +31,7 @@ namespace Neptune.Web.Models
             Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";
 
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == observationType.ObservationTypeID);
-            TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation) : null;
+            TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation, overrideAssessmentScoreIfFailing) : null;
         }
     }
 }

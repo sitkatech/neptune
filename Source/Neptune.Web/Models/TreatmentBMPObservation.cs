@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Linq;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Views.ObservationType;
@@ -38,20 +37,7 @@ namespace Neptune.Web.Models
         }
         public double? CalculateObservationScore()
         {
-            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
-            switch (observationTypeCollectionMethod.ToEnum)
-            {
-                case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return observationTypeCollectionMethod.CalculateScore(this);
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return 0;
-                case ObservationTypeCollectionMethodEnum.PassFail:
-                    return observationTypeCollectionMethod.CalculateScore(this);
-                case ObservationTypeCollectionMethodEnum.Percentage:
-                    return 0;
-                default:
-                    return null;
-            }
+            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
         }
 
         public string FormattedObservationScore()
@@ -62,28 +48,15 @@ namespace Neptune.Web.Models
 
         public double? CalculateObservationValue()
         {
-            var observationTypeCollectionMethod = ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
-            switch (observationTypeCollectionMethod.ToEnum)
-            {
-                case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return 0;
-                case ObservationTypeCollectionMethodEnum.PassFail:
-                    return 0;
-                case ObservationTypeCollectionMethodEnum.Percentage:
-                    return 0;
-                default:
-                    return null;
-            }
+            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
         }
 
         public bool OverrideScoreForFailingObservation(ObservationType observationType)
         {
             var score = CalculateObservationScore();
-            if (score == null)
+            if ((score?? 0) < 0.01)
             {
-                return false;
+                return true;
             }
             return Math.Abs(score.Value - 2) < 0.01;
         }
@@ -99,6 +72,11 @@ namespace Neptune.Web.Models
 
                 return $"Observation for BMP {treatmentBMPName} ({ObservationType.ObservationTypeName}) on Assessment Dated {assessmentDate}";
             }
+        }
+
+        public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
+        {
+            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, ObservationType.ObservationTypeSchema, overrideAssessmentScoreIfFailing);
         }
     }
 }
