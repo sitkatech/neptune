@@ -43,14 +43,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, TreatmentBMPAssessment contextModelObject)
         {
-            var hasPrivs = person.CanManageStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
-
-            if (!hasPrivs)
-            {
-                return new PermissionCheckResult($"You aren't assigned to manage assessments for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.OrganizationDisplayName}");
-            }
-            
-            return new PermissionCheckResult();
+            return new TreatmentBMPManageFeature().HasPermission(person, contextModelObject.TreatmentBMP);
         }
     }
 }

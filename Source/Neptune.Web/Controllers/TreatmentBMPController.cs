@@ -85,7 +85,7 @@ namespace Neptune.Web.Controllers
         [NeptuneEditFeature]
         public ViewResult New()
         {
-            var viewModel = new EditViewModel();
+            var viewModel = new EditViewModel { OwnerOrganizationID = CurrentPerson.OrganizationID};
             return ViewEdit(viewModel);
         }
 

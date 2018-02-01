@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPDocumentManageFeature]
         public PartialViewResult Delete(TreatmentBMPDocumentPrimaryKey treatmentBMPDocumentPrimaryKey)
         {
             var treatmentBMPDocument = treatmentBMPDocumentPrimaryKey.EntityObject;
@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPDocumentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Delete(TreatmentBMPDocumentPrimaryKey treatmentBMPDocumentPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
@@ -76,7 +76,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPDocumentManageFeature]
         public ActionResult Edit(TreatmentBMPDocumentPrimaryKey treatmentBMPDocumentPrimaryKey)
         {
             var treatmentBMPDocument = treatmentBMPDocumentPrimaryKey.EntityObject;
@@ -85,7 +85,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPDocumentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(TreatmentBMPDocumentPrimaryKey treatmentBMPDocumentPrimaryKey, EditViewModel viewModel)
         {

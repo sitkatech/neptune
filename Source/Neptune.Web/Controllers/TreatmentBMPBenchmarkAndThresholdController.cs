@@ -30,7 +30,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPBenchmarkAndThresholdController : NeptuneBaseController
     {
-        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        [TreatmentBMPManageFeature]
         public ViewResult Instructions(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -38,9 +38,8 @@ namespace Neptune.Web.Controllers
             return RazorView<Instructions, InstructionsViewData>(viewData);
         }
 
-
         [HttpGet]
-        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        [TreatmentBMPManageFeature]
         public ViewResult EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -51,7 +50,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPBenchmarkAndThresholdsManageFeature]
+        [TreatmentBMPManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditBenchmarkAndThreshold(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, EditBenchmarkAndThresholdViewModel viewModel)
         {

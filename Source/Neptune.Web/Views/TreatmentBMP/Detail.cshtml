@@ -206,11 +206,13 @@
 
     <div class="col-md-6 col-sm-12">
         <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">Documents</div>
+            <div class="panel-heading panelTitle">
+                Documents
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                </span>
+            </div>
             <div class="panel-body">
-                <div class="pull-right">
-                    @ModalDialogFormHelper.ModalDialogFormLink("<span class=\'glyphicon glyphicon-plus-sign\' style=\'margin-right: 3px\'></span>Add Document", ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string> { "btn", "btn-trpa", "btn-sm" }, ViewDataTyped.CurrentPersonCanManage)
-                </div>
                 @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
                 {
                     foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))

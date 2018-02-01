@@ -248,7 +248,7 @@
     <Compile Include="Security\NeptuneEditFeature.cs" />
     <Compile Include="Security\ModeledCatchmentManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPAssessmentManageFeature.cs" />
-    <Compile Include="Security\TreatmentBMPBenchmarkAndThresholdsManageFeature.cs" />
+    <Compile Include="Security\TreatmentBMPDocumentManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPManageFeature.cs" />
     <Compile Include="Security\ModeledCatchmentDeleteFeature.cs" />
     <Compile Include="Startup.cs" />
@@ -1418,8 +1418,12 @@
     <Content Include="Content\bootstrap-file-input\js\plugins\canvas-to-blob.min.js" />
     <Content Include="Content\bootstrap-select\bootstrap-select.css" />
     <Content Include="Content\bootstrap-select\bootstrap-select.js" />
-    <Content Include="Content\bootstrap-select\bootstrap-select.min.css" />
-    <Content Include="Content\bootstrap-select\bootstrap-select.min.js" />
+    <Content Include="Content\bootstrap-select\bootstrap-select.min.css">
+      <DependentUpon>bootstrap-select.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap-select\bootstrap-select.min.js">
+      <DependentUpon>bootstrap-select.js</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-tags\bootstrap-tags.css" />
     <Content Include="Content\bootstrap-tags\bootstrap-tags.js" />
     <Content Include="Content\bootstrap-tags\bootstrap-tags.min.css">
@@ -1783,8 +1787,6 @@
     <Content Include="Content\leaflet\Bing.min.js.map">
       <DependentUpon>Bing.min.js</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap-select\bootstrap-select.js.map" />
-    <Content Include="Content\bootstrap-select\bootstrap-select.css.map" />
     <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.less" />
     <Content Include="Content\fancytree\skin-common.less" />
     <Content Include="Content\fancytree\skin-bootstrap\ui.fancytree.css.map">

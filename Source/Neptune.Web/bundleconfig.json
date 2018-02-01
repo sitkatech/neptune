@@ -70,5 +70,17 @@
     "inputFiles": [
       "Content/bootstrap-typeahead/bootstrap3-typeahead.js"
     ]
+  },
+  {
+    "outputFileName": "Content/bootstrap-select/bootstrap-select.min.js",
+    "inputFiles": [
+      "Content/bootstrap-select/bootstrap-select.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/bootstrap-select/bootstrap-select.min.css",
+    "inputFiles": [
+      "Content/bootstrap-select/bootstrap-select.css"
+    ]
   }
 ]
