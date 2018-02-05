@@ -68,7 +68,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         [StringLength(Models.TreatmentBMP.FieldLengths.SystemOfRecordID)]
         public string SystemOfRecordID { get; set; }
 
-        [Required(ErrorMessage = "Must specify Owner")]
         [DisplayName("Owner")]
         public int? OwnerOrganizationID { get; set; }
 
@@ -121,7 +120,15 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             treatmentBMP.SystemOfRecordID = SystemOfRecordID;
-            treatmentBMP.OwnerOrganizationID = OwnerOrganizationID.Value;
+            if (OwnerOrganizationID.HasValue)
+            {
+                treatmentBMP.OwnerOrganizationID = OwnerOrganizationID.Value;
+            }
+            else
+            {
+                treatmentBMP.OwnerOrganizationID = treatmentBMP.StormwaterJurisdiction.OrganizationID;
+            }
+            
             treatmentBMP.YearBuilt = YearBuilt;
         }
 

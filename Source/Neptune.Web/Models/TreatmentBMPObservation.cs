@@ -30,6 +30,7 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPObservation : IAuditableEntity
     {
         public DiscreteObservationSchema DiscreteObservationData => JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
+        public PassFailObservationSchema PassFailObservationData => JsonConvert.DeserializeObject<PassFailObservationSchema>(ObservationData);
 
         public bool IsComplete()
         {

@@ -468,8 +468,8 @@
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <a href="@ViewDataTyped.ObservationTypeIndexUrl" class="btn btn-neptune">Cancel</a>
             <button type="submit" class="btn btn-neptune">Save</button>
+            <a href="@ViewDataTyped.ObservationTypeIndexUrl" class="btn btn-neptune">Cancel</a>
         </div>
         @Html.HiddenFor(m => m.ObservationTypeID)
         <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="AngularModel.ObservationTypeSchema" />
