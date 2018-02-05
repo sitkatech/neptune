@@ -44,7 +44,7 @@
                 Basics
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
-                    <span class="pullRight panel-heading panelTitle-right">
+                    <span class="pull-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
                 }
@@ -83,7 +83,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Benchmark &amp; Threshold Values
-                <span class="pullRight panel-heading panelTitle-right">
+                <span class="pull-right">
                     @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
                     {
                         <a href="@ViewDataTyped.AddBenchmarkAndThresholdUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -126,7 +126,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Additional Data
-                <span class="pullRight panel-heading panelTitle-right">
+                <span class="pull-right">
                     @if (ViewDataTyped.CurrentPersonCanManage)
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -160,7 +160,7 @@
                 Location
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
-                    <span class="pullRight panel-heading panelTitle-right">
+                    <span class="pull-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
                 }
@@ -177,7 +177,7 @@
                 Assessments
                 @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
                 {
-                    <span class="pullRight panel-heading panelTitle-right">
+                    <span class="pull-right">
                         <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
                     </span>
                 }
