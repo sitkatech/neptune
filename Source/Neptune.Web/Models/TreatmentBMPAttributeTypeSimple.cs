@@ -1,4 +1,6 @@
-﻿namespace Neptune.Web.Models
+﻿using LtInfo.Common.Views;
+
+namespace Neptune.Web.Models
 {
     public class TreatmentBMPAttributeTypeSimple
     {
@@ -13,7 +15,7 @@
             TreatmentBMPAttributeTypeID = treatmentBMPAttributeType.TreatmentBMPAttributeTypeID;
             TreatmentBMPAttributeTypeName = $"{treatmentBMPAttributeType.TreatmentBMPAttributeTypeName}";
             DataTypeDisplayName = treatmentBMPAttributeType.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName;
-            MeasurementUnitDisplayName = treatmentBMPAttributeType.MeasurementUnitType.LegendDisplayName;
+            MeasurementUnitDisplayName = treatmentBMPAttributeType.GetMeasurementUnitDisplayName();
             IsRequired = treatmentBMPAttributeType.IsRequired;
         }
     }

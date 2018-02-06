@@ -566,7 +566,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPAtt
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPAttributeTypeName" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="TreatmentBMPAttributeDataTypeID" Type="int" Nullable="false" />
-    <Property Name="MeasurementUnitTypeID" Type="int" Nullable="false" />
+    <Property Name="MeasurementUnitTypeID" Type="int" />
     <Property Name="IsRequired" Type="bit" Nullable="false" />
     <Property Name="TreatmentBMPAttributeTypeDescription" Type="varchar" MaxLength="1000" />
   </EntityType>

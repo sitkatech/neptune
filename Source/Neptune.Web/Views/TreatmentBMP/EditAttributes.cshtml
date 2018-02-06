@@ -58,13 +58,22 @@ Source code is available upon request via <support@sitkatech.com>.
                                                 </div>
 
                                             }
-                                            else
+                                            else if (attribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
                                             {
-                                                <div class="input-group">
-                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit"/>
-                                                    <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
+                                                <div class="row">
+                                                    <div class="col-sm-5">
+                                                        <div class="input-group">
+                                                            <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit"/>
+                                                            <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             }
+                                            else
+                                            {
+                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
+                                            }
+                                            
                                     </div>
                                 </div>
                             }
@@ -75,8 +84,8 @@ Source code is available upon request via <support@sitkatech.com>.
                 <div class="row">
                     <div class="col-xs-12" style="text-align: right">
                         <hr />
-                        <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
                         <button action="p" type="submit" class="btn btn-neptune">Save</button>
+                        <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
                     </div>
                     @Html.HiddenFor(x => x.TreatmentBMPTypeID)
                 </div>

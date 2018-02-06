@@ -574,7 +574,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPAttributeTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="TreatmentBMPAttributeDataTypeID" Type="Int32" Nullable="false" />
-    <Property Name="MeasurementUnitTypeID" Type="Int32" Nullable="false" />
+    <Property Name="MeasurementUnitTypeID" Type="Int32" />
     <Property Name="IsRequired" Type="Boolean" Nullable="false" />
     <Property Name="TreatmentBMPAttributeTypeDescription" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMPAttributes" Relationship="Neptune.Web.Models.FK_TreatmentBMPAttribute_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID" FromRole="TreatmentBMPAttributeType" ToRole="TreatmentBMPAttributes" />

@@ -58,15 +58,13 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             }
 
             TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPAttributeDataTypeID.ToString(), x => x.TreatmentBMPAttributeDataTypeDisplayName);
-            MeasurementUnitTypes = measurementUnitTypes.ToSelectListWithEmptyFirstRow(x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName);
+            MeasurementUnitTypes = measurementUnitTypes.ToSelectListWithEmptyFirstRow(x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, "None");
 
-            TreatmentBMPAttributeTypeIndexUrl =
-                SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
+            TreatmentBMPAttributeTypeIndexUrl = SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
 
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
-            ViewTreatmentBMPAttributeInstructionsNeptunePage =
-                new ViewPageContentViewData(treatmentBMPAttributeInstructionsNeptunePage, currentPerson);
+            ViewTreatmentBMPAttributeInstructionsNeptunePage = new ViewPageContentViewData(treatmentBMPAttributeInstructionsNeptunePage, currentPerson);
         }
     }
 }

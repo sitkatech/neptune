@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[TreatmentBMPAttributeType](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPAttributeTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TreatmentBMPAttributeDataTypeID] [int] NOT NULL,
-	[MeasurementUnitTypeID] [int] NOT NULL,
+	[MeasurementUnitTypeID] [int] NULL,
 	[IsRequired] [bit] NOT NULL,
 	[TreatmentBMPAttributeTypeDescription] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID] PRIMARY KEY CLUSTERED 

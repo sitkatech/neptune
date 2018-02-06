@@ -93,14 +93,13 @@ namespace Neptune.Web.Models
                     x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
                 if (treatmentBMPAttribute != null)
                 {
-                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType ==
-                        MeasurementUnitType.DateTime)
+                    var measurmentUnit = "";
+                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        return treatmentBMPAttribute.TreatmentBMPAttributeValue;
+                        measurmentUnit = $" {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
                     }
 
-                    return
-                        $"{treatmentBMPAttribute.TreatmentBMPAttributeValue} {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
+                    return $"{treatmentBMPAttribute.TreatmentBMPAttributeValue}{measurmentUnit}";
                 }
             }
             return string.Empty;

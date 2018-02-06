@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttributeType(int treatmentBMPAttributeTypeID, string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, int measurementUnitTypeID, bool isRequired, string treatmentBMPAttributeTypeDescription) : this()
+        public TreatmentBMPAttributeType(int treatmentBMPAttributeTypeID, string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, int? measurementUnitTypeID, bool isRequired, string treatmentBMPAttributeTypeDescription) : this()
         {
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
             this.TreatmentBMPAttributeTypeName = treatmentBMPAttributeTypeName;
@@ -44,36 +44,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttributeType(string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, int measurementUnitTypeID, bool isRequired) : this()
+        public TreatmentBMPAttributeType(string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, bool isRequired) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPAttributeTypeName = treatmentBMPAttributeTypeName;
             this.TreatmentBMPAttributeDataTypeID = treatmentBMPAttributeDataTypeID;
-            this.MeasurementUnitTypeID = measurementUnitTypeID;
             this.IsRequired = isRequired;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAttributeType(string treatmentBMPAttributeTypeName, TreatmentBMPAttributeDataType treatmentBMPAttributeDataType, MeasurementUnitType measurementUnitType, bool isRequired) : this()
+        public TreatmentBMPAttributeType(string treatmentBMPAttributeTypeName, TreatmentBMPAttributeDataType treatmentBMPAttributeDataType, bool isRequired) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPAttributeTypeName = treatmentBMPAttributeTypeName;
             this.TreatmentBMPAttributeDataTypeID = treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeID;
-            this.MeasurementUnitTypeID = measurementUnitType.MeasurementUnitTypeID;
             this.IsRequired = isRequired;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPAttributeType CreateNewBlank(TreatmentBMPAttributeDataType treatmentBMPAttributeDataType, MeasurementUnitType measurementUnitType)
+        public static TreatmentBMPAttributeType CreateNewBlank(TreatmentBMPAttributeDataType treatmentBMPAttributeDataType)
         {
-            return new TreatmentBMPAttributeType(default(string), treatmentBMPAttributeDataType, measurementUnitType, default(bool));
+            return new TreatmentBMPAttributeType(default(string), treatmentBMPAttributeDataType, default(bool));
         }
 
         /// <summary>
@@ -95,7 +93,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public string TreatmentBMPAttributeTypeName { get; set; }
         public int TreatmentBMPAttributeDataTypeID { get; set; }
-        public int MeasurementUnitTypeID { get; set; }
+        public int? MeasurementUnitTypeID { get; set; }
         public bool IsRequired { get; set; }
         public string TreatmentBMPAttributeTypeDescription { get; set; }
         [NotMapped]
@@ -105,7 +103,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public TreatmentBMPAttributeDataType TreatmentBMPAttributeDataType { get { return TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID]; } }
-        public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID]; } }
+        public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitTypeID.HasValue ? MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID.Value] : null; } }
 
         public static class FieldLengths
         {

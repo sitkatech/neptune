@@ -32,7 +32,6 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypePercentDecline PercentDecline = MeasurementUnitTypePercentDecline.Instance;
         public static readonly MeasurementUnitTypePercentIncrease PercentIncrease = MeasurementUnitTypePercentIncrease.Instance;
         public static readonly MeasurementUnitTypePercentDeviation PercentDeviation = MeasurementUnitTypePercentDeviation.Instance;
-        public static readonly MeasurementUnitTypeDateTime DateTime = MeasurementUnitTypeDateTime.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -42,7 +41,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, DateTime };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -124,8 +123,6 @@ namespace Neptune.Web.Models
                     return Acres;
                 case MeasurementUnitTypeEnum.Count:
                     return Count;
-                case MeasurementUnitTypeEnum.DateTime:
-                    return DateTime;
                 case MeasurementUnitTypeEnum.Feet:
                     return Feet;
                 case MeasurementUnitTypeEnum.Inches:
@@ -171,8 +168,7 @@ namespace Neptune.Web.Models
         Seconds = 11,
         PercentDecline = 12,
         PercentIncrease = 13,
-        PercentDeviation = 14,
-        DateTime = 15
+        PercentDeviation = 14
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -257,11 +253,5 @@ namespace Neptune.Web.Models
     {
         private MeasurementUnitTypePercentDeviation(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
         public static readonly MeasurementUnitTypePercentDeviation Instance = new MeasurementUnitTypePercentDeviation(14, @"PercentDeviation", @"% deviation", @"% deviation", @"% deviation", 0, false);
-    }
-
-    public partial class MeasurementUnitTypeDateTime : MeasurementUnitType
-    {
-        private MeasurementUnitTypeDateTime(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypeDateTime Instance = new MeasurementUnitTypeDateTime(15, @"DateTime", @"Date/Time", @"Date/Time", @"Date/Time", 0, false);
     }
 }

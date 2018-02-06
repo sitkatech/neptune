@@ -9,7 +9,7 @@ CREATE TABLE dbo.TreatmentBMPAttributeType(
 	TenantID int NOT NULL CONSTRAINT FK_TreatmentBMPAttributeType_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	TreatmentBMPAttributeTypeName varchar(100) NOT NULL CONSTRAINT AK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeName UNIQUE,
 	TreatmentBMPAttributeDataTypeID int not null CONSTRAINT FK_TreatmentBMPAttributeType_TreatmentBMPAttributeDataType_TreatmentBMPAttributeDataTypeID FOREIGN KEY REFERENCES dbo.TreatmentBMPAttributeDataType (TreatmentBMPAttributeDataTypeID),
-	MeasurementUnitTypeID int not null CONSTRAINT FK_TreatmentBMPAttributeType_MeasurementUnitType_MeasurementUnitTypeID FOREIGN KEY REFERENCES dbo.MeasurementUnitType(MeasurementUnitTypeID),
+	MeasurementUnitTypeID int null CONSTRAINT FK_TreatmentBMPAttributeType_MeasurementUnitType_MeasurementUnitTypeID FOREIGN KEY REFERENCES dbo.MeasurementUnitType(MeasurementUnitTypeID),
 	IsRequired bit not null,
 	TreatmentBMPAttributeTypeDescription varchar(1000) NULL,
 	CONSTRAINT AK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID_TenantID UNIQUE (TreatmentBMPAttributeTypeID, TenantID)

@@ -42,7 +42,6 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentBMPAttributeDataType)]
         public int? TreatmentBMPAttributeDataTypeID { get; set; }
 
-        [Required]
         [FieldDefinitionDisplay(FieldDefinitionEnum.MeasurementUnit)]
         public int? MeasurementUnitTypeID { get; set; }
 
@@ -71,7 +70,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         {
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeName = TreatmentBMPAttributeTypeName;
             treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID = TreatmentBMPAttributeDataTypeID.Value;
-            treatmentBMPAttributeType.MeasurementUnitTypeID = MeasurementUnitTypeID.Value;
+            treatmentBMPAttributeType.MeasurementUnitTypeID = MeasurementUnitTypeID;
             treatmentBMPAttributeType.IsRequired = IsRequired;
         }
 
