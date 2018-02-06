@@ -197,6 +197,8 @@
     <Compile Include="Common\SitkaRouteTableEntry.cs" />
     <Compile Include="Controllers\GoogleChartController.cs" />
     <Compile Include="Models\HslColor.cs" />
+    <Compile Include="Models\TreatmentBMPAttribute.cs" />
+    <Compile Include="Models\TreatmentBMPAttributeDataType.cs" />
     <Compile Include="Models\TreatmentBMPAttributeTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAttributeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAttributeType.cs" />
