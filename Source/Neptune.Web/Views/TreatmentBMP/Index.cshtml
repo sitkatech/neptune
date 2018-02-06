@@ -57,7 +57,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 Treatment BMP Search
             </div>
             <div class="panel-body">
-                <p >Search for a BMP by name, click a BMP icon on the map, or see all BMPs in the grid at the bottom of the page.</p>
+                <p >Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
                 <div class="input-group">
                     <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off" />
                     <span class="input-group-btn">
@@ -101,13 +101,21 @@ Source code is available upon request via <support@sitkatech.com>.
     jQuery(document).ready(function()
     {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        var map = new NeptuneMaps.StormwaterSearch(mapInitJson);
+        var neptuneMap = new NeptuneMaps.StormwaterSearch(mapInitJson);
 
         var selector = '#treatmentBMPFinder';
         var selectorButton = '#treatmentBMPFinderButton';
         var summaryUrl = @Html.Raw(ViewDataTyped.FindTreatmentBMPByNameUrl.ToJS());
 
-        map.typeaheadSearch(selector, selectorButton, summaryUrl);
+        neptuneMap.typeaheadSearch(selector, selectorButton, summaryUrl);
+
+        var url = "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Outfall_Inspections/FeatureServer/0";
+        var outfallsPopup = function(layer) {
+            return L.Util.template('<p>Facility ID: {FACILITYID}<br>Facility Type: {FACTYPE}',
+                layer.feature.properties);
+        };
+        var layerName = "Outfalls";
+        neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
     });
 
 </script>

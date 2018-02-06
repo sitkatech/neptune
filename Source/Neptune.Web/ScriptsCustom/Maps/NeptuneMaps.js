@@ -351,3 +351,14 @@ NeptuneMaps.Map.prototype.unblockMap = function() {
     jQuery("#" + this.MapDivId).unblock();
 };
 
+NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup) {
+    var features = L.esri.featureLayer({
+            url: url
+        }
+    );
+
+    features.bindPopup(popup);
+
+    this.addLayerToLayerControl(features, layerName);
+}
+

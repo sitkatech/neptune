@@ -197,8 +197,6 @@
     <Compile Include="Common\SitkaRouteTableEntry.cs" />
     <Compile Include="Controllers\GoogleChartController.cs" />
     <Compile Include="Models\HslColor.cs" />
-    <Compile Include="Models\TreatmentBMPAttribute.cs" />
-    <Compile Include="Models\TreatmentBMPAttributeDataType.cs" />
     <Compile Include="Models\TreatmentBMPAttributeTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAttributeSimple.cs" />
     <Compile Include="Models\TreatmentBMPAttributeType.cs" />
@@ -485,6 +483,10 @@
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.min.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.min.css" />
+    <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers-debug.js" />
+    <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js" />
+    <Content Include="Content\esri-leaflet\esri-leaflet-debug.js" />
+    <Content Include="Content\esri-leaflet\esri-leaflet.js" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
@@ -574,6 +576,8 @@
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.min.css.map" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css.map" />
+    <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js.map" />
+    <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
