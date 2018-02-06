@@ -29,6 +29,7 @@ namespace Neptune.Web.Views.Shared
         {
             HtmlPageTitle = "Error Page";
             PageTitle = "Error Page";
+            EntityName = "Error";
         }
     }
 }

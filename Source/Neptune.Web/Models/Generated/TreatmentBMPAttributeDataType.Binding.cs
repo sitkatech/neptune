@@ -144,6 +144,6 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPAttributeDataTypeDateTime : TreatmentBMPAttributeDataType
     {
         private TreatmentBMPAttributeDataTypeDateTime(int treatmentBMPAttributeDataTypeID, string treatmentBMPAttributeDataTypeName, string treatmentBMPAttributeDataTypeDisplayName) : base(treatmentBMPAttributeDataTypeID, treatmentBMPAttributeDataTypeName, treatmentBMPAttributeDataTypeDisplayName) {}
-        public static readonly TreatmentBMPAttributeDataTypeDateTime Instance = new TreatmentBMPAttributeDataTypeDateTime(4, @"DateTime", @"DateTime");
+        public static readonly TreatmentBMPAttributeDataTypeDateTime Instance = new TreatmentBMPAttributeDataTypeDateTime(4, @"DateTime", @"Date/Time");
     }
 }

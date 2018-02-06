@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
                        x.ObservationTypeID == observationType.ObservationTypeID) != null;
         }
 
-        public string GetTreatmentBMPAttributeValue(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        public string GetTreatmentBMPAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
         {
             if (TreatmentBMPAttributes.Any())
             {
@@ -93,10 +93,17 @@ namespace Neptune.Web.Models
                     x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
                 if (treatmentBMPAttribute != null)
                 {
-                    return treatmentBMPAttribute.TreatmentBMPAttributeValue;
+                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType ==
+                        MeasurementUnitType.DateTime)
+                    {
+                        return treatmentBMPAttribute.TreatmentBMPAttributeValue;
+                    }
+
+                    return
+                        $"{treatmentBMPAttribute.TreatmentBMPAttributeValue} {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
                 }
             }
-            return ViewUtilities.NotProvidedString;
+            return string.Empty;
         }
     }
 }

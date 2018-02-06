@@ -81,6 +81,18 @@ namespace Neptune.Web.Views.TreatmentBMP
                 errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>("Must enter all required fields.", m => m.TreatmentBMPAttributes));
             }
 
+            foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => !string.IsNullOrWhiteSpace(x.TreatmentBMPAttributeValue)))
+            {
+                var treatmentBMPTypeAttributeType = treatmentBMPTypeAttributeTypes.Single(x =>
+                    x.TreatmentBMPAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPAttributeTypeID);
+                var treatmentBMPAttributeDataType = treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType;
+                if (!treatmentBMPAttributeDataType.ValueIsCorrectDataType(treatmentBMPAttributeSimple.TreatmentBMPAttributeValue))
+                {
+                    errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>(
+                        $"Entered value for {treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName} does not match expected type ({treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName}).", m => m.TreatmentBMPAttributes));
+                }
+            }
+
             return errors;
         }
     }

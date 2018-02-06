@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
 
             TreatmentBMPTypeAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes
-                .OrderBy(x => x.TreatmentBMPAttributeTypeID).ToList();
+                .OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName).ToList();
         }
     }
 }

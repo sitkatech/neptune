@@ -147,7 +147,7 @@
                     {
                         <div class="row">
                             <label class="col-sm-5 control-label text-right">@Html.Label(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName)</label>
-                            <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValue(treatmentBMPTypeAttributeType)</div>
+                            <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</div>
                         </div>
                     }
                 }
@@ -216,7 +216,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 col-sm-12">
+    <div class="col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Documents

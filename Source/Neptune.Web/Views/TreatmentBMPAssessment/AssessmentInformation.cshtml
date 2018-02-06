@@ -29,8 +29,6 @@
 @{
     SetLayout("SiteLayout.cshtml", ViewDataTyped);
 }
-<script type="text/javascript" src="@Url.Content("~/Content/bootstrap-datepicker/js/bootstrap-datepicker.min.js")"></script>
-<link rel="stylesheet" href="/Content/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
 <p>
     The BMP assessment workflow allows input of treatment BMP observations to help determine maintenance urgency. A BMP assessment is a compilation of distinct rapid observations and/or measurements made at treatment BMPs, which results in a score between 0-5.
 </p>
@@ -130,7 +128,6 @@
 <script type="text/javascript">
     // <![CDATA[
     jQuery(document).ready(function () {
-        jQuery(".sitkaDatePicker").datepicker();
         HookupCheckIfFormIsDirtyNoDisable(undefined);
     });
     // ]]>
