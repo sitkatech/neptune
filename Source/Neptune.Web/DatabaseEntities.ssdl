@@ -521,7 +521,7 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" />
     <Property Name="ModeledCatchmentID" Type="int" />
     <Property Name="Notes" Type="varchar" MaxLength="200" />
-    <Property Name="SystemOfRecordID" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="SystemOfRecordID" Type="varchar" MaxLength="100" />
     <Property Name="YearBuilt" Type="int" />
     <Property Name="OwnerOrganizationID" Type="int" Nullable="false" />
   </EntityType>

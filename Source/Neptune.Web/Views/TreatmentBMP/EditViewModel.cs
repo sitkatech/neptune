@@ -63,7 +63,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         [StringLength(Models.TreatmentBMP.FieldLengths.Notes)]
         public string Notes { get; set; }
 
-        [Required(ErrorMessage = "Must specify the ID in System of Record")]
         [DisplayName("ID in System of Record")]
         [StringLength(Models.TreatmentBMP.FieldLengths.SystemOfRecordID)]
         public string SystemOfRecordID { get; set; }
@@ -126,7 +125,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
             else
             {
-                treatmentBMP.OwnerOrganizationID = treatmentBMP.StormwaterJurisdiction.OrganizationID;
+                var stormwaterJurisdiction =
+                    HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(treatmentBMP
+                        .StormwaterJurisdictionID);
+                treatmentBMP.OwnerOrganizationID = stormwaterJurisdiction.OrganizationID;
             }
             
             treatmentBMP.YearBuilt = YearBuilt;

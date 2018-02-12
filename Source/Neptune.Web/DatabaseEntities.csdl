@@ -521,7 +521,7 @@
     <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
     <Property Name="ModeledCatchmentID" Type="Int32" />
     <Property Name="Notes" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
-    <Property Name="SystemOfRecordID" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="SystemOfRecordID" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="YearBuilt" Type="Int32" />
     <Property Name="OwnerOrganizationID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="ModeledCatchment" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="TreatmentBMPs" ToRole="ModeledCatchment" />

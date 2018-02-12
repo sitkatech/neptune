@@ -110,7 +110,7 @@ namespace Neptune.Web.Controllers
 
         private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel, Person currentPerson)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, null, currentPerson.OrganizationID);
+            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, currentPerson.OrganizationID);
         }
 
         [HttpGet]

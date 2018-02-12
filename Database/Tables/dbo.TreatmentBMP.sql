@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[ModeledCatchmentID] [int] NULL,
 	[Notes] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[YearBuilt] [int] NULL,
 	[OwnerOrganizationID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 

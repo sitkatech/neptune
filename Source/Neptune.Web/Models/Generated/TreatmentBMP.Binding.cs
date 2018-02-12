@@ -51,7 +51,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, string systemOfRecordID, int ownerOrganizationID) : this()
+        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -59,14 +59,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPName = treatmentBMPName;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
-            this.SystemOfRecordID = systemOfRecordID;
             this.OwnerOrganizationID = ownerOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, string systemOfRecordID, Organization ownerOrganization) : this()
+        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -77,7 +76,6 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.TreatmentBMPs.Add(this);
-            this.SystemOfRecordID = systemOfRecordID;
             this.OwnerOrganizationID = ownerOrganization.OrganizationID;
             this.OwnerOrganization = ownerOrganization;
             ownerOrganization.TreatmentBMPsWhereYouAreTheOwnerOrganization.Add(this);
@@ -88,7 +86,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization)
         {
-            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, default(string), ownerOrganization);
+            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization);
         }
 
         /// <summary>
