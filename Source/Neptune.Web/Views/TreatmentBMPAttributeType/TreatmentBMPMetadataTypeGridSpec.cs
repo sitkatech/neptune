@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMPAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPAttributeDataType.ToGridHeaderString(), a => a.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(Models.FieldDefinition.MeasurementUnit.ToGridHeaderString(), a => a.MeasurementUnitType.MeasurementUnitTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.MeasurementUnit.ToGridHeaderString(), a => a.GetMeasurementUnitDisplayName(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Required?", a => a.IsRequired.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             
         }
