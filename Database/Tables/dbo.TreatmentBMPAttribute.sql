@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[TreatmentBMPAttribute](
 	[TreatmentBMPAttributeID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
+	[TreatmentBMPTypeAttributeTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[TreatmentBMPAttributeTypeID] [int] NOT NULL,
 	[TreatmentBMPAttributeValue] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -61,6 +62,11 @@ ALTER TABLE [dbo].[TreatmentBMPAttribute]  WITH CHECK ADD  CONSTRAINT [FK_Treatm
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID], [TenantID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttribute] CHECK CONSTRAINT [FK_TreatmentBMPAttribute_TreatmentBMPType_TreatmentBMPTypeID_TenantID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeAttributeTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeAttributeTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttribute] CHECK CONSTRAINT [FK_TreatmentBMPAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttribute]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_TreatmentBMPAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeID], [TreatmentBMPAttributeTypeID])
 REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeID], [TreatmentBMPAttributeTypeID])

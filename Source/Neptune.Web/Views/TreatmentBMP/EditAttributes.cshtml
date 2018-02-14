@@ -47,6 +47,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         }
                                     </label>
                                     <div class="col-sm-6">
+                                            <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID" />
                                             <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID" />
                                             @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
                                             {
@@ -87,7 +88,6 @@ Source code is available upon request via <support@sitkatech.com>.
                         <button action="p" type="submit" class="btn btn-neptune">Save</button>
                         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
                     </div>
-                    @Html.HiddenFor(x => x.TreatmentBMPTypeID)
                 </div>
             </div>
         </div>

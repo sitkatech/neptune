@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[TreatmentBMPAssessmentID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
+	[TreatmentBMPTypeID] [int] NOT NULL,
 	[StormwaterAssessmentTypeID] [int] NOT NULL,
 	[AssessmentDate] [datetime] NOT NULL,
 	[PersonID] [int] NOT NULL,
@@ -21,6 +22,11 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 (
 	[TreatmentBMPAssessmentID] ASC,
 	[TenantID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPAssessmentID] ASC,
+	[TreatmentBMPTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
@@ -54,6 +60,16 @@ ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_Treat
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TenantID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TenantID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
+REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMPAssessment_AlternateAssessmentScoreAndAlternateAssessmentRationaleBothOrNone] CHECK  (([AlternateAssessmentScore] IS NULL AND [AlternateAssessmentRationale] IS NULL OR [AlternateAssessmentScore] IS NOT NULL AND [AlternateAssessmentRationale] IS NOT NULL))
 GO

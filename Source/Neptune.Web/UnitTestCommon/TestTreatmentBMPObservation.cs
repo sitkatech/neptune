@@ -31,7 +31,8 @@ namespace Neptune.Web.UnitTestCommon
             public static TreatmentBMPObservation Create(TreatmentBMPType treatmentBMPType, ObservationType observationType)
             {
                 var treatmentBMPAssessment = TestTreatmentBMPAssessment.Create(TestTreatmentBMP.Create(treatmentBMPType));
-                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, observationType);
+                var treatmentBMPTypeObservationType = TestTreatmentBMPTypeObservationType.Create(treatmentBMPType, observationType);
+                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, treatmentBMPTypeObservationType, treatmentBMPType, observationType);
             }
 
             public static TreatmentBMPObservation Create(ObservationType observationType, TreatmentBMPType treatmentBMPType, double benchmark, double threshold, double observation)

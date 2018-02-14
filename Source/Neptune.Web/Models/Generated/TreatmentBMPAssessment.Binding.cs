@@ -30,10 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int stormwaterAssessmentTypeID, DateTime assessmentDate, int personID, double? alternateAssessmentScore, string alternateAssessmentRationale, bool isPrivate, string notes) : this()
+        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int stormwaterAssessmentTypeID, DateTime assessmentDate, int personID, double? alternateAssessmentScore, string alternateAssessmentRationale, bool isPrivate, string notes) : this()
         {
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.StormwaterAssessmentTypeID = stormwaterAssessmentTypeID;
             this.AssessmentDate = assessmentDate;
             this.PersonID = personID;
@@ -46,12 +47,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPID, int stormwaterAssessmentTypeID, DateTime assessmentDate, int personID, bool isPrivate) : this()
+        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID, int stormwaterAssessmentTypeID, DateTime assessmentDate, int personID, bool isPrivate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.StormwaterAssessmentTypeID = stormwaterAssessmentTypeID;
             this.AssessmentDate = assessmentDate;
             this.PersonID = personID;
@@ -61,13 +63,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, StormwaterAssessmentType stormwaterAssessmentType, DateTime assessmentDate, Person person, bool isPrivate) : this()
+        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, StormwaterAssessmentType stormwaterAssessmentType, DateTime assessmentDate, Person person, bool isPrivate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.TreatmentBMPAssessments.Add(this);
+            this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
+            this.TreatmentBMPType = treatmentBMPType;
+            treatmentBMPType.TreatmentBMPAssessments.Add(this);
             this.StormwaterAssessmentTypeID = stormwaterAssessmentType.StormwaterAssessmentTypeID;
             this.AssessmentDate = assessmentDate;
             this.PersonID = person.PersonID;
@@ -79,9 +84,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, StormwaterAssessmentType stormwaterAssessmentType, Person person)
+        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, StormwaterAssessmentType stormwaterAssessmentType, Person person)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, stormwaterAssessmentType, default(DateTime), person, default(bool));
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType, stormwaterAssessmentType, default(DateTime), person, default(bool));
         }
 
         /// <summary>
@@ -102,6 +107,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPAssessmentID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
+        public int TreatmentBMPTypeID { get; set; }
         public int StormwaterAssessmentTypeID { get; set; }
         public DateTime AssessmentDate { get; set; }
         public int PersonID { get; set; }
@@ -115,6 +121,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public StormwaterAssessmentType StormwaterAssessmentType { get { return StormwaterAssessmentType.AllLookupDictionary[StormwaterAssessmentTypeID]; } }
         public virtual Person Person { get; set; }
 

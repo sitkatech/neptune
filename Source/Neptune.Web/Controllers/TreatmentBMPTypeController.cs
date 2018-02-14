@@ -180,6 +180,12 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteTreatmentBMPType(treatmentBMPType, viewModel);
             }
 
+            treatmentBMPType.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
+            treatmentBMPType.TreatmentBMPAssessments.DeleteTreatmentBMPAssessment();
+            treatmentBMPType.TreatmentBMPAttributes.DeleteTreatmentBMPAttribute();
+            treatmentBMPType.TreatmentBMPs.DeleteTreatmentBMP();
+            treatmentBMPType.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
+            treatmentBMPType.TreatmentBMPTypeAttributeTypes.DeleteTreatmentBMPTypeAttributeType();
             treatmentBMPType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();
             treatmentBMPType.DeleteTreatmentBMPType();
             return new ModalDialogFormJsonResult();

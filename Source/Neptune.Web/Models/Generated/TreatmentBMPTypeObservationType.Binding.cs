@@ -23,7 +23,8 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPTypeObservationType()
         {
-
+            this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
+            this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -84,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPObservations.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeObservationType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name};
 
         [Key]
         public int TreatmentBMPTypeObservationTypeID { get; set; }
@@ -104,6 +105,8 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
 
+        public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
+        public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual ObservationType ObservationType { get; set; }
 

@@ -30,10 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttribute(int treatmentBMPAttributeID, int treatmentBMPID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(int treatmentBMPAttributeID, int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
         {
             this.TreatmentBMPAttributeID = treatmentBMPAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
             this.TreatmentBMPAttributeValue = treatmentBMPAttributeValue;
@@ -42,12 +43,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttribute(int treatmentBMPID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
             this.TreatmentBMPAttributeValue = treatmentBMPAttributeValue;
@@ -56,13 +58,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAttribute(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType, string treatmentBMPAttributeValue) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.TreatmentBMPAttributes.Add(this);
+            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeType.TreatmentBMPTypeAttributeTypeID;
+            this.TreatmentBMPTypeAttributeType = treatmentBMPTypeAttributeType;
+            treatmentBMPTypeAttributeType.TreatmentBMPAttributes.Add(this);
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPAttributes.Add(this);
@@ -75,9 +80,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPAttribute CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType)
+        public static TreatmentBMPAttribute CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType)
         {
-            return new TreatmentBMPAttribute(treatmentBMP, treatmentBMPType, treatmentBMPAttributeType, default(string));
+            return new TreatmentBMPAttribute(treatmentBMP, treatmentBMPTypeAttributeType, treatmentBMPType, treatmentBMPAttributeType, default(string));
         }
 
         /// <summary>
@@ -98,6 +103,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPAttributeID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
+        public int TreatmentBMPTypeAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int TreatmentBMPAttributeTypeID { get; set; }
         public string TreatmentBMPAttributeValue { get; set; }
@@ -106,6 +112,7 @@ namespace Neptune.Web.Models
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual TreatmentBMPTypeAttributeType TreatmentBMPTypeAttributeType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual TreatmentBMPAttributeType TreatmentBMPAttributeType { get; set; }
 

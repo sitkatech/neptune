@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -62,8 +63,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditBenchmarkAndThreshold(treatmentBMP, observationType, viewModel);
             }
 
-            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID) ??
-                                        new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, observationType, viewModel.BenchmarkValue.Value, viewModel.ThresholdValue.Value);
+            var benchmarkAndThreshold = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMP, observationType);
 
             viewModel.UpdateModel(benchmarkAndThreshold, CurrentPerson);
             SetMessageForDisplay("Benchmark and threshold values successfully saved.");
@@ -72,6 +72,25 @@ namespace Neptune.Web.Controllers
                 ? GetNextObservationTypeViewResult(treatmentBMP, observationType)
                 : RedirectToAction(new SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>(c => c.EditBenchmarkAndThreshold(treatmentBMPPrimaryKey, observationTypePrimaryKey)));
         }
+
+        private static TreatmentBMPBenchmarkAndThreshold GetExistingTreatmentBMPObservationOrCreateNew(
+            TreatmentBMP treatmentBMP, ObservationType observationType)
+        {
+            var treatmentBMPObservation = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID);
+            if (treatmentBMPObservation == null)
+            {
+                var treatmentBMPTypeObservationType =
+                    treatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x =>
+                        x.ObservationTypeID == observationType.ObservationTypeID);
+                Check.RequireNotNull(treatmentBMPTypeObservationType,
+                    $"Not a valid Observation Type ID {observationType.ObservationTypeID} for Treatment BMP Type ID {treatmentBMP.TreatmentBMPTypeID}");
+                treatmentBMPObservation = new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeObservationType,
+                    treatmentBMP.TreatmentBMPType, observationType, 0, 0);
+            }
+
+            return treatmentBMPObservation;
+        }
+
 
         private ViewResult ViewEditBenchmarkAndThreshold(TreatmentBMP treatmentBMP, ObservationType observationType, EditBenchmarkAndThresholdViewModel viewModel)
         {

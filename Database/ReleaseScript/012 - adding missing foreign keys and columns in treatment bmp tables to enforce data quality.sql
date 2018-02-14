@@ -1,0 +1,64 @@
+alter table dbo.TreatmentBMPTypeObservationType add constraint AK_TreatmentBMPTypeObservationType_TreatmentBMPTypeID_ObservationTypeID unique (TreatmentBMPTypeID, ObservationTypeID)
+alter table dbo.TreatmentBMPTypeObservationType add constraint AK_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_ObservationTypeID unique (TreatmentBMPTypeObservationTypeID, TreatmentBMPTypeID, ObservationTypeID)
+alter table dbo.TreatmentBMPBenchmarkAndThreshold add TreatmentBMPTypeID int null, TreatmentBMPTypeObservationTypeID int null
+alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPType_TreatmentBMPTypeID foreign key (TreatmentBMPTypeID) references dbo.TreatmentBMPType(TreatmentBMPTypeID)
+
+
+
+alter table dbo.TreatmentBMPAssessment add TreatmentBMPTypeID int null
+alter table dbo.TreatmentBMPObservation add TreatmentBMPTypeObservationTypeID int null
+alter table dbo.TreatmentBMPObservation add TreatmentBMPTypeID int null
+alter table dbo.TreatmentBMPAttribute add TreatmentBMPTypeAttributeTypeID int null
+
+GO
+
+update tbt
+set tbt.TreatmentBMPTypeID = tb.TreatmentBMPTypeID
+from dbo.TreatmentBMPBenchmarkAndThreshold tbt
+join dbo.TreatmentBMP tb on tbt.TreatmentBMPID = tb.TreatmentBMPID
+
+update tbt
+set tbt.TreatmentBMPTypeObservationTypeID = tb.TreatmentBMPTypeObservationTypeID
+from dbo.TreatmentBMPBenchmarkAndThreshold tbt
+join dbo.TreatmentBMPTypeObservationType tb on tbt.TreatmentBMPTypeID = tb.TreatmentBMPTypeID and tbt.ObservationTypeID = tb.ObservationTypeID
+
+update tbt
+set tbt.TreatmentBMPTypeID = tb.TreatmentBMPTypeID
+from dbo.TreatmentBMPAssessment tbt
+join dbo.TreatmentBMP tb on tbt.TreatmentBMPID = tb.TreatmentBMPID
+
+update tbt
+set tbt.TreatmentBMPTypeID = tb.TreatmentBMPTypeID
+from dbo.TreatmentBMPAssessment tbt
+join dbo.TreatmentBMP tb on tbt.TreatmentBMPID = tb.TreatmentBMPID
+
+update tbo
+set tbo.TreatmentBMPTypeID = tbtot.TreatmentBMPTypeID, tbo.TreatmentBMPTypeObservationTypeID = tbtot.TreatmentBMPTypeObservationTypeID
+from dbo.TreatmentBMPAssessment tba
+join dbo.TreatmentBMPObservation tbo on tba.TreatmentBMPAssessmentID = tbo.TreatmentBMPAssessmentID
+join dbo.TreatmentBMPTypeObservationType tbtot on tba.TreatmentBMPTypeID = tbtot.TreatmentBMPTypeID and tbo.ObservationTypeID = tbtot.ObservationTypeID
+
+update tba
+set tba.TreatmentBMPTypeAttributeTypeID = tbtat.TreatmentBMPTypeAttributeTypeID
+from dbo.TreatmentBMPAttribute tba
+join dbo.TreatmentBMPTypeAttributeType tbtat on tba.TreatmentBMPTypeID = tbtat.TreatmentBMPTypeID and tba.TreatmentBMPAttributeTypeID = tbtat.TreatmentBMPAttributeTypeID
+
+
+
+alter table dbo.TreatmentBMPBenchmarkAndThreshold alter column TreatmentBMPTypeID int not null
+alter table dbo.TreatmentBMPBenchmarkAndThreshold alter column TreatmentBMPTypeObservationTypeID int not null
+alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID foreign key (TreatmentBMPID, TreatmentBMPTypeID) references dbo.TreatmentBMP(TreatmentBMPID, TreatmentBMPTypeID)
+alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID foreign key (TreatmentBMPTypeObservationTypeID) references dbo.TreatmentBMPTypeObservationType(TreatmentBMPTypeObservationTypeID)
+alter table dbo.TreatmentBMPBenchmarkAndThreshold add constraint FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_Observ foreign key (TreatmentBMPTypeObservationTypeID, TreatmentBMPTypeID, ObservationTypeID) references dbo.TreatmentBMPTypeObservationType(TreatmentBMPTypeObservationTypeID, TreatmentBMPTypeID, ObservationTypeID)
+alter table dbo.TreatmentBMPAssessment alter column TreatmentBMPTypeID int not null
+alter table dbo.TreatmentBMPObservation alter column TreatmentBMPTypeID int not null
+alter table dbo.TreatmentBMPObservation alter column TreatmentBMPTypeObservationTypeID int not null
+alter table dbo.TreatmentBMPAssessment add constraint FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID foreign key (TreatmentBMPID, TreatmentBMPTypeID) references dbo.TreatmentBMP(TreatmentBMPID, TreatmentBMPTypeID)
+alter table dbo.TreatmentBMPObservation add constraint FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID foreign key (TreatmentBMPTypeObservationTypeID) references dbo.TreatmentBMPTypeObservationType(TreatmentBMPTypeObservationTypeID)
+alter table dbo.TreatmentBMPObservation add constraint FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_ObservationTypeI foreign key (TreatmentBMPTypeObservationTypeID, TreatmentBMPTypeID, ObservationTypeID) references dbo.TreatmentBMPTypeObservationType(TreatmentBMPTypeObservationTypeID, TreatmentBMPTypeID, ObservationTypeID)
+alter table dbo.TreatmentBMPAssessment add constraint AK_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID unique (TreatmentBMPAssessmentID, TreatmentBMPTypeID)
+alter table dbo.TreatmentBMPObservation add constraint FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID foreign key (TreatmentBMPAssessmentID, TreatmentBMPTypeID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TreatmentBMPTypeID)
+
+
+alter table dbo.TreatmentBMPAttribute alter column TreatmentBMPTypeAttributeTypeID int not null
+alter table dbo.TreatmentBMPAttribute add constraint FK_TreatmentBMPAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID foreign key (TreatmentBMPTypeAttributeTypeID) references dbo.TreatmentBMPTypeAttributeType(TreatmentBMPTypeAttributeTypeID)

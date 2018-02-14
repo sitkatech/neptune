@@ -14,6 +14,17 @@ CREATE TABLE [dbo].[TreatmentBMPTypeObservationType](
  CONSTRAINT [PK_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPTypeObservationTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPTypeObservationType_TreatmentBMPTypeID_ObservationTypeID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPTypeID] ASC,
+	[ObservationTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_ObservationTypeID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPTypeObservationTypeID] ASC,
+	[TreatmentBMPTypeID] ASC,
+	[ObservationTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

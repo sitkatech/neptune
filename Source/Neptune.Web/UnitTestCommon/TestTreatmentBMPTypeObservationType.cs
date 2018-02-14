@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TestTreatmentBMPAssessment.cs" company="Tahoe Regional Planning Agency">
+<copyright file="TestTreatmentBMPBenchmarkAndThreshold.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,21 +19,18 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.UnitTestCommon
 {
     public static partial class TestFramework
     {
-        public static class TestTreatmentBMPAssessment
+        public static class TestTreatmentBMPTypeObservationType
         {
-            public static TreatmentBMPAssessment Create(TreatmentBMP treatmentBMP)
+            public static TreatmentBMPTypeObservationType Create(Models.TreatmentBMPType treatmentBMPType, ObservationType observationType)
             {
-                var person = TestPerson.Create();
-                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, person, false);
-                return treatmentBMPAssessment;
+                return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType, false);
             }
         }
-    }
+    }    
 }

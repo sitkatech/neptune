@@ -26,6 +26,7 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -154,16 +155,32 @@ namespace Neptune.Web.Controllers
                 return ViewDiscreteCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
             }
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
-            
+            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, observationType);
             viewModel.UpdateModel(treatmentBMPObservation);
-
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
                 ? GetNextObservationTypeViewResult(treatmentBMPAssessment, observationType)
                 : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, observationType)));
+        }
+
+        private static TreatmentBMPObservation GetExistingTreatmentBMPObservationOrCreateNew(
+            TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType)
+        {
+            var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
+                .Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            if (treatmentBMPObservation == null)
+            {
+                var treatmentBMPTypeObservationType =
+                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x =>
+                        x.ObservationTypeID == observationType.ObservationTypeID);
+                Check.RequireNotNull(treatmentBMPTypeObservationType,
+                    $"Not a valid Observation Type ID {observationType.ObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
+                treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeObservationType,
+                    treatmentBMPAssessment.TreatmentBMPType, observationType, string.Empty);
+            }
+
+            return treatmentBMPObservation;
         }
 
         private ViewResult ViewDiscreteCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, DiscreteCollectionMethodViewModel viewModel)
@@ -197,9 +214,7 @@ namespace Neptune.Web.Controllers
                 return ViewRateCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
             }
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
-
+            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, observationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
@@ -239,9 +254,7 @@ namespace Neptune.Web.Controllers
                 return ViewPassFailCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
             }
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
-
+            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, observationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
@@ -282,9 +295,7 @@ namespace Neptune.Web.Controllers
                 return ViewPercentageCollectionMethod(treatmentBMPAssessment, observationType, viewModel);
             }
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
-            var treatmentBMPObservation = existingObservation ?? new TreatmentBMPObservation(treatmentBMPAssessment, observationType, string.Empty);
-
+            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, observationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
@@ -343,15 +354,14 @@ namespace Neptune.Web.Controllers
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, StormwaterAssessmentType.Regular, DateTime.Now, CurrentPerson, false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, CurrentPerson, false);
         }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> AssessmentGridJsonData(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            TreatmentBMPAssessmentGridSpec gridSpec;
-            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out gridSpec, CurrentPerson, treatmentBMP);
+            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }

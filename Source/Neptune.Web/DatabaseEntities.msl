@@ -283,6 +283,7 @@
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="StormwaterAssessmentTypeID" ColumnName="StormwaterAssessmentTypeID" />
           <ScalarProperty Name="AssessmentDate" ColumnName="AssessmentDate" />
           <ScalarProperty Name="PersonID" ColumnName="PersonID" />
@@ -299,6 +300,7 @@
           <ScalarProperty Name="TreatmentBMPAttributeID" ColumnName="TreatmentBMPAttributeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="TreatmentBMPTypeAttributeTypeID" ColumnName="TreatmentBMPTypeAttributeTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="TreatmentBMPAttributeTypeID" ColumnName="TreatmentBMPAttributeTypeID" />
           <ScalarProperty Name="TreatmentBMPAttributeValue" ColumnName="TreatmentBMPAttributeValue" />
@@ -324,6 +326,8 @@
           <ScalarProperty Name="TreatmentBMPBenchmarkAndThresholdID" ColumnName="TreatmentBMPBenchmarkAndThresholdID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="TreatmentBMPTypeObservationTypeID" ColumnName="TreatmentBMPTypeObservationTypeID" />
+          <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="BenchmarkValue" ColumnName="BenchmarkValue" />
           <ScalarProperty Name="ThresholdValue" ColumnName="ThresholdValue" />
@@ -361,6 +365,8 @@
           <ScalarProperty Name="TreatmentBMPObservationID" ColumnName="TreatmentBMPObservationID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
+          <ScalarProperty Name="TreatmentBMPTypeObservationTypeID" ColumnName="TreatmentBMPTypeObservationTypeID" />
+          <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
         </MappingFragment>

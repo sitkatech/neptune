@@ -32,9 +32,6 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditAttributesViewModel : FormViewModel, IValidatableObject
     {
-        [Required]
-        public int TreatmentBMPTypeID { get; set; }
-
         [DisplayName("Metadata")]
         public List<TreatmentBMPAttributeSimple> TreatmentBMPAttributes { get; set; }
 
@@ -47,10 +44,10 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID;
             TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes
                 .Select(x => new TreatmentBMPAttributeSimple
                 {
+                    TreatmentBMPTypeAttributeTypeID = x.TreatmentBMPTypeAttributeTypeID,
                     TreatmentBMPAttributeTypeID = x.TreatmentBMPAttributeTypeID,
                     TreatmentBMPAttributeValue = x.TreatmentBMPAttributeValue
                 })
@@ -60,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
             var treatmentBMPAttributesToUpdate = TreatmentBMPAttributes.Where(x => !string.IsNullOrWhiteSpace(x.TreatmentBMPAttributeValue))
-                .Select(x => new TreatmentBMPAttribute(treatmentBMP.TreatmentBMPID, treatmentBMP.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID, x.TreatmentBMPAttributeValue))
+                .Select(x => new TreatmentBMPAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID, x.TreatmentBMPAttributeValue))
                 .ToList();
             var treatmentBMPAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributes.Local;
             treatmentBMP.TreatmentBMPAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
@@ -73,10 +70,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             var errors = new List<ValidationResult>();
 
-            var treatmentBMPAttributeTypeIDs = TreatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeTypeID).ToList();
-            var treatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Where(x => x.TreatmentBMPTypeID == TreatmentBMPTypeID && treatmentBMPAttributeTypeIDs.Contains(x.TreatmentBMPAttributeTypeID)).ToList();
+            var treatmentBMPTypeAttributeTypeIDs = TreatmentBMPAttributes.Select(x => x.TreatmentBMPTypeAttributeTypeID).ToList();
+            var treatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Where(x => treatmentBMPTypeAttributeTypeIDs.Contains(x.TreatmentBMPTypeAttributeTypeID)).ToList();
             if (treatmentBMPTypeAttributeTypes.Any(x =>
-                TreatmentBMPAttributes.SingleOrDefault(y => y.TreatmentBMPAttributeTypeID == x.TreatmentBMPAttributeTypeID && x.TreatmentBMPAttributeType.IsRequired && string.IsNullOrWhiteSpace(y.TreatmentBMPAttributeValue)) != null))
+                TreatmentBMPAttributes.SingleOrDefault(y => y.TreatmentBMPTypeAttributeTypeID == x.TreatmentBMPTypeAttributeTypeID && x.TreatmentBMPAttributeType.IsRequired && string.IsNullOrWhiteSpace(y.TreatmentBMPAttributeValue)) != null))
             {
                 errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>("Must enter all required fields.", m => m.TreatmentBMPAttributes));
             }
@@ -84,7 +81,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => !string.IsNullOrWhiteSpace(x.TreatmentBMPAttributeValue)))
             {
                 var treatmentBMPTypeAttributeType = treatmentBMPTypeAttributeTypes.Single(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPAttributeTypeID);
+                    x.TreatmentBMPTypeAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPTypeAttributeTypeID);
                 var treatmentBMPAttributeDataType = treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType;
                 if (!treatmentBMPAttributeDataType.ValueIsCorrectDataType(treatmentBMPAttributeSimple.TreatmentBMPAttributeValue))
                 {

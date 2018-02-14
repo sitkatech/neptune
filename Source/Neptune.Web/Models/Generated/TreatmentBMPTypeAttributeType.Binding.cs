@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPTypeAttributeType()
         {
-
+            this.TreatmentBMPAttributes = new HashSet<TreatmentBMPAttribute>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -78,13 +78,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return TreatmentBMPAttributes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeAttributeType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeAttributeType).Name, typeof(TreatmentBMPAttribute).Name};
 
         [Key]
         public int TreatmentBMPTypeAttributeTypeID { get; set; }
@@ -94,6 +94,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeAttributeTypeID; } set { TreatmentBMPTypeAttributeTypeID = value; } }
 
+        public virtual ICollection<TreatmentBMPAttribute> TreatmentBMPAttributes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual TreatmentBMPAttributeType TreatmentBMPAttributeType { get; set; }

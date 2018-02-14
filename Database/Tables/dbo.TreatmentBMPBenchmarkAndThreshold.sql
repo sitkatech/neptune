@@ -6,6 +6,8 @@ CREATE TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold](
 	[TreatmentBMPBenchmarkAndThresholdID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
+	[TreatmentBMPTypeObservationTypeID] [int] NOT NULL,
+	[TreatmentBMPTypeID] [int] NOT NULL,
 	[ObservationTypeID] [int] NOT NULL,
 	[BenchmarkValue] [float] NOT NULL,
 	[ThresholdValue] [float] NOT NULL,
@@ -40,3 +42,23 @@ ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold]  WITH CHECK ADD  CONSTRAIN
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TenantID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold] CHECK CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TenantID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold] CHECK CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
+REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold] CHECK CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPType_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID] FOREIGN KEY([TreatmentBMPTypeObservationTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeObservationType] ([TreatmentBMPTypeObservationTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold] CHECK CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_Observ] FOREIGN KEY([TreatmentBMPTypeObservationTypeID], [TreatmentBMPTypeID], [ObservationTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeObservationType] ([TreatmentBMPTypeObservationTypeID], [TreatmentBMPTypeID], [ObservationTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPBenchmarkAndThreshold] CHECK CONSTRAINT [FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_Observ]

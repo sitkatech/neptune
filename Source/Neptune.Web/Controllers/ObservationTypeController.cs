@@ -154,6 +154,10 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteObservationType(observationType, viewModel);
             }
+            observationType.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
+            observationType.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
+            observationType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();
+
             observationType.DeleteObservationType();
             return new ModalDialogFormJsonResult();
         }
