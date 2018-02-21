@@ -588,6 +588,18 @@ namespace LtInfo.Common.DhtmlWrappers
         /// <summary>
         /// For making an edit icon on the grid with an editor in a jquery ui dialog
         /// </summary>
+        public static HtmlString MakeEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm, bool userCanEdit)
+        {
+            return userCanEdit
+                ? MakeModalDialogLink($"{EditIconBootstrap}<span style=\"display:none\">Edit</span>",
+                    modalDialogForm.ContentUrl, modalDialogForm.DialogWidth, modalDialogForm.DialogTitle,
+                    modalDialogForm.OnJavascriptReadyFunction)
+                : new HtmlString(string.Empty);
+        }
+
+        /// <summary>
+        /// For making an edit icon on the grid with an editor in a jquery ui dialog
+        /// </summary>
         public static HtmlString MakeLtInfoEditIconAsModalDialogLinkBootstrap(ModalDialogForm modalDialogForm)
         {
             string linkText = $"{EditIconBootstrap}<span style=\"display:none\">Edit</span>";

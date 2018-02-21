@@ -12,7 +12,7 @@ namespace Neptune.Web.Controllers
 {
     public class MaintenanceRecordController : NeptuneBaseController
     {
-        [TreatmentBMPManageFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> MaintenanceRecordsGridJsonData(
             TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
         {

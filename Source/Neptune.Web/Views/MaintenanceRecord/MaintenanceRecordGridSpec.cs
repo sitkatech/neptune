@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Web;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.ModalDialog;
@@ -34,14 +35,16 @@ namespace Neptune.Web.Views.MaintenanceRecord
         {
             ObjectNameSingular = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel();
             ObjectNamePlural = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
-            var currentPersonCanEditOrDelete = new TreatmentBMPManageFeature().HasPermission(currentPerson, treatmentBMP).HasPermission;
+            var currentPersonCanEditOrDelete = new TreatmentBMPManageFeature()
+                .HasPermission(currentPerson, treatmentBMP).HasPermission;
 
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), 
+                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),$"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}")), 30, DhtmlxGridColumnFilterType.None);
-            
+                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),
+                        $"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}"), currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
+
             Add("Date", x => x.MaintenanceRecordDate.ToShortDateString(), 100);
             Add("Performed By", x => x.PerformedByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),

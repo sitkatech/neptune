@@ -31,9 +31,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public EditMaintenanceRecordViewData(List<Person> persons)
         {
             AllPersons = persons.ToSelectListWithDisabledEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
-                x => x.FullNameLastFirst,"");
+                x => x.FullNameLastFirst,"Choose a person");
 
-            AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"");
+            AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"Choose a type");
         }
 
         public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
