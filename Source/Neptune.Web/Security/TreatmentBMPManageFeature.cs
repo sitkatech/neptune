@@ -52,4 +52,26 @@ namespace Neptune.Web.Security
             return new PermissionCheckResult();
         }
     }
+    [SecurityFeatureDescription("Allows editing a Maintenance Activity if you are can edit the BMP it belonds to")]
+    public class MaintenanceActivityManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<MaintenanceActivity>
+    {
+        private readonly NeptuneFeatureWithContextImpl<MaintenanceActivity> _lakeTahoeInfoFeatureWithContextImpl;
+
+        public MaintenanceActivityManageFeature()
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.Normal })
+        {
+            _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<MaintenanceActivity>(this);
+            ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
+        }
+
+        public void DemandPermission(Person person, MaintenanceActivity contextModelObject)
+        {
+            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
+        }
+
+        public PermissionCheckResult HasPermission(Person person, MaintenanceActivity contextModelObject)
+        {
+            return new TreatmentBMPManageFeature().HasPermission(person, contextModelObject.TreatmentBMP);
+        }
+    }
 }

@@ -1,9 +1,12 @@
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using LtInfo.Common.MvcResults;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.MaintenanceActivity;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
@@ -29,6 +32,30 @@ namespace Neptune.Web.Controllers
             return ViewNew(new EditMaintenanceActivityViewModel());
         }
 
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey, EditMaintenanceActivityViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewNew(viewModel);
+            }
+
+            var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
+            var newMaintenanceActivity = new MaintenanceActivity(treatmentBmp.TreatmentBMPID,viewModel.MaintenanceActivityDate.Value, viewModel.PerformedByPersonID.Value, viewModel.MaintenanceActivityTypeID.Value);
+            
+
+            HttpRequestStorage.DatabaseEntities.AllMaintenanceActivities.Add(newMaintenanceActivity);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            viewModel.UpdateModel(newMaintenanceActivity);
+
+            SetMessageForDisplay($"{FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()} successfully added.");
+
+            return new ModalDialogFormJsonResult();
+        }
+
         //todo : possibly an unnecessary abstraction
         private PartialViewResult ViewNew(EditMaintenanceActivityViewModel viewModel)
         {
@@ -36,7 +63,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPManageFeature]
+        [MaintenanceActivityManageFeature]
         public PartialViewResult Edit(MaintenanceActivityPrimaryKey maintenanceActivityPrimaryKey)
         {
             var maintenanceActivity = maintenanceActivityPrimaryKey.EntityObject;
@@ -45,24 +72,62 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPManageFeature]
+        [MaintenanceActivityManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(MaintenanceActivityPrimaryKey maintenanceActivityPrimaryKey,
             EditMaintenanceActivityViewModel viewModel)
         {
-            throw new System.NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return ViewNew(viewModel);
+            }
+
+            var maintenanceActivity = maintenanceActivityPrimaryKey.EntityObject;
+            viewModel.UpdateModel(maintenanceActivity);
+            
+            SetMessageForDisplay($"{FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()} successfully edited.");
+
+            return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewEdit(EditMaintenanceActivityViewModel viewModel)
         {
-            var viewData = new EditMaintenanceActivityViewData();
+            var persons = HttpRequestStorage.DatabaseEntities.People.OrderBy(x=>x.LastName).ToList();
+            var viewData = new EditMaintenanceActivityViewData(persons);
             return RazorPartialView<EditMaintenanceActivity, EditMaintenanceActivityViewData,
                 EditMaintenanceActivityViewModel>(viewData, viewModel);
         }
 
-        [TreatmentBMPManageFeature]
+        [HttpGet]
+        [MaintenanceActivityManageFeature]
         public ActionResult Delete(MaintenanceActivityPrimaryKey maintenanceActivityPrimaryKey)
         {
-            throw new System.NotImplementedException();
+            var viewModel = new ConfirmDialogFormViewModel(maintenanceActivityPrimaryKey.PrimaryKeyValue);
+            return ViewDelete(viewModel);
+        }
+
+        [HttpPost]
+        [MaintenanceActivityManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(MaintenanceActivityPrimaryKey maintenanceActivityPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var maintenanceActivity = maintenanceActivityPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDelete(viewModel);
+            }
+            maintenanceActivity.DeleteMaintenanceActivity();
+
+            SetMessageForDisplay($"{FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()} successfully deleted");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private ActionResult ViewDelete(ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to delete this {FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()}?";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
+                viewModel);
         }
     }
 }

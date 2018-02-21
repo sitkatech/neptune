@@ -47,7 +47,8 @@ namespace Neptune.Web.Models
             "NeptunePageImage",
             "FileResource",
             "Notification",
-            "SupportRequestLog"
+            "SupportRequestLog",
+            "MaintenanceActivity"
         };
 
         public string AuditDescriptionDisplay

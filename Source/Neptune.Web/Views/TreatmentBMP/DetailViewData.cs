@@ -75,7 +75,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             AssessmentGridName = "Assessment";
 
             MaintenanceActivityGridSpec = new MaintenanceActivityGridSpec(CurrentPerson, treatmentBMP);
-            MaintenanceActivityGridName = "Maintenance Activity";
+            MaintenanceActivityGridName = "MaintenanceActivity";
 
             AssessmentGridDataUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.AssessmentGridJsonData(treatmentBMP));
             MaintenanceActivityGridUrl =

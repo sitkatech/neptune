@@ -38,13 +38,13 @@ namespace Neptune.Web.Views.MaintenanceActivity
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), 
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl())), 30, DhtmlxGridColumnFilterType.None);
+                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),$"Edit {Models.FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()}")), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.MaintenanceActivityType.ToGridHeaderString("Type"),
                 x => x.MaintenanceActivityType.MaintenanceActivityTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);
             Add("Date", x => x.MaintenanceActivityDate.ToShortDateString(), 100);
             Add("Performed By", x => x.PerformedByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
-            Add("Description", x => x.MaintenanceActivityDescription, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Description", x => x.MaintenanceActivityDescription, 300, DhtmlxGridColumnFilterType.Text);
         }
     }
 }
