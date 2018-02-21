@@ -38,8 +38,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FieldDefinitionData> FieldDefinitionDatas { get { return AllFieldDefinitionDatas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FileResource> AllFileResources { get; set; }
         public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<MaintenanceActivity> AllMaintenanceActivities { get; set; }
-        public virtual IQueryable<MaintenanceActivity> MaintenanceActivities { get { return AllMaintenanceActivities.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<MaintenanceRecord> AllMaintenanceRecords { get; set; }
+        public virtual IQueryable<MaintenanceRecord> MaintenanceRecords { get { return AllMaintenanceRecords.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<ModeledCatchmentGeometryStaging> AllModeledCatchmentGeometryStagings { get; set; }
         public virtual IQueryable<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get { return AllModeledCatchmentGeometryStagings.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<ModeledCatchment> AllModeledCatchments { get; set; }
@@ -132,13 +132,13 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
 
-                case "MaintenanceActivity":
-                    return MaintenanceActivities.GetMaintenanceActivity(primaryKey);
+                case "MaintenanceRecord":
+                    return MaintenanceRecords.GetMaintenanceRecord(primaryKey);
 
-                case "MaintenanceActivityType":
-                    var maintenanceActivityType = MaintenanceActivityType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(maintenanceActivityType, "MaintenanceActivityType", primaryKey);
-                    return maintenanceActivityType;
+                case "MaintenanceRecordType":
+                    var maintenanceRecordType = MaintenanceRecordType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(maintenanceRecordType, "MaintenanceRecordType", primaryKey);
+                    return maintenanceRecordType;
 
                 case "MeasurementUnitType":
                     var measurementUnitType = MeasurementUnitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

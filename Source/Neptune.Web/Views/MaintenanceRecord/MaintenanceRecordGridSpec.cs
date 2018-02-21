@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaintenancyActivityGridSpec.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaintenancyRecordGridSpec.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -26,25 +26,28 @@ using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 
-namespace Neptune.Web.Views.MaintenanceActivity
+namespace Neptune.Web.Views.MaintenanceRecord
 {
-    public class MaintenanceActivityGridSpec : GridSpec<Models.MaintenanceActivity>
+    public class MaintenanceRecordGridSpec : GridSpec<Models.MaintenanceRecord>
     {
-        public MaintenanceActivityGridSpec(Person currentPerson, Models.TreatmentBMP treatmentBMP)
+        public MaintenanceRecordGridSpec(Person currentPerson, Models.TreatmentBMP treatmentBMP)
         {
+            ObjectNameSingular = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel();
+            ObjectNamePlural = Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized();
             var currentPersonCanEditOrDelete = new TreatmentBMPManageFeature().HasPermission(currentPerson, treatmentBMP).HasPermission;
 
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), 
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),$"Edit {Models.FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabel()}")), 30, DhtmlxGridColumnFilterType.None);
-            Add(Models.FieldDefinition.MaintenanceActivityType.ToGridHeaderString("Type"),
-                x => x.MaintenanceActivityType.MaintenanceActivityTypeDisplayName, 100,
-                DhtmlxGridColumnFilterType.Text);
-            Add("Date", x => x.MaintenanceActivityDate.ToShortDateString(), 100);
+                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),$"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}")), 30, DhtmlxGridColumnFilterType.None);
+            
+            Add("Date", x => x.MaintenanceRecordDate.ToShortDateString(), 100);
             Add("Performed By", x => x.PerformedByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
-            Add("Description", x => x.MaintenanceActivityDescription, 300, DhtmlxGridColumnFilterType.Text);
+            Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
+                x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
+                DhtmlxGridColumnFilterType.Text);
+            Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
         }
     }
 }

@@ -4,18 +4,18 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
-    public static class MaintenanceActivityModelExtensions
+    public static class MaintenanceRecordModelExtensions
     {
-        public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceActivityController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
-        public static string GetEditUrl(this MaintenanceActivity maintenanceActivity)
+        public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
+        public static string GetEditUrl(this MaintenanceRecord maintenanceRecord)
         {
-            return EditUrlTemplate.ParameterReplace(maintenanceActivity.MaintenanceActivityID);
+            return EditUrlTemplate.ParameterReplace(maintenanceRecord.MaintenanceRecordID);
         }
 
-        public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceActivityController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
-        public static string GetDeleteUrl(this MaintenanceActivity maintenanceActivity)
+        public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
+        public static string GetDeleteUrl(this MaintenanceRecord maintenanceRecord)
         {
-            return DeleteUrlTemplate.ParameterReplace(maintenanceActivity.MaintenanceActivityID);
+            return DeleteUrlTemplate.ParameterReplace(maintenanceRecord.MaintenanceRecordID);
         }
     }
 }

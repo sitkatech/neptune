@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="StormwaterManageTreatmentBMPFeature.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaintenanceRecordManageFeature.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -24,32 +24,26 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows editing a Treatment BMP if you are assigned to manage that BMP's jurisdiction")]
-    public class TreatmentBMPManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<TreatmentBMP>
+    [SecurityFeatureDescription("Allows editing a Maintenance Activity if you are can edit the BMP it belonds to")]
+    public class MaintenanceRecordManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<MaintenanceRecord>
     {
-        private readonly NeptuneFeatureWithContextImpl<TreatmentBMP> _lakeTahoeInfoFeatureWithContextImpl;
+        private readonly NeptuneFeatureWithContextImpl<MaintenanceRecord> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public TreatmentBMPManageFeature()
+        public MaintenanceRecordManageFeature()
             : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.Normal })
         {
-            _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<TreatmentBMP>(this);
+            _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<MaintenanceRecord>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
         }
 
-        public void DemandPermission(Person person, TreatmentBMP contextModelObject)
+        public void DemandPermission(Person person, MaintenanceRecord contextModelObject)
         {
             _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
         }
 
-        public PermissionCheckResult HasPermission(Person person, TreatmentBMP contextModelObject)
+        public PermissionCheckResult HasPermission(Person person, MaintenanceRecord contextModelObject)
         {
-            var canManageStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(contextModelObject.StormwaterJurisdiction);
-            if (!canManageStormwaterJurisdiction)
-            {
-                return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.OrganizationDisplayName}");
-            }
-
-            return new PermissionCheckResult();
+            return new TreatmentBMPManageFeature().HasPermission(person, contextModelObject.TreatmentBMP);
         }
     }
 }

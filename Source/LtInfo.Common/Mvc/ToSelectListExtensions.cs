@@ -201,6 +201,20 @@ namespace LtInfo.Common.Mvc
         }
 
         /// <summary>
+        /// Returns an IEnumerable&lt;SelectListItem&gt; by using the specified func for data value field, the data text field, and a selected value. The Empty first row will no be selectable.
+        /// </summary>
+        /// <param name="enumerable">the ienumerable items.</param>
+        /// <param name="value">The data value field.</param>
+        /// <param name="text">The data text field.</param>
+        /// <param name="emptyFirstRowText">Initial blank row text.</param>
+        public static IEnumerable<SelectListItem> ToSelectListWithDisabledEmptyFirstRow<T>(this IEnumerable<T> enumerable, Func<T, string> value, Func<T, string> text, string emptyFirstRowText)
+        {
+            var selectListItems = enumerable.ToSelectList(value, text).ToList();
+            selectListItems.Insert(0, new SelectListItem { Text = emptyFirstRowText, Value = string.Empty, Disabled = true});
+            return selectListItems;
+        }
+
+        /// <summary>
         /// Returns an IEnumerable&lt;SelectListItem&gt; by using the specified func for data value field, the data text field, and the selected values.
         /// </summary>
         /// <param name="enumerable">the ienumerable items.</param>

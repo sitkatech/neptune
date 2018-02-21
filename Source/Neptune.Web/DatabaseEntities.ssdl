@@ -6,7 +6,7 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.Store.FieldDefinitionData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.Store.FieldDefinitionDataImage" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="MaintenanceActivity" EntityType="Neptune.Web.Models.Store.MaintenanceActivity" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.Store.MaintenanceRecord" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.Store.ModeledCatchment" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.Store.ModeledCatchmentGeometryStaging" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.Store.NeptuneHomePageImage" store:Type="Tables" Schema="dbo" />
@@ -53,13 +53,13 @@
       <End Role="CreatePerson" EntitySet="Person" />
       <End Role="FileResourcesWhereYouAreTheCreatePerson" EntitySet="FileResource" />
     </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceActivity_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_MaintenanceActivity_Person_PerformedByPersonID_PersonID">
+    <AssociationSet Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
-      <End Role="MaintenanceActivitiesWhereYouAreThePerformedByPerson" EntitySet="MaintenanceActivity" />
+      <End Role="MaintenanceRecordsWhereYouAreThePerformedByPerson" EntitySet="MaintenanceRecord" />
     </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceActivity_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_MaintenanceActivity_TreatmentBMP_TreatmentBMPID">
+    <AssociationSet Name="FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
-      <End Role="MaintenanceActivities" EntitySet="MaintenanceActivity" />
+      <End Role="MaintenanceRecords" EntitySet="MaintenanceRecord" />
     </AssociationSet>
     <AssociationSet Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.Store.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
@@ -319,17 +319,17 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_FileResource_FileResourceID
     <Property Name="CreatePersonID" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
   </EntityType>
-  <EntityType Name="MaintenanceActivity">
+  <EntityType Name="MaintenanceRecord">
     <Key>
-      <PropertyRef Name="MaintenanceActivityID" />
+      <PropertyRef Name="MaintenanceRecordID" />
     </Key>
-    <Property Name="MaintenanceActivityID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="MaintenanceRecordID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="MaintenanceActivityDate" Type="date" Nullable="false" />
+    <Property Name="MaintenanceRecordDate" Type="date" Nullable="false" />
     <Property Name="PerformedByPersonID" Type="int" Nullable="false" />
-    <Property Name="MaintenanceActivityDescription" Type="varchar" MaxLength="500" />
-    <Property Name="MaintenanceActivityTypeID" Type="int" Nullable="false" />
+    <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
+    <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -547,7 +547,7 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
     <Property Name="RecaptchaPrivateKey" Type="varchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6035: The relationship 'FK_MaintenanceActivity_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -772,26 +772,26 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeObser
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MaintenanceActivity_Person_PerformedByPersonID_PersonID">
+  <Association Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
     <End Role="PerformedByPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
-    <End Role="MaintenanceActivitiesWhereYouAreThePerformedByPerson" Type="Neptune.Web.Models.Store.MaintenanceActivity" Multiplicity="*" />
+    <End Role="MaintenanceRecordsWhereYouAreThePerformedByPerson" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PerformedByPerson">
         <PropertyRef Name="PersonID" />
       </Principal>
-      <Dependent Role="MaintenanceActivitiesWhereYouAreThePerformedByPerson">
+      <Dependent Role="MaintenanceRecordsWhereYouAreThePerformedByPerson">
         <PropertyRef Name="PerformedByPersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MaintenanceActivity_TreatmentBMP_TreatmentBMPID">
+  <Association Name="FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID">
     <End Role="TreatmentBMP" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="1" />
-    <End Role="MaintenanceActivities" Type="Neptune.Web.Models.Store.MaintenanceActivity" Multiplicity="*" />
+    <End Role="MaintenanceRecords" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TreatmentBMP">
         <PropertyRef Name="TreatmentBMPID" />
       </Principal>
-      <Dependent Role="MaintenanceActivities">
+      <Dependent Role="MaintenanceRecords">
         <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[MaintenanceActivity]
+//  Source Table: [dbo].[MaintenanceRecord]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[MaintenanceActivity]")]
-    public partial class MaintenanceActivity : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[MaintenanceRecord]")]
+    public partial class MaintenanceRecord : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected MaintenanceActivity()
+        protected MaintenanceRecord()
         {
 
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -30,53 +30,53 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceActivity(int maintenanceActivityID, int treatmentBMPID, DateTime maintenanceActivityDate, int performedByPersonID, string maintenanceActivityDescription, int maintenanceActivityTypeID) : this()
+        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, int performedByPersonID, string maintenanceRecordDescription, int maintenanceRecordTypeID) : this()
         {
-            this.MaintenanceActivityID = maintenanceActivityID;
+            this.MaintenanceRecordID = maintenanceRecordID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.MaintenanceActivityDate = maintenanceActivityDate;
+            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.PerformedByPersonID = performedByPersonID;
-            this.MaintenanceActivityDescription = maintenanceActivityDescription;
-            this.MaintenanceActivityTypeID = maintenanceActivityTypeID;
+            this.MaintenanceRecordDescription = maintenanceRecordDescription;
+            this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceActivity(int treatmentBMPID, DateTime maintenanceActivityDate, int performedByPersonID, int maintenanceActivityTypeID) : this()
+        public MaintenanceRecord(int treatmentBMPID, DateTime maintenanceRecordDate, int performedByPersonID, int maintenanceRecordTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.MaintenanceActivityID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
-            this.MaintenanceActivityDate = maintenanceActivityDate;
+            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.PerformedByPersonID = performedByPersonID;
-            this.MaintenanceActivityTypeID = maintenanceActivityTypeID;
+            this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public MaintenanceActivity(TreatmentBMP treatmentBMP, DateTime maintenanceActivityDate, Person performedByPerson, MaintenanceActivityType maintenanceActivityType) : this()
+        public MaintenanceRecord(TreatmentBMP treatmentBMP, DateTime maintenanceRecordDate, Person performedByPerson, MaintenanceRecordType maintenanceRecordType) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.MaintenanceActivityID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
-            treatmentBMP.MaintenanceActivities.Add(this);
-            this.MaintenanceActivityDate = maintenanceActivityDate;
+            treatmentBMP.MaintenanceRecords.Add(this);
+            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.PerformedByPersonID = performedByPerson.PersonID;
             this.PerformedByPerson = performedByPerson;
-            performedByPerson.MaintenanceActivitiesWhereYouAreThePerformedByPerson.Add(this);
-            this.MaintenanceActivityTypeID = maintenanceActivityType.MaintenanceActivityTypeID;
+            performedByPerson.MaintenanceRecordsWhereYouAreThePerformedByPerson.Add(this);
+            this.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static MaintenanceActivity CreateNewBlank(TreatmentBMP treatmentBMP, Person performedByPerson, MaintenanceActivityType maintenanceActivityType)
+        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, Person performedByPerson, MaintenanceRecordType maintenanceRecordType)
         {
-            return new MaintenanceActivity(treatmentBMP, default(DateTime), performedByPerson, maintenanceActivityType);
+            return new MaintenanceRecord(treatmentBMP, default(DateTime), performedByPerson, maintenanceRecordType);
         }
 
         /// <summary>
@@ -91,27 +91,27 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceActivity).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name};
 
         [Key]
-        public int MaintenanceActivityID { get; set; }
+        public int MaintenanceRecordID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
-        public DateTime MaintenanceActivityDate { get; set; }
+        public DateTime MaintenanceRecordDate { get; set; }
         public int PerformedByPersonID { get; set; }
-        public string MaintenanceActivityDescription { get; set; }
-        public int MaintenanceActivityTypeID { get; set; }
+        public string MaintenanceRecordDescription { get; set; }
+        public int MaintenanceRecordTypeID { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return MaintenanceActivityID; } set { MaintenanceActivityID = value; } }
+        public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual Person PerformedByPerson { get; set; }
-        public MaintenanceActivityType MaintenanceActivityType { get { return MaintenanceActivityType.AllLookupDictionary[MaintenanceActivityTypeID]; } }
+        public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID]; } }
 
         public static class FieldLengths
         {
-            public const int MaintenanceActivityDescription = 500;
+            public const int MaintenanceRecordDescription = 500;
         }
     }
 }

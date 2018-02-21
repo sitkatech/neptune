@@ -1,0 +1,62 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="EditMaintenanceRecord.cs" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+
+@using LtInfo.Common
+@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Common
+@inherits Neptune.Web.Views.MaintenanceRecord.EditMaintenanceRecord
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDate)</div>
+            <div class="col-xs-8">
+                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
+                    <input type="text" name="@Html.NameFor(m => m.MaintenanceRecordDate)" class="form-control assessmentDate" value="@Model.MaintenanceRecordDate.ToStringDate()" />
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
+            <div class="col-xs-8">
+                @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
+                
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.PerformedByPersonID)</div>
+            <div class="col-xs-8">
+                @Html.SearchableDropDownListFor(m=>m.PerformedByPersonID, ViewDataTyped.AllPersons, new Dictionary<string, string> { { "title", "" }, { "data-width", "auto" } })
+                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDescription)</div>
+            <div class="col-xs-8">
+                @Html.TextAreaWithMaxLengthFor(m => m.MaintenanceRecordDescription,new TextAreaForExtensions.TextAreaDimensions(null, 6), null, new List<string>() { "form-control" })
+            </div>
+        </div>
+    </div>
+}
