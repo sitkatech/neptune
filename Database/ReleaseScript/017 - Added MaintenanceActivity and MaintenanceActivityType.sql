@@ -17,3 +17,7 @@ constraint AK_MaintenanceActivity_MaintenanceActivityID_TenantID unique nonclust
 constraint FK_MaintenanceActivity_TreatmentBMP_TreatmentBMPID_TenantID foreign key (TreatmentBMPID, TenantID) references dbo.TreatmentBMP(TreatmentBMPID, TenantID)
 )
 go
+
+insert into dbo.FieldDefinition(FieldDefinitionID, FieldDefinitionName, FieldDefinitionDisplayName, DefaultDefinition, CanCustomizeLabel)
+values (41, N'MaintenanceActivityType', N'Maintenance Activity Type', 'Whether the maintenance performed was Preventative or Corrective maintenance', 1),
+(42, N'MaintenanceActivity', N'Maintenance Activity', 'A maintenance activity performed on a Treatment BMP', 1)

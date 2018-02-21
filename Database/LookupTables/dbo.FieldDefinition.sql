@@ -42,4 +42,6 @@ VALUES
 (37, N'DefaultBenchmarkValue', N'Default Benchmark Value', '', 1),
 (38, N'AssessmentFailsIfObservationFails', N'Assessment Fails if Observation Fails', '', 1),
 (39, N'TreatmentBMPAttributeType', N'Treatment BMP Attribute Type', '', 1),
-(40, N'TreatmentBMPAttributeDataType', N'Data Type', '', 1)
+(40, N'TreatmentBMPAttributeDataType', N'Data Type', '', 1),
+(41, N'MaintenanceActivityType', N'Maintenance Activity Type', 'Whether the maintenance performed was Preventative or Corrective maintenance', 1),
+(42, N'MaintenanceActivity', N'Maintenance Activity', 'A maintenance activity performed on a Treatment BMP', 1)

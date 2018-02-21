@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\EditMaintenanceActivity.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -181,7 +182,9 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
-    <Compile Include="Controllers\AssessmentController - Copy.cs" />
+    <Compile Include="Views\MaintenanceActivity\EditMaintenanceActivityViewData.cs" />
+    <Compile Include="Views\MaintenanceActivity\EditMaintenanceActivityViewModel.cs" />
+    <Compile Include="Controllers\MaintenanceActivityController.cs" />
     <Compile Include="Controllers\TreatmentBMPAttributeTypeController.cs" />
     <Compile Include="Controllers\TreatmentBMPImageController.cs" />
     <Compile Include="Controllers\TreatmentBMPDocumentController.cs" />
@@ -203,6 +206,7 @@
     <Compile Include="Common\SitkaRouteTableEntry.cs" />
     <Compile Include="Controllers\GoogleChartController.cs" />
     <Compile Include="Models\HslColor.cs" />
+    <Compile Include="Models\MaintenanceActivityModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPAttribute.cs" />
     <Compile Include="Models\TreatmentBMPAttributeDataType.cs" />
     <Compile Include="Models\TreatmentBMPAttributeTypeSimple.cs" />
@@ -913,6 +917,7 @@
     <Content Include="Views\TreatmentBMPAttributeType\Edit.cshtml" />
     <Content Include="Views\TreatmentBMPAttributeType\Manage.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
+    <Content Include="Views\MaintenanceActivity\EditMaintenanceActivity.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

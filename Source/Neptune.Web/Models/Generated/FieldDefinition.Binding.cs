@@ -58,6 +58,8 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionAssessmentFailsIfObservationFails AssessmentFailsIfObservationFails = FieldDefinitionAssessmentFailsIfObservationFails.Instance;
         public static readonly FieldDefinitionTreatmentBMPAttributeType TreatmentBMPAttributeType = FieldDefinitionTreatmentBMPAttributeType.Instance;
         public static readonly FieldDefinitionTreatmentBMPAttributeDataType TreatmentBMPAttributeDataType = FieldDefinitionTreatmentBMPAttributeDataType.Instance;
+        public static readonly FieldDefinitionMaintenanceActivityType MaintenanceActivityType = FieldDefinitionMaintenanceActivityType.Instance;
+        public static readonly FieldDefinitionMaintenanceActivity MaintenanceActivity = FieldDefinitionMaintenanceActivity.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -67,7 +69,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType, MaintenanceActivityType, MaintenanceActivity };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -169,6 +171,10 @@ namespace Neptune.Web.Models
                     return IsPrimaryContactOrganization;
                 case FieldDefinitionEnum.Jurisdiction:
                     return Jurisdiction;
+                case FieldDefinitionEnum.MaintenanceActivity:
+                    return MaintenanceActivity;
+                case FieldDefinitionEnum.MaintenanceActivityType:
+                    return MaintenanceActivityType;
                 case FieldDefinitionEnum.MaximumNumberOfObservations:
                     return MaximumNumberOfObservations;
                 case FieldDefinitionEnum.MaximumValueOfEachObservation:
@@ -274,7 +280,9 @@ namespace Neptune.Web.Models
         DefaultBenchmarkValue = 37,
         AssessmentFailsIfObservationFails = 38,
         TreatmentBMPAttributeType = 39,
-        TreatmentBMPAttributeDataType = 40
+        TreatmentBMPAttributeDataType = 40,
+        MaintenanceActivityType = 41,
+        MaintenanceActivity = 42
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -515,5 +523,17 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionTreatmentBMPAttributeDataType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionTreatmentBMPAttributeDataType Instance = new FieldDefinitionTreatmentBMPAttributeDataType(40, @"TreatmentBMPAttributeDataType", @"Data Type", @"", true);
+    }
+
+    public partial class FieldDefinitionMaintenanceActivityType : FieldDefinition
+    {
+        private FieldDefinitionMaintenanceActivityType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMaintenanceActivityType Instance = new FieldDefinitionMaintenanceActivityType(41, @"MaintenanceActivityType", @"Maintenance Activity Type", @"Whether the maintenance performed was Preventative or Corrective maintenance", true);
+    }
+
+    public partial class FieldDefinitionMaintenanceActivity : FieldDefinition
+    {
+        private FieldDefinitionMaintenanceActivity(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionMaintenanceActivity Instance = new FieldDefinitionMaintenanceActivity(42, @"MaintenanceActivity", @"Maintenance Activity", @"A maintenance activity performed on a Treatment BMP", true);
     }
 }

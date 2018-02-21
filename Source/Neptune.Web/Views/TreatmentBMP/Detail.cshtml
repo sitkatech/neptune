@@ -203,7 +203,6 @@
                 }
                 @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
                 {
-                    <p class="systemText">Assessments for treatment BMP that are included in an active Registration with a credit declaration cannot be deleted or edited.</p>
                     @Html.DhtmlxGrid(ViewDataTyped.AssessmentGridSpec, ViewDataTyped.AssessmentGridName, ViewDataTyped.AssessmentGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
                 }
                 @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
@@ -211,6 +210,30 @@
                     <p class="systemText">
                         BMP has not been assessed.
                     </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Maintenance Activity
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewMaintenanceActivityUrl, "Add Maintenance Activity", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                </span>
+                }
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.TreatmentBMP.MaintenanceActivities.Any())
+                {
+                    @Html.DhtmlxGrid(ViewDataTyped.MaintenanceActivityGridSpec, ViewDataTyped.MaintenanceActivityGridName, ViewDataTyped.MaintenanceActivityGridUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                }
+                else
+                {
+                    <p class="systemText">There are no @FieldDefinition.MaintenanceActivity.GetFieldDefinitionLabelPluralized() for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
                 }
             </div>
         </div>
@@ -253,7 +276,7 @@
                 }
                 else
                 {
-                    <p class="systemText">No documents have been uploaded for this Treatment BMP.</p>
+                    <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel().</p>
                 }
             </div>
         </div>
