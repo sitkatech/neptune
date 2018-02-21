@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         {
             this.AuditLogs = new HashSet<AuditLog>();
             this.FileResourcesWhereYouAreTheCreatePerson = new HashSet<FileResource>();
+            this.MaintenanceActivitiesWhereYouAreThePerformedByPerson = new HashSet<MaintenanceActivity>();
             this.ModeledCatchmentGeometryStagings = new HashSet<ModeledCatchmentGeometryStaging>();
             this.Notifications = new HashSet<Notification>();
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
@@ -111,13 +112,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPAssessments.Any();
+            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || MaintenanceActivitiesWhereYouAreThePerformedByPerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPAssessments.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPAssessment).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FileResource).Name, typeof(MaintenanceActivity).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPAssessment).Name};
 
         [Key]
         public int PersonID { get; set; }
@@ -140,6 +141,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<AuditLog> AuditLogs { get; set; }
         public virtual ICollection<FileResource> FileResourcesWhereYouAreTheCreatePerson { get; set; }
+        public virtual ICollection<MaintenanceActivity> MaintenanceActivitiesWhereYouAreThePerformedByPerson { get; set; }
         public virtual ICollection<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }

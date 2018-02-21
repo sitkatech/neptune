@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -70,6 +70,11 @@
     <Compile Include="Models\Generated\FileResourcePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\GoogleChartType.Binding.cs" />
     <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\MaintenanceActivity.Binding.cs" />
+    <Compile Include="Models\Generated\MaintenanceActivity.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\MaintenanceActivityPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\MaintenanceActivityType.Binding.cs" />
+    <Compile Include="Models\Generated\MaintenanceActivityTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\MeasurementUnitType.Binding.cs" />
     <Compile Include="Models\Generated\MeasurementUnitTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ModeledCatchment.Binding.cs" />
@@ -176,6 +181,7 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Controllers\AssessmentController - Copy.cs" />
     <Compile Include="Controllers\TreatmentBMPAttributeTypeController.cs" />
     <Compile Include="Controllers\TreatmentBMPImageController.cs" />
     <Compile Include="Controllers\TreatmentBMPDocumentController.cs" />
@@ -269,6 +275,7 @@
     <Compile Include="Views\Jurisdiction\IndexGridSpec.cs" />
     <Compile Include="Views\Jurisdiction\IndexViewData.cs" />
     <Compile Include="Views\Jurisdiction\JurisdictionUrbanCatchmentsGridSpec.cs" />
+    <Compile Include="Views\MaintenanceActivity\MaintenanceActivityGridSpec.cs" />
     <Compile Include="Views\Map\JurisdictionsMapInitJson.cs" />
     <Compile Include="Views\ModeledCatchment\ApproveModeledCatchmentGisUpload.cs" />
     <Compile Include="Views\ModeledCatchment\ApproveModeledCatchmentGisUploadViewData.cs" />

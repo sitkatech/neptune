@@ -65,6 +65,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MaintenanceActivity">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.MaintenanceActivity">
+        <MappingFragment StoreEntitySet="MaintenanceActivity">
+          <ScalarProperty Name="MaintenanceActivityID" ColumnName="MaintenanceActivityID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="MaintenanceActivityDate" ColumnName="MaintenanceActivityDate" />
+          <ScalarProperty Name="PerformedByPersonID" ColumnName="PerformedByPersonID" />
+          <ScalarProperty Name="MaintenanceActivityDescription" ColumnName="MaintenanceActivityDescription" />
+          <ScalarProperty Name="MaintenanceActivityTypeID" ColumnName="MaintenanceActivityTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ModeledCatchment">
       <EntityTypeMapping TypeName="Neptune.Web.Models.ModeledCatchment">
         <MappingFragment StoreEntitySet="ModeledCatchment">
