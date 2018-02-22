@@ -194,6 +194,14 @@ ul.dropdown-menu li a:hover {
 ul.dropdown-menu .divider {
   background-color: #eee;
 }
+.navbar-toggle .glyphicon-menu-hamburger {
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .navbar-nav .open .dropdown-menu {
+    background-color: #fff;
+  }
+}
 footer {
   position: relative;
   bottom: 0;
@@ -1068,6 +1076,16 @@ nav.navbar li {
   background-color: #969491;
   border-left-color: #969491;
   color: #333;
+}
+.lastArrow.current {
+  background-color: #E49937;
+  border-left-color: #E49937;
+  color: #fff;
+}
+.lastArrow.default {
+  background-color: #eee;
+  border-left-color: #eee;
+  color: #006B77;
 }
 .btn-neptune,
 .neptune-modal-dialog .btn-neptune {

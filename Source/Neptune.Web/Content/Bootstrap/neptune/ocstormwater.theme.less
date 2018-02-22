@@ -51,6 +51,7 @@
 @neptune-white: #fff;
 @neptune-black: #000;
 @neptune-blue: #7E8D98;
+@neptune-dark-blue: #006B77;
 @neptune-orange: #E49937;
 
 @neptune-active-arrow-color: #E49937;
@@ -142,6 +143,20 @@ nav.navbar {
         background-color: @neptune-middle-arrow-color;
         border-left-color: @neptune-middle-arrow-color;
         color: @neptune-text-color;
+    }
+}
+
+.lastArrow {
+    &.current {
+        background-color: @neptune-active-arrow-color;
+        border-left-color: @neptune-active-arrow-color;
+        color: @neptune-contentBackground-color;
+    }
+
+    &.default {
+        background-color: @neptune-inactive-arrow-color;
+        border-left-color: @neptune-inactive-arrow-color;
+        color: @neptune-dark-blue;
     }
 }
 
