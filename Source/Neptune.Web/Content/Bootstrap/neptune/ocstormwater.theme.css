@@ -1069,6 +1069,16 @@ nav.navbar li {
   border-left-color: #969491;
   color: #333;
 }
+.lastArrow.current {
+  background-color: #E49937;
+  border-left-color: #E49937;
+  color: #fff;
+}
+.lastArrow.default {
+  background-color: #eee;
+  border-left-color: #eee;
+  color: #006B77;
+}
 .btn-neptune,
 .neptune-modal-dialog .btn-neptune {
   font-size: 15px;

@@ -48,7 +48,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 
     @*if there is a tenant style sheet, use that otherwise use the default. The tenant style sheet should import the default sheet so no need to load it twice*@
-    <link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
+    @*<link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />*@
+    <link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />
     
 
     @RenderSection("JavascriptAndStylesContent", false)
@@ -138,14 +139,14 @@ Source code is available upon request via <support@sitkatech.com>.
     jQuery(document).ready(function() {
   
         jQuery(window).scroll(function () {
-            //if you hard code, then use console
-            //.log to determine when you want the 
-            //nav bar to stick.  
+            // this is fragile, the 10px buffer is for when the document height is just equal to the height of the view port + the height of the header
+            var outerHeight = jQuery(document).height();
+            var heightOfViewPort = jQuery(window).height();
 
-            if (jQuery(window).scrollTop() > 111) {
+            if (jQuery(window).scrollTop() > 111 && (outerHeight > (heightOfViewPort + 110 + 10))) {
                 jQuery('.neptuneNavbar').addClass('navbar-fixed-top');
             }
-            if ($(window).scrollTop() < 110) {
+            if (jQuery(window).scrollTop() < 110) {
                 jQuery('.neptuneNavbar').removeClass('navbar-fixed-top');
             }
         });
