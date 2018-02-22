@@ -65,7 +65,7 @@ namespace Neptune.Web.Common
         {
             return HttpRequestStorage.Tenant.GetTenantAttribute().TenantStyleSheetFileResource != null
                 ? new SitkaRoute<TenantController>(c => c.Style(HttpRequestStorage.Tenant.TenantName)).BuildUrlFromExpression()
-                : "~/Content/Bootstrap/neptune/default.theme.min.css";
+                : "~/Content/Bootstrap/neptune/base.theme.min.css";
         }
         
         public static DbGeometry GetDefaultBoundingBox()

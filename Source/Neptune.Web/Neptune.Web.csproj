@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -500,6 +500,12 @@
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.min.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.css" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-social.min.css" />
+    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.css">
+      <DependentUpon>ocstormwater.theme.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.min.css">
+      <DependentUpon>ocstormwater.theme.css</DependentUpon>
+    </Content>
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers-debug.js" />
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js" />
     <Content Include="Content\esri-leaflet\esri-leaflet-debug.js" />
@@ -512,6 +518,32 @@
     <Content Include="Content\img\MimeTypeIcons\powerpoint_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\word_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\word_48x48.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-144x144.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-192x192.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-36x36.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-48x48.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-72x72.png" />
+    <Content Include="Content\img\OCStormwater\android-icon-96x96.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-114x114.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-120x120.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-144x144.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-152x152.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-180x180.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-57x57.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-60x60.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-72x72.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-76x76.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon-precomposed.png" />
+    <Content Include="Content\img\OCStormwater\apple-icon.png" />
+    <Content Include="Content\img\OCStormwater\browserconfig.xml" />
+    <Content Include="Content\img\OCStormwater\favicon-16x16.png" />
+    <Content Include="Content\img\OCStormwater\favicon-32x32.png" />
+    <Content Include="Content\img\OCStormwater\favicon-96x96.png" />
+    <Content Include="Content\img\OCStormwater\favicon.ico" />
+    <Content Include="Content\img\OCStormwater\ms-icon-144x144.png" />
+    <Content Include="Content\img\OCStormwater\ms-icon-150x150.png" />
+    <Content Include="Content\img\OCStormwater\ms-icon-310x310.png" />
+    <Content Include="Content\img\OCStormwater\ms-icon-70x70.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-57x57.png" />
@@ -595,6 +627,8 @@
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js.map" />
     <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
+    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
+    <Content Include="Content\img\OCStormwater\manifest.json" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />

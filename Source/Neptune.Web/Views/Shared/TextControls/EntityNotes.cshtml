@@ -27,7 +27,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 @if (ViewDataTyped.CanEditNotes)
 {
-    <div class="summaryLayoutUpdateControls"style="float: right">
+    <div style="float: right">
         <span style="display: inline-block">
             @ModalDialogFormHelper.ModalDialogFormLink(NeptuneDhtmlxGridHtmlHelpers.PlusIcon.ToString(), ViewDataTyped.AddNoteUrl, string.Format("New Note for {0}", ViewDataTyped.EntityName), new List<string>(), ViewDataTyped.CanEditNotes)
         </span>
@@ -38,12 +38,12 @@ Source code is available upon request via <support@sitkatech.com>.
 }
 @if (ViewDataTyped.Notes.Any())
 {
-    <table class="summaryLayout">
+    <table class="table">
         @foreach (var entityNote in ViewDataTyped.Notes.OrderByDescending(x => x.LastUpdated))
         {
             <tr class="@entityNote.DisplayCssClass">
-                <td class="summaryLayoutUpdateControls">@ModalDialogFormHelper.MakeEditIconLink(entityNote.EditUrl, string.Format("Edit Note for {0}", ViewDataTyped.EntityName), ViewDataTyped.CanEditNotes)</td>
-                <td class="summaryLayoutUpdateControls">@ModalDialogFormHelper.MakeDeleteLink(DhtmlxGridHtmlHelpers.DeleteIconBootstrap.ToString(), entityNote.DeleteUrl, new List<string>(), ViewDataTyped.CanEditNotes)</td>
+                <td>@ModalDialogFormHelper.MakeEditIconLink(entityNote.EditUrl, string.Format("Edit Note for {0}", ViewDataTyped.EntityName), ViewDataTyped.CanEditNotes)</td>
+                <td>@ModalDialogFormHelper.MakeDeleteLink(DhtmlxGridHtmlHelpers.DeleteIconBootstrap.ToString(), entityNote.DeleteUrl, new List<string>(), ViewDataTyped.CanEditNotes)</td>
                 <td>@entityNote.LastUpdated.ToStringDateTime()</td>
                 <td>@entityNote.LastUpdatedBy</td>
                 <td>@Html.Raw(entityNote.Note.HtmlEncodeWithBreaks())</td>

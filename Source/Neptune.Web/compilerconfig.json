@@ -22,5 +22,9 @@
   {
     "outputFile": "ScriptsCustom/Maps/NeptuneMaps.Stormwater.es5.js",
     "inputFile": "ScriptsCustom/Maps/NeptuneMaps.Stormwater.js"
+  },
+  {
+    "outputFile": "Content/Bootstrap/neptune/ocstormwater.theme.css",
+    "inputFile": "Content/Bootstrap/neptune/ocstormwater.theme.less"
   }
 ]
