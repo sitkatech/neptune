@@ -32,6 +32,9 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypePercentDecline PercentDecline = MeasurementUnitTypePercentDecline.Instance;
         public static readonly MeasurementUnitTypePercentIncrease PercentIncrease = MeasurementUnitTypePercentIncrease.Instance;
         public static readonly MeasurementUnitTypePercentDeviation PercentDeviation = MeasurementUnitTypePercentDeviation.Instance;
+        public static readonly MeasurementUnitTypeCubiceet Cubiceet = MeasurementUnitTypeCubiceet.Instance;
+        public static readonly MeasurementUnitTypeGallons Gallons = MeasurementUnitTypeGallons.Instance;
+        public static readonly MeasurementUnitTypeMinutes Minutes = MeasurementUnitTypeMinutes.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -41,7 +44,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, Cubiceet, Gallons, Minutes };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -123,8 +126,12 @@ namespace Neptune.Web.Models
                     return Acres;
                 case MeasurementUnitTypeEnum.Count:
                     return Count;
+                case MeasurementUnitTypeEnum.Cubiceet:
+                    return Cubiceet;
                 case MeasurementUnitTypeEnum.Feet:
                     return Feet;
+                case MeasurementUnitTypeEnum.Gallons:
+                    return Gallons;
                 case MeasurementUnitTypeEnum.Inches:
                     return Inches;
                 case MeasurementUnitTypeEnum.InchesPerHour:
@@ -135,6 +142,8 @@ namespace Neptune.Web.Models
                     return Meters;
                 case MeasurementUnitTypeEnum.MilligamsPerLiter:
                     return MilligamsPerLiter;
+                case MeasurementUnitTypeEnum.Minutes:
+                    return Minutes;
                 case MeasurementUnitTypeEnum.Percent:
                     return Percent;
                 case MeasurementUnitTypeEnum.PercentDecline:
@@ -168,7 +177,10 @@ namespace Neptune.Web.Models
         Seconds = 11,
         PercentDecline = 12,
         PercentIncrease = 13,
-        PercentDeviation = 14
+        PercentDeviation = 14,
+        Cubiceet = 15,
+        Gallons = 16,
+        Minutes = 17
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -253,5 +265,23 @@ namespace Neptune.Web.Models
     {
         private MeasurementUnitTypePercentDeviation(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
         public static readonly MeasurementUnitTypePercentDeviation Instance = new MeasurementUnitTypePercentDeviation(14, @"PercentDeviation", @"% deviation", @"% deviation", @"% deviation", 0, false);
+    }
+
+    public partial class MeasurementUnitTypeCubiceet : MeasurementUnitType
+    {
+        private MeasurementUnitTypeCubiceet(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeCubiceet Instance = new MeasurementUnitTypeCubiceet(15, @"Cubic eet", @"cubic feet", @"cu ft", @"cu ft", 0, false);
+    }
+
+    public partial class MeasurementUnitTypeGallons : MeasurementUnitType
+    {
+        private MeasurementUnitTypeGallons(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeGallons Instance = new MeasurementUnitTypeGallons(16, @"Gallons", @"gallons", @"gallons", @"gallon", 0, false);
+    }
+
+    public partial class MeasurementUnitTypeMinutes : MeasurementUnitType
+    {
+        private MeasurementUnitTypeMinutes(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeMinutes Instance = new MeasurementUnitTypeMinutes(17, @"Minutes", @"minutes", @"minutes", @"minute", 0, false);
     }
 }

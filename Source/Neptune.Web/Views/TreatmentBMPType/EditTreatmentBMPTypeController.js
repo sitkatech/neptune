@@ -106,6 +106,11 @@
         return treatmentBMPAttributeTypeToFind.IsRequired ? "Yes" : "No";
     };
 
+    $scope.getTreatmentBMPAttributeTypeDescription = function (treatmentBMPTypeAttributeTypeSimple) {
+        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
+        return treatmentBMPAttributeTypeToFind.Description;
+    };
+
     $scope.getTreatmentBMPAttributeType = function (treatmentBMPAttributeTypeID) {
         return _.find($scope.AngularViewData.TreatmentBMPAttributeTypes, function (f) { return treatmentBMPAttributeTypeID == f.TreatmentBMPAttributeTypeID; });
     };

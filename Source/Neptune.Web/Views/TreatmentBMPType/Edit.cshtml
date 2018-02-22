@@ -195,6 +195,7 @@
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
                     <th class="text-center">@Html.Label("Required?")</th>
+                    <th class="text-center">@Html.Label("Description")</th>
                 </tr>
                 <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getTreatmentBMPAttributeTypeName]">
                     <td>
@@ -204,6 +205,7 @@
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDataTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeMeasurementUnitName(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-center" ng-bind="getTreatmentBMPAttributeTypeIsRequired(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-center" ng-bind="getTreatmentBMPAttributeTypeDescription(treatmentBMPTypeAttributeTypeSimple)"></td>
                 </tr>
             </table>
         </div>

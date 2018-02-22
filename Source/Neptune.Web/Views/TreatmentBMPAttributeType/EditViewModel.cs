@@ -49,6 +49,13 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         [DisplayName("Required?")]
         public bool IsRequired { get; set; }
 
+        [Required]
+        [FieldDefinitionDisplay(Models.FieldDefinitionEnum.AttributeTypePurpose)]
+        public int TreatmentBMPAttributeTypePurposeID { get; set; }
+
+        [StringLength(Models.TreatmentBMPAttributeType.FieldLengths.TreatmentBMPAttributeTypeDescription)]
+        public string TreatmentBMPAttributeTypeDesription { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -63,6 +70,8 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             TreatmentBMPAttributeDataTypeID = treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID;
             MeasurementUnitTypeID = treatmentBMPAttributeType.MeasurementUnitTypeID;
             IsRequired = treatmentBMPAttributeType.IsRequired;
+            TreatmentBMPAttributeTypePurposeID = treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID;
+            TreatmentBMPAttributeTypeDesription = treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription;
         }
 
 
@@ -72,6 +81,8 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID = TreatmentBMPAttributeDataTypeID.Value;
             treatmentBMPAttributeType.MeasurementUnitTypeID = MeasurementUnitTypeID;
             treatmentBMPAttributeType.IsRequired = IsRequired;
+            treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
+            treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

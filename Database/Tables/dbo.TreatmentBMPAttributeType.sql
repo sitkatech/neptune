@@ -9,7 +9,8 @@ CREATE TABLE [dbo].[TreatmentBMPAttributeType](
 	[TreatmentBMPAttributeDataTypeID] [int] NOT NULL,
 	[MeasurementUnitTypeID] [int] NULL,
 	[IsRequired] [bit] NOT NULL,
-	[TreatmentBMPAttributeTypeDescription] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TreatmentBMPAttributeTypeDescription] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[TreatmentBMPAttributeTypePurposeID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAttributeTypeID] ASC
@@ -40,3 +41,8 @@ ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_Tr
 REFERENCES [dbo].[TreatmentBMPAttributeDataType] ([TreatmentBMPAttributeDataTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [FK_TreatmentBMPAttributeType_TreatmentBMPAttributeDataType_TreatmentBMPAttributeDataTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypePurpose_TreatmentBMPAttributeTypePurposeID] FOREIGN KEY([TreatmentBMPAttributeTypePurposeID])
+REFERENCES [dbo].[TreatmentBMPAttributeTypePurpose] ([TreatmentBMPAttributeTypePurposeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [FK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypePurpose_TreatmentBMPAttributeTypePurposeID]

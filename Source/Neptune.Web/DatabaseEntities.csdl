@@ -629,7 +629,8 @@
     <Property Name="TreatmentBMPAttributeDataTypeID" Type="Int32" Nullable="false" />
     <Property Name="MeasurementUnitTypeID" Type="Int32" />
     <Property Name="IsRequired" Type="Boolean" Nullable="false" />
-    <Property Name="TreatmentBMPAttributeTypeDescription" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="TreatmentBMPAttributeTypeDescription" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="TreatmentBMPAttributeTypePurposeID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="TreatmentBMPAttributes" Relationship="Neptune.Web.Models.FK_TreatmentBMPAttribute_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID" FromRole="TreatmentBMPAttributeType" ToRole="TreatmentBMPAttributes" />
     <NavigationProperty Name="TreatmentBMPTypeAttributeTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAttributeType_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID" FromRole="TreatmentBMPAttributeType" ToRole="TreatmentBMPTypeAttributeTypes" />
   </EntityType>

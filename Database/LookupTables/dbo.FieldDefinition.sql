@@ -44,4 +44,5 @@ VALUES
 (39, N'TreatmentBMPAttributeType', N'Treatment BMP Attribute Type', '', 1),
 (40, N'TreatmentBMPAttributeDataType', N'Data Type', '', 1),
 (41, N'MaintenanceRecordType', N'Maintenance Record Type', 'Whether the maintenance performed was Preventative or Corrective maintenance', 1),
-(42, N'MaintenanceRecord', N'Maintenance Record', 'A record of a maintenance activity performed on a Treatment BMP', 1)
+(42, N'MaintenanceRecord', N'Maintenance Record', 'A record of a maintenance activity performed on a Treatment BMP', 1),
+(43, N'AttributeTypePurpose', N'Purpose', 'How the attribute type will be used for analysis and reporting', 1)

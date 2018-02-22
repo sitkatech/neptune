@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
@@ -39,6 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
 
         public IEnumerable<SelectListItem> TreatmentBMPAttributeDataTypes { get; }
         public IEnumerable<SelectListItem> MeasurementUnitTypes { get; }
+        public IEnumerable<SelectListItem> TreatmentBMPAttributeTypePurposes { get; }
 
 
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
@@ -57,14 +59,22 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 SubEntityUrl = treatmentBMPAttributeType.GetDetailUrl();
             }
 
-            TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPAttributeDataTypeID.ToString(), x => x.TreatmentBMPAttributeDataTypeDisplayName);
-            MeasurementUnitTypes = measurementUnitTypes.ToSelectListWithEmptyFirstRow(x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, "None");
+            TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.ToSelectListWithEmptyFirstRow(
+                x => x.TreatmentBMPAttributeDataTypeID.ToString(), x => x.TreatmentBMPAttributeDataTypeDisplayName);
+            MeasurementUnitTypes = measurementUnitTypes.ToSelectListWithEmptyFirstRow(
+                x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, "None");
+            TreatmentBMPAttributeTypePurposes =
+                TreatmentBMPAttributeTypePurpose.All.ToSelectListWithDisabledEmptyFirstRow(
+                    x => x.TreatmentBMPAttributeTypePurposeID.ToString(CultureInfo.InvariantCulture),
+                    x => x.TreatmentBMPAttributeTypePurposeDisplayName, "Choose a purpose");
 
-            TreatmentBMPAttributeTypeIndexUrl = SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
+            TreatmentBMPAttributeTypeIndexUrl =
+                SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
 
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
-            ViewTreatmentBMPAttributeInstructionsNeptunePage = new ViewPageContentViewData(treatmentBMPAttributeInstructionsNeptunePage, currentPerson);
+            ViewTreatmentBMPAttributeInstructionsNeptunePage =
+                new ViewPageContentViewData(treatmentBMPAttributeInstructionsNeptunePage, currentPerson);
         }
     }
 }

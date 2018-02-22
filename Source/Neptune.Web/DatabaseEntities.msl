@@ -330,6 +330,7 @@
           <ScalarProperty Name="MeasurementUnitTypeID" ColumnName="MeasurementUnitTypeID" />
           <ScalarProperty Name="IsRequired" ColumnName="IsRequired" />
           <ScalarProperty Name="TreatmentBMPAttributeTypeDescription" ColumnName="TreatmentBMPAttributeTypeDescription" />
+          <ScalarProperty Name="TreatmentBMPAttributeTypePurposeID" ColumnName="TreatmentBMPAttributeTypePurposeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

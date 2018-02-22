@@ -33,7 +33,7 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="form-horizontal">                            
+                        <div class="form-horizontal">
                             @for (var i = 0; i < ViewDataTyped.TreatmentBMPTypeAttributeTypes.Count; i++)
                             {
                                 var attribute = ViewDataTyped.TreatmentBMPTypeAttributeTypes[i];
@@ -43,38 +43,46 @@ Source code is available upon request via <support@sitkatech.com>.
                                         @attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName
                                         @if (attribute.TreatmentBMPAttributeType.IsRequired)
                                         {
-                                            <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span>
+                                            <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px;"></span>
                                         }
                                     </label>
                                     <div class="col-sm-6">
-                                            <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID" />
-                                            <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID" />
-                                            @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
-                                            {
-                                                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
-                                                    <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" class="form-control" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
-                                                    <div class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-th"></span>
-                                                    </div>
-                                                </div>
 
-                                            }
-                                            else if (attribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
-                                            {
-                                                <div class="row">
-                                                    <div class="col-sm-5">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit"/>
-                                                            <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID"/>
+                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID"/>
+                                                @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
+                                                {
+                                                    <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
+                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" class="form-control" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)"/>
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-th"></span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
-                                            }
-                                            
+                                                }
+                                                else if (attribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="input-group">
+                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit"/>
+                                                                <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)"/>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <p style="margin-top: 5px;" class="systemText">@attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             }

@@ -102,6 +102,7 @@
                                 <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
                                 <th class="text-right">@Html.Label("Required?")</th>
+                                <th class="text-right">@Html.Label("Description")</th>
                             </tr>
                             <tbody>
                                 @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAttributeTypes)
@@ -111,6 +112,7 @@
                                         <td class="text-left">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName</td>
                                         <td class="text-right">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetMeasurementUnitDisplayName()</td>
                                         <td class="text-right">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.IsRequired.ToYesNo()</td>
+                                        <td class="text-right">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
                                     </tr>
                                 }
                             </tbody>

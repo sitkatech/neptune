@@ -60,6 +60,14 @@
                     <label class="col-sm-3 control-label text-right">@Html.Label("Required?")</label>
                     <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.IsRequired.ToYesNo()</div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.AttributeTypePurpose)</label>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose.TreatmentBMPAttributeTypePurposeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-3 control-label text-right">@Html.Label("Description")</label>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</div>
+                </div>
             </div>
         </div>
     </div>

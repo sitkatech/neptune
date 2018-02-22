@@ -261,6 +261,11 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPAttribute":
                     return TreatmentBMPAttributes.GetTreatmentBMPAttribute(primaryKey);
 
+                case "TreatmentBMPAttributeTypePurpose":
+                    var treatmentBMPAttributeTypePurpose = TreatmentBMPAttributeTypePurpose.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPAttributeTypePurpose, "TreatmentBMPAttributeTypePurpose", primaryKey);
+                    return treatmentBMPAttributeTypePurpose;
+
                 case "TreatmentBMPAttributeType":
                     return TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(primaryKey);
 
