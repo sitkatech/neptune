@@ -44,18 +44,22 @@ Source code is available upon request via <support@sitkatech.com>.
     <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-16x16.png", MultiTenantHelpers.GetTenantName())>
 
     @{ Html.RenderRazorSitkaPartial<NeptuneIncludes>(); }
-    
-    <link href="@Url.Content("~/Content/Bootstrap/neptune/base.theme.min.css")" rel="stylesheet" type="text/css" />
+
+
+
+    @*if there is a tenant style sheet, use that otherwise use the default. The tenant style sheet should import the default sheet so no need to load it twice*@
     <link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
+    
 
     @RenderSection("JavascriptAndStylesContent", false)
 </head>
 <body>
     <div class="expandToFillScreen">
-        <div class="header">            
-            <div class="headerText">
-                <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()" /><a href="@ViewDataTyped.NeptuneHomeUrl">@MultiTenantHelpers.GetTenantDisplayName()</a>
-            </div>
+        <div class="header">                          
+                <a href="@ViewDataTyped.NeptuneHomeUrl">
+                    <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()"/>
+                    <span class="headerText">@MultiTenantHelpers.GetTenantDisplayName()</span>
+                </a>
         </div>
         <div id="mainnavandcontent">
             <nav class="navbar neptuneNavbar">
@@ -129,3 +133,21 @@ Source code is available upon request via <support@sitkatech.com>.
 
 </body>
 </html>
+
+<script>
+    jQuery(document).ready(function() {
+  
+        jQuery(window).scroll(function () {
+            //if you hard code, then use console
+            //.log to determine when you want the 
+            //nav bar to stick.  
+
+            if (jQuery(window).scrollTop() > 111) {
+                jQuery('.neptuneNavbar').addClass('navbar-fixed-top');
+            }
+            if ($(window).scrollTop() < 110) {
+                jQuery('.neptuneNavbar').removeClass('navbar-fixed-top');
+            }
+        });
+    });
+</script>

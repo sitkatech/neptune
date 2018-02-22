@@ -1,0 +1,152 @@
+﻿// This file is for any custom theming of Bootstrap
+//
+// Core variables and mixins - allows reuse of any Bootstrap or custom variables
+@import "../bootstrap-3.3.7/less/variables.less";
+@import "bootstrap.neptune.variables.less";
+@import "../bootstrap-3.3.7/less/mixins.less";
+@import (reference) "../bootstrap-3.3.7/less/glyphicons.less";
+@import "./base.theme.less";
+
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:700);
+
+
+// Customizable Variables
+@neptune-menu-font: "Lato", "Open Sans", sans-serif;
+@neptune-header-font: "Lato", "Open Sans", sans-serif;
+@neptune-text-font: "Lato", "Open Sans",sans-serif;
+@neptune-text-fontSize: 15px;
+
+@neptune-text-color: #333;
+@neptune-header-color: #0099ab;
+
+@neptune-background-color: #fff;
+@neptune-contentBackground-color: #fff;
+@neptune-contentBorder-color: #fff;
+
+@neptune-logoHeaderBackground-color: #fff;
+@neptune-logoHeaderText-color: #337ab7;
+@neptune-navBackground-color: #0099ab;
+@neptune-navBorder-color: #fff;
+@neptune-navText-color: #fff;
+@neptune-navItemText-color-hover: #fff;
+@neptune-navItemBackground-color-hover: #00c1d5;
+
+@neptune-panel-headerBackground-color: #969491;
+@neptune-panel-headerText-color: #fff;
+@neptune-panel-border-color: #fff;
+
+@neptune-pageTitle-color: #337ab7;
+
+@neptune-helpIcon-color: #70A1CC;
+
+@neptune-buttonBackground-color: #0099ab;
+@neptune-buttonText-color: #fff;
+@neptune-buttonBackground-color-hover: #00c1d5;
+@neptune-buttonText-color-hover: #fff;
+
+@neptune-scrollSpyAccent-color: #337ab7;
+
+@neptune-white: #fff;
+@neptune-black: #000;
+@neptune-blue: #7E8D98;
+@neptune-orange: #E49937;
+
+@neptune-active-arrow-color: #E49937;
+@neptune-middle-arrow-color: #969491;
+@neptune-inactive-arrow-color: #eee;
+
+@z-index-arrow: 900;
+
+@success-color: #5cb85c;
+@warning-color: #f0ad4e;
+@danger-color: #a94442;
+
+
+@disabled-color: #999;
+
+.header {
+    padding: 0;
+    img.headerLogo {
+        height: 100px;
+    }
+
+    .headerText {
+        display: none;
+    }
+}
+
+nav.navbar {
+    border-bottom: none;
+    margin-bottom: 0;
+    border: none;
+
+    li {
+        font-weight: 400;
+        font-size: @neptune-text-fontSize;
+    }
+}
+
+.homepageCarouselFullWidthColumn {
+    .main-text {
+        text-align: center;
+
+        h1 {
+            font-weight: 700;
+            font-family: 'Montserrat', 'Lato', sans-serif;
+        }
+    }
+
+    .glyphicon-chevron-left, .glyphicon-chevron-right {
+        color: @neptune-orange;
+    }
+
+    .carousel-indicators li.active {
+        background-color: @neptune-orange;
+        border-color: @neptune-orange;
+    }
+}
+
+#homepageCarousel .carousel-inner .item .carousel-caption {
+    bottom: 40px;
+
+    .captionBlock {
+        background-color: @neptune-navItemBackground-color-hover;
+        color: @neptune-navItemText-color-hover;
+        border-radius: 2px;
+
+        p {
+            text-shadow: none;
+            margin: 5px;
+            font-size: @neptune-text-fontSize;
+        }
+    }
+
+}
+
+.panelNeptune .panelTitle{
+    font-size: @neptune-text-fontSize;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Middle arrow */
+.middleArrow {
+    &.current {
+        background-color: @neptune-middle-arrow-color;
+        border-left-color: @neptune-middle-arrow-color;
+        color: @neptune-white;
+    }
+
+    &.default {
+        background-color: @neptune-middle-arrow-color;
+        border-left-color: @neptune-middle-arrow-color;
+        color: @neptune-text-color;
+    }
+}
+
+
+.btn-neptune, .neptune-modal-dialog .btn-neptune {
+    font-size: 15px;
+}
+
