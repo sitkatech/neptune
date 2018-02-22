@@ -194,6 +194,14 @@ ul.dropdown-menu li a:hover {
 ul.dropdown-menu .divider {
   background-color: #eee;
 }
+.navbar-toggle .glyphicon-menu-hamburger {
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .navbar-nav .open .dropdown-menu {
+    background-color: #fff;
+  }
+}
 footer {
   position: relative;
   bottom: 0;

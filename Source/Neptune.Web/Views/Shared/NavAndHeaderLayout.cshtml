@@ -48,8 +48,9 @@ Source code is available upon request via <support@sitkatech.com>.
 
 
     @*if there is a tenant style sheet, use that otherwise use the default. The tenant style sheet should import the default sheet so no need to load it twice*@
-    @*<link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />*@
-    <link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
+    @*swich commented lines for testing purposes*@
+    @*<link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />*@
     
 
     @RenderSection("JavascriptAndStylesContent", false)
