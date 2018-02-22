@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using LtInfo.Common
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
@@ -28,7 +28,6 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.Tenant.Detail
-
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -43,16 +42,18 @@ Source code is available upon request via <support@sitkatech.com>.
         //]]>
     </script>
 }
-
 <div class="row">
     <div class="col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
+                Basics
                 @if (ViewDataTyped.IsCurrentTenant)
                 {
-                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditBasicsUrl, string.Format("Edit Tenant: {0}", ViewDataTyped.TenantAttribute.TenantDisplayName), 800, "Save", "Cancel", new List<string>(), null, null)
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditBasicsUrl, string.Format("Edit Tenant: {0}", ViewDataTyped.TenantAttribute.TenantDisplayName), 800, "Save", "Cancel", new List<string>(), null, null)
+                    </span>
+
                 }
-                Basics
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -121,7 +122,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         @if (ViewDataTyped.TenantAttribute.TenantSquareLogoFileResource != null)
                         {
                             <div style="margin-bottom: 15px;">
-                                @Html.Image(ViewDataTyped.TenantAttribute.TenantSquareLogoFileResource.FileResourceUrl, new {style = "max-width: 100%;"})
+                                @Html.Image(ViewDataTyped.TenantAttribute.TenantSquareLogoFileResource.FileResourceUrl, new { style = "max-width: 100%;" })
                             </div>
                         }
                         else
@@ -142,7 +143,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         @if (ViewDataTyped.TenantAttribute.TenantBannerLogoFileResource != null)
                         {
                             <div style="margin-bottom: 15px;">
-                                @Html.Image(ViewDataTyped.TenantAttribute.TenantBannerLogoFileResource.FileResourceUrl, new {style = "max-width: 100%;"})
+                                @Html.Image(ViewDataTyped.TenantAttribute.TenantBannerLogoFileResource.FileResourceUrl, new { style = "max-width: 100%;" })
                             </div>
                         }
                         else
@@ -157,11 +158,14 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @if (ViewDataTyped.IsCurrentTenant)
-                {
-                    @ModalDialogFormHelper.ModalDialogFormLink(null, BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditBoundingBoxUrl, string.Format("Edit Default Map Extent: {0}", ViewDataTyped.TenantAttribute.TenantDisplayName), 800, ModalDialogFormHelper.SaveButtonID, "Save", "Cancel", new List<string>(), null, null, ViewDataTyped.EditBoundingBoxFormID, null)
-                }
                 Default Map Extent
+                @if (ViewDataTyped.IsCurrentTenant)
+    {
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(null, BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditBoundingBoxUrl, string.Format("Edit Default Map Extent: {0}", ViewDataTyped.TenantAttribute.TenantDisplayName), 800, ModalDialogFormHelper.SaveButtonID, "Save", "Cancel", new List<string>(), null, null, ViewDataTyped.EditBoundingBoxFormID, null)
+                </span>
+
+}
             </div>
             <div class="panel-body" id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 400px;">
             </div>

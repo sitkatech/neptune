@@ -127,7 +127,7 @@
             <div class="panel-heading panelTitle">
                 Additional Data
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage)
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
