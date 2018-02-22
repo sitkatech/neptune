@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using LtInfo.Common.BootstrapWrappers;
+using LtInfo.Common.Mvc;
 
 namespace LtInfo.Common
 {
@@ -60,7 +61,7 @@ namespace LtInfo.Common
         {
             return new[]
                 {
-                    new SelectListItem {Text = "Choose one", Value = string.Empty},
+                    new SelectListItem {Text = ToSelectListExtensions.DefaultEmptyFirstRowText, Value = string.Empty},
                     new SelectListItem {Text = "No", Value = false.ToString()},
                     new SelectListItem {Text = "Yes", Value = true.ToString()}
                 };

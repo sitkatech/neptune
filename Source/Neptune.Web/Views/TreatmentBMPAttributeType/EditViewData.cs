@@ -21,8 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.Mvc;
+using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -41,6 +44,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         public IEnumerable<SelectListItem> TreatmentBMPAttributeDataTypes { get; }
         public IEnumerable<SelectListItem> MeasurementUnitTypes { get; }
         public IEnumerable<SelectListItem> TreatmentBMPAttributeTypePurposes { get; }
+        public IEnumerable<SelectListItem> YesNos { get; }
 
 
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
@@ -59,14 +63,15 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 SubEntityUrl = treatmentBMPAttributeType.GetDetailUrl();
             }
 
-            TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.ToSelectListWithEmptyFirstRow(
+            YesNos = BooleanFormats.GetYesNoSelectList();
+            TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.TreatmentBMPAttributeDataTypeID.ToString(), x => x.TreatmentBMPAttributeDataTypeDisplayName);
-            MeasurementUnitTypes = measurementUnitTypes.ToSelectListWithEmptyFirstRow(
-                x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, "None");
+            MeasurementUnitTypes = measurementUnitTypes.OrderBy(x => x.MeasurementUnitTypeDisplayName).ToSelectListWithEmptyFirstRow(
+                x => x.MeasurementUnitTypeID.ToString(), x => x.MeasurementUnitTypeDisplayName, ViewUtilities.NoneString);
             TreatmentBMPAttributeTypePurposes =
                 TreatmentBMPAttributeTypePurpose.All.ToSelectListWithDisabledEmptyFirstRow(
                     x => x.TreatmentBMPAttributeTypePurposeID.ToString(CultureInfo.InvariantCulture),
-                    x => x.TreatmentBMPAttributeTypePurposeDisplayName, "Choose a purpose");
+                    x => x.TreatmentBMPAttributeTypePurposeDisplayName);
 
             TreatmentBMPAttributeTypeIndexUrl =
                 SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());

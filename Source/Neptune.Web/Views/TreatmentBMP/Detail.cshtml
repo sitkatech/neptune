@@ -143,20 +143,25 @@
                 }
                 else
                 {
-                    <div class="row">
-                        <label class="col-sm-3">@Html.Label("Attribute")</label>
-                        <div class="col-sm-4">@Html.Label("Value")</div>
-                        <div class="col-sm-5">@Html.Label("description")</div>
-                    </div>
-                    foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes)
-                    {
-                    <div class="row">
-                        <label class="col-sm-3 control-label text-left">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName</label>
-
-                        <div class="col-sm-4">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</div>
-                        <div class="col-sm-5 systemText">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</div>
-                    </div>
-                    }
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes)
+                        {
+                            <tr>
+                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName</td>
+                                <td>@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
                 }
             </div>
         </div>

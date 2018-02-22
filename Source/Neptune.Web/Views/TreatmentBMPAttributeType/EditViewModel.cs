@@ -53,6 +53,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         [FieldDefinitionDisplay(Models.FieldDefinitionEnum.AttributeTypePurpose)]
         public int TreatmentBMPAttributeTypePurposeID { get; set; }
 
+        [DisplayName("Description")]
         [StringLength(Models.TreatmentBMPAttributeType.FieldLengths.TreatmentBMPAttributeTypeDescription)]
         public string TreatmentBMPAttributeTypeDesription { get; set; }
 
