@@ -1034,6 +1034,10 @@ nav.navbar li {
   font-weight: 400;
   font-size: 15px;
 }
+nav.navbar-fixed-top {
+  padding-left: 15px;
+  padding-right: 15px;
+}
 .homepageCarouselFullWidthColumn .main-text {
   text-align: center;
 }
