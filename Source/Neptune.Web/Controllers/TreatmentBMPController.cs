@@ -199,7 +199,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !treatmentBMP.HasDependentObjectsBesidesBenchmarksAndThresholds();
+            var canDelete = true;
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete the '{treatmentBMP.TreatmentBMPName}' treatment BMP?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Detail(treatmentBMP), "here"));

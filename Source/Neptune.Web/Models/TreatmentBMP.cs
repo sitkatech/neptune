@@ -107,6 +107,7 @@ namespace Neptune.Web.Models
 
         public void DeleteFull()
         {
+            TreatmentBMPAssessments.SelectMany(x => x.TreatmentBMPObservations).ToList().DeleteTreatmentBMPObservation();
             TreatmentBMPAssessments.DeleteTreatmentBMPAssessment();
             TreatmentBMPAttributes.DeleteTreatmentBMPAttribute();
             TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
