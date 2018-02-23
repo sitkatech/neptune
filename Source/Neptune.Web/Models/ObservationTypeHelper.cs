@@ -95,9 +95,9 @@ namespace Neptune.Web.Models
                 validationErrors.Add(new ValidationResult("Minimum Number of Observations must be greater than 0"));
             }
 
-            if (maximumNumberOfObservations != null && minimumNumberOfObservations >= maximumNumberOfObservations)
+            if (maximumNumberOfObservations != null && minimumNumberOfObservations > maximumNumberOfObservations)
             {
-                validationErrors.Add(new ValidationResult("Minimum Number of Observations must less than the Maximum Number of Observations"));
+                validationErrors.Add(new ValidationResult("Minimum Number of Observations must be less than or equal to the Maximum Number of Observations"));
             }
         }
 
@@ -105,7 +105,7 @@ namespace Neptune.Web.Models
         {           
             if (maximumValueOfObservations != null && minimumValueOfObservations > maximumValueOfObservations)
             {
-                validationErrors.Add(new ValidationResult("Minimum Value of Each Observation must less than the Maximum Value of Each Observation"));
+                validationErrors.Add(new ValidationResult("Minimum Value of Each Observation must be less than or equal to the Maximum Value of Each Observation"));
             }
         }
 

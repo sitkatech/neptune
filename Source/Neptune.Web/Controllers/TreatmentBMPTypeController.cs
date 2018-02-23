@@ -183,7 +183,7 @@ namespace Neptune.Web.Controllers
             treatmentBMPType.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
             treatmentBMPType.TreatmentBMPAssessments.DeleteTreatmentBMPAssessment();
             treatmentBMPType.TreatmentBMPAttributes.DeleteTreatmentBMPAttribute();
-            treatmentBMPType.TreatmentBMPs.DeleteTreatmentBMP();
+            treatmentBMPType.TreatmentBMPs.ToList().ForEach(x => x.DeleteFull());
             treatmentBMPType.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
             treatmentBMPType.TreatmentBMPTypeAttributeTypes.DeleteTreatmentBMPTypeAttributeType();
             treatmentBMPType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();

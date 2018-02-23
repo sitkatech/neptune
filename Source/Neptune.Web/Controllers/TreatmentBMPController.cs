@@ -192,7 +192,8 @@ namespace Neptune.Web.Controllers
             {
                 treatmentBMP.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
             }
-            treatmentBMP.DeleteTreatmentBMP();
+
+            treatmentBMP.DeleteFull();
             return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Index()));
         }
 
