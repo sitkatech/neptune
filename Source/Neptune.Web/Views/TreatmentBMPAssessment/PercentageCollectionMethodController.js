@@ -25,10 +25,10 @@ angular.module("NeptuneApp").controller("PercentageCollectionMethodController", 
 
     $scope.initializeWithEmptyRows = function () {
         var newObservationData = {
-            PercentageObservations: []
+            SingleValueObservations: []
         }
         for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
-            newObservationData.PercentageObservations.push({
+            newObservationData.SingleValueObservations.push({
                 PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
                 ObservationValue: null,
                 Notes: null
@@ -42,24 +42,21 @@ angular.module("NeptuneApp").controller("PercentageCollectionMethodController", 
             $scope.initializeWithEmptyRows();
         } else {
             $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData);
-            console.log($scope.ObservationData);
-            if ($scope.ObservationData.PercentageObservations == null) {
+            if ($scope.ObservationData.SingleValueObservations == null) {
                 $scope.initializeWithEmptyRows();
             }
         }
     };
 
-    $scope.calculateTotalPercent = function () {
-        var sum = _.reduce($scope.ObservationData.PercentageObservations, function (sum, n) {
+    $scope.calculateRemainingPercent = function () {
+        var sum = _.reduce($scope.ObservationData.SingleValueObservations, function (sum, n) {
             var toAdd = n.ObservationValue == null ? 0 : n.ObservationValue;
             return sum + toAdd;
         }, 0);
-        return Math.round(sum * 100) / 100;
+        return Math.round((100 - sum) * 100) / 100;
     }
 
-    $scope.percentExceeds100 = function () { return $scope.calculateTotalPercent() > 100 ? true : false; }
-
-    $scope.percentDoesNotEqual100 = function () { return $scope.calculateTotalPercent() !== 100 ? true : false; }
+    $scope.percentIsNegative = function () { return $scope.calculateRemainingPercent() < 0 ? true : false; }
 
     $scope.submit = function () {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);

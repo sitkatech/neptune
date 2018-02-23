@@ -60,7 +60,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </div>
                 <br />
                 <div>
-                    <table class="table observationList" ng-hide="ObservationData.PercentageObservations.length === 0">
+                    <table class="table observationList" ng-hide="ObservationData.SingleValueObservations.length === 0">
                         <thead>
                         <tr class="row">
                             <th class="col-xs-3">@Html.Label("Measurement Type")</th>
@@ -68,7 +68,7 @@ Source code is available upon request via <support@sitkatech.com>.
                             <th class="col-xs-7">@Html.Label("Notes")</th>
                         </tr>
                         </thead>
-                        <tr class="row" ng-repeat="observation in ObservationData.PercentageObservations track by $index">
+                        <tr class="row" ng-repeat="observation in ObservationData.SingleValueObservations track by $index">
                             <td class="col-xs-3">
                                 <span ng-bind="observation.PropertyObserved"></span>
                             </td>
@@ -82,10 +82,10 @@ Source code is available upon request via <support@sitkatech.com>.
                         <tfoot>
                         <tr class="row">
                             <td class="col-xs-3">
-                                Total
+                                Other
                             </td>
-                            <td class="col-xs-2 text-center" style="font-weight: bold" ng-class="percentExceeds100() ? 'red' : ''">
-                                {{calculateTotalPercent()}}%
+                            <td class="col-xs-2 text-center" style="font-weight: bold" ng-class="percentIsNegative() ? 'red' : ''">
+                                {{calculateRemainingPercent()}}%
                             </td>
                         </tr>
                         </tfoot>
@@ -101,8 +101,8 @@ Source code is available upon request via <support@sitkatech.com>.
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)" ng-disabled="percentDoesNotEqual100()">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)" ng-disabled="percentDoesNotEqual100()">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)" ng-disabled="percentIsNegative()">Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)" ng-disabled="percentIsNegative()">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
 
         @Html.HiddenFor(m => m.TreatmentBMPAssessmentID)

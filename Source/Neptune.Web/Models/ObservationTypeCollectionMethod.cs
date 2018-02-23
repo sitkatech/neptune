@@ -286,21 +286,7 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
-            {
-                validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
-            }
-
-            if (propertiesToObserve.Any(string.IsNullOrWhiteSpace))
-            {
-                validationErrors.Add(new ValidationResult("Each Property to Observe must have a name and cannot be blank"));
-            }
-
-            if (propertiesToObserve.Count < 2)
-            {
-                validationErrors.Add(new ValidationResult("At least two Properties to Observe is required"));
-            }
-
+            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
             ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
             ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
             ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
@@ -336,12 +322,22 @@ namespace Neptune.Web.Models
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = JsonConvert.DeserializeObject<PercentageObservationSchema>(observationData);
-            return 0; //todo
+            return observation.SingleValueObservations.Sum(x => x.ObservationValue);
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
-            throw new NotImplementedException();
+            var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
+            var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
+
+            if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
+            {
+                return null;
+            }
+
+            return ObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
         }
     }
 }
