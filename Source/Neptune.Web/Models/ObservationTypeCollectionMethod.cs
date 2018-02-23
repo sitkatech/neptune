@@ -286,7 +286,21 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            if (propertiesToObserve.Distinct().Count() < propertiesToObserve.Count)
+            {
+                validationErrors.Add(new ValidationResult("Properties to Observe must have unique names"));
+            }
+
+            if (propertiesToObserve.Any(string.IsNullOrWhiteSpace))
+            {
+                validationErrors.Add(new ValidationResult("Each Property to Observe must have a name and cannot be blank"));
+            }
+
+            if (propertiesToObserve.Count < 2)
+            {
+                validationErrors.Add(new ValidationResult("At least two Properties to Observe is required"));
+            }
+
             ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
             ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
             ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);

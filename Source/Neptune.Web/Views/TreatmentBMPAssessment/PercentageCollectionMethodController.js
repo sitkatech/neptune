@@ -23,39 +23,45 @@ angular.module("NeptuneApp").controller("PercentageCollectionMethodController", 
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    var newSingleValueObservation = {
-        PropertyObserved: null,
-        ObservationValue: null,
-        Notes: null
-    }
-
-    var newObservationData = {
-        SingleValueObservations: []
-    }
-
-
     $scope.initializeWithEmptyRows = function () {
-        $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData) == null ? newObservationData : JSON.parse($scope.AngularModel.ObservationData);
-        while ($scope.ObservationData.SingleValueObservations.length < $scope.AngularViewData.MinimumNumberOfObservations) {
-            $scope.addObservation();
+        var newObservationData = {
+            PercentageObservations: []
         }
+        for (var i = 0; i < $scope.AngularViewData.PropertiesToObserve.length; i++) {
+            newObservationData.PercentageObservations.push({
+                PropertyObserved: $scope.AngularViewData.PropertiesToObserve[i].DisplayName,
+                ObservationValue: null,
+                Notes: null
+            });
+        }
+        $scope.ObservationData = newObservationData;
+    };
+
+    $scope.initializeData = function () {
+        if (JSON.parse($scope.AngularModel.ObservationData) == null) {
+            $scope.initializeWithEmptyRows();
+        } else {
+            $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData);
+            console.log($scope.ObservationData);
+            if ($scope.ObservationData.PercentageObservations == null) {
+                $scope.initializeWithEmptyRows();
+            }
+        }
+    };
+
+    $scope.calculateTotalPercent = function () {
+        var sum = _.reduce($scope.ObservationData.PercentageObservations, function (sum, n) {
+            var toAdd = n.ObservationValue == null ? 0 : n.ObservationValue;
+            return sum + toAdd;
+        }, 0);
+        return Math.round(sum * 100) / 100;
     }
 
-    $scope.addObservation = function () {
-        $scope.ObservationData.SingleValueObservations.push({
-            PropertyObserved: null,
-            ObservationValue: null,
-            Notes: null
-        });        
-    };
+    $scope.percentExceeds100 = function () { return $scope.calculateTotalPercent() > 100 ? true : false; }
 
-    $scope.deleteObservation = function (observation) {
-        Sitka.Methods.removeFromJsonArray($scope.ObservationData.SingleValueObservations, observation);
-    };
+    $scope.percentDoesNotEqual100 = function () { return $scope.calculateTotalPercent() !== 100 ? true : false; }
 
     $scope.submit = function () {
         $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
-    }
-
-    
+    };
 });

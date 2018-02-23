@@ -19,12 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Linq;
 using LtInfo.Common.Views;
-using Microsoft.Ajax.Utilities;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Views.ObservationType;
 using Newtonsoft.Json;
 

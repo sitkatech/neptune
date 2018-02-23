@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -39,23 +38,21 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
         {
             ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(observationType.PercentageSchema);
-            MeasurementUnitLabelAndUnit =
-                $"{observationType.BenchmarkMeasurementUnitLabel()} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            MeasurementUnitLabelAndUnit = $"{observationType.BenchmarkMeasurementUnitLabel()} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
             AssessmentDescription = observationType.PercentageSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
+            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
         }
 
         public class PercentageCollectionMethodViewDataForAngular
         {
             public List<SelectItemSimple> PropertiesToObserve { get; }
 
-            public PercentageCollectionMethodViewDataForAngular(PercentageObservationTypeSchema passFailObservationTypeSchema)
+            public PercentageCollectionMethodViewDataForAngular(PercentageObservationTypeSchema percentageObservationTypeSchema)
             {
                 PropertiesToObserve = new List<SelectItemSimple>();
                 var count = 1;
-                passFailObservationTypeSchema.PropertiesToObserve.ForEach(x =>
+                percentageObservationTypeSchema.PropertiesToObserve.ForEach(x =>
                 {
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
                     count += 1;
