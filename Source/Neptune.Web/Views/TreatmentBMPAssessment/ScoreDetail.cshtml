@@ -97,17 +97,17 @@ Source code is available upon request via <support@sitkatech.com>.
                     <td class="col-xs-3">{{observationType.DisplayName}}</td>
 
                     <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
-                        <span class="badge colorBadge" ng-style="{'background-color': getHue(2)}">{{observationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
+                        <span class="badge colorBadge">{{observationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
                     </td>
 
                     <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete">
-                        <span class="badge colorBadge" ng-style="{'background-color': getHue(observationType.TreatmentBMPObservationSimple.ObservationScore)}">{{observationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
+                        <span class="badge colorBadge">{{observationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
                     </td>
                     
                     <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
                     
                     <td class="col-xs-2 text-center" ng-if="observationType.HasBenchmarkAndThresholds">
-                        <span class="badge colorBadge" ng-style="{'background-color': getHue(5)}">{{observationType.BenchmarkValue | setDecimal:3 }}</span>
+                        <span class="badge colorBadge">{{observationType.BenchmarkValue | setDecimal:3 }}</span>
                     </td>
 
                     <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && !observationType.TreatmentBMPObservationSimple.IsComplete">
@@ -115,17 +115,17 @@ Source code is available upon request via <support@sitkatech.com>.
                     </td>
 
                     <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete && !observationType.TreatmentBMPObservationSimple.OverrideScore">
-                        <em ng-style="{'color': getHue(observationType.TreatmentBMPObservationSimple.ObservationValue)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
+                        <em style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
                     </td>
 
                     <td class="text-center" colspan="3" ng-if="!observationType.HasBenchmarkAndThresholds && observationType.TreatmentBMPObservationSimple.IsComplete && observationType.TreatmentBMPObservationSimple.OverrideScore">
-                        <em ng-style="{'color': getHue(0)}" style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
+                        <em style="font-weight: bold">{{observationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
                     </td>
 
                     <td class="col-xs-2 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.OverrideScore">{{observationType.Weight}}</td>
 
                     <td class="col-xs-1 text-center" ng-if="observationType.TreatmentBMPObservationSimple.IsComplete">
-                        <span class="bold">{{observationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
+                        <span class="bold badge">{{observationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
                     </td>
                     <td class="col-xs-1 text-center" ng-if="!observationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
                 </tr>
@@ -136,7 +136,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 <td class="col-xs-2 text-center">-</td>
                 <td class="col-xs-2 text-center">100%</td>
                 <td class="col-xs-1 text-center" ng-if="AngularViewData.AssessmentIsComplete">
-                    <span class="badge colorBadge" ng-style="{'background-color': getHue(AngularViewData.AssessmentScore)}">{{AngularViewData.AssessmentScore | setDecimal:2 }}</span>
+                    <span class="badge colorBadge">{{AngularViewData.AssessmentScore | setDecimal:2 }}</span>
                 </td>
                 <td class="col-xs-1 text-center" ng-if="!AngularViewData.AssessmentIsComplete">-</td>
             </tr>
@@ -149,15 +149,4 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
         <div style="clear: both;"></div>
     </div>
-    <div class="row">
-        <div class="col-xs-12 pull-right" id="legendGradient">
-            <p style="width: 15px; text-align: left; display: inline-block">0</p>
-            <p style="width: 20px; text-align: right; display: inline-block">1</p>
-            <p style="width: 30px; text-align: right; display: inline-block">2</p>
-            <p style="width: 30px; text-align: right; display: inline-block">3</p>
-            <p style="width: 30px; text-align: right; display: inline-block">4</p>
-            <p style="width: 30px; text-align: right; display: inline-block">5</p>
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-    </div>
+</div>
