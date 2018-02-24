@@ -19,13 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.ObservationType
 {
@@ -33,7 +31,7 @@ namespace Neptune.Web.Views.ObservationType
     {
         public ObservationTypeGridSpec(Person currentPerson)
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.ObservationType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.ObservationTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.ObservationCollectionMethod.ToGridHeaderString(), a => a.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName, 200, DhtmlxGridColumnFilterType.SelectFilterStrict);

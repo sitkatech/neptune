@@ -135,12 +135,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteObservationType(ObservationType observationType, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !observationType.HasDependentObjects();
-            var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}'?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()}", SitkaRoute<ObservationTypeController>.BuildLinkFromExpression(x => x.Detail(observationType), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            var confirmMessage = $"Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}'?";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 

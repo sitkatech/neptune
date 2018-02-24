@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
     {
         public TreatmentBMPTypeGridSpec(Person currentPerson)
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson), !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), new NeptuneAdminFeature().HasPermissionByPerson(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPTypeName), 400, DhtmlxGridColumnFilterType.Html);
             Add($"Number of {Models.FieldDefinition.ObservationType.ToGridHeaderStringPlural("Observation Types")}", a => a.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType).Count(), 100);

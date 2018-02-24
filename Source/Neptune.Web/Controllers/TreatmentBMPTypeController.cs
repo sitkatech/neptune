@@ -160,12 +160,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPType(TreatmentBMPType treatmentBMPType, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !treatmentBMPType.TreatmentBMPs.Any();
-            var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}'?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}", SitkaRoute<TreatmentBMPTypeController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPType), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            var confirmMessage = $"Are you sure you want to delete this {FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}'?";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
