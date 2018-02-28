@@ -22,7 +22,7 @@
     <add key="MaximumAllowedUploadFileSize" value="${max-file-upload-size}"/>
     <add key="DatabaseConnectionString" value="Server=${db-data-source};Database=${db-name};${db-auth-settings}"/>
     <add key="RecaptchaValidatorUrl" value="https://www.google.com/recaptcha/api/siteverify"/>
-    <add key="SitkaSupportEmail" value="projectneptune@sitkatech.com"/>
+    <add key="SitkaSupportEmail" value="rocket.team@sitkatech.com"/>
     <add key="DoNotReplyEmail" value="donotreply@${application-domain}"/>
     <add key="ApplicationDomain" value="${application-domain}"/>
     <add key="Ogr2OgrExecutable" value="C:\Program Files\GDAL\ogr2ogr.exe"/>

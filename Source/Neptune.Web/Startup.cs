@@ -17,6 +17,8 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
@@ -120,8 +122,8 @@ namespace Neptune.Web
                 Thread.CurrentPrincipal.Identity.Name,
                 Thread.CurrentPrincipal.Identity.IsAuthenticated);
 
-            //var sendNewUserNotification = false;
-            //var sendNewOrganizationNotification = false;
+            var sendNewUserNotification = false;
+            var sendNewOrganizationNotification = false;
             var person = HttpRequestStorage.DatabaseEntities.People.GetPersonByPersonGuid(keystoneUserClaims.UserGuid);
 
             if (person == null)
@@ -141,7 +143,7 @@ namespace Neptune.Web
                     false,
                     keystoneUserClaims.LoginName);
                 HttpRequestStorage.DatabaseEntities.AllPeople.Add(person);
-                //sendNewUserNotification = true;
+                sendNewUserNotification = true;
             }
             else
             {
@@ -172,7 +174,7 @@ namespace Neptune.Web
                         HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
                     organization = new Organization(keystoneUserClaims.OrganizationName, true, defaultOrganizationType);
                     HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(organization);
-                    //sendNewOrganizationNotification = true;
+                    sendNewOrganizationNotification = true;
                 }
 
                 organization.OrganizationName = keystoneUserClaims.OrganizationName;
@@ -195,28 +197,29 @@ namespace Neptune.Web
             HttpRequestStorage.Person = person;
             HttpRequestStorage.DatabaseEntities.SaveChanges(person);
 
-            //var ipAddress = HttpContext.Current.Request.UserHostAddress;
-            //var userAgent = HttpContext.Current.Request.UserAgent;
-            //if (sendNewUserNotification)
-            //{
-            //    SendNewUserCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
-            //}
+            var hostName = System.Net.Dns.GetHostName();
+            var userAgent = HttpContext.Current.Request.UserAgent;
+            if (sendNewUserNotification)
+            {
+                SendNewUserCreatedMessage(person, userAgent, keystoneUserClaims.LoginName);
+            }
 
-            //if (sendNewOrganizationNotification)
-            //{
-            //    SendNewOrganizationCreatedMessage(person, ipAddress, userAgent, keystoneUserClaims.LoginName);
-            //}
+            if (sendNewOrganizationNotification)
+            {
+                SendNewOrganizationCreatedMessage(person, userAgent, keystoneUserClaims.LoginName);
+            }
 
             return HttpRequestStorage.Person;
 
         }
 
-        private static void SendNewUserCreatedMessage(Person person, string ipAddress, string userAgent, string loginName)
+
+        private static void SendNewUserCreatedMessage(Person person, string userAgent, string loginName)
         {
             var subject = $"User added: {person.FullNameFirstLastAndOrg}";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
-    <strong>Neptune User added:</strong> {person.FullNameFirstLast}<br />
+    <strong>OC Stormwater Tools User added:</strong> {person.FullNameFirstLast}<br />
     <strong>Added on:</strong> {DateTime.Now}<br />
     <strong>Email:</strong> {person.Email}<br />
     <strong>Phone:</strong> {person.Phone.ToPhoneNumberString()}<br />
@@ -224,14 +227,13 @@ namespace Neptune.Web
     <p>
         You may want to <a href=""{
                     SitkaRoute<UserController>.BuildAbsoluteUrlFromExpression(x => x.Detail(person.PersonID))
-                }"">assign this user roles</a> to allow them to work with specific areas of the site. Or you can leave the user with an unassigned role if they don't need special privileges.
+                }"">assign this user a role</a> and associate them with a jurisdiction to allow them to use the site. Or you can leave the user with Unassigned roles if they don't need special privileges.
     </p>
     <br />
     <br />
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
     LOGIN: {loginName}<br />
-    IP ADDRESS: {ipAddress}<br />
     USERAGENT: {userAgent}<br />
     <br />
     </div>
@@ -257,7 +259,7 @@ namespace Neptune.Web
             SitkaSmtpClient.Send(mailMessage);
         }
 
-        private static void SendNewOrganizationCreatedMessage(Person person, string ipAddress, string userAgent, string loginName)
+        private static void SendNewOrganizationCreatedMessage(Person person, string userAgent, string loginName)
         {
             var organization = person.Organization;
             var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.DisplayName}";
@@ -282,7 +284,6 @@ namespace Neptune.Web
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
     LOGIN: {loginName}<br />
-    IP ADDRESS: {ipAddress}<br />
     USERAGENT: {userAgent}<br />
     <br />
     </div>
