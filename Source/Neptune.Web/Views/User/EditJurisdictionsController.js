@@ -29,19 +29,19 @@ angular.module("NeptuneApp").controller("EditJurisdictionsController", function 
         var usedStormwaterJurisdictionIDs = ($scope.AngularModel.StormwaterJurisdictionPersonSimples).map(function (s) { return s.StormwaterJurisdictionID });
         var filter = _($scope.AngularViewData.StormwaterJurisdictionsSimple).filter(function (f) { return !_.includes(usedStormwaterJurisdictionIDs, f.StormwaterJurisdictionID); });
         var orgsFilteredAndSorted = filter.sortBy(["StormwaterJurisdictionDisplayName"]).value();
-        console.log(orgsFilteredAndSorted);
         return orgsFilteredAndSorted;
     };
 
-    $scope.addRow = function () {
-        if ($scope.StormwaterJurisdictionToAdd != null)
-        {
-            var newStormwaterJurisdictionPersonSimple = {
-                StormwaterJurisdictionID: $scope.StormwaterJurisdictionToAdd.StormwaterJurisdictionID,
-                PersonID: $scope.AngularModel.PersonID
-            }
-            $scope.AngularModel.StormwaterJurisdictionPersonSimples.push(newStormwaterJurisdictionPersonSimple);
+    $scope.addRow = function() {
+        if ($scope.StormwaterJurisdictionToAdd == null) {
+            return;
         }
+        var newStormwaterJurisdictionPersonSimple = {
+            StormwaterJurisdictionID: $scope.StormwaterJurisdictionToAdd.StormwaterJurisdictionID,
+            PersonID: $scope.AngularModel.PersonID
+        }
+        $scope.AngularModel.StormwaterJurisdictionPersonSimples.push(newStormwaterJurisdictionPersonSimple);
+        $scope.StormwaterJurisdictionToAdd = null;
     };
 
     $scope.getStormwaterJurisdictionDisplayName = function (stromwaterJurisdictionOnViewModel)

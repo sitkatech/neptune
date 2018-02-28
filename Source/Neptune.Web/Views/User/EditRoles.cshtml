@@ -39,19 +39,19 @@ Source code is available upon request via <support@sitkatech.com>.
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.ShouldReceiveSupportEmails, new {@class = "col-xs-12 col-sm-3 control-label"})
+            @Html.LabelFor(m => m.ShouldReceiveSystemCommunications, new {@class = "col-xs-12 col-sm-3 control-label"})
             <div class="col-xs-12 col-sm-9">
                 <div class="radio-inline">
                     <label>
-                        @Html.RadioButtonFor(m => m.ShouldReceiveSupportEmails, true) Yes
+                        @Html.RadioButtonFor(m => m.ShouldReceiveSystemCommunications, true) Yes
                     </label>
                 </div>
                 <div class="radio-inline">
                     <label>
-                        @Html.RadioButtonFor(m => m.ShouldReceiveSupportEmails, false) No
+                        @Html.RadioButtonFor(m => m.ShouldReceiveSystemCommunications, false) No
                     </label>
                 </div>
-                @Html.ValidationMessageFor(m => m.ShouldReceiveSupportEmails)
+                @Html.ValidationMessageFor(m => m.ShouldReceiveSystemCommunications)
             </div>
         </div>
     </div>

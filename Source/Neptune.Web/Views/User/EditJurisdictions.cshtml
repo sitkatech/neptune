@@ -35,6 +35,12 @@ Source code is available upon request via <support@sitkatech.com>.
             });
 
     angular.bootstrap(jQuery("#EditJurisdictionsApp"), ["NeptuneApp"]);
+
+    jQuery(".selectpicker").selectpicker("refresh");
+    jQuery(".modal").on("hidden.bs.modal",
+        function () {
+            jQuery(".bootstrap-select.open").removeClass("open");
+        });
     // ]]>
 </script>
 
@@ -43,14 +49,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </div>
 
 <div id="EditJurisdictionsApp" ng-controller="EditJurisdictionsController">
-    <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs, road operations, Registrations, and Declarations within the jurisdictions asssigned below. </p>
+    <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
     @using (Html.BeginForm())
     {
 
         <div class="form-group">
             <label class="control-label">Jurisdiction to Add:</label>
             <div class="input-group">
-                <select ng-model="StormwaterJurisdictionToAdd" ng-options="StormwaterJurisdiction.StormwaterJurisdictionDisplayName for StormwaterJurisdiction in filteredStormwaterJurisdictions()" class="form-control"></select>
+                <select data-ng-model="StormwaterJurisdictionToAdd"
+                        data-ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionDisplayName for stormwaterJurisdiction in filteredStormwaterJurisdictions() track by stormwaterJurisdiction.StormwaterJurisdictionID"
+                        selectpicker
+                        data-live-search="true"
+                        data-container="body"
+                        data-title="Select a Jurisdiction to Add"
+                        data-width="100%">
+                    <option value="null" disabled selected>Select a Jurisdiction to Add</option>
+                </select>
                 <span class="input-group-btn">
                     <button class="btn btn-neptune" type="button" ng-click="addRow()">
                         <span class="glyphicon glyphicon-plus"></span> Add

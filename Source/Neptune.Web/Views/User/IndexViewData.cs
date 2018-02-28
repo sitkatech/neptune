@@ -40,7 +40,6 @@ namespace Neptune.Web.Views.User
         {
             PageTitle = "All Users";
             EntityName = "Users";
-            var hasDeletePermission = new UserEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new IndexGridSpec(currentPerson) {ObjectNameSingular = "User", ObjectNamePlural = "Users", SaveFiltersInCookie = true};
             GridName = "UserGrid";
             GridDataUrl = SitkaRoute<UserController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
@@ -48,7 +47,7 @@ namespace Neptune.Web.Views.User
             KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
 
             PullUserFromKeystoneUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.PullUserFromKeystone());
-            UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);
+            UserIsAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }

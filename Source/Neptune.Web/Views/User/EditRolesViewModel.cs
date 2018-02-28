@@ -36,8 +36,8 @@ namespace Neptune.Web.Views.User
         public int? RoleID { get; set; }
 
         [Required]
-        [DisplayName("Should Receive Support Emails?")]
-        public bool ShouldReceiveSupportEmails { get; set; }
+        [DisplayName("Should Receive System Communications?")]
+        public bool ShouldReceiveSystemCommunications { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -51,13 +51,13 @@ namespace Neptune.Web.Views.User
             PersonID = person.PersonID;
             RoleID = person.RoleID;
 
-            ShouldReceiveSupportEmails = person.ReceiveSupportEmails;
+            ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
         }
 
         public void UpdateModel(Person person, Person currentPerson)
         {
             person.RoleID = RoleID.Value;
-            person.ReceiveSupportEmails = ShouldReceiveSupportEmails;
+            person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(person.PersonID))
             {

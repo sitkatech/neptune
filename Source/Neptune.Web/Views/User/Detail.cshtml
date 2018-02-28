@@ -123,7 +123,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-5 fieldLabel text-right">Receive Support Emails</div>
+                        <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
                         <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
                     </div>
                 </div>
@@ -149,7 +149,9 @@ Source code is available upon request via <support@sitkatech.com>.
                     }
                     else
                     {
-                        <p class="systemText">No assigned @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()</p>
+                        <p class="systemText">
+                            User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please <a href="@ViewDataTyped.RequestSupportUrl">contact an administrator</a>
+                        </p>
                     }
                 </div>
             </div>

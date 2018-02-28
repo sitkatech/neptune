@@ -7,4 +7,6 @@ insert dbo.SupportRequestType (SupportRequestTypeID, SupportRequestTypeName, Sup
 (3, 'NewOrganization', 'Need an Organization added to the list', 4),
 (4, 'ProvideFeedback', 'Provide Feedback on the site', 6),
 (5, 'RequestOrganizationNameChange', 'Request a change to an Organization''s name', 9),
-(6, 'Other', 'Other', 100)
+(6, 'Other', 'Other', 100),
+(7, 'RequestToChangeUserAccountPrivileges', 'Request to change user account privileges', 10)
+

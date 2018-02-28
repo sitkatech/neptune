@@ -84,4 +84,7 @@ namespace Neptune.Web.Models
             mailMessage.To.Add(NeptuneWebConfiguration.SitkaSupportEmail);
         }
     }
+    public partial class SupportRequestTypeRequestToChangeUserAccountPrivileges
+    {
+    }
 }

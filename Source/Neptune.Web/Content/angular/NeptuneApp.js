@@ -4,7 +4,8 @@
     angular.module("NeptuneApp", [
         "ng-currency",
         "server-validate",
-        "ui.bootstrap"
+        "ui.bootstrap",
+        "ng-bootstrap-select"
     ]);
 
     angular.module("NeptuneApp").filter("nfcurrency", ["$filter", "$locale", function ($filter, $locale) {

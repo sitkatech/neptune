@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         public static readonly SupportRequestTypeProvideFeedback ProvideFeedback = SupportRequestTypeProvideFeedback.Instance;
         public static readonly SupportRequestTypeRequestOrganizationNameChange RequestOrganizationNameChange = SupportRequestTypeRequestOrganizationNameChange.Instance;
         public static readonly SupportRequestTypeOther Other = SupportRequestTypeOther.Instance;
+        public static readonly SupportRequestTypeRequestToChangeUserAccountPrivileges RequestToChangeUserAccountPrivileges = SupportRequestTypeRequestToChangeUserAccountPrivileges.Instance;
 
         public static readonly List<SupportRequestType> All;
         public static readonly ReadOnlyDictionary<int, SupportRequestType> AllLookupDictionary;
@@ -33,7 +34,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static SupportRequestType()
         {
-            All = new List<SupportRequestType> { ReportBug, ForgotLoginInfo, NewOrganization, ProvideFeedback, RequestOrganizationNameChange, Other };
+            All = new List<SupportRequestType> { ReportBug, ForgotLoginInfo, NewOrganization, ProvideFeedback, RequestOrganizationNameChange, Other, RequestToChangeUserAccountPrivileges };
             AllLookupDictionary = new ReadOnlyDictionary<int, SupportRequestType>(All.ToDictionary(x => x.SupportRequestTypeID));
         }
 
@@ -117,6 +118,8 @@ namespace Neptune.Web.Models
                     return ReportBug;
                 case SupportRequestTypeEnum.RequestOrganizationNameChange:
                     return RequestOrganizationNameChange;
+                case SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges:
+                    return RequestToChangeUserAccountPrivileges;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -130,7 +133,8 @@ namespace Neptune.Web.Models
         NewOrganization = 3,
         ProvideFeedback = 4,
         RequestOrganizationNameChange = 5,
-        Other = 6
+        Other = 6,
+        RequestToChangeUserAccountPrivileges = 7
     }
 
     public partial class SupportRequestTypeReportBug : SupportRequestType
@@ -167,5 +171,11 @@ namespace Neptune.Web.Models
     {
         private SupportRequestTypeOther(int supportRequestTypeID, string supportRequestTypeName, string supportRequestTypeDisplayName, int supportRequestTypeSortOrder) : base(supportRequestTypeID, supportRequestTypeName, supportRequestTypeDisplayName, supportRequestTypeSortOrder) {}
         public static readonly SupportRequestTypeOther Instance = new SupportRequestTypeOther(6, @"Other", @"Other", 100);
+    }
+
+    public partial class SupportRequestTypeRequestToChangeUserAccountPrivileges : SupportRequestType
+    {
+        private SupportRequestTypeRequestToChangeUserAccountPrivileges(int supportRequestTypeID, string supportRequestTypeName, string supportRequestTypeDisplayName, int supportRequestTypeSortOrder) : base(supportRequestTypeID, supportRequestTypeName, supportRequestTypeDisplayName, supportRequestTypeSortOrder) {}
+        public static readonly SupportRequestTypeRequestToChangeUserAccountPrivileges Instance = new SupportRequestTypeRequestToChangeUserAccountPrivileges(7, @"RequestToChangeUserAccountPrivileges", @"Request to change user account privileges", 10);
     }
 }
