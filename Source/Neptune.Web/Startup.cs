@@ -197,16 +197,14 @@ namespace Neptune.Web
             HttpRequestStorage.Person = person;
             HttpRequestStorage.DatabaseEntities.SaveChanges(person);
 
-            var hostName = System.Net.Dns.GetHostName();
-            var userAgent = HttpContext.Current.Request.UserAgent;
             if (sendNewUserNotification)
             {
-                SendNewUserCreatedMessage(person, userAgent, keystoneUserClaims.LoginName);
+                SendNewUserCreatedMessage(person, keystoneUserClaims.LoginName);
             }
 
             if (sendNewOrganizationNotification)
             {
-                SendNewOrganizationCreatedMessage(person, userAgent, keystoneUserClaims.LoginName);
+                SendNewOrganizationCreatedMessage(person, keystoneUserClaims.LoginName);
             }
 
             return HttpRequestStorage.Person;
@@ -214,7 +212,7 @@ namespace Neptune.Web
         }
 
 
-        private static void SendNewUserCreatedMessage(Person person, string userAgent, string loginName)
+        private static void SendNewUserCreatedMessage(Person person, string loginName)
         {
             var subject = $"User added: {person.FullNameFirstLastAndOrg}";
             var message = $@"
@@ -234,7 +232,6 @@ namespace Neptune.Web
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
     LOGIN: {loginName}<br />
-    USERAGENT: {userAgent}<br />
     <br />
     </div>
     <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {
@@ -259,7 +256,7 @@ namespace Neptune.Web
             SitkaSmtpClient.Send(mailMessage);
         }
 
-        private static void SendNewOrganizationCreatedMessage(Person person, string userAgent, string loginName)
+        private static void SendNewOrganizationCreatedMessage(Person person, string loginName)
         {
             var organization = person.Organization;
             var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.DisplayName}";
@@ -284,7 +281,6 @@ namespace Neptune.Web
     <div style='font-size: 10px; color: gray'>
     OTHER DETAILS:<br />
     LOGIN: {loginName}<br />
-    USERAGENT: {userAgent}<br />
     <br />
     </div>
     <div>You received this email because you are set up as a point of contact for support - if that's not correct, let us know: {
