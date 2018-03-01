@@ -17,8 +17,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
@@ -240,20 +238,7 @@ namespace Neptune.Web
 </div>
 ";
 
-            var mailMessage = new MailMessage { From = new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
-            mailMessage.To.Add(NeptuneWebConfiguration.SitkaSupportEmail);
-
-            // Reply-To Header
-            mailMessage.ReplyToList.Add(person.Email);
-
-            // TO field
-            var supportPersons = HttpRequestStorage.DatabaseEntities.People.GetPeopleWhoReceiveSupportEmails();
-            foreach (var supportPerson in supportPersons)
-            {
-                mailMessage.To.Add(supportPerson.Email);
-            }
-
-            SitkaSmtpClient.Send(mailMessage);
+            SendMessageImpl(person, subject, message);
         }
 
         private static void SendNewOrganizationCreatedMessage(Person person, string loginName)
@@ -289,8 +274,18 @@ namespace Neptune.Web
 </div>
 ";
 
-            var mailMessage = new MailMessage { From = new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail), Subject = subject, Body = message, IsBodyHtml = true };
-            mailMessage.To.Add(NeptuneWebConfiguration.SitkaSupportEmail);
+            SendMessageImpl(person, subject, message);
+        }
+
+        private static void SendMessageImpl(Person person, string subject, string message)
+        {
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
 
             // Reply-To Header
             mailMessage.ReplyToList.Add(person.Email);
@@ -304,6 +299,5 @@ namespace Neptune.Web
 
             SitkaSmtpClient.Send(mailMessage);
         }
-
     }
 }
