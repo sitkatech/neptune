@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common
-@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.ModalDialog
 @inherits Neptune.Web.Views.User.Detail
@@ -150,7 +149,8 @@ Source code is available upon request via <support@sitkatech.com>.
                     else
                     {
                         <p class="systemText">
-                            User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please <a href="@ViewDataTyped.RequestSupportUrl">contact an administrator</a>
+                            User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please
+                            @ModalDialogFormHelper.ModalDialogFormLink("contact an administrator", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
                         </p>
                     }
                 </div>

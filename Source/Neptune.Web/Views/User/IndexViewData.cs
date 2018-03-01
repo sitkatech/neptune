@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.User
             KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
 
             PullUserFromKeystoneUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.PullUserFromKeystone());
-            UserIsAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
+            UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }
