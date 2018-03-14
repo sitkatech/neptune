@@ -20,7 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Linq;
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -45,6 +44,7 @@ namespace Neptune.Web.Views
         public readonly string LogInUrl;
         public readonly string LogOutUrl;
         public readonly string RequestSupportUrl;
+        public readonly string LegalUrl;
         public readonly ViewPageContentViewData ViewPageContentViewData;
 
         /// <summary>
@@ -69,19 +69,20 @@ namespace Neptune.Web.Views
 
             RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
 
+            LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
+
             MakeNeptuneMenu(currentPerson);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
 
-        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.NeptunePage neptunePage) : this(currentPerson, neptunePage)
+        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
+            Models.NeptunePage neptunePage) : this(currentPerson, neptunePage)
         {
-            
         }
 
         protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity) : this(currentPerson)
         {
-
         }
 
         private void MakeNeptuneMenu(Person currentPerson)
@@ -149,14 +150,10 @@ namespace Neptune.Web.Views
             {
                 return $" | {BreadCrumbTitle}";
             }
-            else if (!string.IsNullOrWhiteSpace(PageTitle))
-            {
-                return $" | {PageTitle}";
-            }
-            else
-            {
-                return string.Empty;
-            }
+
+            return !string.IsNullOrWhiteSpace(PageTitle)
+                ? $" | {PageTitle}"
+                : string.Empty;
         }
     }
 }
