@@ -74,7 +74,6 @@ namespace Neptune.Web.Views.ObservationType
 
     public class ViewDataForAngular
     {
-       
         public List<ObservationTypeSpecificationSimple> ObservationTypeSpecificationSimples { get; }
         public List<ObservationTypeCollectionMethodSimple> ObservationTypeCollectionMethods { get; }
         public List<SelectItemSimple> ObservationThresholdTypes { get; }

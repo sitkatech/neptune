@@ -34,14 +34,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PercentageCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public PercentageCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
+            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
         {
             ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(observationType.PercentageSchema);
             MeasurementUnitLabelAndUnit = $"{observationType.BenchmarkMeasurementUnitLabel()} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
             AssessmentDescription = observationType.PercentageSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
+            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBmpAssessment, observationType));
         }
 
         public class PercentageCollectionMethodViewDataForAngular
@@ -57,9 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
                     count += 1;
                 });
-
             }
         }
     }
-
 }

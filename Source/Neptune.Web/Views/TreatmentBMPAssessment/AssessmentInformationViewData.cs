@@ -31,8 +31,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly IEnumerable<SelectListItem> AssessmentTypes;
 
         public const string ThisSectionName = "Assessment Information";
-        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, IEnumerable<SelectListItem> jurisdictionPeople, IEnumerable<SelectListItem> assessmentTypes)
-            : base(currentPerson, treatmentBMPAssessment, ThisSectionName)
+        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople, IEnumerable<SelectListItem> assessmentTypes)
+            : base(currentPerson, treatmentBmpAssessment, ThisSectionName, false)
         {
             JurisdictionPeople = jurisdictionPeople;
             AssessmentTypes = assessmentTypes;

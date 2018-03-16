@@ -32,10 +32,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public RateCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }
         public string AssessmentDescription { get; }
-        public string SubmitUrl { get; }        
+        public string SubmitUrl { get; }
 
-        public RateCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public RateCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
+            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
         {
             ViewDataForAngular = new RateCollectionMethodViewDataForAngular(observationType.RateObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentDescription = observationType.RateObservationTypeSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.RateCollectionMethod(treatmentBMPAssessment, observationType));
+                x.RateCollectionMethod(treatmentBmpAssessment, observationType));
         }
 
         public class RateCollectionMethodViewDataForAngular

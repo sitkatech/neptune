@@ -29,14 +29,17 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
     public abstract class AssessmentViewData : NeptuneViewData
     {
+        // ReSharper disable InconsistentNaming
         public readonly Models.TreatmentBMPAssessment TreatmentBMPAssessment;
         public readonly Models.TreatmentBMP TreatmentBMP;
         public readonly string AssessmentInformationUrl;
         public readonly string ScoreUrl;
         public readonly string SectionName;
         public readonly bool AssessmentInformationComplete;
+        public readonly bool DisableInputs;
 
-        protected AssessmentViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+        protected AssessmentViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName, bool disableInputs)
+            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             TreatmentBMP = treatmentBMPAssessment.TreatmentBMP;
             TreatmentBMPAssessment = treatmentBMPAssessment;
@@ -48,11 +51,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
             else
             {
-                AssessmentInformationUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPAssessment));
+                AssessmentInformationUrl =
+                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
+                        x.Edit(TreatmentBMPAssessment));
                 AssessmentInformationComplete = true;
             }
 
-            ScoreUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.Score(TreatmentBMPAssessment));
+            ScoreUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
+                x.Score(TreatmentBMPAssessment));
 
             SectionName = sectionName;
 
@@ -61,6 +67,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.FormattedNameAndType;
             SubEntityUrl = treatmentBMPAssessment.TreatmentBMP.GetDetailUrl();
             PageTitle = treatmentBMPAssessment.AssessmentDate.ToStringDate();
+            DisableInputs = disableInputs;
         }
     }
 }

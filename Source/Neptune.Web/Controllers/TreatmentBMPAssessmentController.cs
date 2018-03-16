@@ -184,7 +184,8 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewDiscreteCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, DiscreteCollectionMethodViewModel viewModel)
         {
-            var viewData = new DiscreteCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            var viewData =
+                new DiscreteCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType, false);
             return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
         }
 
@@ -225,7 +226,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewRateCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, RateCollectionMethodViewModel viewModel)
         {
-            var viewData = new RateCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            var viewData = new RateCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType, false);
             return RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(viewData, viewModel);
         }
 
@@ -265,7 +266,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewPassFailCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, PassFailCollectionMethodViewModel viewModel)
         {
-            var viewData = new PassFailCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            var viewData = new PassFailCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType, false);
             return RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(viewData, viewModel);
         }
 
@@ -306,7 +307,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewPercentageCollectionMethod(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType, PercentageCollectionMethodViewModel viewModel)
         {
-            var viewData = new PercentageCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType);
+            var viewData = new PercentageCollectionMethodViewData(CurrentPerson, treatmentBMPAssessment, observationType, false);
             return RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
         }
 
@@ -402,7 +403,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewScore(TreatmentBMPAssessment treatmentBMPAssessment, ScoreViewModel viewModel)
         {
-            var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
+            var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment, false);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         }   
  
@@ -412,7 +413,7 @@ namespace Neptune.Web.Controllers
             //Null observationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
             var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName);
 
-            var nextObservationType = observationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x => string.Compare(x.ObservationTypeName, observationType.ObservationTypeName) > 0); 
+            var nextObservationType = observationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x =>  String.CompareOrdinal(x.ObservationTypeName, observationType.ObservationTypeName) > 0); 
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore

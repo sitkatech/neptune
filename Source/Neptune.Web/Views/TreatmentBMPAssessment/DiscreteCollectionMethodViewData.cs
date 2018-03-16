@@ -19,9 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -36,8 +34,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public DiscreteCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public DiscreteCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
+            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
         {
             ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(observationType.DiscreteObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
@@ -45,7 +43,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentDescription = observationType.DiscreteObservationTypeSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.DiscreteCollectionMethod(treatmentBMPAssessment, observationType));
+                x.DiscreteCollectionMethod(treatmentBmpAssessment, observationType));
         }
 
         public class DiscreteCollectionMethodViewDataForAngular
@@ -67,11 +65,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 });
 
                 MinimumNumberOfObservations = discreteObservationTypeSchema.MinimumNumberOfObservations;
-                MaximumNumberOfObservations = discreteObservationTypeSchema.MaximumNumberOfObservations ?? Int32.MaxValue;
+                MaximumNumberOfObservations = discreteObservationTypeSchema.MaximumNumberOfObservations ?? int.MaxValue;
                 MinimumValueOfObservations = discreteObservationTypeSchema.MinimumValueOfObservations;
-                MaximumValueOfObservations = discreteObservationTypeSchema.MaximumValueOfObservations ?? Double.MaxValue;
+                MaximumValueOfObservations = discreteObservationTypeSchema.MaximumValueOfObservations ?? double.MaxValue;
             }
         }
     }
-
 }

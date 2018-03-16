@@ -35,8 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public PassFailCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
+            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
             PassingScoreLabel = observationType.PassFailSchema.PassingScoreLabel;
@@ -44,7 +44,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentDescription = observationType.PassFailSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.PassFailCollectionMethod(treatmentBMPAssessment, observationType));
+                x.PassFailCollectionMethod(treatmentBmpAssessment, observationType));
         }
 
         public class PassFailCollectionMethodViewDataForAngular
@@ -64,5 +64,4 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
         }
     }
-
 }

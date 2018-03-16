@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ScoreViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="AssessmentViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreViewData : AssessmentViewData
+    public abstract class Assessment<TViewData, TViewModel> : TypedWebViewPage<TViewData, TViewModel>
+        where TViewData : AssessmentViewData
     {
-        public const string ThisSectionName = "Score";
-        public readonly string CalculatedAssessmentScoreFormatted;
-        public readonly ScoreDetailViewData ScoreDetailViewData;
-
-        public ScoreViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, bool disableInputs)
-            : base(currentPerson, treatmentBmpAssessment, ThisSectionName, disableInputs)
-        {
-            CalculatedAssessmentScoreFormatted = treatmentBmpAssessment.FormattedScore();
-            ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment);
-        }       
-
     }
 }

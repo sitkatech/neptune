@@ -29,7 +29,11 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.ObservationType;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.TreatmentBMPAssessment;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Detail = Neptune.Web.Views.ObservationType.Detail;
+using DetailViewData = Neptune.Web.Views.ObservationType.DetailViewData;
 
 namespace Neptune.Web.Controllers
 {
@@ -197,6 +201,50 @@ namespace Neptune.Web.Controllers
             var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(observationType.ObservationTypeSchema);
             var viewData = new ViewPercentageSchemaDetailViewData(schema);
             return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ContentResult PreviewObservationType()
+        {
+            return Content("");
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult PreviewObservationType(EditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelStateSerialized = JObject
+                    .FromObject(ModelState.ToDictionary(x => x.Key,
+                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+                return new HttpStatusCodeResult(400, modelStateSerialized);
+            }
+
+            PartialViewResult result;
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    var resultViewModel = new DiscreteCollectionMethodViewModel();
+                    var viewData = new DiscreteCollectionMethodViewData(CurrentPerson, );
+                    result = RazorPartialView<DiscreteCollectionMethodPartial, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, resultViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    result = null; // todo
+                    break;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    result = null; // todo
+                    break;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    result = null; // todo
+                    break;
+                default:
+                    throw new ArgumentException("Observation Collection Method not supported by ");
+            }
+
+            return result;
         }
     }
 }

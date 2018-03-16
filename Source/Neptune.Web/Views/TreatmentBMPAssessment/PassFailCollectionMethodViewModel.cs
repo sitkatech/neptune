@@ -25,7 +25,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
     public class PassFailCollectionMethodViewModel : ObservationViewModel
     {
-       
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -35,8 +34,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
         public PassFailCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)       
         {
-           
         }
-
     }
 }
