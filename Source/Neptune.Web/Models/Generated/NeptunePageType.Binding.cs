@@ -37,6 +37,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions ManageTreatmentBMPAttributeTypeInstructions = NeptunePageTypeManageTreatmentBMPAttributeTypeInstructions.Instance;
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeInstructions ManageTreatmentBMPAttributeInstructions = NeptunePageTypeManageTreatmentBMPAttributeInstructions.Instance;
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypesList ManageTreatmentBMPAttributeTypesList = NeptunePageTypeManageTreatmentBMPAttributeTypesList.Instance;
+        public static readonly NeptunePageTypeLegal Legal = NeptunePageTypeLegal.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -46,7 +47,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageTreatmentBMPAttributeTypeInstructions, ManageTreatmentBMPAttributeInstructions, ManageTreatmentBMPAttributeTypesList };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageTreatmentBMPAttributeTypeInstructions, ManageTreatmentBMPAttributeInstructions, ManageTreatmentBMPAttributeTypesList, Legal };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -130,6 +131,8 @@ namespace Neptune.Web.Models
                     return HomePage;
                 case NeptunePageTypeEnum.Jurisdiction:
                     return Jurisdiction;
+                case NeptunePageTypeEnum.Legal:
+                    return Legal;
                 case NeptunePageTypeEnum.ManageObservationTypeInstructions:
                     return ManageObservationTypeInstructions;
                 case NeptunePageTypeEnum.ManageObservationTypeLabelsAndUnitsInstructions:
@@ -182,7 +185,8 @@ namespace Neptune.Web.Models
         ManageTreatmentBMPTypeInstructions = 16,
         ManageTreatmentBMPAttributeTypeInstructions = 17,
         ManageTreatmentBMPAttributeInstructions = 18,
-        ManageTreatmentBMPAttributeTypesList = 19
+        ManageTreatmentBMPAttributeTypesList = 19,
+        Legal = 20
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -297,5 +301,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeManageTreatmentBMPAttributeTypesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypesList Instance = new NeptunePageTypeManageTreatmentBMPAttributeTypesList(19, @"ManageTreatmentBMPAttributeTypesList", @"Manage Treatment BMP Attribute Types List", 2);
+    }
+
+    public partial class NeptunePageTypeLegal : NeptunePageType
+    {
+        private NeptunePageTypeLegal(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeLegal Instance = new NeptunePageTypeLegal(20, @"Legal", @"Legal", 2);
     }
 }
