@@ -99,7 +99,7 @@
                 </tr>
                 <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
                     <td>
-                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteObservationTypeRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer" ng-show="!isObservationTypeInUse(treatmentBMPTypeObservationTypeSimple)"></span>
+                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteObservationTypeRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer"></span>
                     </td>
                     <td class="text-left" ng-bind="getObservationTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
                     <td class="text-left" ng-bind="getObservationCollectionMethodTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
@@ -199,7 +199,7 @@
                 </tr>
                 <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getTreatmentBMPAttributeTypeName]">
                     <td>
-                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteTreatmentBMPAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer" ng-show="!isTreatmentBMPAttributeTypeInUse(treatmentBMPTypeAttributeTypeSimple)"></span>
+                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteTreatmentBMPAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
                     </td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDataTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>

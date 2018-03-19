@@ -87,6 +87,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Notification).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+            HttpRequestStorage.DatabaseEntities.AllNotifications.Remove(this);                
+        }
+
         [Key]
         public int NotificationID { get; set; }
         public int TenantID { get; private set; }

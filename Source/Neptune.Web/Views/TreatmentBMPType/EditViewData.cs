@@ -41,18 +41,14 @@ namespace Neptune.Web.Views.TreatmentBMPType
         {
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
-            IEnumerable<int> treatmentBMPAttributeTypeIDsWithData = new List<int>();
-            IEnumerable<int> observationTypeIDsWithData = new List<int>();
             if (treatmentBMPType != null)
             {
                 SubEntityName = treatmentBMPType.TreatmentBMPTypeName;
                 SubEntityUrl = treatmentBMPType.GetDetailUrl();
-                treatmentBMPAttributeTypeIDsWithData = treatmentBMPType.TreatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeTypeID).Distinct();
-                observationTypeIDsWithData = treatmentBMPType.TreatmentBMPObservations.Select(x => x.ObservationTypeID).Distinct();
             }
             PageTitle = $"{(treatmentBMPType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
 
-            ViewDataForAngular = new ViewDataForAngular(observationTypes, treatmentBMPAttributeTypes, observationTypeIDsWithData, treatmentBMPAttributeTypeIDsWithData);
+            ViewDataForAngular = new ViewDataForAngular(observationTypes, treatmentBMPAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
@@ -61,20 +57,13 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
     public class ViewDataForAngular
     {
-        public IEnumerable<int> ObservationTypeIDsWithData { get; }
-        public IEnumerable<int> TreatmentBMPAttributeTypeIDsWithData { get; }
-
         public List<ObservationTypeSimple> ObservationTypes { get; }
         public List<TreatmentBMPAttributeTypeSimple> TreatmentBMPAttributeTypes { get; }
 
 
         public ViewDataForAngular(IEnumerable<Models.ObservationType> observationTypes,
-            IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes,
-            IEnumerable<int> observationTypeIDsWithData,
-            IEnumerable<int> treatmentBMPAttributeTypeIDsWithData)
+            IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes)
         {
-            ObservationTypeIDsWithData = observationTypeIDsWithData;
-            TreatmentBMPAttributeTypeIDsWithData = treatmentBMPAttributeTypeIDsWithData;
             ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();
             TreatmentBMPAttributeTypes = treatmentBMPAttributeTypes.Select(x => new TreatmentBMPAttributeTypeSimple(x)).ToList();
         }

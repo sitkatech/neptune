@@ -135,7 +135,9 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteObservationType(ObservationType observationType, ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}'?";
+            var treatmentBMPTypeLabel = observationType.TreatmentBMPTypeObservationTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPObservationLabel = observationType.TreatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
+            var confirmMessage = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' is related to {observationType.TreatmentBMPTypeObservationTypes.Count} {treatmentBMPTypeLabel} and has {observationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -150,11 +152,10 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteObservationType(observationType, viewModel);
             }
-            observationType.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
-            observationType.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
-            observationType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();
 
-            observationType.DeleteObservationType();
+            var message = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' successfully deleted!";
+            observationType.DeleteFull();
+            SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }
 

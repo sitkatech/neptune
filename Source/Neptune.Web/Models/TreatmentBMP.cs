@@ -104,21 +104,5 @@ namespace Neptune.Web.Models
             }
             return string.Empty;
         }
-
-        public void DeleteFull()
-        {
-            TreatmentBMPAssessments.SelectMany(x => x.TreatmentBMPObservations).ToList().DeleteTreatmentBMPObservation();
-            TreatmentBMPAssessments.DeleteTreatmentBMPAssessment();
-            TreatmentBMPAttributes.DeleteTreatmentBMPAttribute();
-            TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
-
-            MaintenanceRecords.DeleteMaintenanceRecord();
-            TreatmentBMPDocuments.DeleteTreatmentBMPDocument();
-
-            var fileResources = TreatmentBMPImages.Select(x => x.FileResource).ToList();
-            TreatmentBMPImages.DeleteTreatmentBMPImage();
-            fileResources.DeleteFileResource();
-            this.DeleteTreatmentBMP();
-        }
     }
 }

@@ -91,6 +91,30 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in ModeledCatchments.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in StormwaterJurisdictionPeople.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.Remove(this);                
+        }
+
         [Key]
         public int StormwaterJurisdictionID { get; set; }
         public int TenantID { get; private set; }

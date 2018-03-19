@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
     {
         public TreatmentBMPAttributeTypeGridSpec()
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
             Add(Models.FieldDefinition.TreatmentBMPAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPAttributeDataType.ToGridHeaderString(), a => a.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);

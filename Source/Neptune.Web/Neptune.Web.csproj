@@ -323,7 +323,7 @@
     <Compile Include="Views\TreatmentBMPAttributeType\EditViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAttributeType\Manage.cs" />
     <Compile Include="Views\TreatmentBMPAttributeType\ManageViewData.cs" />
-    <Compile Include="Views\TreatmentBMPAttributeType\TreatmentBMPMetadataTypeGridSpec.cs" />
+    <Compile Include="Views\TreatmentBMPAttributeType\TreatmentBMPAttributeTypeGridSpec.cs" />
     <Compile Include="Views\ObservationType\Detail.cs" />
     <Compile Include="Views\ObservationType\DetailViewData.cs" />
     <Compile Include="Views\ObservationType\DiscreteValueObservationTypeSchema.cs" />
@@ -2520,6 +2520,7 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LtInfo.Common\LtInfo.Common.csproj">

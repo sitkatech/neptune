@@ -76,6 +76,25 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StateProvince).Name, typeof(County).Name, typeof(StormwaterJurisdiction).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in Counties.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in StormwaterJurisdictions.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllStateProvinces.Remove(this);                
+        }
+
         [Key]
         public int StateProvinceID { get; set; }
         public int TenantID { get; private set; }

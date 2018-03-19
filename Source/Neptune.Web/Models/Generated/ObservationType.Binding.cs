@@ -87,6 +87,30 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeObservationType).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in TreatmentBMPBenchmarkAndThresholds.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPObservations.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPTypeObservationTypes.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllObservationTypes.Remove(this);                
+        }
+
         [Key]
         public int ObservationTypeID { get; set; }
         public int TenantID { get; private set; }

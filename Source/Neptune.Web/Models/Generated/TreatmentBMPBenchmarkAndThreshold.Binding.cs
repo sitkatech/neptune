@@ -102,6 +102,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPBenchmarkAndThreshold).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPBenchmarkAndThresholds.Remove(this);                
+        }
+
         [Key]
         public int TreatmentBMPBenchmarkAndThresholdID { get; set; }
         public int TenantID { get; private set; }

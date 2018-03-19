@@ -134,14 +134,6 @@
 
     $scope.deleteTreatmentBMPAttributeTypeRow = function (rowToDelete) { Sitka.Methods.removeFromJsonArray($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples, rowToDelete); };
 
-    $scope.isObservationTypeInUse = function (treatmentBMPTypeObservationTypeSimple) {
-        return _.includes($scope.AngularViewData.ObservationTypeIDsWithData, treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
-    };
-
-    $scope.isTreatmentBMPAttributeTypeInUse = function (treatmentBMPTypeAttributeTypeSimple) {
-        return _.includes($scope.AngularViewData.TreatmentBMPAttributeTypeIDsWithData, treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-    };
-
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 

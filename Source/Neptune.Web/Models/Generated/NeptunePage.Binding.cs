@@ -80,6 +80,20 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(NeptunePage).Name, typeof(NeptunePageImage).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in NeptunePageImages.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllNeptunePages.Remove(this);                
+        }
+
         [Key]
         public int NeptunePageID { get; set; }
         public int TenantID { get; private set; }

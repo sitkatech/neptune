@@ -93,6 +93,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+            HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Remove(this);                
+        }
+
         [Key]
         public int MaintenanceRecordID { get; set; }
         public int TenantID { get; private set; }

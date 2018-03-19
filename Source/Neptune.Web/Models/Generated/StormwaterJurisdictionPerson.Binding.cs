@@ -86,6 +86,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdictionPerson).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+            HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Remove(this);                
+        }
+
         [Key]
         public int StormwaterJurisdictionPersonID { get; set; }
         public int TenantID { get; private set; }

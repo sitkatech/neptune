@@ -160,7 +160,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPType(TreatmentBMPType treatmentBMPType, ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to delete this {FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}'?";
+            var treatmentBMPLabel = treatmentBMPType.TreatmentBMPs.Count == 1 ? FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized();
+            var confirmMessage = $"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' has {treatmentBMPType.TreatmentBMPs.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -176,14 +177,9 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteTreatmentBMPType(treatmentBMPType, viewModel);
             }
 
-            treatmentBMPType.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
-            treatmentBMPType.TreatmentBMPAssessments.DeleteTreatmentBMPAssessment();
-            treatmentBMPType.TreatmentBMPAttributes.DeleteTreatmentBMPAttribute();
-            treatmentBMPType.TreatmentBMPs.ToList().ForEach(x => x.DeleteFull());
-            treatmentBMPType.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
-            treatmentBMPType.TreatmentBMPTypeAttributeTypes.DeleteTreatmentBMPTypeAttributeType();
-            treatmentBMPType.TreatmentBMPTypeObservationTypes.DeleteTreatmentBMPTypeObservationType();
-            treatmentBMPType.DeleteTreatmentBMPType();
+            var message = $"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' successfully deleted!";
+            treatmentBMPType.DeleteFull();
+            SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }
     }

@@ -114,12 +114,10 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPAttributeType(TreatmentBMPAttributeType treatmentBMPAttributeType, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !treatmentBMPAttributeType.HasDependentObjects();
-            var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinition.TreatmentBMPAttributeType.GetFieldDefinitionLabel()} '{treatmentBMPAttributeType.TreatmentBMPAttributeTypeName}'?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.TreatmentBMPAttributeType.GetFieldDefinitionLabel()}", SitkaRoute<TreatmentBMPAttributeTypeController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPAttributeType), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            var treatmentBMPTypeLabel = treatmentBMPAttributeType.TreatmentBMPTypeAttributeTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPLabel = treatmentBMPAttributeType.TreatmentBMPAttributes.Count == 1 ? FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized();
+            var confirmMessage = $"{FieldDefinition.TreatmentBMPAttributeType.GetFieldDefinitionLabel()} '{treatmentBMPAttributeType.TreatmentBMPAttributeTypeName}' is associated with {treatmentBMPAttributeType.TreatmentBMPTypeAttributeTypes.Count} {treatmentBMPTypeLabel} and {treatmentBMPAttributeType.TreatmentBMPAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.TreatmentBMPAttributeType.GetFieldDefinitionLabel()}?";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
@@ -133,7 +131,10 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteTreatmentBMPAttributeType(treatmentBMPAttributeType, viewModel);
             }
-            treatmentBMPAttributeType.DeleteTreatmentBMPAttributeType();
+
+            var message = $"{FieldDefinition.TreatmentBMPAttributeType.GetFieldDefinitionLabel()} '{treatmentBMPAttributeType.TreatmentBMPAttributeTypeName}' successfully deleted!";
+            treatmentBMPAttributeType.DeleteFull();
+            SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }
     }

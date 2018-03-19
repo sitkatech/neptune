@@ -86,6 +86,20 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ModeledCatchment).Name, typeof(TreatmentBMP).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in TreatmentBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllModeledCatchments.Remove(this);                
+        }
+
         [Key]
         public int ModeledCatchmentID { get; set; }
         public int TenantID { get; private set; }

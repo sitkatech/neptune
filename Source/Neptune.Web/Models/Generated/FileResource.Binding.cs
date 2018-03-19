@@ -107,6 +107,60 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(Organization).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in FieldDefinitionDataImages.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in NeptuneHomePageImages.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in NeptunePageImages.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in OrganizationsWhereYouAreTheLogoFileResource.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TenantAttributesWhereYouAreTheTenantBannerLogoFileResource.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TenantAttributesWhereYouAreTheTenantSquareLogoFileResource.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TenantAttributesWhereYouAreTheTenantStyleSheetFileResource.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPDocuments.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPImages.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllFileResources.Remove(this);                
+        }
+
         [Key]
         public int FileResourceID { get; set; }
         public int TenantID { get; private set; }

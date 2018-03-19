@@ -99,6 +99,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPObservation).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPObservations.Remove(this);                
+        }
+
         [Key]
         public int TreatmentBMPObservationID { get; set; }
         public int TenantID { get; private set; }

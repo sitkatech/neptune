@@ -120,6 +120,65 @@ namespace Neptune.Web.Models
         /// </summary>
         public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FileResource).Name, typeof(MaintenanceRecord).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPAssessment).Name};
 
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in AuditLogs.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in FileResourcesWhereYouAreTheCreatePerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in MaintenanceRecordsWhereYouAreThePerformedByPerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in ModeledCatchmentGeometryStagings.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in Notifications.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in OrganizationsWhereYouAreThePrimaryContactPerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in StormwaterJurisdictionPeople.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in SupportRequestLogsWhereYouAreTheRequestPerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TenantAttributesWhereYouAreThePrimaryContactPerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPAssessments.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllPeople.Remove(this);                
+        }
+
         [Key]
         public int PersonID { get; set; }
         public int TenantID { get; private set; }
