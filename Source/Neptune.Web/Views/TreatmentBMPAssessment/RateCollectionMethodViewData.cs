@@ -27,7 +27,7 @@ using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class RateCollectionMethodViewData : AssessmentViewData
+    public class RateCollectionMethodViewData : BaseObservationViewData
     {
         public RateCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }

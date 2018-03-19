@@ -23,7 +23,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreViewData : AssessmentViewData
+    public class ScoreViewData : BaseObservationViewData
     {
         public const string ThisSectionName = "Score";
         public readonly string CalculatedAssessmentScoreFormatted;

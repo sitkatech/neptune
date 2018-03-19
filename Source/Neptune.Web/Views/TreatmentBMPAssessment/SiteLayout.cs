@@ -20,8 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class SiteLayout : LtInfo.Common.Mvc.TypedWebViewPage<AssessmentViewData>
+    public abstract class SiteLayout : LtInfo.Common.Mvc.TypedWebViewPage<BaseObservationViewData>
     {
-       
     }
 }

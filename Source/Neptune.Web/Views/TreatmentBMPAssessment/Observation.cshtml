@@ -1,0 +1,38 @@
+﻿@using Neptune.Web.Models
+@using Neptune.Web.Views.TreatmentBMPAssessment
+
+@inherits Observation<ObservationViewData, ObservationViewModel>
+
+@{
+    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
+}
+
+@section JavascriptAndStylesContent
+{
+    @if (ViewDataTyped.ObservationPartialViewData.DisableInputs)
+    {
+        <script type="text/javascript">
+            // <![CDATA[
+            jQuery("#treatmentBmpAssessmentContainer").find(":input").prop("disabled", true);
+            // ]]>
+        </script>
+    }
+}
+
+<div id="treatmentBmpAssessmentContainer">
+    @switch (ViewDataTyped.ObservationTypeCollectionMethod.ToEnum)
+    {
+        case ObservationTypeCollectionMethodEnum.DiscreteValue:
+            DiscreteCollectionMethod.RenderPartialView(Html, ViewDataTyped.ObservationPartialViewData as DiscreteCollectionMethodViewData, Model as DiscreteCollectionMethodViewModel);
+            break;
+        case ObservationTypeCollectionMethodEnum.PassFail:
+            PassFailCollectionMethod.RenderPartialView(Html, ViewDataTyped.ObservationPartialViewData as PassFailCollectionMethodViewData, Model as PassFailCollectionMethodViewModel);
+            break;
+        case ObservationTypeCollectionMethodEnum.Percentage:
+            PercentageCollectionMethod.RenderPartialView(Html, ViewDataTyped.ObservationPartialViewData as PercentageCollectionMethodViewData, Model as PercentageCollectionMethodViewModel);
+            break;
+        case ObservationTypeCollectionMethodEnum.Rate:
+            RateCollectionMethod.RenderPartialView(Html, ViewDataTyped.ObservationPartialViewData as RateCollectionMethodViewData, Model as RateCollectionMethodViewModel);
+            break;
+    }
+</div>

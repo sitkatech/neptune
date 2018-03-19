@@ -27,7 +27,7 @@ using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PassFailCollectionMethodViewData : AssessmentViewData
+    public class PassFailCollectionMethodViewData : BaseObservationViewData
     {
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string PassingScoreLabel { get; }

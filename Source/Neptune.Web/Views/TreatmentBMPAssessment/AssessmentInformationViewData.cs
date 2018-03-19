@@ -25,7 +25,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class AssessmentInformationViewData : AssessmentViewData
+    public class AssessmentInformationViewData : BaseObservationViewData
     {
         public readonly IEnumerable<SelectListItem> JurisdictionPeople;
         public readonly IEnumerable<SelectListItem> AssessmentTypes;
