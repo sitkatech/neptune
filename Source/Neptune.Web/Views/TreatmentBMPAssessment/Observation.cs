@@ -23,9 +23,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class Observation<TViewData, TViewModel> : TypedWebViewPage<TViewData, TViewModel>
-        where TViewData : ObservationViewData
-        where TViewModel : ObservationViewModel
+    public abstract class Observation : TypedWebViewPage<ObservationViewData, ObservationViewModel>
     {
     }
 }

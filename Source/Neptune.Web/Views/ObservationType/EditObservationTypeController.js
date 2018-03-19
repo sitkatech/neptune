@@ -148,4 +148,31 @@
             $scope.AngularModel.ObservationTypeCollectionMethodID)
         : null;
 
+    $scope.previewObservationType = function () {
+        jQuery.ajax($scope.AngularViewData.PreviewUrl,
+            {
+                data: jQuery("#EditObservationTypeControllerApp").serialize(),
+                method: "POST",
+                error: function (jqXhr, status, error) {
+                    console.error(error);
+                    jQuery(".previewErrorAlert").remove();
+                    jQuery("formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
+                        "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
+                        "There was a problem preparing the preview for your Observation Type." +
+                        "</div>");
+                },
+                success: function (data) {
+                    createBootstrapAlert(data, "Preview Observation Type", "Close");
+                }
+            });
+    };
+
+    $scope.disableObservationType = function() {
+        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty(jQuery("[name=\"ObservationTypeName\"]").val()),
+            thresholdTypeIsSet = parseInt(jQuery("[name=\"ObservationThresholdTypeID\"]").val()) !== NaN,
+            targetTypeIsSet = parseInt(jQuery("[name=\"ObservationTargetTypeID\"]").val()) !== NaN,
+            collectionMethodIsSet = parseInt(jQuery("[name=\"ObservationTypeCollectionMethodID\"]").val()) !== NaN,
+            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty(jQuery("[name=\"ObservationTypeSchema\"]").val());
+        return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
+    };
 });

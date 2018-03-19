@@ -1,22 +1,10 @@
 ﻿@using Neptune.Web.Models
 @using Neptune.Web.Views.TreatmentBMPAssessment
 
-@inherits Observation<ObservationViewData, ObservationViewModel>
+@inherits Observation
 
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
-}
-
-@section JavascriptAndStylesContent
-{
-    @if (ViewDataTyped.ObservationPartialViewData.DisableInputs)
-    {
-        <script type="text/javascript">
-            // <![CDATA[
-            jQuery("#treatmentBmpAssessmentContainer").find(":input").prop("disabled", true);
-            // ]]>
-        </script>
-    }
 }
 
 <div id="treatmentBmpAssessmentContainer">

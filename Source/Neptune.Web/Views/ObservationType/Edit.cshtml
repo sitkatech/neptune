@@ -1,7 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Common
-@using Neptune.Web.Controllers
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json.Linq
@@ -19,13 +17,12 @@
                     AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
                 };
             });
-
     // ]]>
 </script>
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewInstructionsNeptunePage); }
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-submit="submit()" name="observationTypeForm">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-submit="submit()" name="observationTypeForm" ng-cloak>
     <div class="formPage">
         <div class="row">
             <div class="col-xs-12">
@@ -42,7 +39,7 @@
                             @Html.LabelWithSugarFor(m => m.ObservationTypeName)
                         </div>
                         <div class="col-sm-4">
-                            @Html.TextBoxFor(m => m.ObservationTypeName, new { @class = "form-control", style = "width:100%" })
+                            <input type="text" name="@Html.NameFor(m => m.ObservationTypeName)" ng-model="AngularModel.ObservationTypeName" class="form-control" />
                             @Html.ValidationMessageFor(m => m.ObservationTypeName)
                         </div>
                     </div>
@@ -468,10 +465,11 @@
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>
         <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="button" class="btn btn-neptune" ng-disabled="disableObservationType()" ng-click="previewObservationType()">Preview</button>
             <button type="submit" class="btn btn-neptune">Save</button>
             <a href="@ViewDataTyped.ObservationTypeIndexUrl" class="btn btn-neptune">Cancel</a>
         </div>
         @Html.HiddenFor(m => m.ObservationTypeID)
         <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="AngularModel.ObservationTypeSchema" />
     </div>
-</form>
+</form> 

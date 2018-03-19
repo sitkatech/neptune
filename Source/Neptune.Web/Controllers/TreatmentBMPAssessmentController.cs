@@ -287,7 +287,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, ObservationType observationType, ObservationViewModel viewModel)
         {
             var viewData = new ObservationViewData(CurrentPerson, treatmentBmpAssessment, observationTypeCollectionMethod, observationType);
-            return RazorView<Observation<ObservationViewData, ObservationViewModel>, ObservationViewData, ObservationViewModel>(viewData, viewModel);
+            return RazorView<Observation, ObservationViewData, ObservationViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
