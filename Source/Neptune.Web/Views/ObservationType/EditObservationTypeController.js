@@ -149,6 +149,9 @@
         : null;
 
     $scope.previewObservationType = function () {
+        $scope.submit();
+        $scope.$apply();
+
         jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").empty();
         jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").remove();
         jQuery.ajax($scope.AngularViewData.PreviewUrl,
