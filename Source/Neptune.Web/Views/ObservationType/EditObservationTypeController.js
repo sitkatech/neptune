@@ -159,14 +159,22 @@
                 data: jQuery("#EditObservationTypeControllerApp").serialize(),
                 method: "POST",
                 error: function (jqXhr, status, error) {
-                    console.error(error);
                     jQuery(".previewErrorAlert").remove();
+                    var listItems = _.chain(jqXhr.responseJSON)
+                        .values()
+                        .flatten()
+                        .map(function (x) { return "<li>" + x + "</li>"; })
+                        .value();
                     jQuery(".formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
                         "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
-                        "There was a problem preparing the preview for your Observation Type." +
+                        "<p>There was a problem preparing the preview for your Observation Type.</p>" +
+                        "<ul>" +
+                        listItems.join("") +
+                        "</ul>" +
                         "</div>");
                 },
                 success: function (data) {
+                    jQuery(".previewErrorAlert").remove();
                     var modalContent = "<div class=\"previewModalContent\" style=\"max-width: 850px;\">" +
                         "<p>This is a preview of what your Observation Type will look like in a Treatment BMP Assessment form.</p>" +
                         "<div class=\"formPage\">" +

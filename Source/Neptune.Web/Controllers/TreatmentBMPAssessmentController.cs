@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
@@ -416,7 +417,9 @@ namespace Neptune.Web.Controllers
                 var modelStateSerialized = JObject
                     .FromObject(ModelState.ToDictionary(x => x.Key,
                         x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
-                return new HttpStatusCodeResult(400, modelStateSerialized);
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                return Content(modelStateSerialized);
             }
 
             PartialViewResult result;
