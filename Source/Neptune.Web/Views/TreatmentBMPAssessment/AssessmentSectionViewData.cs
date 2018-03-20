@@ -6,21 +6,17 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class BaseObservationViewData : NeptuneViewData
+    public class AssessmentSectionViewData : NeptuneViewData
     {
-        // ReSharper disable InconsistentNaming
-        public readonly Models.TreatmentBMPAssessment TreatmentBMPAssessment;
-        public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly string AssessmentInformationUrl;
-        public readonly string ScoreUrl;
-        public readonly string SectionName;
-        public readonly bool AssessmentInformationComplete;
-        public readonly bool DisableInputs;
+        public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
+        public string AssessmentInformationUrl { get; }
+        public string ScoreUrl { get; }
+        public string SectionName { get; }
+        public bool AssessmentInformationComplete { get; }
 
-        protected BaseObservationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName, bool disableInputs)
+        public AssessmentSectionViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
-            TreatmentBMP = treatmentBMPAssessment.TreatmentBMP;
             TreatmentBMPAssessment = treatmentBMPAssessment;
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
@@ -40,8 +36,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 x.Score(TreatmentBMPAssessment));
 
             SectionName = sectionName;
-
-            DisableInputs = disableInputs;
 
             EntityName = "Treatment BMP Assessments";
             EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());

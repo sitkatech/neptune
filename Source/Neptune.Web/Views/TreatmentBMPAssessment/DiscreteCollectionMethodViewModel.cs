@@ -23,19 +23,19 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class DiscreteCollectionMethodViewModel : ObservationViewModel
-    {    
+    public class DiscreteCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    {
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
         public DiscreteCollectionMethodViewModel()
-        {            
+        {
         }
 
-        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)         
-        {            
+        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.ObservationType observationType)
+            : base(treatmentBMPObservation, observationType)
+        {
         }
-
-
     }
 }

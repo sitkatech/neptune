@@ -284,10 +284,10 @@ namespace Neptune.Web.Controllers
                 : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.PercentageCollectionMethod(treatmentBMPAssessment, observationType)));
         }
 
-        private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, ObservationType observationType, ObservationViewModel viewModel)
+        private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, ObservationType observationType, CollectionMethodSectionViewModel viewModel)
         {
-            var viewData = new ObservationViewData(CurrentPerson, treatmentBmpAssessment, observationTypeCollectionMethod, observationType);
-            return RazorView<Observation, ObservationViewData, ObservationViewModel>(viewData, viewModel);
+            var viewData = new CollectionMethodSectionViewData(CurrentPerson, treatmentBmpAssessment, observationTypeCollectionMethod, observationType);
+            return RazorView<CollectionMethodSection, CollectionMethodSectionViewData, CollectionMethodSectionViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -382,7 +382,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewScore(TreatmentBMPAssessment treatmentBMPAssessment, ScoreViewModel viewModel)
         {
-            var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment, false);
+            var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         }   
  
@@ -434,22 +434,22 @@ namespace Neptune.Web.Controllers
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
-                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(CurrentPerson, treatmentBmpAssessment, observationType, true);
+                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, observationType);
                     result = RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData, discreteCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
-                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(CurrentPerson, treatmentBmpAssessment, observationType, true);
+                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, observationType);
                     result = RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
-                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(CurrentPerson, treatmentBmpAssessment, observationType, true);
+                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, observationType);
                     result = RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Rate:
                     var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
-                    var rateCollectionMethodViewData = new RateCollectionMethodViewData(CurrentPerson, treatmentBmpAssessment, observationType, true);
+                    var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, observationType);
                     result = RazorPartialView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
                     break;
                 default:

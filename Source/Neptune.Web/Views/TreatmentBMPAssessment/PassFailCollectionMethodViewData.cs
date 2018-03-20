@@ -22,12 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PassFailCollectionMethodViewData : BaseObservationViewData
+    public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string PassingScoreLabel { get; }
@@ -35,8 +34,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
-            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
+        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
             PassingScoreLabel = observationType.PassFailSchema.PassingScoreLabel;

@@ -18,7 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@inherits Neptune.Web.Views.TreatmentBMPAssessment.SiteLayout
+@inherits Neptune.Web.Views.TreatmentBMPAssessment.AssessmentSection
 
 @{
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
@@ -34,14 +34,14 @@
         <div class="col-xs-12 col-sm-3">
             <nav id="wizardNav">
                 <ul class="nav nav-stacked">
-                    <li class="@(ViewDataTyped.ObservationPartialViewData.SectionName =="Assessment Information" ? "active" : string.Empty)">
-                        <a href="@ViewDataTyped.ObservationPartialViewData.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
+                    <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
+                        <a href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
                     </li>
-                    @foreach (var observationType in ViewDataTyped.ObservationPartialViewData.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
+                    @foreach (var observationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
                     {
-                        <li class="@(ViewDataTyped.ObservationPartialViewData.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
-                            <a class="@(!ViewDataTyped.ObservationPartialViewData.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.ObservationPartialViewData.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.ObservationPartialViewData.TreatmentBMPAssessment))">
-                                @if (ViewDataTyped.ObservationPartialViewData.TreatmentBMPAssessment.IsObservationComplete(observationType))
+                        <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
+                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">
+                                @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(observationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }
@@ -53,8 +53,8 @@
                             </a>
                         </li>
                     }
-                    <li class="@(ViewDataTyped.ObservationPartialViewData.SectionName =="Score" ? "active" : string.Empty)">
-                        <a class="@(!ViewDataTyped.ObservationPartialViewData.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.ObservationPartialViewData.AssessmentInformationComplete ? "#" : ViewDataTyped.ObservationPartialViewData.ScoreUrl)"><span style="margin-left: 22px">Score</span></a>
+                    <li class="@(ViewDataTyped.SectionName =="Score" ? "active" : string.Empty)">
+                        <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : ViewDataTyped.ScoreUrl)"><span style="margin-left: 22px">Score</span></a>
                     </li>
                 </ul>
             </nav>
@@ -62,7 +62,7 @@
 
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
-                <h2>@ViewDataTyped.ObservationPartialViewData.SectionName</h2>
+                <h2>@ViewDataTyped.SectionName</h2>
                 <hr>
             </div>
 

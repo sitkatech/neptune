@@ -7,17 +7,17 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class ObservationViewModel : FormViewModel, IValidatableObject
+    public class CollectionMethodSectionViewModel : AssessmentSectionViewModel
     {
         public int? TreatmentBMPAssessmentID { get; set; }
         public int? ObservationTypeID { get; set; }
         public string ObservationData { get; set; }
 
-        protected ObservationViewModel()
+        protected CollectionMethodSectionViewModel()
         {
         }
 
-        protected ObservationViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType)
+        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType)
         {
             TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
             ObservationTypeID = observationType.ObservationTypeID;

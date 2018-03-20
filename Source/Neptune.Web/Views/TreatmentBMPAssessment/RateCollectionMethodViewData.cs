@@ -22,20 +22,18 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class RateCollectionMethodViewData : BaseObservationViewData
+    public class RateCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
         public RateCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }
 
-        public RateCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType, bool disableInputs)
-            : base(currentPerson, treatmentBmpAssessment, observationType.ObservationTypeName, disableInputs)
+        public RateCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
         {
             ViewDataForAngular = new RateCollectionMethodViewDataForAngular(observationType.RateObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
@@ -71,5 +69,4 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
         }
     }
-
 }

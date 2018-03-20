@@ -23,18 +23,17 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreViewData : BaseObservationViewData
+    public class ScoreViewData : AssessmentSectionViewData
     {
         public const string ThisSectionName = "Score";
         public readonly string CalculatedAssessmentScoreFormatted;
         public readonly ScoreDetailViewData ScoreDetailViewData;
 
-        public ScoreViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, bool disableInputs)
-            : base(currentPerson, treatmentBmpAssessment, ThisSectionName, disableInputs)
+        public ScoreViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment)
+            : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
         {
             CalculatedAssessmentScoreFormatted = treatmentBmpAssessment.FormattedScore();
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment);
         }       
-
     }
 }
