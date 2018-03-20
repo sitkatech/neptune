@@ -149,6 +149,8 @@
         : null;
 
     $scope.previewObservationType = function () {
+        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").empty();
+        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").remove();
         jQuery.ajax($scope.AngularViewData.PreviewUrl,
             {
                 data: jQuery("#EditObservationTypeControllerApp").serialize(),
@@ -156,23 +158,31 @@
                 error: function (jqXhr, status, error) {
                     console.error(error);
                     jQuery(".previewErrorAlert").remove();
-                    jQuery("formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
+                    jQuery(".formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
                         "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
                         "There was a problem preparing the preview for your Observation Type." +
                         "</div>");
                 },
                 success: function (data) {
-                    createBootstrapAlert(data, "Preview Observation Type", "Close");
+                    var modalContent = "<div class=\"previewModalContent\" style=\"max-width: 850px;\">" +
+                        "<p>This is a preview of what your Observation Type will look like in a Treatment BMP Assessment form.</p>" +
+                        "<div class=\"formPage\">" +
+                        data +
+                        "</div>" +
+                        "</div>";
+                    createBootstrapAlert(modalContent, "Preview Observation Type", "Close");
+                    jQuery(".previewModalContent :input").prop("disabled", true);
                 }
             });
     };
 
     $scope.disableObservationType = function() {
-        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty(jQuery("[name=\"ObservationTypeName\"]").val()),
-            thresholdTypeIsSet = parseInt(jQuery("[name=\"ObservationThresholdTypeID\"]").val()) !== NaN,
-            targetTypeIsSet = parseInt(jQuery("[name=\"ObservationTargetTypeID\"]").val()) !== NaN,
-            collectionMethodIsSet = parseInt(jQuery("[name=\"ObservationTypeCollectionMethodID\"]").val()) !== NaN,
-            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty(jQuery("[name=\"ObservationTypeSchema\"]").val());
+        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeName),
+            thresholdTypeIsSet = parseInt($scope.AngularModel.ObservationThresholdTypeID) !== NaN,
+            targetTypeIsSet = parseInt($scope.AngularModel.ObservationTargetTypeID) !== NaN,
+            collectionMethodIsSet = parseInt($scope.AngularModel.ObservationTypeCollectionMethodID) !== NaN,
+            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeSchema);
+
         return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
     };
 });
