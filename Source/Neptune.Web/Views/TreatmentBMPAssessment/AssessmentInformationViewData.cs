@@ -25,14 +25,14 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class AssessmentInformationViewData : AssessmentSectionViewData
+    public class AssessmentInformationViewData : AssessmentViewData
     {
         public readonly IEnumerable<SelectListItem> JurisdictionPeople;
         public readonly IEnumerable<SelectListItem> AssessmentTypes;
 
         public const string ThisSectionName = "Assessment Information";
-        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople, IEnumerable<SelectListItem> assessmentTypes)
-            : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
+        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, IEnumerable<SelectListItem> jurisdictionPeople, IEnumerable<SelectListItem> assessmentTypes)
+            : base(currentPerson, treatmentBMPAssessment, ThisSectionName)
         {
             JurisdictionPeople = jurisdictionPeople;
             AssessmentTypes = assessmentTypes;

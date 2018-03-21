@@ -30,8 +30,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.ObservationType;
 using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
-using Detail = Neptune.Web.Views.ObservationType.Detail;
-using DetailViewData = Neptune.Web.Views.ObservationType.DetailViewData;
 
 namespace Neptune.Web.Controllers
 {
@@ -53,7 +51,8 @@ namespace Neptune.Web.Controllers
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<ObservationType>(observationTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
-        
+
+
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult New()
@@ -123,7 +122,8 @@ namespace Neptune.Web.Controllers
             var viewData = new DetailViewData(CurrentPerson, observationType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
-        
+
+
         [HttpGet]
         [NeptuneAdminFeature]
         public PartialViewResult DeleteObservationType(ObservationTypePrimaryKey observationTypePrimaryKey)
@@ -157,7 +157,8 @@ namespace Neptune.Web.Controllers
             observationType.DeleteObservationType();
             return new ModalDialogFormJsonResult();
         }
-        
+
+
         [HttpGet]
         [NeptuneAdminFeature]
         public PartialViewResult DiscreteDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)

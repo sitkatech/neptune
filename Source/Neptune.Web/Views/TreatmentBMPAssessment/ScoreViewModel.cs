@@ -23,12 +23,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using LtInfo.Common;
+using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreViewModel : AssessmentSectionViewModel, IValidatableObject
+    public class ScoreViewModel : FormViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPAssessmentID { get; set; }

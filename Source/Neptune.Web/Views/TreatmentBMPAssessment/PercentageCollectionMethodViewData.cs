@@ -22,24 +22,26 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PercentageCollectionMethodViewData : BaseCollectionMethodFormViewData
+    public class PercentageCollectionMethodViewData : AssessmentViewData
     {
         public PercentageCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PercentageCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
+        public PercentageCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
+            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
         {
             ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(observationType.PercentageSchema);
             MeasurementUnitLabelAndUnit = $"{observationType.BenchmarkMeasurementUnitLabel()} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
             AssessmentDescription = observationType.PercentageSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBmpAssessment, observationType));
+            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
         }
 
         public class PercentageCollectionMethodViewDataForAngular
@@ -55,7 +57,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
                     count += 1;
                 });
+
             }
         }
     }
+
 }

@@ -23,18 +23,19 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PercentageCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public class PercentageCollectionMethodViewModel : ObservationViewModel
     {
+       
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
         public PercentageCollectionMethodViewModel()
-        {
+        {            
         }
 
-        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)
-        {
+        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)     
+        {         
         }
+
     }
 }
