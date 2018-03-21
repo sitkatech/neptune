@@ -23,20 +23,18 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PassFailCollectionMethodViewModel : ObservationViewModel
+    public class PassFailCollectionMethodViewModel : BaseCollectionMethodFormViewModel
     {
-       
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
         public PassFailCollectionMethodViewModel()
-        {            
-        }
-
-        public PassFailCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)       
         {
-           
         }
 
+        public PassFailCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)
+        {
+        }
     }
 }

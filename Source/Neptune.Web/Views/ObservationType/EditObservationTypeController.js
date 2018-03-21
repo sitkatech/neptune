@@ -148,4 +148,52 @@
             $scope.AngularModel.ObservationTypeCollectionMethodID)
         : null;
 
+    $scope.previewObservationType = function () {
+        $scope.submit();
+        $scope.$apply();
+
+        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").empty();
+        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").remove();
+        jQuery.ajax($scope.AngularViewData.PreviewUrl,
+            {
+                data: jQuery("#EditObservationTypeControllerApp").serialize(),
+                method: "POST",
+                error: function (jqXhr, status, error) {
+                    jQuery(".previewErrorAlert").remove();
+                    var listItems = _.chain(jqXhr.responseJSON)
+                        .values()
+                        .flatten()
+                        .map(function (x) { return "<li>" + x + "</li>"; })
+                        .value();
+                    jQuery(".formPage").append("<div class=\"alert alert-danger alert-dismissable previewErrorAlert\" role=\"alert\">" +
+                        "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>" +
+                        "<p>There was a problem preparing the preview for your Observation Type.</p>" +
+                        "<ul>" +
+                        listItems.join("") +
+                        "</ul>" +
+                        "</div>");
+                },
+                success: function (data) {
+                    jQuery(".previewErrorAlert").remove();
+                    var modalContent = "<div class=\"previewModalContent\" style=\"max-width: 850px;\">" +
+                        "<p>This is a preview of what your Observation Type will look like in a Treatment BMP Assessment form.</p>" +
+                        "<div class=\"formPage\">" +
+                        data +
+                        "</div>" +
+                        "</div>";
+                    createBootstrapAlert(modalContent, "Preview Observation Type", "Close");
+                    jQuery(".previewModalContent :input").prop("disabled", true);
+                }
+            });
+    };
+
+    $scope.disableObservationType = function() {
+        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeName),
+            thresholdTypeIsSet = parseInt($scope.AngularModel.ObservationThresholdTypeID) !== NaN,
+            targetTypeIsSet = parseInt($scope.AngularModel.ObservationTargetTypeID) !== NaN,
+            collectionMethodIsSet = parseInt($scope.AngularModel.ObservationTypeCollectionMethodID) !== NaN,
+            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeSchema);
+
+        return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
+    };
 });

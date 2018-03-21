@@ -22,12 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 using Neptune.Web.Views.ObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class PassFailCollectionMethodViewData : AssessmentViewData
+    public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string PassingScoreLabel { get; }
@@ -35,8 +34,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
             PassingScoreLabel = observationType.PassFailSchema.PassingScoreLabel;
@@ -44,7 +42,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentDescription = observationType.PassFailSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.PassFailCollectionMethod(treatmentBMPAssessment, observationType));
+                x.PassFailCollectionMethod(treatmentBmpAssessment, observationType));
         }
 
         public class PassFailCollectionMethodViewDataForAngular
@@ -64,5 +62,4 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
         }
     }
-
 }
