@@ -106,6 +106,15 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [Route("Legal")]
+        [AnonymousUnclassifiedFeature]
+        public ViewResult Legal()
+        {
+            var con = new HomeController {ControllerContext = ControllerContext};
+            return con.ViewPageContent(NeptunePageTypeEnum.Legal);
+        }
+
+        [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult ManageHomePageImages()
         {

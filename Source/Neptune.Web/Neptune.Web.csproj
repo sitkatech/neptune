@@ -315,6 +315,15 @@
     <Compile Include="Views\NeptunePage\NeptunePageDetails.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageDetailsViewData.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\AssessmentSection.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\BaseCollectionMethodForm.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\BaseCollectionMethodFormViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\BaseCollectionMethodFormViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\CollectionMethodSection.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\CollectionMethodSectionViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessment\CollectionMethodSectionViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAttributeType\Detail.cs" />
     <Compile Include="Views\TreatmentBMPAttributeType\DetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAttributeType\DiscreteValueObservationTypeSchema.cs" />
@@ -720,7 +729,6 @@
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
     <Compile Include="Models\ObservationTypeSimple.cs" />
-    <Compile Include="Views\TreatmentBMPAssessment\ObservationViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\PassFailCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodViewData.cs" />
@@ -835,7 +843,6 @@
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentInformation.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentInformationViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentInformationViewModel.cs" />
-    <Compile Include="Views\TreatmentBMPAssessment\AssessmentViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\Detail.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\Score.cs" />
@@ -843,7 +850,6 @@
     <Compile Include="Views\TreatmentBMPAssessment\ScoreDetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\ScoreViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\ScoreViewModel.cs" />
-    <Compile Include="Views\TreatmentBMPAssessment\SiteLayout.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\TreatmentBMPAssessmentGridSpec.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\BenchmarkAndThresholdViewData.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\Instructions.cs" />
@@ -893,7 +899,7 @@
     <Compile Include="Views\Shared\ErrorViewData.cs" />
     <Content Include="Views\TreatmentBMPAssessment\PercentageCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodController.js" />
-    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController .js" />
+    <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
@@ -957,6 +963,7 @@
     <Content Include="Views\TreatmentBMPAttributeType\Manage.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecord.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessment\CollectionMethodSection.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -19,27 +19,23 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
+@using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMPAssessment.RateCollectionMethod
-
-@{
-    SetLayout("SiteLayout.cshtml", ViewDataTyped);
-}
 
 <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessment/RateCollectionMethodController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
-    angular.module("NeptuneApp")
-        .factory("angularModelAndViewData",
-            function()
-            {
-                return {
-                    AngularModel: @Html.Raw(JObject.FromObject(Model)),
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
-                    };
-            });
+    angular.module("NeptuneApp").factory("angularModelAndViewData",
+        function() {
+            return {
+                AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
+                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+            };
+        });
+    angular.bootstrap(jQuery("[ng-controller=\"RateCollectionMethodController\"]"), ["NeptuneApp"]);
 
-    jQuery(document).ready(function () {       
+    jQuery(document).ready(function() {
         HookupCheckIfFormIsDirtyNoDisable(undefined);
     });
     // ]]>

@@ -21,4 +21,5 @@ values
 (16, 'ManageTreatmentBMPTypeInstructions', 'Manage Treatment BMP Type Instructions', 2),
 (17, 'ManageTreatmentBMPAttributeTypeInstructions', 'Manage Treatment BMP Attribute Type Instructions', 2),
 (18, 'ManageTreatmentBMPAttributeInstructions', 'Manage Treatment BMP Attribute Instructions', 2),
-(19, 'ManageTreatmentBMPAttributeTypesList', 'Manage Treatment BMP Attribute Types List', 2)
+(19, 'ManageTreatmentBMPAttributeTypesList', 'Manage Treatment BMP Attribute Types List', 2),
+(20, 'Legal', 'Legal', 2)

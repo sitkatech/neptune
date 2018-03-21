@@ -26,7 +26,7 @@
 @inherits Score
 
 @{
-    SetLayout("SiteLayout.cshtml", ViewDataTyped);
+    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
 <script type="text/javascript">
@@ -52,10 +52,10 @@
 </script>
 
 <p>
-    The BMP Assessment Score is a 0-5 value that represents the treatment BMP condition at the time of observations. The BMP Assessment Score is a weighted integration of field observation results (observation scores) based on treatment BMP type.
+    The BMP Assessment Score is a 0-5 value that represents the treatment BMP condition at the time of observations.
+    The BMP Assessment Score is a weighted integration of field observation results (observation scores) based on treatment BMP type.
 </p>
 <hr>
-
 <div class="row" style="margin-bottom: 10px">
     <div class="col-sm-3 control-label">
         <label>Assessment Score</label>
@@ -73,7 +73,6 @@
         </div>
     }
 </div>
-
 
 <div class="panel panelNeptune" style="background-color: white">
     <div class="panel-heading panelTitle">
@@ -135,9 +134,3 @@
         </div>
     </div>
 }
-
-
-<script type="text/javascript" language="javascript">
-       
-</script>
-

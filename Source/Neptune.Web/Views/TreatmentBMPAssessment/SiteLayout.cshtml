@@ -1,28 +1,32 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="SiteLayout.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="SiteLayout.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
-@using Neptune.Web.Models
-@inherits Neptune.Web.Views.TreatmentBMPAssessment.SiteLayout
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@inherits Neptune.Web.Views.TreatmentBMPAssessment.AssessmentSection
 
 @{
-    SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped);
+    @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
+}
+
+@section JavascriptAndStylesContent
+{
+    @RenderSection("JavascriptAndStylesContent", false)
 }
 
 <div>
@@ -31,12 +35,12 @@ Source code is available upon request via <support@sitkatech.com>.
             <nav id="wizardNav">
                 <ul class="nav nav-stacked">
                     <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
-                        <a  href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
+                        <a href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
                     </li>
-                    @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
+                    @foreach (var observationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
                     {
                         <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
-                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">                                
+                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : observationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">
                                 @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(observationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
@@ -55,17 +59,17 @@ Source code is available upon request via <support@sitkatech.com>.
                 </ul>
             </nav>
         </div>
-        
+
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
                 <h2>@ViewDataTyped.SectionName</h2>
                 <hr>
             </div>
-            
+
             <div class="validationError">
                 @Html.ValidationSummary()
             </div>
-            
+
             <div class="wizardMain">
                 @RenderBody()
             </div>

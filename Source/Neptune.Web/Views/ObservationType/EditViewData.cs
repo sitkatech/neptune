@@ -74,7 +74,6 @@ namespace Neptune.Web.Views.ObservationType
 
     public class ViewDataForAngular
     {
-       
         public List<ObservationTypeSpecificationSimple> ObservationTypeSpecificationSimples { get; }
         public List<ObservationTypeCollectionMethodSimple> ObservationTypeCollectionMethods { get; }
         public List<SelectItemSimple> ObservationThresholdTypes { get; }
@@ -84,11 +83,13 @@ namespace Neptune.Web.Views.ObservationType
         public int RateObservationTypeCollectionMethodID { get; }
         public int PassFailObservationTypeCollectionMethodID { get; }
         public int PercentageObservationTypeCollectionMethodID { get; }
+        public string PreviewUrl { get; set; }
 
         public ViewDataForAngular(List<ObservationTypeSpecification> observationTypeSpecifications,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods,
             List<ObservationThresholdType> observationThresholdTypes,
-            List<ObservationTargetType> observationTargetTypes, List<MeasurementUnitType> measurementUnitTypes)
+            List<ObservationTargetType> observationTargetTypes,
+            List<MeasurementUnitType> measurementUnitTypes)
         {
             ObservationTypeSpecificationSimples = observationTypeSpecifications.Select(x => new ObservationTypeSpecificationSimple(x)).ToList();
             ObservationTypeCollectionMethods = observationTypeCollectionMethods.Select(x => new ObservationTypeCollectionMethodSimple(x)).ToList();
@@ -100,6 +101,7 @@ namespace Neptune.Web.Views.ObservationType
             RateObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Rate.ObservationTypeCollectionMethodID;
             PassFailObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID;
             PercentageObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Percentage.ObservationTypeCollectionMethodID;
+            PreviewUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.Preview());
         }
     }
 

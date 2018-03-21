@@ -19,11 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public abstract class PercentageCollectionMethod : TypedWebViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
+    public abstract class PercentageCollectionMethod : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, PercentageCollectionMethodViewData viewData, PercentageCollectionMethodViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
+        }
     }
 }

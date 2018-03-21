@@ -19,25 +19,21 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
-    public class ScoreViewData : AssessmentViewData
+    public class ScoreViewData : AssessmentSectionViewData
     {
         public const string ThisSectionName = "Score";
         public readonly string CalculatedAssessmentScoreFormatted;
         public readonly ScoreDetailViewData ScoreDetailViewData;
 
-        public ScoreViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
-            : base(currentPerson, treatmentBMPAssessment, ThisSectionName)
+        public ScoreViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment)
+            : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
         {
-            CalculatedAssessmentScoreFormatted = treatmentBMPAssessment.FormattedScore();
-            ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
+            CalculatedAssessmentScoreFormatted = treatmentBmpAssessment.FormattedScore();
+            ScoreDetailViewData = new ScoreDetailViewData(treatmentBmpAssessment);
         }       
-
     }
 }
