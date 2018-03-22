@@ -20,11 +20,21 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Security
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.ObservationType.Detail
 @section JavascriptAndStylesContent
 {
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#schemaDetails").load('@(Url.Content(ViewDataTyped.ViewSchemaDetailUrl))');
+        });
+    </script>
 }
 
 @section RightOfPageTitle
@@ -65,8 +75,15 @@
 
 </div>
 
-<script type="text/javascript">  
-    $(document).ready(function () {
-        $("#schemaDetails").load('@(Url.Content(ViewDataTyped.ViewSchemaDetailUrl))');
-    });
-</script>  
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Treatment BMP Types Using this Observation Type
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPTypeGridSpec, ViewDataTyped.TreatmentBMPTypeGridName, ViewDataTyped.TreatmentBMPTypeGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>

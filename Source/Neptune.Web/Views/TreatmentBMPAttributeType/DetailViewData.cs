@@ -23,6 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.TreatmentBMPType;
 
 namespace Neptune.Web.Views.TreatmentBMPAttributeType
 {
@@ -30,6 +31,9 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
     {
         public Models.TreatmentBMPAttributeType TreatmentBMPAttributeType { get; }
         public bool UserHasTreatmentBMPAttributeTypeManagePermissions { get; }
+        public TreatmentBMPTypeGridSpec TreatmentBMPTypeGridSpec { get; }
+        public string TreatmentBMPTypeGridName { get; }
+        public string TreatmentBMPTypeGridDataUrl { get; }
 
         public DetailViewData(Person currentPerson,
             Models.TreatmentBMPAttributeType treatmentBMPAttributeType) : base(currentPerson)
@@ -44,6 +48,16 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             {
                 EntityUrl = SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(c => c.Manage());
             }
+
+            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
+            {
+                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                SaveFiltersInCookie = true
+            };
+
+            TreatmentBMPTypeGridName = "treatmentBMPTypeGridForAttribute";
+            TreatmentBMPTypeGridDataUrl = SitkaRoute<TreatmentBMPAttributeTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(treatmentBMPAttributeType));
         }
     }
 }

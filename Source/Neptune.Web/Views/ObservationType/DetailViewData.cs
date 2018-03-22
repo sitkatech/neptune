@@ -23,6 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.TreatmentBMPType;
 
 namespace Neptune.Web.Views.ObservationType
 {
@@ -31,6 +32,10 @@ namespace Neptune.Web.Views.ObservationType
         public Models.ObservationType ObservationType { get; }
         public bool UserHasObservationTypeManagePermissions { get; }
         public string ViewSchemaDetailUrl { get; }
+        public TreatmentBMPTypeGridSpec TreatmentBMPTypeGridSpec { get; }
+        public string TreatmentBMPTypeGridName { get; }
+        public string TreatmentBMPTypeGridDataUrl { get; }
+
 
         public DetailViewData(Person currentPerson,
             Models.ObservationType observationType) : base(currentPerson)
@@ -47,6 +52,16 @@ namespace Neptune.Web.Views.ObservationType
             }
 
             ViewSchemaDetailUrl = observationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(observationType);
+
+            TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
+            {
+                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}",
+                SaveFiltersInCookie = true
+            };
+
+            TreatmentBMPTypeGridName = "treatmentBMPTypeGridForObservationType";
+            TreatmentBMPTypeGridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(observationType));
         }
     }
 }

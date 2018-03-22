@@ -21,12 +21,15 @@
 @using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using LtInfo.Common.Views
 @using Neptune.Web.Security
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Views.TreatmentBMPAttributeType.Detail
 @section JavascriptAndStylesContent
 {
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
 @section RightOfPageTitle
@@ -68,6 +71,18 @@
                     <label class="col-sm-3 control-label text-right">@Html.Label("Description")</label>
                     <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Treatment BMP Types Using this Attribute
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPTypeGridSpec, ViewDataTyped.TreatmentBMPTypeGridName, ViewDataTyped.TreatmentBMPTypeGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
     </div>

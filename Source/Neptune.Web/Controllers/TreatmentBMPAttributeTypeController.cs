@@ -8,6 +8,14 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.TreatmentBMPAttributeType;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.TreatmentBMPType;
+using Detail = Neptune.Web.Views.TreatmentBMPAttributeType.Detail;
+using DetailViewData = Neptune.Web.Views.TreatmentBMPAttributeType.DetailViewData;
+using Edit = Neptune.Web.Views.TreatmentBMPAttributeType.Edit;
+using EditViewData = Neptune.Web.Views.TreatmentBMPAttributeType.EditViewData;
+using EditViewModel = Neptune.Web.Views.TreatmentBMPAttributeType.EditViewModel;
+using Manage = Neptune.Web.Views.TreatmentBMPAttributeType.Manage;
+using ManageViewData = Neptune.Web.Views.TreatmentBMPAttributeType.ManageViewData;
 
 namespace Neptune.Web.Controllers
 {
@@ -30,6 +38,15 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [NeptuneAdminFeature]
+        public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(TreatmentBMPAttributeTypePrimaryKey treatmentBMPAttributeTypePrimaryKey)
+        {
+            var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
+            var treatmentBMPAttributeType = treatmentBMPAttributeTypePrimaryKey.EntityObject;
+            var treatmentBMPTypes = treatmentBMPAttributeType.TreatmentBMPTypeAttributeTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
 
         [HttpGet]
         [NeptuneAdminFeature]
