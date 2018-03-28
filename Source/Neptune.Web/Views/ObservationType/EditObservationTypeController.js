@@ -141,6 +141,19 @@
         $scope.AngularModel.ObservationTypeSchema = JSON.stringify($scope.ObservationTypeSchema);
     }
 
+    //$scope.PopulateDefaults = function () {
+    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.AssessmentDescription)) {
+    //        $scope.ObservationTypeSchema.AssessmentDescription = "";
+    //    }
+    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.BenchmarkDescription)) {
+    //        $scope.ObservationTypeSchema.BenchmarkDescription = "";
+    //    }
+    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.ThresholdDescription)) {
+    //        $scope.ObservationTypeSchema.ThresholdDescription = "";
+    //    }
+    
+    //}
+
     $scope.ObservationTypeSchema = JSON.parse($scope.AngularModel.ObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.ObservationTypeSchema);
     $scope.ObservationTypeCollectionMethodSelected = $scope.AngularModel.ObservationTypeCollectionMethodID != null
         ? Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods,
@@ -149,14 +162,17 @@
         : null;
 
     $scope.previewObservationType = function () {
+
         $scope.submit();
         $scope.$apply();
+
+        var postData = jQuery("#EditObservationTypeControllerApp").serialize();
 
         jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").empty();
         jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").remove();
         jQuery.ajax($scope.AngularViewData.PreviewUrl,
             {
-                data: jQuery("#EditObservationTypeControllerApp").serialize(),
+                data: postData,
                 method: "POST",
                 error: function (jqXhr, status, error) {
                     jQuery(".previewErrorAlert").remove();
@@ -175,24 +191,24 @@
                 },
                 success: function (data) {
                     jQuery(".previewErrorAlert").remove();
-                    var modalContent = "<div class=\"previewModalContent\" style=\"max-width: 850px;\">" +
-                        "<p>This is a preview of what your Observation Type will look like in a Treatment BMP Assessment form.</p>" +
-                        "<div class=\"formPage\">" +
+                    var modalContent = "<div class=\"previewModalContent\" style=\"width: 850px;\">" +
+                        "<p>This is a preview of the Observation Type in a Treatment BMP Assessment.</p>" +
+                        "<div class=\"formPage\" style=\" border: 1px solid #a8a8a8; border-radius: 4px; box-shadow: 5px 5px lightgray\">" +
                         data +
                         "</div>" +
                         "</div>";
                     createBootstrapAlert(modalContent, "Preview Observation Type", "Close");
-                    jQuery(".previewModalContent :input").prop("disabled", true);
+                    jQuery(".previewModalContent :input[type='submit']").prop("disabled", true);
                 }
             });
     };
 
     $scope.disableObservationType = function() {
         var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeName),
-            thresholdTypeIsSet = parseInt($scope.AngularModel.ObservationThresholdTypeID) !== NaN,
-            targetTypeIsSet = parseInt($scope.AngularModel.ObservationTargetTypeID) !== NaN,
-            collectionMethodIsSet = parseInt($scope.AngularModel.ObservationTypeCollectionMethodID) !== NaN,
-            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeSchema);
+            thresholdTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationThresholdTypeID),
+            targetTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTargetTypeID),
+            collectionMethodIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeCollectionMethodSelected),
+            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema);
 
         return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
     };

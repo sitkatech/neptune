@@ -112,7 +112,7 @@ namespace Neptune.Web.Views.ObservationType
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[ObservationTypeCollectionMethodID.Value];
             if (!observationTypeCollectionMethod.ValidateObservationTypeJson(ObservationTypeSchema))
             {
-                validationResults.Add(new ValidationResult("Schema is invalid, cannot save Observation Type"));
+                validationResults.Add(new ValidationResult("Incomplete information about the observation type. Complete each required field and try again."));
                 return validationResults;
             }            
 
