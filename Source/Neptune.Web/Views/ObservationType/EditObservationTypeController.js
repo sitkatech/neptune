@@ -141,18 +141,21 @@
         $scope.AngularModel.ObservationTypeSchema = JSON.stringify($scope.ObservationTypeSchema);
     }
 
-    //$scope.PopulateDefaults = function () {
-    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.AssessmentDescription)) {
-    //        $scope.ObservationTypeSchema.AssessmentDescription = "";
-    //    }
-    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.BenchmarkDescription)) {
-    //        $scope.ObservationTypeSchema.BenchmarkDescription = "";
-    //    }
-    //    if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.ThresholdDescription)) {
-    //        $scope.ObservationTypeSchema.ThresholdDescription = "";
-    //    }
-    
-    //}
+    $scope.populateDefaults = function () {
+        var temp = Object.assign({}, $scope.ObservationTypeSchema);
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.AssessmentDescription)) {
+            temp.AssessmentDescription = "Custom Assessment Instructions will be displayed here.";
+        }
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.BenchmarkDescription)) {
+            temp.BenchmarkDescription = "Benchmark Instructions";
+        }
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.ThresholdDescription)) {
+            temp.ThresholdDescription = "Threshold Instructions";
+        }
+
+        $scope.AngularModel.ObservationTypeSchema = JSON.stringify(temp);
+
+    }
 
     $scope.ObservationTypeSchema = JSON.parse($scope.AngularModel.ObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.ObservationTypeSchema);
     $scope.ObservationTypeCollectionMethodSelected = $scope.AngularModel.ObservationTypeCollectionMethodID != null
@@ -163,7 +166,7 @@
 
     $scope.previewObservationType = function () {
 
-        $scope.submit();
+        $scope.populateDefaults();
         $scope.$apply();
 
         var postData = jQuery("#EditObservationTypeControllerApp").serialize();
