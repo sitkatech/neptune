@@ -901,6 +901,7 @@
     <Content Include="Views\TreatmentBMPAssessment\PassFailCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAttributeType\EditTreatmentBMPAttributeTypeController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />

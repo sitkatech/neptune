@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttributeType(int treatmentBMPAttributeTypeID, string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, int? measurementUnitTypeID, bool isRequired, string treatmentBMPAttributeTypeDescription, int treatmentBMPAttributeTypePurposeID) : this()
+        public TreatmentBMPAttributeType(int treatmentBMPAttributeTypeID, string treatmentBMPAttributeTypeName, int treatmentBMPAttributeDataTypeID, int? measurementUnitTypeID, bool isRequired, string treatmentBMPAttributeTypeDescription, int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypeOptionsSchema) : this()
         {
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
             this.TreatmentBMPAttributeTypeName = treatmentBMPAttributeTypeName;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.IsRequired = isRequired;
             this.TreatmentBMPAttributeTypeDescription = treatmentBMPAttributeTypeDescription;
             this.TreatmentBMPAttributeTypePurposeID = treatmentBMPAttributeTypePurposeID;
+            this.TreatmentBMPAttributeTypeOptionsSchema = treatmentBMPAttributeTypeOptionsSchema;
         }
 
         /// <summary>
@@ -119,6 +120,7 @@ namespace Neptune.Web.Models
         public bool IsRequired { get; set; }
         public string TreatmentBMPAttributeTypeDescription { get; set; }
         public int TreatmentBMPAttributeTypePurposeID { get; set; }
+        public string TreatmentBMPAttributeTypeOptionsSchema { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAttributeTypeID; } set { TreatmentBMPAttributeTypeID = value; } }
 

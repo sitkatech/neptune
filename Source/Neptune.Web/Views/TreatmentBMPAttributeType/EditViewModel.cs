@@ -45,6 +45,9 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         [FieldDefinitionDisplay(FieldDefinitionEnum.MeasurementUnit)]
         public int? MeasurementUnitTypeID { get; set; }
 
+        [DisplayName("Options")]
+        public string TreatmentBMPAttributeTypeOptionsSchema { get; set; }
+
         [Required]
         [DisplayName("Required?")]
         public bool IsRequired { get; set; }
@@ -70,6 +73,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             TreatmentBMPAttributeTypeName = treatmentBMPAttributeType.TreatmentBMPAttributeTypeName;
             TreatmentBMPAttributeDataTypeID = treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID;
             MeasurementUnitTypeID = treatmentBMPAttributeType.MeasurementUnitTypeID;
+            TreatmentBMPAttributeTypeOptionsSchema = treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema;
             IsRequired = treatmentBMPAttributeType.IsRequired;
             TreatmentBMPAttributeTypePurposeID = treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID;
             TreatmentBMPAttributeTypeDesription = treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription;
@@ -84,6 +88,11 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.IsRequired = IsRequired;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
+            if (TreatmentBMPAttributeDataTypeID.Value ==
+                TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+            {
+                treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = TreatmentBMPAttributeTypeOptionsSchema;
+            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -94,6 +103,11 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             if (treatmentBMPAttributeTypesWithSameName.Any(x => x.TreatmentBMPAttributeTypeID != TreatmentBMPAttributeTypeID))
             {
                 validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
+            }
+
+            if (TreatmentBMPAttributeDataTypeID.Value == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID && string.IsNullOrEmpty(TreatmentBMPAttributeTypeOptionsSchema))
+            {
+                validationResults.Add(new ValidationResult("A Pick from List attribute must have options defined"));
             }
 
             return validationResults;

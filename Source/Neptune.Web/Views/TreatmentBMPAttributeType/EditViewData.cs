@@ -29,6 +29,7 @@ using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.ObservationType;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMPAttributeType
@@ -45,7 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         public IEnumerable<SelectListItem> MeasurementUnitTypes { get; }
         public IEnumerable<SelectListItem> TreatmentBMPAttributeTypePurposes { get; }
         public IEnumerable<SelectListItem> YesNos { get; }
-
+        public ViewDataForAngular ViewDataForAngular { get; }
 
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<TreatmentBMPAttributeDataType> treatmentBMPAttributeDataTypes, string submitUrl,
@@ -80,6 +81,34 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
             ViewTreatmentBMPAttributeInstructionsNeptunePage =
                 new ViewPageContentViewData(treatmentBMPAttributeInstructionsNeptunePage, currentPerson);
+
+            ViewDataForAngular = new ViewDataForAngular(treatmentBMPAttributeDataTypes);
+        }
+    }
+
+    public class ViewDataForAngular
+    {
+        public List<TreatmentBMPAttributeDataTypeSimple> TreatmentBMPAttributeDataTypes { get; }
+       
+        public ViewDataForAngular(List<TreatmentBMPAttributeDataType> treatmentBMPAttributeDataTypes)           
+        {
+            TreatmentBMPAttributeDataTypes = treatmentBMPAttributeDataTypes.Select(x => new TreatmentBMPAttributeDataTypeSimple(x)).ToList();
+        }
+    }
+
+    public class TreatmentBMPAttributeDataTypeSimple
+    {
+        public int ID { get; }
+        public string DisplayName { get; }
+        public bool HasOptions { get; }
+        public bool HasMeasurementUnit { get; }
+
+        public TreatmentBMPAttributeDataTypeSimple(TreatmentBMPAttributeDataType treatmentBMPAttributeDataType)
+        {
+            ID = treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeID;
+            DisplayName = treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName;
+            HasOptions = treatmentBMPAttributeDataType.HasOptions();
+            HasMeasurementUnit = treatmentBMPAttributeDataType.HasMeasurementUnit();
         }
     }
 }

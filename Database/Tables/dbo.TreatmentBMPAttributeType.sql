@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[TreatmentBMPAttributeType](
 	[IsRequired] [bit] NOT NULL,
 	[TreatmentBMPAttributeTypeDescription] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[TreatmentBMPAttributeTypePurposeID] [int] NOT NULL,
+	[TreatmentBMPAttributeTypeOptionsSchema] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAttributeTypeID] ASC
@@ -24,7 +25,7 @@ CREATE TABLE [dbo].[TreatmentBMPAttributeType](
 (
 	[TreatmentBMPAttributeTypeName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAttributeType_MeasurementUnitType_MeasurementUnitTypeID] FOREIGN KEY([MeasurementUnitTypeID])
@@ -46,3 +47,7 @@ ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_Tr
 REFERENCES [dbo].[TreatmentBMPAttributeTypePurpose] ([TreatmentBMPAttributeTypePurposeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [FK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypePurpose_TreatmentBMPAttributeTypePurposeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMPAttributeType_PickListTypeOptionSchemaNotNull] CHECK  (([TreatmentBMPAttributeDataTypeID]<>(5) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NULL OR [TreatmentBMPAttributeDataTypeID]=(5) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NOT NULL))
+GO
+ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [CK_TreatmentBMPAttributeType_PickListTypeOptionSchemaNotNull]

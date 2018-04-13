@@ -55,10 +55,20 @@
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</label>
                     <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName</div>
                 </div>
-                <div class="row">
-                    <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</label>
-                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.GetMeasurementUnitDisplayName()</div>
-                </div>
+                @if (ViewDataTyped.TreatmentBMPAttributeType.MeasurementUnitTypeID != null)
+                {
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</label>
+                        <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.GetMeasurementUnitDisplayName()</div>
+                    </div>
+                }               
+                @if (ViewDataTyped.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema != null)
+                {
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">@Html.Label("Options")</label>
+                        <div class="col-sm-9">@string.Join(", ", ViewDataTyped.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString())</div>
+                    </div>
+                }
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.Label("Required?")</label>
                     <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAttributeType.IsRequired.ToYesNo()</div>
