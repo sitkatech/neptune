@@ -232,7 +232,7 @@ namespace LtInfo.Common.HtmlHelperExtensions
             };
             tagBuilder.MergeAttributes(htmlAttributes);
             tagBuilder.MergeAttribute("name", fullName, true /* replaceExisting */);
-            tagBuilder.MergeAttribute("data-width", "auto");
+            tagBuilder.MergeAttribute("data-width", "100%");
             tagBuilder.MergeAttribute("data-live-search", "true");
             tagBuilder.MergeAttribute("data-live-search-placeholder", "Search");
             tagBuilder.MergeAttribute("data-container", "body");
