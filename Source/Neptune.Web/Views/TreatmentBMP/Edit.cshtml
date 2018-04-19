@@ -272,6 +272,7 @@
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
         neptuneMap.initializeTreatmentBMPEditor();
         neptuneMap.map.on("locationfound", onLocationFound);
+        neptuneMap.map.on('locationerror', onLocationError);
 
         jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX), #@Html.IdFor(x => x.TreatmentBMPPointY)").on("input", function()
         {
@@ -309,6 +310,10 @@
             neptuneMap.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
             neptuneMap.currentMarker.addTo(neptuneMap.map);
             neptuneMap.accuracyCircle.addTo(neptuneMap.map);
+        }
+
+        function onLocationError(e) {
+            alert(e.message);
         }
 
         HookupCheckIfFormIsDirtyNoDisable(undefined);
