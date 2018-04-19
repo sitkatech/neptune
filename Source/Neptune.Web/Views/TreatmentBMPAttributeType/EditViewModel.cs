@@ -19,13 +19,16 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Newtonsoft.Json;
 
 namespace Neptune.Web.Views.TreatmentBMPAttributeType
 {
@@ -44,6 +47,9 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.MeasurementUnit)]
         public int? MeasurementUnitTypeID { get; set; }
+
+        [DisplayName("Options")]
+        public string TreatmentBMPAttributeTypeOptionsSchema { get; set; }
 
         [Required]
         [DisplayName("Required?")]
@@ -70,6 +76,7 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             TreatmentBMPAttributeTypeName = treatmentBMPAttributeType.TreatmentBMPAttributeTypeName;
             TreatmentBMPAttributeDataTypeID = treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID;
             MeasurementUnitTypeID = treatmentBMPAttributeType.MeasurementUnitTypeID;
+            TreatmentBMPAttributeTypeOptionsSchema = treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema;
             IsRequired = treatmentBMPAttributeType.IsRequired;
             TreatmentBMPAttributeTypePurposeID = treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID;
             TreatmentBMPAttributeTypeDesription = treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription;
@@ -84,6 +91,11 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.IsRequired = IsRequired;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
+            if (TreatmentBMPAttributeDataTypeID.Value ==
+                TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+            {
+                treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = TreatmentBMPAttributeTypeOptionsSchema;
+            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -95,6 +107,36 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             {
                 validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
             }
+
+            if (TreatmentBMPAttributeDataTypeID.Value == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+            {
+                try
+                {
+                    var test = JsonConvert.DeserializeObject<List<string>>(TreatmentBMPAttributeTypeOptionsSchema);
+                }
+                catch
+                {
+                    validationResults.Add(new ValidationResult("A Pick from List options cannot be saved"));
+                    return validationResults;
+                }
+
+                var options = JsonConvert.DeserializeObject<List<string>>(TreatmentBMPAttributeTypeOptionsSchema);
+                if (options.Any(string.IsNullOrEmpty))
+                {
+                    validationResults.Add(new ValidationResult("Pick from List options cannot be empty"));
+                }
+
+                if (options.Count.Equals(0))
+                {
+                    validationResults.Add(new ValidationResult("A Pick from List attribute must have options defined"));
+                }
+
+                if (options.Select(x => x.ToLower()).HasDuplicates())
+                {
+                    validationResults.Add(new ValidationResult("Pick from List options must be unique, remove duplicates"));
+                }
+            }
+
 
             return validationResults;
         }

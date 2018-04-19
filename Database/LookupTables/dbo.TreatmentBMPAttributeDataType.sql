@@ -6,4 +6,5 @@ values
 (1, 'String', 'String'),
 (2, 'Integer', 'Integer'),
 (3, 'Decimal', 'Decimal'),
-(4, 'DateTime', 'Date/Time')
+(4, 'DateTime', 'Date/Time'),
+(5, 'PickFromList', 'Pick from List')

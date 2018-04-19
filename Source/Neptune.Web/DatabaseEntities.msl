@@ -331,6 +331,7 @@
           <ScalarProperty Name="IsRequired" ColumnName="IsRequired" />
           <ScalarProperty Name="TreatmentBMPAttributeTypeDescription" ColumnName="TreatmentBMPAttributeTypeDescription" />
           <ScalarProperty Name="TreatmentBMPAttributeTypePurposeID" ColumnName="TreatmentBMPAttributeTypePurposeID" />
+          <ScalarProperty Name="TreatmentBMPAttributeTypeOptionsSchema" ColumnName="TreatmentBMPAttributeTypeOptionsSchema" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

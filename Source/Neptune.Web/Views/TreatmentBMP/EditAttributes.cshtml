@@ -1,23 +1,24 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Edit.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.TreatmentBMP.EditAttributes
 
@@ -43,38 +44,52 @@ Source code is available upon request via <support@sitkatech.com>.
                                         @attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName
                                         @if (attribute.TreatmentBMPAttributeType.IsRequired)
                                         {
-                                            <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px;"></span>
+                                        <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
                                         }
                                     </label>
                                     <div class="col-sm-6">
-
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID"/>
-                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID"/>
+                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID" />
+                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID" />
                                                 @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
                                                 {
                                                     <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
-                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" class="form-control" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)"/>
+                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" class="form-control" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
                                                         <div class="input-group-addon">
                                                             <span class="glyphicon glyphicon-th"></span>
                                                         </div>
                                                     </div>
                                                 }
-                                                else if (attribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                                                else if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.Integer || attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.Decimal)
                                                 {
                                                     <div class="row">
                                                         <div class="col-sm-5">
                                                             <div class="input-group">
-                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit"/>
+                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" aria-describedby="attributeUnit" />
                                                                 <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 }
+                                                else if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.PickFromList)
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            
+                                                                <select class="form-control" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue">
+                                                                    <option value=""></option>
+                                                                    @foreach (var option in attribute.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString())
+                                                                    {
+                                                                        <option value="@option" selected="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValue == option)">@option</option>
+                                                                    }
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                }
                                                 else
                                                 {
-                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)"/>
+                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValue : null)" />
                                                 }
                                             </div>
                                         </div>
@@ -91,8 +106,11 @@ Source code is available upon request via <support@sitkatech.com>.
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12" style="text-align: right">
-                        <hr />
+                    <hr/>
+                    <div class="col-xs-12 col-sm-2">
+                        <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                    </div>
+                    <div class="col-xs-12 col-sm-10" style="text-align: right">
                         <button action="p" type="submit" class="btn btn-neptune">Save</button>
                         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
                     </div>
@@ -103,9 +121,9 @@ Source code is available upon request via <support@sitkatech.com>.
 }
 
 <script type="text/javascript">
-// <![CDATA[
-jQuery(document).ready(function () {
-    HookupCheckIfFormIsDirtyNoDisable(undefined);
-});
+    // <![CDATA[
+    jQuery(document).ready(function () {
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
+    });
 // ]]>
 </script>
