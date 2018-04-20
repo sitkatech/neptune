@@ -47,30 +47,6 @@
             <div class="form-horizontal">
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
-                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID, "Jurisdiction")
-                    </div>
-                    <div class="col-xs-12 col-sm-4">
-                        @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                        {
-                            @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems, new Dictionary<string, object> { { "style", "width: 100%" }, { "class", "form-control" } })
-                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
-                        }
-                        else
-                        {
-                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.OrganizationDisplayName</p>
-                            @Html.HiddenFor(x => x.StormwaterJurisdictionID)
-                        }
-                    </div>
-                    <div class="col-xs-12 col-sm-2 control-label">
-                        @Html.LabelWithSugarFor(m => m.OwnerOrganizationID)
-                    </div>
-                    <div class="col-xs-12 col-sm-4">
-                        @Html.SearchableDropDownListFor(m => m.OwnerOrganizationID, ViewDataTyped.OwnerOrganizationSelectListItems)
-                        @Html.ValidationMessageFor(m => m.OwnerOrganizationID)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.TreatmentBMPName)
                     </div>
                     <div class="col-xs-12 col-sm-4">
@@ -82,25 +58,42 @@
                     </div>
                     <div class="col-xs-12 col-sm-4">
                         @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                        {
-                            @Html.DropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
-                            @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
-                        }
-                        else
-                        {
-                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</p>
-                            @Html.HiddenFor(m => m.TreatmentBMPTypeID)
-                        }
+                    {
+                        @Html.DropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
+                        @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
+                }
+                else
+                {
+                    <p class="form-control-static">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</p>
+                    @Html.HiddenFor(m => m.TreatmentBMPTypeID)
+            }
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
-                        @Html.LabelWithSugarFor(m => m.SystemOfRecordID)
+                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID, "Jurisdiction")
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.SystemOfRecordID, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
-                        @Html.ValidationMessageFor(m => m.SystemOfRecordID)
+                        @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
+                    {
+                        @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems, new Dictionary<string, object> { { "style", "width: 100%" }, { "class", "form-control" } })
+                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                }
+                else
+                {
+                    <p class="form-control-static">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.OrganizationDisplayName</p>
+                    @Html.HiddenFor(x => x.StormwaterJurisdictionID)
+            }
                     </div>
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m => m.OwnerOrganizationID)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.SearchableDropDownListFor(m => m.OwnerOrganizationID, ViewDataTyped.OwnerOrganizationSelectListItems)
+                        @Html.ValidationMessageFor(m => m.OwnerOrganizationID)
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.YearBuilt)
                     </div>
@@ -108,32 +101,38 @@
                         @Html.TextBoxFor(m => m.YearBuilt, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" }, { "type", "number" } })
                         @Html.ValidationMessageFor(m => m.YearBuilt)
                     </div>
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m => m.SystemOfRecordID)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.TextBoxFor(m => m.SystemOfRecordID, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
+                        @Html.ValidationMessageFor(m => m.SystemOfRecordID)
+                    </div>
                 </div>
             </div>
         </div>
         <hr />
+        <div class="row">
+            <div class="col-xs-12 control-label">
+                <label>BMP Location</label>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-12">
                         To set the location of the Treatment BMP:
                         <ul>
-                            <li>Enter latitude and longitude below <strong>OR</strong></li>
+                            <li>Place the BMP at your current location (using GPS if available) <strong>OR</strong></li>
                             <li>Click on the location of the BMP on the map <strong>OR</strong></li>
-                            <li>Use the button to find your current location </li>
+                            <li>Directly type in the latitude and longitude</li>
                         </ul>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-12">
                         <div class="row">
                             <div class="form-horizontal">
-                                <div class="form-group">
-                                    <div class="col-xs-4 col-sm-4 control-label">
-                                        @Html.LabelWithSugarFor(m => m.TreatmentBMPPointX)
-                                    </div>
-                                    <div class="col-xs-8 col-sm-8">
-                                        @Html.TextBoxFor(x => x.TreatmentBMPPointX, new { type = "number", @class = "form-control", style = "width: auto;", step = "0.001" })
-                                        @Html.ValidationMessageFor(x => x.TreatmentBMPPointX)
-                                    </div>
+                                <div class="col-sm-offset-4 col-sm-8">
+                                    <a style="margin-bottom: 10px" class="btn btn-neptune" id="useCurrentLocationButton"><i class="glyphicon glyphicon-phone"></i> Use Current Location</a>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-4 col-sm-4 control-label">
@@ -144,20 +143,26 @@
                                         @Html.ValidationMessageFor(x => x.TreatmentBMPPointY)
                                     </div>
                                 </div>
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <a style="margin-bottom: 10px" class="btn btn-neptune" id="useCurrentLocationButton">Use Current Location</a>
+                                <div class="form-group">
+                                    <div class="col-xs-4 col-sm-4 control-label">
+                                        @Html.LabelWithSugarFor(m => m.TreatmentBMPPointX)
+                                    </div>
+                                    <div class="col-xs-8 col-sm-8">
+                                        @Html.TextBoxFor(x => x.TreatmentBMPPointX, new { type = "number", @class = "form-control", style = "width: auto;", step = "0.001" })
+                                        @Html.ValidationMessageFor(x => x.TreatmentBMPPointX)
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>    
-                </div>                
+                    </div>
+                </div>
             </div>
             <div class="col-xs-12 col-md-6">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
                 <p class="figure-caption">Click the map to set the location of the Treatment BMP, or enter latitude and longitude.</p>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-horizontal">
