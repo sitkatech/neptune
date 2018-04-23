@@ -94,7 +94,7 @@
                 @if (!ViewDataTyped.HasSettableBenchmarkAndThresholdValues)
                 {
                     <p class="systemText">
-                        This type of treatment BMP does not have settable benchmark and threshold values.
+                        This type of treatment BMP does not have settable benchmark and threshold values
                     </p>
                 }
                 else
@@ -137,7 +137,7 @@
                 @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
                 {
                     <p class="systemText">
-                        This type of treatment BMP does not have any additional attributes.
+                        This type of treatment BMP does not have any additional attributes
                     </p>
                 }
                 else
@@ -209,7 +209,7 @@
                 @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
                 {
                     <p class="systemText">
-                        BMP cannot be assessed until benchmark and threshold values for each observation type are entered.
+                        BMP cannot be assessed until benchmark and threshold values for each observation type are entered
                     </p>
                 }
                 @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
@@ -219,7 +219,7 @@
                 @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
                 {
                     <p class="systemText">
-                        BMP has not been assessed.
+                        BMP has not been assessed
                     </p>
                 }
             </div>
@@ -287,7 +287,7 @@
                 }
                 else
                 {
-                    <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel().</p>
+                    <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
                 }
             </div>
         </div>

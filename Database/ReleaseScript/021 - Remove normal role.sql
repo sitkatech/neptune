@@ -8,3 +8,10 @@ go
 update dbo.Person
 set RoleID = 6
 where RoleID = 2
+
+go
+
+delete dbo.StormwaterJurisdictionPerson
+from dbo.StormwaterJurisdictionPerson sjp
+join dbo.Person p on sjp.PersonID = p.PersonID
+where p.RoleID in (1, 4)
