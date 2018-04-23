@@ -133,13 +133,13 @@
         <div class="col-md-6">
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
-                    @string.Format("Jurisdictions {0} is Assigned to", ViewDataTyped.Person.FullNameFirstLast)
+                    Assigned @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
                     @if (ViewDataTyped.UserCanManageThisPersonPermissions)
-                    {
-                        <span class="pull-right">
-                            @ViewDataTyped.EditJurisdictionsLink
-                        </span>
-                    }                
+    {
+                <span class="pull-right">
+                    @ViewDataTyped.EditJurisdictionsLink
+                </span>
+}
                 </div>
                 <div class="panel-body">
                     @if (ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).Any())

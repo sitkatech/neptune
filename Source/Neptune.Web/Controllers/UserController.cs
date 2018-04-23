@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace Neptune.Web.Controllers
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditRolesViewModel(person);
-            return ViewEdit(viewModel);
+            return ViewEditRoles(viewModel);
         }
 
         [HttpPost]
@@ -72,15 +73,16 @@ namespace Neptune.Web.Controllers
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewEditRoles(viewModel);
             }
             viewModel.UpdateModel(person, CurrentPerson);
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEdit(EditRolesViewModel viewModel)
+        private PartialViewResult ViewEditRoles(EditRolesViewModel viewModel)
         {
-            var roles = CurrentPerson.IsSitkaAdministrator() ? Role.All : Role.All.Except(new[] {Role.SitkaAdmin});
+            var roles = CurrentPerson.IsSitkaAdministrator() ? Role.All : 
+                CurrentPerson.IsAdministrator() ? Role.All.Except(new List<Role> { Role.SitkaAdmin}) : Role.All.Except(new List<Role> { Role.SitkaAdmin, Role.Admin });
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
             var viewData = new EditRolesViewData(rolesAsSelectListItems);
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
@@ -234,7 +236,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditJurisdiction(EditJurisdictionsViewModel viewModel)
         {
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.CanManageStormwaterJurisdiction(x)).ToList();            
             var viewData = new EditJurisdictionsViewData(CurrentPerson, stormwaterJurisdictions);
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }

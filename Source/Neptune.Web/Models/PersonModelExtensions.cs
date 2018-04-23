@@ -24,6 +24,7 @@ using System.Web;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using LtInfo.Common;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
 {
@@ -82,14 +83,9 @@ namespace Neptune.Web.Models
 
         public static bool IsAdministrator(this Person person)
         {
-            return person != null && person.Role == Role.Admin && IsSitkaAdministrator(person);
+            return person != null && new NeptuneAdminFeature().HasPermissionByPerson(person);
         }
 
-        public static bool IsApprover(this Person person)
-        {
-            return person != null && (person.IsAdministrator() || person.IsSitkaAdministrator());
-        }
-        
         public static bool ShouldReceiveNotifications(this Person person)
         {
             return person.ReceiveSupportEmails;
@@ -102,7 +98,7 @@ namespace Neptune.Web.Models
 
         public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
         {
-            return person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
+            return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
         }
     }
 }
