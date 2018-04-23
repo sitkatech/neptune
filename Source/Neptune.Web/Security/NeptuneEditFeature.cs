@@ -25,11 +25,11 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Edit for Stormwater")]
+    [SecurityFeatureDescription("Allows Creating and Editing Stormwater Assests")]
     public class NeptuneEditFeature : NeptuneFeature
     {
         public NeptuneEditFeature()
-            : base(new List<Role> { Role.Normal, Role.Admin, Role.SitkaAdmin })
+            : base(new List<Role> { Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin })
         {
         }
 

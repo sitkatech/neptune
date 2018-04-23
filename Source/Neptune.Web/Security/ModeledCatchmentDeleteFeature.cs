@@ -9,7 +9,7 @@ namespace Neptune.Web.Security
         private readonly NeptuneFeatureWithContextImpl<ModeledCatchment> _lakeTahoeInfoFeatureWithContextImpl;
 
         public ModeledCatchmentDeleteFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.Normal })
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<ModeledCatchment>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;

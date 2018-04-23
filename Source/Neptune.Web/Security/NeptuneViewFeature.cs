@@ -28,7 +28,7 @@ namespace Neptune.Web.Security
     public class NeptuneViewFeature : NeptuneFeature
     {
         public NeptuneViewFeature()
-            : base(new List<Role> { Role.Admin, Role.Normal, Role.SitkaAdmin })
+            : base(new List<Role> { Role.Admin, Role.JurisdictionEditor, Role.SitkaAdmin })
         {
         }
     }

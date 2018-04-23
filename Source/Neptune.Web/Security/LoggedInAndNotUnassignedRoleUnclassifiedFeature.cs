@@ -23,7 +23,7 @@ namespace Neptune.Web.Security
     /// <summary>
     /// Must be at least logged in and have role >= Normal
     /// </summary>
-    [SecurityFeatureDescription("Has a Neptune role")]
+    [SecurityFeatureDescription("View Content For Logged In Users Without a Role Assigned")]
     public class LoggedInAndNotUnassignedRoleUnclassifiedFeature : NeptuneFeature
     {
         public LoggedInAndNotUnassignedRoleUnclassifiedFeature()

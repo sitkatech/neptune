@@ -56,7 +56,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [UserEditFeature]
+        [UserEditRoleFeature]
         public PartialViewResult EditRoles(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [UserEditFeature]
+        [UserEditRoleFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditRoles(PersonPrimaryKey personPrimaryKey, EditRolesViewModel viewModel)
         {
@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [UserEditFeature]
+        [UserDeleteFeature]
         public PartialViewResult Delete(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
@@ -107,7 +107,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [UserEditFeature]
+        [UserDeleteFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Delete(PersonPrimaryKey personPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
@@ -207,7 +207,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [UserEditFeature]
         public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
@@ -216,7 +216,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [UserEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditJurisdictionsViewModel viewModel)
         {

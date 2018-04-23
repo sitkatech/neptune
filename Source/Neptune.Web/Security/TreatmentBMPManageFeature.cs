@@ -30,7 +30,7 @@ namespace Neptune.Web.Security
         private readonly NeptuneFeatureWithContextImpl<TreatmentBMP> _lakeTahoeInfoFeatureWithContextImpl;
 
         public TreatmentBMPManageFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.Normal })
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<TreatmentBMP>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
