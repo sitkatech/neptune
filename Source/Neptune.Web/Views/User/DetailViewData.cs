@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.User
         public readonly Person Person;
         public readonly string EditPersonOrganizationPrimaryContactUrl;
         public readonly string IndexUrl;
+        public readonly string JurisdictionIndexUrl;
 
         public readonly bool UserHasPersonViewPermissions;
         public readonly bool UserCanManageThisPersonPermissions;
@@ -59,6 +60,7 @@ namespace Neptune.Web.Views.User
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Index());
+            JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
 
             UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManageThisPersonPermissions = new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;

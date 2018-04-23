@@ -97,69 +97,75 @@
             </div>
         </div>
     </div>
-    
-        <div class="col-md-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Role
-                    @if (ViewDataTyped.UserCanManageThisPersonPermissions)
-                    {
-                        <span class="pull-right">
-                            @ViewDataTyped.EditRolesLink
-                        </span>
-                    }
+
+    <div class="col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Role
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions)
+                {
+                    <span class="pull-right">
+                        @ViewDataTyped.EditRolesLink
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-5 fieldLabel text-right">Role</div>
+                    <div class="col-xs-7">
+                        @if (ViewDataTyped.UserCanManagePeople)
+                        {
+                            @ViewDataTyped.Person.Role.GetDisplayNameAsUrl()
+                        }
+                        else
+                        {
+                            @ViewDataTyped.Person.Role.RoleDisplayName
+                        }
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-5 fieldLabel text-right">Role</div>
-                        <div class="col-xs-7">
-                            @if (ViewDataTyped.UserCanManagePeople)
-                            {
-                                @ViewDataTyped.Person.Role.GetDisplayNameAsUrl()
-                            }
-                            else
-                            {
-                                @ViewDataTyped.Person.Role.RoleDisplayName
-                            }
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
-                        <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
-                    </div>
+                <div class="row">
+                    <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
+                    <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Assigned @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
-                    @if (ViewDataTyped.UserCanManageThisPersonPermissions)
-    {
-                <span class="pull-right">
-                    @ViewDataTyped.EditJurisdictionsLink
-                </span>
-}
-                </div>
-                <div class="panel-body">
-                    @if (ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).Any())
-                    {
-                        <ul style="margin: 5px 0">
-                            @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
-                            {
-                                <li>@jurisdiction.GetDisplayNameAsDetailUrl()</li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="systemText">
-                            @ViewDataTyped.Person.FullNameFirstLast it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
-                        </p>
-                    }
-                </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assigned @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions && !ViewDataTyped.Person.IsAdministrator())
+                {
+                    <span class="pull-right">
+                        @ViewDataTyped.EditJurisdictionsLink
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.Person.IsAdministrator())
+                {
+                    <p class="systemText">
+                        Administrators are by definition assigned to manage <a href="@ViewDataTyped.JurisdictionIndexUrl">all @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()</a>
+                    </p>
+                }
+                else if (ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).Any())
+                {
+                    <ul style="margin: 5px 0">
+                        @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
+                        {
+                            <li>@jurisdiction.GetDisplayNameAsDetailUrl()</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="systemText">
+                        @ViewDataTyped.Person.FullNameFirstLast is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                    </p>
+                }
             </div>
         </div>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -182,7 +188,7 @@
                 }
                 else
                 {
-                    <p class="systemText">Not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
+                    <p class="systemText">@ViewDataTyped.Person.FullNameFirstLast is not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
                 }
             </div>
         </div>
