@@ -42,14 +42,10 @@ namespace Neptune.Web.Views.ObservationType
         {
             ObservationType = observationType;
             EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
+            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Index());
             PageTitle = observationType.ObservationTypeName;
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-
-            if (UserHasObservationTypeManagePermissions)
-            {
-                EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Manage());
-            }
 
             ViewSchemaDetailUrl = observationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(observationType);
 

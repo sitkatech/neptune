@@ -43,6 +43,14 @@ namespace Neptune.Web.Controllers
 {
     public class ObservationTypeController : NeptuneBaseController
     {
+        [NeptuneViewFeature]
+        public ViewResult Index()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypesList);
+            var viewData = new ManageViewData(CurrentPerson, neptunePage);
+            return RazorView<Manage, ManageViewData>(viewData);
+        }
+
         [NeptuneAdminFeature]
         public ViewResult Manage()
         {
@@ -51,7 +59,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Manage, ManageViewData>(viewData);
         }
 
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<ObservationType> ObservationTypeGridJsonData()
         {
             var gridSpec = new ObservationTypeGridSpec(CurrentPerson);
@@ -60,7 +68,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
@@ -177,7 +185,7 @@ namespace Neptune.Web.Controllers
         }
         
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public PartialViewResult DiscreteDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
@@ -187,7 +195,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public PartialViewResult RateDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
@@ -197,7 +205,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public PartialViewResult PassFailDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;
@@ -207,7 +215,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public PartialViewResult PercentageDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var observationType = observationTypePrimaryKey.EntityObject;

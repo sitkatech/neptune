@@ -106,7 +106,8 @@ namespace Neptune.Web.Views
             var exploreMenu = new LtInfoMenuItem("Explore");
 
             exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<JurisdictionController>(c => c.Index()), currentPerson, "Jurisdictions", "Group1"));
-            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.Index()), currentPerson, "Treatment BMPs", "Group3"));
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.Index()), currentPerson, "Treatment BMPs", "Group2"));        
+            exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group3"));
             exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group3"));
             exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<AssessmentController>(c => c.Index()), currentPerson, "Assessments", "Group6"));
             return exploreMenu;

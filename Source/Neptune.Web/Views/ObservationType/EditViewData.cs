@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.ObservationType
             Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.ObservationType observationType) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
-            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
+            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = $"{(observationType != null ? "Edit" : "New")} {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
 
             if (observationType != null)
@@ -60,7 +60,7 @@ namespace Neptune.Web.Views.ObservationType
             }
 
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
-            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Manage());
+            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
             SubmitUrl = submitUrl;
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
