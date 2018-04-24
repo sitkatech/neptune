@@ -30,7 +30,7 @@ namespace Neptune.Web.Security
         private readonly NeptuneFeatureWithContextImpl<MaintenanceRecord> _lakeTahoeInfoFeatureWithContextImpl;
 
         public MaintenanceRecordManageFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionEditor })
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<MaintenanceRecord>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;

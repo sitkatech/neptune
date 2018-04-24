@@ -27,7 +27,7 @@ angular.module("NeptuneApp").controller("EditJurisdictionsController", function 
     $scope.filteredStormwaterJurisdictions = function ()
     {
         var usedStormwaterJurisdictionIDs = ($scope.AngularModel.StormwaterJurisdictionPersonSimples).map(function (s) { return s.StormwaterJurisdictionID });
-        var filter = _($scope.AngularViewData.StormwaterJurisdictionsSimple).filter(function (f) { return !_.includes(usedStormwaterJurisdictionIDs, f.StormwaterJurisdictionID); });
+        var filter = _($scope.AngularViewData.StormwaterJurisdictionsCurrentPersonCanManage).filter(function (f) { return !_.includes(usedStormwaterJurisdictionIDs, f.StormwaterJurisdictionID); });
         var orgsFilteredAndSorted = filter.sortBy(["StormwaterJurisdictionDisplayName"]).value();
         return orgsFilteredAndSorted;
     };
@@ -38,7 +38,8 @@ angular.module("NeptuneApp").controller("EditJurisdictionsController", function 
         }
         var newStormwaterJurisdictionPersonSimple = {
             StormwaterJurisdictionID: $scope.StormwaterJurisdictionToAdd.StormwaterJurisdictionID,
-            PersonID: $scope.AngularModel.PersonID
+            PersonID: $scope.AngularModel.PersonID,
+            CurrentPersonCanRemove: true
         }
         $scope.AngularModel.StormwaterJurisdictionPersonSimples.push(newStormwaterJurisdictionPersonSimple);
         $scope.StormwaterJurisdictionToAdd = null;
@@ -47,12 +48,16 @@ angular.module("NeptuneApp").controller("EditJurisdictionsController", function 
     $scope.getStormwaterJurisdictionDisplayName = function (stromwaterJurisdictionOnViewModel)
     {
         var stormwaterJurisdictionID = stromwaterJurisdictionOnViewModel.StormwaterJurisdictionID;
-        var stormwaterJurisdiction = _.find($scope.AngularViewData.StormwaterJurisdictionsSimple, function (x) { return x.StormwaterJurisdictionID == stormwaterJurisdictionID; });
+        var stormwaterJurisdiction = _.find($scope.AngularViewData.AllStormwaterJurisdictions, function (x) { return x.StormwaterJurisdictionID == stormwaterJurisdictionID; });
         return stormwaterJurisdiction.StormwaterJurisdictionDisplayName;
     };
 
     $scope.deleteRow = function (stormwaterJurisdictionSimple) {
         Sitka.Methods.removeFromJsonArray($scope.AngularModel.StormwaterJurisdictionPersonSimples, stormwaterJurisdictionSimple);
+    };
+
+    $scope.canRemoveRow = function (stormwaterJurisdictionPersonSimple) {
+        return stormwaterJurisdictionPersonSimple.CurrentPersonCanRemove;
     };
 
 });

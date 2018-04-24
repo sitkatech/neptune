@@ -22,6 +22,7 @@
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Security
 @inherits Neptune.Web.Views.User.Index
 @section JavascriptAndStylesContent
 {
@@ -30,7 +31,10 @@
 
 @section RightOfPageTitle
 {
-    @ModalDialogFormHelper.ModalDialogFormLink("Pull User from Keystone", ViewDataTyped.PullUserFromKeystoneUrl, "Pull User from Keystone", new List<string> { "btn", "btn-neptune", "btn-sm" }, ViewDataTyped.UserIsAdmin)
+    @if (new SitkaAdminFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink("Pull User from Keystone", ViewDataTyped.PullUserFromKeystoneUrl, "Pull User from Keystone", new List<string> { "btn", "btn-neptune", "btn-sm" }, ViewDataTyped.UserIsAdmin)
+    }
 }
 
 <p>

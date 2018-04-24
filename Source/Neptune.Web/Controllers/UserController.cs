@@ -30,6 +30,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.User;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -213,7 +214,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
-            var viewModel = new EditJurisdictionsViewModel(person);
+            var viewModel = new EditJurisdictionsViewModel(person, CurrentPerson);
             return ViewEditJurisdiction(viewModel);
         }
 
@@ -236,8 +237,10 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEditJurisdiction(EditJurisdictionsViewModel viewModel)
         {
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.CanManageStormwaterJurisdiction(x)).ToList();            
-            var viewData = new EditJurisdictionsViewData(CurrentPerson, stormwaterJurisdictions);
+            var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
+            var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.CanManageStormwaterJurisdiction(x)).ToList();
+
+            var viewData = new EditJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }
 

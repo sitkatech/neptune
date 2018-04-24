@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         public int? StormwaterJurisdictionPersonID { get; set; }
         public int PersonID { get; set; }
         public int StormwaterJurisdictionID { get; set; }
+        public bool CurrentPersonCanRemove { get; set; }
 
            /// <summary>
         /// Needed by ModelBinder
@@ -33,11 +34,13 @@ namespace Neptune.Web.Models
         {
         }
 
-        public StormwaterJurisdictionPersonSimple(StormwaterJurisdictionPerson stormwaterJurisdictionPerson)
+        public StormwaterJurisdictionPersonSimple(StormwaterJurisdictionPerson stormwaterJurisdictionPerson, Person currentPerson)
         {
             StormwaterJurisdictionPersonID = stormwaterJurisdictionPerson.StormwaterJurisdictionPersonID;
             PersonID = stormwaterJurisdictionPerson.PersonID;
             StormwaterJurisdictionID = stormwaterJurisdictionPerson.StormwaterJurisdictionID;
+            CurrentPersonCanRemove =
+                currentPerson.CanManageStormwaterJurisdiction(stormwaterJurisdictionPerson.StormwaterJurisdiction);
         }
     }
 }
