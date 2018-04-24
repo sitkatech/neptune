@@ -198,7 +198,6 @@
     NeptuneMaps.Map.prototype.changeMarkerOnMap = function(self, e)
     {
         self.removeLayerFromMap(self.currentMarker);
-        self.removeLayerFromMap(self.accuracyCircle);
         self.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
         self.currentMarker.addTo(self.map);
         self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
@@ -230,7 +229,6 @@
     NeptuneMaps.Map.prototype.initializeTreatmentBMPEditor = function()
     {
         this.currentMarker = null;
-        this.accuracyCircle = null;
         this.treatmentBMPInformationContainer = jQuery("#@ViewDataTyped.TreatmentBMPInformationContainer");
         this.treatmentBMPPointXField = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)");
         this.treatmentBMPPointYField = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)");
@@ -282,7 +280,6 @@
         jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX), #@Html.IdFor(x => x.TreatmentBMPPointY)").on("input", function()
         {
             neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
-            neptuneMap.removeLayerFromMap(neptuneMap.accuracyCircle);
             var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)").val(),
                 y = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)").val();
 
@@ -308,13 +305,9 @@
             x.val(e.latlng.lng);
             y.val(e.latlng.lat);
 
-            var radius = e.accuracy / 2;
-            neptuneMap.accuracyCircle = L.circle(e.latlng, radius);
-
             neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
             neptuneMap.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
             neptuneMap.currentMarker.addTo(neptuneMap.map);
-            neptuneMap.accuracyCircle.addTo(neptuneMap.map);
         }
 
         function onLocationError(e) {
