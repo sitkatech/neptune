@@ -32,9 +32,11 @@ namespace Neptune.Web.Views.User
         public readonly Person Person;
         public readonly string EditPersonOrganizationPrimaryContactUrl;
         public readonly string IndexUrl;
+        public readonly string JurisdictionIndexUrl;
 
         public readonly bool UserHasPersonViewPermissions;
-        public readonly bool UserHasPersonManagePermissions;
+        public readonly bool UserCanManageThisPersonPermissions;
+        public readonly bool UserCanManagePeople;
         public readonly bool UserHasViewEverythingPermissions;
         public readonly bool IsViewingSelf;
         public readonly UserNotificationGridSpec UserNotificationGridSpec;
@@ -58,24 +60,26 @@ namespace Neptune.Web.Views.User
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
             IndexUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Index());
+            JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
 
             UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
-            UserHasPersonManagePermissions = new UserEditFeature().HasPermissionByPerson(currentPerson);
+            UserCanManageThisPersonPermissions = new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;
+            UserCanManagePeople = new UserEditFeature().HasPermissionByPerson(currentPerson);
             UserHasViewEverythingPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
-            if (UserHasPersonManagePermissions)
+            if (UserCanManagePeople)
             {
                 EntityUrl = IndexUrl;
             }
 
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
-            EditRolesLink = UserHasPersonManagePermissions
+            EditRolesLink = UserCanManageThisPersonPermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),
                     $"Edit Roles for User - {personToView.FullNameFirstLast}",
                     true)
                 : new HtmlString(string.Empty);
 
-            EditJurisdictionsLink = UserHasPersonManagePermissions
+            EditJurisdictionsLink = UserCanManageThisPersonPermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditJurisdiction(personToView)),
                     $"Edit Assigned Jurisdictions for User - {personToView.FullNameFirstLast}",
                     true)

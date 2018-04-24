@@ -30,7 +30,7 @@ namespace Neptune.Web.Controllers
 {
     public class RoleController : NeptuneBaseController
     {
-        [NeptuneAdminFeature]
+        [UserEditFeature]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson);
@@ -63,13 +63,13 @@ namespace Neptune.Web.Controllers
             return roles.OrderBy(x => x.RoleDisplayName).ToList();
         }
 
-        [NeptuneAdminFeature]
+        [UserEditFeature]
         public ViewResult Anonymous()
         {
             return ViewDetail(new AnonymousRole());
         }
 
-        [NeptuneAdminFeature]
+        [UserEditFeature]
         public ViewResult Detail(int roleID)
         {
             var role = Role.AllLookupDictionary[roleID];

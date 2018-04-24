@@ -18,10 +18,15 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Collections.Generic;
+using Neptune.Web.Models;
+
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Edit User")]
-    public class UserEditFeature : NeptuneAdminFeature
+    public class UserEditFeature : NeptuneFeature
     {
+        public UserEditFeature() : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager }) { }
     }
 }

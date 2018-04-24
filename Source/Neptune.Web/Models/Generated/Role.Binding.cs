@@ -19,9 +19,10 @@ namespace Neptune.Web.Models
     public abstract partial class Role : IHavePrimaryKey
     {
         public static readonly RoleAdmin Admin = RoleAdmin.Instance;
-        public static readonly RoleNormal Normal = RoleNormal.Instance;
         public static readonly RoleUnassigned Unassigned = RoleUnassigned.Instance;
         public static readonly RoleSitkaAdmin SitkaAdmin = RoleSitkaAdmin.Instance;
+        public static readonly RoleJurisdictionManager JurisdictionManager = RoleJurisdictionManager.Instance;
+        public static readonly RoleJurisdictionEditor JurisdictionEditor = RoleJurisdictionEditor.Instance;
 
         public static readonly List<Role> All;
         public static readonly ReadOnlyDictionary<int, Role> AllLookupDictionary;
@@ -31,7 +32,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static Role()
         {
-            All = new List<Role> { Admin, Normal, Unassigned, SitkaAdmin };
+            All = new List<Role> { Admin, Unassigned, SitkaAdmin, JurisdictionManager, JurisdictionEditor };
             AllLookupDictionary = new ReadOnlyDictionary<int, Role>(All.ToDictionary(x => x.RoleID));
         }
 
@@ -105,8 +106,10 @@ namespace Neptune.Web.Models
             {
                 case RoleEnum.Admin:
                     return Admin;
-                case RoleEnum.Normal:
-                    return Normal;
+                case RoleEnum.JurisdictionEditor:
+                    return JurisdictionEditor;
+                case RoleEnum.JurisdictionManager:
+                    return JurisdictionManager;
                 case RoleEnum.SitkaAdmin:
                     return SitkaAdmin;
                 case RoleEnum.Unassigned:
@@ -120,21 +123,16 @@ namespace Neptune.Web.Models
     public enum RoleEnum
     {
         Admin = 1,
-        Normal = 2,
         Unassigned = 3,
-        SitkaAdmin = 4
+        SitkaAdmin = 4,
+        JurisdictionManager = 5,
+        JurisdictionEditor = 6
     }
 
     public partial class RoleAdmin : Role
     {
         private RoleAdmin(int roleID, string roleName, string roleDisplayName, string roleDescription) : base(roleID, roleName, roleDisplayName, roleDescription) {}
         public static readonly RoleAdmin Instance = new RoleAdmin(1, @"Admin", @"Administrator", @"");
-    }
-
-    public partial class RoleNormal : Role
-    {
-        private RoleNormal(int roleID, string roleName, string roleDisplayName, string roleDescription) : base(roleID, roleName, roleDisplayName, roleDescription) {}
-        public static readonly RoleNormal Instance = new RoleNormal(2, @"Normal", @"Normal User", @"");
     }
 
     public partial class RoleUnassigned : Role
@@ -147,5 +145,17 @@ namespace Neptune.Web.Models
     {
         private RoleSitkaAdmin(int roleID, string roleName, string roleDisplayName, string roleDescription) : base(roleID, roleName, roleDisplayName, roleDescription) {}
         public static readonly RoleSitkaAdmin Instance = new RoleSitkaAdmin(4, @"SitkaAdmin", @"Sitka Administrator", @"");
+    }
+
+    public partial class RoleJurisdictionManager : Role
+    {
+        private RoleJurisdictionManager(int roleID, string roleName, string roleDisplayName, string roleDescription) : base(roleID, roleName, roleDisplayName, roleDescription) {}
+        public static readonly RoleJurisdictionManager Instance = new RoleJurisdictionManager(5, @"JurisdictionManager", @"Jurisdication Manager", @"");
+    }
+
+    public partial class RoleJurisdictionEditor : Role
+    {
+        private RoleJurisdictionEditor(int roleID, string roleName, string roleDisplayName, string roleDescription) : base(roleID, roleName, roleDisplayName, roleDescription) {}
+        public static readonly RoleJurisdictionEditor Instance = new RoleJurisdictionEditor(6, @"JurisdictionEditor", @"Jurisdication Editor", @"");
     }
 }

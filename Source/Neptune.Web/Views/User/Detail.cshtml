@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
@@ -44,40 +44,40 @@ Source code is available upon request via <support@sitkatech.com>.
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.UserHasPersonManagePermissions)
+    @if (ViewDataTyped.UserCanManageThisPersonPermissions)
     {
-        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} User", "<span class='glyphicon glyphicon-edit''></span>", ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate"), ViewDataTyped.ActivateInactivateUrl, string.Format("{0} this user?", ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate"), 400, "Continue", "Cancel", new List<string>{"btn","btn-neptune", "headerButtonText", "inactivateUserButton" },null,null);
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} User", "<span class='glyphicon glyphicon-edit''></span>", ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate"), ViewDataTyped.ActivateInactivateUrl, string.Format("{0} this user?", ViewDataTyped.Person.IsActive ? "Inactivate" : "Activate"), 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null);
     }
 }
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Basics
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Basics
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-4 fieldLabel text-right">Name</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.FullNameFirstLast</div>
                 </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-4 fieldLabel text-right">Name</div>
-                        <div class="col-xs-8">@ViewDataTyped.Person.FullNameFirstLast</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 fieldLabel text-right">Email</div>
-                        <div class="col-xs-8">@ViewDataTyped.Person.Email</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 fieldLabel text-right">Phone</div>
-                        <div class="col-xs-8">@ViewDataTyped.Person.Phone.ToPhoneNumberString()</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 fieldLabel text-right">@FieldDefinition.Username.GetFieldDefinitionLabel()</div>
-                        <div class="col-xs-8">@ViewDataTyped.Person.LoginName</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4 fieldLabel text-right">@FieldDefinition.Organization.GetFieldDefinitionLabel()</div>
-                        <div class="col-xs-8">@ViewDataTyped.Person.Organization.GetDisplayNameAsUrl()</div>
-                    </div>
-                    @if (ViewDataTyped.UserHasPersonManagePermissions)
+                <div class="row">
+                    <div class="col-xs-4 fieldLabel text-right">Email</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.Email</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 fieldLabel text-right">Phone</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.Phone.ToPhoneNumberString()</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 fieldLabel text-right">@FieldDefinition.Username.GetFieldDefinitionLabel()</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.LoginName</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 fieldLabel text-right">@FieldDefinition.Organization.GetFieldDefinitionLabel()</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.Organization.GetDisplayNameAsUrl()</div>
+                </div>
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions)
                 {
                     <div class="row">
                         <div class="col-xs-4 fieldLabel text-right">Last Activity</div>
@@ -87,84 +87,103 @@ Source code is available upon request via <support@sitkatech.com>.
                         <div class="col-xs-4 fieldLabel text-right">Created Date</div>
                         <div class="col-xs-8">@ViewDataTyped.Person.CreateDate.ToStringDateTimeNoLeadingZeros()</div>
                     </div>
-            }
-                    @if (ViewDataTyped.UserHasPersonManagePermissions || ViewDataTyped.IsViewingSelf)
+                }
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions || ViewDataTyped.IsViewingSelf)
                 {
                     <div class="alert" role="alert">
                         This information can be <a target="_blank" class="alert-link" href="@ViewDataTyped.Person.GetKeystoneEditLink()">edited here</a>
                     </div>
-            }
-                </div>
+                }
             </div>
         </div>
-        @if (ViewDataTyped.UserHasPersonManagePermissions || ViewDataTyped.IsViewingSelf)
-    {
-        <div class="col-md-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Role
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Role
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions)
+                {
                     <span class="pull-right">
                         @ViewDataTyped.EditRolesLink
                     </span>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-5 fieldLabel text-right">Role</div>
-                        <div class="col-xs-7">
-                            @if (ViewDataTyped.UserHasPersonManagePermissions)
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-5 fieldLabel text-right">Role</div>
+                    <div class="col-xs-7">
+                        @if (ViewDataTyped.UserCanManagePeople)
                         {
                             @ViewDataTyped.Person.Role.GetDisplayNameAsUrl()
-                    }
-                    else
-                    {
-                        @ViewDataTyped.Person.Role.RoleDisplayName
-                }
-                        </div>
+                        }
+                        else
+                        {
+                            @ViewDataTyped.Person.Role.RoleDisplayName
+                        }
                     </div>
-                    <div class="row">
-                        <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
-                        <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
-                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
+                    <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    @string.Format("Jurisdictions {0} is Assigned to Manage", ViewDataTyped.Person.FullNameFirstLast)
-                    <span class="pull-right">
-                        @ViewDataTyped.EditJurisdictionsLink 
-                    </span>
-                </div>
-                <div class="panel-body">
-                    @if (ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).Any())
-                    {
-                        <ul style="margin: 5px 0">
-                            @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
-                            {
-                                <li>@jurisdiction.GetDisplayNameAsDetailUrl()</li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="systemText">
-                            User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please
-                            @ModalDialogFormHelper.ModalDialogFormLink("contact an administrator", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
-                        </p>
-                    }
-                </div>
-            </div>
-        </div>
-}
     </div>
+    <div class="col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assigned @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                @if (ViewDataTyped.UserCanManageThisPersonPermissions && !ViewDataTyped.Person.IsAdministrator())
+                {
+                    <span class="pull-right">
+                        @ViewDataTyped.EditJurisdictionsLink
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.Person.IsAdministrator())
+                {
+                    <p class="systemText">
+                        Administrators are by definition assigned to manage <a href="@ViewDataTyped.JurisdictionIndexUrl">all @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()</a>
+                    </p>
+                }
+                else if (ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).Any())
+                {
+                    <ul style="margin: 5px 0">
+                        @foreach (var jurisdiction in ViewDataTyped.Person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction))
+                        {
+                            <li>@jurisdiction.GetDisplayNameAsDetailUrl()</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="systemText">
+                        <span>
+                            @ViewDataTyped.Person.FullNameFirstLast is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                        </span>
+                        @if (!ViewDataTyped.UserCanManageThisPersonPermissions)
+                        {
+                            <span>
+                                User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please
+                                @ModalDialogFormHelper.ModalDialogFormLink("contact an administrator", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null).
+                            </span>
+                        }
+                    </p>
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">                
+            <div class="panel-heading panelTitle">
                 @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel())
                 <span class="pull-right">
-                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserHasPersonManagePermissions)
+                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
                 </span>
             </div>
             <div class="panel-body">
@@ -179,7 +198,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 }
                 else
                 {
-                    <p class="systemText">Not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
+                    <p class="systemText">@ViewDataTyped.Person.FullNameFirstLast is not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
                 }
             </div>
         </div>

@@ -34,12 +34,12 @@ namespace Neptune.Web.Models
 
         public bool CanEdit(Person person)
         {
-            return new TreatmentBMPManageFeature().HasPermission(person, this).HasPermission;
+            return new NeptuneEditFeature().HasPermissionByPerson(person);
         }
 
-        public bool CanDelete()
+        public bool CanDelete(Person person)
         {
-            return TreatmentBMPAssessments.Count.Equals(0);
+            return new TreatmentBMPDeleteFeature().HasPermission(person, this).HasPermission;
         }
        
         public string AuditDescriptionString => TreatmentBMPName;

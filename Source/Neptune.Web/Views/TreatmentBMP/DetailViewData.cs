@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
@@ -36,6 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string NewAssessmentUrl { get; }
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
+        public bool CurrentPersonCanEditTreatmentBMP { get; }
 
         public bool CanEditBenchmarkAndThresholds { get; }
 
@@ -67,7 +69,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
             NewAssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
-            CurrentPersonCanManage = CurrentPerson.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            CurrentPersonCanEditTreatmentBMP = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
 

@@ -80,7 +80,7 @@ Source code is available upon request via <support@sitkatech.com>.
             </tr>
             <tr ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionDisplayName">
                 <td style="width:60px;">
-                    <span class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer"></span>
+                    <span ng-if="canRemoveRow(stormwaterJurisdictionSimple)" class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer" ></span>
                 </td>
                 <td ng-bind="getStormwaterJurisdictionDisplayName(stormwaterJurisdictionSimple)"></td>
                 <td style="width:0px;">

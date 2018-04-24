@@ -43,10 +43,10 @@ namespace Neptune.Web.Views.User
         {
         }
 
-        public EditJurisdictionsViewModel(Person person)
+        public EditJurisdictionsViewModel(Person person, Person currentPerson)
         {
             PersonID = person.PersonID;
-            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.OrganizationDisplayName).Select(x => new StormwaterJurisdictionPersonSimple(x)).ToList();
+            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.OrganizationDisplayName).Select(x => new StormwaterJurisdictionPersonSimple(x, currentPerson)).ToList();
         }
 
         public void UpdateModel(Person person, IList<StormwaterJurisdictionPerson> allStormwaterJurisdictionPeople)

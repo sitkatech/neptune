@@ -29,7 +29,7 @@ namespace Neptune.Web.UnitTestCommon
             public static Person Create()
             {
                 var organization = TestOrganization.Create();
-                var person = Person.CreateNewBlank(Role.Normal, organization);
+                var person = Person.CreateNewBlank(Role.JurisdictionEditor, organization);
                 person.Organization = organization;
                 person.Email = MakeTestEmail("email");
                 person.FirstName = MakeTestName("firstName", Person.FieldLengths.FirstName);

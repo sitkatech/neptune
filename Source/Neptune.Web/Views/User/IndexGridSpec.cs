@@ -32,11 +32,11 @@ namespace Neptune.Web.Views.User
     {
         public IndexGridSpec(Person currentPerson)
         {
-            var hasDeletePermission = new UserEditFeature().HasPermissionByPerson(currentPerson);
+            var hasDeletePermission = new UserDeleteFeature().HasPermissionByPerson(currentPerson);
             if (hasDeletePermission)
             {
                 Add(string.Empty,
-                    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), !x.HasDependentObjects(), !x.HasDependentObjects()),
+                    x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), hasDeletePermission, !x.HasDependentObjects()),
                     30, DhtmlxGridColumnFilterType.None);
             }
             Add("Last Name", a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.LastName), 100, DhtmlxGridColumnFilterType.Html);

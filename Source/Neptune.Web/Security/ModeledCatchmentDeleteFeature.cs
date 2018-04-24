@@ -3,13 +3,13 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows creating and editing a Modeled Catchment if you are assigned to manage that jurisdiction")]
+    [SecurityFeatureDescription("Allows deleting a Modeled Catchment if you are assigned to manage that jurisdiction")]
     public class ModeledCatchmentDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<ModeledCatchment>
     {
         private readonly NeptuneFeatureWithContextImpl<ModeledCatchment> _lakeTahoeInfoFeatureWithContextImpl;
 
         public ModeledCatchmentDeleteFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.Normal })
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<ModeledCatchment>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;

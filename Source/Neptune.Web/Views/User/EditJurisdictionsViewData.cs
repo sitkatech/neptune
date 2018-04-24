@@ -30,19 +30,21 @@ namespace Neptune.Web.Views.User
         
         public readonly EditViewDataForAngular ViewDataForAngular;
 
-        public EditJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> stormwaterJurisdictions)
+        public EditJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
-            ViewDataForAngular = new EditViewDataForAngular(stormwaterJurisdictions);
+            ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
         }
 
         public class EditViewDataForAngular
         {
-            public readonly List<StormwaterJurisdictionSimple> StormwaterJurisdictionsSimple;
+            public readonly List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions;
+            public readonly List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage;
 
-            public EditViewDataForAngular(List<StormwaterJurisdiction> stormwaterJurisdictions)
+            public EditViewDataForAngular(List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictions)
             {
-                StormwaterJurisdictionsSimple = stormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+                AllStormwaterJurisdictions = allStormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+                StormwaterJurisdictionsCurrentPersonCanManage = stormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             }
         }
     }

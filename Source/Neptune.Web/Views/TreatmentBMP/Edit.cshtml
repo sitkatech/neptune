@@ -76,7 +76,7 @@
                     <div class="col-xs-12 col-sm-4">
                         @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
                     {
-                        @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems, new Dictionary<string, object> { { "style", "width: 100%" }, { "class", "form-control" } })
+                        @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
                         @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
                 }
                 else

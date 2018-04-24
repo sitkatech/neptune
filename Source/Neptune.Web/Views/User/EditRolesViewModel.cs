@@ -59,6 +59,12 @@ namespace Neptune.Web.Views.User
             person.RoleID = RoleID.Value;
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
 
+            var assignedRole = Models.Role.AllLookupDictionary[RoleID.Value];
+            if (assignedRole == Models.Role.Admin || assignedRole == Models.Role.SitkaAdmin)
+            {
+                person.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson();
+            }
+
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(person.PersonID))
             {
                 // Existing person
