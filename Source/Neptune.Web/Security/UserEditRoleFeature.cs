@@ -31,7 +31,13 @@ namespace Neptune.Web.Security
             
             //Only SitkaAdmin users should be able to see other SitkaAdmin users
             var currentPersonIsAdmin = person.Role == Role.SitkaAdmin || person.Role == Role.Admin;
+            var currentPersonIsJurisdictionManager = person.Role == Role.JurisdictionManager;
             var personBeingEditedIsAdmin = contextModelObject.Role == Role.SitkaAdmin || contextModelObject.Role == Role.Admin;
+
+            if (!(currentPersonIsAdmin || currentPersonIsJurisdictionManager))
+            {
+                return new PermissionCheckResult("You don\'t have permission to edit this user's role.");
+            }
 
             if (!currentPersonIsAdmin && personBeingEditedIsAdmin)
             {

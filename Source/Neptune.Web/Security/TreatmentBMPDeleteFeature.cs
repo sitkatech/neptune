@@ -28,6 +28,11 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult($"You aren't assigned to manage Treatment BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.OrganizationDisplayName}");
             }
 
+            if (!(person.IsAdministrator() || person.Role == Role.JurisdictionManager))
+            {
+                return new PermissionCheckResult($"You do not have permission to delete Treatment BMPs for Jurisdiction {contextModelObject.StormwaterJurisdiction.OrganizationDisplayName}");
+            }
+
             return new PermissionCheckResult();
         }
     }

@@ -160,9 +160,19 @@
                 else
                 {
                     <p class="systemText">
-                        @ViewDataTyped.Person.FullNameFirstLast is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                        <span>
+                            @ViewDataTyped.Person.FullNameFirstLast is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                        </span>
+                        @if (!ViewDataTyped.UserCanManageThisPersonPermissions)
+                        {
+                            <span>
+                                User it not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized(). To add the user to a @FieldDefinition.Jurisdiction.GetFieldDefinitionLabel() please
+                                @ModalDialogFormHelper.ModalDialogFormLink("contact an administrator", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null).
+                            </span>
+                        }
                     </p>
                 }
+                
             </div>
         </div>
     </div>

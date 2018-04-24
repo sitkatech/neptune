@@ -41,7 +41,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Basics
-                @if (ViewDataTyped.CurrentPersonCanManage)
+                @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -181,7 +181,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Location
-                @if (ViewDataTyped.CurrentPersonCanManage)
+                @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
