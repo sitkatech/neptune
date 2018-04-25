@@ -26,12 +26,13 @@ namespace Neptune.Web.Models
             var thresholdValue = observationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);
             var assessmentScoreWeight = observationType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeID)?.AssessmentScoreWeight;
 
-            ThresholdValueInObservedUnits = observationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease) ?? 0;
-            BenchmarkValue = benchmarkValue ?? 0;            
-            Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";
-
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == observationType.ObservationTypeID);
             TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation, overrideAssessmentScoreIfFailing) : null;
+
+            var useUpperValue = observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease || (observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation && TreatmentBMPObservationSimple?.ObservationValue > benchmarkValue);
+            ThresholdValueInObservedUnits = observationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue) ?? 0;
+            BenchmarkValue = benchmarkValue ?? 0;
+            Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";
         }
     }
 }
