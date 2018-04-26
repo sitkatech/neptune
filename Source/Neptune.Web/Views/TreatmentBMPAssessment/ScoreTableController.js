@@ -33,7 +33,7 @@ angular.module("NeptuneApp").controller("ScoreTableController", function ($scope
     $scope.getHue = function (value) {
         if (Sitka.Methods.isUndefinedNullOrEmpty(value) || value <= 2)
         {
-            return "hsl(0,100%,59%";
+            return "hsl(0,100%,59%)";
         }
         var hue = (((value - 2) / 3) * 120);
         return "hsl(" + hue + ",100%,59%)}";

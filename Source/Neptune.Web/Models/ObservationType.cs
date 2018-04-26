@@ -266,7 +266,7 @@ namespace Neptune.Web.Models
             {
                 var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
                 var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
-                return $"{formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+                return $"+/- {formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
             }
 
             var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);

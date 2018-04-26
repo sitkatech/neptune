@@ -256,19 +256,19 @@ namespace Neptune.Web.Models
     public partial class MeasurementUnitTypePercentDecline : MeasurementUnitType
     {
         private MeasurementUnitTypePercentDecline(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypePercentDecline Instance = new MeasurementUnitTypePercentDecline(12, @"PercentDecline", @"% decline", @"% decline", @"% decline", 0, false);
+        public static readonly MeasurementUnitTypePercentDecline Instance = new MeasurementUnitTypePercentDecline(12, @"PercentDecline", @"% decline from benchmark", @"% decline from benchmark", @"% decline from benchmark", 0, false);
     }
 
     public partial class MeasurementUnitTypePercentIncrease : MeasurementUnitType
     {
         private MeasurementUnitTypePercentIncrease(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypePercentIncrease Instance = new MeasurementUnitTypePercentIncrease(13, @"PercentIncrease", @"% increase", @"% increase", @"% increase", 0, false);
+        public static readonly MeasurementUnitTypePercentIncrease Instance = new MeasurementUnitTypePercentIncrease(13, @"PercentIncrease", @"% increase from benchmark", @"% increase from benchmark", @"% increase from benchmark", 0, false);
     }
 
     public partial class MeasurementUnitTypePercentDeviation : MeasurementUnitType
     {
         private MeasurementUnitTypePercentDeviation(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypePercentDeviation Instance = new MeasurementUnitTypePercentDeviation(14, @"PercentDeviation", @"% deviation", @"% deviation", @"% deviation", 0, false);
+        public static readonly MeasurementUnitTypePercentDeviation Instance = new MeasurementUnitTypePercentDeviation(14, @"PercentDeviation", @"% of benchmark", @"% of benchmark", @"% of benchmark", 0, false);
     }
 
     public partial class MeasurementUnitTypeCubicFeet : MeasurementUnitType
