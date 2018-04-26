@@ -7,4 +7,5 @@ values
 (2, 'Integer', 'Integer'),
 (3, 'Decimal', 'Decimal'),
 (4, 'DateTime', 'Date/Time'),
-(5, 'PickFromList', 'Pick from List')
+(5, 'PickFromList', 'Pick One from List'),
+(6, 'MultiSelect', 'Select Many from List')

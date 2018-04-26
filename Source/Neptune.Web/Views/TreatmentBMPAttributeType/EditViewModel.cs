@@ -91,10 +91,15 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.IsRequired = IsRequired;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
-            if (TreatmentBMPAttributeDataTypeID.Value ==
-                TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+
+            var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];
+            if (treatmentBMPAttributeDataType.HasOptions())
             {
                 treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = TreatmentBMPAttributeTypeOptionsSchema;
+            }
+            else
+            {
+                treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = null;
             }
         }
 
@@ -108,7 +113,8 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
             }
 
-            if (TreatmentBMPAttributeDataTypeID.Value == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+            var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];
+            if (treatmentBMPAttributeDataType.HasOptions())
             {
                 try
                 {
