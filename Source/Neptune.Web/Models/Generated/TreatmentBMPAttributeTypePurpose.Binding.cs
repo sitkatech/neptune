@@ -18,8 +18,8 @@ namespace Neptune.Web.Models
 {
     public abstract partial class TreatmentBMPAttributeTypePurpose : IHavePrimaryKey
     {
-        public static readonly TreatmentBMPAttributeTypePurposeDesignParameter DesignParameter = TreatmentBMPAttributeTypePurposeDesignParameter.Instance;
-        public static readonly TreatmentBMPAttributeTypePurposeOther Other = TreatmentBMPAttributeTypePurposeOther.Instance;
+        public static readonly TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes PerformanceAndModelingAttributes = TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes.Instance;
+        public static readonly TreatmentBMPAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = TreatmentBMPAttributeTypePurposeOtherDesignAttributes.Instance;
 
         public static readonly List<TreatmentBMPAttributeTypePurpose> All;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPAttributeTypePurpose> AllLookupDictionary;
@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static TreatmentBMPAttributeTypePurpose()
         {
-            All = new List<TreatmentBMPAttributeTypePurpose> { DesignParameter, Other };
+            All = new List<TreatmentBMPAttributeTypePurpose> { PerformanceAndModelingAttributes, OtherDesignAttributes };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAttributeTypePurpose>(All.ToDictionary(x => x.TreatmentBMPAttributeTypePurposeID));
         }
 
@@ -99,10 +99,10 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case TreatmentBMPAttributeTypePurposeEnum.DesignParameter:
-                    return DesignParameter;
-                case TreatmentBMPAttributeTypePurposeEnum.Other:
-                    return Other;
+                case TreatmentBMPAttributeTypePurposeEnum.OtherDesignAttributes:
+                    return OtherDesignAttributes;
+                case TreatmentBMPAttributeTypePurposeEnum.PerformanceAndModelingAttributes:
+                    return PerformanceAndModelingAttributes;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -111,19 +111,19 @@ namespace Neptune.Web.Models
 
     public enum TreatmentBMPAttributeTypePurposeEnum
     {
-        DesignParameter = 1,
-        Other = 2
+        PerformanceAndModelingAttributes = 1,
+        OtherDesignAttributes = 2
     }
 
-    public partial class TreatmentBMPAttributeTypePurposeDesignParameter : TreatmentBMPAttributeTypePurpose
+    public partial class TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes : TreatmentBMPAttributeTypePurpose
     {
-        private TreatmentBMPAttributeTypePurposeDesignParameter(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
-        public static readonly TreatmentBMPAttributeTypePurposeDesignParameter Instance = new TreatmentBMPAttributeTypePurposeDesignParameter(1, @"DesignParameter", @"Design Parameter");
+        private TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
+        public static readonly TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes Instance = new TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes(1, @"PerformanceAndModelingAttributes", @"Performance / Modeling Attributes");
     }
 
-    public partial class TreatmentBMPAttributeTypePurposeOther : TreatmentBMPAttributeTypePurpose
+    public partial class TreatmentBMPAttributeTypePurposeOtherDesignAttributes : TreatmentBMPAttributeTypePurpose
     {
-        private TreatmentBMPAttributeTypePurposeOther(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
-        public static readonly TreatmentBMPAttributeTypePurposeOther Instance = new TreatmentBMPAttributeTypePurposeOther(2, @"Other", @"Other");
+        private TreatmentBMPAttributeTypePurposeOtherDesignAttributes(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
+        public static readonly TreatmentBMPAttributeTypePurposeOtherDesignAttributes Instance = new TreatmentBMPAttributeTypePurposeOtherDesignAttributes(2, @"OtherDesignAttributes", @"Other Design Attributes");
     }
 }
