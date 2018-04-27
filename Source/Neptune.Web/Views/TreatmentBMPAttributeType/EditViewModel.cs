@@ -113,6 +113,25 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
             }
 
+
+            if (ModelObjectHelpers.IsRealPrimaryKeyValue(TreatmentBMPAttributeTypeID))
+            {
+                var type = HttpRequestStorage.DatabaseEntities.TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(TreatmentBMPAttributeTypeID);
+                var isStringType = type.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.String;
+                if (!isStringType && type.TreatmentBMPAttributeDataTypeID != TreatmentBMPAttributeDataTypeID)
+                {
+                    validationResults.Add(new ValidationResult("You cannot change the type of attribute"));
+                }
+
+                var updatedTypeIsStringPickFromListOrMultiselect = (TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.String.TreatmentBMPAttributeDataTypeID ||
+                         TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID ||
+                         TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.MultiSelect.TreatmentBMPAttributeDataTypeID);
+                if (isStringType && !updatedTypeIsStringPickFromListOrMultiselect)
+                {
+                    validationResults.Add(new ValidationResult("You cannot change a String attribute to any other than a single or multi select list"));
+                }
+            }
+
             var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];
             if (treatmentBMPAttributeDataType.HasOptions())
             {

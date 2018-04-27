@@ -69,7 +69,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
-            var treatmentBMPAttributeSimplesWithValues = TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues.Count > 0);
+            var treatmentBMPAttributeSimplesWithValues = TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0);
             var treatmentBMPAttributesToUpdate = new List<TreatmentBMPAttribute>();
             foreach (var x in treatmentBMPAttributeSimplesWithValues)
             {
@@ -113,7 +113,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 return errors;
             }
 
-            foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues.Count > 0))
+            foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0))
             {
                 var treatmentBMPAttributeType = treatmentBMPAttributeTypes.Single(x =>
                     x.TreatmentBMPAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPAttributeTypeID);
