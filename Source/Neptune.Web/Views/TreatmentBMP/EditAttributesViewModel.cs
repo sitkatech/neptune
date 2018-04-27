@@ -102,7 +102,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 var treatmentBMPAttributeSimple = TreatmentBMPAttributes.SingleOrDefault(y =>
                     y.TreatmentBMPAttributeTypeID == x.TreatmentBMPAttributeTypeID 
                     && x.IsRequired 
-                    && (y.TreatmentBMPAttributeValues.Count == 0 || y.TreatmentBMPAttributeValues == null || y.TreatmentBMPAttributeValues.All(string.IsNullOrEmpty)));
+                    && (y.TreatmentBMPAttributeValues == null || y.TreatmentBMPAttributeValues.All(string.IsNullOrEmpty)));
 
                 return treatmentBMPAttributeSimple != null;
             });

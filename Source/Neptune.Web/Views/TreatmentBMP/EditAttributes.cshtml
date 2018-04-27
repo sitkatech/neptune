@@ -55,7 +55,7 @@
                                                 @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
                                                 {
                                                     <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
-                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" class="form-control" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
+                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
                                                         <div class="input-group-addon">
                                                             <span class="glyphicon glyphicon-th"></span>
                                                         </div>
@@ -66,8 +66,8 @@
                                                     <div class="row">
                                                         <div class="col-sm-5">
                                                             <div class="input-group">
-                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" aria-describedby="attributeUnit" />
-                                                                <span class="input-group-addon" id="attributeUnit">@attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName</span>
+                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" aria-describedby="attributeUnit" />
+                                                                <span class="input-group-addon" id="attributeUnit">@(attribute.TreatmentBMPAttributeType.MeasurementUnitType != null ? attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -81,7 +81,7 @@
                                                                 <option value=""></option>
                                                                 @foreach (var option in attribute.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString())
                                                                 {
-                                                                    <option value="@option" selected="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues[0] == option)">@option</option>
+                                                                    <option value="@option" selected="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null && currentMetadata.TreatmentBMPAttributeValues[0] == option)">@option</option>
                                                                 }
                                                             </select>
                                                         </div>
@@ -100,7 +100,7 @@
                                                                        id="@string.Format("multiselect_{0}", option)" 
                                                                        value="@option" 
                                                                        name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues" 
-                                                                       checked="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues.Any(value => value == option))">
+                                                                       checked="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null && currentMetadata.TreatmentBMPAttributeValues.Any(value => value == option))">
                                                                 <label for="@string.Format("multiselect_{0}{1}", option, i)">@option</label><br />
                                                             }
                                                         </div>
@@ -108,7 +108,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValue[0]" value="@(currentMetadata != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
+                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
                                                 }
                                             </div>
                                         </div>
