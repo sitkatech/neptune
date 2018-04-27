@@ -92,27 +92,40 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             var errors = new List<ValidationResult>();
 
-            var treatmentBMPTypeAttributeTypeIDs = TreatmentBMPAttributes.Select(x => x.TreatmentBMPTypeAttributeTypeID).ToList();
-            var treatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Where(x => treatmentBMPTypeAttributeTypeIDs.Contains(x.TreatmentBMPTypeAttributeTypeID)).ToList();
-            if (treatmentBMPTypeAttributeTypes.Any(x =>
-                TreatmentBMPAttributes.SingleOrDefault(y => y.TreatmentBMPTypeAttributeTypeID == x.TreatmentBMPTypeAttributeTypeID && x.TreatmentBMPAttributeType.IsRequired && y.TreatmentBMPAttributeValues.Count == 0) != null))
+            var treatmentBMPAttributeTypeIDs = TreatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeTypeID).ToList();
+            var treatmentBMPAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAttributeTypes.Where(x => treatmentBMPAttributeTypeIDs.Contains(x.TreatmentBMPAttributeTypeID)).ToList();
+
+
+            var requiredAttributeDoesNotHaveValue = treatmentBMPAttributeTypes.Any(x =>
+            {
+
+                var treatmentBMPAttributeSimple = TreatmentBMPAttributes.SingleOrDefault(y =>
+                    y.TreatmentBMPAttributeTypeID == x.TreatmentBMPAttributeTypeID 
+                    && x.IsRequired 
+                    && (y.TreatmentBMPAttributeValues.Count == 0 || y.TreatmentBMPAttributeValues == null || y.TreatmentBMPAttributeValues.All(string.IsNullOrEmpty)));
+
+                return treatmentBMPAttributeSimple != null;
+            });
+
+            if (requiredAttributeDoesNotHaveValue)
             {
                 errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>("Must enter all required fields.", m => m.TreatmentBMPAttributes));
+                return errors;
             }
 
             foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues.Count > 0))
             {
-                var treatmentBMPTypeAttributeType = treatmentBMPTypeAttributeTypes.Single(x =>
-                    x.TreatmentBMPTypeAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPTypeAttributeTypeID);
+                var treatmentBMPAttributeType = treatmentBMPAttributeTypes.Single(x =>
+                    x.TreatmentBMPAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPAttributeTypeID);
 
-                var treatmentBMPAttributeDataType = treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType;
+                var treatmentBMPAttributeDataType = treatmentBMPAttributeType.TreatmentBMPAttributeDataType;
 
                 foreach (var value in treatmentBMPAttributeSimple.TreatmentBMPAttributeValues)
                 {
                     if (!treatmentBMPAttributeDataType.ValueIsCorrectDataType(value))
                     {
                         errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>(
-                            $"Entered value for {treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName} does not match expected type ({treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName}).", m => m.TreatmentBMPAttributes));
+                            $"Entered value for {treatmentBMPAttributeType.TreatmentBMPAttributeTypeName} does not match expected type ({treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName}).", m => m.TreatmentBMPAttributes));
                     }
                 }
                 

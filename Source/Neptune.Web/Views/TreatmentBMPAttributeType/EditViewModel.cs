@@ -122,24 +122,29 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 }
                 catch
                 {
-                    validationResults.Add(new ValidationResult("A Pick from List options cannot be saved"));
+                    validationResults.Add(new ValidationResult("Options cannot be saved"));
                     return validationResults;
                 }
 
                 var options = JsonConvert.DeserializeObject<List<string>>(TreatmentBMPAttributeTypeOptionsSchema);
                 if (options.Any(string.IsNullOrEmpty))
                 {
-                    validationResults.Add(new ValidationResult("Pick from List options cannot be empty"));
+                    validationResults.Add(new ValidationResult("Options cannot be empty"));
                 }
 
                 if (options.Count.Equals(0))
                 {
-                    validationResults.Add(new ValidationResult("A Pick from List attribute must have options defined"));
+                    validationResults.Add(new ValidationResult("This type of attribute must have options defined"));
+                }
+
+                if (treatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.MultiSelect && options.Count == 1)
+                {
+                    validationResults.Add(new ValidationResult("This type of attribute must have more than one option defined"));
                 }
 
                 if (options.Select(x => x.ToLower()).HasDuplicates())
                 {
-                    validationResults.Add(new ValidationResult("Pick from List options must be unique, remove duplicates"));
+                    validationResults.Add(new ValidationResult("Options must be unique, remove duplicates"));
                 }
             }
 
