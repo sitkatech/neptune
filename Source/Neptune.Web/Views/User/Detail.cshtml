@@ -182,9 +182,12 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel())
-                <span class="pull-right">
-                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
-                </span>
+                @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+                {
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
+                    </span>
+                }
             </div>
             <div class="panel-body">
                 @if (ViewDataTyped.Person.PrimaryContactOrganizations.Any())

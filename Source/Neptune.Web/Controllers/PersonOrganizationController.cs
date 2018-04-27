@@ -32,7 +32,7 @@ namespace Neptune.Web.Controllers
     public class PersonOrganizationController : NeptuneBaseController
     {
         [HttpGet]
-        [UserEditFeature]
+        [NeptuneAdminFeature]
         public PartialViewResult EditPersonOrganizationPrimaryContacts(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [UserEditFeature]
+        [NeptuneAdminFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditPersonOrganizationPrimaryContacts(PersonPrimaryKey personPrimaryKey, EditPersonOrganizationsViewModel viewModel)
         {
