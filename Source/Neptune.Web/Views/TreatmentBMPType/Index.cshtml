@@ -40,7 +40,7 @@
             <div class="col-lg-6">
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
-                        @treatmentBMPType.GetDisplayNameAsUrl()
+                        @treatmentBMPType.TreatmentBMPTypeName
                     </div>
                     <div class="panel-body">
                         @Html.Label("Description:") @treatmentBMPType.TreatmentBMPTypeDescription
@@ -79,7 +79,13 @@
                             }
                             </tbody>
                         </table>
-                        @if (treatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                        @Html.Label("Attribute Types:")
+                        <ul>
+                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
+                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
+                        </ul>
+                        <a href="@treatmentBMPType.GetDetailUrl()" class="btn btn-neptune">BMP Type Details</a>
+                        @*@if (treatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
                         {
                             <table class="table table-striped table-responsive">
                                 @Html.Label("Attribute Types:")
@@ -103,7 +109,7 @@
                                 }
                                 </tbody>
                             </table>
-                        }
+                        }*@
                     </div>
                 </div>
             </div>
