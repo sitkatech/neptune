@@ -97,4 +97,21 @@
         }
     }
 
+    public partial class TreatmentBMPAttributeDataTypeMultiSelect
+    {
+        public override bool ValueIsCorrectDataType(string treatmentBMPAttributeValue)
+        {
+            return true;
+        }
+
+        public override bool HasOptions()
+        {
+            return true;
+        }
+
+        public override bool HasMeasurementUnit()
+        {
+            return false;
+        }
+    }
 }

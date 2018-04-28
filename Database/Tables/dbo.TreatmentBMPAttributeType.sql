@@ -48,6 +48,6 @@ REFERENCES [dbo].[TreatmentBMPAttributeTypePurpose] ([TreatmentBMPAttributeTypeP
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [FK_TreatmentBMPAttributeType_TreatmentBMPAttributeTypePurpose_TreatmentBMPAttributeTypePurposeID]
 GO
-ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMPAttributeType_PickListTypeOptionSchemaNotNull] CHECK  (([TreatmentBMPAttributeDataTypeID]<>(5) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NULL OR [TreatmentBMPAttributeDataTypeID]=(5) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NOT NULL))
+ALTER TABLE [dbo].[TreatmentBMPAttributeType]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMPAttributeType_PickListTypeOptionSchemaNotNull] CHECK  ((NOT ([TreatmentBMPAttributeDataTypeID]=(6) OR [TreatmentBMPAttributeDataTypeID]=(5)) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NULL OR ([TreatmentBMPAttributeDataTypeID]=(6) OR [TreatmentBMPAttributeDataTypeID]=(5)) AND [TreatmentBMPAttributeTypeOptionsSchema] IS NOT NULL))
 GO
 ALTER TABLE [dbo].[TreatmentBMPAttributeType] CHECK CONSTRAINT [CK_TreatmentBMPAttributeType_PickListTypeOptionSchemaNotNull]

@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
         public static readonly TreatmentBMPAttributeDataTypeDecimal Decimal = TreatmentBMPAttributeDataTypeDecimal.Instance;
         public static readonly TreatmentBMPAttributeDataTypeDateTime DateTime = TreatmentBMPAttributeDataTypeDateTime.Instance;
         public static readonly TreatmentBMPAttributeDataTypePickFromList PickFromList = TreatmentBMPAttributeDataTypePickFromList.Instance;
+        public static readonly TreatmentBMPAttributeDataTypeMultiSelect MultiSelect = TreatmentBMPAttributeDataTypeMultiSelect.Instance;
 
         public static readonly List<TreatmentBMPAttributeDataType> All;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPAttributeDataType> AllLookupDictionary;
@@ -32,7 +33,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static TreatmentBMPAttributeDataType()
         {
-            All = new List<TreatmentBMPAttributeDataType> { String, Integer, Decimal, DateTime, PickFromList };
+            All = new List<TreatmentBMPAttributeDataType> { String, Integer, Decimal, DateTime, PickFromList, MultiSelect };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAttributeDataType>(All.ToDictionary(x => x.TreatmentBMPAttributeDataTypeID));
         }
 
@@ -108,6 +109,8 @@ namespace Neptune.Web.Models
                     return Decimal;
                 case TreatmentBMPAttributeDataTypeEnum.Integer:
                     return Integer;
+                case TreatmentBMPAttributeDataTypeEnum.MultiSelect:
+                    return MultiSelect;
                 case TreatmentBMPAttributeDataTypeEnum.PickFromList:
                     return PickFromList;
                 case TreatmentBMPAttributeDataTypeEnum.String:
@@ -124,7 +127,8 @@ namespace Neptune.Web.Models
         Integer = 2,
         Decimal = 3,
         DateTime = 4,
-        PickFromList = 5
+        PickFromList = 5,
+        MultiSelect = 6
     }
 
     public partial class TreatmentBMPAttributeDataTypeString : TreatmentBMPAttributeDataType
@@ -154,6 +158,12 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPAttributeDataTypePickFromList : TreatmentBMPAttributeDataType
     {
         private TreatmentBMPAttributeDataTypePickFromList(int treatmentBMPAttributeDataTypeID, string treatmentBMPAttributeDataTypeName, string treatmentBMPAttributeDataTypeDisplayName) : base(treatmentBMPAttributeDataTypeID, treatmentBMPAttributeDataTypeName, treatmentBMPAttributeDataTypeDisplayName) {}
-        public static readonly TreatmentBMPAttributeDataTypePickFromList Instance = new TreatmentBMPAttributeDataTypePickFromList(5, @"PickFromList", @"Pick from List");
+        public static readonly TreatmentBMPAttributeDataTypePickFromList Instance = new TreatmentBMPAttributeDataTypePickFromList(5, @"PickFromList", @"Pick One from List");
+    }
+
+    public partial class TreatmentBMPAttributeDataTypeMultiSelect : TreatmentBMPAttributeDataType
+    {
+        private TreatmentBMPAttributeDataTypeMultiSelect(int treatmentBMPAttributeDataTypeID, string treatmentBMPAttributeDataTypeName, string treatmentBMPAttributeDataTypeDisplayName) : base(treatmentBMPAttributeDataTypeID, treatmentBMPAttributeDataTypeName, treatmentBMPAttributeDataTypeDisplayName) {}
+        public static readonly TreatmentBMPAttributeDataTypeMultiSelect Instance = new TreatmentBMPAttributeDataTypeMultiSelect(6, @"MultiSelect", @"Select Many from List");
     }
 }

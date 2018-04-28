@@ -91,10 +91,15 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.IsRequired = IsRequired;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
-            if (TreatmentBMPAttributeDataTypeID.Value ==
-                TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+
+            var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];
+            if (treatmentBMPAttributeDataType.HasOptions())
             {
                 treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = TreatmentBMPAttributeTypeOptionsSchema;
+            }
+            else
+            {
+                treatmentBMPAttributeType.TreatmentBMPAttributeTypeOptionsSchema = null;
             }
         }
 
@@ -108,7 +113,27 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
             }
 
-            if (TreatmentBMPAttributeDataTypeID.Value == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID)
+
+            if (ModelObjectHelpers.IsRealPrimaryKeyValue(TreatmentBMPAttributeTypeID))
+            {
+                var type = HttpRequestStorage.DatabaseEntities.TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(TreatmentBMPAttributeTypeID);
+                var isStringType = type.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.String;
+                if (!isStringType && type.TreatmentBMPAttributeDataTypeID != TreatmentBMPAttributeDataTypeID)
+                {
+                    validationResults.Add(new ValidationResult("You cannot change the type of attribute"));
+                }
+
+                var updatedTypeIsStringPickFromListOrMultiselect = (TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.String.TreatmentBMPAttributeDataTypeID ||
+                         TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.PickFromList.TreatmentBMPAttributeDataTypeID ||
+                         TreatmentBMPAttributeDataTypeID == TreatmentBMPAttributeDataType.MultiSelect.TreatmentBMPAttributeDataTypeID);
+                if (isStringType && !updatedTypeIsStringPickFromListOrMultiselect)
+                {
+                    validationResults.Add(new ValidationResult("You cannot change a String attribute to any other than a single or multi select list"));
+                }
+            }
+
+            var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];
+            if (treatmentBMPAttributeDataType.HasOptions())
             {
                 try
                 {
@@ -116,24 +141,29 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
                 }
                 catch
                 {
-                    validationResults.Add(new ValidationResult("A Pick from List options cannot be saved"));
+                    validationResults.Add(new ValidationResult("Options cannot be saved"));
                     return validationResults;
                 }
 
                 var options = JsonConvert.DeserializeObject<List<string>>(TreatmentBMPAttributeTypeOptionsSchema);
                 if (options.Any(string.IsNullOrEmpty))
                 {
-                    validationResults.Add(new ValidationResult("Pick from List options cannot be empty"));
+                    validationResults.Add(new ValidationResult("Options cannot be empty"));
                 }
 
                 if (options.Count.Equals(0))
                 {
-                    validationResults.Add(new ValidationResult("A Pick from List attribute must have options defined"));
+                    validationResults.Add(new ValidationResult("This type of attribute must have options defined"));
+                }
+
+                if (treatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.MultiSelect && options.Count == 1)
+                {
+                    validationResults.Add(new ValidationResult("This type of attribute must have more than one option defined"));
                 }
 
                 if (options.Select(x => x.ToLower()).HasDuplicates())
                 {
-                    validationResults.Add(new ValidationResult("Pick from List options must be unique, remove duplicates"));
+                    validationResults.Add(new ValidationResult("Options must be unique, remove duplicates"));
                 }
             }
 

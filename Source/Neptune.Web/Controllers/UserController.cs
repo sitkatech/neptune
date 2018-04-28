@@ -77,6 +77,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditRoles(viewModel);
             }
             viewModel.UpdateModel(person, CurrentPerson);
+            SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 
@@ -230,8 +231,8 @@ namespace Neptune.Web.Controllers
             }
 
             HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Load();
-
             viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Local);
+            SetMessageForDisplay($"Assigned {FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 

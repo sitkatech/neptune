@@ -89,17 +89,22 @@ namespace Neptune.Web.Models
         {
             if (TreatmentBMPAttributes.Any())
             {
-                var treatmentBMPAttribute = TreatmentBMPAttributes.SingleOrDefault(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
-                if (treatmentBMPAttribute != null)
+                var treatmentBMPAttributes = TreatmentBMPAttributes.Where(x =>
+                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID).ToList();
+                if (treatmentBMPAttributes.Count == 1)
                 {
                     var measurmentUnit = "";
-                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                    if (treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
+                        measurmentUnit = $" {treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
                     }
 
-                    return $"{treatmentBMPAttribute.TreatmentBMPAttributeValue}{measurmentUnit}";
+                    return $"{treatmentBMPAttributes.First().TreatmentBMPAttributeValue}{measurmentUnit}";
+                }
+
+                if (treatmentBMPAttributes.Count > 1)
+                {
+                    return string.Join(", ", treatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeValue).OrderBy(x => x));
                 }
             }
             return string.Empty;

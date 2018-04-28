@@ -120,7 +120,7 @@
             return;
         }
         var newTreatmentBMPTypeAttributeTypeSimple = $scope.createNewTreatmentBMPAttributeTypeRow($scope.TreatmentBMPAttributeTypeToAdd.TreatmentBMPAttributeTypeID);
-
+        
         $scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples.push(newTreatmentBMPTypeAttributeTypeSimple);
         $scope.resetTreatmentBMPAttributeTypeToAdd();
     };
@@ -139,6 +139,9 @@
 
     if ($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples == null) {
         $scope.AngularModel.TreatmentBMPTypeObservationTypeSimples = [];
+    }
+    if ($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples == null) {
+        $scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples = [];
     }
     $scope.resetObservationTypeToAdd();
 });
