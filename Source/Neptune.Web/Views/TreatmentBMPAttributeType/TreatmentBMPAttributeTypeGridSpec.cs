@@ -36,8 +36,10 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             Add(Models.FieldDefinition.TreatmentBMPAttributeType.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.GetDetailUrl(), a.TreatmentBMPAttributeTypeName), 200, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPAttributeDataType.ToGridHeaderString(), a => a.TreatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.MeasurementUnit.ToGridHeaderString(), a => a.GetMeasurementUnitDisplayName(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.AttributeTypePurpose.ToGridHeaderString(),
+                a => a.TreatmentBMPAttributeTypePurpose.TreatmentBMPAttributeTypePurposeDisplayName, 200,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Required?", a => a.IsRequired.ToYesNo(), 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            
         }
     }
 }

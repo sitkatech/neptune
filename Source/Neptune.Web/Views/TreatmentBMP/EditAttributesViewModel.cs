@@ -42,9 +42,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
         }
 
-        public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP)
+        public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP,
+            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
         {
-            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType != TreatmentBMPAttributeDataType.MultiSelect)
+            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType != TreatmentBMPAttributeDataType.MultiSelect && x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID==treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
                 .Select(x => new TreatmentBMPAttributeSimple
                 {
                     TreatmentBMPTypeAttributeTypeID = x.TreatmentBMPTypeAttributeTypeID,
@@ -67,7 +68,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPAttributes.AddRange(multiselectValuesCollapsedToSimple);
         }
 
-        public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
+        public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson,
+            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
         {
             var treatmentBMPAttributeSimplesWithValues = TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0);
             var treatmentBMPAttributesToUpdate = new List<TreatmentBMPAttribute>();
@@ -80,7 +82,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             var treatmentBMPAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributes.Local;
-            treatmentBMP.TreatmentBMPAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
+            var existingTreatmentBmpAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x =>
+                x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID ==
+                treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID).ToList();
+
+            existingTreatmentBmpAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID 
                           && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID 
                           && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID

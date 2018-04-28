@@ -39,14 +39,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
             PageTitle = treatmentBMPType.TreatmentBMPTypeName;
 
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            if (UserHasTreatmentBMPTypeManagePermissions)
-            {
-                EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
-            }
-            else if (new NeptuneViewFeature().HasPermissionByPerson(currentPerson))
-            {
-                EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
-            }
+
+            EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
         }
     }
 }

@@ -50,7 +50,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditTreatmentBMPImagesUrl { get; }
 
         public ImageCarouselViewData ImageCarouselViewData { get; }
-        public string EditTreatmentBMPAttributesUrl { get; }
+        public string EditTreatmentBMPPerformanceAndModelingAttributesUrl { get; }
+        public string EditTreatmentBMPOtherDesignAttributesUrl { get; }
 
         public string MaintenanceRecordGridName { get; }
         public MaintenanceRecordGridSpec MaintenanceRecordGridSpec { get; }
@@ -88,7 +89,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
             NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
-            EditTreatmentBMPAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP));
+            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes));
+            EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, TreatmentBMPAttributeTypePurpose.OtherDesignAttributes));
         }
+
+        
     }
 }
