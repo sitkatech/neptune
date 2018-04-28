@@ -45,8 +45,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP,
             TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
         {
-            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType != TreatmentBMPAttributeDataType.MultiSelect)
-            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID==treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
+            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType != TreatmentBMPAttributeDataType.MultiSelect && x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID==treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
                 .Select(x => new TreatmentBMPAttributeSimple
                 {
                     TreatmentBMPTypeAttributeTypeID = x.TreatmentBMPTypeAttributeTypeID,
