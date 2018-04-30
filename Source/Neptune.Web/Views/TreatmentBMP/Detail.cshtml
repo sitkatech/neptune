@@ -154,7 +154,7 @@
                         @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
                         {
                             <tr>
-                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName</td>
+                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))</td>
                                 <td>@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
                             </tr>
@@ -196,7 +196,7 @@
                         @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
                         {
                             <tr>
-                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName</td>
+                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))</td>
                                 <td>@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
                             </tr>
