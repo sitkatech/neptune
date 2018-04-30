@@ -66,7 +66,7 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel, null);
             }
 
-            var treatmentBmpAttributeTypePurpose = TreatmentBMPAttributeTypePurpose.AllLookupDictionary[viewModel.TreatmentBMPAttributeTypePurposeID];
+            var treatmentBmpAttributeTypePurpose = TreatmentBMPAttributeTypePurpose.AllLookupDictionary[viewModel.TreatmentBMPAttributeTypePurposeID.GetValueOrDefault()];
 
             var treatmentBMPAttributeType = new TreatmentBMPAttributeType(String.Empty, TreatmentBMPAttributeDataType.String, false, treatmentBmpAttributeTypePurpose);
             viewModel.UpdateModel(treatmentBMPAttributeType, CurrentPerson);
