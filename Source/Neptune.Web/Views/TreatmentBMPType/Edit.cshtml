@@ -77,7 +77,7 @@
                                         data-title="Select an Observation Type to Add"
                                         style="width: 100%"
                                         ng-options="observationType as observationType.ObservationTypeName for observationType in filteredObservationTypes() track by observationType.ObservationTypeID">
-                                    <option value="null" disabled selected>Select an Observation Type to Add</option>
+                                    <option value="" disabled selected>Select an Observation Type to Add</option>
                                 </select>
                                 <span class="input-group-btn">
                                     <button class="btn btn-neptune" type="button" ng-click="addObservationTypeRow()">
@@ -197,20 +197,22 @@
                 <tr>
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeType)</th>
+                    <th class="text-left">@Html.Label("Purpose")</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
                     <th class="text-center">@Html.Label("Required?")</th>
-                    <th class="text-center">@Html.Label("Description")</th>
+                    <th class="text-left">@Html.Label("Description")</th>
                 </tr>
                 <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getTreatmentBMPAttributeTypeName]">
                     <td>
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteTreatmentBMPAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
                     </td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypePurpose(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDataTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeMeasurementUnitName(treatmentBMPTypeAttributeTypeSimple)"></td>
                     <td class="text-center" ng-bind="getTreatmentBMPAttributeTypeIsRequired(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-center" ng-bind="getTreatmentBMPAttributeTypeDescription(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDescription(treatmentBMPTypeAttributeTypeSimple)"></td>
                 </tr>
             </table>
         </div>

@@ -43,9 +43,9 @@
                         @treatmentBMPType.TreatmentBMPTypeName
                     </div>
                     <div class="panel-body">
-                        <a href="@treatmentBMPType.GetDetailUrl()" class="btn btn-neptune" style="margin-bottom: 10px;">View Details</a><br/>
-                        @Html.Label("Description:") @treatmentBMPType.TreatmentBMPTypeDescription
-                        <br/>
+                        <a href="@treatmentBMPType.GetDetailUrl()" class="pull-right btn btn-neptune" style="margin-bottom: 10px;">View Details</a>
+                        @Html.Label("Description:") <br /> @treatmentBMPType.TreatmentBMPTypeDescription
+                                                    <br />
                         @Html.Label("Number of BMPs:") @treatmentBMPType.TreatmentBMPs.Count
                         <br/>
                         <table class="table table-striped table-responsive">

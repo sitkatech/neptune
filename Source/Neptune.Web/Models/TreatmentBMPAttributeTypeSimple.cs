@@ -10,6 +10,7 @@ namespace Neptune.Web.Models
         public string MeasurementUnitDisplayName { get; set; }   
         public bool IsRequired { get; set; }
         public string Description { get; set; }
+        public string Purpose { get; set; }
 
         public TreatmentBMPAttributeTypeSimple(TreatmentBMPAttributeType treatmentBMPAttributeType)
         {
@@ -19,6 +20,8 @@ namespace Neptune.Web.Models
             MeasurementUnitDisplayName = treatmentBMPAttributeType.GetMeasurementUnitDisplayName();
             IsRequired = treatmentBMPAttributeType.IsRequired;
             Description = treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription;
+            Purpose = treatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose
+                .TreatmentBMPAttributeTypePurposeDisplayName;
         }
     }
 }

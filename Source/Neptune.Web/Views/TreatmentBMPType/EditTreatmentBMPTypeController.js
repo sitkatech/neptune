@@ -91,6 +91,11 @@
         return treatmentBMPAttributeTypeToFind.TreatmentBMPAttributeTypeName;
     };
 
+    $scope.getTreatmentBMPAttributeTypePurpose = function (treatmentBMPTypeAttributeTypeSimple) {
+        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
+        return treatmentBMPAttributeTypeToFind.Purpose;
+    };
+
     $scope.getTreatmentBMPAttributeTypeDataTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
         var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
         return treatmentBMPAttributeTypeToFind.DataTypeDisplayName;

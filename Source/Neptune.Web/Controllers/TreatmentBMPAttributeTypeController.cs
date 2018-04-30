@@ -111,7 +111,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
+        [NeptuneAdminFeature]
         public ViewResult Detail(TreatmentBMPAttributeTypePrimaryKey treatmentBMPAttributeTypePrimaryKey)
         {
             var treatmentBMPAttributeType = treatmentBMPAttributeTypePrimaryKey.EntityObject;
