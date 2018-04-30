@@ -51,13 +51,14 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
         [DisplayName("Options")]
         public string TreatmentBMPAttributeTypeOptionsSchema { get; set; }
 
+        // backing fields for drop-down lists have to be nullable in order to get the "default option" behavior that we want
         [Required]
         [DisplayName("Required?")]
-        public bool IsRequired { get; set; }
+        public bool? IsRequired { get; set; }
 
         [Required]
         [FieldDefinitionDisplay(Models.FieldDefinitionEnum.AttributeTypePurpose)]
-        public int TreatmentBMPAttributeTypePurposeID { get; set; }
+        public int? TreatmentBMPAttributeTypePurposeID { get; set; }
 
         [DisplayName("Description")]
         [StringLength(Models.TreatmentBMPAttributeType.FieldLengths.TreatmentBMPAttributeTypeDescription)]
@@ -88,8 +89,8 @@ namespace Neptune.Web.Views.TreatmentBMPAttributeType
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeName = TreatmentBMPAttributeTypeName;
             treatmentBMPAttributeType.TreatmentBMPAttributeDataTypeID = TreatmentBMPAttributeDataTypeID.Value;
             treatmentBMPAttributeType.MeasurementUnitTypeID = MeasurementUnitTypeID;
-            treatmentBMPAttributeType.IsRequired = IsRequired;
-            treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID;
+            treatmentBMPAttributeType.IsRequired = IsRequired.GetValueOrDefault();
+            treatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID = TreatmentBMPAttributeTypePurposeID.GetValueOrDefault();
             treatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription = TreatmentBMPAttributeTypeDesription;
 
             var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.AllLookupDictionary[TreatmentBMPAttributeDataTypeID.Value];

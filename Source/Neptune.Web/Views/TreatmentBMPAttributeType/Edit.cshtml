@@ -83,7 +83,7 @@
                                     ng-model="TreatmentBMPAttributeDataTypeID"
                                     ng-change="updateTreatmentBMPAttributeDataType()"
                                     ng-required="true">
-                                <option value=""></option>
+                                <option value="">&lt;Choose one&gt;</option>
                                 <option ng-repeat="treatmentBMPAttributeDataType in AngularViewData.TreatmentBMPAttributeDataTypes"
                                         ng-selected="AngularModel.TreatmentBMPAttributeDataTypeID == treatmentBMPAttributeDataType.ID"
                                         ng-value="treatmentBMPAttributeDataType.ID">
