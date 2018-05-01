@@ -316,7 +316,6 @@
           <ScalarProperty Name="TreatmentBMPTypeAttributeTypeID" ColumnName="TreatmentBMPTypeAttributeTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="TreatmentBMPAttributeTypeID" ColumnName="TreatmentBMPAttributeTypeID" />
-          <ScalarProperty Name="TreatmentBMPAttributeValue" ColumnName="TreatmentBMPAttributeValue" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -332,6 +331,16 @@
           <ScalarProperty Name="TreatmentBMPAttributeTypeDescription" ColumnName="TreatmentBMPAttributeTypeDescription" />
           <ScalarProperty Name="TreatmentBMPAttributeTypePurposeID" ColumnName="TreatmentBMPAttributeTypePurposeID" />
           <ScalarProperty Name="TreatmentBMPAttributeTypeOptionsSchema" ColumnName="TreatmentBMPAttributeTypeOptionsSchema" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPAttributeValue">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAttributeValue">
+        <MappingFragment StoreEntitySet="TreatmentBMPAttributeValue">
+          <ScalarProperty Name="TreatmentBMPAttributeValueID" ColumnName="TreatmentBMPAttributeValueID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="TreatmentBMPAttributeID" ColumnName="TreatmentBMPAttributeID" />
+          <ScalarProperty Name="AttributeValue" ColumnName="AttributeValue" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

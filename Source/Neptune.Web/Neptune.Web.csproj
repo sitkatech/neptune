@@ -161,6 +161,9 @@
     <Compile Include="Models\Generated\TreatmentBMPAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAttributeTypePurpose.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAttributeTypePurposePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAttributeValue.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAttributeValue.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAttributeValuePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThresholdPrimaryKey.Binding.cs" />
@@ -183,6 +186,7 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeObservationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\TreatmentBMPAttributeValue.cs" />
     <Compile Include="Security\MaintenanceRecordManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPDeleteFeature.cs" />
     <Compile Include="Security\UserDeleteFeature.cs" />

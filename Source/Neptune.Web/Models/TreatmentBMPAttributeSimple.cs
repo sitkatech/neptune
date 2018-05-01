@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -16,7 +17,7 @@ namespace Neptune.Web.Models
         {
             TreatmentBMPTypeAttributeTypeID = treatmentBMPAttribute.TreatmentBMPTypeAttributeTypeID;
             TreatmentBMPAttributeTypeID = treatmentBMPAttribute.TreatmentBMPAttributeTypeID;
-            TreatmentBMPAttributeValues = new List<string> { treatmentBMPAttribute.TreatmentBMPAttributeValue };
+            TreatmentBMPAttributeValues = treatmentBMPAttribute.TreatmentBMPAttributeValues.Select(x => x.AttributeValue).ToList();
         }
 
         public TreatmentBMPAttributeSimple(int treatmentBMPTypeAttributeTypeID, int treatmentBMPAttributeTypeID, List<string> values)

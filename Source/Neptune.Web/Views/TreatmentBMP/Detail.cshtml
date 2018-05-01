@@ -157,7 +157,7 @@
                                     <br/>
                                     <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
                                     </td>
-                                <td style="min-width: 100px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                <td style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                             </tr>                            
                         }
                         </tbody>
@@ -190,16 +190,17 @@
                         <tr>
                             <th>Attribute</th>
                             <th>Value</th>
-                            <th>Description</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
                         {
                             <tr>
-                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))</td>
-                                <td>@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
-                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
+                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                                    <br/>
+                                    <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
+                                </td>
+                                <td style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>                                
                             </tr>
                         }
                         </tbody>

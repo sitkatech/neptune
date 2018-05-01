@@ -76,6 +76,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPAttribute> TreatmentBMPAttributes { get { return AllTreatmentBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAttributeType> AllTreatmentBMPAttributeTypes { get; set; }
         public virtual IQueryable<TreatmentBMPAttributeType> TreatmentBMPAttributeTypes { get { return AllTreatmentBMPAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAttributeValue> AllTreatmentBMPAttributeValues { get; set; }
+        public virtual IQueryable<TreatmentBMPAttributeValue> TreatmentBMPAttributeValues { get { return AllTreatmentBMPAttributeValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPDocument> AllTreatmentBMPDocuments { get; set; }
@@ -268,6 +270,9 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPAttributeType":
                     return TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(primaryKey);
+
+                case "TreatmentBMPAttributeValue":
+                    return TreatmentBMPAttributeValues.GetTreatmentBMPAttributeValue(primaryKey);
 
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);

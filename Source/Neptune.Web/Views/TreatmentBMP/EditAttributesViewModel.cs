@@ -45,27 +45,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP,
             TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
         {
-            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType != TreatmentBMPAttributeDataType.MultiSelect && x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID==treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
-                .Select(x => new TreatmentBMPAttributeSimple
-                {
-                    TreatmentBMPTypeAttributeTypeID = x.TreatmentBMPTypeAttributeTypeID,
-                    TreatmentBMPAttributeTypeID = x.TreatmentBMPAttributeTypeID,
-                    TreatmentBMPAttributeValues = new List<string>{x.TreatmentBMPAttributeValue}
-                })
-                .ToList();
-            var multiselectValuesCollapsedToSimple = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.MultiSelect).GroupBy(x => x.TreatmentBMPAttributeType)
-                .Select(x =>
-                {
-                    var treatmentBMPTypeAttributeTypeID = x.Key.TreatmentBMPTypeAttributeTypes.ToList().First().TreatmentBMPTypeAttributeTypeID;
-                    var treatmentBMPAttributeTypeID = x.Key.TreatmentBMPAttributeTypeID;
-                    var selectedOptions = x.ToList().Select(y => y.TreatmentBMPAttributeValue).ToList();
-                    
-                    var treatmentBMPAttributeSimpleMultiselect = new TreatmentBMPAttributeSimple(treatmentBMPTypeAttributeTypeID, treatmentBMPAttributeTypeID, selectedOptions);
-                    return treatmentBMPAttributeSimpleMultiselect;
-                })
-                .ToList();
-
-            TreatmentBMPAttributes.AddRange(multiselectValuesCollapsedToSimple);
+            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID).Select(x => new TreatmentBMPAttributeSimple(x)).ToList();
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson,
@@ -73,25 +53,38 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             var treatmentBMPAttributeSimplesWithValues = TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0);
             var treatmentBMPAttributesToUpdate = new List<TreatmentBMPAttribute>();
+            var treatmentBMPAttributeValuesToUpdate = new List<TreatmentBMPAttributeValue>();
             foreach (var x in treatmentBMPAttributeSimplesWithValues)
             {
+                var treatmentBMPAttribute = new TreatmentBMPAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID);
+                treatmentBMPAttributesToUpdate.Add(treatmentBMPAttribute);
                 foreach (var value in x.TreatmentBMPAttributeValues)
-                {
-                    treatmentBMPAttributesToUpdate.Add(new TreatmentBMPAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID, value));
+                {                    
+                    var treatmentBMPAttributeValue = new TreatmentBMPAttributeValue(treatmentBMPAttribute, value);                   
+                    treatmentBMPAttributeValuesToUpdate.Add(treatmentBMPAttributeValue);
                 }
             }
 
             var treatmentBMPAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributes.Local;
-            var existingTreatmentBmpAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x =>
+            var treatmentBMPAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributeValues.Local;
+
+            var existingTreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x =>
                 x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID ==
                 treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID).ToList();
 
-            existingTreatmentBmpAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
+            var existingTreatmentBMPAttributeValues = existingTreatmentBMPAttributes.SelectMany(x => x.TreatmentBMPAttributeValues).ToList();
+
+            existingTreatmentBMPAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID 
                           && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID 
                           && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID
                           && x.TreatmentBMPAttributeID == y.TreatmentBMPAttributeID,
-                (x, y) => { x.TreatmentBMPAttributeValue = y.TreatmentBMPAttributeValue; });
+                (x, y) => { });
+
+            existingTreatmentBMPAttributeValues.Merge(treatmentBMPAttributeValuesToUpdate, treatmentBMPAttributeValuesInDatabase,
+                (x, y) => x.TreatmentBMPAttributeValueID == y.TreatmentBMPAttributeValueID
+                          && x.TreatmentBMPAttributeID == y.TreatmentBMPAttributeID,
+                (x, y) => { x.AttributeValue = y.AttributeValue; });
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
