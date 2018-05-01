@@ -96,7 +96,7 @@ namespace Neptune.Web.Models
                     var measurmentUnit = "";
                     if (treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
+                        measurmentUnit = $" {treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
                     return $"{treatmentBMPAttributes.First().TreatmentBMPAttributeValue}{measurmentUnit}";

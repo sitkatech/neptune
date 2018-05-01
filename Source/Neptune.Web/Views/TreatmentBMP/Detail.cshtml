@@ -126,7 +126,7 @@
             <div class="panel-heading panelTitle">
                 @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -134,7 +134,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes))
                 {
                 <p class="systemText">
                     This type of treatment BMP does not have any @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName
@@ -146,18 +146,19 @@
                         <thead>
                         <tr>
                             <th>Attribute</th>
-                            <th>Value</th>
-                            <th>Description</th>
+                            <th>Value</th>                            
                         </tr>
                         </thead>
                         <tbody>
                         @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
                         {
                             <tr>
-                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))</td>
-                                <td>@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
-                                <td>@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</td>
-                            </tr>
+                                <td>@(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                                    <br/>
+                                    <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
+                                    </td>
+                                <td style="min-width: 100px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                            </tr>                            
                         }
                         </tbody>
                     </table>
@@ -168,7 +169,7 @@
             <div class="panel-heading panelTitle">
                 @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -176,7 +177,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any())
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes))
                 {
                 <p class="systemText">
                     This type of treatment BMP does not have any @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName
