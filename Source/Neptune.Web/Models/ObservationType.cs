@@ -39,7 +39,8 @@ namespace Neptune.Web.Models
         }
 
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
+        public bool ThresholdIsRelativePercentOfBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
+        public bool TargetIsSweetSpot => ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
 
         public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
         public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
@@ -257,7 +258,7 @@ namespace Neptune.Web.Models
             var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
-            if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
+            if (!ThresholdIsRelativePercentOfBenchmark || benchmarkValue == null)
             {                
                 return formattedThresholdValue;
             }
