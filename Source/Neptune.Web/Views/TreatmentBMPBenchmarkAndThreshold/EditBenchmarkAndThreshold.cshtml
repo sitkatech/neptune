@@ -56,7 +56,11 @@
                     </div>
                     <div class="col-xs-10 col-sm-5">
                         <div class="input-group">
-                            <input type="number" name="@Html.NameFor(m => m.ThresholdValue)" value="@Model.ThresholdValue" placeholder="@ViewDataTyped.DefaultThresholdPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="thresholdUnit" />
+                            @if (ViewDataTyped.TargetIsSweetSpot)
+                            {
+                                <span class="input-group-addon">+/-</span>
+                            }
+                            <input type="number" name="@Html.NameFor(m => m.ThresholdValue)" value="@Model.ThresholdValue" placeholder="@ViewDataTyped.DefaultThresholdPlaceholder" style="width: 100%; text-align: right" class="form-control" aria-describedby="thresholdUnit"/>
                             <span class="input-group-addon" id="thresholdUnit">@ViewDataTyped.ThresholdMeasurementUnitTypeDisplayName</span>
                         </div>
                         @Html.ValidationMessageFor(m => m.ThresholdValue)

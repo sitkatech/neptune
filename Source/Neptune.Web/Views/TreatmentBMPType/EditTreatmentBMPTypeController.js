@@ -40,6 +40,10 @@
         return $scope.getObservationType(observationTypeID).HasBenchmarkAndThresholds;
     }
 
+    $scope.observationTypeTargetIsSweetSpot = function (observationTypeID) {
+        return $scope.getObservationType(observationTypeID).TargetIsSweetSpot;
+    }
+
     $scope.checkOverrideIfFailing = function (treatmentBMPTypeObservationTypeSimple) {
         treatmentBMPTypeObservationTypeSimple.AssessmentScoreWeight = null;
         getWeightTotal();

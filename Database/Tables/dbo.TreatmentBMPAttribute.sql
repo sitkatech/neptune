@@ -9,10 +9,20 @@ CREATE TABLE [dbo].[TreatmentBMPAttribute](
 	[TreatmentBMPTypeAttributeTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[TreatmentBMPAttributeTypeID] [int] NOT NULL,
-	[TreatmentBMPAttributeValue] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAttribute_TreatmentBMPAttributeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAttributeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPAttribute_TreatmentBMPAttributeID_TenantID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPAttributeID] ASC,
+	[TenantID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [AK_TreatmentBMPAttribute_TreatmentBMPTypeID_TreatmentBMPTypeAttributeTypeID] UNIQUE NONCLUSTERED 
+(
+	[TreatmentBMPID] ASC,
+	[TreatmentBMPTypeID] ASC,
+	[TreatmentBMPAttributeTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

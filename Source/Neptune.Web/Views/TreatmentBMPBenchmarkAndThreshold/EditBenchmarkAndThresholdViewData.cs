@@ -36,6 +36,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public string DefaultThresholdText { get; }
         public string DefaultBenchmarkPlaceholder { get; }
         public string DefaultThresholdPlaceholder { get; }
+        public bool TargetIsSweetSpot { get; }
 
         public EditBenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             Models.ObservationType observationType)
@@ -56,7 +57,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             DefaultBenchmarkText = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {treatmentBMPTypeObservationType.DefaultBenchmarkValue} {observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
 
             DefaultThresholdPlaceholder = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultThresholdValue.Value : string.Empty;
-            var optionalPlusMinus = observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation ? "+/-" : "";
+            TargetIsSweetSpot = observationType.TargetIsSweetSpot;
+            var optionalPlusMinus = observationType.TargetIsSweetSpot ? "+/-" : "";
             DefaultThresholdText = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {treatmentBMPTypeObservationType.DefaultThresholdValue} {observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
         }
     }

@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == observationType.ObservationTypeID);
             TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation, overrideAssessmentScoreIfFailing) : null;
 
-            var useUpperValue = observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease || (observationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation && TreatmentBMPObservationSimple?.ObservationValue > benchmarkValue);
+            var useUpperValue = observationType.UseUpperValueForThreshold(benchmarkValue, TreatmentBMPObservationSimple?.ObservationValue);
             ThresholdValueInObservedUnits = observationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue) ?? 0;
             BenchmarkValue = benchmarkValue ?? 0;
             Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";

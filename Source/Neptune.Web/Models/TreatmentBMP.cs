@@ -89,23 +89,20 @@ namespace Neptune.Web.Models
         {
             if (TreatmentBMPAttributes.Any())
             {
-                var treatmentBMPAttributes = TreatmentBMPAttributes.Where(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID).ToList();
-                if (treatmentBMPAttributes.Count == 1)
+                var treatmentBMPAttribute = TreatmentBMPAttributes.SingleOrDefault(x =>
+                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
+                if (treatmentBMPAttribute != null)
                 {
                     var measurmentUnit = "";
-                    if (treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {treatmentBMPAttributes.First().TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName}";
+                        measurmentUnit = $" {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
-                    return $"{treatmentBMPAttributes.First().TreatmentBMPAttributeValue}{measurmentUnit}";
-                }
+                    var value = string.Join(", ", treatmentBMPAttribute.TreatmentBMPAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
 
-                if (treatmentBMPAttributes.Count > 1)
-                {
-                    return string.Join(", ", treatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeValue).OrderBy(x => x));
-                }
+                    return $"{value}{measurmentUnit}";
+                }           
             }
             return string.Empty;
         }

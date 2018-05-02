@@ -39,7 +39,8 @@ namespace Neptune.Web.Models
         }
 
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        public bool ThresholdIsPercentFromBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
+        public bool ThresholdIsRelativePercentOfBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
+        public bool TargetIsSweetSpot => ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
 
         public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
         public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
@@ -171,8 +172,19 @@ namespace Neptune.Web.Models
             }
         }
 
+        public bool UseUpperValueForThreshold(double? benchmarkValue,double? observationValue)
+        {
+            if (benchmarkValue == null || observationValue == null)
+            {
+                return false;
+            }
+            return ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease ||
+                   TargetIsSweetSpot && observationValue > benchmarkValue;
+        }
+
         public double? GetThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
         {
+
             if (benchmarkValue == null || thresholdValue == null)
             {
                 return null;
@@ -191,8 +203,16 @@ namespace Neptune.Web.Models
                 case MeasurementUnitTypeEnum.Feet:
                 case MeasurementUnitTypeEnum.Inches:
                 case MeasurementUnitTypeEnum.InchesPerHour:
-                case MeasurementUnitTypeEnum.Seconds:                    
-                    return thresholdValue;
+                case MeasurementUnitTypeEnum.Seconds:
+                    if (!TargetIsSweetSpot)
+                    {
+                        return thresholdValue;
+                    }
+                    if (useUpperValue)
+                    {
+                        return benchmarkValue + thresholdValue;
+                    }
+                    return benchmarkValue - thresholdValue;
                 case MeasurementUnitTypeEnum.PercentDecline:
                     return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
                 case MeasurementUnitTypeEnum.PercentIncrease:
@@ -243,36 +263,38 @@ namespace Neptune.Web.Models
 
         public string GetFormattedThresholdValue(double? thresholdValue, double? benchmarkValue)
         {
-
+            // observation type has no benchmark and thresholds, return "not applicable"
             if (!HasBenchmarkAndThreshold)
             {
                 return ViewUtilities.NaString;
             }
 
+            // threshold value not set, return "-"
             if (thresholdValue == null)
             {
                 return "-";
             }
 
             var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
+            var benchmarkOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
-            if (!ThresholdIsPercentFromBenchmark || benchmarkValue == null)
+            if (!TargetIsSweetSpot || benchmarkValue == null)
             {                
                 return formattedThresholdValue;
             }
 
-            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation)
+            // If target is sweet spot or high or low
+            if (TargetIsSweetSpot)
             {
                 var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
-                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
-                return $"+/- {formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);                
+                return $"+/- {formattedThresholdValue} ({lowerValueInBenchmarkUnits} - {upperValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
             }
 
             var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
 
-            var otherOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
-            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{otherOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";

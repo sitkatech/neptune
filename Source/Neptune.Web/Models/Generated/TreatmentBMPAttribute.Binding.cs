@@ -23,27 +23,26 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPAttribute()
         {
-
+            this.TreatmentBMPAttributeValues = new HashSet<TreatmentBMPAttributeValue>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttribute(int treatmentBMPAttributeID, int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(int treatmentBMPAttributeID, int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID) : this()
         {
             this.TreatmentBMPAttributeID = treatmentBMPAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
-            this.TreatmentBMPAttributeValue = treatmentBMPAttributeValue;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAttribute(int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int treatmentBMPAttributeTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -52,13 +51,12 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeTypeID;
-            this.TreatmentBMPAttributeValue = treatmentBMPAttributeValue;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAttribute(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType, string treatmentBMPAttributeValue) : this()
+        public TreatmentBMPAttribute(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -74,7 +72,6 @@ namespace Neptune.Web.Models
             this.TreatmentBMPAttributeTypeID = treatmentBMPAttributeType.TreatmentBMPAttributeTypeID;
             this.TreatmentBMPAttributeType = treatmentBMPAttributeType;
             treatmentBMPAttributeType.TreatmentBMPAttributes.Add(this);
-            this.TreatmentBMPAttributeValue = treatmentBMPAttributeValue;
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPAttribute CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, TreatmentBMPAttributeType treatmentBMPAttributeType)
         {
-            return new TreatmentBMPAttribute(treatmentBMP, treatmentBMPTypeAttributeType, treatmentBMPType, treatmentBMPAttributeType, default(string));
+            return new TreatmentBMPAttribute(treatmentBMP, treatmentBMPTypeAttributeType, treatmentBMPType, treatmentBMPAttributeType);
         }
 
         /// <summary>
@@ -91,13 +88,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return TreatmentBMPAttributeValues.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAttribute).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPAttributeValue).Name};
 
 
         /// <summary>
@@ -105,6 +102,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in TreatmentBMPAttributeValues.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributes.Remove(this);                
         }
 
@@ -115,10 +117,10 @@ namespace Neptune.Web.Models
         public int TreatmentBMPTypeAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int TreatmentBMPAttributeTypeID { get; set; }
-        public string TreatmentBMPAttributeValue { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAttributeID; } set { TreatmentBMPAttributeID = value; } }
 
+        public virtual ICollection<TreatmentBMPAttributeValue> TreatmentBMPAttributeValues { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPTypeAttributeType TreatmentBMPTypeAttributeType { get; set; }
@@ -127,7 +129,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int TreatmentBMPAttributeValue = 1000;
+
         }
     }
 }

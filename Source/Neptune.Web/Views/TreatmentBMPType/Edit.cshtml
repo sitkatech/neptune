@@ -118,6 +118,7 @@
                     </td>
                     <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="text-right">
                         <div class="input-group">
+                            <span ng-if="observationTypeTargetIsSweetSpot(treatmentBMPTypeObservationTypeSimple.ObservationTypeID)" class="input-group-addon">+/-</span>
                             <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue" class="form-control" aria-describedby="thresholdUnit{{$index}}" />
                             <span class="input-group-addon" id="thresholdUnit{{$index}}" ng-bind="getObservationTypeThresholdUnit(treatmentBMPTypeObservationTypeSimple)"></span>
                         </div>
