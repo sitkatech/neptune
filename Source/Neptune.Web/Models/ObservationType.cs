@@ -190,11 +190,6 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            if (ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.SpecificValue)
-            {
-                return thresholdValue;
-            }
-
             var thresholdMeasurementUnitType = ThresholdMeasurementUnitType();
             switch (thresholdMeasurementUnitType.ToEnum)
             {
@@ -209,6 +204,10 @@ namespace Neptune.Web.Models
                 case MeasurementUnitTypeEnum.Inches:
                 case MeasurementUnitTypeEnum.InchesPerHour:
                 case MeasurementUnitTypeEnum.Seconds:
+                    if (!TargetIsSweetSpot)
+                    {
+                        return thresholdValue;
+                    }
                     if (useUpperValue)
                     {
                         return benchmarkValue + thresholdValue;

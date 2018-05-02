@@ -15,7 +15,7 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (12, 'PercentDecline', '% decline from benchmark', '% decline from benchmark', '% decline from benchmark', 0, 0),
 (13, 'PercentIncrease', '% increase from benchmark', '% increase from benchmark', '% increase from benchmark', 0, 0),
 (14, 'PercentDeviation', '% of benchmark', '% of benchmark', '% of benchmark', 0, 0),
-(15, 'Cubic Feet', 'cubic feet', 'cu ft', 'cu ft', 0, 0),
-(16, 'Gallons', 'gallons', 'gallons', 'gallon', 0, 0),
-(17, 'Minutes', 'minutes', 'minutes', 'minute', 0, 0),
-(18, 'CubicFeetPerSecond', 'cubic feet per second', 'cfs', 'cfs', 0, 0)
+(15, 'Cubic Feet', 'cubic feet', 'cu ft', 'cu ft', 0, 1),
+(16, 'Gallons', 'gallons', 'gallons', 'gallon', 0, 1),
+(17, 'Minutes', 'minutes', 'minutes', 'minute', 0, 1),
+(18, 'CubicFeetPerSecond', 'cubic feet per second', 'cfs', 'cfs', 0, 1)

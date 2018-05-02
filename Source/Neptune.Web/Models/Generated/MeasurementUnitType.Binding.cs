@@ -274,24 +274,24 @@ namespace Neptune.Web.Models
     public partial class MeasurementUnitTypeCubicFeet : MeasurementUnitType
     {
         private MeasurementUnitTypeCubicFeet(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypeCubicFeet Instance = new MeasurementUnitTypeCubicFeet(15, @"Cubic Feet", @"cubic feet", @"cu ft", @"cu ft", 0, false);
+        public static readonly MeasurementUnitTypeCubicFeet Instance = new MeasurementUnitTypeCubicFeet(15, @"Cubic Feet", @"cubic feet", @"cu ft", @"cu ft", 0, true);
     }
 
     public partial class MeasurementUnitTypeGallons : MeasurementUnitType
     {
         private MeasurementUnitTypeGallons(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypeGallons Instance = new MeasurementUnitTypeGallons(16, @"Gallons", @"gallons", @"gallons", @"gallon", 0, false);
+        public static readonly MeasurementUnitTypeGallons Instance = new MeasurementUnitTypeGallons(16, @"Gallons", @"gallons", @"gallons", @"gallon", 0, true);
     }
 
     public partial class MeasurementUnitTypeMinutes : MeasurementUnitType
     {
         private MeasurementUnitTypeMinutes(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypeMinutes Instance = new MeasurementUnitTypeMinutes(17, @"Minutes", @"minutes", @"minutes", @"minute", 0, false);
+        public static readonly MeasurementUnitTypeMinutes Instance = new MeasurementUnitTypeMinutes(17, @"Minutes", @"minutes", @"minutes", @"minute", 0, true);
     }
 
     public partial class MeasurementUnitTypeCubicFeetPerSecond : MeasurementUnitType
     {
         private MeasurementUnitTypeCubicFeetPerSecond(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
-        public static readonly MeasurementUnitTypeCubicFeetPerSecond Instance = new MeasurementUnitTypeCubicFeetPerSecond(18, @"CubicFeetPerSecond", @"cubic feet per second", @"cfs", @"cfs", 0, false);
+        public static readonly MeasurementUnitTypeCubicFeetPerSecond Instance = new MeasurementUnitTypeCubicFeetPerSecond(18, @"CubicFeetPerSecond", @"cubic feet per second", @"cfs", @"cfs", 0, true);
     }
 }
