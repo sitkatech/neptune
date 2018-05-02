@@ -97,7 +97,8 @@ namespace Neptune.Web.Models
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
             var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var useUpperValue = treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease || (treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation && observationValue > benchmarkValue);
+
+            var useUpperValue = treatmentBMPObservation.ObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
             var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
@@ -331,9 +332,8 @@ namespace Neptune.Web.Models
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
             var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var useUpperValue = treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease || (treatmentBMPObservation.ObservationType.TargetIsSweetSpot && observationValue > benchmarkValue);
+            var useUpperValue = treatmentBMPObservation.ObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
 
-            // only use this if Threshold is reltive to benchmark
             var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)

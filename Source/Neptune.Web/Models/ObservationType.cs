@@ -172,11 +172,27 @@ namespace Neptune.Web.Models
             }
         }
 
+        public bool UseUpperValueForThreshold(double? benchmarkValue,double? observationValue)
+        {
+            if (benchmarkValue == null || observationValue == null)
+            {
+                return false;
+            }
+            return ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease ||
+                   TargetIsSweetSpot && observationValue > benchmarkValue;
+        }
+
         public double? GetThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
         {
+
             if (benchmarkValue == null || thresholdValue == null)
             {
                 return null;
+            }
+
+            if (ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.SpecificValue)
+            {
+                return thresholdValue;
             }
 
             var thresholdMeasurementUnitType = ThresholdMeasurementUnitType();
@@ -248,12 +264,13 @@ namespace Neptune.Web.Models
 
         public string GetFormattedThresholdValue(double? thresholdValue, double? benchmarkValue)
         {
-
+            // observation type has no benchmark and thresholds, return "not applicable"
             if (!HasBenchmarkAndThreshold)
             {
                 return ViewUtilities.NaString;
             }
 
+            // threshold value not set, return "-"
             if (thresholdValue == null)
             {
                 return "-";
@@ -268,6 +285,7 @@ namespace Neptune.Web.Models
                 return formattedThresholdValue;
             }
 
+            // If target is sweet spot or high or low
             if (TargetIsSweetSpot)
             {
                 var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
