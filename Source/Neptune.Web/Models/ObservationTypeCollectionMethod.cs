@@ -331,7 +331,10 @@ namespace Neptune.Web.Models
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
             var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
             var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
+            var useUpperValue = treatmentBMPObservation.ObservationType.ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease || (treatmentBMPObservation.ObservationType.TargetIsSweetSpot && observationValue > benchmarkValue);
+
+            // only use this if Threshold is reltive to benchmark
+            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
             {

@@ -192,8 +192,12 @@ namespace Neptune.Web.Models
                 case MeasurementUnitTypeEnum.Feet:
                 case MeasurementUnitTypeEnum.Inches:
                 case MeasurementUnitTypeEnum.InchesPerHour:
-                case MeasurementUnitTypeEnum.Seconds:                    
-                    return thresholdValue;
+                case MeasurementUnitTypeEnum.Seconds:
+                    if (useUpperValue)
+                    {
+                        return benchmarkValue + thresholdValue;
+                    }
+                    return benchmarkValue - thresholdValue;
                 case MeasurementUnitTypeEnum.PercentDecline:
                     return benchmarkValue - (thresholdValue / 100) * benchmarkValue;
                 case MeasurementUnitTypeEnum.PercentIncrease:
@@ -256,24 +260,24 @@ namespace Neptune.Web.Models
             }
 
             var optionalSpace = ThresholdMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
+            var benchmarkOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
-            if (!ThresholdIsRelativePercentOfBenchmark || benchmarkValue == null)
+            if (!TargetIsSweetSpot || benchmarkValue == null)
             {                
                 return formattedThresholdValue;
             }
 
-            if (ThresholdMeasurementUnitType() == MeasurementUnitType.PercentDeviation)
+            if (TargetIsSweetSpot)
             {
                 var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
-                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);
-                return $"+/- {formattedThresholdValue} ({upperValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName}/{lowerValueInBenchmarkUnits}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+                var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);                
+                return $"+/- {formattedThresholdValue} ({lowerValueInBenchmarkUnits} - {upperValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
             }
 
             var thresholdValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease);
 
-            var otherOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
-            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{otherOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
+            return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
         public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";
