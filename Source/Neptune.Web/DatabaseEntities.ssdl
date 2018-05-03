@@ -702,7 +702,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPAtt
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="FundingSourceID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="Amount" Type="money" Nullable="false" />
+    <Property Name="Amount" Type="money" />
   </EntityType>
   <EntityType Name="TreatmentBMPImage">
     <Key>

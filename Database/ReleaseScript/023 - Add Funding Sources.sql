@@ -49,7 +49,7 @@ CREATE TABLE dbo.TreatmentBMPFundingSource(
 	TenantID int NOT NULL,
 	FundingSourceID int NOT NULL,
 	TreatmentBMPID int NOT NULL,
-	Amount money NOT NULL,
+	Amount money NULL,
 	CONSTRAINT PK_TreatmentBMPFundingSource_TreatmentBMPFundingSourceID PRIMARY KEY CLUSTERED 
 	(
 		TreatmentBMPFundingSourceID ASC

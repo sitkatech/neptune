@@ -71,11 +71,6 @@ namespace Neptune.Web.Views.TreatmentBMPFundingSource
                 {
                     validationResults.Add(new ValidationResult("Each funding source can only be used once."));
                 }
-
-                if (TreatmentBMPFundingSources.Any(x => x.Amount == null))
-                {
-                    validationResults.Add(new ValidationResult("Enter an amount for each Funding Source, or remove Funding Sources with no funding amounts."));
-                }
             }
             return validationResults;
         }

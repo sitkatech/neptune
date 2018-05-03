@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPFundingSource(int treatmentBMPFundingSourceID, int fundingSourceID, int treatmentBMPID, decimal amount) : this()
+        public TreatmentBMPFundingSource(int treatmentBMPFundingSourceID, int fundingSourceID, int treatmentBMPID, decimal? amount) : this()
         {
             this.TreatmentBMPFundingSourceID = treatmentBMPFundingSourceID;
             this.FundingSourceID = fundingSourceID;
@@ -41,20 +41,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPFundingSource(int fundingSourceID, int treatmentBMPID, decimal amount) : this()
+        public TreatmentBMPFundingSource(int fundingSourceID, int treatmentBMPID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FundingSourceID = fundingSourceID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.Amount = amount;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPFundingSource(FundingSource fundingSource, TreatmentBMP treatmentBMP, decimal amount) : this()
+        public TreatmentBMPFundingSource(FundingSource fundingSource, TreatmentBMP treatmentBMP) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -64,7 +63,6 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.TreatmentBMPFundingSources.Add(this);
-            this.Amount = amount;
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPFundingSource CreateNewBlank(FundingSource fundingSource, TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPFundingSource(fundingSource, treatmentBMP, default(decimal));
+            return new TreatmentBMPFundingSource(fundingSource, treatmentBMP);
         }
 
         /// <summary>
@@ -103,7 +101,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int FundingSourceID { get; set; }
         public int TreatmentBMPID { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPFundingSourceID; } set { TreatmentBMPFundingSourceID = value; } }
 

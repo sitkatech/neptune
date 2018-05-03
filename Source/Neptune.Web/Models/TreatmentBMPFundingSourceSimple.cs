@@ -19,7 +19,7 @@
 
         public TreatmentBMPFundingSource ToTreatmentBMPFundingSource()
         {
-            return new TreatmentBMPFundingSource(FundingSourceID, TreatmentBMPID, Amount ?? 0);
+            return new TreatmentBMPFundingSource(FundingSourceID, TreatmentBMPID){Amount = Amount};
         }
 
         public int TreatmentBMPID { get; set; }
