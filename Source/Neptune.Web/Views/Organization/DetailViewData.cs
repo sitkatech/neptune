@@ -30,7 +30,10 @@ namespace Neptune.Web.Views.Organization
     {
         public Models.Organization Organization { get; }
         public bool UserHasOrganizationManagePermissions { get; }
+        public bool UserHasCreateFundingSourcePermissions { get; }
         public string EditOrganizationUrl { get; }
+        public string NewFundingSourceUrl { get; }
+        public string ManageFundingSourcesUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.Organization organization) : base(currentPerson)
         {
@@ -38,11 +41,14 @@ namespace Neptune.Web.Views.Organization
             EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = organization.DisplayName;
             UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
+            UserHasCreateFundingSourcePermissions = new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
             if (UserHasOrganizationManagePermissions)
             {
                 EntityUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Index());
             }
             EditOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(c => c.Edit(organization));
+            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.New());
+            ManageFundingSourcesUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
         }
     }
 }

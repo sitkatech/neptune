@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Models
 @using Neptune.Web.Security
 @using Neptune.Web.Views.Shared
@@ -87,6 +88,35 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                @Html.LabelWithSugarFor(FieldDefinition.FundingSource, LabelWithSugarForExtensions.DisplayStyle.HelpIconOnly)
+                <a href="@ViewDataTyped.ManageFundingSourcesUrl">@FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()</a>
+
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewFundingSourceUrl, string.Format("Create a new {0}", FieldDefinition.FundingSource.GetFieldDefinitionLabel()), new List<string>(), ViewDataTyped.UserHasCreateFundingSourcePermissions)
+                </span>
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.Organization.FundingSources.Any())
+                {
+                    <ul>
+                        @foreach (var fundingSource in ViewDataTyped.Organization.FundingSources.OrderBy(x => x.FundingSourceName))
+                        {
+                            <li>
+                                @fundingSource.DisplayNameAsUrl
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="systemText">No @FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized() set for this @FieldDefinition.Organization.GetFieldDefinitionLabel().</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Users
