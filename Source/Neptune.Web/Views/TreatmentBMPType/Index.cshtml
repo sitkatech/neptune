@@ -59,16 +59,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var observationType in treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType))
+                            @foreach (var observationType in treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.ObservationType))
                             {
-                                var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+                                var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
                                 <tr>
                                     <td>@observationType.GetDisplayNameAsUrl()</td>
-                                    <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToStringShortPercent() : "pass/fail")</td>
+                                    <td>@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.ToStringShortPercent() : "pass/fail")</td>
                                     @if (observationType.HasBenchmarkAndThreshold)
                                     {
-                                        <td>@observationType.GetFormattedBenchmarkValue(treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                        <td>@observationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                        <td>@observationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td>@observationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
                                     }
                                     else
                                     {

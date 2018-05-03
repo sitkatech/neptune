@@ -171,12 +171,12 @@ namespace Neptune.Web.Controllers
                 .Find(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
             if (treatmentBMPObservation == null)
             {
-                var treatmentBMPTypeObservationType =
-                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x =>
+                var TreatmentBMPTypeAssessmentObservationType =
+                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
                         x.ObservationTypeID == observationType.ObservationTypeID);
-                Check.RequireNotNull(treatmentBMPTypeObservationType,
+                Check.RequireNotNull(TreatmentBMPTypeAssessmentObservationType,
                     $"Not a valid Observation Type ID {observationType.ObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
-                treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeObservationType,
+                treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType,
                     treatmentBMPAssessment.TreatmentBMPType, observationType, string.Empty);
             }
 

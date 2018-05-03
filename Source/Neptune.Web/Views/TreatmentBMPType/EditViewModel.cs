@@ -61,21 +61,21 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
             TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
-            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
+            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
             TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
         }
 
 
         public void UpdateModel(Models.TreatmentBMPType treatmentBMPType,
-            List<TreatmentBMPTypeObservationType> currentTreatmentBMPTypeObservationTypes,
-            IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes,
+            List<TreatmentBMPTypeAssessmentObservationType> currentTreatmentBMPTypeObservationTypes,
+            IList<TreatmentBMPTypeAssessmentObservationType> allTreatmentBMPTypeAssessmentObservationTypes,
             List<TreatmentBMPTypeAttributeType> currentTreatmentBMPTypeAttributeTypes,
             ObservableCollection<TreatmentBMPTypeAttributeType> allTreatmentBMPTypeAttributeTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
             treatmentBMPType.TreatmentBMPTypeDescription = TreatmentBMPTypeDescription;
 
-            var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
+            var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeAssessmentObservationType>();
             if (TreatmentBMPTypeObservationTypeSimples != null)
             {
                 // Completely rebuild the list
@@ -83,7 +83,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 {
                     var overrideWeight = x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value;
 
-                    return new TreatmentBMPTypeObservationType(ModelObjectHelpers.NotYetAssignedID,
+                    return new TreatmentBMPTypeAssessmentObservationType(ModelObjectHelpers.NotYetAssignedID,
                         treatmentBMPType.TreatmentBMPTypeID,
                         x.ObservationTypeID,
                         overrideWeight ? null : x.AssessmentScoreWeight/100,
@@ -94,7 +94,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
 
             currentTreatmentBMPTypeObservationTypes.Merge(updatedTreatmentBMPTypeObservationTypes,
-                allTreatmentBMPTypeObservationTypes,
+                allTreatmentBMPTypeAssessmentObservationTypes,
                 (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.ObservationTypeID == y.ObservationTypeID,
                 (x, y) =>
                 {

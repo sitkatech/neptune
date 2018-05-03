@@ -51,15 +51,15 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             BenchmarkDescription = observationType.BenchmarkDescription();
             ThresholdDescription = observationType.ThresholdDescription();
 
-            var treatmentBMPTypeObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+            var TreatmentBMPTypeAssessmentObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
 
-            DefaultBenchmarkPlaceholder = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultBenchmarkValue.Value : string.Empty;
-            DefaultBenchmarkText = treatmentBMPTypeObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {treatmentBMPTypeObservationType.DefaultBenchmarkValue} {observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
+            DefaultBenchmarkPlaceholder = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? "default is " + TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.Value : string.Empty;
+            DefaultBenchmarkText = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue} {observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
 
-            DefaultThresholdPlaceholder = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? "default is " + treatmentBMPTypeObservationType.DefaultThresholdValue.Value : string.Empty;
+            DefaultThresholdPlaceholder = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? "default is " + TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.Value : string.Empty;
             TargetIsSweetSpot = observationType.TargetIsSweetSpot;
             var optionalPlusMinus = observationType.TargetIsSweetSpot ? "+/-" : "";
-            DefaultThresholdText = treatmentBMPTypeObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {treatmentBMPTypeObservationType.DefaultThresholdValue} {observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
+            DefaultThresholdText = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue} {observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
         }
     }
 }

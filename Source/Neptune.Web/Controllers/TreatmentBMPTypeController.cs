@@ -73,15 +73,15 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.Add(treatmentBMPType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes.Load();
-            var treatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
-            var allTreatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Local;
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAssessmentObservationTypes.Load();
+            var treatmentBMPTypeAssessmentObservationTypes = new List<TreatmentBMPTypeAssessmentObservationType>();
+            var allTreatmentBMPTypeAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.Local;
 
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Load();
             var treatmentBMPTypeAttributeTypes = new List<TreatmentBMPTypeAttributeType>();
             var allTreatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAttributeTypes.Local;
 
-            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
+            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeAssessmentObservationTypes, allTreatmentBMPTypeAssessmentObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
            
             SetMessageForDisplay($"Treatment BMP Type {treatmentBMPType.TreatmentBMPTypeName} succesfully created.");
 
@@ -108,15 +108,15 @@ namespace Neptune.Web.Controllers
                 return ViewEdit(viewModel, treatmentBMPType);
             }
 
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeObservationTypes.Load();
-            var treatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeObservationTypes.ToList();
-            var allTreatmentBMPTypeObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Local;
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAssessmentObservationTypes.Load();
+            var treatmentBMPTypeAssessmentObservationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.ToList();
+            var allTreatmentBMPTypeAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.Local;
 
             HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAttributeTypes.Load();
             var treatmentBMPTypeAttributeTypes = treatmentBMPType.TreatmentBMPTypeAttributeTypes.ToList();
             var allTreatmentBMPTypeAttributeTypes = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAttributeTypes.Local;
 
-            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeObservationTypes, allTreatmentBMPTypeObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
+            viewModel.UpdateModel(treatmentBMPType, treatmentBMPTypeAssessmentObservationTypes, allTreatmentBMPTypeAssessmentObservationTypes, treatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes);
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPTypeController>(c => c.Detail(treatmentBMPType.PrimaryKey)));
         }

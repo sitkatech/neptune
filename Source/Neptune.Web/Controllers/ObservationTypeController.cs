@@ -73,7 +73,7 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
             var observationType = observationTypePrimaryKey.EntityObject;
-            var treatmentBMPTypes = observationType.TreatmentBMPTypeObservationTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
+            var treatmentBMPTypes = observationType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -160,9 +160,9 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteObservationType(ObservationType observationType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPTypeLabel = observationType.TreatmentBMPTypeObservationTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPTypeLabel = observationType.TreatmentBMPTypeAssessmentObservationTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             var treatmentBMPObservationLabel = observationType.TreatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
-            var confirmMessage = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' is related to {observationType.TreatmentBMPTypeObservationTypes.Count} {treatmentBMPTypeLabel} and has {observationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()}?";
+            var confirmMessage = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' is related to {observationType.TreatmentBMPTypeAssessmentObservationTypes.Count} {treatmentBMPTypeLabel} and has {observationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

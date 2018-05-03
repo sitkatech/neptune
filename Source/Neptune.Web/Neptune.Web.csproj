@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -179,12 +179,12 @@
     <Compile Include="Models\Generated\TreatmentBMPPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeAttributeType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeAttributeType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeAttributeTypePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeObservationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\TreatmentBMPAttributeValue.cs" />
     <Compile Include="Security\MaintenanceRecordManageFeature.cs" />

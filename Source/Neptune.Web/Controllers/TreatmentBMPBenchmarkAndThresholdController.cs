@@ -79,12 +79,12 @@ namespace Neptune.Web.Controllers
             var treatmentBMPObservation = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID);
             if (treatmentBMPObservation == null)
             {
-                var treatmentBMPTypeObservationType =
-                    treatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes.SingleOrDefault(x =>
+                var TreatmentBMPTypeAssessmentObservationType =
+                    treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
                         x.ObservationTypeID == observationType.ObservationTypeID);
-                Check.RequireNotNull(treatmentBMPTypeObservationType,
+                Check.RequireNotNull(TreatmentBMPTypeAssessmentObservationType,
                     $"Not a valid Observation Type ID {observationType.ObservationTypeID} for Treatment BMP Type ID {treatmentBMP.TreatmentBMPTypeID}");
-                treatmentBMPObservation = new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeObservationType,
+                treatmentBMPObservation = new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, TreatmentBMPTypeAssessmentObservationType,
                     treatmentBMP.TreatmentBMPType, observationType, 0, 0);
             }
 

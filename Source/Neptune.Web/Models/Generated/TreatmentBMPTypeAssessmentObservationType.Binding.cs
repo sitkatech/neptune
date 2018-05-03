@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TreatmentBMPTypeObservationType]
+//  Source Table: [dbo].[TreatmentBMPTypeAssessmentObservationType]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[TreatmentBMPTypeObservationType]")]
-    public partial class TreatmentBMPTypeObservationType : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[TreatmentBMPTypeAssessmentObservationType]")]
+    public partial class TreatmentBMPTypeAssessmentObservationType : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TreatmentBMPTypeObservationType()
+        protected TreatmentBMPTypeAssessmentObservationType()
         {
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
@@ -31,9 +31,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeObservationType(int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, decimal? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeAssessmentObservationType(int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int observationTypeID, decimal? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing) : this()
         {
-            this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
+            this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.ObservationTypeID = observationTypeID;
             this.AssessmentScoreWeight = assessmentScoreWeight;
@@ -45,10 +45,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeObservationType(int treatmentBMPTypeID, int observationTypeID, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeAssessmentObservationType(int treatmentBMPTypeID, int observationTypeID, bool overrideAssessmentScoreIfFailing) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPTypeAssessmentObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.ObservationTypeID = observationTypeID;
@@ -58,25 +58,25 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPTypeObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeAssessmentObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType, bool overrideAssessmentScoreIfFailing) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPTypeObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPTypeAssessmentObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
-            treatmentBMPType.TreatmentBMPTypeObservationTypes.Add(this);
+            treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Add(this);
             this.ObservationTypeID = observationType.ObservationTypeID;
             this.ObservationType = observationType;
-            observationType.TreatmentBMPTypeObservationTypes.Add(this);
+            observationType.TreatmentBMPTypeAssessmentObservationTypes.Add(this);
             this.OverrideAssessmentScoreIfFailing = overrideAssessmentScoreIfFailing;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPTypeObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPTypeAssessmentObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, ObservationType observationType)
         {
-            return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType, default(bool));
+            return new TreatmentBMPTypeAssessmentObservationType(treatmentBMPType, observationType, default(bool));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeAssessmentObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name};
 
 
         /// <summary>
@@ -109,11 +109,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeObservationTypes.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.Remove(this);                
         }
 
         [Key]
-        public int TreatmentBMPTypeObservationTypeID { get; set; }
+        public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int ObservationTypeID { get; set; }
@@ -122,7 +122,7 @@ namespace Neptune.Web.Models
         public double? DefaultBenchmarkValue { get; set; }
         public bool OverrideAssessmentScoreIfFailing { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TreatmentBMPTypeObservationTypeID; } set { TreatmentBMPTypeObservationTypeID = value; } }
+        public int PrimaryKey { get { return TreatmentBMPTypeAssessmentObservationTypeID; } set { TreatmentBMPTypeAssessmentObservationTypeID = value; } }
 
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }

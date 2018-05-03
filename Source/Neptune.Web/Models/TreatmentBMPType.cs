@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
 
         public List<ObservationType> GetObservationTypes()
         {
-            return TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType).ToList();
+            return TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.ObservationType).ToList();
         }
 
         public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";

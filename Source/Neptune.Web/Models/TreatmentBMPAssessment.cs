@@ -69,7 +69,7 @@ namespace Neptune.Web.Models
             }
 
             //if any observations that override the score have a failing score, return 0
-            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing)
                 .ToList().Select(x => x.ObservationType);
 
@@ -83,14 +83,14 @@ namespace Neptune.Web.Models
             }
 
             //if all observations override the score and all are passing, return 5
-            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .All(x => x.OverrideAssessmentScoreIfFailing))
             {
                 return 5;
             }
 
             //otherwise calculate the score
-            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => !x.OverrideAssessmentScoreIfFailing)
                 .Select(x => x.ObservationType).ToList().Sum(x =>
                 {

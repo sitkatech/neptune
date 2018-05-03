@@ -13,14 +13,14 @@
         {
         }
 
-        public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeObservationType treatmentBMPTypeObservationType)
+        public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType)
         {
-            TreatmentBMPTypeID = treatmentBMPTypeObservationType.TreatmentBMPTypeID;
-            ObservationTypeID = treatmentBMPTypeObservationType.ObservationTypeID;
-            AssessmentScoreWeight = treatmentBMPTypeObservationType.AssessmentScoreWeight * 100;
-            DefaultThresholdValue = treatmentBMPTypeObservationType.DefaultThresholdValue;
-            DefaultBenchmarkValue = treatmentBMPTypeObservationType.DefaultBenchmarkValue;
-            OverrideAssessmentScoreIfFailing = treatmentBMPTypeObservationType.OverrideAssessmentScoreIfFailing;
+            TreatmentBMPTypeID = TreatmentBMPTypeAssessmentObservationType.TreatmentBMPTypeID;
+            ObservationTypeID = TreatmentBMPTypeAssessmentObservationType.ObservationTypeID;
+            AssessmentScoreWeight = TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight * 100;
+            DefaultThresholdValue = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue;
+            DefaultBenchmarkValue = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue;
+            OverrideAssessmentScoreIfFailing = TreatmentBMPTypeAssessmentObservationType.OverrideAssessmentScoreIfFailing;
         }
     }
 }

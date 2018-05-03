@@ -30,8 +30,8 @@ namespace Neptune.Web.UnitTestCommon
             public static TreatmentBMPBenchmarkAndThreshold Create(Models.TreatmentBMP treatmentBMP, ObservationType observationType)
             {
                 var treatmentBMPType = treatmentBMP.TreatmentBMPType;
-                var treatmentBMPTypeObservationType = TestTreatmentBMPTypeObservationType.Create(treatmentBMPType, observationType);
-                return TreatmentBMPBenchmarkAndThreshold.CreateNewBlank(treatmentBMP, treatmentBMPTypeObservationType, treatmentBMPType, observationType);
+                var TreatmentBMPTypeAssessmentObservationType = TestTreatmentBMPTypeObservationType.Create(treatmentBMPType, observationType);
+                return TreatmentBMPBenchmarkAndThreshold.CreateNewBlank(treatmentBMP, TreatmentBMPTypeAssessmentObservationType, treatmentBMPType, observationType);
             }
         }
     }    

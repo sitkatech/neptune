@@ -30,11 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, string observationData) : this()
+        public TreatmentBMPObservation(int treatmentBMPObservationID, int treatmentBMPAssessmentID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int observationTypeID, string observationData) : this()
         {
             this.TreatmentBMPObservationID = treatmentBMPObservationID;
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
-            this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
+            this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.ObservationTypeID = observationTypeID;
             this.ObservationData = observationData;
@@ -43,13 +43,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int treatmentBMPTypeObservationTypeID, int treatmentBMPTypeID, int observationTypeID, string observationData) : this()
+        public TreatmentBMPObservation(int treatmentBMPAssessmentID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int observationTypeID, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
-            this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationTypeID;
+            this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.ObservationTypeID = observationTypeID;
             this.ObservationData = observationData;
@@ -58,16 +58,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeObservationType treatmentBMPTypeObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType, string observationData) : this()
+        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
             this.TreatmentBMPAssessment = treatmentBMPAssessment;
             treatmentBMPAssessment.TreatmentBMPObservations.Add(this);
-            this.TreatmentBMPTypeObservationTypeID = treatmentBMPTypeObservationType.TreatmentBMPTypeObservationTypeID;
-            this.TreatmentBMPTypeObservationType = treatmentBMPTypeObservationType;
-            treatmentBMPTypeObservationType.TreatmentBMPObservations.Add(this);
+            this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypeID;
+            this.TreatmentBMPTypeAssessmentObservationType = treatmentBMPTypeAssessmentObservationType;
+            treatmentBMPTypeAssessmentObservationType.TreatmentBMPObservations.Add(this);
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPObservations.Add(this);
@@ -80,9 +80,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeObservationType treatmentBMPTypeObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType)
         {
-            return new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeObservationType, treatmentBMPType, observationType, default(string));
+            return new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, observationType, default(string));
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPObservationID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPAssessmentID { get; set; }
-        public int TreatmentBMPTypeObservationTypeID { get; set; }
+        public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int ObservationTypeID { get; set; }
         public string ObservationData { get; set; }
@@ -121,7 +121,7 @@ namespace Neptune.Web.Models
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPAssessment TreatmentBMPAssessment { get; set; }
-        public virtual TreatmentBMPTypeObservationType TreatmentBMPTypeObservationType { get; set; }
+        public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual ObservationType ObservationType { get; set; }
 
