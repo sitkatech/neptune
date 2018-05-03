@@ -6,6 +6,7 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.FieldDefinitionData" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.FieldDefinitionDataImage" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.FileResource" />
+    <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.FundingSource" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.MaintenanceRecord" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.ModeledCatchment" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.ModeledCatchmentGeometryStaging" />
@@ -29,6 +30,7 @@
     <EntitySet Name="TreatmentBMPAttributeValue" EntityType="Neptune.Web.Models.TreatmentBMPAttributeValue" />
     <EntitySet Name="TreatmentBMPBenchmarkAndThreshold" EntityType="Neptune.Web.Models.TreatmentBMPBenchmarkAndThreshold" />
     <EntitySet Name="TreatmentBMPDocument" EntityType="Neptune.Web.Models.TreatmentBMPDocument" />
+    <EntitySet Name="TreatmentBMPFundingSource" EntityType="Neptune.Web.Models.TreatmentBMPFundingSource" />
     <EntitySet Name="TreatmentBMPImage" EntityType="Neptune.Web.Models.TreatmentBMPImage" />
     <EntitySet Name="TreatmentBMPObservation" EntityType="Neptune.Web.Models.TreatmentBMPObservation" />
     <EntitySet Name="TreatmentBMPType" EntityType="Neptune.Web.Models.TreatmentBMPType" />
@@ -85,6 +87,14 @@
     <AssociationSet Name="FK_TreatmentBMPImage_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_TreatmentBMPImage_FileResource_FileResourceID">
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="TreatmentBMPImages" EntitySet="TreatmentBMPImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FundingSource_Organization_OrganizationID" Association="Neptune.Web.Models.FK_FundingSource_Organization_OrganizationID">
+      <End Role="Organization" EntitySet="Organization" />
+      <End Role="FundingSources" EntitySet="FundingSource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID" Association="Neptune.Web.Models.FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID">
+      <End Role="FundingSource" EntitySet="FundingSource" />
+      <End Role="TreatmentBMPFundingSources" EntitySet="TreatmentBMPFundingSource" />
     </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
@@ -193,6 +203,10 @@
     <AssociationSet Name="FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="TreatmentBMPDocuments" EntitySet="TreatmentBMPDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="TreatmentBMPFundingSources" EntitySet="TreatmentBMPFundingSource" />
     </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
@@ -325,6 +339,19 @@
     <NavigationProperty Name="TreatmentBMPDocuments" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPDocuments" />
     <NavigationProperty Name="TreatmentBMPImages" Relationship="Neptune.Web.Models.FK_TreatmentBMPImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPImages" />
   </EntityType>
+  <EntityType Name="FundingSource">
+    <Key>
+      <PropertyRef Name="FundingSourceID" />
+    </Key>
+    <Property Name="FundingSourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="OrganizationID" Type="Int32" Nullable="false" />
+    <Property Name="FundingSourceName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="FundingSourceDescription" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="Organization" Relationship="Neptune.Web.Models.FK_FundingSource_Organization_OrganizationID" FromRole="FundingSources" ToRole="Organization" />
+    <NavigationProperty Name="TreatmentBMPFundingSources" Relationship="Neptune.Web.Models.FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID" FromRole="FundingSource" ToRole="TreatmentBMPFundingSources" />
+  </EntityType>
   <EntityType Name="MaintenanceRecord">
     <Key>
       <PropertyRef Name="MaintenanceRecordID" />
@@ -436,6 +463,7 @@
     <Property Name="LogoFileResourceID" Type="Int32" />
     <Property Name="OrganizationTypeID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="LogoFileResource" Relationship="Neptune.Web.Models.FK_Organization_FileResource_LogoFileResourceID_FileResourceID" FromRole="OrganizationsWhereYouAreTheLogoFileResource" ToRole="LogoFileResource" />
+    <NavigationProperty Name="FundingSources" Relationship="Neptune.Web.Models.FK_FundingSource_Organization_OrganizationID" FromRole="Organization" ToRole="FundingSources" />
     <NavigationProperty Name="OrganizationType" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="Organizations" ToRole="OrganizationType" />
     <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="OrganizationsWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
     <NavigationProperty Name="People" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="Organization" ToRole="People" />
@@ -586,6 +614,7 @@
     <NavigationProperty Name="TreatmentBMPAttributes" Relationship="Neptune.Web.Models.FK_TreatmentBMPAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPAttributes" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPDocuments" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPDocuments" />
+    <NavigationProperty Name="TreatmentBMPFundingSources" Relationship="Neptune.Web.Models.FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPFundingSources" />
     <NavigationProperty Name="TreatmentBMPImages" Relationship="Neptune.Web.Models.FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPImages" />
   </EntityType>
   <EntityType Name="TreatmentBMPAssessment">
@@ -680,6 +709,18 @@
     <Property Name="DocumentDescription" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_FileResource_FileResourceID" FromRole="TreatmentBMPDocuments" ToRole="FileResource" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPDocuments" ToRole="TreatmentBMP" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPFundingSource">
+    <Key>
+      <PropertyRef Name="TreatmentBMPFundingSourceID" />
+    </Key>
+    <Property Name="TreatmentBMPFundingSourceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="FundingSourceID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <NavigationProperty Name="FundingSource" Relationship="Neptune.Web.Models.FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID" FromRole="TreatmentBMPFundingSources" ToRole="FundingSource" />
+    <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPFundingSources" ToRole="TreatmentBMP" />
   </EntityType>
   <EntityType Name="TreatmentBMPImage">
     <Key>
@@ -908,6 +949,30 @@
       </Principal>
       <Dependent Role="TreatmentBMPImages">
         <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FundingSource_Organization_OrganizationID">
+    <End Role="Organization" Type="Neptune.Web.Models.Organization" Multiplicity="1" />
+    <End Role="FundingSources" Type="Neptune.Web.Models.FundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="FundingSources">
+        <PropertyRef Name="OrganizationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID">
+    <End Role="FundingSource" Type="Neptune.Web.Models.FundingSource" Multiplicity="1" />
+    <End Role="TreatmentBMPFundingSources" Type="Neptune.Web.Models.TreatmentBMPFundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FundingSource">
+        <PropertyRef Name="FundingSourceID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPFundingSources">
+        <PropertyRef Name="FundingSourceID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1231,6 +1296,18 @@
         <PropertyRef Name="TreatmentBMPID" />
       </Principal>
       <Dependent Role="TreatmentBMPDocuments">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
+    <End Role="TreatmentBMPFundingSources" Type="Neptune.Web.Models.TreatmentBMPFundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPFundingSources">
         <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>

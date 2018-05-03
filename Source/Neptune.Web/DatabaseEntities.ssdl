@@ -6,6 +6,7 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.Store.FieldDefinitionData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.Store.FieldDefinitionDataImage" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.Store.FundingSource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.Store.MaintenanceRecord" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.Store.ModeledCatchment" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.Store.ModeledCatchmentGeometryStaging" store:Type="Tables" Schema="dbo" />
@@ -29,6 +30,7 @@
     <EntitySet Name="TreatmentBMPAttributeValue" EntityType="Neptune.Web.Models.Store.TreatmentBMPAttributeValue" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPBenchmarkAndThreshold" EntityType="Neptune.Web.Models.Store.TreatmentBMPBenchmarkAndThreshold" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPDocument" EntityType="Neptune.Web.Models.Store.TreatmentBMPDocument" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TreatmentBMPFundingSource" EntityType="Neptune.Web.Models.Store.TreatmentBMPFundingSource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPImage" EntityType="Neptune.Web.Models.Store.TreatmentBMPImage" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPObservation" EntityType="Neptune.Web.Models.Store.TreatmentBMPObservation" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPType" EntityType="Neptune.Web.Models.Store.TreatmentBMPType" store:Type="Tables" Schema="dbo" />
@@ -53,6 +55,10 @@
     <AssociationSet Name="FK_FileResource_Person_CreatePersonID_PersonID" Association="Neptune.Web.Models.Store.FK_FileResource_Person_CreatePersonID_PersonID">
       <End Role="CreatePerson" EntitySet="Person" />
       <End Role="FileResourcesWhereYouAreTheCreatePerson" EntitySet="FileResource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FundingSource_Organization_OrganizationID" Association="Neptune.Web.Models.Store.FK_FundingSource_Organization_OrganizationID">
+      <End Role="Organization" EntitySet="Organization" />
+      <End Role="FundingSources" EntitySet="FundingSource" />
     </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
@@ -210,6 +216,14 @@
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="TreatmentBMPDocuments" EntitySet="TreatmentBMPDocument" />
     </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID">
+      <End Role="FundingSource" EntitySet="FundingSource" />
+      <End Role="TreatmentBMPFundingSources" EntitySet="TreatmentBMPFundingSource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="TreatmentBMPFundingSources" EntitySet="TreatmentBMPFundingSource" />
+    </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPImage_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPImage_FileResource_FileResourceID">
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="TreatmentBMPImages" EntitySet="TreatmentBMPImage" />
@@ -324,6 +338,20 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_FileResource_FileResourceID
     <Property Name="CreatePersonID" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="FundingSource">
+    <Key>
+      <PropertyRef Name="FundingSourceID" />
+    </Key>
+    <Property Name="FundingSourceID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="OrganizationID" Type="int" Nullable="false" />
+    <Property Name="FundingSourceName" Type="varchar" Nullable="false" MaxLength="200" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="FundingSourceDescription" Type="varchar" MaxLength="500" />
+  </EntityType>
   <EntityType Name="MaintenanceRecord">
     <Key>
       <PropertyRef Name="MaintenanceRecordID" />
@@ -417,6 +445,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeObservationType_ObservationTy
     <Property Name="ObservationTypeSchema" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_FundingSource_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_Person_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_StormwaterJurisdiction_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
@@ -560,6 +589,7 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMP_TreatmentB
 warning 6035: The relationship 'FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="TreatmentBMP">
@@ -663,6 +693,16 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPAtt
     <Property Name="DisplayName" Type="varchar" Nullable="false" MaxLength="200" />
     <Property Name="UploadDate" Type="date" Nullable="false" />
     <Property Name="DocumentDescription" Type="varchar" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="TreatmentBMPFundingSource">
+    <Key>
+      <PropertyRef Name="TreatmentBMPFundingSourceID" />
+    </Key>
+    <Property Name="TreatmentBMPFundingSourceID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="FundingSourceID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="money" Nullable="false" />
   </EntityType>
   <EntityType Name="TreatmentBMPImage">
     <Key>
@@ -787,6 +827,18 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeObser
       </Principal>
       <Dependent Role="FileResourcesWhereYouAreTheCreatePerson">
         <PropertyRef Name="CreatePersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FundingSource_Organization_OrganizationID">
+    <End Role="Organization" Type="Neptune.Web.Models.Store.Organization" Multiplicity="1" />
+    <End Role="FundingSources" Type="Neptune.Web.Models.Store.FundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="FundingSources">
+        <PropertyRef Name="OrganizationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1254,6 +1306,30 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeObser
         <PropertyRef Name="TreatmentBMPID" />
       </Principal>
       <Dependent Role="TreatmentBMPDocuments">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID">
+    <End Role="FundingSource" Type="Neptune.Web.Models.Store.FundingSource" Multiplicity="1" />
+    <End Role="TreatmentBMPFundingSources" Type="Neptune.Web.Models.Store.TreatmentBMPFundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FundingSource">
+        <PropertyRef Name="FundingSourceID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPFundingSources">
+        <PropertyRef Name="FundingSourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMPFundingSource_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="1" />
+    <End Role="TreatmentBMPFundingSources" Type="Neptune.Web.Models.Store.TreatmentBMPFundingSource" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPFundingSources">
         <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>

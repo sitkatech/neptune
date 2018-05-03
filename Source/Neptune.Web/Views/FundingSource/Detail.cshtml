@@ -1,0 +1,65 @@
+﻿@*-----------------------------------------------------------------------
+<copyright file="Detail.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
+@using LtInfo.Common.Views
+@inherits Neptune.Web.Views.FundingSource.Detail
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinition.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.DisplayName), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-5 fieldLabel text-right">Name</div>
+                        <div class="col-xs-7">@ViewDataTyped.FundingSource.FundingSourceName</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 fieldLabel text-right">Description</div>
+                        <div class="col-xs-7">@Html.Raw(ViewDataTyped.FundingSource.FundingSourceDescription.HtmlEncodeWithBreaks())</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinition.Organization)</div>
+                        <div class="col-xs-7">@ViewDataTyped.FundingSource.Organization.GetDisplayNameAsUrl()</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5 fieldLabel text-right">Active?</div>
+                        <div class="col-xs-7">@ViewDataTyped.FundingSource.IsActive.ToYesNo()</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+
+        </div>
+    </div>
+
