@@ -70,14 +70,9 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
         return _.find($scope.AngularViewData.AllFundingSources, function (f) { return fundingSourceID == f.FundingSourceID; });
     };
 
-    $scope.getUnsecuredTotal = function ()
+    $scope.getTotal = function ()
     {
-        return _.reduce($scope.AngularModel.TreatmentBMPFundingSources, function (m, x) { return m + x.UnsecuredAmount; }, 0);
-    };
-
-    $scope.getSecuredTotal = function ()
-    {
-        return _.reduce($scope.AngularModel.TreatmentBMPFundingSources, function (m, x) { return m + x.SecuredAmount; }, 0);
+        return _.reduce($scope.AngularModel.TreatmentBMPFundingSources, function (m, x) { return m + x.Amount; }, 0);
     };
     
     $scope.findTreatmentBMPFundingSourceRow = function(treatmentBMPID, fundingSourceID) { return _.find($scope.AngularModel.TreatmentBMPFundingSources, function(pfse) { return pfse.TreatmentBMPID == treatmentBMPID && pfse.FundingSourceID == fundingSourceID; }); }

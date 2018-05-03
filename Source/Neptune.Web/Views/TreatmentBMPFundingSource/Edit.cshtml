@@ -57,7 +57,7 @@ Source code is available upon request via <support@sitkatech.com>.
             @if (ViewDataTyped.FromFundingSource)
             {
                 <div class="form-group">
-                    <label class="control-label">TreatmentBMP to Add:</label>
+                    <label class="control-label">TreatmentBMP to Add</label>
                     <div class="input-group">
                         <select ng-model="TreatmentBMPIDToAdd"
                                 class="selectpicker"
@@ -73,7 +73,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                     data-tokens="{{treatmentBMP.DisplayName}}"></option>
                         </select>
                         <span class="input-group-btn">
-                            <button class="btn btn-firma" type="button" ng-click="addRow()">
+                            <button class="btn btn-neptune" type="button" ng-click="addRow()">
                                 <span class="glyphicon glyphicon-plus"></span> Add
                             </button>
                         </span>
@@ -83,7 +83,7 @@ Source code is available upon request via <support@sitkatech.com>.
             else
             {
                 <div class="form-group">
-                    <label class="control-label">Funding Source to Add:</label>
+                    <label class="control-label">Funding Source to Add</label>
                     <div class="input-group">
                         <select ng-model="FundingSourceIDToAdd"
                                 class="selectpicker"
@@ -99,7 +99,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                     data-tokens="{{fundingSource.DisplayName}}"></option>
                         </select>
                         <span class="input-group-btn">
-                            <button class="btn btn-firma" type="button" ng-click="addRow()">
+                            <button class="btn btn-neptune" type="button" ng-click="addRow()">
                                 <span class="glyphicon glyphicon-plus"></span> Add
                             </button>
                         </span>
@@ -112,29 +112,23 @@ Source code is available upon request via <support@sitkatech.com>.
                     <col class="col-xs-1"/>
                     <col class="col-xs-4"/>
                     <col class="col-xs-3" style="padding-right: 17px;"/>
-                    <col class="col-xs-1"/>
                 </colgroup>
                 <tbody>
                 <tr>
                     <th></th>
                     <th style="white-space: nowrap">@Html.Raw(ViewDataTyped.FromFundingSource ? Html.LabelWithSugarFor(FieldDefinition.TreatmentBMP) : Html.LabelWithSugarFor(FieldDefinition.FundingSource))</th>
                     <th style="text-align: right; padding-right: 17px;">Amount</th>
-                    <th style="text-align: right;">Total</th>
                 </tr>
-                <tr ng-repeat="treatmentBMPFundingSource in AngularModel.TreatmentBMPFundingSources | orderBy:[getFundingSourceName, getTreatmentBMPName]" style="padding-bottom: 2px;">
-                    <td>
-                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPFundingSource)" style="cursor: pointer"></span></td>
+                <tr ng-repeat="treatmentBMPFundingSource in AngularModel.TreatmentBMPFundingSources | orderBy:[getFundingSourceName, getTreatmentBMPName]">
+                    <td><span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPFundingSource)" style="cursor: pointer"></span></td>
                     <td ng-bind="@(ViewDataTyped.FromFundingSource ? "getTreatmentBMPName(treatmentBMPFundingSource)" : "getFundingSourceName(treatmentBMPFundingSource)")">
                     <td style="text-align: right; padding-right: 17px;">
-                        <input style="float: right; text-align: right" type="text" ng-model="treatmentBMPFundingSource.SecuredAmount" class="sitkaCurrency form-control" ng-currency/>
-                    </td>                   
-                    <th style="text-align: right" ng-bind="(treatmentBMPFundingSource.SecuredAmount + treatmentBMPFundingSource.UnsecuredAmount) | nfcurrency"></th>
+                        <input style="float: right; text-align: right; padding: 2px 0" type="text" ng-model="treatmentBMPFundingSource.Amount" class="sitkaCurrency form-control" ng-currency/>
+                    </td>                                       
                 </tr>
                 <tr style="border-top: 1px solid #eeeeee;">
                     <th colspan="2">Total</th>
-                    <th style="text-align: right; padding-right: 17px;" ng-bind="getSecuredTotal() | nfcurrency">
-                    </th>                    
-                    <th style="text-align: right;" ng-bind="(getSecuredTotal() + getUnsecuredTotal()) | nfcurrency">
+                    <th style="text-align: right; padding-right: 17px;" ng-bind="getTotal() | nfcurrency"></th>                    
                 </tr>
                 </tbody>
             </table>
