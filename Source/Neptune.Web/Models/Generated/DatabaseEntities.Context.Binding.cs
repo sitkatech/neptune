@@ -52,8 +52,6 @@ namespace Neptune.Web.Models
         public virtual IQueryable<NeptunePage> NeptunePages { get { return AllNeptunePages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Notification> AllNotifications { get; set; }
         public virtual IQueryable<Notification> Notifications { get { return AllNotifications.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAssessmentObservationType> AllObservationTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPAssessmentObservationType> ObservationTypes { get { return AllObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Organization> AllOrganizations { get; set; }
         public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
@@ -70,6 +68,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<SupportRequestLog> SupportRequestLogs { get { return AllSupportRequestLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TenantAttribute> AllTenantAttributes { get; set; }
         public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAssessmentObservationType> AllTreatmentBMPAssessmentObservationTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get { return AllTreatmentBMPAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
         public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAttribute> AllTreatmentBMPAttributes { get; set; }
@@ -195,9 +195,6 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(observationTypeCollectionMethod, "ObservationTypeCollectionMethod", primaryKey);
                     return observationTypeCollectionMethod;
 
-                case "TreatmentBMPAssessmentObservationType":
-                    return ObservationTypes.GetObservationType(primaryKey);
-
                 case "ObservationTypeSpecification":
                     var observationTypeSpecification = ObservationTypeSpecification.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
@@ -251,6 +248,9 @@ namespace Neptune.Web.Models
                     var tenant = Tenant.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(tenant, "Tenant", primaryKey);
                     return tenant;
+
+                case "TreatmentBMPAssessmentObservationType":
+                    return TreatmentBMPAssessmentObservationTypes.GetTreatmentBMPAssessmentObservationType(primaryKey);
 
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);

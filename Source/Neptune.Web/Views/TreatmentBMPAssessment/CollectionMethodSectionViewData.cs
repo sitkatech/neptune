@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly BaseCollectionMethodFormViewData ObservationPartialViewData;
 
         public CollectionMethodSectionViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
-            : base(currentPerson, treatmentBMPAssessment, TreatmentBMPAssessmentObservationType.ObservationTypeName)
+            : base(currentPerson, treatmentBMPAssessment, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName)
         {
             ObservationTypeCollectionMethod = observationTypeCollectionMethod;
             switch (observationTypeCollectionMethod.ToEnum)

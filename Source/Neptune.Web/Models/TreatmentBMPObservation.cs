@@ -52,7 +52,7 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
         }
 
-        public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             var score = CalculateObservationScore();
             if ((score?? 0) < 0.01)
@@ -71,13 +71,13 @@ namespace Neptune.Web.Models
                 var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
-                return $"Observation for BMP {treatmentBMPName} ({TreatmentBMPAssessmentObservationType?.ObservationTypeName}) on Assessment Dated {assessmentDate}";
+                return $"Observation for BMP {treatmentBMPName} ({TreatmentBMPAssessmentObservationType?.TreatmentBMPAssessmentObservationTypeName}) on Assessment Dated {assessmentDate}";
             }
         }
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {
-            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, TreatmentBMPAssessmentObservationType.ObservationTypeSchema, overrideAssessmentScoreIfFailing);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeSchema, overrideAssessmentScoreIfFailing);
         }
     }
 }

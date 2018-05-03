@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class ManageViewData : NeptuneViewData
     {
-        public readonly ObservationTypeGridSpec GridSpec;
+        public readonly TreatmentBMPAssessmentObservationTypeGridSpec GridSpec;
         public readonly string GridName;
         public readonly string GridDataUrl;
         public readonly string NewObservationTypeUrl;
@@ -38,8 +38,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
             PageTitle = $"All {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}";
 
-            NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
-            GridSpec = new ObservationTypeGridSpec(currentPerson)
+            NewObservationTypeUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(t => t.New());
+            GridSpec = new TreatmentBMPAssessmentObservationTypeGridSpec(currentPerson)
             {
                 ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}",
                 ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}",
@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             };
 
             GridName = "observationTypeGrid";
-            GridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.ObservationTypeGridJsonData());
+            GridDataUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(tc => tc.ObservationTypeGridJsonData());
         }
     }
 }

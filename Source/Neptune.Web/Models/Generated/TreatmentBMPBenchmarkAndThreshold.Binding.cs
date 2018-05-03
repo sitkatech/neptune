@@ -30,13 +30,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPBenchmarkAndThreshold(int treatmentBMPBenchmarkAndThresholdID, int treatmentBMPID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double benchmarkValue, double thresholdValue) : this()
+        public TreatmentBMPBenchmarkAndThreshold(int treatmentBMPBenchmarkAndThresholdID, int treatmentBMPID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int treatmentBMPAssessmentObservationTypeID, double benchmarkValue, double thresholdValue) : this()
         {
             this.TreatmentBMPBenchmarkAndThresholdID = treatmentBMPBenchmarkAndThresholdID;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
-            this.ObservationTypeID = observationTypeID;
+            this.TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationTypeID;
             this.BenchmarkValue = benchmarkValue;
             this.ThresholdValue = thresholdValue;
         }
@@ -44,7 +44,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPBenchmarkAndThreshold(int treatmentBMPID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int observationTypeID, double benchmarkValue, double thresholdValue) : this()
+        public TreatmentBMPBenchmarkAndThreshold(int treatmentBMPID, int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int treatmentBMPAssessmentObservationTypeID, double benchmarkValue, double thresholdValue) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPBenchmarkAndThresholdID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -52,7 +52,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
-            this.ObservationTypeID = observationTypeID;
+            this.TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationTypeID;
             this.BenchmarkValue = benchmarkValue;
             this.ThresholdValue = thresholdValue;
         }
@@ -60,7 +60,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, double benchmarkValue, double thresholdValue) : this()
+        public TreatmentBMPBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, double benchmarkValue, double thresholdValue) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPBenchmarkAndThresholdID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,9 +73,9 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPBenchmarkAndThresholds.Add(this);
-            this.ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
-            this.TreatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationType;
-            TreatmentBMPAssessmentObservationType.TreatmentBMPBenchmarkAndThresholds.Add(this);
+            this.TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
+            this.TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
+            treatmentBMPAssessmentObservationType.TreatmentBMPBenchmarkAndThresholds.Add(this);
             this.BenchmarkValue = benchmarkValue;
             this.ThresholdValue = thresholdValue;
         }
@@ -83,9 +83,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPBenchmarkAndThreshold CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public static TreatmentBMPBenchmarkAndThreshold CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, TreatmentBMPAssessmentObservationType, default(double), default(double));
+            return new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, treatmentBMPAssessmentObservationType, default(double), default(double));
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
-        public int ObservationTypeID { get; set; }
+        public int TreatmentBMPAssessmentObservationTypeID { get; set; }
         public double BenchmarkValue { get; set; }
         public double ThresholdValue { get; set; }
         [NotMapped]

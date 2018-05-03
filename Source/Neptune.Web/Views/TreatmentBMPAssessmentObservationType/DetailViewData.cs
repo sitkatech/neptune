@@ -42,8 +42,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
             EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
-            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Index());
-            PageTitle = TreatmentBMPAssessmentObservationType.ObservationTypeName;
+            EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.Index());
+            PageTitle = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             };
 
             TreatmentBMPTypeGridName = "treatmentBMPTypeGridForObservationType";
-            TreatmentBMPTypeGridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationType));
+            TreatmentBMPTypeGridDataUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationType));
         }
     }
 }

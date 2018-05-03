@@ -6,7 +6,7 @@
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Edit
 
-<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessmentObservationType/EditObservationTypeController.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessmentObservationType/EditTreatmentBMPAssessmentObservationTypeController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp")
@@ -23,7 +23,7 @@
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewInstructionsNeptunePage); }
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditObservationTypeController" ng-submit="submit()" name="observationTypeForm" ng-cloak>
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="EditObservationTypeControllerApp" ng-controller="EditTreatmentBMPAssessmentObservationTypeController" ng-submit="submit()" name="observationTypeForm" ng-cloak>
     <div class="formPage">
         <div class="row">
             <div class="col-xs-12">
@@ -37,11 +37,11 @@
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.ObservationTypeName)
+                            @Html.LabelWithSugarFor(m => m.TreatmentBMPAssessmentObservationTypeName)
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" name="@Html.NameFor(m => m.ObservationTypeName)" ng-model="AngularModel.ObservationTypeName" class="form-control" />
-                            @Html.ValidationMessageFor(m => m.ObservationTypeName)
+                            <input type="text" name="@Html.NameFor(m => m.TreatmentBMPAssessmentObservationTypeName)" ng-model="AngularModel.TreatmentBMPAssessmentObservationTypeName" class="form-control" />
+                            @Html.ValidationMessageFor(m => m.TreatmentBMPAssessmentObservationTypeName)
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,7 +124,7 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-model="ObservationTypeSchema.AssessmentDescription"
+                                          ng-model="TreatmentBMPAssessmentObservationTypeSchema.AssessmentDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_AssessmentDescription', 'Characters Remaining: ')"
                                           rows="3"
@@ -142,7 +142,7 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-model="ObservationTypeSchema.BenchmarkDescription"
+                                          ng-model="TreatmentBMPAssessmentObservationTypeSchema.BenchmarkDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_BenchmarkDescription', 'Characters Remaining: ')"
                                           rows="3"
@@ -158,7 +158,7 @@
                             <div class="col-sm-9">
                                 <textarea class="form-control" data-val="true"
                                           data-val-length-max="300"
-                                          ng-model="ObservationTypeSchema.ThresholdDescription"
+                                          ng-model="TreatmentBMPAssessmentObservationTypeSchema.ThresholdDescription"
                                           onkeydown="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ');"
                                           onkeyup="Sitka.Methods.keepTextAreaWithinMaxLength(this, 300, 20, 'CharactersRemaining_ThresholdDescription', 'Characters Remaining: ')"
                                           rows="3"
@@ -185,12 +185,12 @@
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
-                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                    <div ng-repeat="item in TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
                                         <input class="form-control"
-                                               ng-model="ObservationTypeSchema.PropertiesToObserve[$index]"
+                                               ng-model="TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]"
                                                style="width: 85%"
                                                type="text"
-                                               value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}"
+                                               value="{{TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]}}"
                                                placeholder="e.g. Staff Plate, Number of Trees">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
@@ -205,16 +205,16 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Height, Count" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Height, Count" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <select style="width: auto" ng-model="ObservationTypeSchema.MeasurementUnitTypeID"
+                                <select style="width: auto" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitTypeID"
                                         class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
-                                            ng-selected="ObservationTypeSchema.MeasurementUnitTypeID == type.ID"
+                                            ng-selected="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
                                             value="{{type.ID}}"></option>
                                 </select>
@@ -225,13 +225,13 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MinimumNumberOfObservations, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.MaximumNumberOfObservations)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MaximumNumberOfObservations" step="1" min="0" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -239,13 +239,13 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MinimumValueOfEachObservation, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MinimumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithSugarFor(FieldDefinition.MaximumValueOfEachObservation)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.MaximumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MaximumValueOfObservations" />
                             </div>
                         </div>
                     </div>
@@ -256,12 +256,12 @@
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
-                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                    <div ng-repeat="item in TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
                                         <input class="form-control"
-                                               ng-model="ObservationTypeSchema.PropertiesToObserve[$index]"
+                                               ng-model="TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]"
                                                style="width: 85%"
                                                type="text"
-                                               value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}"
+                                               value="{{TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]}}"
                                                placeholder="e.g. Infiltrometer, CHP">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
@@ -278,16 +278,16 @@
                                 @Html.LabelWithRequiredTagFor("Label for Data Entered as Rate")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.DiscreteRateMeasurementUnitLabel" placeholder="e.g. Infiltration Rate" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMeasurementUnitLabel" placeholder="e.g. Infiltration Rate" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Unit for Data Entered as Rate")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <select style="width: auto" ng-model="ObservationTypeSchema.DiscreteRateMeasurementUnitTypeID"
+                                <select style="width: auto" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMeasurementUnitTypeID"
                                         class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
-                                            ng-selected="ObservationTypeSchema.DiscreteRateMeasurementUnitTypeID == type.ID"
+                                            ng-selected="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
                                             value="{{type.ID}}"></option>
                                 </select>
@@ -298,13 +298,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum Number of Rate Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMinimumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum Number of Rate Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMaximumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMaximumNumberOfObservations" step="1" min="0" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -312,13 +312,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum Value of Each Rate Observation")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMinimumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum Value of Each Rate Observation")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.DiscreteRateMaximumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.DiscreteRateMaximumValueOfObservations" />
                             </div>
                         </div>
                         <br />
@@ -328,16 +328,16 @@
                                 @Html.LabelWithRequiredTagFor("Label for Value Observed")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.ReadingMeasurementUnitLabel" placeholder="e.g. Instrument Reading" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.ReadingMeasurementUnitLabel" placeholder="e.g. Instrument Reading" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Unit of Data Value Observed")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <select style="width: auto" ng-model="ObservationTypeSchema.ReadingMeasurementUnitTypeID"
+                                <select style="width: auto" ng-model="TreatmentBMPAssessmentObservationTypeSchema.ReadingMeasurementUnitTypeID"
                                         class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
-                                            ng-selected="ObservationTypeSchema.ReadingMeasurementUnitTypeID == type.ID"
+                                            ng-selected="TreatmentBMPAssessmentObservationTypeSchema.ReadingMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
                                             value="{{type.ID}}"></option>
                                 </select>
@@ -348,16 +348,16 @@
                                 @Html.LabelWithRequiredTagFor("Label for Time")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.TimeMeasurementUnitLabel" placeholder="e.g. Elapsed Time" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeMeasurementUnitLabel" placeholder="e.g. Elapsed Time" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Unit of Time")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <select style="width: auto" ng-model="ObservationTypeSchema.TimeMeasurementUnitTypeID"
+                                <select style="width: auto" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeMeasurementUnitTypeID"
                                         class="form-control">
                                     <option ng-repeat="type in AngularViewData.MeasurementUnitTypes"
-                                            ng-selected="ObservationTypeSchema.TimeMeasurementUnitTypeID == type.ID"
+                                            ng-selected="TreatmentBMPAssessmentObservationTypeSchema.TimeMeasurementUnitTypeID == type.ID"
                                             ng-bind="type.DisplayName"
                                             value="{{type.ID}}"></option>
                                 </select>
@@ -368,13 +368,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum Number of Time/Value Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMinimumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeReadingMinimumNumberOfObservations" step="1" min="0" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum Number Time/Value Observations")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMaximumNumberOfObservations" step="1" min="0" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeReadingMaximumNumberOfObservations" step="1" min="0" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -382,13 +382,13 @@
                                 @Html.LabelWithRequiredTagFor("Minimum of Each Data Value")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMinimumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeReadingMinimumValueOfObservations" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.Label("Maximum of Each Data Value")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="number" ng-model="ObservationTypeSchema.TimeReadingMaximumValueOfObservations" />
+                                <input class="form-control" type="number" ng-model="TreatmentBMPAssessmentObservationTypeSchema.TimeReadingMaximumValueOfObservations" />
                             </div>
                         </div>
 
@@ -403,8 +403,8 @@
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
-                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Standing Water Present">
+                                    <div ng-repeat="item in TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                        <input class="form-control" ng-model="TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Standing Water Present">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
@@ -418,13 +418,13 @@
                                 @Html.LabelWithRequiredTagFor("Label for Passing Score")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.PassingScoreLabel" placeholder="e.g. Pass" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.PassingScoreLabel" placeholder="e.g. Pass" />
                             </div>
                             <div class="col-xs-3 col-sm-3 control-label">
                                 @Html.LabelWithRequiredTagFor("Label for Failing Score")
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.FailingScoreLabel" placeholder="e.g. Fail" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.FailingScoreLabel" placeholder="e.g. Fail" />
                             </div>
                         </div>
                     </div>
@@ -436,8 +436,8 @@
                             </div>
                             <div class="col-sm-9">
                                 <div class="row">
-                                    <div ng-repeat="item in ObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
-                                        <input class="form-control" ng-model="ObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{ObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Grass Species Cover">
+                                    <div ng-repeat="item in TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve track by $index" style="margin-bottom: 4px" class="col-xs-12 col-sm-4">
+                                        <input class="form-control" ng-model="TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]" style="width: 85%" type="text" value="{{TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve[$index]}}" placeholder="e.g. Grass Species Cover">
                                         <a class="btn" style="padding-left: 4px"><span class="glyphicon glyphicon-remove" ng-click="removeInput($index)"></span></a>
                                     </div>
                                     <div class="col-xs-12 col-sm-4">
@@ -451,7 +451,7 @@
                                 @Html.LabelWithSugarFor(FieldDefinition.MeasurementUnitLabel, true)
                             </div>
                             <div class="col-xs-9 col-sm-3">
-                                <input class="form-control" type="text" ng-model="ObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Percent Coverage" />
+                                <input class="form-control" type="text" ng-model="TreatmentBMPAssessmentObservationTypeSchema.MeasurementUnitLabel" placeholder="e.g. Percent Coverage" />
                             </div>
                         </div>
                     </div>
@@ -470,7 +470,7 @@
             <button type="submit" class="btn btn-neptune">Save</button>
             <a href="@ViewDataTyped.ObservationTypeIndexUrl" class="btn btn-neptune">Cancel</a>
         </div>
-        @Html.HiddenFor(m => m.ObservationTypeID)
-        <input type="hidden" name="@Html.NameFor(m => m.ObservationTypeSchema)" ng-value="AngularModel.ObservationTypeSchema" />
+        @Html.HiddenFor(m => m.TreatmentBMPAssessmentObservationTypeID)
+        <input type="hidden" name="@Html.NameFor(m => m.TreatmentBMPAssessmentObservationTypeSchema)" ng-value="AngularModel.TreatmentBMPAssessmentObservationTypeSchema" />
     </div>
 </form> 

@@ -32,37 +32,37 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessmentObservationType(int observationTypeID, string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(int treatmentBMPAssessmentObservationTypeID, string treatmentBMPAssessmentObservationTypeName, int observationTypeSpecificationID, string treatmentBMPAssessmentObservationTypeSchema) : this()
         {
-            this.ObservationTypeID = observationTypeID;
-            this.ObservationTypeName = observationTypeName;
+            this.TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationTypeID;
+            this.TreatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationTypeName;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
-            this.ObservationTypeSchema = observationTypeSchema;
+            this.TreatmentBMPAssessmentObservationTypeSchema = treatmentBMPAssessmentObservationTypeSchema;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessmentObservationType(string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(string treatmentBMPAssessmentObservationTypeName, int observationTypeSpecificationID, string treatmentBMPAssessmentObservationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPAssessmentObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.ObservationTypeName = observationTypeName;
+            this.TreatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationTypeName;
             this.ObservationTypeSpecificationID = observationTypeSpecificationID;
-            this.ObservationTypeSchema = observationTypeSchema;
+            this.TreatmentBMPAssessmentObservationTypeSchema = treatmentBMPAssessmentObservationTypeSchema;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessmentObservationType(string observationTypeName, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(string treatmentBMPAssessmentObservationTypeName, ObservationTypeSpecification observationTypeSpecification, string treatmentBMPAssessmentObservationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            this.ObservationTypeName = observationTypeName;
+            this.TreatmentBMPAssessmentObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationTypeName;
             this.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
-            this.ObservationTypeSchema = observationTypeSchema;
+            this.TreatmentBMPAssessmentObservationTypeSchema = treatmentBMPAssessmentObservationTypeSchema;
         }
 
         /// <summary>
@@ -108,17 +108,17 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
-            HttpRequestStorage.DatabaseEntities.AllObservationTypes.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentObservationTypes.Remove(this);                
         }
 
         [Key]
-        public int ObservationTypeID { get; set; }
+        public int TreatmentBMPAssessmentObservationTypeID { get; set; }
         public int TenantID { get; private set; }
-        public string ObservationTypeName { get; set; }
+        public string TreatmentBMPAssessmentObservationTypeName { get; set; }
         public int ObservationTypeSpecificationID { get; set; }
-        public string ObservationTypeSchema { get; set; }
+        public string TreatmentBMPAssessmentObservationTypeSchema { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return ObservationTypeID; } set { ObservationTypeID = value; } }
+        public int PrimaryKey { get { return TreatmentBMPAssessmentObservationTypeID; } set { TreatmentBMPAssessmentObservationTypeID = value; } }
 
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
@@ -128,7 +128,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int ObservationTypeName = 100;
+            public const int TreatmentBMPAssessmentObservationTypeName = 100;
         }
     }
 }

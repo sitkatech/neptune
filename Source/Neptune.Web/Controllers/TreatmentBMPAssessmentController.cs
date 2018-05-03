@@ -133,12 +133,12 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel = new DiscreteCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
             return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
         }
@@ -146,10 +146,10 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [TreatmentBMPAssessmentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, DiscreteCollectionMethodViewModel viewModel)
+        public ActionResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, DiscreteCollectionMethodViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
@@ -168,14 +168,14 @@ namespace Neptune.Web.Controllers
             TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
-                .Find(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+                .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             if (treatmentBMPObservation == null)
             {
                 var TreatmentBMPTypeAssessmentObservationType =
                     treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
-                        x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+                        x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
                 Check.RequireNotNull(TreatmentBMPTypeAssessmentObservationType,
-                    $"Not a valid Observation Type ID {TreatmentBMPAssessmentObservationType.ObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
+                    $"Not a valid Observation Type ID {TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
                 treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType,
                     treatmentBMPAssessment.TreatmentBMPType, TreatmentBMPAssessmentObservationType, string.Empty);
             }
@@ -185,12 +185,12 @@ namespace Neptune.Web.Controllers
         
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel = new RateCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
             return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
         }
@@ -198,10 +198,10 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [TreatmentBMPAssessmentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, RateCollectionMethodViewModel viewModel)
+        public ActionResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, RateCollectionMethodViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
@@ -219,12 +219,12 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel = new PassFailCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
             return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
         }
@@ -232,10 +232,10 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [TreatmentBMPAssessmentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, PassFailCollectionMethodViewModel viewModel)
+        public ActionResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PassFailCollectionMethodViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
@@ -253,12 +253,12 @@ namespace Neptune.Web.Controllers
         
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
-        public ViewResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey)
+        public ViewResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel = new PercentageCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
             return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
         }
@@ -266,10 +266,10 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [TreatmentBMPAssessmentManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ObservationTypePrimaryKey observationTypePrimaryKey, PercentageCollectionMethodViewModel viewModel)
+        public ActionResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PercentageCollectionMethodViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
@@ -390,9 +390,9 @@ namespace Neptune.Web.Controllers
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             //Null TreatmentBMPAssessmentObservationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
-            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName);
+            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
 
-            var nextObservationType = TreatmentBMPAssessmentObservationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x =>  String.CompareOrdinal(x.ObservationTypeName, TreatmentBMPAssessmentObservationType.ObservationTypeName) > 0); 
+            var nextObservationType = TreatmentBMPAssessmentObservationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x =>  String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0); 
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore
@@ -432,7 +432,7 @@ namespace Neptune.Web.Controllers
                 x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
                 x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
                 x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
-            var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.ObservationTypeName, observationTypeSpecification, viewModel.ObservationTypeSchema);
+            var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:

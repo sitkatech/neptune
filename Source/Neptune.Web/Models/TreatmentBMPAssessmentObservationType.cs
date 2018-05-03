@@ -43,10 +43,10 @@ namespace Neptune.Web.Models
         public bool TargetIsSweetSpot => ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
 
         public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
-        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(ObservationTypeSchema);
-        public RateObservationTypeSchema RateObservationTypeSchema => JsonConvert.DeserializeObject<RateObservationTypeSchema>(ObservationTypeSchema);
-        public PassFailObservationTypeSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(ObservationTypeSchema);
-        public PercentageObservationTypeSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(ObservationTypeSchema);
+        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
+        public RateObservationTypeSchema RateObservationTypeSchema => JsonConvert.DeserializeObject<RateObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
+        public PassFailObservationTypeSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
+        public PercentageObservationTypeSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
 
         public MeasurementUnitType BenchmarkMeasurementUnitType()
         {
@@ -297,7 +297,7 @@ namespace Neptune.Web.Models
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
-        public string AuditDescriptionString => $"Observation Type {ObservationTypeName}";
+        public string AuditDescriptionString => $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
     }
 
 

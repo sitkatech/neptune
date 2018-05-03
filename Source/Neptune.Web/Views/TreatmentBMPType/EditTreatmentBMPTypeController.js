@@ -2,38 +2,38 @@
     $scope.resetObservationTypeToAdd = function () { $scope.ObservationTypeToAdd = null; };
     $scope.resetTreatmentBMPAttributeTypeToAdd = function () { $scope.TreatmentBMPAttributeTypeToAdd = null; };
 
-    $scope.getAllUsedObservationTypeIDs = function () { return _.map($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (p) { return p.ObservationTypeID; }); };
+    $scope.getAllUsedObservationTypeIDs = function () { return _.map($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (p) { return p.TreatmentBMPAssessmentObservationTypeID; }); };
 
     $scope.filteredObservationTypes = function () {
         var usedObservationTypeIDs = $scope.getAllUsedObservationTypeIDs();
-        return _($scope.AngularViewData.ObservationTypes).filter(function (f) { return !_.includes(usedObservationTypeIDs, f.ObservationTypeID); })
+        return _($scope.AngularViewData.TreatmentBMPAssessmentObservationTypes).filter(function (f) { return !_.includes(usedObservationTypeIDs, f.TreatmentBMPAssessmentObservationTypeID); })
             .sortBy(function (fs) {
-                return [fs.ObservationTypeName.toLowerCase()];
+                return [fs.TreatmentBMPAssessmentObservationTypeName.toLowerCase()];
             }).value();
     };
 
     $scope.getObservationTypeName = function (treatmentBMPTypeObservationTypeSimple) {
-        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
-        return observationTypeToFind.ObservationTypeName;
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
+        return observationTypeToFind.TreatmentBMPAssessmentObservationTypeName;
     };
 
     $scope.getObservationCollectionMethodTypeName = function (treatmentBMPTypeObservationTypeSimple) {
-        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
         return observationTypeToFind.CollectionMethodDisplayName;
     };
 
     $scope.getObservationTypeBenchmarkUnit = function (treatmentBMPTypeObservationTypeSimple) {
-        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
         return observationTypeToFind.BenchmarkUnitLegendDisplayName;
     };
 
     $scope.getObservationTypeThresholdUnit = function (treatmentBMPTypeObservationTypeSimple) {
-        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.ObservationTypeID);
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
         return observationTypeToFind.ThresholdUnitLegendDisplayName;
     };
 
     $scope.getObservationType = function(observationTypeID) {
-         return _.find($scope.AngularViewData.ObservationTypes, function (f) { return observationTypeID == f.ObservationTypeID; });
+         return _.find($scope.AngularViewData.TreatmentBMPAssessmentObservationTypes, function (f) { return observationTypeID == f.TreatmentBMPAssessmentObservationTypeID; });
     };
 
     $scope.observationTypeHasBenchmarkAndThresholds = function(observationTypeID) {
@@ -55,13 +55,13 @@
         }, 0);
     };
 
-    $scope.findTreatmentBMPTypeObservationTypeSimpleRow = function (observationTypeID) { return _.find($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (pfse) { return pfse.ObservationTypeID == observationTypeID; }); }
+    $scope.findTreatmentBMPTypeObservationTypeSimpleRow = function (observationTypeID) { return _.find($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (pfse) { return pfse.TreatmentBMPAssessmentObservationTypeID == observationTypeID; }); }
 
     $scope.addObservationTypeRow = function () {
         if ($scope.ObservationTypeToAdd == null) {
             return;
         }
-        var newTreatmentBMPTypeObservationTypeSimple = $scope.createNewObservationTypeRow($scope.ObservationTypeToAdd.ObservationTypeID);       
+        var newTreatmentBMPTypeObservationTypeSimple = $scope.createNewObservationTypeRow($scope.ObservationTypeToAdd.TreatmentBMPAssessmentObservationTypeID);       
 
         $scope.AngularModel.TreatmentBMPTypeObservationTypeSimples.push(newTreatmentBMPTypeObservationTypeSimple);
         $scope.resetObservationTypeToAdd();
@@ -69,7 +69,7 @@
 
     $scope.createNewObservationTypeRow = function (observationTypeID) {
         var newTreatmentBMPTypeObservationTypeSimple = {
-            ObservationTypeID: observationTypeID,
+            TreatmentBMPAssessmentObservationTypeID: observationTypeID,
             AssessmentScoreWeight: null,
             DefaultThresholdValue: null,
             DefaultBenchmarkValue: null,

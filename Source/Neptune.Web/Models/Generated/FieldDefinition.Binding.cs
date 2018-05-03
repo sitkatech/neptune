@@ -200,7 +200,7 @@ namespace Neptune.Web.Models
                     return ObservationTargetType;
                 case FieldDefinitionEnum.ObservationThresholdType:
                     return ObservationThresholdType;
-                case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
+                case FieldDefinitionEnum.ObservationType:
                     return TreatmentBMPAssessmentObservationType;
                 case FieldDefinitionEnum.Organization:
                     return Organization;
@@ -269,7 +269,7 @@ namespace Neptune.Web.Models
         Jurisdiction = 23,
         ModeledCatchment = 24,
         TreatmentBMP = 25,
-        TreatmentBMPAssessmentObservationType = 26,
+        ObservationType = 26,
         ObservationCollectionMethod = 27,
         ObservationThresholdType = 28,
         ObservationTargetType = 29,
@@ -442,7 +442,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionObservationType : FieldDefinition
     {
         private FieldDefinitionObservationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationType Instance = new FieldDefinitionObservationType(26, @"TreatmentBMPAssessmentObservationType", @"Observation Type", @"", true);
+        public static readonly FieldDefinitionObservationType Instance = new FieldDefinitionObservationType(26, @"ObservationType", @"Observation Type", @"", true);
     }
 
     public partial class FieldDefinitionObservationCollectionMethod : FieldDefinition

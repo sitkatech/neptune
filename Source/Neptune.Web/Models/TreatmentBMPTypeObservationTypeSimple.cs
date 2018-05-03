@@ -3,7 +3,7 @@
     public class TreatmentBMPTypeObservationTypeSimple
     {
         public int TreatmentBMPTypeID { get; set; }
-        public int ObservationTypeID { get; set; }
+        public int TreatmentBMPAssessmentObservationTypeID { get; set; }
         public decimal? AssessmentScoreWeight { get; set; }
         public double? DefaultThresholdValue { get; set; }
         public double? DefaultBenchmarkValue { get; set; }
@@ -16,7 +16,7 @@
         public TreatmentBMPTypeObservationTypeSimple(TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType)
         {
             TreatmentBMPTypeID = TreatmentBMPTypeAssessmentObservationType.TreatmentBMPTypeID;
-            ObservationTypeID = TreatmentBMPTypeAssessmentObservationType.ObservationTypeID;
+            TreatmentBMPAssessmentObservationTypeID = TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
             AssessmentScoreWeight = TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight * 100;
             DefaultThresholdValue = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue;
             DefaultBenchmarkValue = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue;

@@ -57,14 +57,14 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
     public class ViewDataForAngular
     {
-        public List<ObservationTypeSimple> ObservationTypes { get; }
+        public List<TreatmentBMPTypeAssessmentObservationTypeSimple> TreatmentBMPAssessmentObservationTypes { get; }
         public List<TreatmentBMPAttributeTypeSimple> TreatmentBMPAttributeTypes { get; }
 
 
         public ViewDataForAngular(IEnumerable<Models.TreatmentBMPAssessmentObservationType> observationTypes,
             IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes)
         {
-            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();
+            TreatmentBMPAssessmentObservationTypes = observationTypes.Select(x => new TreatmentBMPTypeAssessmentObservationTypeSimple(x)).ToList();
             TreatmentBMPAttributeTypes = treatmentBMPAttributeTypes.Select(x => new TreatmentBMPAttributeTypeSimple(x)).ToList();
         }
     }

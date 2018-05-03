@@ -26,7 +26,7 @@ using NUnit.Framework;
 namespace Neptune.Web.Models
 {
     [TestFixture]
-    public class ObservationTypeTest
+    public class TreatmentBMPAssessmentObservationTypeTest
     {
        [TestCase(10, 10, 0, 5)]
         [TestCase(0, 10, 0, 2)]
@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         public void TestPositiveLinearInterpolation(double observation, double benchmark, double threshold, double expectedScore)
         {
             //Act
-            var actualScore = ObservationTypeHelper.PositiveLinearInterpolation(observation, benchmark, threshold);
+            var actualScore = TreatmentBMPAssessmentObservationTypeHelper.PositiveLinearInterpolation(observation, benchmark, threshold);
 
             //Assert
             Assert.That(actualScore, Is.EqualTo(Math.Round(expectedScore, 1)).Within(0.00001));
@@ -48,7 +48,7 @@ namespace Neptune.Web.Models
         public void TestNegativeLinearInterpolation(double observation, double benchmark, double threshold, double expectedScore)
         {
             //Act
-            var actualScore = ObservationTypeHelper.NegativeLinearInterpolation(observation, benchmark, threshold);
+            var actualScore = TreatmentBMPAssessmentObservationTypeHelper.NegativeLinearInterpolation(observation, benchmark, threshold);
 
             //Assert
             Assert.That(actualScore, Is.EqualTo(Math.Round(expectedScore, 1)).Within(0.00001));
@@ -60,7 +60,7 @@ namespace Neptune.Web.Models
         public void TestWetBasinBipolarLinearInterpolation(double observation, double benchmark, double threshold, double expectedScore)
         {
             //Act
-            var actualScore = ObservationTypeHelper.WetBasinBipolarLinearInterpolation(observation, benchmark, threshold);
+            var actualScore = TreatmentBMPAssessmentObservationTypeHelper.WetBasinBipolarLinearInterpolation(observation, benchmark, threshold);
 
             //Assert
             Assert.That(actualScore, Is.EqualTo(expectedScore).Within(0.00001));

@@ -28,7 +28,7 @@ VALUES
 (23, N'Jurisdiction', N'Jurisdiction', '', 1),
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
 (25, N'TreatmentBMP', N'Treatment BMP', '', 1),
-(26, N'ObservationType', N'Observation Type', '', 1),
+(26, N'TreatmentBMPAssessmentObservationType', N'Treatment BMP Assessment Observation Type', '', 1),
 (27, N'ObservationCollectionMethod', N'Collection Method', '', 1),
 (28, N'ObservationThresholdType', N'Threshold Type', '', 1),
 (29, N'ObservationTargetType', N'Target Type', '', 1),

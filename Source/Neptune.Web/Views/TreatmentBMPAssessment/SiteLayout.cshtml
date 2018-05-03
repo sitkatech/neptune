@@ -37,9 +37,9 @@
                     <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
                         <a href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
                     </li>
-                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName))
+                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName))
                     {
-                        <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.ObservationTypeName ? "active" : string.Empty)">
+                        <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
                             <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : TreatmentBMPAssessmentObservationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">
                                 @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(TreatmentBMPAssessmentObservationType))
                                 {
@@ -49,7 +49,7 @@
                                 {
                                     <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
                                 }
-                                <span>@TreatmentBMPAssessmentObservationType.ObservationTypeName</span>
+                                <span>@TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName</span>
                             </a>
                         </li>
                     }

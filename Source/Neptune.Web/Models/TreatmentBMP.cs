@@ -47,8 +47,8 @@ namespace Neptune.Web.Models
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
-            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
-            var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.ObservationTypeID).ToList();
+            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
         }
@@ -82,7 +82,7 @@ namespace Neptune.Web.Models
         public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
-                       x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID) != null;
+                       x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
         public string GetTreatmentBMPAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)

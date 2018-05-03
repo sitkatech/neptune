@@ -1,4 +1,4 @@
-﻿angular.module("NeptuneApp").controller("EditObservationTypeController", function ($scope, $timeout, angularModelAndViewData) {
+﻿angular.module("NeptuneApp").controller("EditTreatmentBMPAssessmentObservationTypeController", function ($scope, $timeout, angularModelAndViewData) {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;   
 
@@ -59,21 +59,21 @@
 
 
         if ($scope.selectedCollectionMethodIsDiscrete()) {
-            $scope.ObservationTypeSchema = newDiscreteObservationTypeSchema;
+            $scope.TreatmentBMPAssessmentObservationTypeSchema = newDiscreteObservationTypeSchema;
         }
         else if ($scope.selectedCollectionMethodIsRate()) {
-            $scope.ObservationTypeSchema = newRateObservationTypeSchema;
+            $scope.TreatmentBMPAssessmentObservationTypeSchema = newRateObservationTypeSchema;
         }
         else if ($scope.selectedCollectionMethodIsPassFail()) {
-            $scope.ObservationTypeSchema = newPassFailObservationTypeSchema;
+            $scope.TreatmentBMPAssessmentObservationTypeSchema = newPassFailObservationTypeSchema;
         }
         else if ($scope.selectedCollectionMethodIsPercentage()) {
-            $scope.ObservationTypeSchema = newPercentageObservationTypeSchema;
+            $scope.TreatmentBMPAssessmentObservationTypeSchema = newPercentageObservationTypeSchema;
         } else {
-            $scope.ObservationTypeSchema = {};
+            $scope.TreatmentBMPAssessmentObservationTypeSchema = {};
         }
 
-        if ($scope.ObservationTypeSchema.PropertiesToObserve.length == 0) {
+        if ($scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.length == 0) {
             $scope.addInput();
         }
         
@@ -130,34 +130,34 @@
 
 
     $scope.addInput = function () {
-        $scope.ObservationTypeSchema.PropertiesToObserve.push("");
+        $scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.push("");
     }
 
     $scope.removeInput = function (index) {
-        $scope.ObservationTypeSchema.PropertiesToObserve.splice(index, 1);
+        $scope.TreatmentBMPAssessmentObservationTypeSchema.PropertiesToObserve.splice(index, 1);
     }
 
     $scope.submit = function () {
-        $scope.AngularModel.ObservationTypeSchema = JSON.stringify($scope.ObservationTypeSchema);
+        $scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema = JSON.stringify($scope.TreatmentBMPAssessmentObservationTypeSchema);
     }
 
     $scope.populateDefaults = function () {
-        var temp = Object.assign({}, $scope.ObservationTypeSchema);
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.AssessmentDescription)) {
+        var temp = Object.assign({}, $scope.TreatmentBMPAssessmentObservationTypeSchema);
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.AssessmentDescription)) {
             temp.AssessmentDescription = "Custom Assessment Instructions will be displayed here.";
         }
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.BenchmarkDescription)) {
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.BenchmarkDescription)) {
             temp.BenchmarkDescription = "Benchmark Instructions";
         }
-        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema.ThresholdDescription)) {
+        if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.ThresholdDescription)) {
             temp.ThresholdDescription = "Threshold Instructions";
         }
 
-        $scope.AngularModel.ObservationTypeSchema = JSON.stringify(temp);
+        $scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema = JSON.stringify(temp);
 
     }
 
-    $scope.ObservationTypeSchema = JSON.parse($scope.AngularModel.ObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.ObservationTypeSchema);
+    $scope.TreatmentBMPAssessmentObservationTypeSchema = JSON.parse($scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema) == undefined ? {} : JSON.parse($scope.AngularModel.TreatmentBMPAssessmentObservationTypeSchema);
     $scope.ObservationTypeCollectionMethodSelected = $scope.AngularModel.ObservationTypeCollectionMethodID != null
         ? Sitka.Methods.findElementInJsonArray($scope.AngularViewData.ObservationTypeCollectionMethods,
             "ID",
@@ -171,8 +171,8 @@
 
         var postData = jQuery("#EditObservationTypeControllerApp").serialize();
 
-        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").empty();
-        jQuery("[ng-controller]:not([ng-controller=\"EditObservationTypeController\"])").remove();
+        jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").empty();
+        jQuery("[ng-controller]:not([ng-controller=\"EditTreatmentBMPAssessmentObservationTypeController\"])").remove();
         jQuery.ajax($scope.AngularViewData.PreviewUrl,
             {
                 data: postData,
@@ -207,11 +207,11 @@
     };
 
     $scope.disableObservationType = function() {
-        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTypeName),
+        var nameIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.TreatmentBMPAssessmentObservationTypeName),
             thresholdTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationThresholdTypeID),
             targetTypeIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularModel.ObservationTargetTypeID),
             collectionMethodIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeCollectionMethodSelected),
-            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.ObservationTypeSchema);
+            schemaIsSet = !Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema);
 
         return !(nameIsSet && thresholdTypeIsSet && targetTypeIsSet && collectionMethodIsSet && schemaIsSet);
     };

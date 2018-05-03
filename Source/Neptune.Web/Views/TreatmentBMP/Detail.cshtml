@@ -108,7 +108,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.ObservationTypeName))
+                            @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName))
                             {
                                 <tr>
                                     <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>

@@ -145,17 +145,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPAssessmentObservationType">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAssessmentObservationType">
-        <MappingFragment StoreEntitySet="TreatmentBMPAssessmentObservationType">
-          <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
-          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
-          <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />
-          <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
-          <ScalarProperty Name="ObservationTypeSchema" ColumnName="ObservationTypeSchema" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Organization">
       <EntityTypeMapping TypeName="Neptune.Web.Models.Organization">
         <MappingFragment StoreEntitySet="Organization">
@@ -307,6 +296,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPAssessmentObservationType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAssessmentObservationType">
+        <MappingFragment StoreEntitySet="TreatmentBMPAssessmentObservationType">
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeID" ColumnName="TreatmentBMPAssessmentObservationTypeID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeName" ColumnName="TreatmentBMPAssessmentObservationTypeName" />
+          <ScalarProperty Name="ObservationTypeSpecificationID" ColumnName="ObservationTypeSpecificationID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeSchema" ColumnName="TreatmentBMPAssessmentObservationTypeSchema" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="TreatmentBMPAttribute">
       <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAttribute">
         <MappingFragment StoreEntitySet="TreatmentBMPAttribute">
@@ -352,7 +352,7 @@
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="TreatmentBMPTypeAssessmentObservationTypeID" ColumnName="TreatmentBMPTypeAssessmentObservationTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeID" ColumnName="TreatmentBMPAssessmentObservationTypeID" />
           <ScalarProperty Name="BenchmarkValue" ColumnName="BenchmarkValue" />
           <ScalarProperty Name="ThresholdValue" ColumnName="ThresholdValue" />
         </MappingFragment>
@@ -391,7 +391,7 @@
           <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
           <ScalarProperty Name="TreatmentBMPTypeAssessmentObservationTypeID" ColumnName="TreatmentBMPTypeAssessmentObservationTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeID" ColumnName="TreatmentBMPAssessmentObservationTypeID" />
           <ScalarProperty Name="ObservationData" ColumnName="ObservationData" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -412,7 +412,7 @@
           <ScalarProperty Name="TreatmentBMPTypeAssessmentObservationTypeID" ColumnName="TreatmentBMPTypeAssessmentObservationTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentObservationTypeID" ColumnName="TreatmentBMPAssessmentObservationTypeID" />
           <ScalarProperty Name="AssessmentScoreWeight" ColumnName="AssessmentScoreWeight" />
           <ScalarProperty Name="DefaultThresholdValue" ColumnName="DefaultThresholdValue" />
           <ScalarProperty Name="DefaultBenchmarkValue" ColumnName="DefaultBenchmarkValue" />

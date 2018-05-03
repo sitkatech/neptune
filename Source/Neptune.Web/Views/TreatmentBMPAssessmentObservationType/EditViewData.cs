@@ -50,17 +50,17 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
-            EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = $"{(TreatmentBMPAssessmentObservationType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}";
 
             if (TreatmentBMPAssessmentObservationType != null)
             {
-                SubEntityName = TreatmentBMPAssessmentObservationType.ObservationTypeName;
+                SubEntityName = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 SubEntityUrl = TreatmentBMPAssessmentObservationType.GetDetailUrl();
             }
 
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
-            ObservationTypeIndexUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            ObservationTypeIndexUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());
             SubmitUrl = submitUrl;
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;

@@ -5,7 +5,7 @@ namespace Neptune.Web.Models
 {
     public class TreatmentBMPAssessmentObservationTypeSimple
     {
-        public int ObservationTypeID { get; }
+        public int TreatmentBMPAssessmentObservationTypeID { get; }
         public bool HasBenchmarkAndThresholds { get; }
         public string DisplayName { get; }
         public double? ThresholdValueInObservedUnits { get; }
@@ -13,24 +13,24 @@ namespace Neptune.Web.Models
         public string Weight { get; }
         public TreatmentBMPObservationSimple TreatmentBMPObservationSimple { get; set; }
 
-        public TreatmentBMPAssessmentObservationTypeSimple(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType,
+        public TreatmentBMPAssessmentObservationTypeSimple(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
             TreatmentBMPAssessment treatmentBMPAssessment, bool overrideAssessmentScoreIfFailing)
         {
-            ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
-            HasBenchmarkAndThresholds = TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold;
+            TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
+            HasBenchmarkAndThresholds = treatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold;
            
-            var unitDisplayName = TreatmentBMPAssessmentObservationType.MeasurementUnitType != null ? $" ({TreatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName})" : string.Empty;
-            DisplayName = $"{TreatmentBMPAssessmentObservationType.ObservationTypeName}{unitDisplayName}";
+            var unitDisplayName = treatmentBMPAssessmentObservationType.MeasurementUnitType != null ? $" ({treatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName})" : string.Empty;
+            DisplayName = $"{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}{unitDisplayName}";
 
-            var benchmarkValue = TreatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPAssessment.TreatmentBMP);
-            var thresholdValue = TreatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);
-            var assessmentScoreWeight = TreatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeID)?.AssessmentScoreWeight;
+            var benchmarkValue = treatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPAssessment.TreatmentBMP);
+            var thresholdValue = treatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPAssessment.TreatmentBMP);
+            var assessmentScoreWeight = treatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x => x.TreatmentBMPTypeID == treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeID)?.AssessmentScoreWeight;
 
-            var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             TreatmentBMPObservationSimple = treatmentBMPObservation != null ? new TreatmentBMPObservationSimple(treatmentBMPObservation, overrideAssessmentScoreIfFailing) : null;
 
-            var useUpperValue = TreatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, TreatmentBMPObservationSimple?.ObservationValue);
-            ThresholdValueInObservedUnits = TreatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue) ?? 0;
+            var useUpperValue = treatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, TreatmentBMPObservationSimple?.ObservationValue);
+            ThresholdValueInObservedUnits = treatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue) ?? 0;
             BenchmarkValue = benchmarkValue ?? 0;
             Weight = assessmentScoreWeight?.ToStringShortPercent() ?? "pass/fail";
         }

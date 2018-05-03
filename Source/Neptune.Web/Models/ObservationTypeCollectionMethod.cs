@@ -50,13 +50,13 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            ObservationTypeHelper.ValidateNumberOfObservations(schema.MinimumNumberOfObservations, schema.MaximumNumberOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateValueOfObservations(schema.MinimumValueOfObservations, schema.MaximumValueOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.MeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
-            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateNumberOfObservations(schema.MinimumNumberOfObservations, schema.MaximumNumberOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateValueOfObservations(schema.MinimumValueOfObservations, schema.MaximumValueOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.MeasurementUnitTypeID, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }
@@ -77,7 +77,7 @@ namespace Neptune.Web.Models
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -106,7 +106,7 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            return ObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
+            return TreatmentBMPAssessmentObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
         }
     }
 
@@ -132,19 +132,19 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            ObservationTypeHelper.ValidateNumberOfObservations(schema.DiscreteRateMinimumNumberOfObservations, schema.DiscreteRateMaximumNumberOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateNumberOfObservations(schema.TimeReadingMinimumNumberOfObservations, schema.TimeReadingMaximumNumberOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateValueOfObservations(schema.DiscreteRateMinimumValueOfObservations, schema.DiscreteRateMaximumValueOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateValueOfObservations(schema.TimeReadingMinimumValueOfObservations, schema.TimeReadingMaximumValueOfObservations, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.DiscreteRateMeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.ReadingMeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.TimeMeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.DiscreteRateMeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.TimeMeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.ReadingMeasurementUnitTypeID, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
-            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateNumberOfObservations(schema.DiscreteRateMinimumNumberOfObservations, schema.DiscreteRateMaximumNumberOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateNumberOfObservations(schema.TimeReadingMinimumNumberOfObservations, schema.TimeReadingMaximumNumberOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateValueOfObservations(schema.DiscreteRateMinimumValueOfObservations, schema.DiscreteRateMaximumValueOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateValueOfObservations(schema.TimeReadingMinimumValueOfObservations, schema.TimeReadingMaximumValueOfObservations, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.DiscreteRateMeasurementUnitLabel, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.ReadingMeasurementUnitLabel, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.TimeMeasurementUnitLabel, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.DiscreteRateMeasurementUnitTypeID, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.TimeMeasurementUnitTypeID, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.ReadingMeasurementUnitTypeID, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }
@@ -165,7 +165,7 @@ namespace Neptune.Web.Models
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -208,10 +208,10 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
-            ObservationTypeHelper.ValidateRequiredStringField(schema.PassingScoreLabel, "Passing Score Label must have a name and cannot be blank", validationErrors);
-            ObservationTypeHelper.ValidateRequiredStringField(schema.FailingScoreLabel, "Failing Score Label must have a name and cannot be blank", validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateRequiredStringField(schema.PassingScoreLabel, "Passing Score Label must have a name and cannot be blank", validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateRequiredStringField(schema.FailingScoreLabel, "Failing Score Label must have a name and cannot be blank", validationErrors);
 
             return validationErrors;
         }
@@ -233,7 +233,7 @@ namespace Neptune.Web.Models
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -288,10 +288,10 @@ namespace Neptune.Web.Models
             var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(json);
 
             var propertiesToObserve = schema.PropertiesToObserve;
-            ObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            ObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
-            ObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
-            ObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.MeasurementUnitLabel, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
+            TreatmentBMPAssessmentObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
 
             return validationErrors;
         }
@@ -312,7 +312,7 @@ namespace Neptune.Web.Models
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -341,7 +341,7 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            return ObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
+            return TreatmentBMPAssessmentObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
         }
     }
 }

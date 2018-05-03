@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
     public class CollectionMethodSectionViewModel : AssessmentSectionViewModel
     {
         public int? TreatmentBMPAssessmentID { get; set; }
-        public int? ObservationTypeID { get; set; }
+        public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
         public string ObservationData { get; set; }
 
         protected CollectionMethodSectionViewModel()
@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
-            ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
+            TreatmentBMPAssessmentObservationTypeID = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
             ObservationData = treatmentBMPObservation?.ObservationData;
         }
 
@@ -34,8 +34,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             var validationResults = new List<ValidationResult>();
 
             var TreatmentBMPAssessmentObservationType =
-                HttpRequestStorage.DatabaseEntities.ObservationTypes.SingleOrDefault(x =>
-                    x.ObservationTypeID == ObservationTypeID);
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
+                    x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
             if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
             {

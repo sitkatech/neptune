@@ -120,10 +120,10 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="col-md-6">
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
-                        Observation: @TreatmentBMPAssessmentObservationType.ObservationTypeName
+                        Observation: @TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
                     </div>
                     <div class="panel-body">
-                        @{ var treatmentBMPObservation = ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(x => x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID); }
+                        @{ var treatmentBMPObservation = ViewDataTyped.TreatmentBMPAssessment.TreatmentBMPObservations.SingleOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID); }
                         @if (treatmentBMPObservation == null)
                         {
                             <span>Observation data not entered</span>

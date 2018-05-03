@@ -38,14 +38,14 @@ namespace Neptune.Web.Models
             var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(TreatmentBMPAssessmentObservationType);
 
             Check.Assert(TreatmentBMPTypeAssessmentObservationType != null,
-                $"The Observation Type '{TreatmentBMPAssessmentObservationType.ObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
+                $"The Observation Type '{TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
             return TreatmentBMPTypeAssessmentObservationType;
         }
 
         public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationTypeOrDefault(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             var TreatmentBMPTypeAssessmentObservationType = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
-                x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
+                x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             return TreatmentBMPTypeAssessmentObservationType;
         }

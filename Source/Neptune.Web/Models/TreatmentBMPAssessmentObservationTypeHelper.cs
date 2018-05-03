@@ -26,7 +26,7 @@ using System.Linq;
 
 namespace Neptune.Web.Models
 {
-    public static class ObservationTypeHelper
+    public static class TreatmentBMPAssessmentObservationTypeHelper
     {
         public static double LinearInterpolation(double observation, double benchmark, double threshold)
         {
