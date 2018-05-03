@@ -76,7 +76,7 @@
                                         class="form-control"
                                         data-title="Select an Observation Type to Add"
                                         style="width: 100%"
-                                        ng-options="observationType as observationType.ObservationTypeName for observationType in filteredObservationTypes() track by observationType.ObservationTypeID">
+                                        ng-options="TreatmentBMPAssessmentObservationType as TreatmentBMPAssessmentObservationType.ObservationTypeName for TreatmentBMPAssessmentObservationType in filteredObservationTypes() track by TreatmentBMPAssessmentObservationType.ObservationTypeID">
                                     <option value="" disabled selected>Select an Observation Type to Add</option>
                                 </select>
                                 <span class="input-group-btn">
@@ -94,7 +94,7 @@
             <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeObservationTypeSimples.length > 0">
                 <tr>
                     <th></th>
-                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAssessmentObservationType)</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>

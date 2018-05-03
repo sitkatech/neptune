@@ -27,17 +27,17 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPType;
 using Newtonsoft.Json;
-using Detail = Neptune.Web.Views.ObservationType.Detail;
-using DetailViewData = Neptune.Web.Views.ObservationType.DetailViewData;
-using Edit = Neptune.Web.Views.ObservationType.Edit;
-using EditViewData = Neptune.Web.Views.ObservationType.EditViewData;
-using EditViewModel = Neptune.Web.Views.ObservationType.EditViewModel;
-using Manage = Neptune.Web.Views.ObservationType.Manage;
-using ManageViewData = Neptune.Web.Views.ObservationType.ManageViewData;
+using Detail = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Detail;
+using DetailViewData = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.DetailViewData;
+using Edit = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Edit;
+using EditViewData = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.EditViewData;
+using EditViewModel = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.EditViewModel;
+using Manage = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Manage;
+using ManageViewData = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.ManageViewData;
 
 namespace Neptune.Web.Controllers
 {
@@ -60,11 +60,11 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<ObservationType> ObservationTypeGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMPAssessmentObservationType> ObservationTypeGridJsonData()
         {
             var gridSpec = new ObservationTypeGridSpec(CurrentPerson);
             var observationTypes = HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().OrderBy(x => x.ObservationTypeName).ToList();
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<ObservationType>(observationTypes, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessmentObservationType>(observationTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
@@ -72,8 +72,8 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPType> TreatmentBMPTypeGridJsonData(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var treatmentBMPTypes = observationType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var treatmentBMPTypes = TreatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -96,22 +96,22 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEdit(viewModel, null);
             }
-            var observationType = new ObservationType(String.Empty, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty);
-            viewModel.UpdateModel(observationType, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllObservationTypes.Add(observationType);
+            var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(String.Empty, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty);
+            viewModel.UpdateModel(TreatmentBMPAssessmentObservationType, CurrentPerson);
+            HttpRequestStorage.DatabaseEntities.AllObservationTypes.Add(TreatmentBMPAssessmentObservationType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"Observation Type {observationType.ObservationTypeName} succesfully created.");
+            SetMessageForDisplay($"Observation Type {TreatmentBMPAssessmentObservationType.ObservationTypeName} succesfully created.");
 
-            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(observationType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(TreatmentBMPAssessmentObservationType.PrimaryKey)));
         }
 
         [HttpGet]
         [NeptuneAdminFeature]
         public ViewResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var viewModel = new EditViewModel(observationType);
-            return ViewEdit(viewModel, observationType);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var viewModel = new EditViewModel(TreatmentBMPAssessmentObservationType);
+            return ViewEdit(viewModel, TreatmentBMPAssessmentObservationType);
         }
 
         [HttpPost]
@@ -119,33 +119,33 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(ObservationTypePrimaryKey observationTypePrimaryKey, EditViewModel viewModel)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel, observationType);
+                return ViewEdit(viewModel, TreatmentBMPAssessmentObservationType);
             }
-            viewModel.UpdateModel(observationType, CurrentPerson);
+            viewModel.UpdateModel(TreatmentBMPAssessmentObservationType, CurrentPerson);
 
-            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(observationType.PrimaryKey)));
+            return RedirectToAction(new SitkaRoute<ObservationTypeController>(c => c.Detail(TreatmentBMPAssessmentObservationType.PrimaryKey)));
         }
 
-        private ViewResult ViewEdit(EditViewModel viewModel, ObservationType observationType)
+        private ViewResult ViewEdit(EditViewModel viewModel, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeInstructions);
             var observationInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeObservationInstructions);
             var labelAndUnitsInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeLabelsAndUnitsInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.ObservationTypeID) ? SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.ObservationTypeID)) : SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.New());
-            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.Except(new []{ObservationTypeCollectionMethod.Rate}).ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, observationType);
+            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.Except(new []{ObservationTypeCollectionMethod.Rate}).ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, TreatmentBMPAssessmentObservationType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         [NeptuneViewFeature]
         public ViewResult Detail(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
 
-            var viewData = new DetailViewData(CurrentPerson, observationType);
+            var viewData = new DetailViewData(CurrentPerson, TreatmentBMPAssessmentObservationType);
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -153,16 +153,16 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public PartialViewResult DeleteObservationType(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var viewModel = new ConfirmDialogFormViewModel(observationType.ObservationTypeID);
-            return ViewDeleteObservationType(observationType, viewModel);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(TreatmentBMPAssessmentObservationType.ObservationTypeID);
+            return ViewDeleteObservationType(TreatmentBMPAssessmentObservationType, viewModel);
         }
 
-        private PartialViewResult ViewDeleteObservationType(ObservationType observationType, ConfirmDialogFormViewModel viewModel)
+        private PartialViewResult ViewDeleteObservationType(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPTypeLabel = observationType.TreatmentBMPTypeAssessmentObservationTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
-            var treatmentBMPObservationLabel = observationType.TreatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
-            var confirmMessage = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' is related to {observationType.TreatmentBMPTypeAssessmentObservationTypes.Count} {treatmentBMPTypeLabel} and has {observationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.ObservationType.GetFieldDefinitionLabel()}?";
+            var treatmentBMPTypeLabel = TreatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPObservationLabel = TreatmentBMPAssessmentObservationType.TreatmentBMPObservations.Count == 1 ? "Observation" : "Observations";
+            var confirmMessage = $"{FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{TreatmentBMPAssessmentObservationType.ObservationTypeName}' is related to {TreatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Count} {treatmentBMPTypeLabel} and has {TreatmentBMPAssessmentObservationType.TreatmentBMPObservations.Count} {treatmentBMPObservationLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
@@ -172,14 +172,14 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult DeleteObservationType(ObservationTypePrimaryKey observationTypePrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewDeleteObservationType(observationType, viewModel);
+                return ViewDeleteObservationType(TreatmentBMPAssessmentObservationType, viewModel);
             }
 
-            var message = $"{FieldDefinition.ObservationType.GetFieldDefinitionLabel()} '{observationType.ObservationTypeName}' successfully deleted!";
-            observationType.DeleteFull();
+            var message = $"{FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{TreatmentBMPAssessmentObservationType.ObservationTypeName}' successfully deleted!";
+            TreatmentBMPAssessmentObservationType.DeleteFull();
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }
@@ -188,8 +188,8 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public PartialViewResult DiscreteDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(observationType.ObservationTypeSchema);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationType.ObservationTypeSchema);
             var viewData = new ViewDiscreteValueSchemaDetailViewData(schema);
             return RazorPartialView<ViewDiscreteValueSchemaDetail, ViewDiscreteValueSchemaDetailViewData>(viewData);
         }
@@ -198,8 +198,8 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public PartialViewResult RateDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(observationType.ObservationTypeSchema);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(TreatmentBMPAssessmentObservationType.ObservationTypeSchema);
             var viewData = new ViewRateSchemaDetailViewData(schema);
             return RazorPartialView<ViewRateSchemaDetail, ViewRateSchemaDetailViewData>(viewData);
         }
@@ -208,8 +208,8 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public PartialViewResult PassFailDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(observationType.ObservationTypeSchema);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(TreatmentBMPAssessmentObservationType.ObservationTypeSchema);
             var viewData = new ViewPassFailSchemaDetailViewData(schema);
             return RazorPartialView<ViewPassFailSchemaDetail, ViewPassFailSchemaDetailViewData>(viewData);
         }
@@ -218,8 +218,8 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public PartialViewResult PercentageDetailSchema(ObservationTypePrimaryKey observationTypePrimaryKey)
         {
-            var observationType = observationTypePrimaryKey.EntityObject;
-            var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(observationType.ObservationTypeSchema);
+            var TreatmentBMPAssessmentObservationType = observationTypePrimaryKey.EntityObject;
+            var schema = JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(TreatmentBMPAssessmentObservationType.ObservationTypeSchema);
             var viewData = new ViewPercentageSchemaDetailViewData(schema);
             return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
         }

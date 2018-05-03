@@ -60,7 +60,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType, double benchmarkValue, double thresholdValue) : this()
+        public TreatmentBMPBenchmarkAndThreshold(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, double benchmarkValue, double thresholdValue) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPBenchmarkAndThresholdID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,9 +73,9 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPBenchmarkAndThresholds.Add(this);
-            this.ObservationTypeID = observationType.ObservationTypeID;
-            this.ObservationType = observationType;
-            observationType.TreatmentBMPBenchmarkAndThresholds.Add(this);
+            this.ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
+            this.TreatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationType;
+            TreatmentBMPAssessmentObservationType.TreatmentBMPBenchmarkAndThresholds.Add(this);
             this.BenchmarkValue = benchmarkValue;
             this.ThresholdValue = thresholdValue;
         }
@@ -83,9 +83,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPBenchmarkAndThreshold CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPBenchmarkAndThreshold CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, observationType, default(double), default(double));
+            return new TreatmentBMPBenchmarkAndThreshold(treatmentBMP, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, TreatmentBMPAssessmentObservationType, default(double), default(double));
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Neptune.Web.Models
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        public virtual ObservationType ObservationType { get; set; }
+        public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; }
 
         public static class FieldLengths
         {

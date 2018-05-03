@@ -64,7 +64,7 @@
                     <div class="col-xs-12">
                         <table class="table">
                             <tr>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationType)</th>
+                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAssessmentObservationType)</th>
                                 <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
@@ -74,10 +74,10 @@
                                 @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
                                 {
                                     <tr>
-                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.ObservationType.GetDisplayNameAsUrl()</td>
-                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
-                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.ObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
-                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.ObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
+                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
                                         <td class="text-right">@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
                                     </tr>
                                 }

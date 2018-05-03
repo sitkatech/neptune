@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
@@ -33,15 +33,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }
 
-        public RateCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
+        public RateCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(observationType.RateObservationTypeSchema);
+            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.RateObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
-                $"{observationType.BenchmarkMeasurementUnitLabel()} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = observationType.RateObservationTypeSchema.AssessmentDescription;
+                $"{TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = TreatmentBMPAssessmentObservationType.RateObservationTypeSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.RateCollectionMethod(treatmentBmpAssessment, observationType));
+                x.RateCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public class RateCollectionMethodViewDataForAngular

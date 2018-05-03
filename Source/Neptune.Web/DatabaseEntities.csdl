@@ -13,7 +13,7 @@
     <EntitySet Name="NeptunePage" EntityType="Neptune.Web.Models.NeptunePage" />
     <EntitySet Name="NeptunePageImage" EntityType="Neptune.Web.Models.NeptunePageImage" />
     <EntitySet Name="Notification" EntityType="Neptune.Web.Models.Notification" />
-    <EntitySet Name="ObservationType" EntityType="Neptune.Web.Models.ObservationType" />
+    <EntitySet Name="TreatmentBMPAssessmentObservationType" EntityType="Neptune.Web.Models.TreatmentBMPAssessmentObservationType" />
     <EntitySet Name="Organization" EntityType="Neptune.Web.Models.Organization" />
     <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.OrganizationType" />
     <EntitySet Name="Person" EntityType="Neptune.Web.Models.Person" />
@@ -115,15 +115,15 @@
       <End Role="Notifications" EntitySet="Notification" />
     </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" Association="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID">
-      <End Role="ObservationType" EntitySet="ObservationType" />
+      <End Role="TreatmentBMPAssessmentObservationType" EntitySet="TreatmentBMPAssessmentObservationType" />
       <End Role="TreatmentBMPBenchmarkAndThresholds" EntitySet="TreatmentBMPBenchmarkAndThreshold" />
     </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" Association="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID">
-      <End Role="ObservationType" EntitySet="ObservationType" />
+      <End Role="TreatmentBMPAssessmentObservationType" EntitySet="TreatmentBMPAssessmentObservationType" />
       <End Role="TreatmentBMPObservations" EntitySet="TreatmentBMPObservation" />
     </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID" Association="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID">
-      <End Role="ObservationType" EntitySet="ObservationType" />
+      <End Role="TreatmentBMPAssessmentObservationType" EntitySet="TreatmentBMPAssessmentObservationType" />
       <End Role="TreatmentBMPTypeAssessmentObservationTypes" EntitySet="TreatmentBMPTypeAssessmentObservationType" />
     </AssociationSet>
     <AssociationSet Name="FK_Organization_OrganizationType_OrganizationTypeID" Association="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID">
@@ -408,7 +408,7 @@
     <Property Name="NotificationDate" Type="DateTime" Nullable="false" />
     <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_Notification_Person_PersonID" FromRole="Notifications" ToRole="Person" />
   </EntityType>
-  <EntityType Name="ObservationType">
+  <EntityType Name="TreatmentBMPAssessmentObservationType">
     <Key>
       <PropertyRef Name="ObservationTypeID" />
     </Key>
@@ -417,9 +417,9 @@
     <Property Name="ObservationTypeName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="ObservationTypeSpecificationID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeSchema" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
-    <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPObservations" />
-    <NavigationProperty Name="TreatmentBMPTypeAssessmentObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID" FromRole="ObservationType" ToRole="TreatmentBMPTypeAssessmentObservationTypes" />
+    <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="TreatmentBMPAssessmentObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
+    <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="TreatmentBMPAssessmentObservationType" ToRole="TreatmentBMPObservations" />
+    <NavigationProperty Name="TreatmentBMPTypeAssessmentObservationTypes" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID" FromRole="TreatmentBMPAssessmentObservationType" ToRole="TreatmentBMPTypeAssessmentObservationTypes" />
   </EntityType>
   <EntityType Name="Organization">
     <Key>
@@ -662,7 +662,7 @@
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
     <Property Name="BenchmarkValue" Type="Double" Nullable="false" />
     <Property Name="ThresholdValue" Type="Double" Nullable="false" />
-    <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="ObservationType" />
+    <NavigationProperty Name="TreatmentBMPAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="TreatmentBMPAssessmentObservationType" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="TreatmentBMP" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="TreatmentBMPType" />
     <NavigationProperty Name="TreatmentBMPTypeAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPBenchmarkAndThresholds" ToRole="TreatmentBMPTypeAssessmentObservationType" />
@@ -705,7 +705,7 @@
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationTypeID" Type="Int32" Nullable="false" />
     <Property Name="ObservationData" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="TreatmentBMPObservations" ToRole="ObservationType" />
+    <NavigationProperty Name="TreatmentBMPAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPAssessmentObservationType" />
     <NavigationProperty Name="TreatmentBMPAssessment" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPAssessment" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPType" />
     <NavigationProperty Name="TreatmentBMPTypeAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPObservations" ToRole="TreatmentBMPTypeAssessmentObservationType" />
@@ -738,7 +738,7 @@
     <Property Name="DefaultThresholdValue" Type="Double" />
     <Property Name="DefaultBenchmarkValue" Type="Double" />
     <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="ObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationTypes" ToRole="ObservationType" />
+    <NavigationProperty Name="TreatmentBMPAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationTypes" ToRole="TreatmentBMPAssessmentObservationType" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationType" ToRole="TreatmentBMPObservations" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPTypeAssessmentObservationTypes" ToRole="TreatmentBMPType" />
@@ -996,10 +996,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID">
-    <End Role="ObservationType" Type="Neptune.Web.Models.ObservationType" Multiplicity="1" />
+    <End Role="TreatmentBMPAssessmentObservationType" Type="Neptune.Web.Models.TreatmentBMPAssessmentObservationType" Multiplicity="1" />
     <End Role="TreatmentBMPBenchmarkAndThresholds" Type="Neptune.Web.Models.TreatmentBMPBenchmarkAndThreshold" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="ObservationType">
+      <Principal Role="TreatmentBMPAssessmentObservationType">
         <PropertyRef Name="ObservationTypeID" />
       </Principal>
       <Dependent Role="TreatmentBMPBenchmarkAndThresholds">
@@ -1008,10 +1008,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_TreatmentBMPObservation_ObservationType_ObservationTypeID">
-    <End Role="ObservationType" Type="Neptune.Web.Models.ObservationType" Multiplicity="1" />
+    <End Role="TreatmentBMPAssessmentObservationType" Type="Neptune.Web.Models.TreatmentBMPAssessmentObservationType" Multiplicity="1" />
     <End Role="TreatmentBMPObservations" Type="Neptune.Web.Models.TreatmentBMPObservation" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="ObservationType">
+      <Principal Role="TreatmentBMPAssessmentObservationType">
         <PropertyRef Name="ObservationTypeID" />
       </Principal>
       <Dependent Role="TreatmentBMPObservations">
@@ -1020,10 +1020,10 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID">
-    <End Role="ObservationType" Type="Neptune.Web.Models.ObservationType" Multiplicity="1" />
+    <End Role="TreatmentBMPAssessmentObservationType" Type="Neptune.Web.Models.TreatmentBMPAssessmentObservationType" Multiplicity="1" />
     <End Role="TreatmentBMPTypeAssessmentObservationTypes" Type="Neptune.Web.Models.TreatmentBMPTypeAssessmentObservationType" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="ObservationType">
+      <Principal Role="TreatmentBMPAssessmentObservationType">
         <PropertyRef Name="ObservationTypeID" />
       </Principal>
       <Dependent Role="TreatmentBMPTypeAssessmentObservationTypes">

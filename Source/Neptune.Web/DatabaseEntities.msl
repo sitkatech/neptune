@@ -145,9 +145,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ObservationType">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.ObservationType">
-        <MappingFragment StoreEntitySet="ObservationType">
+    <EntitySetMapping Name="TreatmentBMPAssessmentObservationType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAssessmentObservationType">
+        <MappingFragment StoreEntitySet="TreatmentBMPAssessmentObservationType">
           <ScalarProperty Name="ObservationTypeID" ColumnName="ObservationTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="ObservationTypeName" ColumnName="ObservationTypeName" />

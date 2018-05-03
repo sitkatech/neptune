@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl,
+        public EditViewData(Person currentPerson, List<Models.TreatmentBMPAssessmentObservationType> observationTypes, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType,
             List<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes) : base(currentPerson)
         {
@@ -61,7 +61,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public List<TreatmentBMPAttributeTypeSimple> TreatmentBMPAttributeTypes { get; }
 
 
-        public ViewDataForAngular(IEnumerable<Models.ObservationType> observationTypes,
+        public ViewDataForAngular(IEnumerable<Models.TreatmentBMPAssessmentObservationType> observationTypes,
             IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes)
         {
             ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();

@@ -29,7 +29,7 @@ using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMPAttributeType

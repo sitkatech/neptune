@@ -26,7 +26,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class EditViewData : NeptuneViewData
     {
@@ -47,16 +47,16 @@ namespace Neptune.Web.Views.ObservationType
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
-            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.ObservationType observationType) : base(currentPerson)
+            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(currentPerson)
         {
-            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
+            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(x => x.Index());
-            PageTitle = $"{(observationType != null ? "Edit" : "New")} {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}";
+            PageTitle = $"{(TreatmentBMPAssessmentObservationType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}";
 
-            if (observationType != null)
+            if (TreatmentBMPAssessmentObservationType != null)
             {
-                SubEntityName = observationType.ObservationTypeName;
-                SubEntityUrl = observationType.GetDetailUrl();
+                SubEntityName = TreatmentBMPAssessmentObservationType.ObservationTypeName;
+                SubEntityUrl = TreatmentBMPAssessmentObservationType.GetDetailUrl();
             }
 
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);

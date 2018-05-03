@@ -25,7 +25,7 @@
 @using Neptune.Web.Security
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
-@inherits Neptune.Web.Views.ObservationType.Detail
+@inherits Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Detail
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -41,7 +41,7 @@
 {
     @if (new NeptuneAdminFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.ObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
+        <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.TreatmentBMPAssessmentObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
     }
 }
 
@@ -54,19 +54,19 @@
             <div class="panel-body">
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.Label("Name")</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeName</div>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAssessmentObservationType.ObservationTypeName</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</div>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationThresholdType)</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName</div>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationThresholdType.ObservationThresholdTypeDisplayName</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-3 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.ObservationTargetType)</label>
-                    <div class="col-sm-9">@ViewDataTyped.ObservationType.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName</div>
+                    <div class="col-sm-9">@ViewDataTyped.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTargetType.ObservationTargetTypeDisplayName</div>
                 </div>
             </div>
         </div>

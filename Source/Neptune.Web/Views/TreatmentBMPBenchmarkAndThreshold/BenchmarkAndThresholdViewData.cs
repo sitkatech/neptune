@@ -55,8 +55,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             PageTitle = "Benchmark & Threshold";
         }
 
-        protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
-            : this(currentPerson, treatmentBMP, observationType.ObservationTypeName)
+        protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+            : this(currentPerson, treatmentBMP, TreatmentBMPAssessmentObservationType.ObservationTypeName)
         {            
         }
     }

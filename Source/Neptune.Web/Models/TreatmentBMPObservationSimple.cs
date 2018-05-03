@@ -14,7 +14,7 @@
             ObservationValue = treatmentBMPObservation.CalculateObservationValue();
             IsComplete = treatmentBMPObservation.IsComplete();
 
-            OverrideScore = overrideAssessmentScoreIfFailing && IsComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(treatmentBMPObservation.ObservationType);
+            OverrideScore = overrideAssessmentScoreIfFailing && IsComplete && treatmentBMPObservation.OverrideScoreForFailingObservation(treatmentBMPObservation.TreatmentBMPAssessmentObservationType);
             OverrideScoreText = treatmentBMPObservation.CalculateOverrideScoreText(overrideAssessmentScoreIfFailing);
         }
     }

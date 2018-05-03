@@ -23,7 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class ManageViewData : NeptuneViewData
     {
@@ -35,14 +35,14 @@ namespace Neptune.Web.Views.ObservationType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
-            PageTitle = $"All {Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
+            PageTitle = $"All {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}";
 
             NewObservationTypeUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new ObservationTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}",
+                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}",
                 SaveFiltersInCookie = true                
             };
 

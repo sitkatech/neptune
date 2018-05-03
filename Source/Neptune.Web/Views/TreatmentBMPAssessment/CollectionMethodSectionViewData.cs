@@ -8,23 +8,23 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly ObservationTypeCollectionMethod ObservationTypeCollectionMethod;
         public readonly BaseCollectionMethodFormViewData ObservationPartialViewData;
 
-        public CollectionMethodSectionViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMPAssessment, observationType.ObservationTypeName)
+        public CollectionMethodSectionViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+            : base(currentPerson, treatmentBMPAssessment, TreatmentBMPAssessmentObservationType.ObservationTypeName)
         {
             ObservationTypeCollectionMethod = observationTypeCollectionMethod;
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    ObservationPartialViewData = new DiscreteCollectionMethodViewData(treatmentBMPAssessment, observationType);
+                    ObservationPartialViewData = new DiscreteCollectionMethodViewData(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
                     break;
                 case ObservationTypeCollectionMethodEnum.PassFail:
-                    ObservationPartialViewData = new PassFailCollectionMethodViewData(treatmentBMPAssessment, observationType);
+                    ObservationPartialViewData = new PassFailCollectionMethodViewData(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
                     break;
                 case ObservationTypeCollectionMethodEnum.Percentage:
-                    ObservationPartialViewData = new PercentageCollectionMethodViewData(treatmentBMPAssessment, observationType);
+                    ObservationPartialViewData = new PercentageCollectionMethodViewData(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
                     break;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    ObservationPartialViewData = new RateCollectionMethodViewData(treatmentBMPAssessment, observationType);
+                    ObservationPartialViewData = new RateCollectionMethodViewData(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
                     break;
                 default:
                     throw new ArgumentException(

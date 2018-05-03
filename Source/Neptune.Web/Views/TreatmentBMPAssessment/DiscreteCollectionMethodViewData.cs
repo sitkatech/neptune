@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
@@ -33,15 +33,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public DiscreteCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
+        public DiscreteCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(observationType.DiscreteObservationTypeSchema);
+            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
-                $"{observationType.DiscreteObservationTypeSchema.MeasurementUnitLabel} ({observationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = observationType.DiscreteObservationTypeSchema.AssessmentDescription;
+                $"{TreatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.MeasurementUnitLabel} ({TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = TreatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.DiscreteCollectionMethod(treatmentBmpAssessment, observationType));
+                x.DiscreteCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public class DiscreteCollectionMethodViewDataForAngular

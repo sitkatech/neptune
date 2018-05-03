@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class ViewDiscreteValueSchemaDetailViewData
     {

@@ -52,8 +52,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<NeptunePage> NeptunePages { get { return AllNeptunePages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Notification> AllNotifications { get; set; }
         public virtual IQueryable<Notification> Notifications { get { return AllNotifications.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<ObservationType> AllObservationTypes { get; set; }
-        public virtual IQueryable<ObservationType> ObservationTypes { get { return AllObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAssessmentObservationType> AllObservationTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPAssessmentObservationType> ObservationTypes { get { return AllObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Organization> AllOrganizations { get; set; }
         public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
@@ -195,7 +195,7 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(observationTypeCollectionMethod, "ObservationTypeCollectionMethod", primaryKey);
                     return observationTypeCollectionMethod;
 
-                case "ObservationType":
+                case "TreatmentBMPAssessmentObservationType":
                     return ObservationTypes.GetObservationType(primaryKey);
 
                 case "ObservationTypeSpecification":

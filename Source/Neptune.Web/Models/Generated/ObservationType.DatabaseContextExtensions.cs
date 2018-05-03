@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[ObservationType]
+//  Source Table: [dbo].[TreatmentBMPAssessmentObservationType]
 using System.Collections.Generic;
 using System.Linq;
 using LtInfo.Common.DesignByContract;
@@ -12,11 +12,11 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static ObservationType GetObservationType(this IQueryable<ObservationType> observationTypes, int observationTypeID)
+        public static TreatmentBMPAssessmentObservationType GetObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> observationTypes, int observationTypeID)
         {
-            var observationType = observationTypes.SingleOrDefault(x => x.ObservationTypeID == observationTypeID);
-            Check.RequireNotNullThrowNotFound(observationType, "ObservationType", observationTypeID);
-            return observationType;
+            var TreatmentBMPAssessmentObservationType = observationTypes.SingleOrDefault(x => x.ObservationTypeID == observationTypeID);
+            Check.RequireNotNullThrowNotFound(TreatmentBMPAssessmentObservationType, "TreatmentBMPAssessmentObservationType", observationTypeID);
+            return TreatmentBMPAssessmentObservationType;
         }
 
         public static void DeleteObservationType(this List<int> observationTypeIDList)
@@ -27,7 +27,7 @@ namespace Neptune.Web.Models
             }
         }
 
-        public static void DeleteObservationType(this ICollection<ObservationType> observationTypesToDelete)
+        public static void DeleteObservationType(this ICollection<TreatmentBMPAssessmentObservationType> observationTypesToDelete)
         {
             if(observationTypesToDelete.Any())
             {
@@ -40,9 +40,9 @@ namespace Neptune.Web.Models
             DeleteObservationType(new List<int> { observationTypeID });
         }
 
-        public static void DeleteObservationType(this ObservationType observationTypeToDelete)
+        public static void DeleteObservationType(this TreatmentBMPAssessmentObservationType observationTypeToDelete)
         {
-            DeleteObservationType(new List<ObservationType> { observationTypeToDelete });
+            DeleteObservationType(new List<TreatmentBMPAssessmentObservationType> { observationTypeToDelete });
         }
     }
 }

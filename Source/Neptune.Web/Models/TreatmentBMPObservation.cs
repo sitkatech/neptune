@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using LtInfo.Common.Views;
 using Neptune.Web.Common;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
         }
         public double? CalculateObservationScore()
         {
-            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateScore(this);
         }
 
         public string FormattedObservationScore()
@@ -49,10 +49,10 @@ namespace Neptune.Web.Models
 
         public double? CalculateObservationValue()
         {
-            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
         }
 
-        public bool OverrideScoreForFailingObservation(ObservationType observationType)
+        public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             var score = CalculateObservationScore();
             if ((score?? 0) < 0.01)
@@ -71,13 +71,13 @@ namespace Neptune.Web.Models
                 var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
-                return $"Observation for BMP {treatmentBMPName} ({ObservationType?.ObservationTypeName}) on Assessment Dated {assessmentDate}";
+                return $"Observation for BMP {treatmentBMPName} ({TreatmentBMPAssessmentObservationType?.ObservationTypeName}) on Assessment Dated {assessmentDate}";
             }
         }
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {
-            return ObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, ObservationType.ObservationTypeSchema, overrideAssessmentScoreIfFailing);
+            return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.CalculateOverrideScoreText(ObservationData, TreatmentBMPAssessmentObservationType.ObservationTypeSchema, overrideAssessmentScoreIfFailing);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
@@ -15,8 +15,8 @@ namespace Neptune.Web.Models
         public abstract List<ValidationResult> ValidateObservationType(string json);
         public abstract bool ValidateObservationDataJson(string json);
 
-        public abstract string ViewSchemaDetailUrl(ObservationType observationType);
-        public abstract string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment, ObservationType observationType);
+        public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType);
+        public abstract string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType);
 
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
@@ -75,15 +75,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(observationType));
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            ObservationType observationType)
+            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, observationType));
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -95,11 +95,11 @@ namespace Neptune.Web.Models
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {            
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
-            var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var benchmarkValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
 
-            var useUpperValue = treatmentBMPObservation.ObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
-            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
+            var useUpperValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
+            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
             {
@@ -163,15 +163,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(observationType));
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            ObservationType observationType)
+            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.RateCollectionMethod(treatmentBMPAssessment, observationType));
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.RateCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -231,15 +231,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(observationType));
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            ObservationType observationType)
+            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(treatmentBMPAssessment, observationType));
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -310,15 +310,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(ObservationType observationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(observationType));
+            return SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
         public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            ObservationType observationType)
+            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(treatmentBMPAssessment, observationType));
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -330,11 +330,11 @@ namespace Neptune.Web.Models
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
         {
             var observationValue = GetObservationValueFromObservationData(treatmentBMPObservation.ObservationData);
-            var benchmarkValue = treatmentBMPObservation.ObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var thresholdValue = treatmentBMPObservation.ObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
-            var useUpperValue = treatmentBMPObservation.ObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
+            var benchmarkValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var thresholdValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValue(treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP);
+            var useUpperValue = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.UseUpperValueForThreshold(benchmarkValue, observationValue);
 
-            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.ObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
+            var thresholdValueInBenchmarkUnits = treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, useUpperValue);
 
             if (observationValue == null || benchmarkValue == null || thresholdValueInBenchmarkUnits == null)
             {

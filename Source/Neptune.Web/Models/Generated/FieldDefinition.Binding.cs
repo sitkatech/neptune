@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionJurisdiction Jurisdiction = FieldDefinitionJurisdiction.Instance;
         public static readonly FieldDefinitionModeledCatchment ModeledCatchment = FieldDefinitionModeledCatchment.Instance;
         public static readonly FieldDefinitionTreatmentBMP TreatmentBMP = FieldDefinitionTreatmentBMP.Instance;
-        public static readonly FieldDefinitionObservationType ObservationType = FieldDefinitionObservationType.Instance;
+        public static readonly FieldDefinitionObservationType TreatmentBMPAssessmentObservationType = FieldDefinitionObservationType.Instance;
         public static readonly FieldDefinitionObservationCollectionMethod ObservationCollectionMethod = FieldDefinitionObservationCollectionMethod.Instance;
         public static readonly FieldDefinitionObservationThresholdType ObservationThresholdType = FieldDefinitionObservationThresholdType.Instance;
         public static readonly FieldDefinitionObservationTargetType ObservationTargetType = FieldDefinitionObservationTargetType.Instance;
@@ -70,7 +70,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -200,8 +200,8 @@ namespace Neptune.Web.Models
                     return ObservationTargetType;
                 case FieldDefinitionEnum.ObservationThresholdType:
                     return ObservationThresholdType;
-                case FieldDefinitionEnum.ObservationType:
-                    return ObservationType;
+                case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
+                    return TreatmentBMPAssessmentObservationType;
                 case FieldDefinitionEnum.Organization:
                     return Organization;
                 case FieldDefinitionEnum.OrganizationType:
@@ -269,7 +269,7 @@ namespace Neptune.Web.Models
         Jurisdiction = 23,
         ModeledCatchment = 24,
         TreatmentBMP = 25,
-        ObservationType = 26,
+        TreatmentBMPAssessmentObservationType = 26,
         ObservationCollectionMethod = 27,
         ObservationThresholdType = 28,
         ObservationTargetType = 29,
@@ -442,7 +442,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionObservationType : FieldDefinition
     {
         private FieldDefinitionObservationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationType Instance = new FieldDefinitionObservationType(26, @"ObservationType", @"Observation Type", @"", true);
+        public static readonly FieldDefinitionObservationType Instance = new FieldDefinitionObservationType(26, @"TreatmentBMPAssessmentObservationType", @"Observation Type", @"", true);
     }
 
     public partial class FieldDefinitionObservationCollectionMethod : FieldDefinition

@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType, string observationData) : this()
+        public TreatmentBMPObservation(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, string observationData) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -71,18 +71,18 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPObservations.Add(this);
-            this.ObservationTypeID = observationType.ObservationTypeID;
-            this.ObservationType = observationType;
-            observationType.TreatmentBMPObservations.Add(this);
+            this.ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
+            this.TreatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationType;
+            TreatmentBMPAssessmentObservationType.TreatmentBMPObservations.Add(this);
             this.ObservationData = observationData;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPObservation CreateNewBlank(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType treatmentBMPTypeAssessmentObservationType, TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, observationType, default(string));
+            return new TreatmentBMPObservation(treatmentBMPAssessment, treatmentBMPTypeAssessmentObservationType, treatmentBMPType, TreatmentBMPAssessmentObservationType, default(string));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Neptune.Web.Models
         public virtual TreatmentBMPAssessment TreatmentBMPAssessment { get; set; }
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        public virtual ObservationType ObservationType { get; set; }
+        public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; }
 
         public static class FieldLengths
         {

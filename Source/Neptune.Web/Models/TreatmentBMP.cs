@@ -79,10 +79,10 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessments.Any();
         }
 
-        public bool IsBenchmarkAndThresholdCompleteForObservationType(ObservationType observationType)
+        public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
-                       x.ObservationTypeID == observationType.ObservationTypeID) != null;
+                       x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID) != null;
         }
 
         public string GetTreatmentBMPAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)

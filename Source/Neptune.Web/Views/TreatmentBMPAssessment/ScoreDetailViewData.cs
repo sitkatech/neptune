@@ -45,8 +45,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             public ScoreViewDataForAngular(IEnumerable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
                 ObservationTypeSimples = TreatmentBMPTypeAssessmentObservationTypes
-                    .OrderBy(x => x.ObservationType.ObservationTypeName).Select(x =>
-                        new TreatmentBMPAssessmentObservationTypeSimple(x.ObservationType, treatmentBMPAssessment,
+                    .OrderBy(x => x.TreatmentBMPAssessmentObservationType.ObservationTypeName).Select(x =>
+                        new TreatmentBMPAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType, treatmentBMPAssessment,
                             x.OverrideAssessmentScoreIfFailing)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
                 AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;

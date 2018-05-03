@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationType.cs" company="Tahoe Regional Planning Agency">
+<copyright file="TreatmentBMPAssessmentObservationType.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -21,12 +21,12 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq;
 using LtInfo.Common.Views;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
 namespace Neptune.Web.Models
 {
-    public partial class ObservationType : IAuditableEntity
+    public partial class TreatmentBMPAssessmentObservationType : IAuditableEntity
     {
         public string AssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment)
         {
@@ -232,7 +232,7 @@ namespace Neptune.Web.Models
         public double? GetBenchmarkValue(TreatmentBMP treatmentBMP)
         {
             var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
-                .SingleOrDefault(x => x.ObservationType == this);
+                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.BenchmarkValue;
         }
@@ -240,7 +240,7 @@ namespace Neptune.Web.Models
         public double? GetThresholdValue(TreatmentBMP treatmentBMP)
         {
             var treatmentBMPBenchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds
-                .SingleOrDefault(x => x.ObservationType == this);
+                .SingleOrDefault(x => x.TreatmentBMPAssessmentObservationType == this);
 
             return treatmentBMPBenchmarkAndThreshold?.ThresholdValue;
         }

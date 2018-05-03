@@ -2,7 +2,7 @@
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
    
     public abstract class ViewPercentageSchemaDetail : TypedWebPartialViewPage<ViewPercentageSchemaDetailViewData>

@@ -1,7 +1,7 @@
 ﻿using Neptune.Web.Models;
 using System.Collections.Generic;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class DiscreteObservationTypeSchema
     {

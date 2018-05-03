@@ -58,25 +58,25 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPTypeAssessmentObservationType(TreatmentBMPType treatmentBMPType, ObservationType observationType, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeAssessmentObservationType(TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, bool overrideAssessmentScoreIfFailing) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPTypeAssessmentObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Add(this);
-            this.ObservationTypeID = observationType.ObservationTypeID;
-            this.ObservationType = observationType;
-            observationType.TreatmentBMPTypeAssessmentObservationTypes.Add(this);
+            this.ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
+            this.TreatmentBMPAssessmentObservationType = TreatmentBMPAssessmentObservationType;
+            TreatmentBMPAssessmentObservationType.TreatmentBMPTypeAssessmentObservationTypes.Add(this);
             this.OverrideAssessmentScoreIfFailing = overrideAssessmentScoreIfFailing;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPTypeAssessmentObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPTypeAssessmentObservationType CreateNewBlank(TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return new TreatmentBMPTypeAssessmentObservationType(treatmentBMPType, observationType, default(bool));
+            return new TreatmentBMPTypeAssessmentObservationType(treatmentBMPType, TreatmentBMPAssessmentObservationType, default(bool));
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        public virtual ObservationType ObservationType { get; set; }
+        public virtual TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; set; }
 
         public static class FieldLengths
         {

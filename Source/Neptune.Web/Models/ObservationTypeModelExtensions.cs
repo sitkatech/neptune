@@ -8,26 +8,26 @@ namespace Neptune.Web.Models
     public static class ObservationTypeModelExtensions
     {
         public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.DeleteObservationType(UrlTemplate.Parameter1Int)));
-        public static string GetDeleteUrl(this ObservationType observationType)
+        public static string GetDeleteUrl(this TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return DeleteUrlTemplate.ParameterReplace(observationType.ObservationTypeID);
+            return DeleteUrlTemplate.ParameterReplace(TreatmentBMPAssessmentObservationType.ObservationTypeID);
         }
 
         public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
-        public static string GetEditUrl(this ObservationType observationType)
+        public static string GetEditUrl(this TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return EditUrlTemplate.ParameterReplace(observationType.ObservationTypeID);
+            return EditUrlTemplate.ParameterReplace(TreatmentBMPAssessmentObservationType.ObservationTypeID);
         }
 
-        public static HtmlString GetDisplayNameAsUrl(this ObservationType observationType)
+        public static HtmlString GetDisplayNameAsUrl(this TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return observationType != null ? UrlTemplate.MakeHrefString(observationType.GetDetailUrl(), observationType.ObservationTypeName) : new HtmlString(null);
+            return TreatmentBMPAssessmentObservationType != null ? UrlTemplate.MakeHrefString(TreatmentBMPAssessmentObservationType.GetDetailUrl(), TreatmentBMPAssessmentObservationType.ObservationTypeName) : new HtmlString(null);
         }
 
         public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        public static string GetDetailUrl(this ObservationType observationType)
+        public static string GetDetailUrl(this TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            return observationType == null ? "" : DetailUrlTemplate.ParameterReplace(observationType.ObservationTypeID);
+            return TreatmentBMPAssessmentObservationType == null ? "" : DetailUrlTemplate.ParameterReplace(TreatmentBMPAssessmentObservationType.ObservationTypeID);
         }
     }
 }

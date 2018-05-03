@@ -17,10 +17,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
         }
 
-        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.ObservationType observationType)
+        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
-            ObservationTypeID = observationType.ObservationTypeID;
+            ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
             ObservationData = treatmentBMPObservation?.ObservationData;
         }
 
@@ -33,10 +33,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
             var validationResults = new List<ValidationResult>();
 
-            var observationType =
+            var TreatmentBMPAssessmentObservationType =
                 HttpRequestStorage.DatabaseEntities.ObservationTypes.SingleOrDefault(x =>
                     x.ObservationTypeID == ObservationTypeID);
-            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[observationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
             if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
             {
                 validationResults.Add(new ValidationResult("Schema invalid."));

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[ObservationType]
+//  Source Table: [dbo].[TreatmentBMPAssessmentObservationType]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[ObservationType]")]
-    public partial class ObservationType : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[TreatmentBMPAssessmentObservationType]")]
+    public partial class TreatmentBMPAssessmentObservationType : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected ObservationType()
+        protected TreatmentBMPAssessmentObservationType()
         {
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(int observationTypeID, string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(int observationTypeID, string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             this.ObservationTypeID = observationTypeID;
             this.ObservationTypeName = observationTypeName;
@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public ObservationType(string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(string observationTypeName, int observationTypeSpecificationID, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -56,7 +56,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public ObservationType(string observationTypeName, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
+        public TreatmentBMPAssessmentObservationType(string observationTypeName, ObservationTypeSpecification observationTypeSpecification, string observationTypeSchema) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ObservationTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -68,9 +68,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static ObservationType CreateNewBlank(ObservationTypeSpecification observationTypeSpecification)
+        public static TreatmentBMPAssessmentObservationType CreateNewBlank(ObservationTypeSpecification observationTypeSpecification)
         {
-            return new ObservationType(default(string), observationTypeSpecification, default(string));
+            return new TreatmentBMPAssessmentObservationType(default(string), observationTypeSpecification, default(string));
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(ObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessmentObservationType).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name};
 
 
         /// <summary>

@@ -28,24 +28,24 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<ObservationType> GetObservationTypesForTreatmentType(this IQueryable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes, TreatmentBMPType treatmentBMPType)
+        public static List<TreatmentBMPAssessmentObservationType> GetObservationTypesForTreatmentType(this IQueryable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes, TreatmentBMPType treatmentBMPType)
         {
-            return TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID).ToList().Select(x => x.ObservationType).ToList();
+            return TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID).ToList().Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
         }
 
-        public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationType(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(observationType);
+            var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationTypeOrDefault(TreatmentBMPAssessmentObservationType);
 
             Check.Assert(TreatmentBMPTypeAssessmentObservationType != null,
-                $"The Observation Type '{observationType.ObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
+                $"The Observation Type '{TreatmentBMPAssessmentObservationType.ObservationTypeName}' is not applicable to the Treatment BMP Type '{treatmentBMPType.TreatmentBMPTypeName}'.");
             return TreatmentBMPTypeAssessmentObservationType;
         }
 
-        public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationTypeOrDefault(this TreatmentBMPType treatmentBMPType, ObservationType observationType)
+        public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationTypeOrDefault(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             var TreatmentBMPTypeAssessmentObservationType = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
-                x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.ObservationTypeID == observationType.ObservationTypeID);
+                x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.ObservationTypeID == TreatmentBMPAssessmentObservationType.ObservationTypeID);
 
             return TreatmentBMPTypeAssessmentObservationType;
         }

@@ -28,14 +28,14 @@ using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
         public int ObservationTypeID { get; set; }
 
         [Required]
-        [StringLength(Models.ObservationType.FieldLengths.ObservationTypeName)]
+        [StringLength(Models.TreatmentBMPAssessmentObservationType.FieldLengths.ObservationTypeName)]
         [DisplayName("Name of Observation Type")]
         public string ObservationTypeName { get; set; }      
 
@@ -61,22 +61,22 @@ namespace Neptune.Web.Views.ObservationType
         {
         }
 
-        public EditViewModel(Models.ObservationType observationType)
+        public EditViewModel(Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            ObservationTypeID = observationType.ObservationTypeID;
-            ObservationTypeName = observationType.ObservationTypeName;
+            ObservationTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeID;
+            ObservationTypeName = TreatmentBMPAssessmentObservationType.ObservationTypeName;
 
-            ObservationThresholdTypeID = observationType.ObservationTypeSpecification?.ObservationThresholdTypeID;
-            ObservationTargetTypeID = observationType.ObservationTypeSpecification?.ObservationTargetTypeID;
-            ObservationTypeCollectionMethodID = observationType.ObservationTypeSpecification?.ObservationTypeCollectionMethodID;
+            ObservationThresholdTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification?.ObservationThresholdTypeID;
+            ObservationTargetTypeID = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification?.ObservationTargetTypeID;
+            ObservationTypeCollectionMethodID = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification?.ObservationTypeCollectionMethodID;
 
-            ObservationTypeSchema = observationType.ObservationTypeSchema;
+            ObservationTypeSchema = TreatmentBMPAssessmentObservationType.ObservationTypeSchema;
         }
 
 
-        public void UpdateModel(Models.ObservationType observationType, Person currentPerson)
+        public void UpdateModel(Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, Person currentPerson)
         {
-            observationType.ObservationTypeName = ObservationTypeName;
+            TreatmentBMPAssessmentObservationType.ObservationTypeName = ObservationTypeName;
 
             var observationTypeSpecification = ObservationTypeSpecification.All.FirstOrDefault(x => 
                 x.ObservationTargetTypeID == ObservationTargetTypeID && 
@@ -85,8 +85,8 @@ namespace Neptune.Web.Views.ObservationType
 
             Check.Require(observationTypeSpecification != null, "No valid combination of Target Type, Threshold Type and Collection Method found");
 
-            observationType.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
-            observationType.ObservationTypeSchema = ObservationTypeSchema;
+            TreatmentBMPAssessmentObservationType.ObservationTypeSpecificationID = observationTypeSpecification.ObservationTypeSpecificationID;
+            TreatmentBMPAssessmentObservationType.ObservationTypeSchema = ObservationTypeSchema;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

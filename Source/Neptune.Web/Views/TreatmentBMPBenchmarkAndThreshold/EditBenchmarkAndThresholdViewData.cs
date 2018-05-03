@@ -39,27 +39,27 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         public bool TargetIsSweetSpot { get; }
 
         public EditBenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            Models.ObservationType observationType)
-            : base(currentPerson, treatmentBMP, observationType)
+            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+            : base(currentPerson, treatmentBMP, TreatmentBMPAssessmentObservationType)
         {
-            BenchmarkMeasurementUnitTypeDisplayName = observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
-            ThresholdMeasurementUnitTypeDisplayName = observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;
+            BenchmarkMeasurementUnitTypeDisplayName = TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName;
+            ThresholdMeasurementUnitTypeDisplayName = TreatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName;
 
-            BenchmarkMeasurementUnitLabel = observationType.BenchmarkMeasurementUnitLabel();
-            ThresholdMeasurementUnitLabel = observationType.ThresholdMeasurementUnitLabel();
+            BenchmarkMeasurementUnitLabel = TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel();
+            ThresholdMeasurementUnitLabel = TreatmentBMPAssessmentObservationType.ThresholdMeasurementUnitLabel();
 
-            BenchmarkDescription = observationType.BenchmarkDescription();
-            ThresholdDescription = observationType.ThresholdDescription();
+            BenchmarkDescription = TreatmentBMPAssessmentObservationType.BenchmarkDescription();
+            ThresholdDescription = TreatmentBMPAssessmentObservationType.ThresholdDescription();
 
-            var TreatmentBMPTypeAssessmentObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+            var TreatmentBMPTypeAssessmentObservationType = treatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(TreatmentBMPAssessmentObservationType);
 
             DefaultBenchmarkPlaceholder = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? "default is " + TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.Value : string.Empty;
-            DefaultBenchmarkText = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue} {observationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
+            DefaultBenchmarkText = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue} {TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
 
             DefaultThresholdPlaceholder = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? "default is " + TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.Value : string.Empty;
-            TargetIsSweetSpot = observationType.TargetIsSweetSpot;
-            var optionalPlusMinus = observationType.TargetIsSweetSpot ? "+/-" : "";
-            DefaultThresholdText = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue} {observationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
+            TargetIsSweetSpot = TreatmentBMPAssessmentObservationType.TargetIsSweetSpot;
+            var optionalPlusMinus = TreatmentBMPAssessmentObservationType.TargetIsSweetSpot ? "+/-" : "";
+            DefaultThresholdText = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue} {TreatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
         }
     }
 }

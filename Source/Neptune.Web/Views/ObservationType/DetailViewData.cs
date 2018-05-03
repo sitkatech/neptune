@@ -25,11 +25,11 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.TreatmentBMPType;
 
-namespace Neptune.Web.Views.ObservationType
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
     public class DetailViewData : NeptuneViewData
     {
-        public Models.ObservationType ObservationType { get; }
+        public Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType { get; }
         public bool UserHasObservationTypeManagePermissions { get; }
         public string ViewSchemaDetailUrl { get; }
         public TreatmentBMPTypeGridSpec TreatmentBMPTypeGridSpec { get; }
@@ -38,16 +38,16 @@ namespace Neptune.Web.Views.ObservationType
 
 
         public DetailViewData(Person currentPerson,
-            Models.ObservationType observationType) : base(currentPerson)
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
         {
-            ObservationType = observationType;
-            EntityName = Models.FieldDefinition.ObservationType.GetFieldDefinitionLabelPluralized();
+            TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
+            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(c => c.Index());
-            PageTitle = observationType.ObservationTypeName;
+            PageTitle = TreatmentBMPAssessmentObservationType.ObservationTypeName;
 
             UserHasObservationTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
-            ViewSchemaDetailUrl = observationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(observationType);
+            ViewSchemaDetailUrl = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType);
 
             TreatmentBMPTypeGridSpec = new TreatmentBMPTypeGridSpec(currentPerson)
             {
@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.ObservationType
             };
 
             TreatmentBMPTypeGridName = "treatmentBMPTypeGridForObservationType";
-            TreatmentBMPTypeGridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(observationType));
+            TreatmentBMPTypeGridDataUrl = SitkaRoute<ObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationType));
         }
     }
 }

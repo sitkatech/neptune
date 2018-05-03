@@ -8,10 +8,10 @@ namespace Neptune.Web.Models
         {
             get
             {
-                var observationType = HttpRequestStorage.DatabaseEntities.ObservationTypes.GetObservationType(ObservationTypeID);
+                var TreatmentBMPAssessmentObservationType = HttpRequestStorage.DatabaseEntities.ObservationTypes.GetObservationType(ObservationTypeID);
                 var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(TreatmentBMPID);
 
-                return $"Treatment BMP: {treatmentBMP.TreatmentBMPName}, Observation Type: {observationType.ObservationTypeName}, Benchmark Value: {BenchmarkValue}, Threshold Value: {ThresholdValue}";
+                return $"Treatment BMP: {treatmentBMP.TreatmentBMPName}, Observation Type: {TreatmentBMPAssessmentObservationType.ObservationTypeName}, Benchmark Value: {BenchmarkValue}, Threshold Value: {ThresholdValue}";
             }
         }
     }
