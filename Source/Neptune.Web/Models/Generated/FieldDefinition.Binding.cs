@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionJurisdiction Jurisdiction = FieldDefinitionJurisdiction.Instance;
         public static readonly FieldDefinitionModeledCatchment ModeledCatchment = FieldDefinitionModeledCatchment.Instance;
         public static readonly FieldDefinitionTreatmentBMP TreatmentBMP = FieldDefinitionTreatmentBMP.Instance;
-        public static readonly FieldDefinitionObservationType TreatmentBMPAssessmentObservationType = FieldDefinitionObservationType.Instance;
+        public static readonly FieldDefinitionTreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType = FieldDefinitionTreatmentBMPAssessmentObservationType.Instance;
         public static readonly FieldDefinitionObservationCollectionMethod ObservationCollectionMethod = FieldDefinitionObservationCollectionMethod.Instance;
         public static readonly FieldDefinitionObservationThresholdType ObservationThresholdType = FieldDefinitionObservationThresholdType.Instance;
         public static readonly FieldDefinitionObservationTargetType ObservationTargetType = FieldDefinitionObservationTargetType.Instance;
@@ -200,8 +200,6 @@ namespace Neptune.Web.Models
                     return ObservationTargetType;
                 case FieldDefinitionEnum.ObservationThresholdType:
                     return ObservationThresholdType;
-                case FieldDefinitionEnum.ObservationType:
-                    return TreatmentBMPAssessmentObservationType;
                 case FieldDefinitionEnum.Organization:
                     return Organization;
                 case FieldDefinitionEnum.OrganizationType:
@@ -224,6 +222,8 @@ namespace Neptune.Web.Models
                     return RoleName;
                 case FieldDefinitionEnum.TreatmentBMP:
                     return TreatmentBMP;
+                case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
+                    return TreatmentBMPAssessmentObservationType;
                 case FieldDefinitionEnum.TreatmentBMPAttributeDataType:
                     return TreatmentBMPAttributeDataType;
                 case FieldDefinitionEnum.TreatmentBMPAttributeType:
@@ -269,7 +269,7 @@ namespace Neptune.Web.Models
         Jurisdiction = 23,
         ModeledCatchment = 24,
         TreatmentBMP = 25,
-        ObservationType = 26,
+        TreatmentBMPAssessmentObservationType = 26,
         ObservationCollectionMethod = 27,
         ObservationThresholdType = 28,
         ObservationTargetType = 29,
@@ -439,10 +439,10 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTreatmentBMP Instance = new FieldDefinitionTreatmentBMP(25, @"TreatmentBMP", @"Treatment BMP", @"", true);
     }
 
-    public partial class FieldDefinitionObservationType : FieldDefinition
+    public partial class FieldDefinitionTreatmentBMPAssessmentObservationType : FieldDefinition
     {
-        private FieldDefinitionObservationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionObservationType Instance = new FieldDefinitionObservationType(26, @"ObservationType", @"Observation Type", @"", true);
+        private FieldDefinitionTreatmentBMPAssessmentObservationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionTreatmentBMPAssessmentObservationType Instance = new FieldDefinitionTreatmentBMPAssessmentObservationType(26, @"TreatmentBMPAssessmentObservationType", @"Treatment BMP Assessment Observation Type", @"", true);
     }
 
     public partial class FieldDefinitionObservationCollectionMethod : FieldDefinition
