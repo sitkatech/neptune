@@ -148,7 +148,7 @@
                         <thead>
                             <tr>
                                 <th>Attribute</th>
-                                <th>Value</th>
+                                <th class="text-right">Value</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -160,7 +160,7 @@
                                         <br />
                                         <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
                                     </td>
-                                    <td style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    <td class="text-right" style="min-width: 200px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 </tr>
                             }
                         </tbody>
@@ -192,7 +192,7 @@
                         <thead>
                             <tr>
                                 <th>Attribute</th>
-                                <th>Value</th>
+                                <th class="text-right">Value</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -204,7 +204,7 @@
                                         <br />
                                         <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
                                     </td>
-                                    <td style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    <td class="text-right" style="min-width: 200px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 </tr>
                             }
                         </tbody>
@@ -251,10 +251,12 @@
                 }
             </div>
             <div class="panel-body">
-                <div class="table-responsive">
 
-                    @if (ViewDataTyped.TreatmentBMP.TreatmentBMPFundingSources.Any())
-                    {
+
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPFundingSources.Any())
+                {
+                    <div class="table-responsive">
+
                         <div style="overflow-x: auto">
                             <table class="table table-striped table-condensed table-hover table-bordered">
                                 <tr>
@@ -275,15 +277,16 @@
                                         <th class="text-right">@ViewDataTyped.TreatmentBMP.TreatmentBMPFundingSources.Sum(x => x.Amount).ToStringCurrency()</th>
                                     </tr>
                                 }
-                            </table>                          
+                            </table>
                         </div>
-                    }
-                    else
-                    {
-                        <p class="systemText">No funding sources identified for this Treatment BMP</p>
-                    }
-                </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="systemText">No funding sources identified for this Treatment BMP</p>
+                }
             </div>
+
         </div>
     </div>
 
