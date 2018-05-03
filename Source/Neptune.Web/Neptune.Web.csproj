@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\TreatmentBMPFundingSourceController.cs" />
+    <Compile Include="Models\FundingSourceSimple.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -195,6 +197,8 @@
     <Compile Include="Controllers\FundingSourceController.cs" />
     <Compile Include="Models\FundingSource.cs" />
     <Compile Include="Models\TreatmentBMPAttributeValue.cs" />
+    <Compile Include="Models\TreatmentBMPFundingSourceSimple.cs" />
+    <Compile Include="Models\TreatmentBMPSimple.cs" />
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />
     <Compile Include="Security\FundingSourceViewFeature.cs" />
@@ -776,6 +780,9 @@
     <Compile Include="Views\TreatmentBMPDocument\New.cs" />
     <Compile Include="Views\TreatmentBMPDocument\NewViewData.cs" />
     <Compile Include="Views\TreatmentBMPDocument\NewViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPFundingSource\Edit.cs" />
+    <Compile Include="Views\TreatmentBMPFundingSource\EditViewData.cs" />
+    <Compile Include="Views\TreatmentBMPFundingSource\EditViewModel.cs" />
     <Compile Include="Views\TreatmentBMPImage\Edit.cs" />
     <Compile Include="Views\TreatmentBMPImage\EditViewData.cs" />
     <Compile Include="Views\TreatmentBMPImage\EditViewModel.cs" />
@@ -928,6 +935,7 @@
     <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAttributeType\EditTreatmentBMPAttributeTypeController.js" />
+    <Content Include="Views\TreatmentBMPFundingSource\EditTreatmentBMPFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
@@ -994,6 +1002,7 @@
     <Content Include="Views\FundingSource\Detail.cshtml" />
     <Content Include="Views\FundingSource\Edit.cshtml" />
     <Content Include="Views\FundingSource\Index.cshtml" />
+    <Content Include="Views\TreatmentBMPFundingSource\Edit.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

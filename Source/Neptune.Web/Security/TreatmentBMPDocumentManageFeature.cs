@@ -3,7 +3,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows editing a Treatment BMP Assessment if you are assigned to manage that BMP's jurisdiction")]
+    [SecurityFeatureDescription("Allows editing a Treatment BMP Documents if you are assigned to manage that BMP's jurisdiction")]
     public class TreatmentBMPDocumentManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<TreatmentBMPDocument>
     {
         private readonly NeptuneFeatureWithContextImpl<TreatmentBMPDocument> _lakeTahoeInfoFeatureWithContextImpl;
