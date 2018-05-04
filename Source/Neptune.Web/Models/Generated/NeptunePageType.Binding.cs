@@ -38,6 +38,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeInstructions ManageTreatmentBMPAttributeInstructions = NeptunePageTypeManageTreatmentBMPAttributeInstructions.Instance;
         public static readonly NeptunePageTypeManageTreatmentBMPAttributeTypesList ManageTreatmentBMPAttributeTypesList = NeptunePageTypeManageTreatmentBMPAttributeTypesList.Instance;
         public static readonly NeptunePageTypeLegal Legal = NeptunePageTypeLegal.Instance;
+        public static readonly NeptunePageTypeFundingSourcesList FundingSourcesList = NeptunePageTypeFundingSourcesList.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -47,7 +48,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageTreatmentBMPAttributeTypeInstructions, ManageTreatmentBMPAttributeInstructions, ManageTreatmentBMPAttributeTypesList, Legal };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageTreatmentBMPAttributeTypeInstructions, ManageTreatmentBMPAttributeInstructions, ManageTreatmentBMPAttributeTypesList, Legal, FundingSourcesList };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -123,6 +124,8 @@ namespace Neptune.Web.Models
                     return About;
                 case NeptunePageTypeEnum.Assessment:
                     return Assessment;
+                case NeptunePageTypeEnum.FundingSourcesList:
+                    return FundingSourcesList;
                 case NeptunePageTypeEnum.HomeAdditionalInfo:
                     return HomeAdditionalInfo;
                 case NeptunePageTypeEnum.HomeMapInfo:
@@ -186,7 +189,8 @@ namespace Neptune.Web.Models
         ManageTreatmentBMPAttributeTypeInstructions = 17,
         ManageTreatmentBMPAttributeInstructions = 18,
         ManageTreatmentBMPAttributeTypesList = 19,
-        Legal = 20
+        Legal = 20,
+        FundingSourcesList = 21
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -307,5 +311,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeLegal(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeLegal Instance = new NeptunePageTypeLegal(20, @"Legal", @"Legal", 2);
+    }
+
+    public partial class NeptunePageTypeFundingSourcesList : NeptunePageType
+    {
+        private NeptunePageTypeFundingSourcesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeFundingSourcesList Instance = new NeptunePageTypeFundingSourcesList(21, @"FundingSourcesList", @"Funding Sources List", 2);
     }
 }

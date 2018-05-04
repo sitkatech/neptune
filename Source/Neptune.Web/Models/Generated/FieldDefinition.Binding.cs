@@ -61,6 +61,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionMaintenanceRecordType MaintenanceRecordType = FieldDefinitionMaintenanceRecordType.Instance;
         public static readonly FieldDefinitionMaintenanceRecord MaintenanceRecord = FieldDefinitionMaintenanceRecord.Instance;
         public static readonly FieldDefinitionAttributeTypePurpose AttributeTypePurpose = FieldDefinitionAttributeTypePurpose.Instance;
+        public static readonly FieldDefinitionFundingSource FundingSource = FieldDefinitionFundingSource.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -70,7 +71,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, ObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, TreatmentBMPAttributeType, TreatmentBMPAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -170,6 +171,8 @@ namespace Neptune.Web.Models
                     return DefaultThresholdValue;
                 case FieldDefinitionEnum.ExternalLinks:
                     return ExternalLinks;
+                case FieldDefinitionEnum.FundingSource:
+                    return FundingSource;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
                     return IsPrimaryContactOrganization;
                 case FieldDefinitionEnum.Jurisdiction:
@@ -286,7 +289,8 @@ namespace Neptune.Web.Models
         TreatmentBMPAttributeDataType = 40,
         MaintenanceRecordType = 41,
         MaintenanceRecord = 42,
-        AttributeTypePurpose = 43
+        AttributeTypePurpose = 43,
+        FundingSource = 44
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -545,5 +549,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionAttributeTypePurpose(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionAttributeTypePurpose Instance = new FieldDefinitionAttributeTypePurpose(43, @"AttributeTypePurpose", @"Purpose", @"How the attribute type will be used for analysis and reporting", true);
+    }
+
+    public partial class FieldDefinitionFundingSource : FieldDefinition
+    {
+        private FieldDefinitionFundingSource(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionFundingSource Instance = new FieldDefinitionFundingSource(44, @"FundingSource", @"Funding Source", @"", true);
     }
 }
