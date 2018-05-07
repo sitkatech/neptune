@@ -9,6 +9,7 @@
     <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.FundingSource" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.MaintenanceRecord" />
     <EntitySet Name="MaintenanceRecordObservation" EntityType="Neptune.Web.Models.MaintenanceRecordObservation" />
+    <EntitySet Name="MaintenanceRecordObservationValue" EntityType="Neptune.Web.Models.MaintenanceRecordObservationValue" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.ModeledCatchment" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.ModeledCatchmentGeometryStaging" />
     <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.NeptuneHomePageImage" />
@@ -128,6 +129,10 @@
     <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" Association="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
       <End Role="TreatmentBMPTypeAttributeType" EntitySet="TreatmentBMPTypeAttributeType" />
       <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID" Association="Neptune.Web.Models.FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID">
+      <End Role="MaintenanceRecordObservation" EntitySet="MaintenanceRecordObservation" />
+      <End Role="MaintenanceRecordObservationValues" EntitySet="MaintenanceRecordObservationValue" />
     </AssociationSet>
     <AssociationSet Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
@@ -410,6 +415,17 @@
     <NavigationProperty Name="TreatmentBMPAttributeType" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID" FromRole="MaintenanceRecordObservations" ToRole="TreatmentBMPAttributeType" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID" FromRole="MaintenanceRecordObservations" ToRole="TreatmentBMPType" />
     <NavigationProperty Name="TreatmentBMPTypeAttributeType" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" FromRole="MaintenanceRecordObservations" ToRole="TreatmentBMPTypeAttributeType" />
+    <NavigationProperty Name="MaintenanceRecordObservationValues" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID" FromRole="MaintenanceRecordObservation" ToRole="MaintenanceRecordObservationValues" />
+  </EntityType>
+  <EntityType Name="MaintenanceRecordObservationValue">
+    <Key>
+      <PropertyRef Name="MaintenanceRecordObservationValueID" />
+    </Key>
+    <Property Name="MaintenanceRecordObservationValueID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="MaintenanceRecordObservationID" Type="Int32" Nullable="false" />
+    <Property Name="ObservationValue" Type="String" Nullable="false" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="MaintenanceRecordObservation" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID" FromRole="MaintenanceRecordObservationValues" ToRole="MaintenanceRecordObservation" />
   </EntityType>
   <EntityType Name="ModeledCatchment">
     <Key>
@@ -1119,6 +1135,18 @@
       </Principal>
       <Dependent Role="MaintenanceRecordObservations">
         <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID">
+    <End Role="MaintenanceRecordObservation" Type="Neptune.Web.Models.MaintenanceRecordObservation" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservationValues" Type="Neptune.Web.Models.MaintenanceRecordObservationValue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaintenanceRecordObservation">
+        <PropertyRef Name="MaintenanceRecordObservationID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservationValues">
+        <PropertyRef Name="MaintenanceRecordObservationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

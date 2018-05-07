@@ -9,6 +9,7 @@
     <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.Store.FundingSource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.Store.MaintenanceRecord" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecordObservation" EntityType="Neptune.Web.Models.Store.MaintenanceRecordObservation" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MaintenanceRecordObservationValue" EntityType="Neptune.Web.Models.Store.MaintenanceRecordObservationValue" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.Store.ModeledCatchment" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.Store.ModeledCatchmentGeometryStaging" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.Store.NeptuneHomePageImage" store:Type="Tables" Schema="dbo" />
@@ -92,6 +93,10 @@
     <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
       <End Role="TreatmentBMPTypeAttributeType" EntitySet="TreatmentBMPTypeAttributeType" />
       <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID">
+      <End Role="MaintenanceRecordObservation" EntitySet="MaintenanceRecordObservation" />
+      <End Role="MaintenanceRecordObservationValues" EntitySet="MaintenanceRecordObservationValue" />
     </AssociationSet>
     <AssociationSet Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.Store.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
@@ -404,6 +409,15 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="TreatmentBMPTypeAttributeTypeID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPAttributeTypeID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MaintenanceRecordObservationValue">
+    <Key>
+      <PropertyRef Name="MaintenanceRecordObservationValueID" />
+    </Key>
+    <Property Name="MaintenanceRecordObservationValueID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="MaintenanceRecordObservationID" Type="int" Nullable="false" />
+    <Property Name="ObservationValue" Type="varchar" Nullable="false" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -982,6 +996,18 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttribu
       </Principal>
       <Dependent Role="MaintenanceRecordObservations">
         <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID">
+    <End Role="MaintenanceRecordObservation" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservationValues" Type="Neptune.Web.Models.Store.MaintenanceRecordObservationValue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaintenanceRecordObservation">
+        <PropertyRef Name="MaintenanceRecordObservationID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservationValues">
+        <PropertyRef Name="MaintenanceRecordObservationID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

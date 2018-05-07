@@ -42,6 +42,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
         public virtual IQueryable<MaintenanceRecordObservation> MaintenanceRecordObservations { get { return AllMaintenanceRecordObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<MaintenanceRecordObservationValue> AllMaintenanceRecordObservationValues { get; set; }
+        public virtual IQueryable<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get { return AllMaintenanceRecordObservationValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecord> AllMaintenanceRecords { get; set; }
         public virtual IQueryable<MaintenanceRecord> MaintenanceRecords { get { return AllMaintenanceRecords.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<ModeledCatchmentGeometryStaging> AllModeledCatchmentGeometryStagings { get; set; }
@@ -145,6 +147,9 @@ namespace Neptune.Web.Models
 
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
+
+                case "MaintenanceRecordObservationValue":
+                    return MaintenanceRecordObservationValues.GetMaintenanceRecordObservationValue(primaryKey);
 
                 case "MaintenanceRecord":
                     return MaintenanceRecords.GetMaintenanceRecord(primaryKey);

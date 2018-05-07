@@ -104,6 +104,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MaintenanceRecordObservationValue">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.MaintenanceRecordObservationValue">
+        <MappingFragment StoreEntitySet="MaintenanceRecordObservationValue">
+          <ScalarProperty Name="MaintenanceRecordObservationValueID" ColumnName="MaintenanceRecordObservationValueID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="MaintenanceRecordObservationID" ColumnName="MaintenanceRecordObservationID" />
+          <ScalarProperty Name="ObservationValue" ColumnName="ObservationValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ModeledCatchment">
       <EntityTypeMapping TypeName="Neptune.Web.Models.ModeledCatchment">
         <MappingFragment StoreEntitySet="ModeledCatchment">
