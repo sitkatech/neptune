@@ -96,6 +96,14 @@
       <End Role="FundingSource" EntitySet="FundingSource" />
       <End Role="TreatmentBMPFundingSources" EntitySet="TreatmentBMPFundingSource" />
     </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID" Association="Neptune.Web.Models.FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
+      <End Role="PerformedByOrganization" EntitySet="Organization" />
+      <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" EntitySet="MaintenanceRecord" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID" Association="Neptune.Web.Models.FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
+      <End Role="EnteredByPerson" EntitySet="Person" />
+      <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" EntitySet="MaintenanceRecord" />
+    </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
       <End Role="MaintenanceRecordsWhereYouAreThePerformedByPerson" EntitySet="MaintenanceRecord" />
@@ -363,6 +371,10 @@
     <Property Name="PerformedByPersonID" Type="Int32" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceRecordTypeID" Type="Int32" Nullable="false" />
+    <Property Name="EnteredByPersonID" Type="Int32" />
+    <Property Name="PerformedByOrganizationID" Type="Int32" />
+    <NavigationProperty Name="PerformedByOrganization" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID" FromRole="MaintenanceRecordsWhereYouAreThePerformedByOrganization" ToRole="PerformedByOrganization" />
+    <NavigationProperty Name="EnteredByPerson" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID" FromRole="MaintenanceRecordsWhereYouAreTheEnteredByPerson" ToRole="EnteredByPerson" />
     <NavigationProperty Name="PerformedByPerson" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" FromRole="MaintenanceRecordsWhereYouAreThePerformedByPerson" ToRole="PerformedByPerson" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" FromRole="MaintenanceRecords" ToRole="TreatmentBMP" />
   </EntityType>
@@ -451,6 +463,7 @@
     <Property Name="OrganizationTypeID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="LogoFileResource" Relationship="Neptune.Web.Models.FK_Organization_FileResource_LogoFileResourceID_FileResourceID" FromRole="OrganizationsWhereYouAreTheLogoFileResource" ToRole="LogoFileResource" />
     <NavigationProperty Name="FundingSources" Relationship="Neptune.Web.Models.FK_FundingSource_Organization_OrganizationID" FromRole="Organization" ToRole="FundingSources" />
+    <NavigationProperty Name="MaintenanceRecordsWhereYouAreThePerformedByOrganization" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID" FromRole="PerformedByOrganization" ToRole="MaintenanceRecordsWhereYouAreThePerformedByOrganization" />
     <NavigationProperty Name="OrganizationType" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="Organizations" ToRole="OrganizationType" />
     <NavigationProperty Name="PrimaryContactPerson" Relationship="Neptune.Web.Models.FK_Organization_Person_PrimaryContactPersonID_PersonID" FromRole="OrganizationsWhereYouAreThePrimaryContactPerson" ToRole="PrimaryContactPerson" />
     <NavigationProperty Name="People" Relationship="Neptune.Web.Models.FK_Person_Organization_OrganizationID" FromRole="Organization" ToRole="People" />
@@ -490,6 +503,7 @@
     <Property Name="LoginName" Type="String" Nullable="false" MaxLength="128" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="AuditLogs" Relationship="Neptune.Web.Models.FK_AuditLog_Person_PersonID" FromRole="Person" ToRole="AuditLogs" />
     <NavigationProperty Name="FileResourcesWhereYouAreTheCreatePerson" Relationship="Neptune.Web.Models.FK_FileResource_Person_CreatePersonID_PersonID" FromRole="CreatePerson" ToRole="FileResourcesWhereYouAreTheCreatePerson" />
+    <NavigationProperty Name="MaintenanceRecordsWhereYouAreTheEnteredByPerson" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID" FromRole="EnteredByPerson" ToRole="MaintenanceRecordsWhereYouAreTheEnteredByPerson" />
     <NavigationProperty Name="MaintenanceRecordsWhereYouAreThePerformedByPerson" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" FromRole="PerformedByPerson" ToRole="MaintenanceRecordsWhereYouAreThePerformedByPerson" />
     <NavigationProperty Name="ModeledCatchmentGeometryStagings" Relationship="Neptune.Web.Models.FK_ModeledCatchmentGeometryStaging_Person_PersonID" FromRole="Person" ToRole="ModeledCatchmentGeometryStagings" />
     <NavigationProperty Name="Notifications" Relationship="Neptune.Web.Models.FK_Notification_Person_PersonID" FromRole="Person" ToRole="Notifications" />
@@ -973,6 +987,30 @@
       </Principal>
       <Dependent Role="TreatmentBMPFundingSources">
         <PropertyRef Name="FundingSourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
+    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Organization" Multiplicity="0..1" />
+    <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" Type="Neptune.Web.Models.MaintenanceRecord" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PerformedByOrganization">
+        <PropertyRef Name="OrganizationID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization">
+        <PropertyRef Name="PerformedByOrganizationID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
+    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
+    <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" Type="Neptune.Web.Models.MaintenanceRecord" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EnteredByPerson">
+        <PropertyRef Name="PersonID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson">
+        <PropertyRef Name="EnteredByPersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         {
             this.AuditLogs = new HashSet<AuditLog>();
             this.FileResourcesWhereYouAreTheCreatePerson = new HashSet<FileResource>();
+            this.MaintenanceRecordsWhereYouAreTheEnteredByPerson = new HashSet<MaintenanceRecord>();
             this.MaintenanceRecordsWhereYouAreThePerformedByPerson = new HashSet<MaintenanceRecord>();
             this.ModeledCatchmentGeometryStagings = new HashSet<ModeledCatchmentGeometryStaging>();
             this.Notifications = new HashSet<Notification>();
@@ -112,7 +113,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || MaintenanceRecordsWhereYouAreThePerformedByPerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPAssessments.Any();
+            return AuditLogs.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || MaintenanceRecordsWhereYouAreTheEnteredByPerson.Any() || MaintenanceRecordsWhereYouAreThePerformedByPerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPAssessments.Any();
         }
 
         /// <summary>
@@ -133,6 +134,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in FileResourcesWhereYouAreTheCreatePerson.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in MaintenanceRecordsWhereYouAreTheEnteredByPerson.ToList())
             {
                 x.DeleteFull();
             }
@@ -200,6 +206,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<AuditLog> AuditLogs { get; set; }
         public virtual ICollection<FileResource> FileResourcesWhereYouAreTheCreatePerson { get; set; }
+        public virtual ICollection<MaintenanceRecord> MaintenanceRecordsWhereYouAreTheEnteredByPerson { get; set; }
         public virtual ICollection<MaintenanceRecord> MaintenanceRecordsWhereYouAreThePerformedByPerson { get; set; }
         public virtual ICollection<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }

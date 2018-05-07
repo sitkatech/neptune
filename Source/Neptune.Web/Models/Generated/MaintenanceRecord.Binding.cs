@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, int performedByPersonID, string maintenanceRecordDescription, int maintenanceRecordTypeID) : this()
+        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, int performedByPersonID, string maintenanceRecordDescription, int maintenanceRecordTypeID, int? enteredByPersonID, int? performedByOrganizationID) : this()
         {
             this.MaintenanceRecordID = maintenanceRecordID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -38,6 +38,8 @@ namespace Neptune.Web.Models
             this.PerformedByPersonID = performedByPersonID;
             this.MaintenanceRecordDescription = maintenanceRecordDescription;
             this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
+            this.EnteredByPersonID = enteredByPersonID;
+            this.PerformedByOrganizationID = performedByOrganizationID;
         }
 
         /// <summary>
@@ -110,13 +112,17 @@ namespace Neptune.Web.Models
         public int PerformedByPersonID { get; set; }
         public string MaintenanceRecordDescription { get; set; }
         public int MaintenanceRecordTypeID { get; set; }
+        public int? EnteredByPersonID { get; set; }
+        public int? PerformedByOrganizationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual Person EnteredByPerson { get; set; }
         public virtual Person PerformedByPerson { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID]; } }
+        public virtual Organization PerformedByOrganization { get; set; }
 
         public static class FieldLengths
         {

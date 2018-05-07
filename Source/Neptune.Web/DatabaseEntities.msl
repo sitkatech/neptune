@@ -87,6 +87,8 @@
           <ScalarProperty Name="PerformedByPersonID" ColumnName="PerformedByPersonID" />
           <ScalarProperty Name="MaintenanceRecordDescription" ColumnName="MaintenanceRecordDescription" />
           <ScalarProperty Name="MaintenanceRecordTypeID" ColumnName="MaintenanceRecordTypeID" />
+          <ScalarProperty Name="EnteredByPersonID" ColumnName="EnteredByPersonID" />
+          <ScalarProperty Name="PerformedByOrganizationID" ColumnName="PerformedByOrganizationID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
