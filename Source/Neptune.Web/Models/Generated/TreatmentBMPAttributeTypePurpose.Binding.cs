@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
     {
         public static readonly TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes PerformanceAndModelingAttributes = TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes.Instance;
         public static readonly TreatmentBMPAttributeTypePurposeOtherDesignAttributes OtherDesignAttributes = TreatmentBMPAttributeTypePurposeOtherDesignAttributes.Instance;
+        public static readonly TreatmentBMPAttributeTypePurposeMaintenance Maintenance = TreatmentBMPAttributeTypePurposeMaintenance.Instance;
 
         public static readonly List<TreatmentBMPAttributeTypePurpose> All;
         public static readonly ReadOnlyDictionary<int, TreatmentBMPAttributeTypePurpose> AllLookupDictionary;
@@ -29,7 +30,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static TreatmentBMPAttributeTypePurpose()
         {
-            All = new List<TreatmentBMPAttributeTypePurpose> { PerformanceAndModelingAttributes, OtherDesignAttributes };
+            All = new List<TreatmentBMPAttributeTypePurpose> { PerformanceAndModelingAttributes, OtherDesignAttributes, Maintenance };
             AllLookupDictionary = new ReadOnlyDictionary<int, TreatmentBMPAttributeTypePurpose>(All.ToDictionary(x => x.TreatmentBMPAttributeTypePurposeID));
         }
 
@@ -99,6 +100,8 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
+                case TreatmentBMPAttributeTypePurposeEnum.Maintenance:
+                    return Maintenance;
                 case TreatmentBMPAttributeTypePurposeEnum.OtherDesignAttributes:
                     return OtherDesignAttributes;
                 case TreatmentBMPAttributeTypePurposeEnum.PerformanceAndModelingAttributes:
@@ -112,7 +115,8 @@ namespace Neptune.Web.Models
     public enum TreatmentBMPAttributeTypePurposeEnum
     {
         PerformanceAndModelingAttributes = 1,
-        OtherDesignAttributes = 2
+        OtherDesignAttributes = 2,
+        Maintenance = 3
     }
 
     public partial class TreatmentBMPAttributeTypePurposePerformanceAndModelingAttributes : TreatmentBMPAttributeTypePurpose
@@ -125,5 +129,11 @@ namespace Neptune.Web.Models
     {
         private TreatmentBMPAttributeTypePurposeOtherDesignAttributes(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
         public static readonly TreatmentBMPAttributeTypePurposeOtherDesignAttributes Instance = new TreatmentBMPAttributeTypePurposeOtherDesignAttributes(2, @"OtherDesignAttributes", @"Other Design Attributes");
+    }
+
+    public partial class TreatmentBMPAttributeTypePurposeMaintenance : TreatmentBMPAttributeTypePurpose
+    {
+        private TreatmentBMPAttributeTypePurposeMaintenance(int treatmentBMPAttributeTypePurposeID, string treatmentBMPAttributeTypePurposeName, string treatmentBMPAttributeTypePurposeDisplayName) : base(treatmentBMPAttributeTypePurposeID, treatmentBMPAttributeTypePurposeName, treatmentBMPAttributeTypePurposeDisplayName) {}
+        public static readonly TreatmentBMPAttributeTypePurposeMaintenance Instance = new TreatmentBMPAttributeTypePurposeMaintenance(3, @"Maintenance", @"Maintenance");
     }
 }
