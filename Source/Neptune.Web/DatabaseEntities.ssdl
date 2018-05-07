@@ -8,6 +8,7 @@
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.Store.FundingSource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.Store.MaintenanceRecord" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MaintenanceRecordObservation" EntityType="Neptune.Web.Models.Store.MaintenanceRecordObservation" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchment" EntityType="Neptune.Web.Models.Store.ModeledCatchment" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ModeledCatchmentGeometryStaging" EntityType="Neptune.Web.Models.Store.ModeledCatchmentGeometryStaging" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="NeptuneHomePageImage" EntityType="Neptune.Web.Models.Store.NeptuneHomePageImage" store:Type="Tables" Schema="dbo" />
@@ -75,6 +76,22 @@
     <AssociationSet Name="FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="MaintenanceRecords" EntitySet="MaintenanceRecord" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID">
+      <End Role="MaintenanceRecord" EntitySet="MaintenanceRecord" />
+      <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID">
+      <End Role="TreatmentBMPAttributeType" EntitySet="TreatmentBMPAttributeType" />
+      <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID">
+      <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
+      <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
+      <End Role="TreatmentBMPTypeAttributeType" EntitySet="TreatmentBMPTypeAttributeType" />
+      <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
     </AssociationSet>
     <AssociationSet Name="FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.Store.FK_ModeledCatchment_StormwaterJurisdiction_StormwaterJurisdictionID">
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
@@ -360,6 +377,9 @@ warning 6035: The relationship 'FK_TreatmentBMPFundingSource_FundingSource_Fundi
     <Property Name="IsActive" Type="bit" Nullable="false" />
     <Property Name="FundingSourceDescription" Type="varchar" MaxLength="500" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
   <EntityType Name="MaintenanceRecord">
     <Key>
       <PropertyRef Name="MaintenanceRecordID" />
@@ -373,6 +393,17 @@ warning 6035: The relationship 'FK_TreatmentBMPFundingSource_FundingSource_Fundi
     <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
     <Property Name="EnteredByPersonID" Type="int" />
     <Property Name="PerformedByOrganizationID" Type="int" />
+  </EntityType>
+  <EntityType Name="MaintenanceRecordObservation">
+    <Key>
+      <PropertyRef Name="MaintenanceRecordObservationID" />
+    </Key>
+    <Property Name="MaintenanceRecordObservationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="MaintenanceRecordID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPTypeAttributeTypeID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPAttributeTypeID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -655,6 +686,7 @@ warning 6035: The relationship 'FK_TreatmentBMPAttributeValue_TreatmentBMPAttrib
     <Property Name="TreatmentBMPAttributeTypeID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
@@ -740,6 +772,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPAtt
     <Property Name="ObservationData" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -771,6 +804,8 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeAsses
     <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_TreatmentBMPAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_TreatmentBMPAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="TreatmentBMPTypeAttributeType">
@@ -899,6 +934,54 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttribu
       </Principal>
       <Dependent Role="MaintenanceRecords">
         <PropertyRef Name="TreatmentBMPID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID">
+    <End Role="MaintenanceRecord" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservations" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaintenanceRecord">
+        <PropertyRef Name="MaintenanceRecordID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservations">
+        <PropertyRef Name="MaintenanceRecordID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservation_TreatmentBMPAttributeType_TreatmentBMPAttributeTypeID">
+    <End Role="TreatmentBMPAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPAttributeType" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservations" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPAttributeType">
+        <PropertyRef Name="TreatmentBMPAttributeTypeID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservations">
+        <PropertyRef Name="TreatmentBMPAttributeTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID">
+    <End Role="TreatmentBMPType" Type="Neptune.Web.Models.Store.TreatmentBMPType" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservations" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPType">
+        <PropertyRef Name="TreatmentBMPTypeID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservations">
+        <PropertyRef Name="TreatmentBMPTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
+    <End Role="TreatmentBMPTypeAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" Multiplicity="1" />
+    <End Role="MaintenanceRecordObservations" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMPTypeAttributeType">
+        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      </Principal>
+      <Dependent Role="MaintenanceRecordObservations">
+        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

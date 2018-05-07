@@ -40,6 +40,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FundingSource> AllFundingSources { get; set; }
         public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
+        public virtual IQueryable<MaintenanceRecordObservation> MaintenanceRecordObservations { get { return AllMaintenanceRecordObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecord> AllMaintenanceRecords { get; set; }
         public virtual IQueryable<MaintenanceRecord> MaintenanceRecords { get { return AllMaintenanceRecords.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<ModeledCatchmentGeometryStaging> AllModeledCatchmentGeometryStagings { get; set; }
@@ -140,6 +142,9 @@ namespace Neptune.Web.Models
                     var googleChartType = GoogleChartType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
+
+                case "MaintenanceRecordObservation":
+                    return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
                 case "MaintenanceRecord":
                     return MaintenanceRecords.GetMaintenanceRecord(primaryKey);

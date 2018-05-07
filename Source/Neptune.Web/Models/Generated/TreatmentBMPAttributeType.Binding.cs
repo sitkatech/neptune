@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPAttributeType()
         {
+            this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
             this.TreatmentBMPAttributes = new HashSet<TreatmentBMPAttribute>();
             this.TreatmentBMPTypeAttributeTypes = new HashSet<TreatmentBMPTypeAttributeType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -84,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPAttributes.Any() || TreatmentBMPTypeAttributeTypes.Any();
+            return MaintenanceRecordObservations.Any() || TreatmentBMPAttributes.Any() || TreatmentBMPTypeAttributeTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAttributeType).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPTypeAttributeType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAttributeType).Name, typeof(MaintenanceRecordObservation).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPTypeAttributeType).Name};
 
 
         /// <summary>
@@ -98,6 +99,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in MaintenanceRecordObservations.ToList())
+            {
+                x.DeleteFull();
+            }
 
             foreach(var x in TreatmentBMPAttributes.ToList())
             {
@@ -124,6 +130,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAttributeTypeID; } set { TreatmentBMPAttributeTypeID = value; } }
 
+        public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual ICollection<TreatmentBMPAttribute> TreatmentBMPAttributes { get; set; }
         public virtual ICollection<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }

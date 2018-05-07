@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected MaintenanceRecord()
         {
-
+            this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -87,13 +87,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return MaintenanceRecordObservations.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name, typeof(MaintenanceRecordObservation).Name};
 
 
         /// <summary>
@@ -101,6 +101,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in MaintenanceRecordObservations.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Remove(this);                
         }
 
@@ -117,6 +122,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
+        public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual Person EnteredByPerson { get; set; }
