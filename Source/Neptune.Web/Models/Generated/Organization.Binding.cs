@@ -23,6 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Organization()
         {
+            this.FundingSources = new HashSet<FundingSource>();
             this.People = new HashSet<Person>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TreatmentBMPsWhereYouAreTheOwnerOrganization = new HashSet<TreatmentBMP>();
@@ -86,13 +87,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
+            return FundingSources.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -100,6 +101,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in FundingSources.ToList())
+            {
+                x.DeleteFull();
+            }
 
             foreach(var x in People.ToList())
             {
@@ -132,6 +138,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return OrganizationID; } set { OrganizationID = value; } }
 
+        public virtual ICollection<FundingSource> FundingSources { get; set; }
         public virtual ICollection<Person> People { get; set; }
         protected virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         [NotMapped]

@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPAttributes = new HashSet<TreatmentBMPAttribute>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
+            this.TreatmentBMPFundingSources = new HashSet<TreatmentBMPFundingSource>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
@@ -96,13 +97,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPAttributes.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any();
+            return MaintenanceRecords.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPAttributes.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPFundingSources.Any() || TreatmentBMPImages.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMP).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPAttribute).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPFundingSource).Name, typeof(TreatmentBMPImage).Name};
 
 
         /// <summary>
@@ -136,6 +137,11 @@ namespace Neptune.Web.Models
                 x.DeleteFull();
             }
 
+            foreach(var x in TreatmentBMPFundingSources.ToList())
+            {
+                x.DeleteFull();
+            }
+
             foreach(var x in TreatmentBMPImages.ToList())
             {
                 x.DeleteFull();
@@ -163,6 +169,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPAttribute> TreatmentBMPAttributes { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
+        public virtual ICollection<TreatmentBMPFundingSource> TreatmentBMPFundingSources { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
