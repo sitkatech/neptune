@@ -166,6 +166,10 @@ namespace Neptune.Web.Models
                     return ChartLastUpdatedDate;
                 case FieldDefinitionEnum.ConveyanceFunctionsAsIntended:
                     return ConveyanceFunctionsAsIntended;
+                case FieldDefinitionEnum.CustomAttributeDataType:
+                    return CustomAttributeDataType;
+                case FieldDefinitionEnum.CustomAttributeType:
+                    return CustomAttributeType;
                 case FieldDefinitionEnum.DefaultBenchmarkValue:
                     return DefaultBenchmarkValue;
                 case FieldDefinitionEnum.DefaultThresholdValue:
@@ -230,10 +234,6 @@ namespace Neptune.Web.Models
                     return TreatmentBMP;
                 case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
                     return TreatmentBMPAssessmentObservationType;
-                case FieldDefinitionEnum.CustomAttributeDataType:
-                    return CustomAttributeDataType;
-                case FieldDefinitionEnum.CustomAttributeType:
-                    return CustomAttributeType;
                 case FieldDefinitionEnum.TreatmentBMPDesignDepth:
                     return TreatmentBMPDesignDepth;
                 case FieldDefinitionEnum.TreatmentBMPType:
@@ -528,7 +528,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionCustomAttributeType : FieldDefinition
     {
         private FieldDefinitionCustomAttributeType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionCustomAttributeType Instance = new FieldDefinitionCustomAttributeType(39, @"CustomAttributeType", @"Treatment BMP Attribute Type", @"", true);
+        public static readonly FieldDefinitionCustomAttributeType Instance = new FieldDefinitionCustomAttributeType(39, @"CustomAttributeType", @"Custom Attribute Type", @"", true);
     }
 
     public partial class FieldDefinitionCustomAttributeDataType : FieldDefinition

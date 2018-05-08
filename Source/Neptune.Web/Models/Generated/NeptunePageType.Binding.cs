@@ -136,6 +136,12 @@ namespace Neptune.Web.Models
                     return Jurisdiction;
                 case NeptunePageTypeEnum.Legal:
                     return Legal;
+                case NeptunePageTypeEnum.ManageCustomAttributeInstructions:
+                    return ManageCustomAttributeInstructions;
+                case NeptunePageTypeEnum.ManageCustomAttributeTypeInstructions:
+                    return ManageCustomAttributeTypeInstructions;
+                case NeptunePageTypeEnum.ManageCustomAttributeTypesList:
+                    return ManageCustomAttributeTypesList;
                 case NeptunePageTypeEnum.ManageObservationTypeInstructions:
                     return ManageObservationTypeInstructions;
                 case NeptunePageTypeEnum.ManageObservationTypeLabelsAndUnitsInstructions:
@@ -144,12 +150,6 @@ namespace Neptune.Web.Models
                     return ManageObservationTypeObservationInstructions;
                 case NeptunePageTypeEnum.ManageObservationTypesList:
                     return ManageObservationTypesList;
-                case NeptunePageTypeEnum.ManageCustomAttributeInstructions:
-                    return ManageCustomAttributeInstructions;
-                case NeptunePageTypeEnum.ManageCustomAttributeTypeInstructions:
-                    return ManageCustomAttributeTypeInstructions;
-                case NeptunePageTypeEnum.ManageCustomAttributeTypesList:
-                    return ManageCustomAttributeTypesList;
                 case NeptunePageTypeEnum.ManageTreatmentBMPTypeInstructions:
                     return ManageTreatmentBMPTypeInstructions;
                 case NeptunePageTypeEnum.ManageTreatmentBMPTypesList:
@@ -292,19 +292,19 @@ namespace Neptune.Web.Models
     public partial class NeptunePageTypeManageCustomAttributeTypeInstructions : NeptunePageType
     {
         private NeptunePageTypeManageCustomAttributeTypeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeManageCustomAttributeTypeInstructions Instance = new NeptunePageTypeManageCustomAttributeTypeInstructions(17, @"ManageCustomAttributeTypeInstructions", @"Manage Treatment BMP Attribute Type Instructions", 2);
+        public static readonly NeptunePageTypeManageCustomAttributeTypeInstructions Instance = new NeptunePageTypeManageCustomAttributeTypeInstructions(17, @"ManageCustomAttributeTypeInstructions", @"Manage Custom Attribute Type Instructions", 2);
     }
 
     public partial class NeptunePageTypeManageCustomAttributeInstructions : NeptunePageType
     {
         private NeptunePageTypeManageCustomAttributeInstructions(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeManageCustomAttributeInstructions Instance = new NeptunePageTypeManageCustomAttributeInstructions(18, @"ManageCustomAttributeInstructions", @"Manage Treatment BMP Attribute Instructions", 2);
+        public static readonly NeptunePageTypeManageCustomAttributeInstructions Instance = new NeptunePageTypeManageCustomAttributeInstructions(18, @"ManageCustomAttributeInstructions", @"Manage Custom Attribute Instructions", 2);
     }
 
     public partial class NeptunePageTypeManageCustomAttributeTypesList : NeptunePageType
     {
         private NeptunePageTypeManageCustomAttributeTypesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeManageCustomAttributeTypesList Instance = new NeptunePageTypeManageCustomAttributeTypesList(19, @"ManageCustomAttributeTypesList", @"Manage Treatment BMP Attribute Types List", 2);
+        public static readonly NeptunePageTypeManageCustomAttributeTypesList Instance = new NeptunePageTypeManageCustomAttributeTypesList(19, @"ManageCustomAttributeTypesList", @"Manage Custom Attribute Types List", 2);
     }
 
     public partial class NeptunePageTypeLegal : NeptunePageType
