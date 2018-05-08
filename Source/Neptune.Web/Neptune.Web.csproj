@@ -502,6 +502,7 @@
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Content\bootstrap-datetimepicker\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-datetimepicker\bootstrap-datetimepicker.min.js" />
     <Content Include="Content\bootstrap-datetimepicker\moment.min.js" />
     <Content Include="Content\Bootstrap\neptune\base.theme.css">
