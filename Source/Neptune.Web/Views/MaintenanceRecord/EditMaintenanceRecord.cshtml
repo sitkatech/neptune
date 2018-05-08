@@ -31,10 +31,10 @@
         <div class="form-group">
             <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDate)</div>
             <div class="col-xs-8">
-                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
+                <div class="input-group date" data-date-format="m/d/yyyy" id="maintenancedatetime" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
                     <input type="text" name="@Html.NameFor(m => m.MaintenanceRecordDate)" class="form-control assessmentDate" value="@Model.MaintenanceRecordDate.ToStringDate()" />
                     <div class="input-group-addon">
-                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="glyphicon glyphicon-calendar"></span>
                     </div>
                 </div>
             </div>
@@ -60,3 +60,8 @@
         </div>
     </div>
 }
+<script type="text/javascript">
+    $(function () {
+        $('#maintenancedatetime').datetimepicker();
+    });
+</script>

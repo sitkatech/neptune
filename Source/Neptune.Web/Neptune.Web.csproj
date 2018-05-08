@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -502,6 +502,8 @@
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Content\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Content\bootstrap-datetimepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\bootstrap-datetimepicker\moment.min.js" />
     <Content Include="Content\Bootstrap\neptune\base.theme.css">
       <DependentUpon>base.theme.less</DependentUpon>
     </Content>
