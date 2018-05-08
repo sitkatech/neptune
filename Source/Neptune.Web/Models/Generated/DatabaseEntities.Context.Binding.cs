@@ -32,6 +32,12 @@ namespace Neptune.Web.Models
         public virtual IQueryable<AuditLog> AuditLogs { get { return AllAuditLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<County> AllCounties { get; set; }
         public virtual IQueryable<County> Counties { get { return AllCounties.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<CustomAttribute> AllCustomAttributes { get; set; }
+        public virtual IQueryable<CustomAttribute> CustomAttributes { get { return AllCustomAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<CustomAttributeType> AllCustomAttributeTypes { get; set; }
+        public virtual IQueryable<CustomAttributeType> CustomAttributeTypes { get { return AllCustomAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<CustomAttributeValue> AllCustomAttributeValues { get; set; }
+        public virtual IQueryable<CustomAttributeValue> CustomAttributeValues { get { return AllCustomAttributeValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FieldDefinitionDataImage> AllFieldDefinitionDataImages { get; set; }
         public virtual IQueryable<FieldDefinitionDataImage> FieldDefinitionDataImages { get { return AllFieldDefinitionDataImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FieldDefinitionData> AllFieldDefinitionDatas { get; set; }
@@ -78,12 +84,6 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get { return AllTreatmentBMPAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
         public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAttribute> AllTreatmentBMPAttributes { get; set; }
-        public virtual IQueryable<TreatmentBMPAttribute> TreatmentBMPAttributes { get { return AllTreatmentBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAttributeType> AllTreatmentBMPAttributeTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPAttributeType> TreatmentBMPAttributeTypes { get { return AllTreatmentBMPAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAttributeValue> AllTreatmentBMPAttributeValues { get; set; }
-        public virtual IQueryable<TreatmentBMPAttributeValue> TreatmentBMPAttributeValues { get { return AllTreatmentBMPAttributeValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
         public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPDocument> AllTreatmentBMPDocuments { get; set; }
@@ -117,6 +117,25 @@ namespace Neptune.Web.Models
 
                 case "County":
                     return Counties.GetCounty(primaryKey);
+
+                case "CustomAttributeDataType":
+                    var customAttributeDataType = CustomAttributeDataType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(customAttributeDataType, "CustomAttributeDataType", primaryKey);
+                    return customAttributeDataType;
+
+                case "CustomAttribute":
+                    return CustomAttributes.GetCustomAttribute(primaryKey);
+
+                case "CustomAttributeTypePurpose":
+                    var customAttributeTypePurpose = CustomAttributeTypePurpose.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(customAttributeTypePurpose, "CustomAttributeTypePurpose", primaryKey);
+                    return customAttributeTypePurpose;
+
+                case "CustomAttributeType":
+                    return CustomAttributeTypes.GetCustomAttributeType(primaryKey);
+
+                case "CustomAttributeValue":
+                    return CustomAttributeValues.GetCustomAttributeValue(primaryKey);
 
                 case "FieldDefinitionDataImage":
                     return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
@@ -271,25 +290,6 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);
-
-                case "TreatmentBMPAttributeDataType":
-                    var treatmentBMPAttributeDataType = TreatmentBMPAttributeDataType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(treatmentBMPAttributeDataType, "TreatmentBMPAttributeDataType", primaryKey);
-                    return treatmentBMPAttributeDataType;
-
-                case "TreatmentBMPAttribute":
-                    return TreatmentBMPAttributes.GetTreatmentBMPAttribute(primaryKey);
-
-                case "TreatmentBMPAttributeTypePurpose":
-                    var treatmentBMPAttributeTypePurpose = TreatmentBMPAttributeTypePurpose.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(treatmentBMPAttributeTypePurpose, "TreatmentBMPAttributeTypePurpose", primaryKey);
-                    return treatmentBMPAttributeTypePurpose;
-
-                case "TreatmentBMPAttributeType":
-                    return TreatmentBMPAttributeTypes.GetTreatmentBMPAttributeType(primaryKey);
-
-                case "TreatmentBMPAttributeValue":
-                    return TreatmentBMPAttributeValues.GetTreatmentBMPAttributeValue(primaryKey);
 
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);

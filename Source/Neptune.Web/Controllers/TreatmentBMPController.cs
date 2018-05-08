@@ -238,36 +238,36 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPManageFeature]
-        public ViewResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, TreatmentBMPAttributeTypePurposePrimaryKey treatmentBmpAttributeTypePurposePrimaryKey)
+        public ViewResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBmpAttributeTypePurpose = treatmentBmpAttributeTypePurposePrimaryKey.EntityObject;
+            var customAttributeTypePurpose = customAttributeTypePurposePrimaryKey.EntityObject;
             var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
-            var viewModel = new EditAttributesViewModel(treatmentBMP, treatmentBmpAttributeTypePurpose);
-            return ViewEditAttributes(viewModel, treatmentBMP, treatmentBmpAttributeTypePurpose);
+            var viewModel = new EditAttributesViewModel(treatmentBMP, customAttributeTypePurpose);
+            return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
         }
 
         [HttpPost]
         [TreatmentBMPManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, TreatmentBMPAttributeTypePurposePrimaryKey treatmentBmpAttributeTypePurposePrimaryKey, EditAttributesViewModel viewModel)
+        public ActionResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey, EditAttributesViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBmpAttributeTypePurpose = treatmentBmpAttributeTypePurposePrimaryKey.EntityObject;
+            var customAttributeTypePurpose = customAttributeTypePurposePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditAttributes(viewModel, treatmentBMP, treatmentBmpAttributeTypePurpose);
+                return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
             }
 
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson, treatmentBmpAttributeTypePurpose);
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose);
             SetMessageForDisplay("Treatment BMP Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
         private ViewResult ViewEditAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP,
-            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
+            CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, treatmentBmpAttributeTypePurpose);
+            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose);
             return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
     }

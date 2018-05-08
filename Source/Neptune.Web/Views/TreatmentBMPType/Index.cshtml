@@ -82,8 +82,8 @@
                         </table>
                         @Html.Label("Attribute Types:")
                         <ul>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
+                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName</li>
+                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName</li>
                         </ul>
                     </div>
                 </div>

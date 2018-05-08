@@ -2,6 +2,6 @@
 {
     public partial class TreatmentBMPTypeAttributeType : IAuditableEntity
     {
-        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {TreatmentBMPAttributeType?.TreatmentBMPAttributeTypeName ?? "Unknown"}";
+        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {CustomAttributeType?.CustomAttributeTypeName ?? "Unknown"}";
     }
 }

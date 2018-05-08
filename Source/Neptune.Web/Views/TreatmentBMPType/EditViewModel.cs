@@ -108,10 +108,10 @@ namespace Neptune.Web.Views.TreatmentBMPType
             if (TreatmentBMPTypeAttributeTypeSimples != null)
             {
                 // Completely rebuild the list
-                updatedTreatmentBMPTypeAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID)).ToList();
+                updatedTreatmentBMPTypeAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID)).ToList();
             }
 
-            currentTreatmentBMPTypeAttributeTypes.Merge(updatedTreatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID);
+            currentTreatmentBMPTypeAttributeTypes.Merge(updatedTreatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.CustomAttributeTypeID == y.CustomAttributeTypeID);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

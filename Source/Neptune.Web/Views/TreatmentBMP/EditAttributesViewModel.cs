@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     public class EditAttributesViewModel : FormViewModel, IValidatableObject
     {
         [DisplayName("Metadata")]
-        public List<TreatmentBMPAttributeSimple> TreatmentBMPAttributes { get; set; }
+        public List<CustomAttributeSimple> CustomAttributes { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -43,47 +43,47 @@ namespace Neptune.Web.Views.TreatmentBMP
         }
 
         public EditAttributesViewModel(Models.TreatmentBMP treatmentBMP,
-            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
+            CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            TreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID).Select(x => new TreatmentBMPAttributeSimple(x)).ToList();
+            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID).Select(x => new CustomAttributeSimple(x)).ToList();
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson,
-            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose)
+            CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            var treatmentBMPAttributeSimplesWithValues = TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0);
-            var treatmentBMPAttributesToUpdate = new List<TreatmentBMPAttribute>();
-            var treatmentBMPAttributeValuesToUpdate = new List<TreatmentBMPAttributeValue>();
-            foreach (var x in treatmentBMPAttributeSimplesWithValues)
+            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
+            var customAttributesToUpdate = new List<CustomAttribute>();
+            var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
+            foreach (var x in customAttributeSimplesWithValues)
             {
-                var treatmentBMPAttribute = new TreatmentBMPAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID);
-                treatmentBMPAttributesToUpdate.Add(treatmentBMPAttribute);
-                foreach (var value in x.TreatmentBMPAttributeValues)
+                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
+                customAttributesToUpdate.Add(customAttribute);
+                foreach (var value in x.CustomAttributeValues)
                 {                    
-                    var treatmentBMPAttributeValue = new TreatmentBMPAttributeValue(treatmentBMPAttribute, value);                   
-                    treatmentBMPAttributeValuesToUpdate.Add(treatmentBMPAttributeValue);
+                    var customAttributeValue = new CustomAttributeValue(customAttribute, value);                   
+                    customAttributeValuesToUpdate.Add(customAttributeValue);
                 }
             }
 
-            var treatmentBMPAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributes.Local;
-            var treatmentBMPAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAttributeValues.Local;
+            var customAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributes.Local;
+            var customAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributeValues.Local;
 
-            var existingTreatmentBMPAttributes = treatmentBMP.TreatmentBMPAttributes.Where(x =>
-                x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID ==
-                treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID).ToList();
+            var existingCustomAttributes = treatmentBMP.CustomAttributes.Where(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                customAttributeTypePurpose.CustomAttributeTypePurposeID).ToList();
 
-            var existingTreatmentBMPAttributeValues = existingTreatmentBMPAttributes.SelectMany(x => x.TreatmentBMPAttributeValues).ToList();
+            var existingCustomAttributeValues = existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
 
-            existingTreatmentBMPAttributes.Merge(treatmentBMPAttributesToUpdate, treatmentBMPAttributesInDatabase,
+            existingCustomAttributes.Merge(customAttributesToUpdate, customAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID 
                           && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID 
-                          && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID
-                          && x.TreatmentBMPAttributeID == y.TreatmentBMPAttributeID,
+                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
+                          && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { });
 
-            existingTreatmentBMPAttributeValues.Merge(treatmentBMPAttributeValuesToUpdate, treatmentBMPAttributeValuesInDatabase,
-                (x, y) => x.TreatmentBMPAttributeValueID == y.TreatmentBMPAttributeValueID
-                          && x.TreatmentBMPAttributeID == y.TreatmentBMPAttributeID,
+            existingCustomAttributeValues.Merge(customAttributeValuesToUpdate, customAttributeValuesInDatabase,
+                (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
+                          && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { x.AttributeValue = y.AttributeValue; });
         }
 
@@ -91,40 +91,40 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             var errors = new List<ValidationResult>();
 
-            var treatmentBMPAttributeTypeIDs = TreatmentBMPAttributes.Select(x => x.TreatmentBMPAttributeTypeID).ToList();
-            var treatmentBMPAttributeTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAttributeTypes.Where(x => treatmentBMPAttributeTypeIDs.Contains(x.TreatmentBMPAttributeTypeID)).ToList();
+            var customAttributeTypeIDs = CustomAttributes.Select(x => x.CustomAttributeTypeID).ToList();
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
 
 
-            var requiredAttributeDoesNotHaveValue = treatmentBMPAttributeTypes.Any(x =>
+            var requiredAttributeDoesNotHaveValue = customAttributeTypes.Any(x =>
             {
 
-                var treatmentBMPAttributeSimple = TreatmentBMPAttributes.SingleOrDefault(y =>
-                    y.TreatmentBMPAttributeTypeID == x.TreatmentBMPAttributeTypeID 
+                var customAttributeSimple = CustomAttributes.SingleOrDefault(y =>
+                    y.CustomAttributeTypeID == x.CustomAttributeTypeID 
                     && x.IsRequired 
-                    && (y.TreatmentBMPAttributeValues == null || y.TreatmentBMPAttributeValues.All(string.IsNullOrEmpty)));
+                    && (y.CustomAttributeValues == null || y.CustomAttributeValues.All(string.IsNullOrEmpty)));
 
-                return treatmentBMPAttributeSimple != null;
+                return customAttributeSimple != null;
             });
 
             if (requiredAttributeDoesNotHaveValue)
             {
-                errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>("Must enter all required fields.", m => m.TreatmentBMPAttributes));
+                errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
                 return errors;
             }
 
-            foreach (var treatmentBMPAttributeSimple in TreatmentBMPAttributes.Where(x => x.TreatmentBMPAttributeValues != null && x.TreatmentBMPAttributeValues.Count > 0))
+            foreach (var customAttributeSimple in CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
             {
-                var treatmentBMPAttributeType = treatmentBMPAttributeTypes.Single(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPAttributeSimple.TreatmentBMPAttributeTypeID);
+                var customAttributeType = customAttributeTypes.Single(x =>
+                    x.CustomAttributeTypeID == customAttributeSimple.CustomAttributeTypeID);
 
-                var treatmentBMPAttributeDataType = treatmentBMPAttributeType.TreatmentBMPAttributeDataType;
+                var customAttributeDataType = customAttributeType.CustomAttributeDataType;
 
-                foreach (var value in treatmentBMPAttributeSimple.TreatmentBMPAttributeValues)
+                foreach (var value in customAttributeSimple.CustomAttributeValues)
                 {
-                    if (!treatmentBMPAttributeDataType.ValueIsCorrectDataType(value))
+                    if (!customAttributeDataType.ValueIsCorrectDataType(value))
                     {
-                        errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<TreatmentBMPAttributeSimple>>(
-                            $"Entered value for {treatmentBMPAttributeType.TreatmentBMPAttributeTypeName} does not match expected type ({treatmentBMPAttributeDataType.TreatmentBMPAttributeDataTypeDisplayName}).", m => m.TreatmentBMPAttributes));
+                        errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>(
+                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).", m => m.CustomAttributes));
                     }
                 }
                 

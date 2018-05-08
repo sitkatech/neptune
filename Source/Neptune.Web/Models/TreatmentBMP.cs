@@ -85,21 +85,21 @@ namespace Neptune.Web.Models
                        x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
-        public string GetTreatmentBMPAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
         {
-            if (TreatmentBMPAttributes.Any())
+            if (CustomAttributes.Any())
             {
-                var treatmentBMPAttribute = TreatmentBMPAttributes.SingleOrDefault(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
-                if (treatmentBMPAttribute != null)
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
+                    x.CustomAttributeTypeID == treatmentBMPTypeAttributeType.CustomAttributeTypeID);
+                if (customAttribute != null)
                 {
                     var measurmentUnit = "";
-                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                    if (customAttribute.CustomAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.LegendDisplayName}";
+                        measurmentUnit = $" {customAttribute.CustomAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
-                    var value = string.Join(", ", treatmentBMPAttribute.TreatmentBMPAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
+                    var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
 
                     return $"{value}{measurmentUnit}";
                 }           

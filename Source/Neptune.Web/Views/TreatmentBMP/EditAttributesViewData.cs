@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public List<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
@@ -43,8 +43,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMP = treatmentBMP;
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
 
-            TreatmentBMPTypeAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
-                .OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName).ToList();
+            TreatmentBMPTypeAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID)
+                .OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
         }
     }
 }

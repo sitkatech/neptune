@@ -175,15 +175,15 @@
                         </div>
                         <div class="col-sm-5">
                             <div class="input-group">
-                                <select ng-model="TreatmentBMPAttributeTypeToAdd"
+                                <select ng-model="CustomAttributeTypeToAdd"
                                         class="form-control"
                                         data-title="Select an Attribute Type to Add"
                                         style="width: 100%"
-                                        ng-options="treatmentBMPAttributeType as treatmentBMPAttributeType.TreatmentBMPAttributeTypeName for treatmentBMPAttributeType in filteredTreatmentBMPAttributeTypes() track by treatmentBMPAttributeType.TreatmentBMPAttributeTypeID">
+                                        ng-options="customAttributeType as customAttributeType.CustomAttributeTypeName for customAttributeType in filteredCustomAttributeTypes() track by customAttributeType.CustomAttributeTypeID">
                                     <option value="" disabled selected>Select a BMP Attribute Type to Add</option>
                                 </select>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-neptune" type="button" ng-click="addTreatmentBMPAttributeTypeRow()">
+                                    <button class="btn btn-neptune" type="button" ng-click="addCustomAttributeTypeRow()">
                                         <span class="glyphicon glyphicon-plus"></span> Add
                                     </button>
                                 </span>
@@ -197,29 +197,29 @@
             <table class="table observationTypeTable" style="margin-top: 20px; overflow: scroll" ng-show="AngularModel.TreatmentBMPTypeAttributeTypeSimples.length > 0">
                 <tr>
                     <th></th>
-                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeType)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
                     <th class="text-left">@Html.Label("Purpose")</th>
-                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAttributeDataType)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
                     <th class="text-center">@Html.Label("Required?")</th>
                     <th class="text-left">@Html.Label("Description")</th>
                 </tr>
-                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getTreatmentBMPAttributeTypeName]">
+                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypeName]">
                     <td>
-                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteTreatmentBMPAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
+                        <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteCustomAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
                     </td>
-                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypePurpose(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDataTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeMeasurementUnitName(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-center" ng-bind="getTreatmentBMPAttributeTypeIsRequired(treatmentBMPTypeAttributeTypeSimple)"></td>
-                    <td class="text-left" ng-bind="getTreatmentBMPAttributeTypeDescription(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getCustomAttributeTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getCustomAttributeTypePurpose(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getCustomAttributeTypeDataTypeName(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getCustomAttributeTypeMeasurementUnitName(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-center" ng-bind="getCustomAttributeTypeIsRequired(treatmentBMPTypeAttributeTypeSimple)"></td>
+                    <td class="text-left" ng-bind="getCustomAttributeTypeDescription(treatmentBMPTypeAttributeTypeSimple)"></td>
                 </tr>
             </table>
         </div>
 
-        <div ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getTreatmentBMPAttributeTypeName]">
-            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeAttributeTypeSimples[0].TreatmentBMPAttributeTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID}}" />
+        <div ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypeName]">
+            <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPTypeAttributeTypeSimples[0].CustomAttributeTypeID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID}}" />
         </div>
 
     </div>

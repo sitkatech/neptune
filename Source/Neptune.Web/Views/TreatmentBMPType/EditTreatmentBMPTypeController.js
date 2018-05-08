@@ -1,6 +1,6 @@
 ﻿angular.module("NeptuneApp").controller("EditTreatmentBMPTypeController", function ($scope, angularModelAndViewData) {
     $scope.resetObservationTypeToAdd = function () { $scope.ObservationTypeToAdd = null; };
-    $scope.resetTreatmentBMPAttributeTypeToAdd = function () { $scope.TreatmentBMPAttributeTypeToAdd = null; };
+    $scope.resetCustomAttributeTypeToAdd = function () { $scope.CustomAttributeTypeToAdd = null; };
 
     $scope.getAllUsedObservationTypeIDs = function () { return _.map($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, function (p) { return p.TreatmentBMPAssessmentObservationTypeID; }); };
 
@@ -80,68 +80,68 @@
 
     $scope.deleteObservationTypeRow = function (rowToDelete) { Sitka.Methods.removeFromJsonArray($scope.AngularModel.TreatmentBMPTypeObservationTypeSimples, rowToDelete); };
 
-    $scope.getAllUsedTreatmentBMPAttributeTypeIDs = function () { return _.map($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples, function (p) { return p.TreatmentBMPAttributeTypeID; }); };
+    $scope.getAllUsedCustomAttributeTypeIDs = function () { return _.map($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples, function (p) { return p.CustomAttributeTypeID; }); };
 
-    $scope.filteredTreatmentBMPAttributeTypes = function () {
-        var usedTreatmentBMPAttributeTypeIDs = $scope.getAllUsedTreatmentBMPAttributeTypeIDs();
-        return _($scope.AngularViewData.TreatmentBMPAttributeTypes).filter(function (f) { return !_.includes(usedTreatmentBMPAttributeTypeIDs, f.TreatmentBMPAttributeTypeID); })
+    $scope.filteredCustomAttributeTypes = function () {
+        var usedCustomAttributeTypeIDs = $scope.getAllUsedCustomAttributeTypeIDs();
+        return _($scope.AngularViewData.CustomAttributeTypes).filter(function (f) { return !_.includes(usedCustomAttributeTypeIDs, f.CustomAttributeTypeID); })
             .sortBy(function (fs) {
-                return [fs.TreatmentBMPAttributeTypeName.toLowerCase()];
+                return [fs.CustomAttributeTypeName.toLowerCase()];
             }).value();
     };
 
-    $scope.getTreatmentBMPAttributeTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.TreatmentBMPAttributeTypeName;
+    $scope.getCustomAttributeTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.CustomAttributeTypeName;
     };
 
-    $scope.getTreatmentBMPAttributeTypePurpose = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.Purpose;
+    $scope.getCustomAttributeTypePurpose = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.Purpose;
     };
 
-    $scope.getTreatmentBMPAttributeTypeDataTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.DataTypeDisplayName;
+    $scope.getCustomAttributeTypeDataTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.DataTypeDisplayName;
     };
 
-    $scope.getTreatmentBMPAttributeTypeMeasurementUnitName = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.MeasurementUnitDisplayName;
+    $scope.getCustomAttributeTypeMeasurementUnitName = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.MeasurementUnitDisplayName;
     };
 
-    $scope.getTreatmentBMPAttributeTypeIsRequired = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.IsRequired ? "Yes" : "No";
+    $scope.getCustomAttributeTypeIsRequired = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.IsRequired ? "Yes" : "No";
     };
 
-    $scope.getTreatmentBMPAttributeTypeDescription = function (treatmentBMPTypeAttributeTypeSimple) {
-        var treatmentBMPAttributeTypeToFind = $scope.getTreatmentBMPAttributeType(treatmentBMPTypeAttributeTypeSimple.TreatmentBMPAttributeTypeID);
-        return treatmentBMPAttributeTypeToFind.Description;
+    $scope.getCustomAttributeTypeDescription = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.Description;
     };
 
-    $scope.getTreatmentBMPAttributeType = function (treatmentBMPAttributeTypeID) {
-        return _.find($scope.AngularViewData.TreatmentBMPAttributeTypes, function (f) { return treatmentBMPAttributeTypeID == f.TreatmentBMPAttributeTypeID; });
+    $scope.getCustomAttributeType = function (customAttributeTypeID) {
+        return _.find($scope.AngularViewData.CustomAttributeTypes, function (f) { return customAttributeTypeID == f.CustomAttributeTypeID; });
     };
 
-    $scope.addTreatmentBMPAttributeTypeRow = function () {
-        if ($scope.TreatmentBMPAttributeTypeToAdd == null) {
+    $scope.addCustomAttributeTypeRow = function () {
+        if ($scope.CustomAttributeTypeToAdd == null) {
             return;
         }
-        var newTreatmentBMPTypeAttributeTypeSimple = $scope.createNewTreatmentBMPAttributeTypeRow($scope.TreatmentBMPAttributeTypeToAdd.TreatmentBMPAttributeTypeID);
+        var newTreatmentBMPTypeAttributeTypeSimple = $scope.createNewCustomAttributeTypeRow($scope.CustomAttributeTypeToAdd.CustomAttributeTypeID);
         
         $scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples.push(newTreatmentBMPTypeAttributeTypeSimple);
-        $scope.resetTreatmentBMPAttributeTypeToAdd();
+        $scope.resetCustomAttributeTypeToAdd();
     };
 
-    $scope.createNewTreatmentBMPAttributeTypeRow = function (treatmentBmpAttributeTypeID) {
+    $scope.createNewCustomAttributeTypeRow = function (treatmentBmpAttributeTypeID) {
         var newTreatmentBMPTypeAttributeTypeSimple = {
-            TreatmentBMPAttributeTypeID: treatmentBmpAttributeTypeID
+            CustomAttributeTypeID: treatmentBmpAttributeTypeID
         };
         return newTreatmentBMPTypeAttributeTypeSimple;
     };
 
-    $scope.deleteTreatmentBMPAttributeTypeRow = function (rowToDelete) { Sitka.Methods.removeFromJsonArray($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples, rowToDelete); };
+    $scope.deleteCustomAttributeTypeRow = function (rowToDelete) { Sitka.Methods.removeFromJsonArray($scope.AngularModel.TreatmentBMPTypeAttributeTypeSimples, rowToDelete); };
 
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
