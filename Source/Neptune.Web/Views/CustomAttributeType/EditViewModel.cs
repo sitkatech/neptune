@@ -111,7 +111,7 @@ namespace Neptune.Web.Views.CustomAttributeType
             var customAttributeTypesWithSameName = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypeName == CustomAttributeTypeName);
             if (customAttributeTypesWithSameName.Any(x => x.CustomAttributeTypeID != CustomAttributeTypeID))
             {
-                validationResults.Add(new ValidationResult("A Treatment BMP Attribute Type with this name already exists"));
+                validationResults.Add(new ValidationResult("A Custom Attribute Type with this name already exists"));
             }
 
 

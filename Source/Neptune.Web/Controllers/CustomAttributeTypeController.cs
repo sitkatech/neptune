@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(customAttributeType, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllCustomAttributeTypes.Add(customAttributeType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"Treatment BMP Attribute Type {customAttributeType.CustomAttributeTypeName} succesfully created.");
+            SetMessageForDisplay($"Custom Attribute Type {customAttributeType.CustomAttributeTypeName} succesfully created.");
 
             return RedirectToAction(new SitkaRoute<CustomAttributeTypeController>(c => c.Detail(customAttributeType.PrimaryKey)));
         }

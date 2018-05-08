@@ -2,6 +2,6 @@
 {
     public partial class CustomAttribute : IAuditableEntity
     {
-        public string AuditDescriptionString => "Treatment BMP Attribute deleted";
+        public string AuditDescriptionString => "Custom Attribute deleted";
     }
 }

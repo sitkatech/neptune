@@ -260,7 +260,7 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose);
-            SetMessageForDisplay("Treatment BMP Attributes successfully saved.");
+            SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
