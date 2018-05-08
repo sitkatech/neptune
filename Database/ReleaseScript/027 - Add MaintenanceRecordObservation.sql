@@ -3,7 +3,7 @@ add constraint AK_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID_
 unique (TreatmentBMPTypeAttributeTypeID, TenantID)
 
 create table dbo.MaintenanceRecordObservation​​(
-MaintenanceRecordObservationID int not null identity
+MaintenanceRecordObservationID int not null identity(1,1)
 	constraint PK_MaintenanceRecordObservation_MaintenanceRecordObservationID primary key,
 TenantID int not null
 	constraint FK_MaintenanceRecordObservation_Tenant_TenantID foreign key references dbo.Tenant(TenantID),
