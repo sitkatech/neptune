@@ -46,6 +46,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
                         $"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}"), currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
 
             Add("Date", x => x.MaintenanceRecordDate.ToShortDateString(), 100);
+            Add("Performed By", x => x.PerformedByOrganization.OrganizationShortName, 100, DhtmlxGridColumnFilterType.Text);
             Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
