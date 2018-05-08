@@ -43,7 +43,13 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
-            var newMaintenanceRecord = new MaintenanceRecord(treatmentBmp.TreatmentBMPID,viewModel.MaintenanceRecordDate.Value, viewModel.MaintenanceRecordTypeID.Value);
+            var newMaintenanceRecord =
+                new MaintenanceRecord(treatmentBmp.TreatmentBMPID, viewModel.MaintenanceRecordDate.Value,
+                    viewModel.MaintenanceRecordTypeID.Value)
+                {
+                    PerformedByOrganizationID = viewModel.PerformedByOrganizationID,
+                    EnteredByPersonID = CurrentPerson.PersonID
+                };
             
 
             HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(newMaintenanceRecord);
@@ -91,8 +97,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditMaintenanceRecordViewModel viewModel)
         {
-            var persons = HttpRequestStorage.DatabaseEntities.People.OrderBy(x=>x.LastName).ToList();
-            var viewData = new EditMaintenanceRecordViewData(persons);
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x=>x.OrganizationShortName).ToList();
+            var viewData = new EditMaintenanceRecordViewData(organizations);
             return RazorPartialView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }

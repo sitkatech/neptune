@@ -28,16 +28,16 @@ namespace Neptune.Web.Views.MaintenanceRecord
 {
     public class EditMaintenanceRecordViewData : NeptuneUserControlViewData
     {
-        public EditMaintenanceRecordViewData(List<Person> persons)
+        public EditMaintenanceRecordViewData(List<Models.Organization> organizations)
         {
-            AllPersons = persons.ToSelectListWithDisabledEmptyFirstRow(x => x.PersonID.ToString(CultureInfo.InvariantCulture),
-                x => x.FullNameLastFirst,"Choose a person");
+            AllOrganizations = organizations.ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
+                x => x.OrganizationShortName,"Choose a person");
 
             AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"Choose a type");
         }
 
         public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
 
-        public IEnumerable<SelectListItem> AllPersons { get; }
+        public IEnumerable<SelectListItem> AllOrganizations { get; }
     }
 }

@@ -47,9 +47,9 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.EnteredByPersonID)</div>
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.PerformedByOrganizationID)</div>
             <div class="col-xs-8">
-                @Html.SearchableDropDownListFor(m=>m.EnteredByPersonID, ViewDataTyped.AllPersons, new Dictionary<string, string> { { "title", "  " }, { "data-width", "auto" } })
+                @Html.SearchableDropDownListFor(m=>m.PerformedByOrganizationID, ViewDataTyped.AllOrganizations, new Dictionary<string, string> { { "title", "  " }, { "data-width", "auto" } })
                 </div>
         </div>
         <div class="form-group">
