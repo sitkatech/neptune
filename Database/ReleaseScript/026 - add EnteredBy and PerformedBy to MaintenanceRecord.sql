@@ -1,9 +1,7 @@
--- story said "don't worry about migration since data will be wiped" which I would like to broadly interpret as "wipe Maintenance Record data if it makes this story easier"
---delete from dbo.MaintenanceRecord
+delete from dbo.MaintenanceRecord
 
--- these nulls should be not nulls but I'm waiting to determine if I should uncomment the above delete statement before I make that switch
 alter table dbo.MaintenanceRecord
-add EnteredByPersonID int null
+add EnteredByPersonID int not null
 
 alter table dbo.MaintenanceRecord
 add constraint FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID foreign key (EnteredByPersonID) references dbo.Person(PersonID)
@@ -12,7 +10,7 @@ alter table dbo.MaintenanceRecord
 add constraint FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID foreign key (EnteredByPersonID, TenantID) references dbo.Person(PersonID, TenantID)
 
 alter table dbo.MaintenanceRecord
-add PerformedByOrganizationID int null
+add PerformedByOrganizationID int not null
 
 alter table dbo.MaintenanceRecord
 add constraint FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID foreign key (PerformedByOrganizationID) references dbo.Organization(OrganizationID)

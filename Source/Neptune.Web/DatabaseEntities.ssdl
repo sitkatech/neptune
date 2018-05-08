@@ -391,8 +391,8 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="MaintenanceRecordDate" Type="date" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
     <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
-    <Property Name="EnteredByPersonID" Type="int" />
-    <Property Name="PerformedByOrganizationID" Type="int" />
+    <Property Name="EnteredByPersonID" Type="int" Nullable="false" />
+    <Property Name="PerformedByOrganizationID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="MaintenanceRecordObservation">
     <Key>
@@ -666,6 +666,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="AlternateAssessmentRationale" Type="varchar" MaxLength="1000" />
     <Property Name="IsPrivate" Type="bit" Nullable="false" />
     <Property Name="Notes" Type="varchar" MaxLength="1000" />
+    <Property Name="IsPostMaintenanceAssessment" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID_Tenan' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -899,7 +900,7 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttribu
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
-    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Store.Organization" Multiplicity="0..1" />
+    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Store.Organization" Multiplicity="1" />
     <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PerformedByOrganization">
@@ -911,7 +912,7 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttribu
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
-    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="0..1" />
+    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
     <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="EnteredByPerson">

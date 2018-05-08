@@ -9,8 +9,8 @@ CREATE TABLE [dbo].[MaintenanceRecord](
 	[MaintenanceRecordDate] [date] NOT NULL,
 	[MaintenanceRecordDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceRecordTypeID] [int] NOT NULL,
-	[EnteredByPersonID] [int] NULL,
-	[PerformedByOrganizationID] [int] NULL,
+	[EnteredByPersonID] [int] NOT NULL,
+	[PerformedByOrganizationID] [int] NOT NULL,
  CONSTRAINT [PK_MaintenanceRecord_MaintenanceRecordID] PRIMARY KEY CLUSTERED 
 (
 	[MaintenanceRecordID] ASC

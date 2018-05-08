@@ -334,7 +334,7 @@ namespace Neptune.Web.Controllers
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, CurrentPerson, false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, CurrentPerson, false, false);
         }
 
         [NeptuneViewFeature]
@@ -426,7 +426,7 @@ namespace Neptune.Web.Controllers
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, DateTime.Now, CurrentPerson.PersonID, null, string.Empty, false,
-                string.Empty);
+                string.Empty, false);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
             var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
                 x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&

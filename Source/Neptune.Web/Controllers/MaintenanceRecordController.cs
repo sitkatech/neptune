@@ -45,11 +45,8 @@ namespace Neptune.Web.Controllers
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
             var newMaintenanceRecord =
                 new MaintenanceRecord(treatmentBmp.TreatmentBMPID, viewModel.MaintenanceRecordDate.Value,
-                    viewModel.MaintenanceRecordTypeID.Value)
-                {
-                    PerformedByOrganizationID = viewModel.PerformedByOrganizationID,
-                    EnteredByPersonID = CurrentPerson.PersonID
-                };
+                    viewModel.MaintenanceRecordTypeID.Value, CurrentPerson.PersonID,
+                    viewModel.PerformedByOrganizationID.Value);
             
 
             HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(newMaintenanceRecord);

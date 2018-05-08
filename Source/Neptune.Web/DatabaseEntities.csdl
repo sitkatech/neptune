@@ -388,8 +388,8 @@
     <Property Name="MaintenanceRecordDate" Type="DateTime" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceRecordTypeID" Type="Int32" Nullable="false" />
-    <Property Name="EnteredByPersonID" Type="Int32" />
-    <Property Name="PerformedByOrganizationID" Type="Int32" />
+    <Property Name="EnteredByPersonID" Type="Int32" Nullable="false" />
+    <Property Name="PerformedByOrganizationID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="PerformedByOrganization" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID" FromRole="MaintenanceRecordsWhereYouAreThePerformedByOrganization" ToRole="PerformedByOrganization" />
     <NavigationProperty Name="EnteredByPerson" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID" FromRole="MaintenanceRecordsWhereYouAreTheEnteredByPerson" ToRole="EnteredByPerson" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" FromRole="MaintenanceRecords" ToRole="TreatmentBMP" />
@@ -675,6 +675,7 @@
     <Property Name="AlternateAssessmentRationale" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
     <Property Name="IsPrivate" Type="Boolean" Nullable="false" />
     <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="IsPostMaintenanceAssessment" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="TreatmentBMPAssessments" ToRole="Person" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPAssessments" ToRole="TreatmentBMP" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPAssessments" ToRole="TreatmentBMPType" />
@@ -1036,7 +1037,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
-    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Organization" Multiplicity="0..1" />
+    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Organization" Multiplicity="1" />
     <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" Type="Neptune.Web.Models.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PerformedByOrganization">
@@ -1048,7 +1049,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
-    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Person" Multiplicity="0..1" />
+    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Person" Multiplicity="1" />
     <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" Type="Neptune.Web.Models.MaintenanceRecord" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="EnteredByPerson">

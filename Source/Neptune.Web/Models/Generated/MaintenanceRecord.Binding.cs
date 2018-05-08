@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, string maintenanceRecordDescription, int maintenanceRecordTypeID, int? enteredByPersonID, int? performedByOrganizationID) : this()
+        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, string maintenanceRecordDescription, int maintenanceRecordTypeID, int enteredByPersonID, int performedByOrganizationID) : this()
         {
             this.MaintenanceRecordID = maintenanceRecordID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -44,7 +44,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int treatmentBMPID, DateTime maintenanceRecordDate, int maintenanceRecordTypeID) : this()
+        public MaintenanceRecord(int treatmentBMPID, DateTime maintenanceRecordDate, int maintenanceRecordTypeID, int enteredByPersonID, int performedByOrganizationID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -52,12 +52,14 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMPID;
             this.MaintenanceRecordDate = maintenanceRecordDate;
             this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
+            this.EnteredByPersonID = enteredByPersonID;
+            this.PerformedByOrganizationID = performedByOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public MaintenanceRecord(TreatmentBMP treatmentBMP, DateTime maintenanceRecordDate, MaintenanceRecordType maintenanceRecordType) : this()
+        public MaintenanceRecord(TreatmentBMP treatmentBMP, DateTime maintenanceRecordDate, MaintenanceRecordType maintenanceRecordType, Person enteredByPerson, Organization performedByOrganization) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -66,14 +68,20 @@ namespace Neptune.Web.Models
             treatmentBMP.MaintenanceRecords.Add(this);
             this.MaintenanceRecordDate = maintenanceRecordDate;
             this.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
+            this.EnteredByPersonID = enteredByPerson.PersonID;
+            this.EnteredByPerson = enteredByPerson;
+            enteredByPerson.MaintenanceRecordsWhereYouAreTheEnteredByPerson.Add(this);
+            this.PerformedByOrganizationID = performedByOrganization.OrganizationID;
+            this.PerformedByOrganization = performedByOrganization;
+            performedByOrganization.MaintenanceRecordsWhereYouAreThePerformedByOrganization.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, MaintenanceRecordType maintenanceRecordType)
+        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, MaintenanceRecordType maintenanceRecordType, Person enteredByPerson, Organization performedByOrganization)
         {
-            return new MaintenanceRecord(treatmentBMP, default(DateTime), maintenanceRecordType);
+            return new MaintenanceRecord(treatmentBMP, default(DateTime), maintenanceRecordType, enteredByPerson, performedByOrganization);
         }
 
         /// <summary>
@@ -111,8 +119,8 @@ namespace Neptune.Web.Models
         public DateTime MaintenanceRecordDate { get; set; }
         public string MaintenanceRecordDescription { get; set; }
         public int MaintenanceRecordTypeID { get; set; }
-        public int? EnteredByPersonID { get; set; }
-        public int? PerformedByOrganizationID { get; set; }
+        public int EnteredByPersonID { get; set; }
+        public int PerformedByOrganizationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 

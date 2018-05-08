@@ -46,4 +46,5 @@ VALUES
 (41, N'MaintenanceRecordType', N'Maintenance Record Type', 'Whether the maintenance performed was Preventative or Corrective maintenance', 1),
 (42, N'MaintenanceRecord', N'Maintenance Record', 'A record of a maintenance activity performed on a Treatment BMP', 1),
 (43, N'AttributeTypePurpose', N'Purpose', 'How the attribute type will be used for analysis and reporting', 1),
-(44, N'FundingSource', N'Funding Source', '', 1)
+(44, N'FundingSource', N'Funding Source', '', 1),
+(45, N'IsPostMaintenanceAssessment', N'Is Post Maintenance Assessment', 'Whether the assessment was conducted as a follow-up to a maintenance activity', 1)

@@ -31,7 +31,7 @@ namespace Neptune.Web.UnitTestCommon
             public static TreatmentBMPAssessment Create(TreatmentBMP treatmentBMP)
             {
                 var person = TestPerson.Create();
-                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, person, false);
+                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, person, false, false);
                 return treatmentBMPAssessment;
             }
         }
