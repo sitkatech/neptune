@@ -7,7 +7,6 @@ CREATE TABLE [dbo].[MaintenanceRecord](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[MaintenanceRecordDate] [date] NOT NULL,
-	[PerformedByPersonID] [int] NOT NULL,
 	[MaintenanceRecordDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceRecordTypeID] [int] NOT NULL,
 	[EnteredByPersonID] [int] NULL,
@@ -48,11 +47,6 @@ ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_Maintenanc
 REFERENCES [dbo].[Person] ([PersonID], [TenantID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID]
-GO
-ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID] FOREIGN KEY([PerformedByPersonID])
-REFERENCES [dbo].[Person] ([PersonID])
-GO
-ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID]
 GO
 ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])

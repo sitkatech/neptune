@@ -70,10 +70,6 @@
       <End Role="EnteredByPerson" EntitySet="Person" />
       <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" EntitySet="MaintenanceRecord" />
     </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
-      <End Role="PerformedByPerson" EntitySet="Person" />
-      <End Role="MaintenanceRecordsWhereYouAreThePerformedByPerson" EntitySet="MaintenanceRecord" />
-    </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="MaintenanceRecords" EntitySet="MaintenanceRecord" />
@@ -393,7 +389,6 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="MaintenanceRecordDate" Type="date" Nullable="false" />
-    <Property Name="PerformedByPersonID" Type="int" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
     <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
     <Property Name="EnteredByPersonID" Type="int" />
@@ -924,18 +919,6 @@ warning 6035: The relationship 'FK_TreatmentBMPAttribute_TreatmentBMPTypeAttribu
       </Principal>
       <Dependent Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson">
         <PropertyRef Name="EnteredByPersonID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID">
-    <End Role="PerformedByPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
-    <End Role="MaintenanceRecordsWhereYouAreThePerformedByPerson" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PerformedByPerson">
-        <PropertyRef Name="PersonID" />
-      </Principal>
-      <Dependent Role="MaintenanceRecordsWhereYouAreThePerformedByPerson">
-        <PropertyRef Name="PerformedByPersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
