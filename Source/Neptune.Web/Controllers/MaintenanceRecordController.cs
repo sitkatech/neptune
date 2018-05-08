@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
-            var newMaintenanceRecord = new MaintenanceRecord(treatmentBmp.TreatmentBMPID,viewModel.MaintenanceRecordDate.Value, viewModel.PerformedByPersonID.Value, viewModel.MaintenanceRecordTypeID.Value);
+            var newMaintenanceRecord = new MaintenanceRecord(treatmentBmp.TreatmentBMPID,viewModel.MaintenanceRecordDate.Value, viewModel.MaintenanceRecordTypeID.Value);
             
 
             HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(newMaintenanceRecord);
@@ -56,7 +56,6 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        //todo : possibly an unnecessary abstraction
         private PartialViewResult ViewNew(EditMaintenanceRecordViewModel viewModel)
         {
             return ViewEdit(viewModel);
