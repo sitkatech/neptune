@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.FundingSource
             var fundingSourceEditFeature = new FundingSourceEditFeature();
             if (fundingSourceEditFeature.HasPermissionByPerson(currentPerson))
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.DeleteUrl, fundingSourceEditFeature.HasPermission(currentPerson, x).HasPermission, !x.HasDependentObjects()), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.DeleteUrl, fundingSourceEditFeature.HasPermission(currentPerson, x).HasPermission, true), 30, DhtmlxGridColumnFilterType.None);
             }
 
             Add(Models.FieldDefinition.FundingSource.ToGridHeaderString(), a => UrlTemplate.MakeHrefString(a.DetailUrl, a.DisplayName), 320, DhtmlxGridColumnFilterType.Html);

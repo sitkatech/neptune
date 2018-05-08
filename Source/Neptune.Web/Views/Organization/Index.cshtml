@@ -1,23 +1,24 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Index.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.DhtmlWrappers
@@ -28,15 +29,13 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
-
 @section RightOfPageTitle
 {
     @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Pull {0} from Keystone", FieldDefinition.Organization.GetFieldDefinitionLabel()), ViewDataTyped.PullOrganizationFromKeystoneUrl, string.Format("Pull {0} from Keystone", FieldDefinition.Organization.GetFieldDefinitionLabel()), new List<string> { "btn", "btn-neptune", "btn-sm" }, ViewDataTyped.UserIsSitkaAdmin)
+    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Add Organization", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.NewOrganizationUrl, "Add Organization", new List<string> { "btn", "btn-neptune" }, ViewDataTyped.UserCanAddOrganization)
 }
 
-
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
-
 
 <div style="margin-top: 10px;">
     @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)

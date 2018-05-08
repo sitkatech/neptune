@@ -33,7 +33,9 @@ namespace Neptune.Web.Views.Organization
         public readonly string GridDataUrl;
 
         public readonly string PullOrganizationFromKeystoneUrl;
+        public readonly string NewOrganizationUrl;
         public readonly bool UserIsSitkaAdmin;
+        public readonly bool UserCanAddOrganization;
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
@@ -49,17 +51,14 @@ namespace Neptune.Web.Views.Organization
                 SaveFiltersInCookie = true
             };
 
-            if (hasOrganizationManagePermissions)
-            {
-                var contentUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.New());
-                GridSpec.CreateEntityModalDialogForm = new ModalDialogForm(contentUrl, $"Create a new {Models.FieldDefinition.Organization.GetFieldDefinitionLabel()}");
-            }
-
             GridName = "organizationsGrid";
             GridDataUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
 
             PullOrganizationFromKeystoneUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.PullOrganizationFromKeystone());
             UserIsSitkaAdmin = new SitkaAdminFeature().HasPermissionByPerson(currentPerson);
+            UserCanAddOrganization = new OrganizationManageFeature().HasPermissionByPerson(currentPerson);
+
+            NewOrganizationUrl = SitkaRoute<OrganizationController>.BuildUrlFromExpression(t => t.New());
         }
     }
 }

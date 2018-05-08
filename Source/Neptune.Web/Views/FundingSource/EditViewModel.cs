@@ -25,6 +25,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
+using Microsoft.IdentityModel;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
@@ -40,10 +41,10 @@ namespace Neptune.Web.Views.FundingSource
         [DisplayName("Name")]
         public string FundingSourceName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "The Organization is required.")]
         public int? OrganizationID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Specify whether the Funding Source is Active.")]
         [DisplayName("Active?")]
         public bool? IsActive { get; set; }
 
@@ -91,6 +92,8 @@ namespace Neptune.Web.Views.FundingSource
                 var errorMessage = $"You cannnot create a {Models.FieldDefinition.FundingSource.GetFieldDefinitionLabel()} for an {Models.FieldDefinition.Organization.GetFieldDefinitionLabel()} other than your own.";
                 errors.Add(new SitkaValidationResult<EditViewModel, int?>(errorMessage, x => x.OrganizationID));
             }
+
+
 
             return errors;
         }
