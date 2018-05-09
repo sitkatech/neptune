@@ -203,6 +203,7 @@
     <Compile Include="Controllers\FundingSourceController.cs" />
     <Compile Include="Models\FundingSource.cs" />
     <Compile Include="Models\CustomAttributeValue.cs" />
+    <Compile Include="Models\MaintenanceRecordObservation.cs" />
     <Compile Include="Models\TreatmentBMPFundingSource.cs" />
     <Compile Include="Models\TreatmentBMPFundingSourceSimple.cs" />
     <Compile Include="Models\TreatmentBMPSimple.cs" />

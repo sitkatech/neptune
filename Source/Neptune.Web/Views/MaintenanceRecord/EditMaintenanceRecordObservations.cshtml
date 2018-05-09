@@ -21,4 +21,12 @@
 
 @inherits Neptune.Web.Views.MaintenanceRecord.EditMaintenanceRecordObservations
 
+<div class="row">
+    <div class="col-xs-12">
+        <div class="validationError">
+            @Html.ValidationSummary()
+        </div>
+    </div>
+</div>
+
 @{ Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);}

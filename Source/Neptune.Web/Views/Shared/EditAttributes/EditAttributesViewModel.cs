@@ -78,8 +78,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID 
                           && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID 
                           && x.CustomAttributeTypeID == y.CustomAttributeTypeID
-                          && x.CustomAttributeID == y.CustomAttributeID,
-                (x, y) => { });
+                          && x.CustomAttributeID == y.CustomAttributeID);
 
             existingCustomAttributeValues.Merge(customAttributeValuesToUpdate, customAttributeValuesInDatabase,
                 (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID

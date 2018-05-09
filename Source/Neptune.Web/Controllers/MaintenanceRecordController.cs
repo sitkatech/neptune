@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -174,7 +176,16 @@ namespace Neptune.Web.Controllers
         public ActionResult EditObservations(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
             EditMaintenanceRecordObservationsViewModel viewModel)
         {
-            throw new NotImplementedException();
+            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP);
+            }
+
+            viewModel.UpdateModel(maintenanceRecord);
+            SetMessageForDisplay("Maintenance Record Observations Successfully saved.");
+            return RedirectToAction(
+                new SitkaRoute<MaintenanceRecordController>(c => c.Detail(maintenanceRecordPrimaryKey)));
         }
     }
 
@@ -201,6 +212,8 @@ namespace Neptune.Web.Views.MaintenanceRecord
             EditObservationsUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.EditObservations(maintenanceRecord));
             MaintenanceRecord = maintenanceRecord;
             CurrentPersonCanManage = new MaintenanceRecordManageFeature().HasPermissionByPerson(currentPerson);
+            BMPTypeHasObservationTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
+            UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
         }
 
         public string EditObservationsUrl { get; }
@@ -208,6 +221,8 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public string EditUrl { get; }
         public Models.MaintenanceRecord MaintenanceRecord { get; }
         public bool CurrentPersonCanManage { get; }
+        public bool BMPTypeHasObservationTypes { get; }
+        public bool UserHasCustomAttributeTypeManagePermissions { get; set; }
     }
 
     public abstract class EditMaintenanceRecordObservations : TypedWebViewPage<EditMaintenanceRecordObservationsViewData, EditMaintenanceRecordObservationsViewModel>
@@ -238,6 +253,51 @@ namespace Neptune.Web.Views.MaintenanceRecord
         {
             CustomAttributes =
                 maintenanceRecord.MaintenanceRecordObservations.Select(x => new CustomAttributeSimple(x)).ToList();
+        }
+
+        public void UpdateModel(Models.MaintenanceRecord maintenanceRecord)
+        {
+
+            var treatmentBMPTypeCustomAttributeTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
+            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
+            var customAttributesToUpdate = new List<MaintenanceRecordObservation>();
+            var customAttributeValuesToUpdate = new List<MaintenanceRecordObservationValue>();
+            foreach (var x in customAttributeSimplesWithValues)
+            {
+
+                var customAttribute = new MaintenanceRecordObservation(maintenanceRecord.MaintenanceRecordID,
+                    treatmentBMPTypeCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID)
+                        .TreatmentBMPTypeCustomAttributeTypeID, maintenanceRecord.TreatmentBMP.TreatmentBMPTypeID,
+                    x.CustomAttributeTypeID);
+                customAttributesToUpdate.Add(customAttribute);
+
+                foreach (var value in x.CustomAttributeValues)
+                {
+                    var customAttributeValue = new MaintenanceRecordObservationValue(customAttribute,value);
+                    customAttributeValuesToUpdate.Add(customAttributeValue);
+                }
+            }
+
+            var maintenanceRecordObservationsInDatabase = HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservations.Local;
+            var maintenanceRecordObservationValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservationValues.Local;
+
+            var existingMaintenanceRecordObservations = maintenanceRecord.MaintenanceRecordObservations.Where(x =>
+                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList();
+
+            var existingMaintenanceRecordObservationValues = existingMaintenanceRecordObservations.SelectMany(x => x.MaintenanceRecordObservationValues).ToList();
+
+            existingMaintenanceRecordObservations.Merge(customAttributesToUpdate, maintenanceRecordObservationsInDatabase,
+                (x, y) => x.MaintenanceRecordID == y.MaintenanceRecordID
+                          && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID
+                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
+                          && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
+                (x, y) => { });
+
+            existingMaintenanceRecordObservationValues.Merge(customAttributeValuesToUpdate, maintenanceRecordObservationValuesInDatabase,
+                (x, y) => x.MaintenanceRecordObservationValueID == y.MaintenanceRecordObservationValueID
+                          && x.MaintenanceRecordObservationID == y.MaintenanceRecordObservationID,
+                (x, y) => { x.ObservationValue = y.ObservationValue; });
         }
     }
 }

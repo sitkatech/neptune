@@ -22,15 +22,11 @@
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.Shared.EditAttributes.EditAttributes
 
+
 @using (Html.BeginForm())
 {
     <div class="formPage">
         <div class="row">
-            <div class="col-xs-12">
-                <div class="validationError">
-                    @Html.ValidationSummary()
-                </div>
-            </div>
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12">
@@ -50,7 +46,7 @@
                                     <div class="col-sm-6">
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
+                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
                                                 <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID" />
                                                 @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
                                                 {

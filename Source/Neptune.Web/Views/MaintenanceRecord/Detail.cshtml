@@ -68,7 +68,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Observations
-                @if (ViewDataTyped.CurrentPersonCanManage)
+                @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.BMPTypeHasObservationTypes)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.EditObservationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -76,7 +76,39 @@
                 }
             </div>
             <div class="panel-body">
-                
+                @if (@ViewDataTyped.BMPTypeHasObservationTypes && ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
+                {
+                @*TODO*@
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th class="text-right">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var mro in ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations)
+                        {
+                            <tr>
+                                <td>
+                                    @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
+                                    <br />
+                                    <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                </td>
+                                <td class="text-right" style="min-width: 150px">@mro.GetObservationValueWithUnits()</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else if (@ViewDataTyped.BMPTypeHasObservationTypes && !ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
+                {
+                    <p class="systemText">There are no recorded Observation Values for this Maintenance Record</p>
+                }
+                else
+                {
+                    <p class="systemText">There are no Observation Types available for this Treatment BMP Type.</p>
+                }
             </div>
         </div>
     </div>
