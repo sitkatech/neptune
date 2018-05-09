@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="Edit.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,14 +19,18 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using System.Web.Mvc;
+using System.Web.WebPages;
+using LtInfo.Common.HtmlHelperExtensions;
 
-namespace Neptune.Web.Views.TreatmentBMP
+namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public class EditAttributesViewData : Shared.EditAttributes.EditAttributesViewData
+    public abstract class
+        EditAttributes : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditAttributesViewData, EditAttributesViewModel>
     {
-        public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, treatmentBMP, customAttributeTypePurpose)
+        public static void RenderPartialView(HtmlHelper html, EditAttributesViewData viewData, EditAttributesViewModel viewModel)
         {
+            html.RenderRazorSitkaPartial<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
     }
 }

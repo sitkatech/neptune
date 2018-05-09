@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using DocumentFormat.OpenXml.Presentation;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -11,7 +9,8 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
-using Neptune.Web.Views.TreatmentBMP;
+using Neptune.Web.Views.Shared.EditAttributes;
+
 using  DetailViewData = Neptune.Web.Views.MaintenanceRecord.DetailViewData;
 using  Detail = Neptune.Web.Views.MaintenanceRecord.Detail;
 
@@ -165,8 +164,9 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP)
         {
             var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance);
-            return RazorView<EditMaintenanceRecordObservations, EditMaintenanceRecordObservationsViewData,
-                EditMaintenanceRecordObservationsViewModel>(viewData, viewModel);
+            //return RazorView<EditAttributes, EditAttributesViewData,
+            //    EditAttributesViewModel>(viewData, viewModel);
+            throw new NotImplementedException();
         }
 
         [HttpPost]

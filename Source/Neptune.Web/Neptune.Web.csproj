@@ -810,6 +810,9 @@
     <Compile Include="Views\TreatmentBMPType\TreatmentBMPTypeGridSpec.cs" />
     <Compile Include="Views\TreatmentBMPType\ManageViewData.cs" />
     <Compile Include="Models\TreatmentBMPTypeObservationTypeSimple.cs" />
+    <Compile Include="Views\Shared\EditAttributes\EditAttributes.cs" />
+    <Compile Include="Views\Shared\EditAttributes\EditAttributesViewData.cs" />
+    <Compile Include="Views\Shared\EditAttributes\EditAttributesViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributes.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewModel.cs" />
@@ -1006,7 +1009,7 @@
     <Content Include="Views\CustomAttributeType\Detail.cshtml" />
     <Content Include="Views\CustomAttributeType\Edit.cshtml" />
     <Content Include="Views\CustomAttributeType\Manage.cshtml" />
-    <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
+    <Content Include="Views\Shared\EditAttributes\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecord.cshtml" />
     <Content Include="Views\TreatmentBMPAssessment\CollectionMethodSection.cshtml" />
     <Content Include="Views\FundingSource\Detail.cshtml" />
@@ -1014,6 +1017,7 @@
     <Content Include="Views\FundingSource\Index.cshtml" />
     <Content Include="Views\TreatmentBMPFundingSource\Edit.cshtml" />
     <Content Include="Views\MaintenanceRecord\Detail.cshtml" />
+    <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
