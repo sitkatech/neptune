@@ -62,15 +62,15 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
             TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
             TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
-            TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
+            TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
         }
 
 
         public void UpdateModel(Models.TreatmentBMPType treatmentBMPType,
             List<TreatmentBMPTypeAssessmentObservationType> currentTreatmentBMPTypeObservationTypes,
             IList<TreatmentBMPTypeAssessmentObservationType> allTreatmentBMPTypeAssessmentObservationTypes,
-            List<TreatmentBMPTypeAttributeType> currentTreatmentBMPTypeAttributeTypes,
-            ObservableCollection<TreatmentBMPTypeAttributeType> allTreatmentBMPTypeAttributeTypes)
+            List<TreatmentBMPTypeCustomAttributeType> currentTreatmentBMPTypeCustomAttributeTypes,
+            ObservableCollection<TreatmentBMPTypeCustomAttributeType> allTreatmentBMPTypeCustomAttributeTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
             treatmentBMPType.TreatmentBMPTypeDescription = TreatmentBMPTypeDescription;
@@ -104,14 +104,14 @@ namespace Neptune.Web.Views.TreatmentBMPType
                     x.OverrideAssessmentScoreIfFailing = y.OverrideAssessmentScoreIfFailing;
                 });
 
-            var updatedTreatmentBMPTypeAttributeTypes = new List<TreatmentBMPTypeAttributeType>();
+            var updatedTreatmentBMPTypeCustomAttributeTypes = new List<TreatmentBMPTypeCustomAttributeType>();
             if (TreatmentBMPTypeAttributeTypeSimples != null)
             {
                 // Completely rebuild the list
-                updatedTreatmentBMPTypeAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID)).ToList();
+                updatedTreatmentBMPTypeCustomAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeCustomAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID)).ToList();
             }
 
-            currentTreatmentBMPTypeAttributeTypes.Merge(updatedTreatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.CustomAttributeTypeID == y.CustomAttributeTypeID);
+            currentTreatmentBMPTypeCustomAttributeTypes.Merge(updatedTreatmentBMPTypeCustomAttributeTypes, allTreatmentBMPTypeCustomAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.CustomAttributeTypeID == y.CustomAttributeTypeID);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

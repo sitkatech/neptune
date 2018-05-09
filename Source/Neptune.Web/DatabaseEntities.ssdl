@@ -37,7 +37,7 @@
     <EntitySet Name="TreatmentBMPObservation" EntityType="Neptune.Web.Models.Store.TreatmentBMPObservation" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPType" EntityType="Neptune.Web.Models.Store.TreatmentBMPType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPTypeAssessmentObservationType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeAssessmentObservationType" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="TreatmentBMPTypeAttributeType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TreatmentBMPTypeCustomAttributeType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.Store.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -58,8 +58,8 @@
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="CustomAttributes" EntitySet="CustomAttribute" />
     </AssociationSet>
-    <AssociationSet Name="FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" Association="Neptune.Web.Models.Store.FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
-      <End Role="TreatmentBMPTypeAttributeType" EntitySet="TreatmentBMPTypeAttributeType" />
+    <AssociationSet Name="FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID" Association="Neptune.Web.Models.Store.FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID">
+      <End Role="TreatmentBMPTypeCustomAttributeType" EntitySet="TreatmentBMPTypeCustomAttributeType" />
       <End Role="CustomAttributes" EntitySet="CustomAttribute" />
     </AssociationSet>
     <AssociationSet Name="FK_CustomAttributeValue_CustomAttribute_CustomAttributeID" Association="Neptune.Web.Models.Store.FK_CustomAttributeValue_CustomAttribute_CustomAttributeID">
@@ -106,8 +106,8 @@
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
     </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
-      <End Role="TreatmentBMPTypeAttributeType" EntitySet="TreatmentBMPTypeAttributeType" />
+    <AssociationSet Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID">
+      <End Role="TreatmentBMPTypeCustomAttributeType" EntitySet="TreatmentBMPTypeCustomAttributeType" />
       <End Role="MaintenanceRecordObservations" EntitySet="MaintenanceRecordObservation" />
     </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID">
@@ -282,13 +282,13 @@
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="TreatmentBMPTypeAssessmentObservationTypes" EntitySet="TreatmentBMPTypeAssessmentObservationType" />
     </AssociationSet>
-    <AssociationSet Name="FK_TreatmentBMPTypeAttributeType_CustomAttributeType_CustomAttributeTypeID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPTypeAttributeType_CustomAttributeType_CustomAttributeTypeID">
+    <AssociationSet Name="FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID">
       <End Role="CustomAttributeType" EntitySet="CustomAttributeType" />
-      <End Role="TreatmentBMPTypeAttributeTypes" EntitySet="TreatmentBMPTypeAttributeType" />
+      <End Role="TreatmentBMPTypeCustomAttributeTypes" EntitySet="TreatmentBMPTypeCustomAttributeType" />
     </AssociationSet>
-    <AssociationSet Name="FK_TreatmentBMPTypeAttributeType_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPTypeAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
+    <AssociationSet Name="FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
-      <End Role="TreatmentBMPTypeAttributeTypes" EntitySet="TreatmentBMPTypeAttributeType" />
+      <End Role="TreatmentBMPTypeCustomAttributeTypes" EntitySet="TreatmentBMPTypeCustomAttributeType" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AuditLog">
@@ -327,14 +327,14 @@ warning 6035: The relationship 'FK_CustomAttributeValue_CustomAttribute_CustomAt
     <Property Name="CustomAttributeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="TreatmentBMPTypeAttributeTypeID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPTypeCustomAttributeTypeID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_CustomAttribute_CustomAttributeType_CustomAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_MaintenanceRecordObservation_CustomAttributeType_CustomAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_CustomAttributeType_CustomAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="CustomAttributeType">
     <Key>
@@ -443,7 +443,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="MaintenanceRecordObservationID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="MaintenanceRecordID" Type="int" Nullable="false" />
-    <Property Name="TreatmentBMPTypeAttributeTypeID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPTypeCustomAttributeTypeID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="int" Nullable="false" />
   </EntityType>
@@ -785,7 +785,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_Tre
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_TreatmentBMPTypeAttributeType_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="TreatmentBMPType">
     <Key>
@@ -814,15 +814,15 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeAsses
     <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
-  <EntityType Name="TreatmentBMPTypeAttributeType">
+  <EntityType Name="TreatmentBMPTypeCustomAttributeType">
     <Key>
-      <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      <PropertyRef Name="TreatmentBMPTypeCustomAttributeTypeID" />
     </Key>
-    <Property Name="TreatmentBMPTypeAttributeTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TreatmentBMPTypeCustomAttributeTypeID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="int" Nullable="false" />
@@ -887,15 +887,15 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
-    <End Role="TreatmentBMPTypeAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" Multiplicity="1" />
+  <Association Name="FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID">
+    <End Role="TreatmentBMPTypeCustomAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" Multiplicity="1" />
     <End Role="CustomAttributes" Type="Neptune.Web.Models.Store.CustomAttribute" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TreatmentBMPTypeAttributeType">
-        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      <Principal Role="TreatmentBMPTypeCustomAttributeType">
+        <PropertyRef Name="TreatmentBMPTypeCustomAttributeTypeID" />
       </Principal>
       <Dependent Role="CustomAttributes">
-        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+        <PropertyRef Name="TreatmentBMPTypeCustomAttributeTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1031,15 +1031,15 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID">
-    <End Role="TreatmentBMPTypeAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" Multiplicity="1" />
+  <Association Name="FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID">
+    <End Role="TreatmentBMPTypeCustomAttributeType" Type="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" Multiplicity="1" />
     <End Role="MaintenanceRecordObservations" Type="Neptune.Web.Models.Store.MaintenanceRecordObservation" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TreatmentBMPTypeAttributeType">
-        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+      <Principal Role="TreatmentBMPTypeCustomAttributeType">
+        <PropertyRef Name="TreatmentBMPTypeCustomAttributeTypeID" />
       </Principal>
       <Dependent Role="MaintenanceRecordObservations">
-        <PropertyRef Name="TreatmentBMPTypeAttributeTypeID" />
+        <PropertyRef Name="TreatmentBMPTypeCustomAttributeTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1559,26 +1559,26 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TreatmentBMPTypeAttributeType_CustomAttributeType_CustomAttributeTypeID">
+  <Association Name="FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID">
     <End Role="CustomAttributeType" Type="Neptune.Web.Models.Store.CustomAttributeType" Multiplicity="1" />
-    <End Role="TreatmentBMPTypeAttributeTypes" Type="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" Multiplicity="*" />
+    <End Role="TreatmentBMPTypeCustomAttributeTypes" Type="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="CustomAttributeType">
         <PropertyRef Name="CustomAttributeTypeID" />
       </Principal>
-      <Dependent Role="TreatmentBMPTypeAttributeTypes">
+      <Dependent Role="TreatmentBMPTypeCustomAttributeTypes">
         <PropertyRef Name="CustomAttributeTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TreatmentBMPTypeAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
+  <Association Name="FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
     <End Role="TreatmentBMPType" Type="Neptune.Web.Models.Store.TreatmentBMPType" Multiplicity="1" />
-    <End Role="TreatmentBMPTypeAttributeTypes" Type="Neptune.Web.Models.Store.TreatmentBMPTypeAttributeType" Multiplicity="*" />
+    <End Role="TreatmentBMPTypeCustomAttributeTypes" Type="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TreatmentBMPType">
         <PropertyRef Name="TreatmentBMPTypeID" />
       </Principal>
-      <Dependent Role="TreatmentBMPTypeAttributeTypes">
+      <Dependent Role="TreatmentBMPTypeCustomAttributeTypes">
         <PropertyRef Name="TreatmentBMPTypeID" />
       </Dependent>
     </ReferentialConstraint>

@@ -85,12 +85,12 @@ namespace Neptune.Web.Models
                        x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
-        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
             if (CustomAttributes.Any())
             {
                 var customAttribute = CustomAttributes.SingleOrDefault(x =>
-                    x.CustomAttributeTypeID == treatmentBMPTypeAttributeType.CustomAttributeTypeID);
+                    x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
                     var measurmentUnit = "";

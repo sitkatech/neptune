@@ -35,7 +35,7 @@
           <ScalarProperty Name="CustomAttributeID" ColumnName="CustomAttributeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
-          <ScalarProperty Name="TreatmentBMPTypeAttributeTypeID" ColumnName="TreatmentBMPTypeAttributeTypeID" />
+          <ScalarProperty Name="TreatmentBMPTypeCustomAttributeTypeID" ColumnName="TreatmentBMPTypeCustomAttributeTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="CustomAttributeTypeID" ColumnName="CustomAttributeTypeID" />
         </MappingFragment>
@@ -134,7 +134,7 @@
           <ScalarProperty Name="MaintenanceRecordObservationID" ColumnName="MaintenanceRecordObservationID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="MaintenanceRecordID" ColumnName="MaintenanceRecordID" />
-          <ScalarProperty Name="TreatmentBMPTypeAttributeTypeID" ColumnName="TreatmentBMPTypeAttributeTypeID" />
+          <ScalarProperty Name="TreatmentBMPTypeCustomAttributeTypeID" ColumnName="TreatmentBMPTypeCustomAttributeTypeID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="CustomAttributeTypeID" ColumnName="CustomAttributeTypeID" />
         </MappingFragment>
@@ -467,10 +467,10 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPTypeAttributeType">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPTypeAttributeType">
-        <MappingFragment StoreEntitySet="TreatmentBMPTypeAttributeType">
-          <ScalarProperty Name="TreatmentBMPTypeAttributeTypeID" ColumnName="TreatmentBMPTypeAttributeTypeID" />
+    <EntitySetMapping Name="TreatmentBMPTypeCustomAttributeType">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPTypeCustomAttributeType">
+        <MappingFragment StoreEntitySet="TreatmentBMPTypeCustomAttributeType">
+          <ScalarProperty Name="TreatmentBMPTypeCustomAttributeTypeID" ColumnName="TreatmentBMPTypeCustomAttributeTypeID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="CustomAttributeTypeID" ColumnName="CustomAttributeTypeID" />

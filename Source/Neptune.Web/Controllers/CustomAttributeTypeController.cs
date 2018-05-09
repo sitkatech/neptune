@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new TreatmentBMPTypeGridSpec(CurrentPerson);
             var customAttributeType = customAttributeTypePrimaryKey.EntityObject;
-            var treatmentBMPTypes = customAttributeType.TreatmentBMPTypeAttributeTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
+            var treatmentBMPTypes = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Select(x => x.TreatmentBMPType).OrderBy(x => x.TreatmentBMPTypeName).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPType>(treatmentBMPTypes, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -131,9 +131,9 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteCustomAttributeType(CustomAttributeType customAttributeType, ConfirmDialogFormViewModel viewModel)
         {
-            var treatmentBMPTypeLabel = customAttributeType.TreatmentBMPTypeAttributeTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
+            var treatmentBMPTypeLabel = customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count == 1 ? FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             var treatmentBMPLabel = customAttributeType.CustomAttributes.Count == 1 ? FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel() : FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized();
-            var confirmMessage = $"{FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributeType.CustomAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}?";
+            var confirmMessage = $"{FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' is associated with {customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Count} {treatmentBMPTypeLabel} and {customAttributeType.CustomAttributes.Count} {treatmentBMPLabel}.<br /><br />Are you sure you want to delete this {FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}?";
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }

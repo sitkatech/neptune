@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[MaintenanceRecordObservation](
 	[MaintenanceRecordObservationID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[MaintenanceRecordID] [int] NOT NULL,
-	[TreatmentBMPTypeAttributeTypeID] [int] NOT NULL,
+	[TreatmentBMPTypeCustomAttributeTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[CustomAttributeTypeID] [int] NOT NULL,
  CONSTRAINT [PK_MaintenanceRecordObservation_MaintenanceRecordObservationID] PRIMARY KEY CLUSTERED 
@@ -51,17 +51,17 @@ REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID], [TenantID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID_TenantID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeAttributeTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeAttributeTypeID])
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeCustomAttributeTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeCustomAttributeType] ([TreatmentBMPTypeCustomAttributeTypeID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID]
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID_TenantID] FOREIGN KEY([TreatmentBMPTypeAttributeTypeID], [TenantID])
-REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeAttributeTypeID], [TenantID])
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID_TenantID] FOREIGN KEY([TreatmentBMPTypeCustomAttributeTypeID], [TenantID])
+REFERENCES [dbo].[TreatmentBMPTypeCustomAttributeType] ([TreatmentBMPTypeCustomAttributeTypeID], [TenantID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID_TenantID]
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID_TenantID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeID], [CustomAttributeTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeID], [CustomAttributeTypeID])
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeID], [CustomAttributeTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeCustomAttributeType] ([TreatmentBMPTypeID], [CustomAttributeTypeID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID]
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID]

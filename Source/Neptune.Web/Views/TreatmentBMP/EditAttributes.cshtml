@@ -35,9 +35,9 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-horizontal">
-                            @for (var i = 0; i < ViewDataTyped.TreatmentBMPTypeAttributeTypes.Count; i++)
+                            @for (var i = 0; i < ViewDataTyped.TreatmentBMPTypeCustomAttributeTypes.Count; i++)
                             {
-                                var attribute = ViewDataTyped.TreatmentBMPTypeAttributeTypes[i];
+                                var attribute = ViewDataTyped.TreatmentBMPTypeCustomAttributeTypes[i];
                                 var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == attribute.CustomAttributeTypeID);
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">
@@ -50,7 +50,7 @@
                                     <div class="col-sm-6">
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID" />
+                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
                                                 <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID" />
                                                 @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
                                                 {

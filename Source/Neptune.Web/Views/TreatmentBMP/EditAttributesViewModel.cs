@@ -56,7 +56,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
             foreach (var x in customAttributeSimplesWithValues)
             {
-                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
+                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
                 customAttributesToUpdate.Add(customAttribute);
                 foreach (var value in x.CustomAttributeValues)
                 {                    

@@ -30,11 +30,11 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public CustomAttribute(int customAttributeID, int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
+        public CustomAttribute(int customAttributeID, int treatmentBMPID, int treatmentBMPTypeCustomAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
         {
             this.CustomAttributeID = customAttributeID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
+            this.TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.CustomAttributeTypeID = customAttributeTypeID;
         }
@@ -42,13 +42,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public CustomAttribute(int treatmentBMPID, int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
+        public CustomAttribute(int treatmentBMPID, int treatmentBMPTypeCustomAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.CustomAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
-            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
+            this.TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.CustomAttributeTypeID = customAttributeTypeID;
         }
@@ -56,16 +56,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public CustomAttribute(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType) : this()
+        public CustomAttribute(TreatmentBMP treatmentBMP, TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.CustomAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.CustomAttributes.Add(this);
-            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeType.TreatmentBMPTypeAttributeTypeID;
-            this.TreatmentBMPTypeAttributeType = treatmentBMPTypeAttributeType;
-            treatmentBMPTypeAttributeType.CustomAttributes.Add(this);
+            this.TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeCustomAttributeTypeID;
+            this.TreatmentBMPTypeCustomAttributeType = treatmentBMPTypeCustomAttributeType;
+            treatmentBMPTypeCustomAttributeType.CustomAttributes.Add(this);
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.CustomAttributes.Add(this);
@@ -77,9 +77,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static CustomAttribute CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType, TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType)
+        public static CustomAttribute CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType, TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType)
         {
-            return new CustomAttribute(treatmentBMP, treatmentBMPTypeAttributeType, treatmentBMPType, customAttributeType);
+            return new CustomAttribute(treatmentBMP, treatmentBMPTypeCustomAttributeType, treatmentBMPType, customAttributeType);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Neptune.Web.Models
         public int CustomAttributeID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
-        public int TreatmentBMPTypeAttributeTypeID { get; set; }
+        public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
         [NotMapped]
@@ -123,7 +123,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<CustomAttributeValue> CustomAttributeValues { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        public virtual TreatmentBMPTypeAttributeType TreatmentBMPTypeAttributeType { get; set; }
+        public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual CustomAttributeType CustomAttributeType { get; set; }
 

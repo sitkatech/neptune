@@ -5,7 +5,7 @@ namespace Neptune.Web.Models
 {
     public class CustomAttributeSimple
     {
-        public int TreatmentBMPTypeAttributeTypeID { get; set; }
+        public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
         public List<string> CustomAttributeValues { get; set; }
 
@@ -15,14 +15,14 @@ namespace Neptune.Web.Models
 
         public CustomAttributeSimple(CustomAttribute customAttribute)
         {
-            TreatmentBMPTypeAttributeTypeID = customAttribute.TreatmentBMPTypeAttributeTypeID;
+            TreatmentBMPTypeCustomAttributeTypeID = customAttribute.TreatmentBMPTypeCustomAttributeTypeID;
             CustomAttributeTypeID = customAttribute.CustomAttributeTypeID;
             CustomAttributeValues = customAttribute.CustomAttributeValues.Select(x => x.AttributeValue).ToList();
         }
 
-        public CustomAttributeSimple(int treatmentBMPTypeAttributeTypeID, int customAttributeTypeID, List<string> values)
+        public CustomAttributeSimple(int treatmentBMPTypeCustomAttributeTypeID, int customAttributeTypeID, List<string> values)
         {
-            TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
+            TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypeID;
             CustomAttributeTypeID = customAttributeTypeID;
             CustomAttributeValues = values;
         }

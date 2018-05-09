@@ -128,7 +128,7 @@
             <div class="panel-heading panelTitle">
                 @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -136,7 +136,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                 {
                     <p class="systemText">
                         This type of treatment BMP does not have any @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
@@ -152,7 +152,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                             {
                                 <tr>
                                     <td>
@@ -172,7 +172,7 @@
             <div class="panel-heading panelTitle">
                 @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -180,7 +180,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                 {
                     <p class="systemText">
                         This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
@@ -196,7 +196,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                             {
                                 <tr>
                                     <td>

@@ -9,10 +9,10 @@
         {
         }
 
-        public TreatmentBMPTypeAttributeTypeSimple(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        public TreatmentBMPTypeAttributeTypeSimple(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            TreatmentBMPTypeID = treatmentBMPTypeAttributeType.TreatmentBMPTypeID;
-            CustomAttributeTypeID = treatmentBMPTypeAttributeType.CustomAttributeTypeID;
+            TreatmentBMPTypeID = treatmentBMPTypeCustomAttributeType.TreatmentBMPTypeID;
+            CustomAttributeTypeID = treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID;
         }
     }
 }

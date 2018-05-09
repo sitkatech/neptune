@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TreatmentBMPTypeAttributeType]
+//  Source Table: [dbo].[TreatmentBMPTypeCustomAttributeType]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[TreatmentBMPTypeAttributeType]")]
-    public partial class TreatmentBMPTypeAttributeType : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[TreatmentBMPTypeCustomAttributeType]")]
+    public partial class TreatmentBMPTypeCustomAttributeType : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TreatmentBMPTypeAttributeType()
+        protected TreatmentBMPTypeCustomAttributeType()
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
@@ -31,9 +31,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeAttributeType(int treatmentBMPTypeAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
+        public TreatmentBMPTypeCustomAttributeType(int treatmentBMPTypeCustomAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
         {
-            this.TreatmentBMPTypeAttributeTypeID = treatmentBMPTypeAttributeTypeID;
+            this.TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.CustomAttributeTypeID = customAttributeTypeID;
         }
@@ -41,10 +41,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeAttributeType(int treatmentBMPTypeID, int customAttributeTypeID) : this()
+        public TreatmentBMPTypeCustomAttributeType(int treatmentBMPTypeID, int customAttributeTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPTypeAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPTypeCustomAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.CustomAttributeTypeID = customAttributeTypeID;
@@ -53,24 +53,24 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPTypeAttributeType(TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType) : this()
+        public TreatmentBMPTypeCustomAttributeType(TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPTypeAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPTypeCustomAttributeTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
-            treatmentBMPType.TreatmentBMPTypeAttributeTypes.Add(this);
+            treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Add(this);
             this.CustomAttributeTypeID = customAttributeType.CustomAttributeTypeID;
             this.CustomAttributeType = customAttributeType;
-            customAttributeType.TreatmentBMPTypeAttributeTypes.Add(this);
+            customAttributeType.TreatmentBMPTypeCustomAttributeTypes.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPTypeAttributeType CreateNewBlank(TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType)
+        public static TreatmentBMPTypeCustomAttributeType CreateNewBlank(TreatmentBMPType treatmentBMPType, CustomAttributeType customAttributeType)
         {
-            return new TreatmentBMPTypeAttributeType(treatmentBMPType, customAttributeType);
+            return new TreatmentBMPTypeCustomAttributeType(treatmentBMPType, customAttributeType);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeAttributeType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPTypeCustomAttributeType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name};
 
 
         /// <summary>
@@ -103,16 +103,16 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAttributeTypes.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeCustomAttributeTypes.Remove(this);                
         }
 
         [Key]
-        public int TreatmentBMPTypeAttributeTypeID { get; set; }
+        public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TreatmentBMPTypeAttributeTypeID; } set { TreatmentBMPTypeAttributeTypeID = value; } }
+        public int PrimaryKey { get { return TreatmentBMPTypeCustomAttributeTypeID; } set { TreatmentBMPTypeCustomAttributeTypeID = value; } }
 
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }

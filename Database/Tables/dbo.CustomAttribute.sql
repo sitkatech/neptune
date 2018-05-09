@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[CustomAttribute](
 	[CustomAttributeID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
-	[TreatmentBMPTypeAttributeTypeID] [int] NOT NULL,
+	[TreatmentBMPTypeCustomAttributeTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[CustomAttributeTypeID] [int] NOT NULL,
  CONSTRAINT [PK_CustomAttribute_CustomAttributeID] PRIMARY KEY CLUSTERED 
@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[CustomAttribute](
 	[CustomAttributeID] ASC,
 	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_CustomAttribute_TreatmentBMPTypeID_TreatmentBMPTypeAttributeTypeID] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_CustomAttribute_TreatmentBMPTypeID_TreatmentBMPTypeCustomAttributeTypeID] UNIQUE NONCLUSTERED 
 (
 	[TreatmentBMPID] ASC,
 	[TreatmentBMPTypeID] ASC,
@@ -67,12 +67,12 @@ REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID], [TenantID])
 GO
 ALTER TABLE [dbo].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_TreatmentBMPType_TreatmentBMPTypeID_TenantID]
 GO
-ALTER TABLE [dbo].[CustomAttribute]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeAttributeTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeAttributeTypeID])
+ALTER TABLE [dbo].[CustomAttribute]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeCustomAttributeTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeCustomAttributeType] ([TreatmentBMPTypeCustomAttributeTypeID])
 GO
-ALTER TABLE [dbo].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeAttributeTypeID]
+ALTER TABLE [dbo].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID]
 GO
-ALTER TABLE [dbo].[CustomAttribute]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeID], [CustomAttributeTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeAttributeType] ([TreatmentBMPTypeID], [CustomAttributeTypeID])
+ALTER TABLE [dbo].[CustomAttribute]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID] FOREIGN KEY([TreatmentBMPTypeID], [CustomAttributeTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeCustomAttributeType] ([TreatmentBMPTypeID], [CustomAttributeTypeID])
 GO
-ALTER TABLE [dbo].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID]
+ALTER TABLE [dbo].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID]

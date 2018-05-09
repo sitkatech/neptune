@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -194,9 +194,9 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeAssessmentObservationTypePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeAttributeType.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeAttributeType.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPTypeAttributeTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
     <Compile Include="Controllers\TreatmentBMPFundingSourceController.cs" />
     <Compile Include="Models\FundingSourceSimple.cs" />
@@ -290,7 +290,7 @@
     <Compile Include="Models\TreatmentBMPObservation.cs" />
     <Compile Include="Models\TreatmentBMPObservationSimple.cs" />
     <Compile Include="Models\TreatmentBMPType.cs" />
-    <Compile Include="Models\TreatmentBMPTypeAttributeType.cs" />
+    <Compile Include="Models\TreatmentBMPTypeCustomAttributeType.cs" />
     <Compile Include="Models\TreatmentBMPTypeAttributeTypeSimple.cs" />
     <Compile Include="Models\TreatmentBMPTypeModelExtensions.cs" />
     <Compile Include="Models\TreatmentBMPTypeAssessmentObservationType.cs" />

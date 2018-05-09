@@ -98,8 +98,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> AllTreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual IQueryable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get { return AllTreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPTypeAttributeType> AllTreatmentBMPTypeAttributeTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get { return AllTreatmentBMPTypeAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPTypeCustomAttributeType> AllTreatmentBMPTypeCustomAttributeTypes { get; set; }
+        public virtual IQueryable<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get { return AllTreatmentBMPTypeCustomAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPType> AllTreatmentBMPTypes { get; set; }
         public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
@@ -312,8 +312,8 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPTypeAssessmentObservationType":
                     return TreatmentBMPTypeAssessmentObservationTypes.GetTreatmentBMPTypeAssessmentObservationType(primaryKey);
 
-                case "TreatmentBMPTypeAttributeType":
-                    return TreatmentBMPTypeAttributeTypes.GetTreatmentBMPTypeAttributeType(primaryKey);
+                case "TreatmentBMPTypeCustomAttributeType":
+                    return TreatmentBMPTypeCustomAttributeTypes.GetTreatmentBMPTypeCustomAttributeType(primaryKey);
 
                 case "TreatmentBMPType":
                     return TreatmentBMPTypes.GetTreatmentBMPType(primaryKey);

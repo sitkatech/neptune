@@ -25,7 +25,7 @@ namespace Neptune.Web.Models
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
-            this.TreatmentBMPTypeAttributeTypes = new HashSet<TreatmentBMPTypeAttributeType>();
+            this.TreatmentBMPTypeCustomAttributeTypes = new HashSet<TreatmentBMPTypeCustomAttributeType>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -85,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || MaintenanceRecordObservations.Any() || TreatmentBMPTypeAttributeTypes.Any();
+            return CustomAttributes.Any() || MaintenanceRecordObservations.Any() || TreatmentBMPTypeCustomAttributeTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(CustomAttributeType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name, typeof(TreatmentBMPTypeAttributeType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(CustomAttributeType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name, typeof(TreatmentBMPTypeCustomAttributeType).Name};
 
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Neptune.Web.Models
                 x.DeleteFull();
             }
 
-            foreach(var x in TreatmentBMPTypeAttributeTypes.ToList())
+            foreach(var x in TreatmentBMPTypeCustomAttributeTypes.ToList())
             {
                 x.DeleteFull();
             }
@@ -132,7 +132,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
-        public virtual ICollection<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
+        public virtual ICollection<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public CustomAttributeDataType CustomAttributeDataType { get { return CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID]; } }
         public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitTypeID.HasValue ? MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID.Value] : null; } }
