@@ -1018,6 +1018,7 @@
     <Content Include="Views\TreatmentBMPFundingSource\Edit.cshtml" />
     <Content Include="Views\MaintenanceRecord\Detail.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
+    <Content Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

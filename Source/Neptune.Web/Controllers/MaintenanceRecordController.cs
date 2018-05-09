@@ -164,9 +164,8 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP)
         {
             var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance);
-            //return RazorView<EditAttributes, EditAttributesViewData,
-            //    EditAttributesViewModel>(viewData, viewModel);
-            throw new NotImplementedException();
+            return RazorView<EditMaintenanceRecordObservations, EditMaintenanceRecordObservationsViewData,
+                EditMaintenanceRecordObservationsViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
