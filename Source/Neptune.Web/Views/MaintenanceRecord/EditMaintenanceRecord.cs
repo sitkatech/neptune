@@ -23,7 +23,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.MaintenanceRecord
 {
-    public abstract class EditMaintenanceRecord : TypedWebPartialViewPage<EditMaintenanceRecordViewData,
+    public abstract class EditMaintenanceRecord : TypedWebViewPage<EditMaintenanceRecordViewData,
         EditMaintenanceRecordViewModel>
     {
     }

@@ -1,0 +1,83 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Detail.cs" company="Tahoe Regional Planning Agency">
+        Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+        <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Affero General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+        Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Models
+@inherits Neptune.Web.Views.MaintenanceRecord.Detail
+
+    @Html.ValidationSummary()
+<div class="row">
+    <div class="col-xs-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Basics
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pull-right">
+                        <a href="@ViewDataTyped.EditUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6 control-label text-right">@Html.Label("Maintenance Record Date")</div>
+                    <div class="col-xs-6">
+                        <span>@ViewDataTyped.MaintenanceRecord.MaintenanceRecordDate</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 control-label text-right">@Html.Label("Maintenance Type")</div>
+                    <div class="col-xs-6">
+                        <span>@ViewDataTyped.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 control-label text-right">@Html.Label("Performed By")</div>
+                    <div class="col-xs-6">
+                        <span>@ViewDataTyped.MaintenanceRecord.PerformedByOrganization.GetDisplayNameAsUrl()</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 control-label text-right">@Html.Label("Description")</div>
+                    <div class="col-xs-6">
+                        <span>@ViewDataTyped.MaintenanceRecord.MaintenanceRecordDescription</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Observations
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pull-right">
+                        <a href="@ViewDataTyped.EditObservationsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                
+            </div>
+        </div>
+    </div>
+</div>

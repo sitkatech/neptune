@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[MaintenanceRecord](
 	[MaintenanceRecordID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
-	[MaintenanceRecordDate] [date] NOT NULL,
+	[MaintenanceRecordDate] [datetime] NOT NULL,
 	[MaintenanceRecordDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceRecordTypeID] [int] NOT NULL,
 	[EnteredByPersonID] [int] NOT NULL,

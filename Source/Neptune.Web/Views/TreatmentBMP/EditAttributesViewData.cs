@@ -29,8 +29,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditAttributesViewData : NeptuneViewData
     {
-        public Models.TreatmentBMP TreatmentBMP { get; }
         public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
+        public string ParentDetailUrl { get; set; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
             CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
@@ -40,11 +40,11 @@ namespace Neptune.Web.Views.TreatmentBMP
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();
-            TreatmentBMP = treatmentBMP;
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
 
             TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID)
                 .OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+            ParentDetailUrl = treatmentBMP.GetDetailUrl();
         }
     }
 }

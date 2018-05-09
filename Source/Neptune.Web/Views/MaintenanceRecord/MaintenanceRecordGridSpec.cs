@@ -42,10 +42,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),
-                        $"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}"), currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
+                x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlink(x.GetEditUrl(), currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
 
-            Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 100);
+            Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
             Add("Performed By", x => x.PerformedByOrganization.OrganizationShortName, 100, DhtmlxGridColumnFilterType.Text);
             Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),

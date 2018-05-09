@@ -26,6 +26,13 @@ namespace Neptune.Web.Models
             CustomAttributeTypeID = customAttributeTypeID;
             CustomAttributeValues = values;
         }
+
+        public CustomAttributeSimple(MaintenanceRecordObservation maintenanceRecordObservation)
+        {
+            TreatmentBMPTypeCustomAttributeTypeID = maintenanceRecordObservation.TreatmentBMPTypeCustomAttributeTypeID;
+            CustomAttributeTypeID = maintenanceRecordObservation.CustomAttributeTypeID;
+            CustomAttributeValues = maintenanceRecordObservation.MaintenanceRecordObservationValues.Select(x => x.ObservationValue).ToList();
+        }
     }
    
 }

@@ -430,7 +430,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="MaintenanceRecordID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="MaintenanceRecordDate" Type="date" Nullable="false" />
+    <Property Name="MaintenanceRecordDate" Type="datetime" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
     <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
     <Property Name="EnteredByPersonID" Type="int" Nullable="false" />

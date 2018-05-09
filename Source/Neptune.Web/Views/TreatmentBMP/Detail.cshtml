@@ -329,7 +329,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewMaintenanceRecordUrl, string.Format("Add {0}", FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                        <a href="@ViewDataTyped.NewMaintenanceRecordUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
                     </span>
                 }
             </div>
