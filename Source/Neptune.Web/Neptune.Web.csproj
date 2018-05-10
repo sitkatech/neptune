@@ -222,7 +222,12 @@
     <Compile Include="Views\FundingSource\Index.cs" />
     <Compile Include="Views\FundingSource\IndexGridSpec.cs" />
     <Compile Include="Views\FundingSource\IndexViewData.cs" />
+    <Compile Include="Views\MaintenanceRecord\Detail.cs" />
+    <Compile Include="Views\MaintenanceRecord\DetailViewData.cs" />
     <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecord.cs" />
+    <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cs" />
+    <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecordObservationsViewData.cs" />
+    <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecordObservationsViewModel.cs" />
     <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecordViewData.cs" />
     <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecordViewModel.cs" />
     <Compile Include="Controllers\MaintenanceRecordController.cs" />
