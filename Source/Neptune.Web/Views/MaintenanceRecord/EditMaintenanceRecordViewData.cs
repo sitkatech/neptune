@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
@@ -41,10 +42,11 @@ namespace Neptune.Web.Views.MaintenanceRecord
             PageTitle = isNew ? "New Maintenance Record" : "Edit Maintenance Record";
             IsNew = isNew;
 
-            AllOrganizations = organizations.ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
-                x => x.OrganizationShortName,"Choose an Organization");
+            AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
+                x => x.OrganizationName,"Choose an Organization");
 
             AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"Choose a type");
+
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
             MaintenanceRecordUrl = maintenanceRecord?.GetDetailUrl();

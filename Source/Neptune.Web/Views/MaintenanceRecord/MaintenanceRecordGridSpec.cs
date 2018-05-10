@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
 
             Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
-            Add("Performed By", x => x.PerformedByOrganization.OrganizationShortName, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Performed By", x => x.PerformedByOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
             Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
