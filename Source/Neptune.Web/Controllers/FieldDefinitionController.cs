@@ -45,8 +45,7 @@ namespace Neptune.Web.Controllers
         [CrossAreaRoute]
         public GridJsonNetJObjectResult<FieldDefinition> IndexGridJsonData()
         {
-            FieldDefinitionGridSpec gridSpec;
-            var actions = GetFieldDefinitionsAndGridSpec(out gridSpec, CurrentPerson);
+            var actions = GetFieldDefinitionsAndGridSpec(out var gridSpec, CurrentPerson);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldDefinition>(actions, gridSpec);
             return gridJsonNetJObjectResult;
         }
