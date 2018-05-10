@@ -73,9 +73,11 @@
                         <div class="col-sm-5">
                             <div class="input-group">
                                 <select ng-model="ObservationTypeToAdd"
-                                        class="form-control"
+                                        class="selectpicker"
+                                        data-live-search="true"
+                                        data-container="body"
+                                        data-width="100%" selectpicker
                                         data-title="Select an Observation Type to Add"
-                                        style="width: 100%"
                                         ng-options="TreatmentBMPAssessmentObservationType as TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName for TreatmentBMPAssessmentObservationType in filteredObservationTypes() track by TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID">
                                     <option value="" disabled selected>Select an Observation Type to Add</option>
                                 </select>
@@ -171,16 +173,18 @@
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-3 control-label">
-                            @Html.Label("BMP Attribute Type to Add")
+                            @Html.Label("Attribute to Add")
                         </div>
                         <div class="col-sm-5">
                             <div class="input-group">
                                 <select ng-model="CustomAttributeTypeToAdd"
-                                        class="form-control"
+                                        class="selectpicker"
+                                        data-live-search="true"
+                                        data-container="body"
+                                        data-width="100%" selectpicker
                                         data-title="Select an Attribute Type to Add"
-                                        style="width: 100%"
                                         ng-options="customAttributeType as customAttributeType.CustomAttributeTypeName for customAttributeType in filteredCustomAttributeTypes() track by customAttributeType.CustomAttributeTypeID">
-                                    <option value="" disabled selected>Select a BMP Attribute Type to Add</option>
+                                    <option value="" disabled selected>Select an Attribute Type to Add</option>
                                 </select>
                                 <span class="input-group-btn">
                                     <button class="btn btn-neptune" type="button" ng-click="addCustomAttributeTypeRow()">

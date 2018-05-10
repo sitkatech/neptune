@@ -134,6 +134,6 @@ namespace Neptune.Web.Models
     public partial class CustomAttributeTypePurposeMaintenance : CustomAttributeTypePurpose
     {
         private CustomAttributeTypePurposeMaintenance(int customAttributeTypePurposeID, string customAttributeTypePurposeName, string customAttributeTypePurposeDisplayName) : base(customAttributeTypePurposeID, customAttributeTypePurposeName, customAttributeTypePurposeDisplayName) {}
-        public static readonly CustomAttributeTypePurposeMaintenance Instance = new CustomAttributeTypePurposeMaintenance(3, @"Maintenance", @"Maintenance");
+        public static readonly CustomAttributeTypePurposeMaintenance Instance = new CustomAttributeTypePurposeMaintenance(3, @"Maintenance", @"Maintenance Attributes");
     }
 }

@@ -93,7 +93,7 @@
                                                                 var option = attribute.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
 
                                                                 <input type="checkbox" 
-                                                                       id="@string.Format("multiselect_{0}", option)" 
+                                                                       id="@string.Format("multiselect_{0}{1}", option, i)" 
                                                                        value="@option" 
                                                                        name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues" 
                                                                        checked="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any(value => value == option))">

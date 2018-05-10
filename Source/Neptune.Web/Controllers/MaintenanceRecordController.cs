@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
         [TreatmentBMPManageFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
         {
-            return ViewNew(new EditMaintenanceRecordViewModel(), treatmentBmpPrimaryKey.EntityObject);
+            return ViewNew(new EditMaintenanceRecordViewModel(), treatmentBmpPrimaryKey.EntityObject, null);
         }
 
         [HttpPost]
@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return ViewNew(viewModel, treatmentBmpPrimaryKey.EntityObject);
+                return ViewNew(viewModel, treatmentBmpPrimaryKey.EntityObject, null);
             }
 
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
@@ -75,9 +75,10 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        private ViewResult ViewNew(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP)
+        private ViewResult ViewNew(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP,
+            MaintenanceRecord maintenanceRecord)
         {
-            return ViewEdit(viewModel, treatmentBMP, true);
+            return ViewEdit(viewModel, treatmentBMP, true, maintenanceRecord);
         }
 
         [HttpGet]
@@ -86,7 +87,7 @@ namespace Neptune.Web.Controllers
         {
             var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEdit(viewModel, maintenanceRecord.TreatmentBMP, false);
+            return ViewEdit(viewModel, maintenanceRecord.TreatmentBMP, false, maintenanceRecord);
         }
 
         [HttpPost]
@@ -99,7 +100,7 @@ namespace Neptune.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewNew(viewModel, maintenanceRecord.TreatmentBMP);
+                return ViewNew(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
             }
 
             viewModel.UpdateModel(maintenanceRecord);
@@ -109,11 +110,12 @@ namespace Neptune.Web.Controllers
             return new RedirectResult(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.Detail(maintenanceRecord)));
         }
 
-        private ViewResult ViewEdit(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew)
+        private ViewResult ViewEdit(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
+            MaintenanceRecord maintenanceRecord)
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew);
+            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, maintenanceRecord);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }
@@ -159,13 +161,13 @@ namespace Neptune.Web.Controllers
         {
             var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
             var viewModel = new EditMaintenanceRecordObservationsViewModel(maintenanceRecord);
-            return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP);
+            return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
         }
 
         private ViewResult ViewEditObservations(EditMaintenanceRecordObservationsViewModel viewModel,
-            TreatmentBMP treatmentBMP)
+            TreatmentBMP treatmentBMP, MaintenanceRecord maintenanceRecord)
         {
-            var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance);
+            var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance, maintenanceRecord);
             return RazorView<EditMaintenanceRecordObservations, EditMaintenanceRecordObservationsViewData,
                 EditMaintenanceRecordObservationsViewModel>(viewData, viewModel);
         }
@@ -179,7 +181,7 @@ namespace Neptune.Web.Controllers
             var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP);
+                return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
             }
 
             viewModel.UpdateModel(maintenanceRecord);
@@ -232,10 +234,11 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
     public class EditMaintenanceRecordObservationsViewData : EditAttributesViewData
     {
-        public EditMaintenanceRecordObservationsViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, treatmentBMP, customAttributeTypePurpose)
+        public EditMaintenanceRecordObservationsViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
+            CustomAttributeTypePurpose customAttributeTypePurpose, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson, treatmentBMP, customAttributeTypePurpose)
         {
             PageTitle = $"Edit Maintenance Record Observations";
-            // todo: set ParentDetailUrl
+            ParentDetailUrl = maintenanceRecord.GetDetailUrl();
         }
     }
 

@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
     public class EditMaintenanceRecordViewData : NeptuneViewData
     {
         public EditMaintenanceRecordViewData(Person currentPerson, List<Models.Organization> organizations,
-            Models.TreatmentBMP treatmentBMP, bool isNew) : base(currentPerson)
+            Models.TreatmentBMP treatmentBMP, bool isNew, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
@@ -39,6 +39,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();
             PageTitle = isNew ? "New Maintenance Record" : "Edit Maintenance Record";
+            IsNew = isNew;
 
             AllOrganizations = organizations.ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
                 x => x.OrganizationShortName,"Choose an Organization");
@@ -46,11 +47,15 @@ namespace Neptune.Web.Views.MaintenanceRecord
             AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"Choose a type");
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
+            MaintenanceRecordUrl = maintenanceRecord?.GetDetailUrl();
         }
+
+        public bool IsNew { get; }
 
         public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
 
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string TreatmentBMPUrl { get; }
+        public object MaintenanceRecordUrl { get; }
     }
 }

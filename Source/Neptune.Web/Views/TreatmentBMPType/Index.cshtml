@@ -82,8 +82,10 @@
                         </table>
                         @Html.Label("Attribute Types:")
                         <ul>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName</li>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName</li>
+                            @foreach (var purpose in CustomAttributeTypePurpose.All)
+                            {
+                                <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName</li>
+                            }
                         </ul>
                     </div>
                 </div>

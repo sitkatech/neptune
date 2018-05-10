@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using System.Diagnostics.Eventing.Reader
 @using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
@@ -71,48 +72,14 @@
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                             </tr>
                             <tbody>
-                                @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
-                                {
-                                    <tr>
-                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
-                                        <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
-                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
-                                        <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
-                                        <td class="text-right">@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <table class="table">
-                            <tr>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
-                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
-                                <th class="text-right">@Html.Label("Required?")</th>
-                                <th class="text-right">@Html.Label("Description")</th>
-                            </tr>
-                            <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeID))
+                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
                             {
                                 <tr>
-                                    <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>
-                                    <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
-                                    <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
-                                    <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>
-                                    <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
+                                    <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                    <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName</td>
+                                    <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                    <td class="text-right">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                    <td class="text-right">@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.Value.ToStringShortPercent() : "pass/fail")</td>
                                 </tr>
                             }
                             </tbody>
@@ -122,24 +89,32 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12">
+
+    @foreach (var purpose in CustomAttributeTypePurpose.All)
+    {
+        <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
+                @purpose.CustomAttributeTypePurposeDisplayName
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        <table class="table">
-                            <tr>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
-                                <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
-                                <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
-                                <th class="text-right">@Html.Label("Required?")</th>
-                                <th class="text-right">@Html.Label("Description")</th>
-                            </tr>
-                            <tbody>
-                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeID))
+                        @{
+                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID);
+                        }
+                        @if (treatmentBMPTypeCustomAttributeTypes.Any())
+                        {
+                            <table class="table">
+                                <tr>
+                                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeType)</th>
+                                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.CustomAttributeDataType)</th>
+                                    <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.MeasurementUnit)</th>
+                                    <th class="text-right">@Html.Label("Required?")</th>
+                                    <th class="text-right">@Html.Label("Description")</th>
+                                </tr>
+                                <tbody>
+                                @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes)
                                 {
                                     <tr>
                                         <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>
@@ -149,11 +124,15 @@
                                         <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        }else{ 
+                            <p class="systemText">No @(purpose.CustomAttributeTypePurposeDisplayName) are defined for this BMP Type.</p>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    }
 </div>
