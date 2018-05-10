@@ -33,8 +33,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         }
 
         public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.ObservationType observationType)
-            : base(treatmentBMPObservation, observationType)
+            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+            : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
         {
         }
     }

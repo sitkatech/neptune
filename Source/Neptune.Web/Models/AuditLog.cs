@@ -48,7 +48,9 @@ namespace Neptune.Web.Models
             "FileResource",
             "Notification",
             "SupportRequestLog",
-            "MaintenanceRecord"
+            "MaintenanceRecord",
+            "MaintenanceRecordObservation",
+            "MaintenanceRecordObservationValue"
         };
 
         public string AuditDescriptionDisplay

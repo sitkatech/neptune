@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
     public class EditBenchmarkAndThresholdViewModel : FormViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
-        public int ObservationTypeID { get; set; }
+        public int TreatmentBMPAssessmentObservationTypeID { get; set; }
 
         [Required]
         public double? BenchmarkValue { get; set; }
@@ -47,11 +47,11 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         {
         }
 
-        public EditBenchmarkAndThresholdViewModel(Models.TreatmentBMP treatmentBMP, Models.ObservationType observationType)
+        public EditBenchmarkAndThresholdViewModel(Models.TreatmentBMP treatmentBMP, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
-            ObservationTypeID = observationType.ObservationTypeID;
-            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.ObservationTypeID == observationType.ObservationTypeID);
+            TreatmentBMPAssessmentObservationTypeID = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
+            var benchmarkAndThreshold = treatmentBMP.TreatmentBMPBenchmarkAndThresholds.FirstOrDefault(x => x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             BenchmarkValue = benchmarkAndThreshold?.BenchmarkValue;
             ThresholdValue = benchmarkAndThreshold?.ThresholdValue;             

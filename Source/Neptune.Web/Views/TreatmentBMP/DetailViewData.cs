@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class DetailViewData : NeptuneViewData
     {
-        public bool UserHasTreatmentBMPAttributeTypeManagePermissions { get; }
+        public bool UserHasCustomAttributeTypeManagePermissions { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
         public MapInitJson MapInitJson { get; }
         public string AddBenchmarkAndThresholdUrl { get; }
@@ -74,7 +74,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CurrentPersonCanEditTreatmentBMP = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
-            UserHasTreatmentBMPAttributeTypeManagePermissions =
+            UserHasCustomAttributeTypeManagePermissions =
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
@@ -94,8 +94,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
             EditFundingSourcesUrl = SitkaRoute<TreatmentBMPFundingSourceController>.BuildUrlFromExpression(c => c.EditTreatmentBMPFundingSourcesForTreatmentBMP(treatmentBMP));
-            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes));
-            EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, TreatmentBMPAttributeTypePurpose.OtherDesignAttributes));
+            EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.PerformanceAndModelingAttributes));
+            EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
         }
 
         

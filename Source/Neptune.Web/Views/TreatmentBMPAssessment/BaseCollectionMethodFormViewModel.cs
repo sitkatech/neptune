@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         }
 
         public BaseCollectionMethodFormViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.ObservationType observationType) : base(treatmentBMPObservation, observationType)
+            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
         {
         }
     }

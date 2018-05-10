@@ -35,9 +35,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(Person currentPerson, List<Models.ObservationType> observationTypes, string submitUrl,
+        public EditViewData(Person currentPerson, List<Models.TreatmentBMPAssessmentObservationType> observationTypes, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType,
-            List<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes) : base(currentPerson)
+            List<Models.CustomAttributeType> customAttributeTypes) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
             PageTitle = $"{(treatmentBMPType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
 
-            ViewDataForAngular = new ViewDataForAngular(observationTypes, treatmentBMPAttributeTypes);
+            ViewDataForAngular = new ViewDataForAngular(observationTypes, customAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
@@ -57,15 +57,15 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
     public class ViewDataForAngular
     {
-        public List<ObservationTypeSimple> ObservationTypes { get; }
-        public List<TreatmentBMPAttributeTypeSimple> TreatmentBMPAttributeTypes { get; }
+        public List<TreatmentBMPTypeAssessmentObservationTypeSimple> TreatmentBMPAssessmentObservationTypes { get; }
+        public List<CustomAttributeTypeSimple> CustomAttributeTypes { get; }
 
 
-        public ViewDataForAngular(IEnumerable<Models.ObservationType> observationTypes,
-            IEnumerable<Models.TreatmentBMPAttributeType> treatmentBMPAttributeTypes)
+        public ViewDataForAngular(IEnumerable<Models.TreatmentBMPAssessmentObservationType> observationTypes,
+            IEnumerable<Models.CustomAttributeType> customAttributeTypes)
         {
-            ObservationTypes = observationTypes.Select(x => new ObservationTypeSimple(x)).ToList();
-            TreatmentBMPAttributeTypes = treatmentBMPAttributeTypes.Select(x => new TreatmentBMPAttributeTypeSimple(x)).ToList();
+            TreatmentBMPAssessmentObservationTypes = observationTypes.Select(x => new TreatmentBMPTypeAssessmentObservationTypeSimple(x)).ToList();
+            CustomAttributeTypes = customAttributeTypes.Select(x => new CustomAttributeTypeSimple(x)).ToList();
         }
     }
 }

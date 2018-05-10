@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using System.Web;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -41,16 +42,22 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(new ModalDialogForm(x.GetEditUrl(),
-                        $"Edit {Models.FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()}"), currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
 
-            Add("Date", x => x.MaintenanceRecordDate.ToShortDateString(), 100);
-            Add("Performed By", x => x.PerformedByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
+            Add("Performed By", x => x.PerformedByOrganization.OrganizationShortName, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
+            foreach (var attributeType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x=>x.CustomAttributeType).Where(x=>x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID))
+            {
+                Add(attributeType.CustomAttributeTypeName,
+                    x => x?.MaintenanceRecordObservations?
+                        .SingleOrDefault(y => y.CustomAttributeTypeID == attributeType.CustomAttributeTypeID)?
+                        .GetObservationValueWithUnits(), 150, DhtmlxGridColumnFilterType.Text);
+            }
         }
     }
 }

@@ -18,130 +18,15 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common.BootstrapWrappers
-@using Neptune.Web.Models
+
 @inherits Neptune.Web.Views.TreatmentBMP.EditAttributes
 
-@using (Html.BeginForm())
-{
-    <div class="formPage">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="validationError">
-                    @Html.ValidationSummary()
-                </div>
-            </div>
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-horizontal">
-                            @for (var i = 0; i < ViewDataTyped.TreatmentBMPTypeAttributeTypes.Count; i++)
-                            {
-                                var attribute = ViewDataTyped.TreatmentBMPTypeAttributeTypes[i];
-                                var currentMetadata = Model.TreatmentBMPAttributes.SingleOrDefault(x => x.TreatmentBMPAttributeTypeID == attribute.TreatmentBMPAttributeTypeID);
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">
-                                        @attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName
-                                        @if (attribute.TreatmentBMPAttributeType.IsRequired)
-                                        {
-                                            <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
-                                        }
-                                    </label>
-                                    <div class="col-sm-6">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPTypeAttributeTypeID" value="@attribute.TreatmentBMPTypeAttributeTypeID" />
-                                                <input type="hidden" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeTypeID" value="@attribute.TreatmentBMPAttributeTypeID" />
-                                                @if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.DateTime)
-                                                {
-                                                    <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
-                                                        <input type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
-                                                        <div class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-th"></span>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.Integer || attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.Decimal)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-5">
-                                                            <div class="input-group">
-                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" aria-describedby="attributeUnit" />
-                                                                <span class="input-group-addon" id="attributeUnit">@(attribute.TreatmentBMPAttributeType.MeasurementUnitType != null ? attribute.TreatmentBMPAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.PickFromList)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-5">
-
-                                                            <select class="form-control" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]">
-                                                                <option value=""></option>
-                                                                @foreach (var option in attribute.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString())
-                                                                {
-                                                                    <option value="@option" selected="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null && currentMetadata.TreatmentBMPAttributeValues[0] == option)">@option</option>
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeDataType == TreatmentBMPAttributeDataType.MultiSelect)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-5">
-
-                                                            @for (var j = 0; j < attribute.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString().Count; j++)
-                                                            {
-                                                                var option = attribute.TreatmentBMPAttributeType.GetOptionsSchemaAsListOfString()[j];
-
-                                                                <input type="checkbox" 
-                                                                       id="@string.Format("multiselect_{0}", option)" 
-                                                                       value="@option" 
-                                                                       name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues" 
-                                                                       checked="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null && currentMetadata.TreatmentBMPAttributeValues.Any(value => value == option))">
-                                                                <label for="@string.Format("multiselect_{0}{1}", option, i)">@option</label><br />
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.TreatmentBMPAttributes))[@i].TreatmentBMPAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.TreatmentBMPAttributeValues != null ? currentMetadata.TreatmentBMPAttributeValues[0] : null)" />
-                                                }
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <p style="margin-top: 5px;" class="systemText">@attribute.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <hr />
-                    <div class="col-xs-12 col-sm-2">
-                        <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-                    </div>
-                    <div class="col-xs-12 col-sm-10" style="text-align: right">
-                        <button action="p" type="submit" class="btn btn-neptune">Save</button>
-                        <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">Cancel</a>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="validationError">
+            @Html.ValidationSummary()
         </div>
     </div>
-}
+</div>
 
-<script type="text/javascript">
-    // <![CDATA[
-    jQuery(document).ready(function () {
-        HookupCheckIfFormIsDirtyNoDisable(undefined);
-    });
-// ]]>
-</script>
+@{ Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);}

@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord)
         {
             MaintenanceRecordDate = maintenanceRecord.MaintenanceRecordDate;
-            PerformedByPersonID = maintenanceRecord.PerformedByPersonID;
+            PerformedByOrganizationID = maintenanceRecord.PerformedByOrganizationID;
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
         }
@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
         [Required]
         [Display(Name = "Performed By")]
-        public int? PerformedByPersonID { get; set; }
+        public int? PerformedByOrganizationID { get; set; }
 
         [Display(Name = "Date")]
         [Required]
@@ -63,7 +63,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public void UpdateModel(Models.MaintenanceRecord maintenanceRecord)
         {
             maintenanceRecord.MaintenanceRecordDate = MaintenanceRecordDate.Value;
-            maintenanceRecord.PerformedByPersonID = PerformedByPersonID.Value;
+            maintenanceRecord.PerformedByOrganizationID = PerformedByOrganizationID.Value;
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
         }

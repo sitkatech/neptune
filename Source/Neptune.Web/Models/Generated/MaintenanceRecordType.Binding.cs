@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
 {
     public abstract partial class MaintenanceRecordType : IHavePrimaryKey
     {
-        public static readonly MaintenanceRecordTypePreventative Preventative = MaintenanceRecordTypePreventative.Instance;
+        public static readonly MaintenanceRecordTypeRoutine Routine = MaintenanceRecordTypeRoutine.Instance;
         public static readonly MaintenanceRecordTypeCorrective Corrective = MaintenanceRecordTypeCorrective.Instance;
 
         public static readonly List<MaintenanceRecordType> All;
@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MaintenanceRecordType()
         {
-            All = new List<MaintenanceRecordType> { Preventative, Corrective };
+            All = new List<MaintenanceRecordType> { Routine, Corrective };
             AllLookupDictionary = new ReadOnlyDictionary<int, MaintenanceRecordType>(All.ToDictionary(x => x.MaintenanceRecordTypeID));
         }
 
@@ -101,8 +101,8 @@ namespace Neptune.Web.Models
             {
                 case MaintenanceRecordTypeEnum.Corrective:
                     return Corrective;
-                case MaintenanceRecordTypeEnum.Preventative:
-                    return Preventative;
+                case MaintenanceRecordTypeEnum.Routine:
+                    return Routine;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -111,14 +111,14 @@ namespace Neptune.Web.Models
 
     public enum MaintenanceRecordTypeEnum
     {
-        Preventative = 1,
+        Routine = 1,
         Corrective = 2
     }
 
-    public partial class MaintenanceRecordTypePreventative : MaintenanceRecordType
+    public partial class MaintenanceRecordTypeRoutine : MaintenanceRecordType
     {
-        private MaintenanceRecordTypePreventative(int maintenanceRecordTypeID, string maintenanceRecordTypeName, string maintenanceRecordTypeDisplayName) : base(maintenanceRecordTypeID, maintenanceRecordTypeName, maintenanceRecordTypeDisplayName) {}
-        public static readonly MaintenanceRecordTypePreventative Instance = new MaintenanceRecordTypePreventative(1, @"Preventative", @"Preventative");
+        private MaintenanceRecordTypeRoutine(int maintenanceRecordTypeID, string maintenanceRecordTypeName, string maintenanceRecordTypeDisplayName) : base(maintenanceRecordTypeID, maintenanceRecordTypeName, maintenanceRecordTypeDisplayName) {}
+        public static readonly MaintenanceRecordTypeRoutine Instance = new MaintenanceRecordTypeRoutine(1, @"Routine", @"Routine");
     }
 
     public partial class MaintenanceRecordTypeCorrective : MaintenanceRecordType

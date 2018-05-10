@@ -27,9 +27,9 @@ namespace Neptune.Web.UnitTestCommon
     {
         public static class TestTreatmentBMPTypeObservationType
         {
-            public static TreatmentBMPTypeObservationType Create(Models.TreatmentBMPType treatmentBMPType, ObservationType observationType)
+            public static TreatmentBMPTypeAssessmentObservationType Create(Models.TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
             {
-                return new TreatmentBMPTypeObservationType(treatmentBMPType, observationType, false);
+                return new TreatmentBMPTypeAssessmentObservationType(treatmentBMPType, TreatmentBMPAssessmentObservationType, false);
             }
         }
     }    

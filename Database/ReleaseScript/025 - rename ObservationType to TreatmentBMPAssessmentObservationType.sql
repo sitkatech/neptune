@@ -1,0 +1,34 @@
+exec sp_rename 'dbo.FK_TreatmentBMPBenchmarkAndThreshold_ObservationType_ObservationTypeID', 'FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+
+exec sp_rename 'dbo.FK_TreatmentBMPObservation_ObservationType_ObservationTypeID', 'FK_TreatmentBMPObservation_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+
+exec sp_rename 'dbo.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID', 'FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+
+
+exec sp_rename 'dbo.FK_ObservationType_ObservationTypeSpecification_ObservationTypeSpecificationID', 'FK_TreatmentBMPAssessmentObservationType_ObservationTypeSpecification_ObservationTypeSpecificationID', 'OBJECT';
+exec sp_rename 'dbo.PK_ObservationType_ObservationTypeID', 'PK_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+exec sp_rename 'dbo.AK_ObservationType_ObservationTypeID_TenantID', 'AK_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID_TenantID', 'OBJECT';
+exec sp_rename 'dbo.AK_ObservationType_ObservationTypeName', 'AK_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeName', 'OBJECT';
+
+exec sp_rename 'dbo.FK_TreatmentBMPTypeAssessmentObservationType_ObservationType_ObservationTypeID_TenantID', 'FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID_TenantID', 'OBJECT';
+
+
+exec sp_rename 'dbo.AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeID_ObservationTypeID', 'AK_TreatmentBMPTypeAssessmentTreatmentBMPAssessmentObservationType_TreatmentBMPTypeID_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+
+
+exec sp_rename 'dbo.FK_ObservationType_Tenant_TenantID', 'FK_TreatmentBMPAssessmentObservationType_Tenant_TenantID', 'OBJECT';
+exec sp_rename 'dbo.AK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPID_ObservationTypeID', 'AK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPID_TreatmentBMPAssessmentObservationTypeID', 'OBJECT';
+
+
+exec sp_rename 'dbo.TreatmentBMPObservation.ObservationTypeID', 'TreatmentBMPAssessmentObservationTypeID', 'COLUMN';
+
+
+exec sp_rename 'dbo.ObservationType.ObservationTypeID', 'TreatmentBMPAssessmentObservationTypeID', 'COLUMN';
+exec sp_rename 'dbo.ObservationType.ObservationTypeName', 'TreatmentBMPAssessmentObservationTypeName', 'COLUMN';
+exec sp_rename 'dbo.ObservationType.ObservationTypeSchema', 'TreatmentBMPAssessmentObservationTypeSchema', 'COLUMN';
+
+exec sp_rename 'dbo.TreatmentBMPTypeAssessmentObservationType.ObservationTypeID', 'TreatmentBMPAssessmentObservationTypeID', 'COLUMN';
+
+exec sp_rename 'dbo.TreatmentBMPBenchmarkAndThreshold.ObservationTypeID', 'TreatmentBMPAssessmentObservationTypeID', 'COLUMN';
+
+exec sp_rename 'dbo.ObservationType', 'TreatmentBMPAssessmentObservationType';

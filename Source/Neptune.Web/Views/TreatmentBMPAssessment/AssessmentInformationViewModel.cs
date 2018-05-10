@@ -50,6 +50,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         [FieldDefinitionDisplay(FieldDefinitionEnum.AssessmentForInternalUseOnly)]
         public bool? IsPrivate { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.IsPostMaintenanceAssessment)]
+        [Required]
+        public bool? IsPostMaintenanceAssessment { get; set; }
+
         [FieldDefinitionDisplay(FieldDefinitionEnum.TypeOfAssessment)]
         public int? AssessmentTypeID { get; set; }
 
@@ -70,6 +74,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentNotes = treatmentBMPAssessment.Notes;
             IsPrivate = treatmentBMPAssessment.IsPrivate;
             AssessmentTypeID = treatmentBMPAssessment.StormwaterAssessmentTypeID;
+            IsPostMaintenanceAssessment = treatmentBMPAssessment.IsPostMaintenanceAssessment;
 
         }
 
@@ -78,6 +83,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             treatmentBMPAssessment.PersonID = AssessmentPersonID;
             treatmentBMPAssessment.AssessmentDate = AssessmentDate;
             treatmentBMPAssessment.Notes = AssessmentNotes;
+            treatmentBMPAssessment.IsPostMaintenanceAssessment = IsPostMaintenanceAssessment.Value;
 
             if (currentPerson.Role == Models.Role.Admin)
             {

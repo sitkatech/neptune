@@ -61,21 +61,21 @@ namespace Neptune.Web.Views.TreatmentBMPType
             TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             TreatmentBMPTypeName = treatmentBMPType.TreatmentBMPTypeName;
             TreatmentBMPTypeDescription = treatmentBMPType.TreatmentBMPTypeDescription;
-            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
-            TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
+            TreatmentBMPTypeObservationTypeSimples = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => new TreatmentBMPTypeObservationTypeSimple(x)).ToList();
+            TreatmentBMPTypeAttributeTypeSimples = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x => new TreatmentBMPTypeAttributeTypeSimple(x)).ToList();
         }
 
 
         public void UpdateModel(Models.TreatmentBMPType treatmentBMPType,
-            List<TreatmentBMPTypeObservationType> currentTreatmentBMPTypeObservationTypes,
-            IList<TreatmentBMPTypeObservationType> allTreatmentBMPTypeObservationTypes,
-            List<TreatmentBMPTypeAttributeType> currentTreatmentBMPTypeAttributeTypes,
-            ObservableCollection<TreatmentBMPTypeAttributeType> allTreatmentBMPTypeAttributeTypes)
+            List<TreatmentBMPTypeAssessmentObservationType> currentTreatmentBMPTypeObservationTypes,
+            IList<TreatmentBMPTypeAssessmentObservationType> allTreatmentBMPTypeAssessmentObservationTypes,
+            List<TreatmentBMPTypeCustomAttributeType> currentTreatmentBMPTypeCustomAttributeTypes,
+            ObservableCollection<TreatmentBMPTypeCustomAttributeType> allTreatmentBMPTypeCustomAttributeTypes)
         {
             treatmentBMPType.TreatmentBMPTypeName = TreatmentBMPTypeName;
             treatmentBMPType.TreatmentBMPTypeDescription = TreatmentBMPTypeDescription;
 
-            var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeObservationType>();
+            var updatedTreatmentBMPTypeObservationTypes = new List<TreatmentBMPTypeAssessmentObservationType>();
             if (TreatmentBMPTypeObservationTypeSimples != null)
             {
                 // Completely rebuild the list
@@ -83,9 +83,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 {
                     var overrideWeight = x.OverrideAssessmentScoreIfFailing != null && x.OverrideAssessmentScoreIfFailing.Value;
 
-                    return new TreatmentBMPTypeObservationType(ModelObjectHelpers.NotYetAssignedID,
+                    return new TreatmentBMPTypeAssessmentObservationType(ModelObjectHelpers.NotYetAssignedID,
                         treatmentBMPType.TreatmentBMPTypeID,
-                        x.ObservationTypeID,
+                        x.TreatmentBMPAssessmentObservationTypeID,
                         overrideWeight ? null : x.AssessmentScoreWeight/100,
                         x.DefaultThresholdValue,
                         x.DefaultBenchmarkValue,
@@ -94,8 +94,8 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
 
             currentTreatmentBMPTypeObservationTypes.Merge(updatedTreatmentBMPTypeObservationTypes,
-                allTreatmentBMPTypeObservationTypes,
-                (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.ObservationTypeID == y.ObservationTypeID,
+                allTreatmentBMPTypeAssessmentObservationTypes,
+                (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.TreatmentBMPAssessmentObservationTypeID == y.TreatmentBMPAssessmentObservationTypeID,
                 (x, y) =>
                 {
                     x.AssessmentScoreWeight = y.AssessmentScoreWeight;
@@ -104,14 +104,14 @@ namespace Neptune.Web.Views.TreatmentBMPType
                     x.OverrideAssessmentScoreIfFailing = y.OverrideAssessmentScoreIfFailing;
                 });
 
-            var updatedTreatmentBMPTypeAttributeTypes = new List<TreatmentBMPTypeAttributeType>();
+            var updatedTreatmentBMPTypeCustomAttributeTypes = new List<TreatmentBMPTypeCustomAttributeType>();
             if (TreatmentBMPTypeAttributeTypeSimples != null)
             {
                 // Completely rebuild the list
-                updatedTreatmentBMPTypeAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.TreatmentBMPAttributeTypeID)).ToList();
+                updatedTreatmentBMPTypeCustomAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeCustomAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID)).ToList();
             }
 
-            currentTreatmentBMPTypeAttributeTypes.Merge(updatedTreatmentBMPTypeAttributeTypes, allTreatmentBMPTypeAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.TreatmentBMPAttributeTypeID == y.TreatmentBMPAttributeTypeID);
+            currentTreatmentBMPTypeCustomAttributeTypes.Merge(updatedTreatmentBMPTypeCustomAttributeTypes, allTreatmentBMPTypeCustomAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.CustomAttributeTypeID == y.CustomAttributeTypeID);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -131,9 +131,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 return validationResults;
             }
 
-            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.ObservationTypeID).Contains(y.ObservationTypeID)).ToList();
+            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.TreatmentBMPAssessmentObservationTypeID).Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
-            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.ObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList().Contains(y.ObservationTypeID)).ToList();
+            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList().Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
             var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeSimple>();
             requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);

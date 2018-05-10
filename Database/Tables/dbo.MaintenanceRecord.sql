@@ -6,10 +6,11 @@ CREATE TABLE [dbo].[MaintenanceRecord](
 	[MaintenanceRecordID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
-	[MaintenanceRecordDate] [date] NOT NULL,
-	[PerformedByPersonID] [int] NOT NULL,
+	[MaintenanceRecordDate] [datetime] NOT NULL,
 	[MaintenanceRecordDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceRecordTypeID] [int] NOT NULL,
+	[EnteredByPersonID] [int] NOT NULL,
+	[PerformedByOrganizationID] [int] NOT NULL,
  CONSTRAINT [PK_MaintenanceRecord_MaintenanceRecordID] PRIMARY KEY CLUSTERED 
 (
 	[MaintenanceRecordID] ASC
@@ -27,10 +28,25 @@ REFERENCES [dbo].[MaintenanceRecordType] ([MaintenanceRecordTypeID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_MaintenanceRecordType_MaintenanceRecordTypeID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID] FOREIGN KEY([PerformedByPersonID])
+ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID] FOREIGN KEY([PerformedByOrganizationID])
+REFERENCES [dbo].[Organization] ([OrganizationID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID]
+GO
+ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Organization_PerformedByOrganizationID_TenantID_OrganizationID_TenantID] FOREIGN KEY([PerformedByOrganizationID], [TenantID])
+REFERENCES [dbo].[Organization] ([OrganizationID], [TenantID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Organization_PerformedByOrganizationID_TenantID_OrganizationID_TenantID]
+GO
+ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID] FOREIGN KEY([EnteredByPersonID])
 REFERENCES [dbo].[Person] ([PersonID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Person_PerformedByPersonID_PersonID]
+ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID]
+GO
+ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID] FOREIGN KEY([EnteredByPersonID], [TenantID])
+REFERENCES [dbo].[Person] ([PersonID], [TenantID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID]
 GO
 ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])

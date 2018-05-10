@@ -18,9 +18,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public abstract class EditAttributes : LtInfo.Common.Mvc.TypedWebViewPage<EditAttributesViewData, EditAttributesViewModel>
+    public abstract class
+        EditAttributes : LtInfo.Common.Mvc.TypedWebViewPage<EditAttributesViewData, EditAttributesViewModel>
     {
+
     }
 }

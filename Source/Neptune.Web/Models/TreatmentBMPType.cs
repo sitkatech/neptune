@@ -27,9 +27,9 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPType : IAuditableEntity
     {
 
-        public List<ObservationType> GetObservationTypes()
+        public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
         {
-            return TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType).ToList();
+            return TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
         }
 
         public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";

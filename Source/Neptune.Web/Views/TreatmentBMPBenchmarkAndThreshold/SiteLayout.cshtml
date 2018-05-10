@@ -33,11 +33,11 @@ Source code is available upon request via <support@sitkatech.com>.
                     <li class="@(ViewDataTyped.SectionName == InstructionsViewData.InstructionsSectionName ? "active" : string.Empty)">
                         <a href="@ViewDataTyped.InstructionsUrl"><span style="margin-left: 22px">Instructions</span></a>
                     </li>
-                    @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.ObservationTypeName).Where(x => x.HasBenchmarkAndThreshold))
+                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName).Where(x => x.HasBenchmarkAndThreshold))
                     {
-                        <li class="@(ViewDataTyped.SectionName == observationType.ObservationTypeName ? "active" : string.Empty)">
-                            <a href="@observationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
-                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(observationType))
+                        <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
+                            <a href="@TreatmentBMPAssessmentObservationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
+                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }
@@ -45,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                 {
                                     <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
                                 }
-                                @observationType.ObservationTypeName
+                                @TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
                             </a>
                         </li>
                     }

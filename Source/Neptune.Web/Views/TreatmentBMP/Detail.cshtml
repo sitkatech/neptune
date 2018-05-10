@@ -110,12 +110,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var observationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.ObservationTypeName))
+                            @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName))
                             {
                                 <tr>
-                                    <td>@observationType.GetDisplayNameAsUrl()</td>
-                                    <td>@observationType.GetFormattedBenchmarkValue(observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                                    <td>@observationType.GetFormattedThresholdValue(observationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), observationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                    <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                    <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                    <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
                                 </tr>
                             }
 
@@ -126,9 +126,9 @@
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName
+                @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes))
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -136,10 +136,10 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes))
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                 {
                     <p class="systemText">
-                        This type of treatment BMP does not have any @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName
+                        This type of treatment BMP does not have any @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
                     </p>
                 }
                 else
@@ -152,15 +152,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                             {
                                 <tr>
                                     <td>
-                                        @(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
                                         <br />
-                                        <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
+                                        <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                     </td>
-                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 </tr>
                             }
                         </tbody>
@@ -170,9 +170,9 @@
         </div>
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName
+                @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
                 <span class="pull-right">
-                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes))
+                    @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                     {
                         <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     }
@@ -180,10 +180,10 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Any(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes))
+                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                 {
                     <p class="systemText">
-                        This type of treatment BMP does not have any @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName
+                        This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
                     </p>
                 }
                 else
@@ -196,15 +196,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurpose == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
                             {
                                 <tr>
                                     <td>
-                                        @(ViewDataTyped.UserHasTreatmentBMPAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName))
+                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
                                         <br />
-                                        <span class="help-block">@treatmentBMPTypeAttributeType.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeDescription</span>
+                                        <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                     </td>
-                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetTreatmentBMPAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
                                 </tr>
                             }
                         </tbody>
@@ -329,7 +329,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManage)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewMaintenanceRecordUrl, string.Format("Add {0}", FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                        <a href="@ViewDataTyped.NewMaintenanceRecordUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
                     </span>
                 }
             </div>

@@ -28,20 +28,20 @@ namespace Neptune.Web.UnitTestCommon
     {
         public static class TestTreatmentBMPObservation
         {
-            public static TreatmentBMPObservation Create(TreatmentBMPType treatmentBMPType, ObservationType observationType)
+            public static TreatmentBMPObservation Create(TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
             {
                 var treatmentBMPAssessment = TestTreatmentBMPAssessment.Create(TestTreatmentBMP.Create(treatmentBMPType));
-                var treatmentBMPTypeObservationType = TestTreatmentBMPTypeObservationType.Create(treatmentBMPType, observationType);
-                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, treatmentBMPTypeObservationType, treatmentBMPType, observationType);
+                var TreatmentBMPTypeAssessmentObservationType = TestTreatmentBMPTypeObservationType.Create(treatmentBMPType, TreatmentBMPAssessmentObservationType);
+                return TreatmentBMPObservation.CreateNewBlank(treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType, treatmentBMPType, TreatmentBMPAssessmentObservationType);
             }
 
-            public static TreatmentBMPObservation Create(ObservationType observationType, TreatmentBMPType treatmentBMPType, double benchmark, double threshold, double observation)
+            public static TreatmentBMPObservation Create(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, TreatmentBMPType treatmentBMPType, double benchmark, double threshold, double observation)
             {
-                var treatmentBMPObservation = Create(treatmentBMPType, observationType);
+                var treatmentBMPObservation = Create(treatmentBMPType, TreatmentBMPAssessmentObservationType);
 
                 var treatmentBMP = treatmentBMPObservation.TreatmentBMPAssessment.TreatmentBMP;
 
-                var treatmentBMPBenchmarkAndThreshold = TestTreatmentBMPBenchmarkAndThreshold.Create(treatmentBMP, observationType);
+                var treatmentBMPBenchmarkAndThreshold = TestTreatmentBMPBenchmarkAndThreshold.Create(treatmentBMP, TreatmentBMPAssessmentObservationType);
                 treatmentBMPBenchmarkAndThreshold.BenchmarkValue = benchmark;
                 treatmentBMPBenchmarkAndThreshold.ThresholdValue = threshold;
 

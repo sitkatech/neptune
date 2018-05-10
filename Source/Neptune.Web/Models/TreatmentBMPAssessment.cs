@@ -69,13 +69,13 @@ namespace Neptune.Web.Models
             }
 
             //if any observations that override the score have a failing score, return 0
-            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing)
-                .ToList().Select(x => x.ObservationType);
+                .ToList().Select(x => x.TreatmentBMPAssessmentObservationType);
 
             if (observationTypesThatPotentiallyOverrideScore.Any(x =>
                 {
-                    var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType == x);
+                    var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType == x);
                     return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
                 }))
             {
@@ -83,21 +83,21 @@ namespace Neptune.Web.Models
             }
 
             //if all observations override the score and all are passing, return 5
-            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .All(x => x.OverrideAssessmentScoreIfFailing))
             {
                 return 5;
             }
 
             //otherwise calculate the score
-            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeObservationTypes
+            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => !x.OverrideAssessmentScoreIfFailing)
-                .Select(x => x.ObservationType).ToList().Sum(x =>
+                .Select(x => x.TreatmentBMPAssessmentObservationType).ToList().Sum(x =>
                 {
-                    var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).CalculateObservationScore();
+                    var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore();
 
-                    var observationType = TreatmentBMPObservations.SingleOrDefault(y => y.ObservationType.ObservationTypeID == x.ObservationTypeID).ObservationType;
-                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(observationType).AssessmentScoreWeight.Value);
+                    var TreatmentBMPAssessmentObservationType = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
+                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(TreatmentBMPAssessmentObservationType).AssessmentScoreWeight.Value);
                     return observationScore * observationWeight;
                 });
 
@@ -110,9 +110,9 @@ namespace Neptune.Web.Models
             return score?.ToString("0.0") ?? "-";
         }
 
-        public bool IsObservationComplete(ObservationType observationType)
+        public bool IsObservationComplete(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.ObservationType.ObservationTypeID == observationType.ObservationTypeID);
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             return treatmentBMPObservation != null;
         }

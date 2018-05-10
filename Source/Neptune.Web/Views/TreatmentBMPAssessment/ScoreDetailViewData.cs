@@ -32,8 +32,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public ScoreDetailViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
             var treatmentBMPType = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
-            var treatmentBMPTypeObservationTypes = treatmentBMPType.TreatmentBMPTypeObservationTypes;
-            ViewDataForAngular = new ScoreViewDataForAngular(treatmentBMPTypeObservationTypes, treatmentBMPAssessment);
+            var TreatmentBMPTypeAssessmentObservationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes;
+            ViewDataForAngular = new ScoreViewDataForAngular(TreatmentBMPTypeAssessmentObservationTypes, treatmentBMPAssessment);
         }
 
         public class ScoreViewDataForAngular
@@ -42,11 +42,11 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             public bool AssessmentIsComplete { get; }
             public string AssessmentScore { get; }
 
-            public ScoreViewDataForAngular(IEnumerable<TreatmentBMPTypeObservationType> treatmentBMPTypeObservationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+            public ScoreViewDataForAngular(IEnumerable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
-                ObservationTypeSimples = treatmentBMPTypeObservationTypes
-                    .OrderBy(x => x.ObservationType.ObservationTypeName).Select(x =>
-                        new TreatmentBMPAssessmentObservationTypeSimple(x.ObservationType, treatmentBMPAssessment,
+                ObservationTypeSimples = TreatmentBMPTypeAssessmentObservationTypes
+                    .OrderBy(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName).Select(x =>
+                        new TreatmentBMPAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType, treatmentBMPAssessment,
                             x.OverrideAssessmentScoreIfFailing)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
                 AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;

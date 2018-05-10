@@ -17,5 +17,11 @@ namespace Neptune.Web.Models
         {
             return DeleteUrlTemplate.ParameterReplace(maintenanceRecord.MaintenanceRecordID);
         }
+
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static string GetDetailUrl(this MaintenanceRecord maintenanceRecord)
+        {
+            return DetailUrlTemplate.ParameterReplace(maintenanceRecord.MaintenanceRecordID);
+        }
     }
 }

@@ -47,8 +47,8 @@ namespace Neptune.Web.Models
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
-            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.ObservationTypeID).ToList();
-            var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.ObservationTypeID).ToList();
+            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
         }
@@ -79,27 +79,27 @@ namespace Neptune.Web.Models
             return TreatmentBMPAssessments.Any();
         }
 
-        public bool IsBenchmarkAndThresholdCompleteForObservationType(ObservationType observationType)
+        public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
             return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
-                       x.ObservationTypeID == observationType.ObservationTypeID) != null;
+                       x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
-        public string GetTreatmentBMPAttributeValueWithUnits(TreatmentBMPTypeAttributeType treatmentBMPTypeAttributeType)
+        public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
         {
-            if (TreatmentBMPAttributes.Any())
+            if (CustomAttributes.Any())
             {
-                var treatmentBMPAttribute = TreatmentBMPAttributes.SingleOrDefault(x =>
-                    x.TreatmentBMPAttributeTypeID == treatmentBMPTypeAttributeType.TreatmentBMPAttributeTypeID);
-                if (treatmentBMPAttribute != null)
+                var customAttribute = CustomAttributes.SingleOrDefault(x =>
+                    x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
+                if (customAttribute != null)
                 {
                     var measurmentUnit = "";
-                    if (treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitTypeID.HasValue)
+                    if (customAttribute.CustomAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {treatmentBMPAttribute.TreatmentBMPAttributeType.MeasurementUnitType.LegendDisplayName}";
+                        measurmentUnit = $" {customAttribute.CustomAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
-                    var value = string.Join(", ", treatmentBMPAttribute.TreatmentBMPAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
+                    var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
 
                     return $"{value}{measurmentUnit}";
                 }           

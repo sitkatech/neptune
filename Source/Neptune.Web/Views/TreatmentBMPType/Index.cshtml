@@ -59,16 +59,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var observationType in treatmentBMPType.TreatmentBMPTypeObservationTypes.Select(x => x.ObservationType))
+                            @foreach (var TreatmentBMPAssessmentObservationType in treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType))
                             {
-                                var treatmentBMPTypeObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(observationType);
+                                var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(TreatmentBMPAssessmentObservationType);
                                 <tr>
-                                    <td>@observationType.GetDisplayNameAsUrl()</td>
-                                    <td>@(treatmentBMPTypeObservationType.AssessmentScoreWeight.HasValue ? treatmentBMPTypeObservationType.AssessmentScoreWeight.ToStringShortPercent() : "pass/fail")</td>
-                                    @if (observationType.HasBenchmarkAndThreshold)
+                                    <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                    <td>@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.ToStringShortPercent() : "pass/fail")</td>
+                                    @if (TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold)
                                     {
-                                        <td>@observationType.GetFormattedBenchmarkValue(treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
-                                        <td>@observationType.GetFormattedThresholdValue(treatmentBMPTypeObservationType.DefaultThresholdValue, treatmentBMPTypeObservationType.DefaultBenchmarkValue)</td>
+                                        <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
+                                        <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
                                     }
                                     else
                                     {
@@ -82,8 +82,10 @@
                         </table>
                         @Html.Label("Attribute Types:")
                         <ul>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.PerformanceAndModelingAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
-                            <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeAttributeTypes.Count(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeID)) @TreatmentBMPAttributeTypePurpose.OtherDesignAttributes.TreatmentBMPAttributeTypePurposeDisplayName</li>
+                            @foreach (var purpose in CustomAttributeTypePurpose.All)
+                            {
+                                <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName</li>
+                            }
                         </ul>
                     </div>
                 </div>

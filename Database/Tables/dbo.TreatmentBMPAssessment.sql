@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[AlternateAssessmentRationale] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[IsPrivate] [bit] NOT NULL,
 	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[IsPostMaintenanceAssessment] [bit] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAssessment_TreatmentBMPAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAssessmentID] ASC

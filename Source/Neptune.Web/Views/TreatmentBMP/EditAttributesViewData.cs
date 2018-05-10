@@ -19,32 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditAttributesViewData : NeptuneViewData
+    public class EditAttributesViewData : Shared.EditAttributes.EditAttributesViewData
     {
-        public Models.TreatmentBMP TreatmentBMP { get; }
-        public List<TreatmentBMPTypeAttributeType> TreatmentBMPTypeAttributeTypes { get; set; }
-
-        public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            TreatmentBMPAttributeTypePurpose treatmentBmpAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+        public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, treatmentBMP, customAttributeTypePurpose)
         {
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
-            EntityUrl = treatmentBMPIndexUrl;
-            SubEntityName = treatmentBMP.TreatmentBMPName;
-            SubEntityUrl = treatmentBMP.GetDetailUrl();
-            TreatmentBMP = treatmentBMP;
-            PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
-
-            TreatmentBMPTypeAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAttributeTypes.Where(x=>x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypePurposeID == treatmentBmpAttributeTypePurpose.TreatmentBMPAttributeTypePurposeID)
-                .OrderBy(x => x.TreatmentBMPAttributeType.TreatmentBMPAttributeTypeName).ToList();
         }
     }
 }

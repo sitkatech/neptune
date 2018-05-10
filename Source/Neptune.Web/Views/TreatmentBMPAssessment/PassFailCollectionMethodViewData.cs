@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Views.ObservationType;
+using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
@@ -34,15 +34,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.ObservationType observationType)
+        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(observationType.PassFailSchema);
-            PassingScoreLabel = observationType.PassFailSchema.PassingScoreLabel;
-            FailingScoreLabel = observationType.PassFailSchema.FailingScoreLabel;
-            AssessmentDescription = observationType.PassFailSchema.AssessmentDescription;
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.PassFailSchema);
+            PassingScoreLabel = TreatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
+            FailingScoreLabel = TreatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
+            AssessmentDescription = TreatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
 
             SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.PassFailCollectionMethod(treatmentBmpAssessment, observationType));
+                x.PassFailCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
         }
 
         public class PassFailCollectionMethodViewDataForAngular

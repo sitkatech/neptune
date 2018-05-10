@@ -6,9 +6,9 @@ CREATE TABLE [dbo].[TreatmentBMPObservation](
 	[TreatmentBMPObservationID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPAssessmentID] [int] NOT NULL,
-	[TreatmentBMPTypeObservationTypeID] [int] NOT NULL,
+	[TreatmentBMPTypeAssessmentObservationTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
-	[ObservationTypeID] [int] NOT NULL,
+	[TreatmentBMPAssessmentObservationTypeID] [int] NOT NULL,
 	[ObservationData] [nvarchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_TreatmentBMPObservation_TreatmentBMPObservationID] PRIMARY KEY CLUSTERED 
 (
@@ -16,11 +16,6 @@ CREATE TABLE [dbo].[TreatmentBMPObservation](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_ObservationType_ObservationTypeID] FOREIGN KEY([ObservationTypeID])
-REFERENCES [dbo].[ObservationType] ([ObservationTypeID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_ObservationType_ObservationTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])
@@ -42,17 +37,22 @@ REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [Treatmen
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID]
 GO
+ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID] FOREIGN KEY([TreatmentBMPAssessmentObservationTypeID])
+REFERENCES [dbo].[TreatmentBMPAssessmentObservationType] ([TreatmentBMPAssessmentObservationTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID]
+GO
 ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPType_TreatmentBMPTypeID]
 GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID] FOREIGN KEY([TreatmentBMPTypeObservationTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeObservationType] ([TreatmentBMPTypeObservationTypeID])
+ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID] FOREIGN KEY([TreatmentBMPTypeAssessmentObservationTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeAssessmentObservationType] ([TreatmentBMPTypeAssessmentObservationTypeID])
 GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID]
+ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID]
 GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_ObservationTypeI] FOREIGN KEY([TreatmentBMPTypeObservationTypeID], [TreatmentBMPTypeID], [ObservationTypeID])
-REFERENCES [dbo].[TreatmentBMPTypeObservationType] ([TreatmentBMPTypeObservationTypeID], [TreatmentBMPTypeID], [ObservationTypeID])
+ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTyp] FOREIGN KEY([TreatmentBMPTypeAssessmentObservationTypeID], [TreatmentBMPTypeID], [TreatmentBMPAssessmentObservationTypeID])
+REFERENCES [dbo].[TreatmentBMPTypeAssessmentObservationType] ([TreatmentBMPTypeAssessmentObservationTypeID], [TreatmentBMPTypeID], [TreatmentBMPAssessmentObservationTypeID])
 GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeObservationType_TreatmentBMPTypeObservationTypeID_TreatmentBMPTypeID_ObservationTypeI]
+ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTyp]

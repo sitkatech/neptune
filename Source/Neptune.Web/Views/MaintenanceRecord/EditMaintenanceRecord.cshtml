@@ -20,6 +20,7 @@
 -----------------------------------------------------------------------*@
 
 @using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Common
 @inherits Neptune.Web.Views.MaintenanceRecord.EditMaintenanceRecord
@@ -31,10 +32,10 @@
         <div class="form-group">
             <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDate)</div>
             <div class="col-xs-8">
-                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
-                    <input type="text" name="@Html.NameFor(m => m.MaintenanceRecordDate)" class="form-control assessmentDate" value="@Model.MaintenanceRecordDate.ToStringDate()" />
+                <div class="input-group date" data-date-format="m/d/yyyy" id="maintenancedatetime" data-date-autoclose="true" data-date-clear-btn="true" style="width: 205px">
+                    <input type="text" name="@Html.NameFor(m => m.MaintenanceRecordDate)" class="form-control assessmentDate" value="@Model.MaintenanceRecordDate.ToStringDate()"/>
                     <div class="input-group-addon">
-                        <span class="glyphicon glyphicon-th"></span>
+                        <span class="glyphicon glyphicon-calendar"></span>
                     </div>
                 </div>
             </div>
@@ -42,21 +43,37 @@
         <div class="form-group">
             <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
             <div class="col-xs-8">
-                @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
-                
+                @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
+
             </div>
         </div>
         <div class="form-group">
-            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.PerformedByPersonID)</div>
+            <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.PerformedByOrganizationID)</div>
             <div class="col-xs-8">
-                @Html.SearchableDropDownListFor(m=>m.PerformedByPersonID, ViewDataTyped.AllPersons, new Dictionary<string, string> { { "title", "  " }, { "data-width", "auto" } })
-                </div>
+                @Html.SearchableDropDownListFor(m => m.PerformedByOrganizationID, ViewDataTyped.AllOrganizations, new Dictionary<string, string> {{"title", "  "}, {"data-width", "auto"}})
+            </div>
         </div>
         <div class="form-group">
             <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDescription)</div>
             <div class="col-xs-8">
-                @Html.TextAreaWithMaxLengthFor(m => m.MaintenanceRecordDescription,new TextAreaForExtensions.TextAreaDimensions(null, 6), null, new List<string>() { "form-control" })
+                @Html.TextAreaWithMaxLengthFor(m => m.MaintenanceRecordDescription, new TextAreaForExtensions.TextAreaDimensions(null, 6), null, new List<string>() {"form-control"})
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <hr/>
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button action="p" type="submit" class="btn btn-neptune">Save</button>
+            <a href="@(ViewDataTyped.IsNew ? ViewDataTyped.TreatmentBMPUrl : ViewDataTyped.MaintenanceRecordUrl)" class="btn btn-neptune">Cancel</a>
+        </div>
+    </div>
 }
+<script type="text/javascript">
+    $(function() {
+        $('#maintenancedatetime').datetimepicker();
+    });
+</script>
