@@ -107,15 +107,10 @@ Source code is available upon request via <support@sitkatech.com>.
                     <br />
                 </div>
             }
-            <table class="dialogFormLayout" style="margin-top: 20px; table-layout: fixed" ng-show="AngularModel.TreatmentBMPFundingSources.length > 0">
-                <colgroup>
-                    <col class="col-xs-1"/>
-                    <col class="col-xs-4"/>
-                    <col class="col-xs-3" style="padding-right: 17px;"/>
-                </colgroup>
+            <table class="dialogFormLayout" style="margin-top: 20px; table-layout: fixed" ng-show="AngularModel.TreatmentBMPFundingSources.length > 0">               
                 <tbody>
                 <tr>
-                    <th></th>
+                    <th style="width: 30px;"></th>
                     <th style="white-space: nowrap">@Html.Raw(ViewDataTyped.FromFundingSource ? Html.LabelWithSugarFor(FieldDefinition.TreatmentBMP) : Html.LabelWithSugarFor(FieldDefinition.FundingSource))</th>
                     <th style="text-align: right; padding-right: 17px;">Amount</th>
                 </tr>
@@ -123,7 +118,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     <td><span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPFundingSource)" style="cursor: pointer"></span></td>
                     <td ng-bind="@(ViewDataTyped.FromFundingSource ? "getTreatmentBMPName(treatmentBMPFundingSource)" : "getFundingSourceName(treatmentBMPFundingSource)")">
                     <td style="text-align: right; padding-right: 17px;">
-                        <input style="float: right; text-align: right; padding: 2px 0" type="text" ng-model="treatmentBMPFundingSource.Amount" class="sitkaCurrency form-control" ng-currency/>
+                        <input style="float: right; text-align: right; padding: 2px 0; width: 150px;" type="text" ng-model="treatmentBMPFundingSource.Amount" class="sitkaCurrency form-control" ng-currency/>
                     </td>                                       
                 </tr>
                 <tr style="border-top: 1px solid #eeeeee;">

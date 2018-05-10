@@ -32,6 +32,8 @@ namespace Neptune.Web.Views.FundingSource
         public readonly IndexGridSpec GridSpec;
         public readonly string GridName;
         public readonly string GridDataUrl;
+        public readonly string NewFundingSourceUrl;
+        public readonly bool UserCanAddFundingSource;
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage)
         {
@@ -45,13 +47,12 @@ namespace Neptune.Web.Views.FundingSource
                 SaveFiltersInCookie = true
             };
 
-            if (new FundingSourceCreateFeature().HasPermissionByPerson(currentPerson))
-            {
-                GridSpec.CreateEntityModalDialogForm = new ModalDialogForm(SitkaRoute<FundingSourceController>.BuildUrlFromExpression(t => t.New()), $"Create a new {Models.FieldDefinition.FundingSource.GetFieldDefinitionLabel()}");
-            }
+            UserCanAddFundingSource = new FundingSourceCreateFeature().HasPermissionByPerson(currentPerson);            
 
             GridName = "fundingSourcesGrid";
             GridDataUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(tc => tc.IndexGridJsonData());
+
+            NewFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(tc => tc.New());
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -49,7 +50,8 @@ namespace Neptune.Web.Controllers
                 // If the person is not an admin, we want to default the Funding Source organization to their own Organization
                 OrganizationID = new List<Role> { Role.Admin, Role.SitkaAdmin }.Any(x => x.RoleID == CurrentPerson.RoleID)
                     ? (int?)null
-                    : CurrentPerson.OrganizationID
+                    : CurrentPerson.OrganizationID,
+                IsActive = true
             };
 
             return ViewEdit(viewModel);
@@ -72,7 +74,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fundingSource, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllFundingSources.Add(fundingSource);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.DisplayName} succesfully created.");
+            SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.DisplayNameAsUrl} succesfully created.");
 
             return new ModalDialogFormJsonResult();
         }
@@ -128,9 +130,11 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteFundingSource(FundingSource fundingSource, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !fundingSource.HasDependentObjects();
+            var canDelete = true;
+            var count = fundingSource.TreatmentBMPFundingSources.Count;
+            var totalAmount = fundingSource.TreatmentBMPFundingSources.Sum(x => x.Amount).ToStringCurrency();
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete this {FieldDefinition.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'?"
+                ? $"Are you sure you want to delete this {FieldDefinition.FundingSource.GetFieldDefinitionLabel()} '{fundingSource.FundingSourceName}'? Deleting this funding source will remove {count} Treatment BMP Funding Source records from the system, totaling {totalAmount}."
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()}", SitkaRoute<FundingSourceController>.BuildLinkFromExpression(x => x.Detail(fundingSource), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
@@ -147,7 +151,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteFundingSource(fundingSource, viewModel);
             }
-            fundingSource.DeleteFundingSource();
+            fundingSource.DeleteFull();
             return new ModalDialogFormJsonResult();
         }
 
