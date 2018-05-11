@@ -87,7 +87,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var mro in ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations)
+                        @foreach (var mro in ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.OrderBy(x=>x.CustomAttributeType.CustomAttributeTypeName))
                         {
                             <tr>
                                 <td>

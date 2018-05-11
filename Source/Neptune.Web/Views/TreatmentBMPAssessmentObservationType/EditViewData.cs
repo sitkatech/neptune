@@ -49,9 +49,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
             Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(currentPerson)
         {
-            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
+            EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());
-            PageTitle = $"{(TreatmentBMPAssessmentObservationType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}";
+            PageTitle = $"{(TreatmentBMPAssessmentObservationType != null ? "Edit" : "New")} Observation Type";
 
             if (TreatmentBMPAssessmentObservationType != null)
             {

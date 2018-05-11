@@ -35,14 +35,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
-            PageTitle = $"All {Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = "Observation Type";
+            PageTitle = "All Observation Types";
 
             NewObservationTypeUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new TreatmentBMPAssessmentObservationTypeGridSpec(currentPerson)
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized()}",
+                ObjectNameSingular = "Observation Type",
+                ObjectNamePlural = $"Observation Types",
                 SaveFiltersInCookie = true                
             };
 

@@ -84,7 +84,7 @@
                         <ul>
                             @foreach (var purpose in CustomAttributeTypePurpose.All)
                             {
-                                <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID)) @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName</li>
+                                <li>This BMP Type has @(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Count(x => x.CustomAttributeType.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID)) @purpose.CustomAttributeTypePurposeDisplayName</li>
                             }
                         </ul>
                     </div>

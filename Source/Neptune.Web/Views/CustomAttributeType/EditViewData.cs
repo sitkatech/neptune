@@ -53,10 +53,10 @@ namespace Neptune.Web.Views.CustomAttributeType
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage customAttributeInstructionsNeptunePage,
             Models.CustomAttributeType customAttributeType) : base(currentPerson)
         {
-            EntityName = Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized();
+            EntityName = "Attribute Type";
             EntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());
             PageTitle =
-                $"{(customAttributeType != null ? "Edit" : "New")} {Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}";
+                $"{(customAttributeType != null ? "Edit" : "New")} Attribute Type";
 
             if (customAttributeType != null)
             {

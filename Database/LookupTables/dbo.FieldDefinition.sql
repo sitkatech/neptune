@@ -28,7 +28,7 @@ VALUES
 (23, N'Jurisdiction', N'Jurisdiction', '', 1),
 (24, N'ModeledCatchment', N'Modeled Catchment', '', 1),
 (25, N'TreatmentBMP', N'Treatment BMP', '', 1),
-(26, N'TreatmentBMPAssessmentObservationType', N'Treatment BMP Assessment Observation Type', '', 1),
+(26, N'TreatmentBMPAssessmentObservationType', N'Observation Name', '', 1),
 (27, N'ObservationCollectionMethod', N'Collection Method', '', 1),
 (28, N'ObservationThresholdType', N'Threshold Type', '', 1),
 (29, N'ObservationTargetType', N'Target Type', '', 1),
@@ -41,10 +41,10 @@ VALUES
 (36, N'DefaultThresholdValue', N'Default Threshold Value', '', 1),
 (37, N'DefaultBenchmarkValue', N'Default Benchmark Value', '', 1),
 (38, N'AssessmentFailsIfObservationFails', N'Assessment Fails if Observation Fails', '', 1),
-(39, N'CustomAttributeType', N'Custom Attribute Type', '', 1),
+(39, N'CustomAttributeType', N'Attribute Name', '', 1),
 (40, N'CustomAttributeDataType', N'Data Type', '', 1),
 (41, N'MaintenanceRecordType', N'Maintenance Record Type', 'Whether the maintenance performed was Preventative or Corrective maintenance', 1),
 (42, N'MaintenanceRecord', N'Maintenance Record', 'A record of a maintenance activity performed on a Treatment BMP', 1),
 (43, N'AttributeTypePurpose', N'Purpose', 'How the attribute type will be used for analysis and reporting', 1),
 (44, N'FundingSource', N'Funding Source', '', 1),
-(45, N'IsPostMaintenanceAssessment', N'Is Post Maintenance Assessment', 'Whether the assessment was conducted as a follow-up to a maintenance activity', 1)
+(45, N'IsPostMaintenanceAssessment', N'Post Maintenance Assessment?', 'Whether the assessment was conducted as a follow-up to a maintenance activity', 1)

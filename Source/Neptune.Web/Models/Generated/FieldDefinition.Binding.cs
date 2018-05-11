@@ -450,7 +450,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionTreatmentBMPAssessmentObservationType : FieldDefinition
     {
         private FieldDefinitionTreatmentBMPAssessmentObservationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTreatmentBMPAssessmentObservationType Instance = new FieldDefinitionTreatmentBMPAssessmentObservationType(26, @"TreatmentBMPAssessmentObservationType", @"Treatment BMP Assessment Observation Type", @"", true);
+        public static readonly FieldDefinitionTreatmentBMPAssessmentObservationType Instance = new FieldDefinitionTreatmentBMPAssessmentObservationType(26, @"TreatmentBMPAssessmentObservationType", @"Observation Name", @"", true);
     }
 
     public partial class FieldDefinitionObservationCollectionMethod : FieldDefinition
@@ -528,7 +528,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionCustomAttributeType : FieldDefinition
     {
         private FieldDefinitionCustomAttributeType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionCustomAttributeType Instance = new FieldDefinitionCustomAttributeType(39, @"CustomAttributeType", @"Custom Attribute Type", @"", true);
+        public static readonly FieldDefinitionCustomAttributeType Instance = new FieldDefinitionCustomAttributeType(39, @"CustomAttributeType", @"Attribute Name", @"", true);
     }
 
     public partial class FieldDefinitionCustomAttributeDataType : FieldDefinition
@@ -564,6 +564,6 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionIsPostMaintenanceAssessment : FieldDefinition
     {
         private FieldDefinitionIsPostMaintenanceAssessment(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionIsPostMaintenanceAssessment Instance = new FieldDefinitionIsPostMaintenanceAssessment(45, @"IsPostMaintenanceAssessment", @"Is Post Maintenance Assessment", @"Whether the assessment was conducted as a follow-up to a maintenance activity", true);
+        public static readonly FieldDefinitionIsPostMaintenanceAssessment Instance = new FieldDefinitionIsPostMaintenanceAssessment(45, @"IsPostMaintenanceAssessment", @"Post Maintenance Assessment?", @"Whether the assessment was conducted as a follow-up to a maintenance activity", true);
     }
 }

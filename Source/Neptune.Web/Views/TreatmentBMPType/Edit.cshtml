@@ -183,7 +183,7 @@
                                         data-container="body"
                                         data-width="100%" selectpicker
                                         data-title="Select an Attribute Type to Add"
-                                        ng-options="customAttributeType as customAttributeType.CustomAttributeTypeName for customAttributeType in filteredCustomAttributeTypes() track by customAttributeType.CustomAttributeTypeID">
+                                        ng-options="customAttributeType as customAttributeType.CustomAttributeTypeName group by customAttributeType.Purpose for customAttributeType in filteredCustomAttributeTypes() track by customAttributeType.CustomAttributeTypeID">
                                     <option value="" disabled selected>Select an Attribute Type to Add</option>
                                 </select>
                                 <span class="input-group-btn">

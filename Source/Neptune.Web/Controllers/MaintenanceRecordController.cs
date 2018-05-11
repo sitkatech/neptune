@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
@@ -30,7 +31,12 @@ namespace Neptune.Web.Controllers
         [TreatmentBMPManageFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
         {
-            return ViewNew(new EditMaintenanceRecordViewModel(), treatmentBmpPrimaryKey.EntityObject, null);
+            return ViewNew(
+                new EditMaintenanceRecordViewModel
+                {
+                    MaintenanceRecordDate = DateTime.Now,
+                    PerformedByOrganizationID = CurrentPerson.OrganizationID
+                }, treatmentBmpPrimaryKey.EntityObject, null);
         }
 
         [HttpPost]

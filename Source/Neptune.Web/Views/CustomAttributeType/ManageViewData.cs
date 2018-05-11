@@ -35,15 +35,15 @@ namespace Neptune.Web.Views.CustomAttributeType
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, neptunePage)
         {
-            EntityName = Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized();
-            PageTitle = $"All {Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized()}";
+            EntityName = "Attribute Type";
+            PageTitle = "All Attribute Types";
 
             NewCustomAttributeTypeUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(t => t.New());
             GridSpec = new CustomAttributeTypeGridSpec()
             {
-                ObjectNameSingular = $"{Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()}",
-                ObjectNamePlural = $"{Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized()}",
-                SaveFiltersInCookie = true                
+                ObjectNameSingular = "Attribute Type",
+            ObjectNamePlural = "Attribute Types",
+            SaveFiltersInCookie = true                
             };
 
             GridName = "customAttributeTypeGrid";
