@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="Index.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common
@@ -34,8 +34,23 @@ Source code is available upon request via <support@sitkatech.com>.
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.Stormwater.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMP/TreatmentBMPMapController.js")"></script>
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
-    
+    <script type="text/javascript">
+        // <![CDATA[
+        angular.module("NeptuneApp")
+            .factory("angularModelAndViewData",
+                function()
+                {
+                    return {
+                        AngularModel: null,
+                        AngularViewData:
+                            @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                    };
+                });
+        // ]]>
+    </script>
+
 }
 
 @section RightOfPageTitle
@@ -43,21 +58,21 @@ Source code is available upon request via <support@sitkatech.com>.
     @if (ViewDataTyped.HasManagePermissions)
     {
         <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-    }    
+    }
 }
 
 <div class="pageIntroText">
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
 
-<div class="row">
+<div class="row" ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
     <div class="col-sm-4">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Treatment BMP Search
             </div>
             <div class="panel-body">
-                <p >Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
+                <p>Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
                 <div class="input-group">
                     <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off" />
                     <span class="input-group-btn">
@@ -91,14 +106,14 @@ Source code is available upon request via <support@sitkatech.com>.
                 Treatment BMP Table
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl,"height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    jQuery(document).ready(function()
+    @*jQuery(document).ready(function()
     {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var neptuneMap = new NeptuneMaps.StormwaterSearch(mapInitJson);
@@ -116,6 +131,6 @@ Source code is available upon request via <support@sitkatech.com>.
         };
         var layerName = "Outfalls";
         neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
-    });
+    });*@
 
 </script>

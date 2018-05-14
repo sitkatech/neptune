@@ -956,6 +956,7 @@
     <Content Include="Views\CustomAttributeType\EditCustomAttributeTypeController.js" />
     <Content Include="Views\TreatmentBMPFundingSource\EditTreatmentBMPFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
+    <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
     <Content Include="Views\User\PullUserFromKeystone.cshtml" />

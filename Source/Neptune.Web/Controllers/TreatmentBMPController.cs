@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public ViewResult Index()
         {
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson));
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false));
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJson.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
@@ -49,15 +49,14 @@ namespace Neptune.Web.Controllers
 
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var viewData = new IndexViewData(CurrentPerson, mapInitJson, neptunePage);
+            var viewData = new IndexViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBMPs);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
         {
-            TreatmentBMPGridSpec gridSpec;
-            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out gridSpec, CurrentPerson);
+            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }

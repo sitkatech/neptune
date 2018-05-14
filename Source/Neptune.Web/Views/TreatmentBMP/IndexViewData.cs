@@ -18,6 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Collections.Generic;
+using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -36,8 +39,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string FindTreatmentBMPByNameUrl { get; }
         public string NewUrl { get; }
         public bool HasManagePermissions { get; }
+        public ViewDataForAngular ViewDataForAngular { get; set; }
 
-        public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage)
+        public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
+            List<Models.TreatmentBMP> treatmentBMPs)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "All Treatment BMPs";
@@ -51,6 +56,24 @@ namespace Neptune.Web.Views.TreatmentBMP
             FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindByName(null));
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             HasManagePermissions = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
+            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl);
         }
+    }
+
+    public class ViewDataForAngular
+    {
+        public MapInitJson MapInitJson { get; }
+        public List<TreatmentBMPSimple> TreatmentBMPs { get; }
+        public Dictionary<int,string> TreatmentBMPDetailUrlsByID { get; }
+        public ViewDataForAngular(MapInitJson mapInitJson, List<Models.TreatmentBMP> treatmentBMPs,
+            string findTreatmentBMPByNameUrl)
+        {
+            MapInitJson = mapInitJson;
+            TreatmentBMPs = treatmentBMPs.Select(x=>new TreatmentBMPSimple(x)).ToList();
+            TreatmentBMPDetailUrlsByID = treatmentBMPs.ToDictionary(x=>x.TreatmentBMPID, x=>x.GetDetailUrl());
+            FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
+        }
+
+        public string FindTreatmentBMPByNameUrl { get; }
     }
 }
