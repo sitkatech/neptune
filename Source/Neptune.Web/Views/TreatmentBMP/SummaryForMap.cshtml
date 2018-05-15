@@ -84,18 +84,4 @@ Source code is available upon request via <support@sitkatech.com>.
             </div>
         </div>
     </div>
-    @* todo: neutered per #104 changing the way the treatment bmp index page works. remove these commented lines
-        <div class="card">
-        <ul class="list-group list-group-flush">
-            <li>
-                <a class="list-group-item" href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()"><span class="btn cardButton viewButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search")</span>View BMP Details</a>
-            </li>
-            @if (ViewDataTyped.CurrentPerson.CanManageStormwaterJurisdiction(ViewDataTyped.TreatmentBMP.StormwaterJurisdiction) && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
-            {
-                <li>
-                    <a class="list-group-item" href="@ViewDataTyped.AssessmentUrl"><span class="btn cardButton newButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</span>Start an Assessment</a>
-                </li>
-            }
-        </ul>
-    </div>*@
 </div>
