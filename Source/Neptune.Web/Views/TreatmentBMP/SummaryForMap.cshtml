@@ -23,31 +23,69 @@ Source code is available upon request via <support@sitkatech.com>.
 @using LtInfo.Common.HtmlHelperExtensions
 @inherits Neptune.Web.Views.TreatmentBMP.SummaryForMap
 
+<style>
+    .keyPhoto {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .keyPhoto img {
+        max-height: 350px;
+    }
+    .captionText {
+        font-size: 12px;
+    }
+</style>
+
 <div class="panel panelNeptune">
     <div class="panel-heading panelTitle">
         BMP Overview
     </div>
     <div class="panel-body">
         <div class="row">
-            <label class="col-sm-6 control-label text-right">Name</label>
-            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
-        </div>
-        <div class="row">
-            <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
-        </div>
+            <div class="col-sm-7">
 
-        <div class="row">
-            <label class="col-sm-6 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
-        </div>        
-        <div class="row">
-            <label class="col-sm-6 control-label text-right">Score</label>
-            <div class="col-sm-6">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
-        </div>
+                <div class="row">
+                <label class="col-sm-4 control-label text-right">Name</label>
+                <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
+                <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
+            </div>
 
+            <div class="row">
+                <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+                <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 control-label text-right">Score</label>
+                <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 control-label text-right">Notes</label>
+                <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.Notes</div>
+                </div>
+
+            </div>
+            <div class="col-sm-5">
+                @if (ViewDataTyped.KeyPhoto != null)
+                {
+                    <div class="keyPhoto">
+                        <img class="img-responsive" src="@(ViewDataTyped.KeyPhoto.PhotoUrl)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
+                        <span class="captionText">@ViewDataTyped.KeyPhoto.Caption</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">
+                        <p class="systemText">No Key Photo provided for this Treatment BMP</p>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-    <div class="card">
+    @* todo: neutered per #104 changing the way the treatment bmp index page works. remove these commented lines
+        <div class="card">
         <ul class="list-group list-group-flush">
             <li>
                 <a class="list-group-item" href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()"><span class="btn cardButton viewButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-search")</span>View BMP Details</a>
@@ -57,7 +95,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 <li>
                     <a class="list-group-item" href="@ViewDataTyped.AssessmentUrl"><span class="btn cardButton newButton">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</span>Start an Assessment</a>
                 </li>
-            }            
+            }
         </ul>
-    </div>
+    </div>*@
 </div>

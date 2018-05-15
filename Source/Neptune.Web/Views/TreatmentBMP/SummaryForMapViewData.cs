@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -35,6 +36,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             TreatmentBMP = treatmentBMP;
             AssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));
-        }     
+            // todo: we don't have the concept of a keyphoto yet
+            //KeyPhoto = treatmentBMP.TreatmentBMPImages.SingleOrDefault(x => x.IsKeyPhoto);
+            KeyPhoto = treatmentBMP.TreatmentBMPImages.FirstOrDefault();
+        }
+
+        public Models.TreatmentBMPImage KeyPhoto { get; }
     }
 }

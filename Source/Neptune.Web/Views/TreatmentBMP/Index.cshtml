@@ -96,7 +96,7 @@
         <div class="col-sm-6">
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
-                    John what should I call this?
+                    Found Treatment BMPs
                 </div>
                 <div class="panel-body">
                     <p class="systemText">Found {{visibleBMPCount()}} BMPs.</p>
@@ -111,7 +111,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="treatmentBMP in whatDoICallThis()">
-                                <td>
+                                <td class="text-center">
                                     <span ng-if="!isActive(treatmentBMP)" class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span>
                                     <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
                                 </td>
