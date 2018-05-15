@@ -52,6 +52,13 @@ namespace Neptune.Web.Controllers
             var viewData = new IndexViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBMPs);
             return RazorView<Index, IndexViewData>(viewData);
         }
+        [NeptuneViewFeature]
+        public ViewResult All()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            var viewData = new AllViewData(CurrentPerson, neptunePage);
+            return RazorView<All, AllViewData>(viewData);
+        }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()

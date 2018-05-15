@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             List<Models.TreatmentBMP> treatmentBMPs)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
-            PageTitle = "All Treatment BMPs";
+            PageTitle = "Find a BMP";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             GridSpec = new TreatmentBMPGridSpec(currentPerson) {ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true};
             GridName = "treatmentBMPsGrid";

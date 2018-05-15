@@ -819,9 +819,11 @@
     <Compile Include="Views\Shared\EditAttributes\EditAttributes.cs" />
     <Compile Include="Views\Shared\EditAttributes\EditAttributesViewData.cs" />
     <Compile Include="Views\Shared\EditAttributes\EditAttributesViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\AllViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributes.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\All.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -1026,6 +1028,7 @@
     <Content Include="Views\MaintenanceRecord\Detail.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cshtml" />
+    <Content Include="Views\TreatmentBMP\All.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
