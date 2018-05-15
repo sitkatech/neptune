@@ -22,34 +22,42 @@
         var layerName = "Outfalls";
         $scope.neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
 
-        $scope.visibleBMPs = [];
+        $scope.visibleBMPIDs = [];
 
         // todo: for some reason this bad boy is multicounting whenever we do a zoom. why does it multicount when we do a zoom?
         $scope.$watch(function () {
-            $scope.visibleBMPs = [];
+            var foundIDs = [];
             var map = $scope.neptuneMap.map;
             map.eachLayer(function(layer) {
                 if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
                     if (map.getBounds().contains(layer.getLatLng())) {
-                        $scope.visibleBMPs.push(layer.feature.properties.TreatmentBMPID);
+                        foundIDs.push(layer.feature.properties.TreatmentBMPID);
                     }
                 }
                 if (layer instanceof L.MarkerCluster) {
                     if (map.getBounds().contains(layer.getLatLng())) {
                         var markers = layer.getAllChildMarkers();
                         for (var i = 0; i < markers.length; i++) {
-                            $scope.visibleBMPs.push(markers[i].feature.properties.TreatmentBMPID);
+                            foundIDs.push(markers[i].feature.properties.TreatmentBMPID);
                         }
                     }
                 }
             });
+            $scope.visibleBMPIDs = foundIDs.filter(function(element, index, array) {
+                return array.indexOf(element) === index;
+            })
         });
 
         $scope.whatDoICallThis = function() {
-            return _.filter($scope.AngularViewData.TreatmentBMPs,
+            var filteredBMPs = _.filter($scope.AngularViewData.TreatmentBMPs,
                 function(t) {
-                    return $scope.visibleBMPs.includes(t.TreatmentBMPID);
+                    return $scope.visibleBMPIDs.includes(t.TreatmentBMPID);
                 });
+            var orderedBMPs = _.sortBy(filteredBMPs,
+                function(t) {
+                    return !($scope.isActive(t));
+                });
+            return orderedBMPs;
         }
 
         $scope.neptuneMap.map.on('zoomend', function() { $scope.$apply(); });
@@ -64,13 +72,37 @@
             setActiveImpl(layer, treatmentBMP);
         };
 
+        $scope.setActiveByID = function (treatmentBMPID) {
+            var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
+                function(t) {
+                    return t.TreatmentBMPID == treatmentBMPID;
+                });
+            $scope.activeTreatmentBMP = treatmentBMP;
+        };
+
         function setActiveImpl(layer, treatmentBMP) {
+            // zoom to marker
+            var latLngs = [layer.getLatLng()];
+            var markerBounds = L.latLngBounds(latLngs);
+            $scope.neptuneMap.map.fitBounds(markerBounds);
+
+            // multi-way binding
+            $scope.neptuneMap.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.neptuneMap.setSelectedMarker(layer);
             $scope.activeTreatmentBMP = treatmentBMP;
-        }
+        };
 
         $scope.isActive = function(treatmentBMP) {
             return $scope.activeTreatmentBMP &&
                 $scope.activeTreatmentBMP.TreatmentBMPID === treatmentBMP.TreatmentBMPID;
+        };
+
+        $scope.neptuneMap.searchableLayerGeoJson.on('click', function (e) {
+            $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
+            $scope.$apply();
+        });
+
+        $scope.visibleBMPCount = function() {
+            return $scope.visibleBMPIDs.length;
         };
     });

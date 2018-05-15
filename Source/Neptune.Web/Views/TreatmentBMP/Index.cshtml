@@ -65,55 +65,69 @@
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
 
-<div class="row" ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
-    <div class="col-sm-4">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Treatment BMP Search
+<div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Treatment BMP Map
+                </div>
+                <div id="mapContainer" class="panel-body">
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 300px; margin: 0">
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <p>Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
-                <div class="input-group">
-                    <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off"/>
-                    <span class="input-group-btn">
-                        <a id="treatmentBMPFinderButton" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></a>
-                    </span>
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Treatment BMP Search
+                </div>
+                <div class="panel-body">
+                    <p>Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
+                    <div class="input-group">
+                        <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off" />
+                        <span class="input-group-btn">
+                            <a id="treatmentBMPFinderButton" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></a>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="mapSummaryResults">
+        <div class="col-sm-6">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    John what should I call this?
+                </div>
+                <div class="panel-body">
+                    <p class="systemText">Found {{visibleBMPCount()}} BMPs.</p>
+                    <div style="height: 270px; overflow-y: scroll;">
+                        <table ng-if="visibleBMPCount() <= 15" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>BMP Name</th>
+                                <th>BMP Type</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="treatmentBMP in whatDoICallThis()">
+                                <td>
+                                    <span ng-if="!isActive(treatmentBMP)" class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span>
+                                    <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
+                                </td>
+                                <td><span ng-bind="treatmentBMP.DisplayName" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
+                                <td><span ng-bind="treatmentBMP.Type" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p ng-if="visibleBMPCount() > 15" class="systemText">Please zoom the map closer or perform a BMP Search to see a list of BMPs</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-sm-8">
-        <div class="panel panelNeptune">
-            <div class="panel-heading panelTitle">
-                Treatment BMP Map
-            </div>
-            <div id="mapContainer" class="panel-body">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 600px; margin: 0">
-                </div>
-                <div style="margin: 10px;">
-                    @{ Html.RenderRazorSitkaPartial<TreatmentBMPTypeLegend, TreatmentBMPTypeLegendViewData>(ViewDataTyped.TreatmentBMPTypeLegendViewData); }
-                </div>
-            </div>
-        </div>
-        <div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>BMP Name</th>
-                        <th>BMP Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="treatmentBMP in whatDoICallThis()">
-                        <td><span class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span></td>
-                        <td ng-bind="treatmentBMP.DisplayName"></td>
-                        <td ng-bind="treatmentBMP.Type"></td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="col-sm-12" id="mapSummaryResults">
         </div>
     </div>
 </div>
