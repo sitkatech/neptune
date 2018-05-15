@@ -105,4 +105,24 @@
         $scope.visibleBMPCount = function() {
             return $scope.visibleBMPIDs.length;
         };
+
+        jQuery("#useCurrentLocationButton").on("click", function () {
+            $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
+        });
+
+        //function onLocationFound(e) {
+        //    var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)"),
+        //        y = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)");
+
+        //    x.val(e.latlng.lng);
+        //    y.val(e.latlng.lat);
+
+        //    neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
+        //    neptuneMap.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+        //    neptuneMap.currentMarker.addTo(neptuneMap.map);
+        //}
+
+        //function onLocationError(e) {
+        //    alert(e.message);
+        //}
     });
