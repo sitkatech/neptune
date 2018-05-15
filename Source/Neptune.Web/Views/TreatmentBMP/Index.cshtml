@@ -74,7 +74,7 @@
             <div class="panel-body">
                 <p>Search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
                 <div class="input-group">
-                    <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off" />
+                    <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off"/>
                     <span class="input-group-btn">
                         <a id="treatmentBMPFinderButton" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></a>
                     </span>
@@ -97,6 +97,24 @@
                 </div>
             </div>
         </div>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>BMP Name</th>
+                        <th>BMP Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="treatmentBMP in whatDoICallThis()">
+                        <td><span class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span></td>
+                        <td ng-bind="treatmentBMP.DisplayName"></td>
+                        <td ng-bind="treatmentBMP.Type"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -111,26 +129,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    @*jQuery(document).ready(function()
-    {
-        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        var neptuneMap = new NeptuneMaps.StormwaterSearch(mapInitJson);
-
-        var selector = '#treatmentBMPFinder';
-        var selectorButton = '#treatmentBMPFinderButton';
-        var summaryUrl = @Html.Raw(ViewDataTyped.FindTreatmentBMPByNameUrl.ToJS());
-
-        neptuneMap.typeaheadSearch(selector, selectorButton, summaryUrl);
-
-        var url = "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Outfall_Inspections/FeatureServer/0";
-        var outfallsPopup = function(layer) {
-            return L.Util.template('<p>Facility ID: {FACILITYID}<br>Facility Type: {FACTYPE}',
-                layer.feature.properties);
-        };
-        var layerName = "Outfalls";
-        neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
-    });*@
-
-</script>
