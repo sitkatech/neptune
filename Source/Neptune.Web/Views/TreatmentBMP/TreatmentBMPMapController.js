@@ -47,8 +47,11 @@
                 return array.indexOf(element) === index;
             })
         });
+        $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
 
-        $scope.whatDoICallThis = function() {
+        $scope.visibleBMPs = function() {
             var filteredBMPs = _.filter($scope.AngularViewData.TreatmentBMPs,
                 function(t) {
                     return $scope.visibleBMPIDs.includes(t.TreatmentBMPID);
@@ -59,11 +62,6 @@
                 });
             return orderedBMPs;
         }
-
-        $scope.neptuneMap.map.on('zoomend', function() { $scope.$apply(); });
-        $scope.neptuneMap.map.on('animationend', function() { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
-
 
         $scope.activeTreatmentBMP = {};
         $scope.setActive = function(treatmentBMP) {
@@ -109,20 +107,4 @@
         jQuery("#useCurrentLocationButton").on("click", function () {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         });
-
-        //function onLocationFound(e) {
-        //    var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)"),
-        //        y = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)");
-
-        //    x.val(e.latlng.lng);
-        //    y.val(e.latlng.lat);
-
-        //    neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
-        //    neptuneMap.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
-        //    neptuneMap.currentMarker.addTo(neptuneMap.map);
-        //}
-
-        //function onLocationError(e) {
-        //    alert(e.message);
-        //}
     });

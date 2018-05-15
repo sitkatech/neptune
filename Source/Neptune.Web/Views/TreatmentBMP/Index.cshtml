@@ -121,7 +121,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="treatmentBMP in whatDoICallThis()">
+                            <tr ng-repeat="treatmentBMP in visibleBMPs()">
                                 <td class="text-center">
                                     <span ng-if="!isActive(treatmentBMP)" class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span>
                                     <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
