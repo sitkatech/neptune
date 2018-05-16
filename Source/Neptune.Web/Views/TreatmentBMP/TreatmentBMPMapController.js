@@ -2,11 +2,10 @@
     .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-
-        $scope.model = {};
-    
-
         $scope.neptuneMap = new NeptuneMaps.StormwaterSearch($scope.AngularViewData.MapInitJson);
+
+        $scope.visibleBMPIDs = [];
+        $scope.activeTreatmentBMP = {};
 
         var selector = '#treatmentBMPFinder';
         var selectorButton = '#treatmentBMPFinderButton';
@@ -22,9 +21,8 @@
         var layerName = "Outfalls";
         $scope.neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
 
-        $scope.visibleBMPIDs = [];
+        
 
-        // todo: for some reason this bad boy is multicounting whenever we do a zoom. why does it multicount when we do a zoom?
         $scope.$watch(function () {
             var foundIDs = [];
             var map = $scope.neptuneMap.map;
@@ -43,9 +41,10 @@
                     }
                 }
             });
+            // clusters get multicounted, so we need to use this function to pick out the unique IDs only
             $scope.visibleBMPIDs = foundIDs.filter(function(element, index, array) {
                 return array.indexOf(element) === index;
-            })
+            });
         });
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
@@ -61,9 +60,8 @@
                     return !($scope.isActive(t));
                 });
             return orderedBMPs;
-        }
+        };
 
-        $scope.activeTreatmentBMP = {};
         $scope.setActive = function(treatmentBMP) {
             var layer = _.find($scope.neptuneMap.searchableLayerGeoJson._layers,
                 function(layer) { return treatmentBMP.TreatmentBMPID === layer.feature.properties.TreatmentBMPID; });
@@ -103,8 +101,8 @@
         $scope.visibleBMPCount = function() {
             return $scope.visibleBMPIDs.length;
         };
-
-        jQuery("#useCurrentLocationButton").on("click", function () {
+        
+        $scope.zoomMapToCurrentLocation = function() {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
-        });
+        };
     });

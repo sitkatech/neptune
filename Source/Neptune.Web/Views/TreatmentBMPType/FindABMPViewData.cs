@@ -20,18 +20,16 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {
-    public class IndexViewData : NeptuneViewData
+    public class FindABMPViewData : NeptuneViewData
     {
 
         public List<Models.TreatmentBMPType> TreatmentBMPTypes { get; }
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
+        public FindABMPViewData(Person currentPerson, Models.NeptunePage neptunePage,
             List<Models.TreatmentBMPType> treatmentBMPTypes)
             : base(currentPerson, neptunePage)
         {

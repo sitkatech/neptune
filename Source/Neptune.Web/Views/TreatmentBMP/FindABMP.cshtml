@@ -86,14 +86,14 @@
                     
                    
                     <div class="row">
-                        <div class="col-sm-4"><a style="margin-bottom: 10px" class="btn btn-neptune" id="useCurrentLocationButton"><i class="glyphicon glyphicon-phone"></i>Find nearby BMPs</a></div>
+                        <div class="col-sm-4"><a style="margin-bottom: 10px" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone"></i>Find nearby BMPs</a></div>
                         <div class="col-sm-8">
                             <p class="systemText">Use your device location to find nearby BMPs. This works best for devices with GPS.</p>
                         </div>
                     </div>
                     <hr/>
 
-                    <p class="systemText">Or, search for a BMP by name, click a BMP icon on the neptuneMap, or see all BMPs in the grid at the bottom of the page.</p>
+                    <p class="systemText">Or, search for a BMP by name, click a BMP icon on the map, or see all BMPs in the grid at the bottom of the page.</p>
                     <div class="input-group">
                         <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off"/>
                         <span class="input-group-btn">
@@ -127,11 +127,11 @@
                                     <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
                                 </td>
                                 <td><span ng-bind="treatmentBMP.DisplayName" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
-                                <td><span ng-bind="treatmentBMP.Type" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
+                                <td><span ng-bind="treatmentBMP.TreatmentBMPTypeName" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
                             </tr>
                             </tbody>
                         </table>
-                        <p ng-if="visibleBMPCount() > 15" class="systemText">Please zoom the map closer or perform a BMP Search to see a list of BMPs</p>
+                        <p ng-if="visibleBMPCount() > 15" class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
                     </div>
                 </div>
             </div>

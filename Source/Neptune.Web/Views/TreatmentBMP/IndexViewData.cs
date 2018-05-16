@@ -64,13 +64,12 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public MapInitJson MapInitJson { get; }
         public List<TreatmentBMPSimple> TreatmentBMPs { get; }
-        public Dictionary<int,string> TreatmentBMPDetailUrlsByID { get; }
+
         public ViewDataForAngular(MapInitJson mapInitJson, List<Models.TreatmentBMP> treatmentBMPs,
             string findTreatmentBMPByNameUrl)
         {
             MapInitJson = mapInitJson;
             TreatmentBMPs = treatmentBMPs.Select(x=>new TreatmentBMPSimple(x)).ToList();
-            TreatmentBMPDetailUrlsByID = treatmentBMPs.ToDictionary(x=>x.TreatmentBMPID, x=>x.GetDetailUrl());
             FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
         }
 

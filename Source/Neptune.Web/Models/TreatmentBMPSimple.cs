@@ -4,7 +4,7 @@
     {
         public int TreatmentBMPID { get; set; }
         public string DisplayName { get; set; }
-        public string Type { get; set; }
+        public string TreatmentBMPTypeName { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder
@@ -17,14 +17,14 @@
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             DisplayName = treatmentBMP.TreatmentBMPName;
-            Type = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
+            TreatmentBMPTypeName = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
         }
 
-        public TreatmentBMPSimple(int treatmentBMPID, string displayName, string type)
+        public TreatmentBMPSimple(int treatmentBMPID, string displayName, string treatmentBMPTypeName)
         {
             TreatmentBMPID = treatmentBMPID;
             DisplayName = displayName;
-            Type = type;
+            TreatmentBMPTypeName = treatmentBMPTypeName;
         }
     }
 }
