@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public DetailViewData(Person currentPerson, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = maintenanceRecord.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = maintenanceRecord.TreatmentBMP.GetDetailUrl();

@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();

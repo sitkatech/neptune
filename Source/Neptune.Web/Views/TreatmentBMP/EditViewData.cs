@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             string mapFormID, List<Models.Organization> organizations) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             if (treatmentBMP != null)
             {

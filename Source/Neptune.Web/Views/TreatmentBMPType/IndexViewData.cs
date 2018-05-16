@@ -24,12 +24,12 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMPType
 {
-    public class FindABMPViewData : NeptuneViewData
+    public class IndexViewData : NeptuneViewData
     {
 
         public List<Models.TreatmentBMPType> TreatmentBMPTypes { get; }
 
-        public FindABMPViewData(Person currentPerson, Models.NeptunePage neptunePage,
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             List<Models.TreatmentBMPType> treatmentBMPTypes)
             : base(currentPerson, neptunePage)
         {

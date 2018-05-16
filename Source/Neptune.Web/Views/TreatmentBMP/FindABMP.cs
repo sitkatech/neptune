@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
+    public abstract class FindABMP : LtInfo.Common.Mvc.TypedWebViewPage<FindABMPViewData>
     {
     }
 }

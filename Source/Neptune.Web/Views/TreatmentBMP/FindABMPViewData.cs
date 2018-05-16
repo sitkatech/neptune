@@ -29,7 +29,7 @@ using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class IndexViewData : NeptuneViewData
+    public class FindABMPViewData : NeptuneViewData
     {
         public TreatmentBMPGridSpec GridSpec { get; }
         public string GridName { get; }
@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasManagePermissions { get; }
         public ViewDataForAngular ViewDataForAngular { get; set; }
 
-        public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
+        public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
             List<Models.TreatmentBMP> treatmentBMPs)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
