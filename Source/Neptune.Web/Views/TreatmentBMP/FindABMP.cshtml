@@ -23,6 +23,7 @@
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMP.FindABMP
+
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
@@ -31,13 +32,12 @@
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
     <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMP/TreatmentBMPMapController.js")"></script>
-    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
         // <![CDATA[
         angular.module("NeptuneApp")
             .factory("angularModelAndViewData",
-                function()
-                {
+                function() {
                     return {
                         AngularModel: null,
                         AngularViewData:
@@ -63,49 +63,37 @@
 
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
     <div class="row">
-
-        <div class="col-sm-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Treatment BMP Map
-                </div>
-                <div id="mapContainer" class="panel-body">
-                    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 300px; margin: 0">
-                    </div>
-                </div>
-            </div>
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Treatment BMP Search
-                </div>
-                <div class="panel-body">
-                    
-                   
-                    <div class="row">
-                        <div class="col-sm-4"><a style="margin-bottom: 10px" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone"></i>Find nearby BMPs</a></div>
-                        <div class="col-sm-8">
-                            <p class="systemText">Use your device location to find nearby BMPs. This works best for devices with GPS.</p>
-                        </div>
-                    </div>
-                    <hr/>
-
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
                     <p class="systemText">Or, search for a BMP by name, click a BMP icon on the map, or see all BMPs in the grid at the bottom of the page.</p>
                     <div class="input-group">
                         <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off"/>
                         <span class="input-group-btn">
-                            <a id="treatmentBMPFinderButton" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></a>
+                            <a id="treatmentBMPFinderButton" class="btn btn-default">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </a>
                         </span>
                     </div>
-
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-sm-12">
+                    <a style="margin-bottom: 10px" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone"></i>Find nearby BMPs</a>
+                    <p class="systemText">Use your device location to find nearby BMPs. This works best for devices with GPS.</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="panel panelNeptune">
-                <div class="panel-heading panelTitle">
-                    Found Treatment BMPs
+        <div class="col-sm-8">
+            <div id="mapContainer">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 300px; margin: 0">
                 </div>
-                <div class="panel-body">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div>
                     <p class="systemText">Found {{visibleBMPCount()}} BMPs.</p>
                     <div style="height: 270px; overflow-y: scroll;">
                         <table ng-if="visibleBMPCount() <= 15" class="table table-striped">
@@ -122,8 +110,12 @@
                                     <span ng-if="!isActive(treatmentBMP)" class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span>
                                     <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
                                 </td>
-                                <td><span ng-bind="treatmentBMP.DisplayName" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
-                                <td><span ng-bind="treatmentBMP.TreatmentBMPTypeName" style="line-height: 22px;overflow: hidden;text-overflow: ellipsis;max-height: 22px; white-space: nowrap;"></span></td>
+                                <td>
+                                    <span ng-bind="treatmentBMP.DisplayName" style="line-height: 22px; overflow: hidden; text-overflow: ellipsis; max-height: 22px; white-space: nowrap;"></span>
+                                </td>
+                                <td>
+                                    <span ng-bind="treatmentBMP.TreatmentBMPTypeName" style="line-height: 22px; overflow: hidden; text-overflow: ellipsis; max-height: 22px; white-space: nowrap;"></span>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -131,10 +123,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12" id="mapSummaryResults">
+            <div class="col-sm-9" id="mapSummaryResults"></div>
         </div>
     </div>
 </div>
