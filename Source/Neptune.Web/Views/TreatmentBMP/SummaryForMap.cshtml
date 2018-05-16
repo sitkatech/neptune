@@ -28,36 +28,41 @@ Source code is available upon request via <support@sitkatech.com>.
         margin-left: auto;
         margin-right: auto;
     }
-    .keyPhoto img {
-        max-height: 350px;
-    }
-    .captionText {
-        font-size: 12px;
-    }
+
+    .keyPhoto img { max-height: 350px; }
+
+    .captionText { font-size: 12px; }
 </style>
 <div class="row">
     <div class="col-sm-7">
 
         <div class="row">
-        <label class="col-sm-4 control-label text-right">Name</label>
-        <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
-    </div>
-    <div class="row">
-        <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-        <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
-    </div>
+            <label class="col-sm-4 control-label text-right">Name</label>
+            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
+            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
+        </div>
 
-    <div class="row">
-        <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-        <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
-    </div>
-    <div class="row">
-        <label class="col-sm-4 control-label text-right">Score</label>
-        <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
-    </div>
-    <div class="row">
-        <label class="col-sm-4 control-label text-right">Notes</label>
-        <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.Notes</div>
+        <div class="row">
+            <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 control-label text-right">Score</label>
+            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 control-label text-right">Notes</label>
+            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.Notes</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
+                <a href="#" class="btn btn-neptune" class="btn btn-neptune">Begin Inspection</a>
+                <a href="#" class="btn btn-neptune">Flag for Deletion</a>
+            </div>
         </div>
 
     </div>
@@ -65,7 +70,7 @@ Source code is available upon request via <support@sitkatech.com>.
         @if (ViewDataTyped.KeyPhoto != null)
         {
             <div class="keyPhoto">
-                <img class="img-responsive" src="@(ViewDataTyped.KeyPhoto.PhotoUrl)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
+                <img class="img-responsive" src="@(ViewDataTyped.KeyPhoto.PhotoUrl)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView"/>
                 <span class="captionText">@ViewDataTyped.KeyPhoto.Caption</span>
             </div>
         }

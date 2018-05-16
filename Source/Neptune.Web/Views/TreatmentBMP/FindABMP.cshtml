@@ -55,10 +55,7 @@
 
 @section RightOfPageTitle
 {
-    @if (ViewDataTyped.HasManagePermissions)
-    {
-        <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
-    }
+    
 }
 
 <div class="pageIntroText">
@@ -117,6 +114,17 @@
                     <p class="systemText text-center">Select a BMP from the list to the left.</p>
                 </div>
             </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 style="margin-top: 0;">Didn't find it?</h2>
+            <a href="@ViewDataTyped.AllBMPsUrl" class="btn btn-neptune btn">View list of All BMPs</a>
+            @if (ViewDataTyped.HasManagePermissions)
+            {
+                <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
+            }
         </div>
     </div>
 </div>
