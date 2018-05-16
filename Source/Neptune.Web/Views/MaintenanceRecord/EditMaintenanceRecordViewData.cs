@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Models.TreatmentBMP treatmentBMP, bool isNew, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
+            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();

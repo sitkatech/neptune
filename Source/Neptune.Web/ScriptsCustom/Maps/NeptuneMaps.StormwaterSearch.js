@@ -25,7 +25,7 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
     var self = this;
     
     var layerGroup = new L.LayerGroup();
-    var searchableLayerGeoJson = L.geoJson(stormwaterMapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
+    self.searchableLayerGeoJson = L.geoJson(stormwaterMapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
     {
         pointToLayer: function(feature, latlng)
         {
@@ -65,11 +65,11 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
             });
         }
     });
-    searchableLayerGeoJson.addTo(markerClusterGroup);
+    self.searchableLayerGeoJson.addTo(markerClusterGroup);
 
     markerClusterGroup.addTo(this.map);
     
-    searchableLayerGeoJson.on('click', function (e) { self.markerClicked(self, e); });
+    self.searchableLayerGeoJson.on('click', function (e) { self.markerClicked(self, e); });
 };
 
 NeptuneMaps.StormwaterSearch.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.Stormwater.prototype);

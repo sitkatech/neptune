@@ -819,9 +819,12 @@
     <Compile Include="Views\Shared\EditAttributes\EditAttributes.cs" />
     <Compile Include="Views\Shared\EditAttributes\EditAttributesViewData.cs" />
     <Compile Include="Views\Shared\EditAttributes\EditAttributesViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\IndexViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributes.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditAttributesViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\Index.cs" />
+    <Compile Include="Views\TreatmentBMP\FindABMP.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -912,8 +915,7 @@
     <Compile Include="Views\TreatmentBMP\Edit.cs" />
     <Compile Include="Views\TreatmentBMP\EditViewData.cs" />
     <Compile Include="Views\TreatmentBMP\EditViewModel.cs" />
-    <Compile Include="Views\TreatmentBMP\Index.cs" />
-    <Compile Include="Views\TreatmentBMP\IndexViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\FindABMPViewData.cs" />
     <Compile Include="Views\TreatmentBMP\SummaryForMap.cs" />
     <Compile Include="Views\TreatmentBMP\SummaryForMapViewData.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPGridSpec.cs" />
@@ -956,6 +958,7 @@
     <Content Include="Views\CustomAttributeType\EditCustomAttributeTypeController.js" />
     <Content Include="Views\TreatmentBMPFundingSource\EditTreatmentBMPFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
+    <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
     <Content Include="Views\User\PullUserFromKeystone.cshtml" />
@@ -976,7 +979,6 @@
     <Content Include="Views\TreatmentBMPBenchmarkAndThreshold\_ViewStart.cshtml" />
     <Content Include="Views\TreatmentBMP\Detail.cshtml" />
     <Content Include="Views\TreatmentBMP\Edit.cshtml" />
-    <Content Include="Views\TreatmentBMP\Index.cshtml" />
     <Content Include="Views\TreatmentBMP\SummaryForMap.cshtml" />
     <Content Include="Views\Shared\TreatmentBMPTypeLegend.cshtml" />
     <Content Include="Views\Jurisdiction\Detail.cshtml" />
@@ -1025,6 +1027,8 @@
     <Content Include="Views\MaintenanceRecord\Detail.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cshtml" />
+    <Content Include="Views\TreatmentBMP\Index.cshtml" />
+    <Content Include="Views\TreatmentBMP\FindABMP.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -31,17 +31,16 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
-using Index = Neptune.Web.Views.TreatmentBMP.Index;
-using IndexViewData = Neptune.Web.Views.TreatmentBMP.IndexViewData;
+using FindABMP = Neptune.Web.Views.TreatmentBMP.FindABMP;
 
 namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPController : NeptuneBaseController
     {
         [NeptuneViewFeature]
-        public ViewResult Index()
+        public ViewResult FindABMP()
         {
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson));
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false));
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJson.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
@@ -49,15 +48,21 @@ namespace Neptune.Web.Controllers
 
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var viewData = new IndexViewData(CurrentPerson, mapInitJson, neptunePage);
+            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBMPs);
+            return RazorView<FindABMP, FindABMPViewData>(viewData);
+        }
+        [NeptuneViewFeature]
+        public ViewResult Index()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
         {
-            TreatmentBMPGridSpec gridSpec;
-            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out gridSpec, CurrentPerson);
+            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -196,7 +201,7 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.DeleteFull();
-            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Index()));
+            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.FindABMP()));
         }
 
         private PartialViewResult ViewDeleteTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
