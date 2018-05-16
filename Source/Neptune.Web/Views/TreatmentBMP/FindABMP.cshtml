@@ -47,6 +47,10 @@
         // ]]>
     </script>
 
+    <style>
+        .selected-bmp { background-color: #FFFF85; }
+    </style>
+
 }
 
 @section RightOfPageTitle
@@ -60,7 +64,7 @@
 <div class="pageIntroText">
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
-
+<hr/>
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
     <div class="row">
         <div class="col-sm-4">
@@ -91,39 +95,28 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <div>
-                    <p class="systemText">Found {{visibleBMPCount()}} BMPs.</p>
-                    <div style="height: 270px; overflow-y: scroll;">
-                        <table ng-if="visibleBMPCount() <= 15" class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>BMP Name</th>
-                                <th>BMP Type</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="treatmentBMP in visibleBMPs()">
-                                <td class="text-center">
-                                    <span ng-if="!isActive(treatmentBMP)" class="btn btn-neptune" ng-click="setActive(treatmentBMP)">Select</span>
-                                    <span ng-if="isActive(treatmentBMP)" class="btn btn-neptune" disabled>Selected</span>
-                                </td>
-                                <td>
-                                    <span ng-bind="treatmentBMP.DisplayName" style="line-height: 22px; overflow: hidden; text-overflow: ellipsis; max-height: 22px; white-space: nowrap;"></span>
-                                </td>
-                                <td>
-                                    <span ng-bind="treatmentBMP.TreatmentBMPTypeName" style="line-height: 22px; overflow: hidden; text-overflow: ellipsis; max-height: 22px; white-space: nowrap;"></span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <p ng-if="visibleBMPCount() > 15" class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
-                    </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div style="height: 270px; overflow-y: auto; border-right: solid #ddd 1px; padding-right: 30px;" class="col-sm-3">
+                    <ul class="nav nav-pills nav-stacked" ng-if="visibleBMPCount() <= 15">
+
+                        <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
+                            <div style="color: #737373; cursor: pointer;">
+                                <strong>{{treatmentBMP.DisplayName}}</strong>
+                                <div class="help-block">
+                                    {{treatmentBMP.TreatmentBMPTypeName}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <p ng-if="visibleBMPCount() > 15" class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
+                </div>
+                <div class="col-sm-9" id="mapSummaryResults">
+                    <p class="systemText text-center">Select a BMP from the list to the left.</p>
                 </div>
             </div>
-            <div class="col-sm-9" id="mapSummaryResults"></div>
         </div>
     </div>
 </div>
