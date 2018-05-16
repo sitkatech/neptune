@@ -6,7 +6,7 @@ using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class AllViewData : NeptuneViewData
+    public class IndexViewData : NeptuneViewData
     {
         public TreatmentBMPGridSpec GridSpec { get; }
         public string GridName { get; }
@@ -14,7 +14,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string NewUrl { get; }
         public bool HasManagePermissions { get; }
 
-        public AllViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "All Treatment BMPs";

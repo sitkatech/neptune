@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="All.cs" company="Tahoe Regional Planning Agency">
+<copyright file="Index.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public abstract class All : LtInfo.Common.Mvc.TypedWebViewPage<AllViewData>
+    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
     {
     }
 }

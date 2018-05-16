@@ -52,11 +52,11 @@ namespace Neptune.Web.Controllers
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
         [NeptuneViewFeature]
-        public ViewResult All()
+        public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var viewData = new AllViewData(CurrentPerson, neptunePage);
-            return RazorView<All, AllViewData>(viewData);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptuneViewFeature]
