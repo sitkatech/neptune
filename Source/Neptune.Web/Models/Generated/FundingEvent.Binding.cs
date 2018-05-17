@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected FundingEvent()
         {
-
+            this.FundingEventFundingSources = new HashSet<FundingEventFundingSource>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -80,13 +80,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return FundingEventFundingSources.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingEvent).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingEvent).Name, typeof(FundingEventFundingSource).Name};
 
 
         /// <summary>
@@ -94,6 +94,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in FundingEventFundingSources.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllFundingEvents.Remove(this);                
         }
 
@@ -107,6 +112,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return FundingEventID; } set { FundingEventID = value; } }
 
+        public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public FundingEventType FundingEventType { get { return FundingEventType.AllLookupDictionary[FundingEventTypeID]; } }

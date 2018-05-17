@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TreatmentBMPFundingSourceController.js" company="Tahoe Regional Planning Agency">
+<copyright file="FundingEventFundingSourceController.js" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,7 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController", function ($scope, angularModelAndViewData)
+angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController", function ($scope, angularModelAndViewData)
 {
     $scope.$watch(function () {
         jQuery(".selectpicker").selectpicker("refresh");
@@ -29,7 +29,7 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
     $scope.resetTreatmentBMPIDToAdd = function () { $scope.TreatmentBMPIDToAdd = ($scope.FromTreatmentBMP) ? $scope.getTreatmentBMP(angularModelAndViewData.AngularViewData.TreatmentBMPID).TreatmentBMPID : null; };
 
     $scope.getAllUsedFundingSourceIds = function () {
-        return _.map($scope.AngularModel.TreatmentBMPFundingSources, function (p) { return p.FundingSourceID; });
+        return _.map($scope.AngularModel.FundingEventFundingSources, function (p) { return p.FundingSourceID; });
     };
 
     $scope.filteredFundingSources = function () {
@@ -42,7 +42,7 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
     };
 
     $scope.getAllUsedTreatmentBMPIDs = function () {
-        return _.map($scope.AngularModel.TreatmentBMPFundingSources, function (p) { return p.TreatmentBMPID; });
+        return _.map($scope.AngularModel.FundingEventFundingSources, function (p) { return p.TreatmentBMPID; });
     };
 
     $scope.filteredTreatmentBMPs = function () {
@@ -51,9 +51,9 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
             .sortBy(["DisplayName"]).value();
     };
 
-    $scope.getTreatmentBMPName = function (treatmentBMPFundingSource)
+    $scope.getTreatmentBMPName = function (fundingEventFundingSource)
     {
-        var treatmentBMPToFind = $scope.getTreatmentBMP(treatmentBMPFundingSource.TreatmentBMPID);
+        var treatmentBMPToFind = $scope.getTreatmentBMP(fundingEventFundingSource.TreatmentBMPID);
         return treatmentBMPToFind.DisplayName;
     };
 
@@ -61,8 +61,8 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
         return _.find($scope.AngularViewData.AllTreatmentBMPs, function (f) { return treatmentBMPID == f.TreatmentBMPID; });
     };
 
-    $scope.getFundingSourceName = function (treatmentBMPFundingSource) {
-        var fundingSourceToFind = $scope.getFundingSource(treatmentBMPFundingSource.FundingSourceID);
+    $scope.getFundingSourceName = function (fundingEventFundingSource) {
+        var fundingSourceToFind = $scope.getFundingSource(fundingEventFundingSource.FundingSourceID);
         return fundingSourceToFind.DisplayName;
     };
 
@@ -72,18 +72,18 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
 
     $scope.getTotal = function ()
     {
-        return _.reduce($scope.AngularModel.TreatmentBMPFundingSources, function (m, x) { return m + x.Amount; }, 0);
+        return _.reduce($scope.AngularModel.FundingEventFundingSources, function (m, x) { return m + x.Amount; }, 0);
     };
     
-    $scope.findTreatmentBMPFundingSourceRow = function(treatmentBMPID, fundingSourceID) { return _.find($scope.AngularModel.TreatmentBMPFundingSources, function(pfse) { return pfse.TreatmentBMPID == treatmentBMPID && pfse.FundingSourceID == fundingSourceID; }); }
+    $scope.findFundingEventFundingSourceRow = function(treatmentBMPID, fundingSourceID) { return _.find($scope.AngularModel.FundingEventFundingSources, function(pfse) { return pfse.TreatmentBMPID == treatmentBMPID && pfse.FundingSourceID == fundingSourceID; }); }
 
     $scope.addRow = function()
     {
         if (($scope.FundingSourceIDToAdd == null) || ($scope.TreatmentBMPIDToAdd == null)) {
             return;
         }
-        var newTreatmentBMPFundingSource = $scope.createNewRow($scope.TreatmentBMPIDToAdd, $scope.FundingSourceIDToAdd);
-        $scope.AngularModel.TreatmentBMPFundingSources.push(newTreatmentBMPFundingSource);
+        var newFundingEventFundingSource = $scope.createNewRow($scope.TreatmentBMPIDToAdd, $scope.FundingSourceIDToAdd);
+        $scope.AngularModel.FundingEventFundingSources.push(newFundingEventFundingSource);
         $scope.resetFundingSourceIDToAdd();
         $scope.resetTreatmentBMPIDToAdd();
     };
@@ -92,16 +92,16 @@ angular.module("NeptuneApp").controller("EditTreatmentBMPFundingSourceController
     {
         var treatmentBMP = $scope.getTreatmentBMP(treatmentBMPID);
         var fundingSource = $scope.getFundingSource(fundingSourceID);
-        var newTreatmentBMPFundingSource = {
+        var newFundingEventFundingSource = {
             TreatmentBMPID: treatmentBMP.TreatmentBMPID,
             FundingSourceID: fundingSource.FundingSourceID,
             Amount: null
     };
-        return newTreatmentBMPFundingSource;
+        return newFundingEventFundingSource;
     };
 
     $scope.deleteRow = function (rowToDelete) {
-        Sitka.Methods.removeFromJsonArray($scope.AngularModel.TreatmentBMPFundingSources, rowToDelete);
+        Sitka.Methods.removeFromJsonArray($scope.AngularModel.FundingEventFundingSources, rowToDelete);
     };
 
     $scope.AngularModel = angularModelAndViewData.AngularModel;

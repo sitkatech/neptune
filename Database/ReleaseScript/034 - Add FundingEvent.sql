@@ -42,4 +42,4 @@ GO
 ALTER TABLE dbo.FundingEvent CHECK CONSTRAINT FK_FundingEvent_TreatmentBMP_TreatmentBMPID_TenantID
 GO
 
-
+Alter Table dbo.FundingEvent Add Constraint AK_FundingEvent_FundingEventID_TenantID unique (FundingEventID, TenantID)

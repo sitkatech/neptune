@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected FundingSource()
         {
-            this.TreatmentBMPFundingSources = new HashSet<TreatmentBMPFundingSource>();
+            this.FundingEventFundingSources = new HashSet<FundingEventFundingSource>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -80,13 +80,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPFundingSources.Any();
+            return FundingEventFundingSources.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingSource).Name, typeof(TreatmentBMPFundingSource).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingSource).Name, typeof(FundingEventFundingSource).Name};
 
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Neptune.Web.Models
         public void DeleteFull()
         {
 
-            foreach(var x in TreatmentBMPFundingSources.ToList())
+            foreach(var x in FundingEventFundingSources.ToList())
             {
                 x.DeleteFull();
             }
@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return FundingSourceID; } set { FundingSourceID = value; } }
 
-        public virtual ICollection<TreatmentBMPFundingSource> TreatmentBMPFundingSources { get; set; }
+        public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Organization Organization { get; set; }
 

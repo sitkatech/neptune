@@ -83,6 +83,9 @@
     <Compile Include="Models\Generated\FileResourcePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FundingEvent.Binding.cs" />
     <Compile Include="Models\Generated\FundingEvent.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FundingEventFundingSource.Binding.cs" />
+    <Compile Include="Models\Generated\FundingEventFundingSource.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FundingEventFundingSourcePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FundingEventPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FundingEventType.Binding.cs" />
     <Compile Include="Models\Generated\FundingEventTypePrimaryKey.Binding.cs" />
@@ -184,9 +187,6 @@
     <Compile Include="Models\Generated\TreatmentBMPDocument.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPDocument.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPDocumentPrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPFundingSource.Binding.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPFundingSource.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\TreatmentBMPFundingSourcePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPImage.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPImage.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPImagePrimaryKey.Binding.cs" />

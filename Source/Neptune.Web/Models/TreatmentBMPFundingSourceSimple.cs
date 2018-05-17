@@ -1,28 +1,28 @@
 ﻿namespace Neptune.Web.Models
 {
-    public class TreatmentBMPFundingSourceSimple
+    public class FundingEventFundingSourceSimple
     {
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
-        public TreatmentBMPFundingSourceSimple()
+        public FundingEventFundingSourceSimple()
         {
         }
 
-        public TreatmentBMPFundingSourceSimple(TreatmentBMPFundingSource treatmentBMPFundingSource)
+        public FundingEventFundingSourceSimple(FundingEventFundingSource fundingEventFundingSource)
             : this()
         {
-            TreatmentBMPID = treatmentBMPFundingSource.TreatmentBMPID;
-            FundingSourceID = treatmentBMPFundingSource.FundingSourceID;
-            Amount = treatmentBMPFundingSource.Amount;
+            FundingEventID = fundingEventFundingSource.FundingEventID;
+            FundingSourceID = fundingEventFundingSource.FundingSourceID;
+            Amount = fundingEventFundingSource.Amount;
         }
 
-        public TreatmentBMPFundingSource ToTreatmentBMPFundingSource()
+        public FundingEventFundingSource ToFundingEventFundingSource()
         {
-            return new TreatmentBMPFundingSource(FundingSourceID, TreatmentBMPID){Amount = Amount};
+            return new FundingEventFundingSource(FundingSourceID, FundingEventID){Amount = Amount};
         }
 
-        public int TreatmentBMPID { get; set; }
+        public int FundingEventID { get; set; }
         public int FundingSourceID { get; set; }
         public decimal? Amount { get; set; }
 

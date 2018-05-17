@@ -6,79 +6,79 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.TreatmentBMPFundingSource;
+using Neptune.Web.Views.FundingEventFundingSource;
 
 namespace Neptune.Web.Controllers
 {
-    public class TreatmentBMPFundingSourceController : NeptuneBaseController
+    public class FundingEventFundingSourceController : NeptuneBaseController
     {
         [HttpGet]
         [TreatmentBMPManageFeature]
-        public PartialViewResult EditTreatmentBMPFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public PartialViewResult EditFundingEventFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var currentTreatmentBMPFundingSources = treatmentBMP.TreatmentBMPFundingSources.ToList();
-            var viewModel = new EditViewModel(currentTreatmentBMPFundingSources);
-            return ViewEditTreatmentBMPFundingSources(treatmentBMP, viewModel);
+            var currentFundingEventFundingSources = treatmentBMP.FundingEvents.SelectMany(x=>x.FundingEventFundingSources).ToList();
+            var viewModel = new EditViewModel(currentFundingEventFundingSources);
+            return ViewEditFundingEventFundingSources(treatmentBMP, viewModel);
         }
 
         [HttpPost]
         [TreatmentBMPManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditTreatmentBMPFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
+        public ActionResult EditFundingEventFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var currentTreatmentBMPFundingSources = treatmentBMP.TreatmentBMPFundingSources.ToList();
+            var currentFundingEventFundingSources = treatmentBMP.FundingEvents.SelectMany(x => x.FundingEventFundingSources).ToList();
             if (!ModelState.IsValid)
             {
-                return ViewEditTreatmentBMPFundingSources(treatmentBMP, viewModel);
+                return ViewEditFundingEventFundingSources(treatmentBMP, viewModel);
             }
-            return UpdateTreatmentBMPFundingSources(viewModel, currentTreatmentBMPFundingSources);
+            return UpdateFundingEventFundingSources(viewModel, currentFundingEventFundingSources);
         }
 
         [HttpGet]
         [FundingSourceEditFeature]
-        public PartialViewResult EditTreatmentBMPFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey)
+        public PartialViewResult EditFundingEventFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey)
         {
             var fundingSource = fundingSourcePrimaryKey.EntityObject;
-            var currentTreatmentBMPFundingSources = fundingSource.TreatmentBMPFundingSources.ToList();
-            var viewModel = new EditViewModel(currentTreatmentBMPFundingSources);
-            return ViewEditTreatmentBMPFundingSources(fundingSource, viewModel);
+            var currentFundingEventFundingSources = fundingSource.FundingEventFundingSources.ToList();
+            var viewModel = new EditViewModel(currentFundingEventFundingSources);
+            return ViewEditFundingEventFundingSources(fundingSource, viewModel);
         }
 
         [HttpPost]
         [FundingSourceEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditTreatmentBMPFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey, EditViewModel viewModel)
+        public ActionResult EditFundingEventFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey, EditViewModel viewModel)
         {
             var fundingSource = fundingSourcePrimaryKey.EntityObject;
-            var currentTreatmentBMPFundingSources = fundingSource.TreatmentBMPFundingSources.ToList();
+            var currentFundingEventFundingSources = fundingSource.FundingEventFundingSources.ToList();
             if (!ModelState.IsValid)
             {
-                return ViewEditTreatmentBMPFundingSources(fundingSource, viewModel);
+                return ViewEditFundingEventFundingSources(fundingSource, viewModel);
             }
-            return UpdateTreatmentBMPFundingSources(viewModel, currentTreatmentBMPFundingSources);
+            return UpdateFundingEventFundingSources(viewModel, currentFundingEventFundingSources);
         }
 
-        private static ActionResult UpdateTreatmentBMPFundingSources(EditViewModel viewModel,
-            List<TreatmentBMPFundingSource> currentTreatmentBMPFundingSources)
+        private static ActionResult UpdateFundingEventFundingSources(EditViewModel viewModel,
+            List<FundingEventFundingSource> currentFundingEventFundingSources)
         {
-            HttpRequestStorage.DatabaseEntities.TreatmentBMPFundingSources.Load();
-            var allTreatmentBMPFundingSources = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPFundingSources.Local;
-            viewModel.UpdateModel(currentTreatmentBMPFundingSources, allTreatmentBMPFundingSources);
+            HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Load();
+            var allFundingEventFundingSources = HttpRequestStorage.DatabaseEntities.AllFundingEventFundingSources.Local;
+            viewModel.UpdateModel(currentFundingEventFundingSources, allFundingEventFundingSources);
 
 
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditTreatmentBMPFundingSources(FundingSource fundingSource, EditViewModel viewModel)
+        private PartialViewResult ViewEditFundingEventFundingSources(FundingSource fundingSource, EditViewModel viewModel)
         {
             var allTreatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Select(x => new TreatmentBMPSimple(x)).OrderBy(p => p.DisplayName).ToList();
             var viewData = new EditViewData(new FundingSourceSimple(fundingSource), allTreatmentBMPs);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
-        private PartialViewResult ViewEditTreatmentBMPFundingSources(TreatmentBMP treatmentBMP, EditViewModel viewModel)
+        private PartialViewResult ViewEditFundingEventFundingSources(TreatmentBMP treatmentBMP, EditViewModel viewModel)
         {
             var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
             var viewData = new EditViewData(new TreatmentBMPSimple(treatmentBMP), allFundingSources);
