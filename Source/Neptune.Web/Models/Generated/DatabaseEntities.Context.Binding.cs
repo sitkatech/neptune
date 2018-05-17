@@ -156,6 +156,11 @@ namespace Neptune.Web.Models
                 case "FileResource":
                     return FileResources.GetFileResource(primaryKey);
 
+                case "FundingEventType":
+                    var fundingEventType = FundingEventType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(fundingEventType, "FundingEventType", primaryKey);
+                    return fundingEventType;
+
                 case "FundingSource":
                     return FundingSources.GetFundingSource(primaryKey);
 
