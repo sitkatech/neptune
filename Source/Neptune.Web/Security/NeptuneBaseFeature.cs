@@ -28,7 +28,6 @@ using Neptune.Web.Controllers;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Models;
-using Keystone.Common;
 using Keystone.Common.OpenID;
 
 namespace Neptune.Web.Security
@@ -36,9 +35,7 @@ namespace Neptune.Web.Security
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public abstract class NeptuneBaseFeature : RelyingPartyAuthorizeAttribute
     {
-        private readonly IList<IRole> _grantedRoles;
-
-        public IList<IRole> GrantedRoles => _grantedRoles;
+        public IList<IRole> GrantedRoles { get; }
 
         protected NeptuneBaseFeature(IList<IRole> grantedRoles) // params
         {
@@ -48,7 +45,7 @@ namespace Neptune.Web.Security
             // At least one of these must be set
             //Check.Ensure(grantedRoles.Any(), "Must set at least one Role");
 
-            _grantedRoles = grantedRoles;
+            GrantedRoles = grantedRoles;
         }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -56,7 +53,7 @@ namespace Neptune.Web.Security
             Roles = CalculateRoleNameStringFromFeature();
 
             // MR #321 - force reload of user roles onto IClaimsIdentity
-            KeystoneOpenIDUtilities.AddLocalUserAccountRolesToClaims(HttpRequestStorage.Person);
+            KeystoneOpenIDUtilities.AddLocalUserAccountRolesToClaims(HttpRequestStorage.Person, HttpRequestStorage.GetHttpContextUserThroughOwin().Identity);
 
             // This ends up making the calls into the RoleProvider
             base.OnAuthorization(filterContext);
@@ -71,11 +68,11 @@ namespace Neptune.Web.Security
 
         public virtual bool HasPermissionByPerson(Person person)
         {
-            if (!_grantedRoles.Any()) // AnonymousUnclassifiedFeature case
+            if (!GrantedRoles.Any()) // AnonymousUnclassifiedFeature case
             {
                 return true; 
             }
-            return person != null && _grantedRoles.Any(x => x.RoleID == person.Role.RoleID);
+            return person != null && GrantedRoles.Any(x => x.RoleID == person.Role.RoleID);
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)

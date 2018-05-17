@@ -20,8 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Mvc;
 using Neptune.Web.Security;
 using Neptune.Web.Security.Shared;
@@ -40,23 +38,11 @@ namespace Neptune.Web.Controllers
                                     || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(attributeType,
                                         true);
 
-            var principal = filterContext.HttpContext.User;
-            if (principal.Identity.IsAuthenticated) // we have a token and we can determine the user.
-            {
-                Thread.CurrentPrincipal = principal;
-                if (HttpContext.Current != null)
-                {
-                    HttpContext.Current.User = principal;
-                }
-            }
-
             if (!skipAuthorization)
             {
                 var neptuneBaseFeatureType = typeof(NeptuneBaseFeature);
-                var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor
-                    .GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
-                if (neptuneBaseFeatureAttribute != null &&
-                    ((NeptuneBaseFeature) neptuneBaseFeatureAttribute).GrantedRoles.Any())
+                var neptuneBaseFeatureAttribute = filterContext.ActionDescriptor.GetCustomAttributes(neptuneBaseFeatureType, true).SingleOrDefault();
+                if (neptuneBaseFeatureAttribute != null && ((NeptuneBaseFeature) neptuneBaseFeatureAttribute).GrantedRoles.Any())
                 {
                     base.OnAuthorization(filterContext);
                 }

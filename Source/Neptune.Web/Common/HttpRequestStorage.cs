@@ -20,13 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.Linq;
-using System.Threading;
+using System.Security.Principal;
 using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Models;
-using Keystone.Common;
 using Keystone.Common.OpenID;
 using LtInfo.Common.DesignByContract;
 using Person = Neptune.Web.Models.Person;
@@ -40,15 +38,17 @@ namespace Neptune.Web.Common
             LtInfoEntityTypeLoaderFactoryFunction = () => MakeNewContext(false);
         }
 
-        protected override List<string> BackingStoreKeys
+        protected override List<string> BackingStoreKeys => new List<string>();
+
+        public static IPrincipal GetHttpContextUserThroughOwin()
         {
-            get { return new List<string>(); }
+            return HttpContext.Current.GetOwinContext().Authentication.User;
         }
 
         public static Person Person
         {
-            get { return GetValueOrDefault(PersonKey, () => KeystoneClaimsHelpers.GetOpenIDUserFromPrincipal(Thread.CurrentPrincipal, Person.GetAnonymousSitkaUser(), DatabaseEntities.People.GetPersonByPersonGuid)); }
-            set { SetValue(PersonKey, value); }
+            get { return GetValueOrDefault(PersonKey, () => KeystoneClaimsHelpers.GetOpenIDUserFromPrincipal(GetHttpContextUserThroughOwin(), Person.GetAnonymousSitkaUser(), DatabaseEntities.People.GetPersonByPersonGuid)); }
+            set => SetValue(PersonKey, value);
         }
 
         public static Tenant Tenant
@@ -63,7 +63,7 @@ namespace Neptune.Web.Common
                         {
                             var urlHost = httpContext.Request.Url.Host;
                             var tenant = Tenant.All.SingleOrDefault(x => urlHost.Equals(NeptuneWebConfiguration.NeptuneEnvironment.GetCanonicalHostNameForEnvironment(x), StringComparison.InvariantCultureIgnoreCase));
-                            Check.RequireNotNull(tenant, string.Format("Could not determine tenant from host {0}", urlHost));
+                            Check.RequireNotNull(tenant, $"Could not determine tenant from host {urlHost}");
                             return tenant;
                         }
                         else
@@ -75,10 +75,7 @@ namespace Neptune.Web.Common
         }
 
 
-        public static DatabaseEntities DatabaseEntities
-        {
-            get { return (DatabaseEntities) LtInfoEntityTypeLoader; }
-        }
+        public static DatabaseEntities DatabaseEntities => (DatabaseEntities) LtInfoEntityTypeLoader;
 
         private static DatabaseEntities MakeNewContext(bool autoDetectChangesEnabled)
         {
@@ -100,8 +97,8 @@ namespace Neptune.Web.Common
             {
                 return;
             }
-            var databaseEntities = BackingStore[DatabaseContextKey] as DatabaseEntities;
-            if (databaseEntities != null)
+
+            if (BackingStore[DatabaseContextKey] is DatabaseEntities databaseEntities)
             {
                 databaseEntities.Dispose();
                 BackingStore[DatabaseContextKey] = null;
@@ -123,8 +120,8 @@ namespace Neptune.Web.Common
             {
                 return;
             }
-            var person = BackingStore[PersonKey] as Person;
-            if (person != null)
+
+            if (BackingStore[PersonKey] is Person person)
             {
                 BackingStore[PersonKey] = null;
             }

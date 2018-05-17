@@ -3,7 +3,6 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using LtInfo.Common;
 using System.Security.Claims;
-using System.Threading;
 using System.Web;
 using Keystone.Common.OpenID;
 using Microsoft.Owin;
@@ -17,6 +16,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.Security.Principal;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
@@ -55,29 +55,22 @@ namespace Neptune.Web
                 {
                     SecurityTokenValidated = n =>
                     {
-                        var person = n.AuthenticationTicket.Identity;
-                        person.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
+                        var claimsIdentity = n.AuthenticationTicket.Identity;
+                        claimsIdentity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
                         if (n.ProtocolMessage.Code != null)
-                            person.AddClaim(new Claim("code", n.ProtocolMessage.Code));
+                            claimsIdentity.AddClaim(new Claim("code", n.ProtocolMessage.Code));
 
                         if (n.ProtocolMessage.AccessToken != null)
-                            person.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
+                            claimsIdentity.AddClaim(new Claim("access_token", n.ProtocolMessage.AccessToken));
 
                         //map name claim to default name type
-                        person.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", person.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
+                        claimsIdentity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", claimsIdentity.FindFirst(KeystoneOpenIDClaimTypes.Name).Value.ToString()));
 
-                        if (person.IsAuthenticated) // we have a token and we can determine the person.
+                        if (claimsIdentity.IsAuthenticated) // we have a token and we can determine the person.
                         {
-                            var currentPrincipal = new ClaimsPrincipal(person);
-
-                            Thread.CurrentPrincipal = currentPrincipal;
-                            if (HttpContext.Current != null)
-                            {
-                                HttpContext.Current.User = currentPrincipal;
-                            }
+                            KeystoneOpenIDUtilities.OpenIDClaimHandler(SyncLocalAccountStore, claimsIdentity);
                         }
-                        KeystoneOpenIDUtilities.OpenIDClaimHandler(SyncLocalAccountStore);
 
                         return Task.FromResult(0);
                     },
@@ -113,12 +106,9 @@ namespace Neptune.Web
 
         }
 
-        public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims)
+        public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)
         {
-
-            SitkaHttpApplication.Logger.DebugFormat("In SyncLocalAccountStore - User '{0}', Authenticated = '{1}'",
-                Thread.CurrentPrincipal.Identity.Name,
-                Thread.CurrentPrincipal.Identity.IsAuthenticated);
+            SitkaHttpApplication.Logger.DebugFormat("In SyncLocalAccountStore - User '{0}', Authenticated = '{1}'", userIdentity.Name, userIdentity.IsAuthenticated);
 
             var sendNewUserNotification = false;
             var sendNewOrganizationNotification = false;
