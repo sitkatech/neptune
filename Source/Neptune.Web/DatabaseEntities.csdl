@@ -9,6 +9,7 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.FieldDefinitionData" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.FieldDefinitionDataImage" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.FileResource" />
+    <EntitySet Name="FundingEvent" EntityType="Neptune.Web.Models.FundingEvent" />
     <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.FundingSource" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.MaintenanceRecord" />
     <EntitySet Name="MaintenanceRecordObservation" EntityType="Neptune.Web.Models.MaintenanceRecordObservation" />
@@ -117,6 +118,10 @@
     <AssociationSet Name="FK_TreatmentBMPImage_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_TreatmentBMPImage_FileResource_FileResourceID">
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="TreatmentBMPImages" EntitySet="TreatmentBMPImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="FundingEvents" EntitySet="FundingEvent" />
     </AssociationSet>
     <AssociationSet Name="FK_FundingSource_Organization_OrganizationID" Association="Neptune.Web.Models.FK_FundingSource_Organization_OrganizationID">
       <End Role="Organization" EntitySet="Organization" />
@@ -408,6 +413,18 @@
     <NavigationProperty Name="TreatmentBMPDocuments" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPDocuments" />
     <NavigationProperty Name="TreatmentBMPImages" Relationship="Neptune.Web.Models.FK_TreatmentBMPImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPImages" />
   </EntityType>
+  <EntityType Name="FundingEvent">
+    <Key>
+      <PropertyRef Name="FundingEventID" />
+    </Key>
+    <Property Name="FundingEventID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
+    <Property Name="FundingEventTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Year" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="FundingEvents" ToRole="TreatmentBMP" />
+  </EntityType>
   <EntityType Name="FundingSource">
     <Key>
       <PropertyRef Name="FundingSourceID" />
@@ -692,6 +709,7 @@
     <Property Name="YearBuilt" Type="Int32" />
     <Property Name="OwnerOrganizationID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="CustomAttributes" />
+    <NavigationProperty Name="FundingEvents" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FundingEvents" />
     <NavigationProperty Name="MaintenanceRecords" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="MaintenanceRecords" />
     <NavigationProperty Name="ModeledCatchment" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="TreatmentBMPs" ToRole="ModeledCatchment" />
     <NavigationProperty Name="OwnerOrganization" Relationship="Neptune.Web.Models.FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID" FromRole="TreatmentBMPsWhereYouAreTheOwnerOrganization" ToRole="OwnerOrganization" />
@@ -1093,6 +1111,18 @@
       </Principal>
       <Dependent Role="TreatmentBMPImages">
         <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
+    <End Role="FundingEvents" Type="Neptune.Web.Models.FundingEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="FundingEvents">
+        <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

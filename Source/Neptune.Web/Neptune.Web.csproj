@@ -81,6 +81,9 @@
     <Compile Include="Models\Generated\FileResourceMimeType.Binding.cs" />
     <Compile Include="Models\Generated\FileResourceMimeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FileResourcePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\FundingEvent.Binding.cs" />
+    <Compile Include="Models\Generated\FundingEvent.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\FundingEventPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FundingEventType.Binding.cs" />
     <Compile Include="Models\Generated\FundingEventTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FundingSource.Binding.cs" />

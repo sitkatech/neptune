@@ -9,6 +9,7 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.Store.FieldDefinitionData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.Store.FieldDefinitionDataImage" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FundingEvent" EntityType="Neptune.Web.Models.Store.FundingEvent" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FundingSource" EntityType="Neptune.Web.Models.Store.FundingSource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecord" EntityType="Neptune.Web.Models.Store.MaintenanceRecord" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="MaintenanceRecordObservation" EntityType="Neptune.Web.Models.Store.MaintenanceRecordObservation" store:Type="Tables" Schema="dbo" />
@@ -77,6 +78,10 @@
     <AssociationSet Name="FK_FileResource_Person_CreatePersonID_PersonID" Association="Neptune.Web.Models.Store.FK_FileResource_Person_CreatePersonID_PersonID">
       <End Role="CreatePerson" EntitySet="Person" />
       <End Role="FileResourcesWhereYouAreTheCreatePerson" EntitySet="FileResource" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="FundingEvents" EntitySet="FundingEvent" />
     </AssociationSet>
     <AssociationSet Name="FK_FundingSource_Organization_OrganizationID" Association="Neptune.Web.Models.Store.FK_FundingSource_Organization_OrganizationID">
       <End Role="Organization" EntitySet="Organization" />
@@ -406,6 +411,17 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_FileResource_FileResourceID
     <Property Name="CreatePersonID" Type="int" Nullable="false" />
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="FundingEvent">
+    <Key>
+      <PropertyRef Name="FundingEventID" />
+    </Key>
+    <Property Name="FundingEventID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
+    <Property Name="FundingEventTypeID" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" Nullable="false" />
+    <Property Name="Description" Type="varchar(max)" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMPFundingSource_FundingSource_FundingSourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
@@ -664,6 +680,7 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FundingEvent_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -944,6 +961,18 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Principal>
       <Dependent Role="FileResourcesWhereYouAreTheCreatePerson">
         <PropertyRef Name="CreatePersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="1" />
+    <End Role="FundingEvents" Type="Neptune.Web.Models.Store.FundingEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="FundingEvents">
+        <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

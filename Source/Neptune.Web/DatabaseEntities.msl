@@ -102,6 +102,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FundingEvent">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.FundingEvent">
+        <MappingFragment StoreEntitySet="FundingEvent">
+          <ScalarProperty Name="FundingEventID" ColumnName="FundingEventID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="FundingEventTypeID" ColumnName="FundingEventTypeID" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="FundingSource">
       <EntityTypeMapping TypeName="Neptune.Web.Models.FundingSource">
         <MappingFragment StoreEntitySet="FundingSource">

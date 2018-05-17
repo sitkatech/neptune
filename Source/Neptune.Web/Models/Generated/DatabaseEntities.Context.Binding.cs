@@ -44,6 +44,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FieldDefinitionData> FieldDefinitionDatas { get { return AllFieldDefinitionDatas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FileResource> AllFileResources { get; set; }
         public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<FundingEvent> AllFundingEvents { get; set; }
+        public virtual IQueryable<FundingEvent> FundingEvents { get { return AllFundingEvents.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FundingSource> AllFundingSources { get; set; }
         public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
@@ -155,6 +157,9 @@ namespace Neptune.Web.Models
 
                 case "FileResource":
                     return FileResources.GetFileResource(primaryKey);
+
+                case "FundingEvent":
+                    return FundingEvents.GetFundingEvent(primaryKey);
 
                 case "FundingEventType":
                     var fundingEventType = FundingEventType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
