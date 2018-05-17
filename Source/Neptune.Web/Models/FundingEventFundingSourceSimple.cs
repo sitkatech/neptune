@@ -1,8 +1,10 @@
-﻿namespace Neptune.Web.Models
+﻿using LtInfo.Common.Models;
+
+namespace Neptune.Web.Models
 {
     public class FundingEventFundingSourceSimple
     {
-        public int FundingEventID { get; set; }
+        public int? FundingEventID { get; set; }
         public int FundingSourceID { get; set; }
         public decimal? Amount { get; set; }
 
@@ -23,7 +25,7 @@
 
         public FundingEventFundingSource ToFundingEventFundingSource()
         {
-            return new FundingEventFundingSource(FundingSourceID, FundingEventID) {Amount = Amount};
+            return new FundingEventFundingSource(FundingSourceID, FundingEventID ?? ModelObjectHelpers.NotYetAssignedID) {Amount = Amount};
         }
     }
 }

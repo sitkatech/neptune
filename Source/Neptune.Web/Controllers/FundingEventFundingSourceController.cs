@@ -76,14 +76,14 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewEditFundingEventFundingSources(FundingSource fundingSource, EditViewModel viewModel)
         {
             var allTreatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Select(x => new TreatmentBMPSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(new FundingSourceSimple(fundingSource), allTreatmentBMPs);
+            var viewData = new EditViewData(new FundingSourceSimple(fundingSource), allTreatmentBMPs, FundingEventType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
         private PartialViewResult ViewEditFundingEventFundingSources(TreatmentBMP treatmentBMP, EditViewModel viewModel)
         {
             var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(new TreatmentBMPSimple(treatmentBMP), allFundingSources);
+            var viewData = new EditViewData(new TreatmentBMPSimple(treatmentBMP), allFundingSources, FundingEventType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
     }

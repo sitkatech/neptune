@@ -962,7 +962,7 @@
     <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\CustomAttributeType\EditCustomAttributeTypeController.js" />
-    <Content Include="Views\FundingEventFundingSource\EditTreatmentBMPFundingSourceController.js" />
+    <Content Include="Views\FundingEventFundingSource\EditFundingEventFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />

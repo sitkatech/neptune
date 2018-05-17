@@ -28,6 +28,7 @@ namespace Neptune.Web.Views.FundingEventFundingSource
     {
         public readonly List<FundingSourceSimple> AllFundingSources;
         public readonly List<TreatmentBMPSimple> AllTreatmentBMPs;
+        public readonly List<FundingEventType> AllFundingEventTypes;
         public readonly int? TreatmentBMPID;
         public readonly int? FundingSourceID;
         public readonly bool FromFundingSource;
@@ -35,25 +36,27 @@ namespace Neptune.Web.Views.FundingEventFundingSource
         private EditViewData(List<TreatmentBMPSimple> allTreatmentBMPs,
             List<FundingSourceSimple> allFundingSources,
             int? projectID,
-            int? fundingSourceID)
+            int? fundingSourceID, List<FundingEventType> allFundingEventTypes)
         {
             AllFundingSources = allFundingSources;
             TreatmentBMPID = projectID;
             FundingSourceID = fundingSourceID;
             AllTreatmentBMPs = allTreatmentBMPs;
+            AllFundingEventTypes = allFundingEventTypes;
             
             var displayMode = FundingSourceID.HasValue ? EditorDisplayMode.FromFundingSource : EditorDisplayMode.FromTreatmentBMP;
             FromFundingSource = displayMode == EditorDisplayMode.FromFundingSource;
         }
 
         public EditViewData(TreatmentBMPSimple treatmentBMP,
-            List<FundingSourceSimple> allFundingSources)
-            : this(new List<TreatmentBMPSimple> { treatmentBMP }, allFundingSources, treatmentBMP.TreatmentBMPID, null)
+            List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes)
+            : this(new List<TreatmentBMPSimple> { treatmentBMP }, allFundingSources, treatmentBMP.TreatmentBMPID, null, allFundingEventTypes)
         {
         }
 
-        public EditViewData(FundingSourceSimple fundingSource, List<TreatmentBMPSimple> allTreatmentBMPs)
-            : this(allTreatmentBMPs, new List<FundingSourceSimple> {fundingSource}, null, fundingSource.FundingSourceID)
+        public EditViewData(FundingSourceSimple fundingSource, List<TreatmentBMPSimple> allTreatmentBMPs,
+            List<FundingEventType> allFundingEventTypes)
+            : this(allTreatmentBMPs, new List<FundingSourceSimple> {fundingSource}, null, fundingSource.FundingSourceID, allFundingEventTypes)
         {
         }
 
