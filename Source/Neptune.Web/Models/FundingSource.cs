@@ -41,7 +41,7 @@ namespace Neptune.Web.Models
 
         public List<TreatmentBMP> GetAssociatedTreatmentBMPs(Person person)
         {
-            return TreatmentBMPFundingSources.Select(x => x.TreatmentBMP).ToList();
+            return FundingEvents.Select(x => x.TreatmentBMP).ToList();
         }
     }
 }

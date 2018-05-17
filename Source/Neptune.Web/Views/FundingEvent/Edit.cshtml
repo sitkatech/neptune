@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="EditTreatmentBMPFundingSources.cshtml" company="Tahoe Regional Planning Agency">
+<copyright file="EditFundingEvents.cshtml" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
 @using Newtonsoft.Json.Linq
-@inherits Neptune.Web.Views.TreatmentBMPFundingSource.Edit
+@inherits Neptune.Web.Views.FundingEvent.Edit
 <script type="text/javascript">
     // <![CDATA[
     jQuery(document).ready(function() {
@@ -33,7 +33,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped))
                 };
             });
-        angular.bootstrap(jQuery("#EditTreatmentBMPFundingSourceApp"), ["NeptuneApp"]);
+        angular.bootstrap(jQuery("#EditFundingEventApp"), ["NeptuneApp"]);
 
         jQuery(".selectpicker").selectpicker("refresh");
         jQuery(".modal").on("hidden.bs.modal",
@@ -53,7 +53,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <div ng-app="EditTreatmentBMPFundingSourceApp" id="EditTreatmentBMPFundingSourceApp" ng-controller="EditTreatmentBMPFundingSourceController" style="max-height: 600px;">
+        <div ng-app="EditFundingEventApp" id="EditFundingEventApp" ng-controller="EditFundingEventController" style="max-height: 600px;">
             @if (ViewDataTyped.FromFundingSource)
             {
                 <div class="form-group">
@@ -107,18 +107,18 @@ Source code is available upon request via <support@sitkatech.com>.
                     <br />
                 </div>
             }
-            <table class="dialogFormLayout" style="margin-top: 20px; table-layout: fixed" ng-show="AngularModel.TreatmentBMPFundingSources.length > 0">               
+            <table class="dialogFormLayout" style="margin-top: 20px; table-layout: fixed" ng-show="AngularModel.FundingEvents.length > 0">               
                 <tbody>
                 <tr>
                     <th style="width: 30px;"></th>
                     <th style="white-space: nowrap">@Html.Raw(ViewDataTyped.FromFundingSource ? Html.LabelWithSugarFor(FieldDefinition.TreatmentBMP) : Html.LabelWithSugarFor(FieldDefinition.FundingSource))</th>
                     <th style="text-align: right; padding-right: 17px;">Amount</th>
                 </tr>
-                <tr ng-repeat="treatmentBMPFundingSource in AngularModel.TreatmentBMPFundingSources | orderBy:[getFundingSourceName, getTreatmentBMPName]">
-                    <td><span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(treatmentBMPFundingSource)" style="cursor: pointer"></span></td>
-                    <td ng-bind="@(ViewDataTyped.FromFundingSource ? "getTreatmentBMPName(treatmentBMPFundingSource)" : "getFundingSourceName(treatmentBMPFundingSource)")">
+                <tr ng-repeat="fundingEvent in AngularModel.FundingEvents | orderBy:[getFundingSourceName, getTreatmentBMPName]">
+                    <td><span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteRow(fundingEvent)" style="cursor: pointer"></span></td>
+                    <td ng-bind="@(ViewDataTyped.FromFundingSource ? "getTreatmentBMPName(fundingEvent)" : "getFundingSourceName(fundingEvent)")">
                     <td style="text-align: right; padding-right: 17px;">
-                        <input style="float: right; text-align: right; padding: 2px 0; width: 150px;" type="text" ng-model="treatmentBMPFundingSource.Amount" class="sitkaCurrency form-control" ng-currency/>
+                        <input style="float: right; text-align: right; padding: 2px 0; width: 150px;" type="text" ng-model="fundingEvent.Amount" class="sitkaCurrency form-control" ng-currency/>
                     </td>                                       
                 </tr>
                 <tr style="border-top: 1px solid #eeeeee;">
@@ -130,10 +130,10 @@ Source code is available upon request via <support@sitkatech.com>.
 
             @using (Html.BeginForm())
             {
-                <div ng-repeat="treatmentBMPFundingSource in AngularModel.TreatmentBMPFundingSources | orderBy:[getFundingSourceName, getTreatmentBMPName]">
-                    <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPFundingSources[0].TreatmentBMPID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPFundingSource.TreatmentBMPID}}"/>
-                    <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPFundingSources[0].FundingSourceID).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPFundingSource.FundingSourceID}}"/>
-                    <input type="hidden" name="@Html.NameFor(x => x.TreatmentBMPFundingSources[0].Amount).ToString().Replace("0", "{{$index}}")" value="{{treatmentBMPFundingSource.Amount}}"/>                    
+                <div ng-repeat="fundingEvent in AngularModel.FundingEvents | orderBy:[getFundingSourceName, getTreatmentBMPName]">
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].TreatmentBMPID).ToString().Replace("0", "{{$index}}")" value="{{fundingEvent.TreatmentBMPID}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].FundingSourceID).ToString().Replace("0", "{{$index}}")" value="{{fundingEvent.FundingSourceID}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].Amount).ToString().Replace("0", "{{$index}}")" value="{{fundingEvent.Amount}}"/>                    
                 </div>
             }
         </div>

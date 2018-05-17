@@ -67,7 +67,7 @@
             <div class="panel-body">
                 <div class="table-responsive">
 
-                    @if (ViewDataTyped.FundingSource.TreatmentBMPFundingSources.Any())
+                    @if (ViewDataTyped.FundingSource.FundingEvents.Any())
                     {
                         <div style="overflow-x: auto">
                             <table class="table table-striped table-condensed table-hover table-bordered">
@@ -75,18 +75,18 @@
                                     <th>@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMP)</th>
                                     <th style="text-align: right">Amount</th>
                                 </tr>
-                                @foreach (var treatmentBMPFundingSource in ViewDataTyped.FundingSource.TreatmentBMPFundingSources.OrderBy(x => x.TreatmentBMP.TreatmentBMPName))
+                                @foreach (var treatmentBMPFundingSource in ViewDataTyped.FundingSource.FundingEvents.OrderBy(x => x.TreatmentBMP.TreatmentBMPName))
                                 {
                                     <tr>
                                         <td>@Html.Raw(treatmentBMPFundingSource.TreatmentBMP.GetDisplayNameAsUrl())</td>
                                         <th class="text-right">@treatmentBMPFundingSource.Amount.ToStringCurrency()</th>
                                     </tr>
                                 }
-                                @if (ViewDataTyped.FundingSource.TreatmentBMPFundingSources.Any())
+                                @if (ViewDataTyped.FundingSource.FundingEvents.Any())
                                 {
                                     <tr>
                                         <th>Total</th>
-                                        <th class="text-right">@ViewDataTyped.FundingSource.TreatmentBMPFundingSources.Sum(x => x.Amount).ToStringCurrency()</th>
+                                        <th class="text-right">@ViewDataTyped.FundingSource.FundingEvents.Sum(x => x.Amount).ToStringCurrency()</th>
                                     </tr>
                                 }
                             </table>

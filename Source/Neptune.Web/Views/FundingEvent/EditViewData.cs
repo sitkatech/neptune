@@ -22,7 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPFundingSource
+namespace Neptune.Web.Views.FundingEvent
 {
     public class EditViewData : NeptuneUserControlViewData
     {

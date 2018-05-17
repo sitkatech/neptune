@@ -102,6 +102,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="FundingEvent">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.FundingEvent">
+        <MappingFragment StoreEntitySet="FundingEvent">
+          <ScalarProperty Name="FundingEventID" ColumnName="FundingEventID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FundingSourceID" ColumnName="FundingSourceID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="FundingSource">
       <EntityTypeMapping TypeName="Neptune.Web.Models.FundingSource">
         <MappingFragment StoreEntitySet="FundingSource">
@@ -404,17 +415,6 @@
           <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
           <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
           <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TreatmentBMPFundingSource">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPFundingSource">
-        <MappingFragment StoreEntitySet="TreatmentBMPFundingSource">
-          <ScalarProperty Name="TreatmentBMPFundingSourceID" ColumnName="TreatmentBMPFundingSourceID" />
-          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
-          <ScalarProperty Name="FundingSourceID" ColumnName="FundingSourceID" />
-          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
-          <ScalarProperty Name="Amount" ColumnName="Amount" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
