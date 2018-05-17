@@ -26,11 +26,11 @@ using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.FundingEvent
+namespace Neptune.Web.Views.TreatmentBMPFundingSource
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
-        public List<FundingEventSimple> FundingEvents { get; set; }
+        public List<TreatmentBMPFundingSourceSimple> TreatmentBMPFundingSources { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -39,22 +39,22 @@ namespace Neptune.Web.Views.FundingEvent
         {
         }
 
-        public EditViewModel(List<Models.FundingEvent> fundingEvents)
+        public EditViewModel(List<Models.TreatmentBMPFundingSource> treatmentBMPFundingSources)
         {
-            FundingEvents = fundingEvents.Select(x => new FundingEventSimple(x)).ToList();
+            TreatmentBMPFundingSources = treatmentBMPFundingSources.Select(x => new TreatmentBMPFundingSourceSimple(x)).ToList();
         }
 
-        public void UpdateModel(List<Models.FundingEvent> currentFundingEvents, IList<Models.FundingEvent> allFundingEvents)
+        public void UpdateModel(List<Models.TreatmentBMPFundingSource> currentTreatmentBMPFundingSources, IList<Models.TreatmentBMPFundingSource> allTreatmentBMPFundingSources)
         {
-            var fundingEventsUpdates = new List<Models.FundingEvent>();
-            if (FundingEvents != null)
+            var treatmentBMPFundingSourcesUpdates = new List<Models.TreatmentBMPFundingSource>();
+            if (TreatmentBMPFundingSources != null)
             {
                 // Completely rebuild the list
-                fundingEventsUpdates = FundingEvents.Select(x => x.ToFundingEvent()).ToList();
+                treatmentBMPFundingSourcesUpdates = TreatmentBMPFundingSources.Select(x => x.ToTreatmentBMPFundingSource()).ToList();
             }
 
-            currentFundingEvents.Merge(fundingEventsUpdates,
-                allFundingEvents,
+            currentTreatmentBMPFundingSources.Merge(treatmentBMPFundingSourcesUpdates,
+                allTreatmentBMPFundingSources,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID && x.FundingSourceID == y.FundingSourceID,
                 (x, y) =>
                 {
@@ -65,9 +65,9 @@ namespace Neptune.Web.Views.FundingEvent
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
-            if (FundingEvents != null)
+            if (TreatmentBMPFundingSources != null)
             {
-                if (FundingEvents.GroupBy(x => x.FundingSourceID).Any(x => x.Count() > 1))
+                if (TreatmentBMPFundingSources.GroupBy(x => x.FundingSourceID).Any(x => x.Count() > 1))
                 {
                     validationResults.Add(new ValidationResult("Each funding source can only be used once."));
                 }

@@ -1,6 +1,6 @@
 ﻿namespace Neptune.Web.Models
 {
-    public partial class FundingEvent : IAuditableEntity
+    public partial class TreatmentBMPFundingSource : IAuditableEntity
     {
         public string AuditDescriptionString
         {
