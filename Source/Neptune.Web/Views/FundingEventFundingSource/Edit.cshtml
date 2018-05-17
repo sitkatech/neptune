@@ -130,10 +130,17 @@ Source code is available upon request via <support@sitkatech.com>.
 
             @using (Html.BeginForm())
             {
-                <div ng-repeat="fundingEventFundingSource in AngularModel.FundingEventFundingSources | orderBy:[getFundingSourceName, getTreatmentBMPName]">
-                    <input type="hidden" name="@Html.NameFor(x => x.FundingEventFundingSources[0].FundingEventID).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.TreatmentBMPID}}"/>
-                    <input type="hidden" name="@Html.NameFor(x => x.FundingEventFundingSources[0].FundingSourceID).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.FundingSourceID}}"/>
-                    <input type="hidden" name="@Html.NameFor(x => x.FundingEventFundingSources[0].Amount).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.Amount}}"/>                    
+                <div ng-repeat="fundingEvent in AngularModel.FundingEvents">
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].FundingEventID).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.FundingEventID}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].TreatmentBMPID).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.TreatmentBMPID}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].Year).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.Year}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].Description).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.Description}}"/>
+                    <input type="hidden" name="@Html.NameFor(x => x.FundingEvents[0].FundingEventTypeID).ToString().Replace("0", "{{$index}}")" value="{{fundingEventFundingSource.FundingEventTypeID}}"/>
+                    <div ng-repeat ="fundingEventFundingSource in fundingEvent.FundingEventFundingSources">
+                        <input type="hidden" name="@Html.NameFor(x=>x.FundingEvents[0].FundingEventFundingSources[1].FundingEventID).ToString().Replace("0","{{$parent.$index}}").Replace("1", "{{$index}}")" value="{{fundingEventFundingSource.FundingEventID}}"/>
+                        <input type="hidden" name="@Html.NameFor(x=>x.FundingEvents[0].FundingEventFundingSources[1].FundingSourceID).ToString().Replace("0","{{$parent.$index}}").Replace("1", "{{$index}}")" value="{{fundingEventFundingSource.FundingSourceID}}"/>
+                        <input type="hidden" name="@Html.NameFor(x=>x.FundingEvents[0].FundingEventFundingSources[1].Amount).ToString().Replace("0","{{$parent.$index}}").Replace("1", "{{$index}}")" value="{{fundingEventFundingSource.Amount}}"/>
+                    </div>
                 </div>
             }
         </div>

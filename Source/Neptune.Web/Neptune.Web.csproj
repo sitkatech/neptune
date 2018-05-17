@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\FundingEventSimple.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -203,14 +204,14 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
-    <Compile Include="Controllers\TreatmentBMPFundingSourceController.cs" />
+    <Compile Include="Controllers\FundingEventFundingSourceController.cs" />
     <Compile Include="Models\FundingSourceSimple.cs" />
     <Compile Include="Controllers\FundingSourceController.cs" />
     <Compile Include="Models\FundingSource.cs" />
     <Compile Include="Models\CustomAttributeValue.cs" />
     <Compile Include="Models\MaintenanceRecordObservation.cs" />
     <Compile Include="Models\TreatmentBMPFundingSource.cs" />
-    <Compile Include="Models\TreatmentBMPFundingSourceSimple.cs" />
+    <Compile Include="Models\FundingEventFundingSourceSimple.cs" />
     <Compile Include="Models\TreatmentBMPSimple.cs" />
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />
@@ -801,9 +802,9 @@
     <Compile Include="Views\TreatmentBMPDocument\New.cs" />
     <Compile Include="Views\TreatmentBMPDocument\NewViewData.cs" />
     <Compile Include="Views\TreatmentBMPDocument\NewViewModel.cs" />
-    <Compile Include="Views\TreatmentBMPFundingSource\Edit.cs" />
-    <Compile Include="Views\TreatmentBMPFundingSource\EditViewData.cs" />
-    <Compile Include="Views\TreatmentBMPFundingSource\EditViewModel.cs" />
+    <Compile Include="Views\FundingEventFundingSource\Edit.cs" />
+    <Compile Include="Views\FundingEventFundingSource\EditViewData.cs" />
+    <Compile Include="Views\FundingEventFundingSource\EditViewModel.cs" />
     <Compile Include="Views\TreatmentBMPImage\Edit.cs" />
     <Compile Include="Views\TreatmentBMPImage\EditViewData.cs" />
     <Compile Include="Views\TreatmentBMPImage\EditViewModel.cs" />
@@ -961,7 +962,7 @@
     <Content Include="Views\TreatmentBMPAssessment\RateCollectionMethodController.js" />
     <Content Include="Views\TreatmentBMPAssessment\DiscreteCollectionMethodController.js" />
     <Content Include="Views\CustomAttributeType\EditCustomAttributeTypeController.js" />
-    <Content Include="Views\TreatmentBMPFundingSource\EditTreatmentBMPFundingSourceController.js" />
+    <Content Include="Views\FundingEventFundingSource\EditTreatmentBMPFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
@@ -1028,7 +1029,7 @@
     <Content Include="Views\FundingSource\Detail.cshtml" />
     <Content Include="Views\FundingSource\Edit.cshtml" />
     <Content Include="Views\FundingSource\Index.cshtml" />
-    <Content Include="Views\TreatmentBMPFundingSource\Edit.cshtml" />
+    <Content Include="Views\FundingEventFundingSource\Edit.cshtml" />
     <Content Include="Views\MaintenanceRecord\Detail.cshtml" />
     <Content Include="Views\TreatmentBMP\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cshtml" />

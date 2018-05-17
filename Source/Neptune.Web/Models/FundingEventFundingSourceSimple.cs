@@ -2,6 +2,10 @@
 {
     public class FundingEventFundingSourceSimple
     {
+        public int FundingEventID { get; set; }
+        public int FundingSourceID { get; set; }
+        public decimal? Amount { get; set; }
+
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
@@ -19,12 +23,7 @@
 
         public FundingEventFundingSource ToFundingEventFundingSource()
         {
-            return new FundingEventFundingSource(FundingSourceID, FundingEventID){Amount = Amount};
+            return new FundingEventFundingSource(FundingSourceID, FundingEventID) {Amount = Amount};
         }
-
-        public int FundingEventID { get; set; }
-        public int FundingSourceID { get; set; }
-        public decimal? Amount { get; set; }
-
     }
 }

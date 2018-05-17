@@ -17,8 +17,8 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditFundingEventFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var currentFundingEventFundingSources = treatmentBMP.FundingEvents.SelectMany(x=>x.FundingEventFundingSources).ToList();
-            var viewModel = new EditViewModel(currentFundingEventFundingSources);
+            var currentFundingEvents = treatmentBMP.FundingEvents.ToList();
+            var viewModel = new EditViewModel(currentFundingEvents);
             return ViewEditFundingEventFundingSources(treatmentBMP, viewModel);
         }
 
@@ -28,12 +28,12 @@ namespace Neptune.Web.Controllers
         public ActionResult EditFundingEventFundingSourcesForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var currentFundingEventFundingSources = treatmentBMP.FundingEvents.SelectMany(x => x.FundingEventFundingSources).ToList();
+            var currentFundingEvents = treatmentBMP.FundingEvents.ToList();
             if (!ModelState.IsValid)
             {
                 return ViewEditFundingEventFundingSources(treatmentBMP, viewModel);
             }
-            return UpdateFundingEventFundingSources(viewModel, currentFundingEventFundingSources);
+            return UpdateFundingEventFundingSources(viewModel, currentFundingEvents);
         }
 
         [HttpGet]
@@ -41,8 +41,8 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditFundingEventFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey)
         {
             var fundingSource = fundingSourcePrimaryKey.EntityObject;
-            var currentFundingEventFundingSources = fundingSource.FundingEventFundingSources.ToList();
-            var viewModel = new EditViewModel(currentFundingEventFundingSources);
+            var currentFundingEvents = fundingSource.FundingEventFundingSources.Select(x=>x.FundingEvent).Distinct().ToList();
+            var viewModel = new EditViewModel(currentFundingEvents);
             return ViewEditFundingEventFundingSources(fundingSource, viewModel);
         }
 
@@ -52,20 +52,22 @@ namespace Neptune.Web.Controllers
         public ActionResult EditFundingEventFundingSourcesForFundingSource(FundingSourcePrimaryKey fundingSourcePrimaryKey, EditViewModel viewModel)
         {
             var fundingSource = fundingSourcePrimaryKey.EntityObject;
-            var currentFundingEventFundingSources = fundingSource.FundingEventFundingSources.ToList();
+            var currentFundingEvents = fundingSource.FundingEventFundingSources.Select(x=>x.FundingEvent).Distinct().ToList();
             if (!ModelState.IsValid)
             {
                 return ViewEditFundingEventFundingSources(fundingSource, viewModel);
             }
-            return UpdateFundingEventFundingSources(viewModel, currentFundingEventFundingSources);
+            return UpdateFundingEventFundingSources(viewModel, currentFundingEvents);
         }
 
         private static ActionResult UpdateFundingEventFundingSources(EditViewModel viewModel,
-            List<FundingEventFundingSource> currentFundingEventFundingSources)
+            List<FundingEvent> currentFundingEvents)
         {
             HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Load();
+            HttpRequestStorage.DatabaseEntities.FundingEvents.Load();
             var allFundingEventFundingSources = HttpRequestStorage.DatabaseEntities.AllFundingEventFundingSources.Local;
-            viewModel.UpdateModel(currentFundingEventFundingSources, allFundingEventFundingSources);
+            var allFundingEvents = HttpRequestStorage.DatabaseEntities.AllFundingEvents.Local;
+            viewModel.UpdateModel(currentFundingEvents, allFundingEvents, allFundingEventFundingSources);
 
 
             return new ModalDialogFormJsonResult();

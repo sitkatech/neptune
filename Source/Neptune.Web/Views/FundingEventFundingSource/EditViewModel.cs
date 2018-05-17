@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.FundingEventFundingSource
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
-        public List<FundingEventFundingSourceSimple> FundingEventFundingSources { get; set; }
+        public List<FundingEventSimple> FundingEvents { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -39,37 +39,55 @@ namespace Neptune.Web.Views.FundingEventFundingSource
         {
         }
 
-        public EditViewModel(List<Models.FundingEventFundingSource> fundingEventFundingSources)
+        public EditViewModel(List<Models.FundingEvent> fundingEvents)
         {
-            FundingEventFundingSources = fundingEventFundingSources.Select(x => new FundingEventFundingSourceSimple(x)).ToList();
+            FundingEvents = fundingEvents.Select(x => new FundingEventSimple(x)).ToList();
         }
 
-        public void UpdateModel(List<Models.FundingEventFundingSource> currentFundingEventFundingSources, IList<Models.FundingEventFundingSource> allFundingEventFundingSources)
+        public void UpdateModel(List<Models.FundingEvent> currentFundingEvents, IList<Models.FundingEvent> allFundingEvents, IList<Models.FundingEventFundingSource> allFundingEventFundingSources)
         {
-            var fundingEventFundingSourcesUpdates = new List<Models.FundingEventFundingSource>();
-            if (FundingEventFundingSources != null)
+            var fundingEventsUpdates = new List<Models.FundingEvent>();
+            if (FundingEvents != null)
             {
                 // Completely rebuild the list
-                fundingEventFundingSourcesUpdates = FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList();
+                fundingEventsUpdates = FundingEvents.Select(x => x.ToFundingEvent()).ToList();
             }
 
-            currentFundingEventFundingSources.Merge(fundingEventFundingSourcesUpdates,
-                allFundingEventFundingSources,
-                (x, y) => x.FundingEventID == y.FundingEventID && x.FundingSourceID == y.FundingSourceID,
+            currentFundingEvents.Merge(fundingEventsUpdates,
+                allFundingEvents,
+                (x, y) => x.FundingEventID == y.FundingEventID,
                 (x, y) =>
                 {
-                    x.Amount = y.Amount;
+                    x.Year = y.Year;
+
                 });
+
+            // todo: probably doesn't actually work lol
+            currentFundingEvents.ForEach(x =>
+            {
+                var updatedFundingEvent =
+                    fundingEventsUpdates.SingleOrDefault(y => y.FundingEventID == x.FundingEventID);
+                if (updatedFundingEvent == null)
+                    return;
+
+                var fundingEventFundingSourcesToUpdate = updatedFundingEvent.FundingEventFundingSources;
+
+                x.FundingEventFundingSources.Merge(fundingEventFundingSourcesToUpdate, allFundingEventFundingSources,
+                    (z,w) => z.FundingEventID == w.FundingEventID && z.FundingSourceID == w.FundingSourceID,
+                    
+                    (z,w) => z.Amount = w.Amount);
+            });
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
-            if (FundingEventFundingSources != null)
+            if (FundingEvents != null)
             {
-                if (FundingEventFundingSources.GroupBy(x => x.FundingSourceID).Any(x => x.Count() > 1))
+                if (FundingEvents.Any(
+                    x=>x.FundingEventFundingSources.GroupBy(y => y.FundingSourceID).Any(y => y.Count() > 1)))
                 {
-                    validationResults.Add(new ValidationResult("Each funding source can only be used once."));
+                    validationResults.Add(new ValidationResult("Each funding source can only be used once per funding event."));
                 }
             }
             return validationResults;
