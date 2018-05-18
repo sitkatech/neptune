@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TreatmentBMPFundingSource]
+//  Source Table: [dbo].[FundingEventFundingSource]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[TreatmentBMPFundingSource]")]
-    public partial class TreatmentBMPFundingSource : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[FundingEventFundingSource]")]
+    public partial class FundingEventFundingSource : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TreatmentBMPFundingSource()
+        protected FundingEventFundingSource()
         {
 
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -30,47 +30,47 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPFundingSource(int treatmentBMPFundingSourceID, int fundingSourceID, int treatmentBMPID, decimal? amount) : this()
+        public FundingEventFundingSource(int fundingEventFundingSourceID, int fundingSourceID, int fundingEventID, decimal? amount) : this()
         {
-            this.TreatmentBMPFundingSourceID = treatmentBMPFundingSourceID;
+            this.FundingEventFundingSourceID = fundingEventFundingSourceID;
             this.FundingSourceID = fundingSourceID;
-            this.TreatmentBMPID = treatmentBMPID;
+            this.FundingEventID = fundingEventID;
             this.Amount = amount;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPFundingSource(int fundingSourceID, int treatmentBMPID) : this()
+        public FundingEventFundingSource(int fundingSourceID, int fundingEventID) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.FundingEventFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FundingSourceID = fundingSourceID;
-            this.TreatmentBMPID = treatmentBMPID;
+            this.FundingEventID = fundingEventID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPFundingSource(FundingSource fundingSource, TreatmentBMP treatmentBMP) : this()
+        public FundingEventFundingSource(FundingSource fundingSource, FundingEvent fundingEvent) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TreatmentBMPFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.FundingEventFundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.FundingSourceID = fundingSource.FundingSourceID;
             this.FundingSource = fundingSource;
-            fundingSource.TreatmentBMPFundingSources.Add(this);
-            this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
-            this.TreatmentBMP = treatmentBMP;
-            treatmentBMP.TreatmentBMPFundingSources.Add(this);
+            fundingSource.FundingEventFundingSources.Add(this);
+            this.FundingEventID = fundingEvent.FundingEventID;
+            this.FundingEvent = fundingEvent;
+            fundingEvent.FundingEventFundingSources.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPFundingSource CreateNewBlank(FundingSource fundingSource, TreatmentBMP treatmentBMP)
+        public static FundingEventFundingSource CreateNewBlank(FundingSource fundingSource, FundingEvent fundingEvent)
         {
-            return new TreatmentBMPFundingSource(fundingSource, treatmentBMP);
+            return new FundingEventFundingSource(fundingSource, fundingEvent);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPFundingSource).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingEventFundingSource).Name};
 
 
         /// <summary>
@@ -93,21 +93,21 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPFundingSources.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllFundingEventFundingSources.Remove(this);                
         }
 
         [Key]
-        public int TreatmentBMPFundingSourceID { get; set; }
+        public int FundingEventFundingSourceID { get; set; }
         public int TenantID { get; private set; }
         public int FundingSourceID { get; set; }
-        public int TreatmentBMPID { get; set; }
+        public int FundingEventID { get; set; }
         public decimal? Amount { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TreatmentBMPFundingSourceID; } set { TreatmentBMPFundingSourceID = value; } }
+        public int PrimaryKey { get { return FundingEventFundingSourceID; } set { FundingEventFundingSourceID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FundingSource FundingSource { get; set; }
-        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual FundingEvent FundingEvent { get; set; }
 
         public static class FieldLengths
         {

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[FundingSource]
+//  Source Table: [dbo].[FundingEvent]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,13 +15,13 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[FundingSource]")]
-    public partial class FundingSource : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[FundingEvent]")]
+    public partial class FundingEvent : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected FundingSource()
+        protected FundingEvent()
         {
             this.FundingEventFundingSources = new HashSet<FundingEventFundingSource>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -30,48 +30,48 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FundingSource(int fundingSourceID, int organizationID, string fundingSourceName, bool isActive, string fundingSourceDescription) : this()
+        public FundingEvent(int fundingEventID, int treatmentBMPID, int fundingEventTypeID, int year, string description) : this()
         {
-            this.FundingSourceID = fundingSourceID;
-            this.OrganizationID = organizationID;
-            this.FundingSourceName = fundingSourceName;
-            this.IsActive = isActive;
-            this.FundingSourceDescription = fundingSourceDescription;
+            this.FundingEventID = fundingEventID;
+            this.TreatmentBMPID = treatmentBMPID;
+            this.FundingEventTypeID = fundingEventTypeID;
+            this.Year = year;
+            this.Description = description;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FundingSource(int organizationID, string fundingSourceName, bool isActive) : this()
+        public FundingEvent(int treatmentBMPID, int fundingEventTypeID, int year) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.FundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.FundingEventID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.OrganizationID = organizationID;
-            this.FundingSourceName = fundingSourceName;
-            this.IsActive = isActive;
+            this.TreatmentBMPID = treatmentBMPID;
+            this.FundingEventTypeID = fundingEventTypeID;
+            this.Year = year;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public FundingSource(Organization organization, string fundingSourceName, bool isActive) : this()
+        public FundingEvent(TreatmentBMP treatmentBMP, FundingEventType fundingEventType, int year) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.FundingSourceID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            this.OrganizationID = organization.OrganizationID;
-            this.Organization = organization;
-            organization.FundingSources.Add(this);
-            this.FundingSourceName = fundingSourceName;
-            this.IsActive = isActive;
+            this.FundingEventID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
+            this.TreatmentBMP = treatmentBMP;
+            treatmentBMP.FundingEvents.Add(this);
+            this.FundingEventTypeID = fundingEventType.FundingEventTypeID;
+            this.Year = year;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static FundingSource CreateNewBlank(Organization organization)
+        public static FundingEvent CreateNewBlank(TreatmentBMP treatmentBMP, FundingEventType fundingEventType)
         {
-            return new FundingSource(organization, default(string), default(bool));
+            return new FundingEvent(treatmentBMP, fundingEventType, default(int));
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingSource).Name, typeof(FundingEventFundingSource).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FundingEvent).Name, typeof(FundingEventFundingSource).Name};
 
 
         /// <summary>
@@ -99,27 +99,27 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
-            HttpRequestStorage.DatabaseEntities.AllFundingSources.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllFundingEvents.Remove(this);                
         }
 
         [Key]
-        public int FundingSourceID { get; set; }
+        public int FundingEventID { get; set; }
         public int TenantID { get; private set; }
-        public int OrganizationID { get; set; }
-        public string FundingSourceName { get; set; }
-        public bool IsActive { get; set; }
-        public string FundingSourceDescription { get; set; }
+        public int TreatmentBMPID { get; set; }
+        public int FundingEventTypeID { get; set; }
+        public int Year { get; set; }
+        public string Description { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return FundingSourceID; } set { FundingSourceID = value; } }
+        public int PrimaryKey { get { return FundingEventID; } set { FundingEventID = value; } }
 
         public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
-        public virtual Organization Organization { get; set; }
+        public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public FundingEventType FundingEventType { get { return FundingEventType.AllLookupDictionary[FundingEventTypeID]; } }
 
         public static class FieldLengths
         {
-            public const int FundingSourceName = 200;
-            public const int FundingSourceDescription = 500;
+            public const int Description = 500;
         }
     }
 }

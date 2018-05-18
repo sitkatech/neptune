@@ -19,18 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Antlr.Runtime.Misc;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPFundingSource
+namespace Neptune.Web.Views.FundingEvent
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
-        public List<TreatmentBMPFundingSourceSimple> TreatmentBMPFundingSources { get; set; }
+        public FundingEventSimple FundingEvent { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -39,35 +41,39 @@ namespace Neptune.Web.Views.TreatmentBMPFundingSource
         {
         }
 
-        public EditViewModel(List<Models.TreatmentBMPFundingSource> treatmentBMPFundingSources)
+        public EditViewModel(Models.FundingEvent fundingEvent)
         {
-            TreatmentBMPFundingSources = treatmentBMPFundingSources.Select(x => new TreatmentBMPFundingSourceSimple(x)).ToList();
+            FundingEvent = new FundingEventSimple(fundingEvent);
         }
 
-        public void UpdateModel(List<Models.TreatmentBMPFundingSource> currentTreatmentBMPFundingSources, IList<Models.TreatmentBMPFundingSource> allTreatmentBMPFundingSources)
+        public EditViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            var treatmentBMPFundingSourcesUpdates = new List<Models.TreatmentBMPFundingSource>();
-            if (TreatmentBMPFundingSources != null)
-            {
-                // Completely rebuild the list
-                treatmentBMPFundingSourcesUpdates = TreatmentBMPFundingSources.Select(x => x.ToTreatmentBMPFundingSource()).ToList();
-            }
+            FundingEvent = new FundingEventSimple(treatmentBMP);
+        }
 
-            currentTreatmentBMPFundingSources.Merge(treatmentBMPFundingSourcesUpdates,
-                allTreatmentBMPFundingSources,
-                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID && x.FundingSourceID == y.FundingSourceID,
-                (x, y) =>
-                {
-                    x.Amount = y.Amount;
-                });
+        public void UpdateModel(Models.FundingEvent currentFundingEvent, IList<Models.FundingEventFundingSource> allFundingEventFundingSources)
+        {
+            currentFundingEvent.Description = FundingEvent.Description;
+            currentFundingEvent.FundingEventTypeID = FundingEvent.FundingEventTypeID;
+            currentFundingEvent.Year = FundingEvent.Year;
+
+
+            var fundingEventFundingSourcesToUpdate =
+                FundingEvent.FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList();
+
+            currentFundingEvent.FundingEventFundingSources.Merge(fundingEventFundingSourcesToUpdate,
+                allFundingEventFundingSources,
+                (z, w) => z.FundingEventID == w.FundingEventID && z.FundingSourceID == w.FundingSourceID,
+                (z, w) => z.Amount = w.Amount);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
-            if (TreatmentBMPFundingSources != null)
+
+            if (FundingEvent != null)
             {
-                if (TreatmentBMPFundingSources.GroupBy(x => x.FundingSourceID).Any(x => x.Count() > 1))
+                if (FundingEvent.FundingEventFundingSources?.GroupBy(y => y.FundingSourceID).Any(y => y.Count() > 1) ?? false)
                 {
                     validationResults.Add(new ValidationResult("Each funding source can only be used once."));
                 }
