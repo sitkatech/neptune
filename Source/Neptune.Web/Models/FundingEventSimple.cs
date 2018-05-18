@@ -29,6 +29,12 @@ namespace Neptune.Web.Models
             FundingEventID = fundingEvent.FundingEventID;
         }
 
+        public FundingEventSimple(TreatmentBMP treatmentBMP)
+        {
+            TreatmentBMPID = treatmentBMP.TreatmentBMPID;
+            FundingEventFundingSources = new List<FundingEventFundingSourceSimple>();
+        }
+
         public FundingEvent ToFundingEvent()
         {
             return new FundingEvent(FundingEventID ?? ModelObjectHelpers.NotYetAssignedID, TreatmentBMPID,

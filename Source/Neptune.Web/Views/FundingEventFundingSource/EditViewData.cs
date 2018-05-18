@@ -46,6 +46,12 @@ namespace Neptune.Web.Views.FundingEventFundingSource
             FromFundingSource = displayMode == EditorDisplayMode.FromFundingSource;
         }
 
+        public EditViewData(List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes, Models.TreatmentBMP treatmentBMP)
+        {
+            AllFundingSources = allFundingSources;
+            AllFundingEventTypes = allFundingEventTypes;
+        }
+
         public enum EditorDisplayMode
         {
             FromTreatmentBMP,

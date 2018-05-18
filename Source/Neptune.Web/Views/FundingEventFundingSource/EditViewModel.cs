@@ -46,6 +46,11 @@ namespace Neptune.Web.Views.FundingEventFundingSource
             FundingEvent = new FundingEventSimple(fundingEvent);
         }
 
+        public EditViewModel(Models.TreatmentBMP treatmentBMP)
+        {
+            FundingEvent = new FundingEventSimple(treatmentBMP);
+        }
+
         public void UpdateModel(Models.FundingEvent currentFundingEvent, IList<Models.FundingEventFundingSource> allFundingEventFundingSources)
         {
             currentFundingEvent.Description = FundingEvent.Description;
