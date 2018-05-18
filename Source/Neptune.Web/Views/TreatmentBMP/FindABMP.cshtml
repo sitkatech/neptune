@@ -32,7 +32,7 @@
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.StormwaterSearch.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
     <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMP/TreatmentBMPMapController.js")"></script>
-    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
         // <![CDATA[
         angular.module("NeptuneApp")
@@ -48,28 +48,48 @@
     </script>
 
     <style>
-        .selected-bmp { background-color: #FFFF85; }
+        .selected-bmp {
+            background-color: #FFFF85;
+        }
+        .list-group-item .help-block {
+            margin-bottom: 0;
+            font-size: 12px;
+        }
+        ul.list-group {
+            height: 256px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-top: none;
+            border-bottom: none;
+        }
+
+        li.list-group-item {
+            color: #737373;
+            cursor: pointer;
+        }
+
+        .panel.panelNeptune {
+            border: none;
+        }
     </style>
 
 }
 
 @section RightOfPageTitle
 {
-    
+
 }
 
 <div class="pageIntroText">
     @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 </div>
-<hr/>
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-md-3">
             <div class="row">
                 <div class="col-sm-12">
-                    <p class="systemText">Or, search for a BMP by name, click a BMP icon on the map, or see all BMPs in the grid at the bottom of the page.</p>
                     <div class="input-group">
-                        <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Enter the name of a Treatment BMP" autocomplete="off"/>
+                        <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off" />
                         <span class="input-group-btn">
                             <a id="treatmentBMPFinderButton" class="btn btn-default">
                                 <i class="glyphicon glyphicon-search"></i>
@@ -78,45 +98,46 @@
                     </div>
                 </div>
             </div>
-            <hr/>
+
             <div class="row">
                 <div class="col-sm-12">
-                    <a style="margin-bottom: 10px" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone"></i>Find nearby BMPs</a>
-                    <p class="systemText">Use your device location to find nearby BMPs. This works best for devices with GPS.</p>
+                    <a style="margin: 10px 0; width: 100%" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone" style="margin-right: 4px;"></i>Find nearby BMPs</a>
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-8 col-md-9">
             <div id="mapContainer">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 300px; margin: 0">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
                 </div>
             </div>
         </div>
     </div>
     <div class="row" style="margin-top: 10px;">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div style="height: 270px; overflow-y: auto; border-right: solid #ddd 1px; padding-right: 30px;" class="col-sm-3">
-                    <ul class="nav nav-pills nav-stacked" ng-if="visibleBMPCount() <= 15">
-
-                        <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
-                            <div style="color: #737373; cursor: pointer;">
-                                <strong>{{treatmentBMP.DisplayName}}</strong>
-                                <div class="help-block">
-                                    {{treatmentBMP.TreatmentBMPTypeName}}
-                                </div>
+        <div class="col-sm-3">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    <h3>
+                        BMPs in Map View
+                    </h3>
+                </div>
+                <ul class="list-group" ng-if="visibleBMPCount() <= 15" >
+                    <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
+                            <strong>{{treatmentBMP.DisplayName}}</strong>
+                            <div class="help-block">
+                                {{treatmentBMP.TreatmentBMPTypeName}}
                             </div>
-                        </li>
-                    </ul>
-                    <p ng-if="visibleBMPCount() > 15" class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
+                    </li>
+                </ul>
+                <div class="panel-body" ng-if="visibleBMPCount() > 15">
+                    <p class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
                 </div>
-                <div class="col-sm-9" id="mapSummaryResults">
-                    <p class="systemText text-center">Select a BMP from the list to the left.</p>
-                </div>
+                
             </div>
         </div>
+
+        <div class="col-sm-9" id="mapSummaryResults"></div>
     </div>
-    <hr/>
+    <hr />
     <div class="row">
         <div class="col-sm-12">
             <h2 style="margin-top: 0;">Didn't find it?</h2>
