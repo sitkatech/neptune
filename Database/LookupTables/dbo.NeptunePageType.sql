@@ -23,4 +23,5 @@ values
 (18, 'ManageCustomAttributeInstructions', 'Manage Custom Attribute Instructions', 2),
 (19, 'ManageCustomAttributeTypesList', 'Manage Custom Attribute Types List', 2),
 (20, 'Legal', 'Legal', 2),
-(21, 'FundingSourcesList', 'Funding Sources List', 2)
+(21, 'FundingSourcesList', 'Funding Sources List', 2),
+(22, 'FindABMP', 'Find a BMP', 2)

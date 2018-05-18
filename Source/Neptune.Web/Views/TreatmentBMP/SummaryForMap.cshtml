@@ -21,64 +21,92 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.Views
 @inherits Neptune.Web.Views.TreatmentBMP.SummaryForMap
 
 <style>
     .keyPhoto {
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 20px;
     }
 
-    .keyPhoto img { max-height: 350px; }
+    .keyPhoto img { max-height: 150px; }
+
+    .noKeyPhoto {
+        height: 150px;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+    }
+
+    .noKeyPhoto p {
+        padding: 55px 5px 0 5px;
+    }
 
     .captionText { font-size: 12px; }
 </style>
 <div class="row">
-    <div class="col-sm-7">
-
+    <div class="col-xs-12">
         <div class="row">
-            <label class="col-sm-4 control-label text-right">Name</label>
-            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
+            <div class="col-xs-12">
+                <h4>@ViewDataTyped.TreatmentBMP.TreatmentBMPName</h4>
+            </div>            
         </div>
         <div class="row">
-            <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
-        </div>
-
-        <div class="row">
-            <label class="col-sm-4 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
-        </div>
-        <div class="row">
-            <label class="col-sm-4 control-label text-right">Score</label>
-            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.GetMostRecentScoreAsString()</div>
-        </div>
-        <div class="row">
-            <label class="col-sm-4 control-label text-right">Notes</label>
-            <div class="col-sm-8">@ViewDataTyped.TreatmentBMP.Notes</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
-                <a href="#" class="btn btn-neptune" class="btn btn-neptune">Begin Inspection</a>
-                <a href="#" class="btn btn-neptune">Flag for Deletion</a>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                @if (ViewDataTyped.KeyPhoto != null)
+                {
+                    <div class="keyPhoto">
+                        <a id="keyPhoto" href="@ViewDataTyped.KeyPhoto.PhotoUrl" title="@ViewDataTyped.KeyPhoto.CaptionOnFullView" data-caption="@Html.Raw(@ViewDataTyped.KeyPhoto.CaptionOnFullView.HtmlEncode())">
+                            <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
+                        </a>
+                        <div class="caption">
+                            @Html.Raw(ViewDataTyped.KeyPhoto.CaptionOnGallery.HtmlEncodeWithBreaks())
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center noKeyPhoto">
+                        <p class="systemText">No Key Photo provided for this Treatment BMP</p>
+                    </div>
+                }
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9">
+                <div class="row">
+                    <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type"): @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction"): @ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12"><strong>Notes:</strong> @ViewDataTyped.TreatmentBMP.Notes</div>
+                </div>
             </div>
         </div>
-
-    </div>
-    <div class="col-sm-5">
-        @if (ViewDataTyped.KeyPhoto != null)
-        {
-            <div class="keyPhoto">
-                <img class="img-responsive" src="@(ViewDataTyped.KeyPhoto.PhotoUrl)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView"/>
-                <span class="captionText">@ViewDataTyped.KeyPhoto.Caption</span>
-            </div>
-        }
-        else
-        {
-            <div class="text-center">
-                <p class="systemText">No Key Photo provided for this Treatment BMP</p>
-            </div>
-        }
     </div>
 </div>
+<div class="row" style="margin-top: 20px">
+    <div class="col-sm-12 text-right">
+        <div class="help-block">Begin an inspection to update BMP information, assess or maintain the BMP</div>
+        <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
+        <a href="#" class="btn btn-neptune">Begin Inspection</a>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-xs-12 text-right">
+        <div class="help-block">If you can't locate the BMP in the field, flag for removal from the inventory</div>
+        <a href="#" class="btn btn-sm btn-warning">Flag for Deletion</a>        
+    </div>
+</div>
+
+<script>
+    // <![CDATA[
+    jQuery(document).ready(function()
+    {
+        var keyPhoto = jQuery("#keyPhoto");
+        keyPhoto.fancybox({ "type": "image" }); //hook up fancybox again.
+    });
+    // ]]>
+</script>

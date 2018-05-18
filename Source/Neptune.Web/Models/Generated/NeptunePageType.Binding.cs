@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeManageCustomAttributeTypesList ManageCustomAttributeTypesList = NeptunePageTypeManageCustomAttributeTypesList.Instance;
         public static readonly NeptunePageTypeLegal Legal = NeptunePageTypeLegal.Instance;
         public static readonly NeptunePageTypeFundingSourcesList FundingSourcesList = NeptunePageTypeFundingSourcesList.Instance;
+        public static readonly NeptunePageTypeFindABMP FindABMP = NeptunePageTypeFindABMP.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -48,7 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -124,6 +125,8 @@ namespace Neptune.Web.Models
                     return About;
                 case NeptunePageTypeEnum.Assessment:
                     return Assessment;
+                case NeptunePageTypeEnum.FindABMP:
+                    return FindABMP;
                 case NeptunePageTypeEnum.FundingSourcesList:
                     return FundingSourcesList;
                 case NeptunePageTypeEnum.HomeAdditionalInfo:
@@ -190,7 +193,8 @@ namespace Neptune.Web.Models
         ManageCustomAttributeInstructions = 18,
         ManageCustomAttributeTypesList = 19,
         Legal = 20,
-        FundingSourcesList = 21
+        FundingSourcesList = 21,
+        FindABMP = 22
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -317,5 +321,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeFundingSourcesList(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeFundingSourcesList Instance = new NeptunePageTypeFundingSourcesList(21, @"FundingSourcesList", @"Funding Sources List", 2);
+    }
+
+    public partial class NeptunePageTypeFindABMP : NeptunePageType
+    {
+        private NeptunePageTypeFindABMP(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeFindABMP Instance = new NeptunePageTypeFindABMP(22, @"FindABMP", @"Find a BMP", 2);
     }
 }

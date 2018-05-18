@@ -46,9 +46,9 @@ namespace Neptune.Web.Models
             get { return FileResourceByGuidUrlTemplate.ParameterReplace(FileResourceGUIDAsString); }
         }
 
-        public string FileResourceUrlScaledThumbnail
+        public string FileResourceUrlScaledThumbnail(int maxHeight)
         {
-            get { return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.GetFileResourceResized(FileResourceGUIDAsString, 150, 150)); }
+            return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.GetFileResourceResized(FileResourceGUIDAsString, maxHeight, maxHeight));
         }
 
         public string FileResourceUrlScaledForPrint
