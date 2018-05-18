@@ -51,14 +51,13 @@ Source code is available upon request via <support@sitkatech.com>.
             </div>            
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-3">
+            <div class="col-xs-12 col-sm-4 col-md-3">
                 @if (ViewDataTyped.KeyPhoto != null)
                 {
                     <div class="keyPhoto">
                         <a id="keyPhoto" href="@ViewDataTyped.KeyPhoto.PhotoUrl" title="@ViewDataTyped.KeyPhoto.CaptionOnFullView" data-caption="@Html.Raw(@ViewDataTyped.KeyPhoto.CaptionOnFullView.HtmlEncode())">
-                            <p class="img">
-                                <img src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
-                            </p>
+
+                                <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
                         </a>
                         <div class="caption">
                             @Html.Raw(ViewDataTyped.KeyPhoto.CaptionOnGallery.HtmlEncodeWithBreaks())
@@ -72,7 +71,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     </div>
                 }
             </div>
-            <div class="col-xs-12 col-sm-9">
+            <div class="col-xs-12 col-sm-8 col-md-9">
                 <div class="row">
                     <div class="col-xs-12">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type"): @ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</div>
                 </div>
@@ -85,14 +84,19 @@ Source code is available upon request via <support@sitkatech.com>.
             </div>
         </div>
     </div>
+</div>
+<div class="row">
     <div class="col-sm-12 text-right">
+        <div class="help-block">Begin an inspection to update BMP information, assess or maintain the BMP</div>
         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
-        <a href="#" class="btn btn-neptune">Begin Inspection</a>                
+        <a href="#" class="btn btn-neptune">Begin Inspection</a>
     </div>
-    <hr/>
+</div>
+<br/>
+<div class="row">
     <div class="col-xs-12 text-right">
-        <a href="#" class="btn btn-sm btn-warning">Flag for Deletion</a>
         <div class="help-block">If you can't locate the BMP in the field, flag for removal from the inventory</div>
+        <a href="#" class="btn btn-sm btn-warning">Flag for Deletion</a>        
     </div>
 </div>
 
