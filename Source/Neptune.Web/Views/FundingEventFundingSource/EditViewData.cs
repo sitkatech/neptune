@@ -26,38 +26,24 @@ namespace Neptune.Web.Views.FundingEventFundingSource
 {
     public class EditViewData : NeptuneUserControlViewData
     {
-        public readonly List<FundingSourceSimple> AllFundingSources;
-        public readonly List<TreatmentBMPSimple> AllTreatmentBMPs;
-        public readonly List<FundingEventType> AllFundingEventTypes;
-        public readonly int? TreatmentBMPID;
-        public readonly int? FundingSourceID;
-        public readonly bool FromFundingSource;
+        public  List<FundingSourceSimple> AllFundingSources { get; }
+        public  FundingEvent FundingEvent { get; }
+        public  List<FundingEventType> AllFundingEventTypes { get; }
+        public  int? TreatmentBMPID { get; }
+        public  int? FundingSourceID { get; }
+        public  bool FromFundingSource { get; }
 
-        private EditViewData(List<TreatmentBMPSimple> allTreatmentBMPs,
-            List<FundingSourceSimple> allFundingSources,
-            int? projectID,
-            int? fundingSourceID, List<FundingEventType> allFundingEventTypes)
+        public EditViewData(FundingEvent fundingEvent,
+            List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes)
         {
             AllFundingSources = allFundingSources;
-            TreatmentBMPID = projectID;
-            FundingSourceID = fundingSourceID;
-            AllTreatmentBMPs = allTreatmentBMPs;
+            TreatmentBMPID = fundingEvent.TreatmentBMPID;
+            FundingSourceID = null;
+            FundingEvent = fundingEvent;
             AllFundingEventTypes = allFundingEventTypes;
             
             var displayMode = FundingSourceID.HasValue ? EditorDisplayMode.FromFundingSource : EditorDisplayMode.FromTreatmentBMP;
             FromFundingSource = displayMode == EditorDisplayMode.FromFundingSource;
-        }
-
-        public EditViewData(TreatmentBMPSimple treatmentBMP,
-            List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes)
-            : this(new List<TreatmentBMPSimple> { treatmentBMP }, allFundingSources, treatmentBMP.TreatmentBMPID, null, allFundingEventTypes)
-        {
-        }
-
-        public EditViewData(FundingSourceSimple fundingSource, List<TreatmentBMPSimple> allTreatmentBMPs,
-            List<FundingEventType> allFundingEventTypes)
-            : this(allTreatmentBMPs, new List<FundingSourceSimple> {fundingSource}, null, fundingSource.FundingSourceID, allFundingEventTypes)
-        {
         }
 
         public enum EditorDisplayMode

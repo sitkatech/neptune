@@ -41,26 +41,6 @@ angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController
         }).value();
     };
 
-    //$scope.getAllUsedTreatmentBMPIDs = function () {
-    //    return _.map($scope.AngularModel.FundingEventFundingSources, function (p) { return p.TreatmentBMPID; });
-    //};
-
-    //$scope.filteredTreatmentBMPs = function () {
-    //    var usedTreatmentBMPIDs = $scope.getAllUsedTreatmentBMPIDs();
-    //    return _($scope.AngularViewData.AllTreatmentBMPs).filter(function (f) { return !_.includes(usedTreatmentBMPIDs, f.TreatmentBMPID); })
-    //        .sortBy(["DisplayName"]).value();
-    //};
-
-    //$scope.getTreatmentBMPName = function (fundingEventFundingSource)
-    //{
-    //    var treatmentBMPToFind = $scope.getTreatmentBMP(fundingEventFundingSource.TreatmentBMPID);
-    //    return treatmentBMPToFind.DisplayName;
-    //};
-
-    //$scope.getTreatmentBMP = function (treatmentBMPID) {
-    //    return _.find($scope.AngularViewData.AllTreatmentBMPs, function (f) { return treatmentBMPID == f.TreatmentBMPID; });
-    //};
-
     $scope.getFundingSourceName = function (fundingEventFundingSource) {
         var fundingSourceToFind = $scope.getFundingSource(fundingEventFundingSource.FundingSourceID);
         return fundingSourceToFind.DisplayName;

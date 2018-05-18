@@ -93,7 +93,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
             NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
-            EditFundingSourcesUrl = SitkaRoute<FundingEventFundingSourceController>.BuildUrlFromExpression(c => c.EditFundingEventFundingSourcesForTreatmentBMP(treatmentBMP));
+            //TODO: we need a NewFundingSourceUrl instead
+            //EditFundingSourcesUrl = SitkaRoute<FundingEventFundingSourceController>.BuildUrlFromExpression(c => c.EditFundingEvent(treatmentBMP));
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.PerformanceAndModelingAttributes));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
         }
