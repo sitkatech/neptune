@@ -145,7 +145,7 @@ Source code is available upon request via <support@sitkatech.com>.
                             </div>
                             <a class="@(ViewDataTyped.IsGalleryMode ? "gallery" : string.Empty)" rel="group" href="@galleryImage.PhotoUrl" title="@galleryImage.CaptionOnFullView" data-caption="@Html.Raw(galleryImage.CaptionOnFullView.HtmlEncode())">
                                 <p class="img">
-                                    <img src="@galleryImage.PhotoUrlScaledThumbnail" alt="@galleryImage.CaptionOnFullView" />
+                                    <img src="@galleryImage.PhotoUrlScaledThumbnail(150)" alt="@galleryImage.CaptionOnFullView" />
                                 </p>
                                 <div class="caption">
                                     @Html.Raw(galleryImage.CaptionOnGallery.HtmlEncodeWithBreaks())
