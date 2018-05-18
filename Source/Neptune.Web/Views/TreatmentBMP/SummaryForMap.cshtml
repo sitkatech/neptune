@@ -28,6 +28,7 @@ Source code is available upon request via <support@sitkatech.com>.
     .keyPhoto {
         margin-left: auto;
         margin-right: auto;
+        margin-bottom: 20px;
     }
 
     .keyPhoto img { max-height: 150px; }
@@ -35,6 +36,7 @@ Source code is available upon request via <support@sitkatech.com>.
     .noKeyPhoto {
         height: 150px;
         background-color: #f9f9f9;
+        margin-bottom: 20px;
     }
 
     .noKeyPhoto p {
@@ -56,8 +58,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 {
                     <div class="keyPhoto">
                         <a id="keyPhoto" href="@ViewDataTyped.KeyPhoto.PhotoUrl" title="@ViewDataTyped.KeyPhoto.CaptionOnFullView" data-caption="@Html.Raw(@ViewDataTyped.KeyPhoto.CaptionOnFullView.HtmlEncode())">
-
-                                <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
+                            <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
                         </a>
                         <div class="caption">
                             @Html.Raw(ViewDataTyped.KeyPhoto.CaptionOnGallery.HtmlEncodeWithBreaks())
@@ -85,7 +86,7 @@ Source code is available upon request via <support@sitkatech.com>.
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="margin-top: 20px">
     <div class="col-sm-12 text-right">
         <div class="help-block">Begin an inspection to update BMP information, assess or maintain the BMP</div>
         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
