@@ -22,9 +22,12 @@ namespace Neptune.Web.Models
 
         public string PhotoUrl => FileResource.FileResourceUrl;
 
-        public string PhotoUrlScaledThumbnail => FileResource.FileResourceUrlScaledThumbnail;
-
         public string PhotoUrlScaledForPrint => FileResource.FileResourceUrlScaledForPrint;
+
+        public string PhotoUrlScaledThumbnail(int maxHeight)
+        {
+            return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
+        }
 
         public string EditUrl
         {

@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
 
 
-            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
             var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBMPs);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }

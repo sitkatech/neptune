@@ -17,7 +17,10 @@ namespace Neptune.Web.Models
         public string CaptionOnGallery => Caption;
         public string GetCaptionOnGallery() => $"{Caption}";
         public string PhotoUrl => FileResource.FileResourceUrl;
-        public string PhotoUrlScaledThumbnail => FileResource.FileResourceUrlScaledThumbnail;
+        public string PhotoUrlScaledThumbnail(int maxHeight)
+        {  
+            return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
+        } 
         public string EditUrl => SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
         public List<string> AdditionalCssClasses { get; set; } = new List<string>();
         private object _orderBy;

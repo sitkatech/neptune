@@ -12,17 +12,17 @@
     </div>
     for (var i = 0; i < Model.TreatmentBMPImageSimples.Count; i++)
     {        
-        var monitoringProgramImageSimple = Model.TreatmentBMPImageSimples[i];
-        var monitoringProgramImage = ViewDataTyped.TreatmentBMPImagesByID[monitoringProgramImageSimple.TreatmentBMPImageID.GetValueOrDefault()];
+        var treatmentBMPImageSimple = Model.TreatmentBMPImageSimples[i];
+        var treatmentBMPImage = ViewDataTyped.TreatmentBMPImagesByID[treatmentBMPImageSimple.TreatmentBMPImageID.GetValueOrDefault()];
         @Html.HiddenFor(m => m.TreatmentBMPImageSimples[i].TreatmentBMPImageID)
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ViewDataTyped.TreatmentBMPImagesByID[monitoringProgramImageSimple.TreatmentBMPImageID.GetValueOrDefault()].FileResource.OriginalCompleteFileName
+                @ViewDataTyped.TreatmentBMPImagesByID[treatmentBMPImageSimple.TreatmentBMPImageID.GetValueOrDefault()].FileResource.OriginalCompleteFileName
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-2">
-                        <img src="@monitoringProgramImage.FileResource.FileResourceUrlScaledThumbnail" alt="@monitoringProgramImage.Caption"/>
+                        <img src="@(treatmentBMPImage.FileResource.FileResourceUrlScaledThumbnail(150))" alt="@treatmentBMPImage.Caption"/>
                     </div>
                     <div class="col-xs-10">
                         <div class="form-horizontal">

@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         string CaptionOnGallery { get; }
         string Caption { get; set; }
         string PhotoUrl { get; }
-        string PhotoUrlScaledThumbnail { get; }
+        string PhotoUrlScaledThumbnail(int maxHeight);
         string EditUrl { get; }
         List<string> AdditionalCssClasses { get; }
         object OrderBy { get; set; }
