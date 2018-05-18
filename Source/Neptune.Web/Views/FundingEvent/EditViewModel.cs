@@ -28,7 +28,7 @@ using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.FundingEventFundingSource
+namespace Neptune.Web.Views.FundingEvent
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
@@ -58,7 +58,8 @@ namespace Neptune.Web.Views.FundingEventFundingSource
             currentFundingEvent.Year = FundingEvent.Year;
 
 
-            var fundingEventFundingSourcesToUpdate = currentFundingEvent.FundingEventFundingSources;
+            var fundingEventFundingSourcesToUpdate =
+                FundingEvent.FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList();
 
             currentFundingEvent.FundingEventFundingSources.Merge(fundingEventFundingSourcesToUpdate,
                 allFundingEventFundingSources,
@@ -69,9 +70,10 @@ namespace Neptune.Web.Views.FundingEventFundingSource
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+
             if (FundingEvent != null)
             {
-                if (FundingEvent.FundingEventFundingSources.GroupBy(y => y.FundingSourceID).Any(y => y.Count() > 1))
+                if (FundingEvent.FundingEventFundingSources?.GroupBy(y => y.FundingSourceID).Any(y => y.Count() > 1) ?? false)
                 {
                     validationResults.Add(new ValidationResult("Each funding source can only be used once."));
                 }

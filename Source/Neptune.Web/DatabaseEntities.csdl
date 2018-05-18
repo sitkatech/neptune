@@ -422,7 +422,7 @@
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="FundingEventTypeID" Type="Int32" Nullable="false" />
     <Property Name="Year" Type="Int32" Nullable="false" />
-    <Property Name="Description" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+    <Property Name="Description" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="FundingEvents" ToRole="TreatmentBMP" />
     <NavigationProperty Name="FundingEventFundingSources" Relationship="Neptune.Web.Models.FK_FundingEventFundingSource_FundingEvent_FundingEventID" FromRole="FundingEvent" ToRole="FundingEventFundingSources" />
   </EntityType>

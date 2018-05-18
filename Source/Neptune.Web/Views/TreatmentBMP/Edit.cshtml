@@ -30,7 +30,7 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.Stormwater.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.js")" type="text/javascript"></script>
-    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css"/>
 }
 
 @using (Html.BeginForm())
@@ -50,7 +50,7 @@
                         @Html.LabelWithSugarFor(m => m.TreatmentBMPName)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.TreatmentBMPName, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
+                        @Html.TextBoxFor(m => m.TreatmentBMPName, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}})
                         @Html.ValidationMessageFor(m => m.TreatmentBMPName)
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
@@ -58,15 +58,15 @@
                     </div>
                     <div class="col-xs-12 col-sm-4">
                         @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                    {
-                        @Html.DropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
-                        @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
-                }
-                else
-                {
-                    <p class="form-control-static">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</p>
-                    @Html.HiddenFor(m => m.TreatmentBMPTypeID)
-            }
+                        {
+                            @Html.DropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}})
+                            @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
+                        }
+                        else
+                        {
+                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</p>
+                            @Html.HiddenFor(m => m.TreatmentBMPTypeID)
+                        }
                     </div>
                 </div>
                 <div class="form-group">
@@ -75,15 +75,15 @@
                     </div>
                     <div class="col-xs-12 col-sm-4">
                         @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
-                    {
-                        @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
-                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
-                }
-                else
-                {
-                    <p class="form-control-static">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.OrganizationDisplayName</p>
-                    @Html.HiddenFor(x => x.StormwaterJurisdictionID)
-            }
+                        {
+                            @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
+                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                        }
+                        else
+                        {
+                            <p class="form-control-static">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.OrganizationDisplayName</p>
+                            @Html.HiddenFor(x => x.StormwaterJurisdictionID)
+                        }
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.OwnerOrganizationID)
@@ -98,20 +98,20 @@
                         @Html.LabelWithSugarFor(m => m.YearBuilt)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.YearBuilt, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" }, { "type", "number" } })
+                        @Html.TextBoxFor(m => m.YearBuilt, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}, {"type", "number"}})
                         @Html.ValidationMessageFor(m => m.YearBuilt)
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.SystemOfRecordID)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.SystemOfRecordID, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
+                        @Html.TextBoxFor(m => m.SystemOfRecordID, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}})
                         @Html.ValidationMessageFor(m => m.SystemOfRecordID)
                     </div>
                 </div>
             </div>
         </div>
-        <hr />
+        <hr/>
         <div class="row">
             <div class="col-xs-12 control-label">
                 <label>BMP Location</label>
@@ -139,7 +139,7 @@
                                         @Html.LabelWithSugarFor(m => m.TreatmentBMPPointY)
                                     </div>
                                     <div class="col-xs-8 col-sm-8">
-                                        @Html.TextBoxFor(x => x.TreatmentBMPPointY, new { type = "number", @class = "form-control", style = "width: auto;", step = "0.001" })
+                                        @Html.TextBoxFor(x => x.TreatmentBMPPointY, new {type = "number", @class = "form-control", style = "width: auto;", step = "0.001"})
                                         @Html.ValidationMessageFor(x => x.TreatmentBMPPointY)
                                     </div>
                                 </div>
@@ -148,7 +148,7 @@
                                         @Html.LabelWithSugarFor(m => m.TreatmentBMPPointX)
                                     </div>
                                     <div class="col-xs-8 col-sm-8">
-                                        @Html.TextBoxFor(x => x.TreatmentBMPPointX, new { type = "number", @class = "form-control", style = "width: auto;", step = "0.001" })
+                                        @Html.TextBoxFor(x => x.TreatmentBMPPointX, new {type = "number", @class = "form-control", style = "width: auto;", step = "0.001"})
                                         @Html.ValidationMessageFor(x => x.TreatmentBMPPointX)
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@
                 <p class="figure-caption">Click the map to set the location of the Treatment BMP, or enter latitude and longitude.</p>
             </div>
         </div>
-        <hr />
+        <hr/>
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-horizontal">
@@ -172,7 +172,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-10">
                             @Html.ValidationMessageFor(x => x.Notes)
-                            @Html.TextAreaWithMaxLengthFor(x => x.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> { "form-control" })
+                            @Html.TextAreaWithMaxLengthFor(x => x.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> {"form-control"})
                         </div>
                     </div>
                 </div>
@@ -180,54 +180,46 @@
         </div>
         <div class="row">
             <div class="col-xs-12" style="text-align: right">
-                <hr />
+                <hr/>
                 <button action="p" type="submit" class="btn btn-neptune">Save</button>
                 <a href="@ViewDataTyped.TreatmentBMPIndexUrl" class="btn btn-neptune">Cancel</a>
             </div>
             @Html.HiddenFor(x => x.TreatmentBMPID)
         </div>
     </div>
-
-
 }
-
 
 
 <script type="text/javascript" language="javascript">
     // we are extending Neptune Maps to handle the edit project locations functinality
-    NeptuneMaps.Map.prototype.changeMarkerOnMap = function(self, e)
-    {
+    NeptuneMaps.Map.prototype.changeMarkerOnMap = function(self, e) {
         self.removeLayerFromMap(self.currentMarker);
-        self.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+        self.currentMarker =
+            L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
         self.currentMarker.addTo(self.map);
         self.treatmentBMPPointYField.val(e.latlng.lat.toFixed(4));
         self.treatmentBMPPointXField.val(e.latlng.lng.toFixed(4));
         self.updateLocationInformationOnMap(self.treatmentBMPInformationContainer, e.latlng);
     };
 
-    NeptuneMaps.Map.prototype.addMarkerOnMap = function()
-    {
+    NeptuneMaps.Map.prototype.addMarkerOnMap = function() {
         // add markers
         if (!Sitka.Methods.isUndefinedNullOrEmpty(this.treatmentBMPPointXField.val()) &&
-            !Sitka.Methods.isUndefinedNullOrEmpty(this.treatmentBMPPointYField.val()))
-        {
+            !Sitka.Methods.isUndefinedNullOrEmpty(this.treatmentBMPPointYField.val())) {
             var latLng = new L.LatLng(this.treatmentBMPPointYField.val(),
                 this.treatmentBMPPointXField.val());
             this.currentMarker = L.marker(latLng,
                 { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
             this.currentMarker.addTo(this.map);
             this.updateLocationInformationOnMap(this.treatmentBMPInformationContainer, latLng);
-        }
-        else
-        {
+        } else {
             this.setEmptyLocationInformationOnMap(this.treatmentBMPInformationContainer);
         }
         this.assignClickEventHandler(this.changeMarkerOnMap);
         document.getElementById(this.MapDivId).style.cursor = 'crosshair';
     };
 
-    NeptuneMaps.Map.prototype.initializeTreatmentBMPEditor = function()
-    {
+    NeptuneMaps.Map.prototype.initializeTreatmentBMPEditor = function() {
         this.currentMarker = null;
         this.treatmentBMPInformationContainer = jQuery("#@ViewDataTyped.TreatmentBMPInformationContainer");
         this.treatmentBMPPointXField = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)");
@@ -236,7 +228,7 @@
     };
 
 
-    NeptuneMaps.Map.prototype.updateLocationInformationOnMap = function (treatmentBMPInformationContainer, latlng) {
+    NeptuneMaps.Map.prototype.updateLocationInformationOnMap = function(treatmentBMPInformationContainer, latlng) {
         var html = "";
         for (var i = 0; i < this.vectorLayers.length; i++) {
             var match = leafletPip.pointInLayer(
@@ -255,8 +247,7 @@
                 }
             }
         }
-        if (Sitka.Methods.isUndefinedNullOrEmpty(html))
-        {
+        if (Sitka.Methods.isUndefinedNullOrEmpty(html)) {
             jQuery(".locationInformation").hide();
         } else {
             jQuery(".locationInformation").show();
@@ -264,39 +255,39 @@
         treatmentBMPInformationContainer.html(html);
     };
 
-    NeptuneMaps.Map.prototype.setEmptyLocationInformationOnMap = function (treatmentBMPInformationContainer) {
+    NeptuneMaps.Map.prototype.setEmptyLocationInformationOnMap = function(treatmentBMPInformationContainer) {
         var html = "<span>Add BMP location on map</span>";
         treatmentBMPInformationContainer.html(html);
     };
 
-    jQuery(function()
-    {
+    jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var neptuneMap = new NeptuneMaps.Stormwater(mapInitJson);
         neptuneMap.initializeTreatmentBMPEditor();
         neptuneMap.map.on("locationfound", onLocationFound);
         neptuneMap.map.on('locationerror', onLocationError);
 
-        jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX), #@Html.IdFor(x => x.TreatmentBMPPointY)").on("input", function()
-        {
-            neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
-            var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)").val(),
-                y = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)").val();
+        jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX), #@Html.IdFor(x => x.TreatmentBMPPointY)").on("input",
+            function() {
+                neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
+                var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)").val(),
+                    y = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointY)").val();
 
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(x) && !Sitka.Methods.isUndefinedNullOrEmpty(y))
-            {
-                var latlng = L.latLng(Number.parseFloat(y), Number.parseFloat(x));
-                neptuneMap.currentMarker = L.marker(latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
-                neptuneMap.currentMarker.addTo(neptuneMap.map);
+                if (!Sitka.Methods.isUndefinedNullOrEmpty(x) && !Sitka.Methods.isUndefinedNullOrEmpty(y)) {
+                    var latlng = L.latLng(Number.parseFloat(y), Number.parseFloat(x));
+                    neptuneMap.currentMarker = L.marker(latlng,
+                        { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+                    neptuneMap.currentMarker.addTo(neptuneMap.map);
 
-                neptuneMap.updateLocationInformationOnMap(neptuneMap.treatmentBMPInformationContainer, latlng);
-            }
+                    neptuneMap.updateLocationInformationOnMap(neptuneMap.treatmentBMPInformationContainer, latlng);
+                }
 
-        });
+            });
 
-        jQuery("#useCurrentLocationButton").on("click", function() {
-            neptuneMap.map.locate({ setView: true, maxZoom: 15 });
-        });
+        jQuery("#useCurrentLocationButton").on("click",
+            function() {
+                neptuneMap.map.locate({ setView: true, maxZoom: 15 });
+            });
 
         function onLocationFound(e) {
             var x = jQuery("#@Html.IdFor(x => x.TreatmentBMPPointX)"),
@@ -306,7 +297,8 @@
             y.val(e.latlng.lat);
 
             neptuneMap.removeLayerFromMap(neptuneMap.currentMarker);
-            neptuneMap.currentMarker = L.marker(e.latlng, { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
+            neptuneMap.currentMarker = L.marker(e.latlng,
+                { icon: L.MakiMarkers.icon({ icon: "marker", color: "#935F59", size: "m" }) });
             neptuneMap.currentMarker.addTo(neptuneMap.map);
         }
 

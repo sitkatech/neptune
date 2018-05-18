@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[FundingEvent](
 	[TreatmentBMPID] [int] NOT NULL,
 	[FundingEventTypeID] [int] NOT NULL,
 	[Year] [int] NOT NULL,
-	[Description] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Description] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_FundingEvent_FundingEventID] PRIMARY KEY CLUSTERED 
 (
 	[FundingEventID] ASC
@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[FundingEvent](
 	[FundingEventID] ASC,
 	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 
 GO
 ALTER TABLE [dbo].[FundingEvent]  WITH CHECK ADD  CONSTRAINT [FK_FundingEvent_FundingEventType_FundingEventTypeID] FOREIGN KEY([FundingEventTypeID])

@@ -1,18 +1,20 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.FundingEventFundingSource;
+using Neptune.Web.Views.FundingEvent;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
-    public class FundingEventFundingSourceController : NeptuneBaseController
+    public class FundingEventController : NeptuneBaseController
     {
         [HttpGet]
-        [TreatmentBMPManageFeature]
+        [FundingEventManageFeature]
         public PartialViewResult EditFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey)
         {
             var fundingEvent = fundingEventPrimaryKey.EntityObject;
@@ -22,7 +24,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPManageFeature]
+        [FundingEventManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey, EditViewModel viewModel)
         {
@@ -62,10 +64,11 @@ namespace Neptune.Web.Controllers
             }
 
             var fundingEvent = new FundingEvent(treatmentBMPPrimaryKey.EntityObject.TreatmentBMPID,
-                viewModel.FundingEvent.FundingEventTypeID, viewModel.FundingEvent.FundingEventTypeID)
+                viewModel.FundingEvent.FundingEventTypeID, viewModel.FundingEvent.Year)
             {
-                FundingEventFundingSources = viewModel.FundingEvent.FundingEventFundingSources
-                    .Select(x => x.ToFundingEventFundingSource()).ToList()
+                FundingEventFundingSources = viewModel.FundingEvent.FundingEventFundingSources?
+                    .Select(x => x.ToFundingEventFundingSource()).ToList(),
+                Description = viewModel.FundingEvent.Description
             };
 
             HttpRequestStorage.DatabaseEntities.AllFundingEvents.Add(fundingEvent);
@@ -89,6 +92,43 @@ namespace Neptune.Web.Controllers
             var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
             var viewData = new EditViewData(fundingEvent, allFundingSources, FundingEventType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [FundingEventManageFeature]
+        public ActionResult DeleteFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey)
+        {
+            var fundingEvent = fundingEventPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fundingEventPrimaryKey.PrimaryKeyValue);
+            return ViewDelete(viewModel, fundingEvent);
+        }
+
+        [HttpPost]
+        [FundingEventManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult DeleteFundingEvent(FundingEventPrimaryKey fundingEventPrimaryKey,
+            ConfirmDialogFormViewModel viewModel)
+        {
+            var fundingEvent = fundingEventPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDelete(viewModel, fundingEvent);
+            }
+
+            fundingEvent.DeleteFull();
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private ActionResult ViewDelete(ConfirmDialogFormViewModel viewModel, FundingEvent fundingEvent)
+        {
+            var confirmMessage =
+                $"Are you sure you want to delete this {FieldDefinition.FundingEvent.GetFieldDefinitionLabel()}? This will remove {fundingEvent.FundingEventFundingSources.Sum(x=>x.Amount).ToStringCurrency()} of expenditures from this BMP.";
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
+                viewModel);
         }
     }
 }

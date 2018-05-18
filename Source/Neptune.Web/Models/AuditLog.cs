@@ -50,7 +50,8 @@ namespace Neptune.Web.Models
             "SupportRequestLog",
             "MaintenanceRecord",
             "MaintenanceRecordObservation",
-            "MaintenanceRecordObservationValue"
+            "MaintenanceRecordObservationValue",
+            "FundingEventFundingSource"
         };
 
         public string AuditDescriptionDisplay

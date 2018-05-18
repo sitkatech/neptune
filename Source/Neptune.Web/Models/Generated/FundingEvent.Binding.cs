@@ -119,7 +119,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-
+            public const int Description = 500;
         }
     }
 }

@@ -20,42 +20,34 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Globalization;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.FundingEventFundingSource
+namespace Neptune.Web.Views.FundingEvent
 {
     public class EditViewData : NeptuneUserControlViewData
     {
         public  List<FundingSourceSimple> AllFundingSources { get; }
-        public  FundingEvent FundingEvent { get; }
-        public  List<FundingEventType> AllFundingEventTypes { get; }
+        public  IEnumerable<SelectListItem> AllFundingEventTypes { get; }
         public  int? TreatmentBMPID { get; }
-        public  int? FundingSourceID { get; }
-        public  bool FromFundingSource { get; }
 
-        public EditViewData(FundingEvent fundingEvent,
+        public EditViewData(Models.FundingEvent fundingEvent,
             List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes)
         {
             AllFundingSources = allFundingSources;
             TreatmentBMPID = fundingEvent.TreatmentBMPID;
-            FundingSourceID = null;
-            FundingEvent = fundingEvent;
-            AllFundingEventTypes = allFundingEventTypes;
-            
-            var displayMode = FundingSourceID.HasValue ? EditorDisplayMode.FromFundingSource : EditorDisplayMode.FromTreatmentBMP;
-            FromFundingSource = displayMode == EditorDisplayMode.FromFundingSource;
+            AllFundingEventTypes = allFundingEventTypes.ToSelectListWithEmptyFirstRow(x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.FundingEventTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Select a Funding Source");
         }
 
         public EditViewData(List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes, Models.TreatmentBMP treatmentBMP)
         {
             AllFundingSources = allFundingSources;
-            AllFundingEventTypes = allFundingEventTypes;
-        }
-
-        public enum EditorDisplayMode
-        {
-            FromTreatmentBMP,
-            FromFundingSource
+            AllFundingEventTypes = allFundingEventTypes.ToSelectListWithEmptyFirstRow(x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.FundingEventTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Select a Funding Source");
+            TreatmentBMPID = TreatmentBMPID;
         }
     }
 }

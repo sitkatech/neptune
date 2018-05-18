@@ -423,7 +423,7 @@ warning 6035: The relationship 'FK_FundingEventFundingSource_FundingEvent_Fundin
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="FundingEventTypeID" Type="int" Nullable="false" />
     <Property Name="Year" Type="int" Nullable="false" />
-    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="Description" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="FundingEventFundingSource">
     <Key>

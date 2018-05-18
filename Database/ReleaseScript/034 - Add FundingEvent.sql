@@ -6,7 +6,7 @@ CREATE TABLE dbo.FundingEvent(
 	TreatmentBMPID int NOT NULL,
 	FundingEventTypeID int NOT NULL,
 	[Year] int NOT NULL,
-	Description varchar(max) NULL
+	Description varchar(500) NULL
  CONSTRAINT PK_FundingEvent_FundingEventID PRIMARY KEY CLUSTERED 
 (
 	FundingEventID ASC
