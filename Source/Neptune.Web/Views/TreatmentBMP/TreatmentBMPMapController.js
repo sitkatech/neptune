@@ -73,7 +73,9 @@
                 function(t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
-            $scope.activeTreatmentBMP = treatmentBMP;
+            var layer = _.find($scope.neptuneMap.searchableLayerGeoJson._layers,
+                function (layer) { return treatmentBMPID === layer.feature.properties.TreatmentBMPID; });
+            setActiveImpl(layer, treatmentBMP);
         };
 
         function setActiveImpl(layer, treatmentBMP) {
