@@ -279,7 +279,7 @@
                                         {
                                             <tr>
                                                 <td>@Html.Raw(fundingEventFundingSource.FundingSource.DisplayNameAsUrl)</td>
-                                                <th class="text-right">@fundingEventFundingSource.Amount.ToStringCurrency()</th>
+                                                <th class="text-right">@(fundingEventFundingSource.AmountIfSpecified)</th>
                                             </tr>
                                         }
                                         <tr>

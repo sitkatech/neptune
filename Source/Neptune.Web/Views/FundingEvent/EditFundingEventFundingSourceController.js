@@ -26,7 +26,7 @@ angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController
 
     $scope.resetFundingEventTypeIDToAdd = function () { $scope.FundingEventTypeIDToAdd = null; }
 
-    $scope.resetFundingSourceIDToAdd = function () { $scope.FundingSourceIDToAdd = null; };
+    $scope.resetFundingSourceToAdd = function () { $scope.FundingSourceToAdd = null; };
 
     $scope.getAllUsedFundingSourceIds = function (fundingEvent) {
         return _.map(fundingEvent.FundingEventFundingSources, function (p) { return p.FundingSourceID; });
@@ -71,9 +71,9 @@ angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController
 
     $scope.addRow = function(fundingEvent)
     {
-        var newFundingEventFundingSource = $scope.createNewRow(fundingEvent, $scope.FundingSourceIDToAdd);
+        var newFundingEventFundingSource = $scope.createNewRow(fundingEvent, $scope.FundingSourceToAdd.FundingSourceID);
         fundingEvent.FundingEventFundingSources.push(newFundingEventFundingSource);
-        $scope.resetFundingSourceIDToAdd();
+        $scope.resetFundingSourceToAdd();
         $scope.resetTreatmentBMPIDToAdd();
     };
 
@@ -95,7 +95,7 @@ angular.module("NeptuneApp").controller("EditFundingEventFundingSourceController
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
     $scope.FromFundingSource = angularModelAndViewData.AngularViewData.FromFundingSource;
-    $scope.resetFundingSourceIDToAdd();
+    $scope.resetFundingSourceToAdd();
     $scope.resetFundingEventTypeIDToAdd();
 });
 

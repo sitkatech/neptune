@@ -18,6 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Models
 @using LtInfo.Common.HtmlHelperExtensions
 @using Newtonsoft.Json.Linq
@@ -58,48 +59,43 @@ Source code is available upon request via <support@sitkatech.com>.
                 <div class="form-horizontal">
                     @Html.HiddenFor(m=>m.FundingEvent.TreatmentBMPID)
                     <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label class="control-label">Funding Event Type</label>
+                        <div class="col-sm-3 text-right">
+                            @Html.LabelWithSugarFor(m=>m.FundingEvent.FundingEventTypeID)
                         </div>
                         <div class="col-sm-9">
                             @Html.SearchableDropDownListFor(m => m.FundingEvent.FundingEventTypeID, ViewDataTyped.AllFundingEventTypes, new {@class = "form-control"})
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label class="control-label">Year</label>
+                        <div class="col-sm-3 text-right">
+                            @Html.LabelWithSugarFor(m => m.FundingEvent.Year)
                         </div>
                         <div class="col-sm-9">
                             @Html.TextBoxFor(m => m.FundingEvent.Year, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}, {"type", "number"}})
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label class="control-label">Description</label>
+                        <div class="col-sm-3 text-right">
+                            @Html.LabelWithSugarFor(m => m.FundingEvent.Description)
                         </div>
                         <div class="col-sm-9">
                             @Html.TextAreaWithMaxLengthFor(m => m.FundingEvent.Description, new TextAreaForExtensions.TextAreaDimensions(null, 3), "", new List<string> {"form-control"})
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 text-right">
                             <label class="control-label">Funding Source to Add</label>
                         </div>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <select ng-model="FundingSourceIDToAdd"
+                                <select ng-model="FundingSourceToAdd"
                                         class="selectpicker"
                                         data-live-search="true"
                                         data-container="body"
+                                        data-width="100%" selectpicker
                                         title="Select a Funding Source to Add"
-                                        data-width="100%">
+                                        ng-options="fundingSource as fundingSource.DisplayName for fundingSource in filteredFundingSources(AngularModel.FundingEvent) track by fundingSource.FundingSourceID">
                                     <option value="" disabled selected>Select a Funding Source to Add</option>
-                                    <option ng-repeat="fundingSource in filteredFundingSources(AngularModel.FundingEvent)"
-                                            value="{{fundingSource.FundingSourceID}}"
-                                            ng-selected="FundingSourceIDToAdd == fundingSource.FundingSourceID"
-                                            ng-bind="fundingSource.DisplayName"
-                                            data-tokens="{{fundingSource.DisplayName}}">
-                                    </option>
                                 </select>
                                 <span class="input-group-btn">
                                     <button class="btn btn-neptune" type="button" ng-click="addRow(AngularModel.FundingEvent)">
@@ -113,7 +109,7 @@ Source code is available upon request via <support@sitkatech.com>.
                         <tbody>
                         <tr>
                             <th style="width: 30px;"></th>
-                            <th style="white-space: nowrap">@Html.LabelWithSugarFor(FieldDefinition.FundingSource))</th>
+                            <th style="white-space: nowrap">@Html.LabelWithSugarFor(FieldDefinition.FundingSource)</th>
                             <th style="text-align: right; padding-right: 17px;">Amount</th>
                         </tr>
                         <tr ng-repeat="fundingEventFundingSource in AngularModel.FundingEvent.FundingEventFundingSources | orderBy:[getFundingSourceName]">

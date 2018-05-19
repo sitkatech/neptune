@@ -15,6 +15,7 @@ namespace Neptune.Web.Models
         [Required]
         public int Year { get; set; }
 
+        [Required(ErrorMessage="Funding Event Type is required")]
         [DisplayName("Funding Event Type")]
         public int FundingEventTypeID { get; set; }
 

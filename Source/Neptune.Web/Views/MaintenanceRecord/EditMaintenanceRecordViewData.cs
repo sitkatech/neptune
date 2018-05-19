@@ -45,7 +45,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
             AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
                 x => x.OrganizationName,"Choose an Organization");
 
-            AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture), x=>x.MaintenanceRecordTypeDisplayName,"Choose a type");
+            AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
 
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
