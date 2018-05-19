@@ -83,6 +83,7 @@
             var latLngs = [layer.getLatLng()];
             var markerBounds = L.latLngBounds(latLngs);
             $scope.neptuneMap.map.fitBounds(markerBounds);
+            $scope.neptuneMap.map.setZoom(13);
 
             // multi-way binding
             $scope.neptuneMap.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
