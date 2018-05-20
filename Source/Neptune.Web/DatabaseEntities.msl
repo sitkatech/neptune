@@ -381,7 +381,6 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="StormwaterAssessmentTypeID" ColumnName="StormwaterAssessmentTypeID" />
           <ScalarProperty Name="AssessmentDate" ColumnName="AssessmentDate" />
           <ScalarProperty Name="PersonID" ColumnName="PersonID" />
           <ScalarProperty Name="AlternateAssessmentScore" ColumnName="AlternateAssessmentScore" />

@@ -730,7 +730,6 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
-    <Property Name="StormwaterAssessmentTypeID" Type="int" Nullable="false" />
     <Property Name="AssessmentDate" Type="datetime" Nullable="false" />
     <Property Name="PersonID" Type="int" Nullable="false" />
     <Property Name="AlternateAssessmentScore" Type="float" />

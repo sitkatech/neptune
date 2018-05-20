@@ -7,7 +7,6 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
-	[StormwaterAssessmentTypeID] [int] NOT NULL,
 	[AssessmentDate] [datetime] NOT NULL,
 	[PersonID] [int] NOT NULL,
 	[AlternateAssessmentScore] [float] NULL,
@@ -41,11 +40,6 @@ ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_Treat
 REFERENCES [dbo].[Person] ([PersonID], [TenantID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_Person_PersonID_TenantID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_StormwaterAssessmentType_StormwaterAssessmentTypeID] FOREIGN KEY([StormwaterAssessmentTypeID])
-REFERENCES [dbo].[StormwaterAssessmentType] ([StormwaterAssessmentTypeID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_StormwaterAssessmentType_StormwaterAssessmentTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])

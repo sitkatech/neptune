@@ -741,7 +741,6 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
-    <Property Name="StormwaterAssessmentTypeID" Type="Int32" Nullable="false" />
     <Property Name="AssessmentDate" Type="DateTime" Nullable="false" />
     <Property Name="PersonID" Type="Int32" Nullable="false" />
     <Property Name="AlternateAssessmentScore" Type="Double" />

@@ -102,17 +102,6 @@
                         </div>
                     </div>
                 }
-                @if (ViewDataTyped.CurrentPerson.Role == Role.Admin)
-                {
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.AssessmentTypeID, true)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.AssessmentTypeID, ViewDataTyped.AssessmentTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </div>

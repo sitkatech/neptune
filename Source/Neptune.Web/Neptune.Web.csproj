@@ -153,8 +153,6 @@
     <Compile Include="Models\Generated\StateProvince.Binding.cs" />
     <Compile Include="Models\Generated\StateProvince.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\StateProvincePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\StormwaterAssessmentType.Binding.cs" />
-    <Compile Include="Models\Generated\StormwaterAssessmentTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterBreadCrumbEntity.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterBreadCrumbEntityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\StormwaterJurisdiction.Binding.cs" />

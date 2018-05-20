@@ -28,14 +28,12 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
     public class AssessmentInformationViewData : AssessmentSectionViewData
     {
         public readonly IEnumerable<SelectListItem> JurisdictionPeople;
-        public readonly IEnumerable<SelectListItem> AssessmentTypes;
 
         public const string ThisSectionName = "Assessment Information";
-        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople, IEnumerable<SelectListItem> assessmentTypes)
+        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople)
             : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
         {
             JurisdictionPeople = jurisdictionPeople;
-            AssessmentTypes = assessmentTypes;
         }  
     }
 }
