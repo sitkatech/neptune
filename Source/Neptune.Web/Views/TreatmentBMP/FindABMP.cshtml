@@ -50,7 +50,9 @@
     <style>
         .selected-bmp {
             background-color: #FFFF85;
-        }
+        }.selected-bmp:hover {
+            background-color: #FFFF85 !important;
+        } 
         .list-group-item .help-block {
             margin-bottom: 0;
             font-size: 12px;
@@ -65,6 +67,11 @@
 
         li.list-group-item {
             color: #737373;
+            cursor: pointer;
+        }
+
+        li.list-group-item:hover {
+            background-color: #eee;
             cursor: pointer;
         }
 

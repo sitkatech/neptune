@@ -76,7 +76,7 @@ NeptuneMaps.StormwaterSearch.prototype = Sitka.Methods.clonePrototype(NeptuneMap
 
 NeptuneMaps.StormwaterSearch.prototype.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
     var self = this;
-
+    self.typeaheadSelector = typeaheadSelector;
     var finder = jQuery(typeaheadSelector);
     finder.typeahead({
             highlight: true,
@@ -100,10 +100,13 @@ NeptuneMaps.StormwaterSearch.prototype.typeaheadSearch = function (typeaheadSele
         function(ev, suggestion)
         {
             var summaryDataJson = JSON.parse(suggestion.Value);
-
-            self.setSelectedMarker(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson));
             self.loadSummaryPanel(summaryDataJson.MapSummaryUrl);
-            self.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 14);
+            self.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 13);
+            self.map.invalidateSize();
+            setTimeout(function() {
+                    self.apply(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson), summaryDataJson.EntityID);
+                },
+                500);
         });
 
     jQuery(typeaheadSelectorButton).click(function () { selectFirstSuggestionFunction(finder); });
