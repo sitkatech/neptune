@@ -12,6 +12,16 @@
         var summaryUrl = $scope.AngularViewData.FindTreatmentBMPByNameUrl;
 
         $scope.neptuneMap.typeaheadSearch(selector, selectorButton, summaryUrl);
+        $scope.neptuneMap.apply = function (marker, treatmentBMPID) {
+            $scope.neptuneMap.setSelectedMarker(marker);
+            var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
+                function (t) {
+                    return t.TreatmentBMPID == treatmentBMPID;
+                });
+            $scope.activeTreatmentBMP = treatmentBMP;
+
+            $scope.$apply();
+        }
 
         var url = "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Outfall_Inspections/FeatureServer/0";
         var outfallsPopup = function (layer) {
@@ -59,13 +69,16 @@
                 function(t) {
                     return !($scope.isActive(t));
                 });
-            return orderedBMPs;
+            return filteredBMPs;
         };
 
+
+
+        // only used when selecting from the list 
         $scope.setActive = function(treatmentBMP) {
             var layer = _.find($scope.neptuneMap.searchableLayerGeoJson._layers,
                 function(layer) { return treatmentBMP.TreatmentBMPID === layer.feature.properties.TreatmentBMPID; });
-            setActiveImpl(layer, treatmentBMP);
+            setActiveImpl(layer, treatmentBMP, false);
         };
 
         $scope.setActiveByID = function (treatmentBMPID) {
@@ -75,15 +88,17 @@
                 });
             var layer = _.find($scope.neptuneMap.searchableLayerGeoJson._layers,
                 function (layer) { return treatmentBMPID === layer.feature.properties.TreatmentBMPID; });
-            setActiveImpl(layer, treatmentBMP);
+            setActiveImpl(layer, treatmentBMP, true);
         };
 
-        function setActiveImpl(layer, treatmentBMP) {
-            // zoom to marker
-            var latLngs = [layer.getLatLng()];
-            var markerBounds = L.latLngBounds(latLngs);
-            $scope.neptuneMap.map.fitBounds(markerBounds);
-            $scope.neptuneMap.map.setZoom(13);
+        function setActiveImpl(layer, treatmentBMP, updateMap) {
+            if (updateMap) {
+                // zoom to marker
+                var latLngs = [layer.getLatLng()];
+                var markerBounds = L.latLngBounds(latLngs);
+                $scope.neptuneMap.map.fitBounds(markerBounds);
+                $scope.neptuneMap.map.setZoom(13);
+            }
 
             // multi-way binding
             $scope.neptuneMap.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);

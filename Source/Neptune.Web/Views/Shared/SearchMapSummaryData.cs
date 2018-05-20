@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Data.Entity.Spatial;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared
 {
