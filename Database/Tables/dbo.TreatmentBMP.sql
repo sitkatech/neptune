@@ -5,7 +5,7 @@ GO
 CREATE TABLE [dbo].[TreatmentBMP](
 	[TreatmentBMPID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
-	[TreatmentBMPName] [varchar](30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[TreatmentBMPName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,

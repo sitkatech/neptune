@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Linq;
 using LtInfo.Common.Views;
 using Neptune.Web.Security;
@@ -105,6 +106,23 @@ namespace Neptune.Web.Models
                 }           
             }
             return string.Empty;
+        }
+
+        public DateTime? LastMaintainedDateTime()
+        {
+            return !MaintenanceRecords.Any()
+                ? null
+                : (DateTime?) MaintenanceRecords.Select(x => x.MaintenanceRecordDate)
+                    .Max();
+        }
+
+        public string LastMaintainedDateAsString()
+        {
+            return !MaintenanceRecords.Any()
+                ? "Never"
+                : MaintenanceRecords.Select(x => x.MaintenanceRecordDate)
+                    .Max().ToString("g");
+
         }
     }
 }

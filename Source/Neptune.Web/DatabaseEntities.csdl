@@ -712,7 +712,7 @@
     </Key>
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
-    <Property Name="TreatmentBMPName" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
+    <Property Name="TreatmentBMPName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
     <Property Name="LocationPoint" Type="Geometry" />
     <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
