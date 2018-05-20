@@ -59,6 +59,7 @@
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
 
         $scope.visibleBMPs = function() {
             var filteredBMPs = _.filter($scope.AngularViewData.TreatmentBMPs,
@@ -67,9 +68,9 @@
                 });
             var orderedBMPs = _.sortBy(filteredBMPs,
                 function(t) {
-                    return !($scope.isActive(t));
+                    return (t.DisplayName);
                 });
-            return filteredBMPs;
+            return orderedBMPs;
         };
 
 
@@ -101,6 +102,7 @@
             }
 
             // multi-way binding
+            jQuery($scope.neptuneMap.typeaheadSelector).typeahead('val', '');
             $scope.neptuneMap.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.neptuneMap.setSelectedMarker(layer);
             $scope.activeTreatmentBMP = treatmentBMP;
