@@ -34,6 +34,9 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditFundingEventFundingSources(fundingEvent, viewModel);
             }
+
+            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully updated.");
+
             return UpdateFundingEventFundingSources(viewModel, fundingEvent);
         }
         [HttpGet]
@@ -73,6 +76,9 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.AllFundingEvents.Add(fundingEvent);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully added.");
+
             return new ModalDialogFormJsonResult();
         }
 
