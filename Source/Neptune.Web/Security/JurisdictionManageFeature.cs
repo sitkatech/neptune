@@ -26,9 +26,9 @@ using Neptune.Web.Models;
 namespace Neptune.Web.Security
 {
     [SecurityFeatureDescription("Allows Creating and Editing Stormwater Assests")]
-    public class NeptuneEditFeature : NeptuneFeature
+    public class JurisdictionManageFeature : NeptuneFeature
     {
-        public NeptuneEditFeature()
+        public JurisdictionManageFeature()
             : base(new List<Role> { Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin })
         {
         }

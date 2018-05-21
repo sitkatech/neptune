@@ -40,14 +40,14 @@ namespace Neptune.Web.Views.FundingEvent
             TreatmentBMPID = fundingEvent.TreatmentBMPID;
             AllFundingEventTypes = allFundingEventTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
-                x => x.FundingEventTypeDisplayName, "Select a Funding Source");
+                x => x.FundingEventTypeDisplayName, "Select a Funding Event Type");
         }
 
         public EditViewData(List<FundingSourceSimple> allFundingSources, List<FundingEventType> allFundingEventTypes, Models.TreatmentBMP treatmentBMP)
         {
             AllFundingSources = allFundingSources;
             AllFundingEventTypes = allFundingEventTypes.ToSelectListWithEmptyFirstRow(x => x.FundingEventTypeID.ToString(CultureInfo.InvariantCulture),
-                x => x.FundingEventTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Select a Funding Source");
+                x => x.FundingEventTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Select a Funding Event Type");
             TreatmentBMPID = TreatmentBMPID;
         }
     }

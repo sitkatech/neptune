@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         public ViewResult New()
         {
             var viewModel = new EditViewModel();
@@ -95,7 +95,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         public ActionResult New(EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -119,7 +119,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         public ViewResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -129,7 +129,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {

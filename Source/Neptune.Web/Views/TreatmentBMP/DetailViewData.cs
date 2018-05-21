@@ -73,7 +73,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewAssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
-            CurrentPersonCanEditTreatmentBMP = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
+            CurrentPersonCanEditTreatmentBMP = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             UserHasCustomAttributeTypeManagePermissions =
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 

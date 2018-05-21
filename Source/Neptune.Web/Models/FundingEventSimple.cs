@@ -13,6 +13,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
 
         [Required]
+        [Range(1980, 2050, ErrorMessage = "Please enter a valid year range")]
         public int Year { get; set; }
 
         [Required(ErrorMessage="Funding Event Type is required")]

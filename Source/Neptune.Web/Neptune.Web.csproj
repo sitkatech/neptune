@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -310,7 +310,7 @@
     <Compile Include="Models\TreatmentBMPTypeObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Security\LoggedInAndNotUnassignedRoleUnclassifiedFeature.cs" />
     <Compile Include="Security\NeptuneViewFeature.cs" />
-    <Compile Include="Security\NeptuneEditFeature.cs" />
+    <Compile Include="Security\JurisdictionManageFeature.cs" />
     <Compile Include="Security\ModeledCatchmentManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPAssessmentManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPDocumentManageFeature.cs" />
