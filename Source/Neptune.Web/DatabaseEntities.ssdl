@@ -830,6 +830,7 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPTypeAsses
     <Property Name="DefaultThresholdValue" Type="float" />
     <Property Name="DefaultBenchmarkValue" Type="float" />
     <Property Name="OverrideAssessmentScoreIfFailing" Type="bit" Nullable="false" />
+    <Property Name="SortOrder" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeID_CustomAttributeTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -844,6 +845,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="int" Nullable="false" />
+    <Property Name="SortOrder" Type="int" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />

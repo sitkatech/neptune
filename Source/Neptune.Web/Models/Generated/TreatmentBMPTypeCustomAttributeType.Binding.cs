@@ -31,11 +31,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeCustomAttributeType(int treatmentBMPTypeCustomAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID) : this()
+        public TreatmentBMPTypeCustomAttributeType(int treatmentBMPTypeCustomAttributeTypeID, int treatmentBMPTypeID, int customAttributeTypeID, int? sortOrder) : this()
         {
             this.TreatmentBMPTypeCustomAttributeTypeID = treatmentBMPTypeCustomAttributeTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.CustomAttributeTypeID = customAttributeTypeID;
+            this.SortOrder = sortOrder;
         }
 
         /// <summary>
@@ -111,6 +112,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
+        public int? SortOrder { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeCustomAttributeTypeID; } set { TreatmentBMPTypeCustomAttributeTypeID = value; } }
 

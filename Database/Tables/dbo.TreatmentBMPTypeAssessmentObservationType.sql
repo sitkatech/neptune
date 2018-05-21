@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType](
 	[DefaultThresholdValue] [float] NULL,
 	[DefaultBenchmarkValue] [float] NULL,
 	[OverrideAssessmentScoreIfFailing] [bit] NOT NULL,
+	[SortOrder] [int] NULL,
  CONSTRAINT [PK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPTypeAssessmentObservationTypeID] ASC

@@ -475,6 +475,7 @@
           <ScalarProperty Name="DefaultThresholdValue" ColumnName="DefaultThresholdValue" />
           <ScalarProperty Name="DefaultBenchmarkValue" ColumnName="DefaultBenchmarkValue" />
           <ScalarProperty Name="OverrideAssessmentScoreIfFailing" ColumnName="OverrideAssessmentScoreIfFailing" />
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -485,6 +486,7 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="CustomAttributeTypeID" ColumnName="CustomAttributeTypeID" />
+          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

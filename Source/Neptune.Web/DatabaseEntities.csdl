@@ -855,6 +855,7 @@
     <Property Name="DefaultThresholdValue" Type="Double" />
     <Property Name="DefaultBenchmarkValue" Type="Double" />
     <Property Name="OverrideAssessmentScoreIfFailing" Type="Boolean" Nullable="false" />
+    <Property Name="SortOrder" Type="Int32" />
     <NavigationProperty Name="TreatmentBMPAssessmentObservationType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationTypes" ToRole="TreatmentBMPAssessmentObservationType" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationType" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID" FromRole="TreatmentBMPTypeAssessmentObservationType" ToRole="TreatmentBMPObservations" />
@@ -868,6 +869,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="Int32" Nullable="false" />
+    <Property Name="SortOrder" Type="Int32" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID" FromRole="TreatmentBMPTypeCustomAttributeType" ToRole="CustomAttributes" />
     <NavigationProperty Name="CustomAttributeType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID" FromRole="TreatmentBMPTypeCustomAttributeTypes" ToRole="CustomAttributeType" />
     <NavigationProperty Name="MaintenanceRecordObservations" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID" FromRole="TreatmentBMPTypeCustomAttributeType" ToRole="MaintenanceRecordObservations" />
