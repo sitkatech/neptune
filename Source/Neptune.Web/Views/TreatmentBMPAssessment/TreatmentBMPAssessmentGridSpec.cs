@@ -41,7 +41,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             Add("Date", x => x.AssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Score", x => x.AlternateAssessmentScore ?? x.CalculateAssessmentScore(), 80);
             Add(Models.FieldDefinition.AssessmentForInternalUseOnly.ToGridHeaderString(), x => x.IsPrivate.ToYesNo(), 80);
-            Add(Models.FieldDefinition.TypeOfAssessment.ToGridHeaderString(), x => x.StormwaterAssessmentType.StormwaterAssessmentTypeDisplayName, 100);
         }
     }
 }

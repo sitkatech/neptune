@@ -41,6 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesOrEmpty(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Notes", x => x.Notes, 195);
             Add("Number of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
+            Add("Last Maintained On", x => x.LastMaintainedDateTime(), 130, DhtmlxGridColumnFormatType.Date);
         }
     }
 }

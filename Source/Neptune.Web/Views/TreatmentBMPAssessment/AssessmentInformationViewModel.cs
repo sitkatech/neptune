@@ -54,9 +54,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         [Required]
         public bool? IsPostMaintenanceAssessment { get; set; }
 
-        [FieldDefinitionDisplay(FieldDefinitionEnum.TypeOfAssessment)]
-        public int? AssessmentTypeID { get; set; }
-
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -73,7 +70,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             AssessmentDate = treatmentBMPAssessment.AssessmentDate;
             AssessmentNotes = treatmentBMPAssessment.Notes;
             IsPrivate = treatmentBMPAssessment.IsPrivate;
-            AssessmentTypeID = treatmentBMPAssessment.StormwaterAssessmentTypeID;
             IsPostMaintenanceAssessment = treatmentBMPAssessment.IsPostMaintenanceAssessment;
 
         }
@@ -93,15 +89,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             {
                 treatmentBMPAssessment.IsPrivate = IsPrivate.Value;
             }
-
-            if (currentPerson.Role != Models.Role.Admin)
-            {
-                treatmentBMPAssessment.StormwaterAssessmentTypeID = StormwaterAssessmentType.Regular.StormwaterAssessmentTypeID;
-            }
-            else
-            {
-                treatmentBMPAssessment.StormwaterAssessmentTypeID = AssessmentTypeID.Value;
-            }  
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -109,20 +96,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             var validationResults = new List<ValidationResult>();
             var isAssessmentPersonAdmin = HttpRequestStorage.DatabaseEntities.People.GetPerson(AssessmentPersonID).Role == Models.Role.Admin;
             var isCurrentPersonAdmin = HttpRequestStorage.DatabaseEntities.People.GetPerson(CurrentPersonID).Role == Models.Role.Admin;
-            
-            if (!AssessmentTypeID.HasValue && isAssessmentPersonAdmin)
-            {
-                validationResults.Add(new SitkaValidationResult<AssessmentInformationViewModel, int?>("Type of Assessment is required.", x => x.AssessmentTypeID));
-            }
 
             if (!IsPrivate.HasValue && !isAssessmentPersonAdmin && !isCurrentPersonAdmin)
             {
                 validationResults.Add(new SitkaValidationResult<AssessmentInformationViewModel, bool?>("For Internal Use Only is required.", x => x.IsPrivate));
-            }
-
-            if (isCurrentPersonAdmin && !isAssessmentPersonAdmin && StormwaterAssessmentType.ToType(AssessmentTypeID.Value) == StormwaterAssessmentType.Validation)
-            {
-                validationResults.Add(new SitkaValidationResult<AssessmentInformationViewModel, int?>("Type of Assessment must be Regular.", x => x.AssessmentTypeID));             
             }
 
             return validationResults;

@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
 
         public bool IsPublicRegularAssessment()
         {
-            return StormwaterAssessmentType == StormwaterAssessmentType.Regular && !IsPrivate;
+            return !IsPrivate;
         }        
 
         public double? CalculateAssessmentScore()

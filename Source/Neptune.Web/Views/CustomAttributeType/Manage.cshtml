@@ -33,7 +33,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 @section RightOfPageTitle
 {
-    @if (new NeptuneEditFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
+    @if (new JurisdictionManageFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
         <a class="btn btn-neptune headerButtonText customAttributeTypeButton" href="@ViewDataTyped.NewCustomAttributeTypeUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Custom Attribute Type</a>
     }    

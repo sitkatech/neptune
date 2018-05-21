@@ -266,11 +266,6 @@ namespace Neptune.Web.Models
                 case "StateProvince":
                     return StateProvinces.GetStateProvince(primaryKey);
 
-                case "StormwaterAssessmentType":
-                    var stormwaterAssessmentType = StormwaterAssessmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(stormwaterAssessmentType, "StormwaterAssessmentType", primaryKey);
-                    return stormwaterAssessmentType;
-
                 case "StormwaterBreadCrumbEntity":
                     var stormwaterBreadCrumbEntity = StormwaterBreadCrumbEntity.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(stormwaterBreadCrumbEntity, "StormwaterBreadCrumbEntity", primaryKey);

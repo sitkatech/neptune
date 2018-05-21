@@ -124,10 +124,8 @@ namespace Neptune.Web.Controllers
             stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
 
             var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
-            
-            var assessmentTypes = StormwaterAssessmentType.All.ToSelectList(x => x.StormwaterAssessmentTypeID.ToString(CultureInfo.InvariantCulture), x => x.StormwaterAssessmentTypeDisplayName);
 
-            var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList, assessmentTypes);
+            var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList);
             return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
         }
 
@@ -334,7 +332,7 @@ namespace Neptune.Web.Controllers
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, StormwaterAssessmentType.Regular, DateTime.Now, CurrentPerson, false, false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson, false, false);
         }
 
         [NeptuneViewFeature]
@@ -424,7 +422,7 @@ namespace Neptune.Web.Controllers
 
             PartialViewResult result;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
+                ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, DateTime.Now, CurrentPerson.PersonID, null, string.Empty, false,
                 string.Empty, false);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);

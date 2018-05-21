@@ -708,7 +708,7 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     </Key>
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
-    <Property Name="TreatmentBMPName" Type="varchar" Nullable="false" MaxLength="30" />
+    <Property Name="TreatmentBMPName" Type="varchar" Nullable="false" MaxLength="50" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="LocationPoint" Type="geometry" />
     <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" />
@@ -730,7 +730,6 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
-    <Property Name="StormwaterAssessmentTypeID" Type="int" Nullable="false" />
     <Property Name="AssessmentDate" Type="datetime" Nullable="false" />
     <Property Name="PersonID" Type="int" Nullable="false" />
     <Property Name="AlternateAssessmentScore" Type="float" />

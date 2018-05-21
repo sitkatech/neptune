@@ -32,7 +32,6 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionRoleName RoleName = FieldDefinitionRoleName.Instance;
         public static readonly FieldDefinitionChartLastUpdatedDate ChartLastUpdatedDate = FieldDefinitionChartLastUpdatedDate.Instance;
         public static readonly FieldDefinitionTreatmentBMPType TreatmentBMPType = FieldDefinitionTreatmentBMPType.Instance;
-        public static readonly FieldDefinitionTypeOfAssessment TypeOfAssessment = FieldDefinitionTypeOfAssessment.Instance;
         public static readonly FieldDefinitionConveyanceFunctionsAsIntended ConveyanceFunctionsAsIntended = FieldDefinitionConveyanceFunctionsAsIntended.Instance;
         public static readonly FieldDefinitionAssessmentScoreWeight AssessmentScoreWeight = FieldDefinitionAssessmentScoreWeight.Instance;
         public static readonly FieldDefinitionObservationScore ObservationScore = FieldDefinitionObservationScore.Instance;
@@ -73,7 +72,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, TypeOfAssessment, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -241,8 +240,6 @@ namespace Neptune.Web.Models
                     return TreatmentBMPDesignDepth;
                 case FieldDefinitionEnum.TreatmentBMPType:
                     return TreatmentBMPType;
-                case FieldDefinitionEnum.TypeOfAssessment:
-                    return TypeOfAssessment;
                 case FieldDefinitionEnum.Username:
                     return Username;
                 default:
@@ -267,7 +264,6 @@ namespace Neptune.Web.Models
         RoleName = 12,
         ChartLastUpdatedDate = 13,
         TreatmentBMPType = 14,
-        TypeOfAssessment = 15,
         ConveyanceFunctionsAsIntended = 16,
         AssessmentScoreWeight = 17,
         ObservationScore = 18,
@@ -383,12 +379,6 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionTreatmentBMPType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionTreatmentBMPType Instance = new FieldDefinitionTreatmentBMPType(14, @"TreatmentBMPType", @"Treatment BMP Type", @"", true);
-    }
-
-    public partial class FieldDefinitionTypeOfAssessment : FieldDefinition
-    {
-        private FieldDefinitionTypeOfAssessment(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionTypeOfAssessment Instance = new FieldDefinitionTypeOfAssessment(15, @"TypeOfAssessment", @"Type of Assessment", @"", true);
     }
 
     public partial class FieldDefinitionConveyanceFunctionsAsIntended : FieldDefinition

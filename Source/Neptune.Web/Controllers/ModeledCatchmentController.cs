@@ -145,7 +145,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         public ViewResult UpdateModeledCatchmentGeometry()
         {
             var viewModel = new UpdateModeledCatchmentGeometryViewModel();
@@ -153,7 +153,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult UpdateModeledCatchmentGeometry(UpdateModeledCatchmentGeometryViewModel viewModel)
         {
@@ -177,7 +177,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveModeledCatchmentGisUpload()
         {
@@ -186,7 +186,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ApproveModeledCatchmentGisUpload(ApproveModeledCatchmentGisUploadViewModel viewModel)
         {
@@ -224,7 +224,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ApproveModeledCatchmentGisUpload, ApproveModeledCatchmentGisUploadViewData, ApproveModeledCatchmentGisUploadViewModel>(viewData, viewModel);
         }
 
-        [NeptuneEditFeature]
+        [JurisdictionManageFeature]
         public JsonResult UploadGisReport(StormwaterJurisdictionPrimaryKey stormwaterJurisdictionPrimaryKey,
             ModeledCatchmentGeometryStagingPrimaryKey modeledCatchmentGeometryStagingPrimaryKey,
             string selectedProperty)

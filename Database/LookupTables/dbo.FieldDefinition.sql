@@ -17,7 +17,6 @@ VALUES
 (12, N'RoleName', N'Role Name', N'<p>The name or title describing&nbsp;function or set of permissions that can be assigned to a user.</p>', 1),
 (13, N'Chart Last Updated Date', 'ChartLastUpdatedDate','<p>The date this chart was last updated with current information.</p>', 1),
 (14, N'TreatmentBMPType', N'Treatment BMP Type', '', 1),
-(15, N'TypeOfAssessment', N'Type of Assessment', '', 1),
 (16, N'ConveyanceFunctionsAsIntended', N'Conveyance Functions as Intended', '', 1),
 (17, N'AssessmentScoreWeight', N'Assessment Score Weight', '', 1),
 (18, N'ObservationScore', N'Observation Score', '', 1),

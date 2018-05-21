@@ -23,7 +23,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             GridName = "treatmentBMPsGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPGridJsonData());
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
-            HasManagePermissions = new NeptuneEditFeature().HasPermissionByPerson(currentPerson);
+            HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }
