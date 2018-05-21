@@ -53,7 +53,7 @@ NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
     }    
 
     var options = {
-        scrollWheelZoom: false, // If this is on (default) scrolling down the page will intercept and starting zooming the map
+        scrollWheelZoom: true, // If this is on (default) scrolling down the page will intercept and starting zooming the map
         layers: [baseLayers[initialBaseLayerShown]],
         attributionControl: false,
         fullscreenControl: mapInitJson.AllowFullScreen ? { pseudoFullscreen: true } : false
