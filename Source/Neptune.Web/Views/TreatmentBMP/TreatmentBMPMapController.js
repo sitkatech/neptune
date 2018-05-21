@@ -94,11 +94,7 @@
 
         function setActiveImpl(layer, treatmentBMP, updateMap) {
             if (updateMap) {
-                // zoom to marker
-                var latLngs = [layer.getLatLng()];
-                var markerBounds = L.latLngBounds(latLngs);
-                $scope.neptuneMap.map.fitBounds(markerBounds);
-                $scope.neptuneMap.map.setZoom(13);
+                $scope.neptuneMap.map.panTo(layer.getLatLng());
             }
 
             // multi-way binding
