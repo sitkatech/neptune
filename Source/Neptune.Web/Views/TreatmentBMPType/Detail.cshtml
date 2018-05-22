@@ -73,7 +73,7 @@
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                             </tr>
                             <tbody>
-                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
+                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
                             {
                                 <tr>
                                     <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
@@ -103,7 +103,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         @{
-                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID);
+                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID).ToList();
                         }
                         @if (treatmentBMPTypeCustomAttributeTypes.Any())
                         {
@@ -116,7 +116,7 @@
                                     <th class="text-right">@Html.Label("Description")</th>
                                 </tr>
                                 <tbody>
-                                    @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes)
+                                    @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
                                     {
                                         <tr>
                                             <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>

@@ -35,9 +35,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(Person currentPerson, List<Models.TreatmentBMPAssessmentObservationType> observationTypes, string submitUrl,
+        public EditViewData(Person currentPerson, IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType,
-            List<Models.CustomAttributeType> customAttributeTypes) : base(currentPerson)
+            IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
@@ -61,11 +61,11 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public List<CustomAttributeTypeSimple> CustomAttributeTypes { get; }
 
 
-        public ViewDataForAngular(IEnumerable<Models.TreatmentBMPAssessmentObservationType> observationTypes,
-            IEnumerable<Models.CustomAttributeType> customAttributeTypes)
+        public ViewDataForAngular(IEnumerable<Models.TreatmentBMPTypeAssessmentObservationType> observationTypes,
+            IEnumerable<Models.TreatmentBMPTypeCustomAttributeType> customAttributeTypes)
         {
-            TreatmentBMPAssessmentObservationTypes = observationTypes.Select(x => new TreatmentBMPTypeAssessmentObservationTypeSimple(x)).ToList();
-            CustomAttributeTypes = customAttributeTypes.Select(x => new CustomAttributeTypeSimple(x)).ToList();
+            TreatmentBMPAssessmentObservationTypes = observationTypes.Select(x => new TreatmentBMPTypeAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType){TreatmentBMPAssessmentObservationTypeSortOrder = x.SortOrder}).ToList();
+            CustomAttributeTypes = customAttributeTypes.Select(x => new CustomAttributeTypeSimple(x.CustomAttributeType){ CustomAttributeTypeSortOrder = x.SortOrder}).ToList();
         }
     }
 }
