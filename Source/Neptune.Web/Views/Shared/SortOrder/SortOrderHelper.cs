@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TreatmentBMPType.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<copyright file="SortOrderHelper.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -19,25 +19,26 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Web.Views.Shared.SortOrder;
+using System.Web;
+using LtInfo.Common.ModalDialog;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.Web.Views.Shared.SortOrder
 {
-    public partial class TreatmentBMPType : IAuditableEntity
+    public static class SortOrderHelper
     {
-
-        public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
+        public static HtmlString SortOrderModalLink(string url, bool hasPermission)
         {
-            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
+            return ModalDialogFormHelper.ModalDialogFormLink("Edit Sort Order", url,
+                "Edit sort order", new List<string> {"btn", "btn-neptune"}, hasPermission);
         }
 
-        public List<TreatmentBMPTypeAssessmentObservationType> GetObservationTypesForAssessment()
+        public static IOrderedEnumerable<T> SortByOrderThenName<T>(this ICollection<T> sortableList) where T : IHaveASortOrder
         {
-            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().ToList();
+            return sortableList.OrderBy(x => x.SortOrder).ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase);
         }
-
-        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
     }
 }

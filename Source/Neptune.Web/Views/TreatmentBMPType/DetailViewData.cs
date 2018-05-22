@@ -30,6 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
     {
         public Models.TreatmentBMPType TreatmentBMPType { get; }
         public bool UserHasTreatmentBMPTypeManagePermissions { get; }
+        public string ObservationTypeSortOrderUrl { get; set; }
 
         public DetailViewData(Person currentPerson,
             Models.TreatmentBMPType treatmentBMPType) : base(currentPerson)
@@ -41,6 +42,17 @@ namespace Neptune.Web.Views.TreatmentBMPType
             UserHasTreatmentBMPTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
+
+            ObservationTypeSortOrderUrl =
+                SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x =>
+                    x.EditObservationTypesSortOrder(TreatmentBMPType));
+
+        }
+
+        public string AttributeTypeSortOrderUrl(int attributeTypePurposeID)
+        {
+            return SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x =>
+                x.EditAttributeTypesSortOrder(TreatmentBMPType, attributeTypePurposeID));
         }
     }
 }

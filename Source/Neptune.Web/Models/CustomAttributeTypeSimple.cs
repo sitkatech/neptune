@@ -11,6 +11,7 @@ namespace Neptune.Web.Models
         public bool IsRequired { get; set; }
         public string Description { get; set; }
         public string Purpose { get; set; }
+        public int? CustomAttributeTypeSortOrder { get; set; }
 
         public CustomAttributeTypeSimple(CustomAttributeType customAttributeType)
         {

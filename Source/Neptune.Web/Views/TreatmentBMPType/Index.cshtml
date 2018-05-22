@@ -23,6 +23,7 @@
 @using MoreLinq
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.SortOrder
 @inherits Neptune.Web.Views.TreatmentBMPType.Index
 @section JavascriptAndStylesContent
 {
@@ -59,7 +60,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var TreatmentBMPAssessmentObservationType in treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType))
+                            @foreach (var TreatmentBMPAssessmentObservationType in treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
                             {
                                 var TreatmentBMPTypeAssessmentObservationType = treatmentBMPType.GetTreatmentBMPTypeObservationType(TreatmentBMPAssessmentObservationType);
                                 <tr>

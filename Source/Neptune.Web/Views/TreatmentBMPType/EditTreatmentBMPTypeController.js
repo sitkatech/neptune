@@ -17,6 +17,11 @@
         return observationTypeToFind.TreatmentBMPAssessmentObservationTypeName;
     };
 
+    $scope.getObservationTypeSortOrder = function (treatmentBMPTypeObservationTypeSimple) {
+        var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
+        return observationTypeToFind.TreatmentBMPAssessmentObservationTypeSortOrder;
+    };
+
     $scope.getObservationCollectionMethodTypeName = function (treatmentBMPTypeObservationTypeSimple) {
         var observationTypeToFind = $scope.getObservationType(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID);
         return observationTypeToFind.CollectionMethodDisplayName;
@@ -93,6 +98,11 @@
     $scope.getCustomAttributeTypeName = function (treatmentBMPTypeAttributeTypeSimple) {
         var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
         return customAttributeTypeToFind.CustomAttributeTypeName;
+    };
+
+    $scope.getCustomAttributeTypeSortOrder = function (treatmentBMPTypeAttributeTypeSimple) {
+        var customAttributeTypeToFind = $scope.getCustomAttributeType(treatmentBMPTypeAttributeTypeSimple.CustomAttributeTypeID);
+        return customAttributeTypeToFind.CustomAttributeTypeSortOrder;
     };
 
     $scope.getCustomAttributeTypePurpose = function (treatmentBMPTypeAttributeTypeSimple) {

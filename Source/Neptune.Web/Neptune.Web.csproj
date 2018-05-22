@@ -209,6 +209,7 @@
     <Compile Include="Controllers\FundingSourceController.cs" />
     <Compile Include="Models\FundingSource.cs" />
     <Compile Include="Models\CustomAttributeValue.cs" />
+    <Compile Include="Models\IHaveASortOrder.cs" />
     <Compile Include="Models\MaintenanceRecordObservation.cs" />
     <Compile Include="Models\TreatmentBMPFundingSource.cs" />
     <Compile Include="Models\FundingEventFundingSourceSimple.cs" />
@@ -365,6 +366,10 @@
     <Compile Include="Views\NeptunePage\NeptunePageDetails.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageDetailsViewData.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
+    <Compile Include="Views\Shared\SortOrder\EditSortOrder.cs" />
+    <Compile Include="Views\Shared\SortOrder\EditSortOrderViewData.cs" />
+    <Compile Include="Views\Shared\SortOrder\EditSortOrderViewModel.cs" />
+    <Compile Include="Views\Shared\SortOrder\SortOrderHelper.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSection.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewModel.cs" />
@@ -622,6 +627,8 @@
     <Content Include="Content\qtip\jquery.qtip.validation.min.js">
       <DependentUpon>jquery.qtip.validation.js</DependentUpon>
     </Content>
+    <Content Include="Content\Sortable.js" />
+    <Content Include="Content\Sortable.min.js" />
     <Content Include="Content\spinjs\spin.min.js" />
     <Content Include="Content\typeahead\typeahead.js" />
     <Content Include="Content\typeahead\typeahead.min.js">
@@ -1036,6 +1043,7 @@
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecordObservations.cshtml" />
     <Content Include="Views\TreatmentBMP\Index.cshtml" />
     <Content Include="Views\TreatmentBMP\FindABMP.cshtml" />
+    <Content Include="Views\Shared\SortOrder\EditSortOrder.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

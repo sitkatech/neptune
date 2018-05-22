@@ -18,7 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using System.Diagnostics.Eventing.Reader
+@using Neptune.Web.Views.Shared.SortOrder
 @using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
@@ -61,6 +61,7 @@
                 Applicable Observation Types
             </div>
             <div class="panel-body">
+                <div class="row"><div class="col-xs-12" style="margin-bottom: 10px;">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.ObservationTypeSortOrderUrl, ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</div></div>
                 <div class="row">
                     <div class="col-xs-12">
                         <table class="table">
@@ -72,7 +73,7 @@
                                 <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                             </tr>
                             <tbody>
-                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
+                            @foreach (var TreatmentBMPTypeAssessmentObservationType in ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName())
                             {
                                 <tr>
                                     <td class="text-left">@TreatmentBMPTypeAssessmentObservationType.TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
@@ -98,10 +99,11 @@
                 @purpose.CustomAttributeTypePurposeDisplayName
             </div>
             <div class="panel-body">
+                <div class="row"><div class="col-xs-12" style="margin-bottom: 10px;">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.AttributeTypeSortOrderUrl(purpose.CustomAttributeTypePurposeID), ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</div></div>
                 <div class="row">
                     <div class="col-xs-12">
                         @{
-                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID);
+                            var treatmentBMPTypeCustomAttributeTypes = ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID).ToList();
                         }
                         @if (treatmentBMPTypeCustomAttributeTypes.Any())
                         {
@@ -114,19 +116,21 @@
                                     <th class="text-right">@Html.Label("Description")</th>
                                 </tr>
                                 <tbody>
-                                @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes)
-                                {
-                                    <tr>
-                                        <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>
-                                        <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
-                                        <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
-                                        <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>
-                                        <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
-                                    </tr>
-                                }
+                                    @foreach (var treatmentBMPTypeAttributeType in treatmentBMPTypeCustomAttributeTypes.SortByOrderThenName())
+                                    {
+                                        <tr>
+                                            <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl()</td>
+                                            <td class="text-left">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeDataType.CustomAttributeDataTypeDisplayName</td>
+                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.GetMeasurementUnitDisplayName()</td>
+                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.IsRequired.ToYesNo()</td>
+                                            <td class="text-right">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
-                        }else{ 
+                        }
+                        else
+                        {
                             <p class="systemText">No @(purpose.CustomAttributeTypePurposeDisplayName) are defined for this BMP Type.</p>
                         }
                     </div>

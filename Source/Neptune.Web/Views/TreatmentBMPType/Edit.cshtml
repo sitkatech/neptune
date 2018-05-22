@@ -104,7 +104,7 @@
                     <th style="width: 32px"></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.AssessmentFailsIfObservationFails) </th>
                 </tr>
-                <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeName]">
+                <tr ng-repeat="treatmentBMPTypeObservationTypeSimple in AngularModel.TreatmentBMPTypeObservationTypeSimples | orderBy:[getObservationTypeSortOrder, getObservationTypeName]">
                     <td>
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteObservationTypeRow(treatmentBMPTypeObservationTypeSimple)" style="cursor: pointer"></span>
                     </td>
@@ -208,7 +208,7 @@
                     <th class="text-center">@Html.Label("Required?")</th>
                     <th class="text-left">@Html.Label("Description")</th>
                 </tr>
-                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypeName]">
+                <tr ng-repeat="treatmentBMPTypeAttributeTypeSimple in AngularModel.TreatmentBMPTypeAttributeTypeSimples | orderBy:[getCustomAttributeTypePurpose, getCustomAttributeTypeSortOrder, getCustomAttributeTypeName]">
                     <td>
                         <span class="glyphicon glyphicon-trash blue" title="Remove row" alt="Remove row" ng-click="deleteCustomAttributeTypeRow(treatmentBMPTypeAttributeTypeSimple)" style="cursor: pointer"></span>
                     </td>
