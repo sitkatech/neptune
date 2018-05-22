@@ -35,9 +35,12 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string SubmitUrl { get; }
         public ViewPageContentViewData ViewInstructionsNeptunePage { get; }
 
-        public EditViewData(Person currentPerson, IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
+        public EditViewData(Person currentPerson,
+            IEnumerable<TreatmentBMPTypeAssessmentObservationType> observationTypes, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.TreatmentBMPType treatmentBMPType,
-            IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes) : base(currentPerson)
+            IEnumerable<TreatmentBMPTypeCustomAttributeType> customAttributeTypes,
+            IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes,
+            IEnumerable<Models.CustomAttributeType> allCustomAttributeTypes) : base(currentPerson)
         {
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Manage());
@@ -48,7 +51,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             }
             PageTitle = $"{(treatmentBMPType != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()}";
 
-            ViewDataForAngular = new ViewDataForAngular(observationTypes, customAttributeTypes);
+            ViewDataForAngular = new ViewDataForAngular(observationTypes, customAttributeTypes, allObservationTypes,allCustomAttributeTypes);
             TreatmentBMPTypeIndexUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Manage());
             SubmitUrl = submitUrl;
             ViewInstructionsNeptunePage = new ViewPageContentViewData(instructionsNeptunePage, currentPerson);
@@ -62,10 +65,21 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
 
         public ViewDataForAngular(IEnumerable<Models.TreatmentBMPTypeAssessmentObservationType> observationTypes,
-            IEnumerable<Models.TreatmentBMPTypeCustomAttributeType> customAttributeTypes)
+            IEnumerable<Models.TreatmentBMPTypeCustomAttributeType> customAttributeTypes, IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes, IEnumerable<Models.CustomAttributeType> allCustomAttributeTypes)
         {
-            TreatmentBMPAssessmentObservationTypes = observationTypes.Select(x => new TreatmentBMPTypeAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType){TreatmentBMPAssessmentObservationTypeSortOrder = x.SortOrder}).ToList();
-            CustomAttributeTypes = customAttributeTypes.Select(x => new CustomAttributeTypeSimple(x.CustomAttributeType){ CustomAttributeTypeSortOrder = x.SortOrder}).ToList();
+            TreatmentBMPAssessmentObservationTypes = allObservationTypes.Select(x =>
+                new TreatmentBMPTypeAssessmentObservationTypeSimple(x)
+                {
+                    TreatmentBMPAssessmentObservationTypeSortOrder = observationTypes.SingleOrDefault(y =>
+                            y.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID)
+                        ?.SortOrder
+                }).ToList();
+
+            CustomAttributeTypes = allCustomAttributeTypes.Select(x => new CustomAttributeTypeSimple(x)
+            {
+                CustomAttributeTypeSortOrder = customAttributeTypes
+                    .SingleOrDefault(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID)?.SortOrder
+            }).ToList();
         }
     }
 }
