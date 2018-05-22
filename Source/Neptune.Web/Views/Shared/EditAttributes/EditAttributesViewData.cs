@@ -24,6 +24,7 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
@@ -43,7 +44,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
 
             TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID)
-                .OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName).ToList();
+                .ToList().SortByOrderThenName().ToList();
             ParentDetailUrl = treatmentBMP.GetDetailUrl();
         }
     }

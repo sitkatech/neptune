@@ -26,6 +26,7 @@
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Views.Shared.SortOrder
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMP.Detail
@@ -110,7 +111,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName))
+                            @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
                             {
                                 <tr>
                                     <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
@@ -152,7 +153,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).ToList().SortByOrderThenName())
                             {
                                 <tr>
                                     <td>
@@ -196,7 +197,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).OrderBy(x => x.CustomAttributeType.CustomAttributeTypeName))
+                            @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
                             {
                                 <tr>
                                     <td>
