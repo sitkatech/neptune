@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
@@ -44,8 +45,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
             public ScoreViewDataForAngular(IEnumerable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             {
-                ObservationTypeSimples = TreatmentBMPTypeAssessmentObservationTypes
-                    .OrderBy(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName).Select(x =>
+                ObservationTypeSimples = TreatmentBMPTypeAssessmentObservationTypes.ToList()
+                    .SortByOrderThenName().Select(x =>
                         new TreatmentBMPAssessmentObservationTypeSimple(x.TreatmentBMPAssessmentObservationType, treatmentBMPAssessment,
                             x.OverrideAssessmentScoreIfFailing)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
