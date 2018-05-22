@@ -37,7 +37,7 @@
                     <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
                         <a href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
                     </li>
-                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName))
+                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType))
                     {
                         <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
                             <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : TreatmentBMPAssessmentObservationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">

@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Models
 {
@@ -29,7 +30,12 @@ namespace Neptune.Web.Models
 
         public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
         {
-            return TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
+            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
+        }
+
+        public List<TreatmentBMPTypeAssessmentObservationType> GetObservationTypesForAssessment()
+        {
+            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().ToList();
         }
 
         public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
