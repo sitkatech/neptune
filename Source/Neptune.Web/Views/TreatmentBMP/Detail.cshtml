@@ -40,375 +40,391 @@
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css"/>
 }
 
-<div class="row">
-<div class="col-xs-12 col-sm-6">
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Basics
-            @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
-            {
-                <span class="pull-right">
-                    <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                </span>
-            }
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">Name</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.Label("Owner")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.Label("Year Built")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.YearBuilt</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.Label("ID in System of Record")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.SystemOfRecordID</div>
-            </div>
-            <div class="row">
-                <label class="col-sm-5 control-label text-right">@Html.Label("Notes")</label>
-                <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
-            </div>
-        </div>
-    </div>
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Benchmark &amp; Threshold Values
-            <span class="pull-right">
-                @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
-                {
-                    <a href="@ViewDataTyped.AddBenchmarkAndThresholdUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                }
-
-            </span>
-        </div>
-        <div class="panel-body">
-            @if (!ViewDataTyped.HasSettableBenchmarkAndThresholdValues)
-            {
-                <p class="systemText">
-                    This type of treatment BMP does not have settable benchmark and threshold values
-                </p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Observation Type</th>
-                        <th>Benchmark</th>
-                        <th>Threshold</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Basics
+                    @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
                     {
-                        <tr>
-                            <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
-                            <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                            <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                        </tr>
+                        <span class="pull-right">
+                            <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        </span>
                     }
-
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
-            <span class="pull-right">
-                @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
-                {
-                    <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                }
-
-            </span>
-        </div>
-        <div class="panel-body">
-            @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
-            {
-                <p class="systemText">
-                    This type of treatment BMP does not have any @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
-                </p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Attribute</th>
-                        <th class="text-right">Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).ToList().SortByOrderThenName())
-                    {
-                        <tr>
-                            <td>
-                                @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
-                                <br/>
-                                <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
-                            </td>
-                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
-            <span class="pull-right">
-                @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
-                {
-                    <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                }
-
-            </span>
-        </div>
-        <div class="panel-body">
-            @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
-            {
-                <p class="systemText">
-                    This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
-                </p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Attribute</th>
-                        <th class="text-right">Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
-                    {
-                        <tr>
-                            <td>
-                                @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
-                                <br/>
-                                <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
-                            </td>
-                            <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-</div>
-<div class="col-xs-12 col-sm-6">
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Images
-            <span class="pull-right">
-                @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPImageUrl, "Upload New Treatment BMP Image", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditTreatmentBMPImagesUrl, "Edit Treatment BMP Images", new List<string>(), ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPImages.Any())
-            </span>
-        </div>
-        <div class="panel-body">
-            @{ ImageCarousel.RenderPartialView(Html, ViewDataTyped.ImageCarouselViewData); }
-        </div>
-    </div>
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Location
-            @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
-            {
-                <span class="pull-right">
-                    <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
-                </span>
-            }
-        </div>
-        <div class="panel-body" id="mapContainer">
-            <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
-        </div>
-    </div>
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Funding Events
-            @if (ViewDataTyped.CurrentPersonCanManage)
-            {
-                <span class="pull-right">
-                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewFundingSourcesUrl, "New Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                </span>
-            }
-        </div>
-        <div class="panel-body" style="max-height: 800px; overflow: auto;">
-            @if (ViewDataTyped.TreatmentBMP.FundingEvents.Any())
-            {
-                foreach (var fundingEvent in ViewDataTyped.TreatmentBMP.FundingEvents)
-                {
+                </div>
+                <div class="panel-body">
                     <div class="row">
-                        <div class="col-sm-9">
-                            <h4>@fundingEvent.DisplayName</h4>
-                        </div>
-                        <div class="col-sm-3 text-right">
-                            @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), fundingEvent.GetEditUrl(), "Edit Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                            @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), fundingEvent.GetDeleteUrl(), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                        </div>
+                        <label class="col-sm-5 control-label text-right">Name</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPName</div>
                     </div>
-                    <p>@fundingEvent.Description</p>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPType, "Type")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetDisplayNameAsUrl()</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.Label("Owner")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.Label("Year Built")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.YearBuilt</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.Label("ID in System of Record")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.SystemOfRecordID</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">@Html.Label("Notes")</label>
+                        <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
+                    <span class="pull-right">
+                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
+                        {
+                            <a href="@ViewDataTyped.EditTreatmentBMPPerformanceAndModelingAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        }
 
-                    if (fundingEvent.FundingEventFundingSources.Any())
+                    </span>
+                </div>
+                <div class="panel-body">
+                    @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                     {
-                        <div class="table-responsive">
-                            <div style="overflow-x: auto">
-                                <table class="table table-striped table-condensed table-hover table-bordered">
-                                    <tr>
-                                        <th>@Html.LabelWithSugarFor(FieldDefinition.FundingSource)</th>
-                                        <th style="text-align: right">Amount</th>
-                                    </tr>
-                                    @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.DisplayName))
-                                    {
-                                        <tr>
-                                            <td>@Html.Raw(fundingEventFundingSource.FundingSource.DisplayNameAsUrl)</td>
-                                            <th class="text-right">@(fundingEventFundingSource.AmountIfSpecified)</th>
-                                        </tr>
-                                    }
-                                    <tr>
-                                        <th>Total</th>
-                                        <th class="text-right">@fundingEvent.FundingEventFundingSources.Sum(x => x.Amount).ToStringCurrency()</th>
-                                    </tr>
-
-                                </table>
-                            </div>
-                        </div>
+                        <p class="systemText">
+                            This type of treatment BMP does not have any @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName
+                        </p>
                     }
                     else
                     {
-                        <p class="systemText">No Funding Sources identified for this Funding Event</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Attribute</th>
+                                    <th class="text-right">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes).ToList().SortByOrderThenName())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                            <br />
+                                            <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                        </td>
+                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     }
-                }
-            }
-            else
-            {
-                <p class="systemText">No Funding Events identified for this Treatment BMP</p>
-            }
-        </div>
+                </div>
+            </div>
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
+                    <span class="pull-right">
+                        @if (ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                        {
+                            <a href="@ViewDataTyped.EditTreatmentBMPOtherDesignAttributesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                        }
 
-    </div>
-</div>
-
-<div class="col-xs-12">
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Assessments
-            @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
-            {
-                <span class="pull-right">
-                    <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
-                </span>
-            }
-        </div>
-        <div class="panel-body">
-            @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
-            {
-                <p class="systemText">
-                    BMP cannot be assessed until benchmark and threshold values for each observation type are entered
-                </p>
-            }
-            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
-            {
-                @Html.DhtmlxGrid(ViewDataTyped.AssessmentGridSpec, ViewDataTyped.AssessmentGridName, ViewDataTyped.AssessmentGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-            }
-            @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
-            {
-                <p class="systemText">
-                    BMP has not been assessed
-                </p>
-            }
-        </div>
-    </div>
-</div>
-
-<div class="col-xs-12">
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Maintenance History
-            @if (ViewDataTyped.CurrentPersonCanManage)
-            {
-                <span class="pull-right">
-                    <a href="@ViewDataTyped.NewMaintenanceRecordUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
-                </span>
-            }
-        </div>
-        <div class="panel-body">
-            @if (ViewDataTyped.TreatmentBMP.MaintenanceRecords.Any())
-            {
-                @Html.DhtmlxGrid(ViewDataTyped.MaintenanceRecordGridSpec, ViewDataTyped.MaintenanceRecordGridName, ViewDataTyped.MaintenanceRecordGridUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-            }
-            else
-            {
-                <p class="systemText">There are no @FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized() for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
-            }
-        </div>
-    </div>
-</div>
-
-<div class="col-xs-12">
-    <div class="panel panelNeptune">
-        <div class="panel-heading panelTitle">
-            Documents
-            <span class="pull-right">
-                @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-            </span>
-        </div>
-        <div class="panel-body">
-            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
-            {
-                foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
-                {
-                    if (ViewDataTyped.CurrentPersonCanManage)
+                    </span>
+                </div>
+                <div class="panel-body">
+                    @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
                     {
-                        <span>
-                            @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
-                            @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
+                        <p class="systemText">
+                            This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
+                        </p>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Attribute</th>
+                                    <th class="text-right">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var treatmentBMPTypeAttributeType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes).ToList().SortByOrderThenName())
+                                {
+                                    <tr>
+                                        <td>
+                                            @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                            <br />
+                                            <span class="help-block">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                        </td>
+                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Images
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPImageUrl, "Upload New Treatment BMP Image", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditTreatmentBMPImagesUrl, "Edit Treatment BMP Images", new List<string>(), ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPImages.Any())
+                    </span>
+                </div>
+                <div class="panel-body">
+                    @{ ImageCarousel.RenderPartialView(Html, ViewDataTyped.ImageCarouselViewData); }
+                </div>
+            </div>
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Location
+                    @if (ViewDataTyped.CurrentPersonCanEditTreatmentBMP)
+                    {
+                        <span class="pull-right">
+                            <a href="@ViewDataTyped.TreatmentBMP.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                         </span>
                     }
+                </div>
+                <div class="panel-body" id="mapContainer">
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
+                </div>
+            </div>
 
-                    <a href="@treatmentBMPDocument.FileResource.FileResourceUrl">
-                        @treatmentBMPDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
-                    </a>
-
-                    <dl class="dl-horizontal">
-                        <dt>@Html.Label("Uploaded On")</dt>
-                        <dd>@treatmentBMPDocument.UploadDate.ToShortDateString()</dd>
-                        <dt>@Html.Label("File Type")</dt>
-                        <dd>@treatmentBMPDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
-                        <dt>@Html.Label("Description")</dt>
-                        <dd>@treatmentBMPDocument.DocumentDescription</dd>
-                    </dl>
-                    <hr/>
-                }
-            }
-            else
-            {
-                <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
-            }
         </div>
-    </div>
-</div>
-</div>
 
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Assessments
+                            @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
+                            {
+                                <span class="pull-right">
+                                    <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
+                                </span>
+                            }
+                        </div>
+                        <div class="panel-body">
+                            @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                            {
+                                <p class="systemText">
+                                    BMP cannot be assessed until benchmark and threshold values for each observation type are entered
+                                </p>
+                            }
+                            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
+                            {
+                                @Html.DhtmlxGrid(ViewDataTyped.AssessmentGridSpec, ViewDataTyped.AssessmentGridName, ViewDataTyped.AssessmentGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                            }
+                            @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                            {
+                                <p class="systemText">
+                                    BMP has not been assessed
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Funding Events
+                            @if (ViewDataTyped.CurrentPersonCanManage)
+                            {
+                                <span class="pull-right">
+                                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewFundingSourcesUrl, "New Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                                </span>
+                            }
+                        </div>
+                        <div class="panel-body" style="max-height: 800px; overflow: auto;">
+                            @if (ViewDataTyped.TreatmentBMP.FundingEvents.Any())
+                            {
+                                foreach (var fundingEvent in ViewDataTyped.TreatmentBMP.FundingEvents)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <h4>@fundingEvent.DisplayName</h4>
+                                        </div>
+                                        <div class="col-sm-3 text-right">
+                                            @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), fundingEvent.GetEditUrl(), "Edit Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                                            @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), fundingEvent.GetDeleteUrl(), new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                                        </div>
+                                    </div>
+                                    <p>@fundingEvent.Description</p>
+
+                                    if (fundingEvent.FundingEventFundingSources.Any())
+                                    {
+                                        <div class="table-responsive">
+                                            <div style="overflow-x: auto">
+                                                <table class="table table-striped table-condensed table-hover table-bordered">
+                                                    <tr>
+                                                        <th>@Html.LabelWithSugarFor(FieldDefinition.FundingSource)</th>
+                                                        <th style="text-align: right">Amount</th>
+                                                    </tr>
+                                                    @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.DisplayName))
+                                                    {
+                                                        <tr>
+                                                            <td>@Html.Raw(fundingEventFundingSource.FundingSource.DisplayNameAsUrl)</td>
+                                                            <th class="text-right">@(fundingEventFundingSource.AmountIfSpecified)</th>
+                                                        </tr>
+                                                    }
+                                                    <tr>
+                                                        <th>Total</th>
+                                                        <th class="text-right">@fundingEvent.FundingEventFundingSources.Sum(x => x.Amount).ToStringCurrency()</th>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="systemText">No Funding Sources identified for this Funding Event</p>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <p class="systemText">No Funding Events identified for this Treatment BMP</p>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Benchmark &amp; Threshold Values
+                            <span class="pull-right">
+                                @if (ViewDataTyped.CanEditBenchmarkAndThresholds)
+                                {
+                                    <a href="@ViewDataTyped.AddBenchmarkAndThresholdUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                                }
+
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            @if (!ViewDataTyped.HasSettableBenchmarkAndThresholdValues)
+                            {
+                                <p class="systemText">
+                                    This type of treatment BMP does not have settable benchmark and threshold values
+                                </p>
+                            }
+                            else
+                            {
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Observation Type</th>
+                                            <th>Benchmark</th>
+                                            <th>Threshold</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
+                                        {
+                                            <tr>
+                                                <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                                <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                                <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Maintenance History
+                            @if (ViewDataTyped.CurrentPersonCanManage)
+                            {
+                                <span class="pull-right">
+                                    <a href="@ViewDataTyped.NewMaintenanceRecordUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
+                                </span>
+                            }
+                        </div>
+                        <div class="panel-body">
+                            @if (ViewDataTyped.TreatmentBMP.MaintenanceRecords.Any())
+                            {
+                                @Html.DhtmlxGrid(ViewDataTyped.MaintenanceRecordGridSpec, ViewDataTyped.MaintenanceRecordGridName, ViewDataTyped.MaintenanceRecordGridUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                            }
+                            else
+                            {
+                                <p class="systemText">There are no @FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized() for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
+                            Documents
+                            <span class="pull-right">
+                                @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            @if (ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.Any())
+                            {
+                                foreach (var treatmentBMPDocument in ViewDataTyped.TreatmentBMP.TreatmentBMPDocuments.OrderBy(x => x.DisplayName))
+                                {
+                                    if (ViewDataTyped.CurrentPersonCanManage)
+                                    {
+                                        <span>
+                                            @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", treatmentBMPDocument.GetEditTreatmentBMPDocumentUrl(), "Edit Treatment BMP Document", new List<string>(), true)
+                                            @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", treatmentBMPDocument.GetDeleteTreatmentBMPDocumentUrl(), new List<string>(), true)
+                                        </span>
+                                    }
+
+                                    <a href="@treatmentBMPDocument.FileResource.FileResourceUrl">
+                                        @treatmentBMPDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                                    </a>
+
+                                    <dl class="dl-horizontal">
+                                        <dt>@Html.Label("Uploaded On")</dt>
+                                        <dd>@treatmentBMPDocument.UploadDate.ToShortDateString()</dd>
+                                        <dt>@Html.Label("File Type")</dt>
+                                        <dd>@treatmentBMPDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                                        <dt>@Html.Label("Description")</dt>
+                                        <dd>@treatmentBMPDocument.DocumentDescription</dd>
+                                    </dl>
+                                    <hr />
+                                }
+                            }
+                            else
+                            {
+                                <p class="systemText">No documents have been uploaded for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
