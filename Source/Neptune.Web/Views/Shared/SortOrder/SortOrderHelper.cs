@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Shared.SortOrder
         public static HtmlString SortOrderModalLink(string url, bool hasPermission)
         {
             return ModalDialogFormHelper.ModalDialogFormLink("Edit Sort Order", url,
-                "Edit sort order", new List<string> {"btn", "btn-firma"}, hasPermission);
+                "Edit sort order", new List<string> {"btn", "btn-neptune"}, hasPermission);
         }
 
         public static IOrderedEnumerable<T> SortByOrderThenName<T>(this ICollection<T> sortableList) where T : IHaveASortOrder

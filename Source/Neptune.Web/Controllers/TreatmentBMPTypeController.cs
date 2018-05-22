@@ -215,28 +215,30 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneAdminFeature]
-        public PartialViewResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
+        public PartialViewResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey,
+            int attributeTypePurposeID)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
             EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
-            return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel);
+            return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
         }
 
-        private PartialViewResult ViewEditAttributeTypesSortOrder(TreatmentBMPType treatmentBMPType, EditSortOrderViewModel viewModel)
+        private PartialViewResult ViewEditAttributeTypesSortOrder(TreatmentBMPType treatmentBMPType,
+            EditSortOrderViewModel viewModel, int attributeTypePurposeID)
         {
-            EditSortOrderViewData viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes), "Attribute Types");
+            EditSortOrderViewData viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == attributeTypePurposeID)), "Attribute Types");
             return RazorPartialView<EditSortOrder, EditSortOrderViewData, EditSortOrderViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
         [NeptuneAdminFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, EditSortOrderViewModel viewModel)
+        public ActionResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, int attributeTypePurposeID, EditSortOrderViewModel viewModel)
         {
             var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel);
+                return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
             }
 
             viewModel.UpdateModel(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes));
