@@ -89,7 +89,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
                         overrideWeight ? null : x.AssessmentScoreWeight/100,
                         x.DefaultThresholdValue,
                         x.DefaultBenchmarkValue,
-                        x.OverrideAssessmentScoreIfFailing ?? false);
+                        x.OverrideAssessmentScoreIfFailing ?? false, null);
                 }).ToList();
             }
 
@@ -108,7 +108,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
             if (TreatmentBMPTypeAttributeTypeSimples != null)
             {
                 // Completely rebuild the list
-                updatedTreatmentBMPTypeCustomAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeCustomAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID)).ToList();
+                updatedTreatmentBMPTypeCustomAttributeTypes = TreatmentBMPTypeAttributeTypeSimples.Select(x => new TreatmentBMPTypeCustomAttributeType(ModelObjectHelpers.NotYetAssignedID, treatmentBMPType.TreatmentBMPTypeID, x.CustomAttributeTypeID, null)).ToList();
             }
 
             currentTreatmentBMPTypeCustomAttributeTypes.Merge(updatedTreatmentBMPTypeCustomAttributeTypes, allTreatmentBMPTypeCustomAttributeTypes, (x, y) => x.TreatmentBMPTypeID == y.TreatmentBMPTypeID && x.CustomAttributeTypeID == y.CustomAttributeTypeID);

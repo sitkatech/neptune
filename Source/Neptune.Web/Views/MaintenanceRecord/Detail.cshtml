@@ -78,7 +78,6 @@
             <div class="panel-body">
                 @if (@ViewDataTyped.BMPTypeHasObservationTypes && ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.Any())
                 {
-                @*TODO*@
                     <table class="table">
                         <thead>
                         <tr>
@@ -87,7 +86,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach (var mro in ViewDataTyped.MaintenanceRecord.MaintenanceRecordObservations.OrderBy(x=>x.CustomAttributeType.CustomAttributeTypeName))
+                        @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
                         {
                             <tr>
                                 <td>

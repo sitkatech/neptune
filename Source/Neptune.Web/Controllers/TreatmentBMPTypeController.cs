@@ -28,6 +28,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.SortOrder;
 using Neptune.Web.Views.TreatmentBMPType;
 
 namespace Neptune.Web.Controllers
@@ -125,9 +126,11 @@ namespace Neptune.Web.Controllers
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypeInstructions);
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPTypeID) ? SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPTypeID)) : SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.New());
-            var observationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList();
-            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
-            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes);
+            var observationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.ToList();
+            var customAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
+            var allTreatmentBMPAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList();
+            var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
+            var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -180,6 +183,68 @@ namespace Neptune.Web.Controllers
             var message = $"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' successfully deleted!";
             treatmentBMPType.DeleteFull();
             SetMessageForDisplay(message);
+            return new ModalDialogFormJsonResult();
+        }
+
+        [NeptuneAdminFeature]
+        public PartialViewResult EditObservationTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey)
+        {
+            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            return ViewEditObservationTypesSortOrder(treatmentBMPType, viewModel);
+        }
+
+        private PartialViewResult ViewEditObservationTypesSortOrder(TreatmentBMPType treatmentBMPType, EditSortOrderViewModel viewModel)
+        {
+            EditSortOrderViewData viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes), "Observation Types");
+            return RazorPartialView<EditSortOrder, EditSortOrderViewData, EditSortOrderViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditObservationTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, EditSortOrderViewModel viewModel)
+        {
+            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditObservationTypesSortOrder(treatmentBMPType, viewModel);
+            }
+
+            viewModel.UpdateModel(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes));
+            SetMessageForDisplay("Successfully Updated Observation Type Sort Order");
+            return new ModalDialogFormJsonResult();
+        }
+
+        [NeptuneAdminFeature]
+        public PartialViewResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey,
+            int attributeTypePurposeID)
+        {
+            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            EditSortOrderViewModel viewModel = new EditSortOrderViewModel();
+            return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
+        }
+
+        private PartialViewResult ViewEditAttributeTypesSortOrder(TreatmentBMPType treatmentBMPType,
+            EditSortOrderViewModel viewModel, int attributeTypePurposeID)
+        {
+            EditSortOrderViewData viewData = new EditSortOrderViewData(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == attributeTypePurposeID)), "Attribute Types");
+            return RazorPartialView<EditSortOrder, EditSortOrderViewData, EditSortOrderViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditAttributeTypesSortOrder(TreatmentBMPTypePrimaryKey treatmentBMPTypePrimaryKey, int attributeTypePurposeID, EditSortOrderViewModel viewModel)
+        {
+            var treatmentBMPType = treatmentBMPTypePrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditAttributeTypesSortOrder(treatmentBMPType, viewModel, attributeTypePurposeID);
+            }
+
+            viewModel.UpdateModel(new List<IHaveASortOrder>(treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes));
+            SetMessageForDisplay("Successfully Updated Attribute Type Sort Order");
             return new ModalDialogFormJsonResult();
         }
     }

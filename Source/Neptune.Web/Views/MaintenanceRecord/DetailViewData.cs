@@ -15,14 +15,20 @@ namespace Neptune.Web.Views.MaintenanceRecord
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = maintenanceRecord.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = maintenanceRecord.TreatmentBMP.GetDetailUrl();
-            PageTitle = "Maintenance Record Detail";
+            PageTitle = maintenanceRecord.MaintenanceRecordDate.ToShortDateString();
             EditUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.Edit(maintenanceRecord));
             EditObservationsUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.EditObservations(maintenanceRecord));
             MaintenanceRecord = maintenanceRecord;
             CurrentPersonCanManage = new MaintenanceRecordManageFeature().HasPermissionByPerson(currentPerson);
             BMPTypeHasObservationTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+
+            SortedMaintenanceRecordObservations = MaintenanceRecord.MaintenanceRecordObservations.ToList()
+                .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
+                .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.DisplayName);
         }
+
+        public IOrderedEnumerable<MaintenanceRecordObservation> SortedMaintenanceRecordObservations { get; }
 
         public string EditObservationsUrl { get; }
 
@@ -30,6 +36,6 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public Models.MaintenanceRecord MaintenanceRecord { get; }
         public bool CurrentPersonCanManage { get; }
         public bool BMPTypeHasObservationTypes { get; }
-        public bool UserHasCustomAttributeTypeManagePermissions { get; set; }
+        public bool UserHasCustomAttributeTypeManagePermissions { get; }
     }
 }

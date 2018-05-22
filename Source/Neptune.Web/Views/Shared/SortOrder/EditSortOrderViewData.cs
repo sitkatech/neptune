@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TreatmentBMPType.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<copyright file="EditSortOrderViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -21,23 +21,19 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Web.Views.Shared.SortOrder;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.Web.Views.Shared.SortOrder
 {
-    public partial class TreatmentBMPType : IAuditableEntity
+    public class EditSortOrderViewData : NeptuneUserControlViewData
     {
+        public List<IHaveASortOrder> Sortables { get; }
+        public string SortableNamePlural { get; }
 
-        public List<TreatmentBMPAssessmentObservationType> GetObservationTypes()
+        public EditSortOrderViewData(ICollection<IHaveASortOrder> sortables, string sortableNamePlural)
         {
-            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
+            Sortables = sortables.ToList();
+            SortableNamePlural = sortableNamePlural;
         }
-
-        public List<TreatmentBMPTypeAssessmentObservationType> GetObservationTypesForAssessment()
-        {
-            return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().ToList();
-        }
-
-        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
     }
 }

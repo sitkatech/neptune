@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[TreatmentBMPTypeCustomAttributeType](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[CustomAttributeTypeID] [int] NOT NULL,
+	[SortOrder] [int] NULL,
  CONSTRAINT [PK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPTypeCustomAttributeTypeID] ASC

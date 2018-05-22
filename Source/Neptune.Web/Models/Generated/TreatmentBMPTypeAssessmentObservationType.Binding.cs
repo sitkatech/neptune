@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPTypeAssessmentObservationType(int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int treatmentBMPAssessmentObservationTypeID, decimal? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing) : this()
+        public TreatmentBMPTypeAssessmentObservationType(int treatmentBMPTypeAssessmentObservationTypeID, int treatmentBMPTypeID, int treatmentBMPAssessmentObservationTypeID, decimal? assessmentScoreWeight, double? defaultThresholdValue, double? defaultBenchmarkValue, bool overrideAssessmentScoreIfFailing, int? sortOrder) : this()
         {
             this.TreatmentBMPTypeAssessmentObservationTypeID = treatmentBMPTypeAssessmentObservationTypeID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.DefaultThresholdValue = defaultThresholdValue;
             this.DefaultBenchmarkValue = defaultBenchmarkValue;
             this.OverrideAssessmentScoreIfFailing = overrideAssessmentScoreIfFailing;
+            this.SortOrder = sortOrder;
         }
 
         /// <summary>
@@ -121,6 +122,7 @@ namespace Neptune.Web.Models
         public double? DefaultThresholdValue { get; set; }
         public double? DefaultBenchmarkValue { get; set; }
         public bool OverrideAssessmentScoreIfFailing { get; set; }
+        public int? SortOrder { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPTypeAssessmentObservationTypeID; } set { TreatmentBMPTypeAssessmentObservationTypeID = value; } }
 
