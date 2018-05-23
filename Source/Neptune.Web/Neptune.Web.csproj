@@ -1061,7 +1061,7 @@
     <Content Include="Views\TreatmentBMP\FindABMP.cshtml" />
     <Content Include="Views\Shared\SortOrder\EditSortOrder.cshtml" />
     <Content Include="Views\FieldVisit\SiteLayout.cshtml" />
-    <Content Include="Views\FieldVisit\ProjectTypeSelection.cshtml" />
+    <Content Include="Views\FieldVisit\NewFieldVisit.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

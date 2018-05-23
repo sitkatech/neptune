@@ -23,7 +23,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Linq;
 using Neptune.Web.Models;
-using Neptune.Web.Views;
 
 namespace Neptune.Web.Views.FieldVisit
 {

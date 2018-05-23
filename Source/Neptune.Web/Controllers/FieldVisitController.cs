@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Controllers
 {
@@ -34,9 +35,12 @@ namespace Neptune.Web.Controllers
     {
         [HttpGet]
         [FieldVisitCreateFeature]
-        public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            throw new NotImplementedException();
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewData = new NewFieldVisitViewData(treatmentBMP);
+            var viewModel = new NewFieldVisitViewModel();
+            return RazorPartialView<NewFieldVisit, NewFieldVisitViewData, NewFieldVisitViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
