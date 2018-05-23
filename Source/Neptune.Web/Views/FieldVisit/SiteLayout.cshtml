@@ -1,0 +1,68 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="SiteLayout.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@inherits Neptune.Web.Views.FieldVisit.FieldVisitSection
+
+@{
+    @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
+}
+
+@section JavascriptAndStylesContent
+{
+    @RenderSection("JavascriptAndStylesContent", false)
+}
+
+<div>
+    <div class="row wizard">
+        <div class="col-xs-12 col-sm-3">
+            <nav id="wizardNav">
+                <ul class="nav nav-stacked">
+                    @foreach (var fieldVisitSection in FieldVisitSection.All)
+                    {
+                        <li class="@(ViewDataTyped.SectionName == fieldVisitSection.FieldVisitSectionName ? "active" : string.Empty)">
+                            @*Todo: section url*@
+                            <a href="#">
+                                <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
+                            </a>
+                        </li>
+
+                        @*TODO: Generate submenu*@
+                    }
+                </ul>
+            </nav>
+        </div>
+
+        <div id="wizardContent" class="col-xs-12 col-sm-9">
+            <div class="wizardHeader">
+                <h2>@ViewDataTyped.SectionName</h2>
+                <hr>
+            </div>
+
+            <div class="validationError">
+                @Html.ValidationSummary()
+            </div>
+
+            <div class="wizardMain">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>

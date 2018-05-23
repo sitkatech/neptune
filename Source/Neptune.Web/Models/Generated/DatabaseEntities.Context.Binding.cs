@@ -155,6 +155,11 @@ namespace Neptune.Web.Models
                 case "FieldVisit":
                     return FieldVisits.GetFieldVisit(primaryKey);
 
+                case "FieldVisitSection":
+                    var fieldVisitSection = FieldVisitSection.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(fieldVisitSection, "FieldVisitSection", primaryKey);
+                    return fieldVisitSection;
+
                 case "FieldVisitStatus":
                     var fieldVisitStatus = FieldVisitStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(fieldVisitStatus, "FieldVisitStatus", primaryKey);

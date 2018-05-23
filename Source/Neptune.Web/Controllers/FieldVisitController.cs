@@ -30,7 +30,7 @@ using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
-    public class FieldVisitController
+    public class FieldVisitController : NeptuneBaseController
     {
         [HttpGet]
         [FieldVisitEditFeature]
