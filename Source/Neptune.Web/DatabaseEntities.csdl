@@ -9,7 +9,6 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.FieldDefinitionData" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.FieldDefinitionDataImage" />
     <EntitySet Name="FieldVisit" EntityType="Neptune.Web.Models.FieldVisit" />
-    <EntitySet Name="FieldVisitStatus" EntityType="Neptune.Web.Models.FieldVisitStatus" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.FileResource" />
     <EntitySet Name="FundingEvent" EntityType="Neptune.Web.Models.FundingEvent" />
     <EntitySet Name="FundingEventFundingSource" EntityType="Neptune.Web.Models.FundingEventFundingSource" />
@@ -85,10 +84,6 @@
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
     </AssociationSet>
-    <AssociationSet Name="FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID" Association="Neptune.Web.Models.FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID">
-      <End Role="FieldVisitStatus" EntitySet="FieldVisitStatus" />
-      <End Role="FieldVisits" EntitySet="FieldVisit" />
-    </AssociationSet>
     <AssociationSet Name="FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID" Association="Neptune.Web.Models.FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID">
       <End Role="MaintenanceRecord" EntitySet="MaintenanceRecord" />
       <End Role="FieldVisits" EntitySet="FieldVisit" />
@@ -96,6 +91,10 @@
     <AssociationSet Name="FK_FieldVisit_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.FK_FieldVisit_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
       <End Role="FieldVisitsWhereYouAreThePerformedByPerson" EntitySet="FieldVisit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldVisit_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="FieldVisits" EntitySet="FieldVisit" />
     </AssociationSet>
     <AssociationSet Name="FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" Association="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID">
       <End Role="InitialAssessment" EntitySet="TreatmentBMPAssessment" />
@@ -417,26 +416,18 @@
     </Key>
     <Property Name="FieldVisitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="FieldVisitStatusID" Type="Int32" />
     <Property Name="InitialAssessmentID" Type="Int32" />
     <Property Name="MaintenanceRecordID" Type="Int32" />
     <Property Name="PostMaintenanceAssessmentID" Type="Int32" />
     <Property Name="PerformedByPersonID" Type="Int32" Nullable="false" />
     <Property Name="VisitDate" Type="DateTime" Nullable="false" />
-    <NavigationProperty Name="FieldVisitStatus" Relationship="Neptune.Web.Models.FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID" FromRole="FieldVisits" ToRole="FieldVisitStatus" />
     <NavigationProperty Name="MaintenanceRecord" Relationship="Neptune.Web.Models.FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID" FromRole="FieldVisits" ToRole="MaintenanceRecord" />
     <NavigationProperty Name="PerformedByPerson" Relationship="Neptune.Web.Models.FK_FieldVisit_Person_PerformedByPersonID_PersonID" FromRole="FieldVisitsWhereYouAreThePerformedByPerson" ToRole="PerformedByPerson" />
+    <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID" FromRole="FieldVisits" ToRole="TreatmentBMP" />
     <NavigationProperty Name="InitialAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" FromRole="FieldVisitsWhereYouAreTheInitialAssessment" ToRole="InitialAssessment" />
     <NavigationProperty Name="PostMaintenanceAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID" FromRole="FieldVisitsWhereYouAreThePostMaintenanceAssessment" ToRole="PostMaintenanceAssessment" />
-  </EntityType>
-  <EntityType Name="FieldVisitStatus">
-    <Key>
-      <PropertyRef Name="FieldVisitStatusID" />
-    </Key>
-    <Property Name="FieldVisitStatusID" Type="Int32" Nullable="false" />
-    <Property Name="FieldVisitStatusName" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-    <Property Name="FieldVisitStatusDisplayName" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-    <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID" FromRole="FieldVisitStatus" ToRole="FieldVisits" />
   </EntityType>
   <EntityType Name="FileResource">
     <Key>
@@ -773,6 +764,7 @@
     <Property Name="YearBuilt" Type="Int32" />
     <Property Name="OwnerOrganizationID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="CustomAttributes" />
+    <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FieldVisits" />
     <NavigationProperty Name="FundingEvents" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FundingEvents" />
     <NavigationProperty Name="MaintenanceRecords" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="MaintenanceRecords" />
     <NavigationProperty Name="ModeledCatchment" Relationship="Neptune.Web.Models.FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID" FromRole="TreatmentBMPs" ToRole="ModeledCatchment" />
@@ -1060,18 +1052,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID">
-    <End Role="FieldVisitStatus" Type="Neptune.Web.Models.FieldVisitStatus" Multiplicity="0..1" />
-    <End Role="FieldVisits" Type="Neptune.Web.Models.FieldVisit" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FieldVisitStatus">
-        <PropertyRef Name="FieldVisitStatusID" />
-      </Principal>
-      <Dependent Role="FieldVisits">
-        <PropertyRef Name="FieldVisitStatusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID">
     <End Role="MaintenanceRecord" Type="Neptune.Web.Models.MaintenanceRecord" Multiplicity="0..1" />
     <End Role="FieldVisits" Type="Neptune.Web.Models.FieldVisit" Multiplicity="*" />
@@ -1093,6 +1073,18 @@
       </Principal>
       <Dependent Role="FieldVisitsWhereYouAreThePerformedByPerson">
         <PropertyRef Name="PerformedByPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldVisit_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
+    <End Role="FieldVisits" Type="Neptune.Web.Models.FieldVisit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="FieldVisits">
+        <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

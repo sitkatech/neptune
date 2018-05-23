@@ -12,6 +12,7 @@ values
 create table dbo.FieldVisit(
 FieldVisitID int not null identity(1,1) constraint PK_FieldVisit_FieldVisitID primary key,
 TenantID int not null constraint FK_FieldVisit_Tenant_TenantID foreign key references dbo.Tenant(TenantID),
+TreatmentBMPID int not null constraint FK_FieldVisit_TreatmentBMP_TreatmentBMPID foreign key references dbo.TreatmentBMP(TreatmentBMPID),
 FieldVisitStatusID int null constraint FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID foreign key references dbo.FieldVisitStatus(FieldVisitStatusID),
 InitialAssessmentID int null constraint FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID foreign key references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID),
 MaintenanceRecordID int null constraint FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID foreign key references dbo.MaintenanceRecord(MaintenanceRecordID),
@@ -28,3 +29,4 @@ VisitDate datetime not null
  	foreign key (PostMaintenanceAssessmentID, TenantID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TenantID)
  Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_Person_PerformedByPersonID_TenantID_PersonID_TenantID
  	foreign key (PerformedByPersonID, TenantID) references dbo.Person(PersonID, TenantID)
+Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMP_TreatmentBMPID_TenantID foreign key (TreatmentBMPID, TenantID) references dbo.TreatmentBMP(TreatmentBMPID, TenantID)

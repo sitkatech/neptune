@@ -3,10 +3,11 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[FieldVisitStatus]
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
+using System.Data;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -15,89 +16,124 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[FieldVisitStatus]")]
-    public partial class FieldVisitStatus : IHavePrimaryKey, ICanDeleteFull
+    public abstract partial class FieldVisitStatus : IHavePrimaryKey
     {
+        public static readonly FieldVisitStatusInProgress InProgress = FieldVisitStatusInProgress.Instance;
+        public static readonly FieldVisitStatusComplete Complete = FieldVisitStatusComplete.Instance;
+        public static readonly FieldVisitStatusUnresolved Unresolved = FieldVisitStatusUnresolved.Instance;
+
+        public static readonly List<FieldVisitStatus> All;
+        public static readonly ReadOnlyDictionary<int, FieldVisitStatus> AllLookupDictionary;
+
         /// <summary>
-        /// Default Constructor; only used by EF
+        /// Static type constructor to coordinate static initialization order
         /// </summary>
-        protected FieldVisitStatus()
+        static FieldVisitStatus()
         {
-            this.FieldVisits = new HashSet<FieldVisit>();
+            All = new List<FieldVisitStatus> { InProgress, Complete, Unresolved };
+            AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitStatus>(All.ToDictionary(x => x.FieldVisitStatusID));
         }
 
         /// <summary>
-        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
+        /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        public FieldVisitStatus(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : this()
+        protected FieldVisitStatus(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName)
         {
-            this.FieldVisitStatusID = fieldVisitStatusID;
-            this.FieldVisitStatusName = fieldVisitStatusName;
-            this.FieldVisitStatusDisplayName = fieldVisitStatusDisplayName;
-        }
-
-        /// <summary>
-        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
-        /// </summary>
-        public FieldVisitStatus(string fieldVisitStatusName, string fieldVisitStatusDisplayName) : this()
-        {
-            // Mark this as a new object by setting primary key with special value
-            this.FieldVisitStatusID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            
-            this.FieldVisitStatusName = fieldVisitStatusName;
-            this.FieldVisitStatusDisplayName = fieldVisitStatusDisplayName;
-        }
-
-
-        /// <summary>
-        /// Creates a "blank" object of this type and populates primitives with defaults
-        /// </summary>
-        public static FieldVisitStatus CreateNewBlank()
-        {
-            return new FieldVisitStatus(default(string), default(string));
-        }
-
-        /// <summary>
-        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
-        /// </summary>
-        /// <returns></returns>
-        public bool HasDependentObjects()
-        {
-            return FieldVisits.Any();
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FieldVisitStatus).Name, typeof(FieldVisit).Name};
-
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteFull()
-        {
-
-            foreach(var x in FieldVisits.ToList())
-            {
-                x.DeleteFull();
-            }
-            HttpRequestStorage.DatabaseEntities.FieldVisitStatuses.Remove(this);                
+            FieldVisitStatusID = fieldVisitStatusID;
+            FieldVisitStatusName = fieldVisitStatusName;
+            FieldVisitStatusDisplayName = fieldVisitStatusDisplayName;
         }
 
         [Key]
-        public int FieldVisitStatusID { get; set; }
-        public string FieldVisitStatusName { get; set; }
-        public string FieldVisitStatusDisplayName { get; set; }
+        public int FieldVisitStatusID { get; private set; }
+        public string FieldVisitStatusName { get; private set; }
+        public string FieldVisitStatusDisplayName { get; private set; }
         [NotMapped]
-        public int PrimaryKey { get { return FieldVisitStatusID; } set { FieldVisitStatusID = value; } }
+        public int PrimaryKey { get { return FieldVisitStatusID; } }
 
-        public virtual ICollection<FieldVisit> FieldVisits { get; set; }
-
-        public static class FieldLengths
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public bool Equals(FieldVisitStatus other)
         {
-            public const int FieldVisitStatusName = 20;
-            public const int FieldVisitStatusDisplayName = 20;
+            if (other == null)
+            {
+                return false;
+            }
+            return other.FieldVisitStatusID == FieldVisitStatusID;
         }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as FieldVisitStatus);
+        }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return FieldVisitStatusID;
+        }
+
+        public static bool operator ==(FieldVisitStatus left, FieldVisitStatus right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(FieldVisitStatus left, FieldVisitStatus right)
+        {
+            return !Equals(left, right);
+        }
+
+        public FieldVisitStatusEnum ToEnum { get { return (FieldVisitStatusEnum)GetHashCode(); } }
+
+        public static FieldVisitStatus ToType(int enumValue)
+        {
+            return ToType((FieldVisitStatusEnum)enumValue);
+        }
+
+        public static FieldVisitStatus ToType(FieldVisitStatusEnum enumValue)
+        {
+            switch (enumValue)
+            {
+                case FieldVisitStatusEnum.Complete:
+                    return Complete;
+                case FieldVisitStatusEnum.InProgress:
+                    return InProgress;
+                case FieldVisitStatusEnum.Unresolved:
+                    return Unresolved;
+                default:
+                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
+            }
+        }
+    }
+
+    public enum FieldVisitStatusEnum
+    {
+        InProgress = 1,
+        Complete = 2,
+        Unresolved = 3
+    }
+
+    public partial class FieldVisitStatusInProgress : FieldVisitStatus
+    {
+        private FieldVisitStatusInProgress(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : base(fieldVisitStatusID, fieldVisitStatusName, fieldVisitStatusDisplayName) {}
+        public static readonly FieldVisitStatusInProgress Instance = new FieldVisitStatusInProgress(1, @"InProgress", @"In Progress");
+    }
+
+    public partial class FieldVisitStatusComplete : FieldVisitStatus
+    {
+        private FieldVisitStatusComplete(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : base(fieldVisitStatusID, fieldVisitStatusName, fieldVisitStatusDisplayName) {}
+        public static readonly FieldVisitStatusComplete Instance = new FieldVisitStatusComplete(2, @"Complete", @"Complete");
+    }
+
+    public partial class FieldVisitStatusUnresolved : FieldVisitStatus
+    {
+        private FieldVisitStatusUnresolved(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : base(fieldVisitStatusID, fieldVisitStatusName, fieldVisitStatusDisplayName) {}
+        public static readonly FieldVisitStatusUnresolved Instance = new FieldVisitStatusUnresolved(3, @"Unresolved", @"Unresolved");
     }
 }

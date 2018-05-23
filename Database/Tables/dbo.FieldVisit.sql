@@ -5,6 +5,7 @@ GO
 CREATE TABLE [dbo].[FieldVisit](
 	[FieldVisitID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
+	[TreatmentBMPID] [int] NOT NULL,
 	[FieldVisitStatusID] [int] NULL,
 	[InitialAssessmentID] [int] NULL,
 	[MaintenanceRecordID] [int] NULL,
@@ -47,6 +48,16 @@ ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Tenant
 REFERENCES [dbo].[Tenant] ([TenantID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_Tenant_TenantID]
+GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMP_TreatmentBMPID]
+GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMP_TreatmentBMPID_TenantID] FOREIGN KEY([TreatmentBMPID], [TenantID])
+REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TenantID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMP_TreatmentBMPID_TenantID]
 GO
 ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID] FOREIGN KEY([InitialAssessmentID], [TenantID])
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TenantID])

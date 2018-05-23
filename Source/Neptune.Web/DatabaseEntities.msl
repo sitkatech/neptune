@@ -92,21 +92,13 @@
         <MappingFragment StoreEntitySet="FieldVisit">
           <ScalarProperty Name="FieldVisitID" ColumnName="FieldVisitID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="FieldVisitStatusID" ColumnName="FieldVisitStatusID" />
           <ScalarProperty Name="InitialAssessmentID" ColumnName="InitialAssessmentID" />
           <ScalarProperty Name="MaintenanceRecordID" ColumnName="MaintenanceRecordID" />
           <ScalarProperty Name="PostMaintenanceAssessmentID" ColumnName="PostMaintenanceAssessmentID" />
           <ScalarProperty Name="PerformedByPersonID" ColumnName="PerformedByPersonID" />
           <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FieldVisitStatus">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.FieldVisitStatus">
-        <MappingFragment StoreEntitySet="FieldVisitStatus">
-          <ScalarProperty Name="FieldVisitStatusID" ColumnName="FieldVisitStatusID" />
-          <ScalarProperty Name="FieldVisitStatusName" ColumnName="FieldVisitStatusName" />
-          <ScalarProperty Name="FieldVisitStatusDisplayName" ColumnName="FieldVisitStatusDisplayName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

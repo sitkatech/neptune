@@ -9,7 +9,6 @@
     <EntitySet Name="FieldDefinitionData" EntityType="Neptune.Web.Models.Store.FieldDefinitionData" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FieldDefinitionDataImage" EntityType="Neptune.Web.Models.Store.FieldDefinitionDataImage" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FieldVisit" EntityType="Neptune.Web.Models.Store.FieldVisit" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="FieldVisitStatus" EntityType="Neptune.Web.Models.Store.FieldVisitStatus" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FileResource" EntityType="Neptune.Web.Models.Store.FileResource" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FundingEvent" EntityType="Neptune.Web.Models.Store.FundingEvent" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FundingEventFundingSource" EntityType="Neptune.Web.Models.Store.FundingEventFundingSource" store:Type="Tables" Schema="dbo" />
@@ -77,10 +76,6 @@
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="FieldDefinitionDataImages" EntitySet="FieldDefinitionDataImage" />
     </AssociationSet>
-    <AssociationSet Name="FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID" Association="Neptune.Web.Models.Store.FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID">
-      <End Role="FieldVisitStatus" EntitySet="FieldVisitStatus" />
-      <End Role="FieldVisits" EntitySet="FieldVisit" />
-    </AssociationSet>
     <AssociationSet Name="FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID" Association="Neptune.Web.Models.Store.FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID">
       <End Role="MaintenanceRecord" EntitySet="MaintenanceRecord" />
       <End Role="FieldVisits" EntitySet="FieldVisit" />
@@ -88,6 +83,10 @@
     <AssociationSet Name="FK_FieldVisit_Person_PerformedByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_FieldVisit_Person_PerformedByPersonID_PersonID">
       <End Role="PerformedByPerson" EntitySet="Person" />
       <End Role="FieldVisitsWhereYouAreThePerformedByPerson" EntitySet="FieldVisit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FieldVisit_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_FieldVisit_TreatmentBMP_TreatmentBMPID">
+      <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
+      <End Role="FieldVisits" EntitySet="FieldVisit" />
     </AssociationSet>
     <AssociationSet Name="FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" Association="Neptune.Web.Models.Store.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID">
       <End Role="InitialAssessment" EntitySet="TreatmentBMPAssessment" />
@@ -414,20 +413,13 @@ warning 6035: The relationship 'FK_FieldDefinitionDataImage_FieldDefinitionData_
     </Key>
     <Property Name="FieldVisitID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="FieldVisitStatusID" Type="int" />
     <Property Name="InitialAssessmentID" Type="int" />
     <Property Name="MaintenanceRecordID" Type="int" />
     <Property Name="PostMaintenanceAssessmentID" Type="int" />
     <Property Name="PerformedByPersonID" Type="int" Nullable="false" />
     <Property Name="VisitDate" Type="datetime" Nullable="false" />
-  </EntityType>
-  <EntityType Name="FieldVisitStatus">
-    <Key>
-      <PropertyRef Name="FieldVisitStatusID" />
-    </Key>
-    <Property Name="FieldVisitStatusID" Type="int" Nullable="false" />
-    <Property Name="FieldVisitStatusName" Type="varchar" Nullable="false" MaxLength="20" />
-    <Property Name="FieldVisitStatusDisplayName" Type="varchar" Nullable="false" MaxLength="20" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldDefinitionDataImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -738,6 +730,7 @@ warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_Stormwate
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FieldVisit_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_FundingEvent_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -1002,18 +995,6 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID">
-    <End Role="FieldVisitStatus" Type="Neptune.Web.Models.Store.FieldVisitStatus" Multiplicity="0..1" />
-    <End Role="FieldVisits" Type="Neptune.Web.Models.Store.FieldVisit" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FieldVisitStatus">
-        <PropertyRef Name="FieldVisitStatusID" />
-      </Principal>
-      <Dependent Role="FieldVisits">
-        <PropertyRef Name="FieldVisitStatusID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID">
     <End Role="MaintenanceRecord" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="0..1" />
     <End Role="FieldVisits" Type="Neptune.Web.Models.Store.FieldVisit" Multiplicity="*" />
@@ -1035,6 +1016,18 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Principal>
       <Dependent Role="FieldVisitsWhereYouAreThePerformedByPerson">
         <PropertyRef Name="PerformedByPersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FieldVisit_TreatmentBMP_TreatmentBMPID">
+    <End Role="TreatmentBMP" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="1" />
+    <End Role="FieldVisits" Type="Neptune.Web.Models.Store.FieldVisit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TreatmentBMP">
+        <PropertyRef Name="TreatmentBMPID" />
+      </Principal>
+      <Dependent Role="FieldVisits">
+        <PropertyRef Name="TreatmentBMPID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

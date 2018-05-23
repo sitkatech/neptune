@@ -44,7 +44,6 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FieldDefinitionData> FieldDefinitionDatas { get { return AllFieldDefinitionDatas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FieldVisit> AllFieldVisits { get; set; }
         public virtual IQueryable<FieldVisit> FieldVisits { get { return AllFieldVisits.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FieldVisitStatus> FieldVisitStatuses { get; set; }
         public virtual DbSet<FileResource> AllFileResources { get; set; }
         public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FundingEventFundingSource> AllFundingEventFundingSources { get; set; }
@@ -157,7 +156,9 @@ namespace Neptune.Web.Models
                     return FieldVisits.GetFieldVisit(primaryKey);
 
                 case "FieldVisitStatus":
-                    return FieldVisitStatuses.GetFieldVisitStatus(primaryKey);
+                    var fieldVisitStatus = FieldVisitStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(fieldVisitStatus, "FieldVisitStatus", primaryKey);
+                    return fieldVisitStatus;
 
                 case "FileResourceMimeType":
                     var fileResourceMimeType = FileResourceMimeType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

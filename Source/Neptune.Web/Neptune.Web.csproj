@@ -80,7 +80,6 @@
     <Compile Include="Models\Generated\FieldVisit.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\FieldVisitPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FieldVisitStatus.Binding.cs" />
-    <Compile Include="Models\Generated\FieldVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\FieldVisitStatusPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FileResource.Binding.cs" />
     <Compile Include="Models\Generated\FileResource.DatabaseContextExtensions.cs" />
@@ -207,6 +206,7 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Controllers\FieldVisitController.cs" />
     <Compile Include="Models\FundingEventFundingSource.cs" />
     <Compile Include="Models\FundingEvent.cs" />
     <Compile Include="Models\FundingEventSimple.cs" />
@@ -220,6 +220,7 @@
     <Compile Include="Models\TreatmentBMPFundingSource.cs" />
     <Compile Include="Models\FundingEventFundingSourceSimple.cs" />
     <Compile Include="Models\TreatmentBMPSimple.cs" />
+    <Compile Include="Security\FieldVisitEditFeature.cs" />
     <Compile Include="Security\FundingEventManageFeature.cs" />
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />
