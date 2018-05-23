@@ -21,6 +21,7 @@ PerformedByPersonID int not null constraint FK_FieldVisit_Person_PerformedByPers
 VisitDate datetime not null
 )
 
+-- double keys for tenant ID
  Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID
  	foreign key (InitialAssessmentID, TenantID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TenantID)
  Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TenantID
@@ -30,3 +31,14 @@ VisitDate datetime not null
  Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_Person_PerformedByPersonID_TenantID_PersonID_TenantID
  	foreign key (PerformedByPersonID, TenantID) references dbo.Person(PersonID, TenantID)
 Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMP_TreatmentBMPID_TenantID foreign key (TreatmentBMPID, TenantID) references dbo.TreatmentBMP(TreatmentBMPID, TenantID)
+
+--double keys for consistency
+Alter Table dbo.TreatmentBMPAssessment Add Constraint AK_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPID unique(TreatmentBMPAssessmentID, TreatmentBMPID)
+Alter Table dbo.MaintenanceRecord Add Constraint AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID unique(MaintenanceRecordID, TreatmentBMPID)
+
+ Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID
+ 	foreign key (InitialAssessmentID, TreatmentBMPID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TreatmentBMPID)
+ Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID
+ 	foreign key (MaintenanceRecordID, TreatmentBMPID) references dbo.MaintenanceRecord(MaintenanceRecordID, TreatmentBMPID)
+ Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID
+ 	foreign key (PostMaintenanceAssessmentID, TreatmentBMPID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TreatmentBMPID)

@@ -486,6 +486,7 @@ warning 6035: The relationship 'FK_FundingEventFundingSource_FundingSource_Fundi
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="MaintenanceRecord">
@@ -758,7 +759,9 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->

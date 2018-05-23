@@ -34,6 +34,11 @@ REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TenantID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TenantID]
 GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPID])
+REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID]
+GO
 ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Person_PerformedByPersonID_PersonID] FOREIGN KEY([PerformedByPersonID])
 REFERENCES [dbo].[Person] ([PersonID])
 GO
@@ -69,6 +74,11 @@ REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID]
 GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID] FOREIGN KEY([InitialAssessmentID], [TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID]
+GO
 ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID] FOREIGN KEY([PostMaintenanceAssessmentID], [TenantID])
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TenantID])
 GO
@@ -78,3 +88,8 @@ ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Treatm
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID]
+GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID] FOREIGN KEY([PostMaintenanceAssessmentID], [TreatmentBMPID])
+REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TreatmentBMPID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID]
