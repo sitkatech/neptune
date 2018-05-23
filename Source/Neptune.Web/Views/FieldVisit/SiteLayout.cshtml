@@ -36,7 +36,7 @@
                     {
                         <li class="@(ViewDataTyped.SectionName == fieldVisitSection.FieldVisitSectionName ? "active" : string.Empty)">
                             @*Todo: section url*@
-                            <a href="#">
+                            <a href="@fieldVisitSection.GetSectionUrl(ViewDataTyped.FieldVisit)">
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
                         </li>
