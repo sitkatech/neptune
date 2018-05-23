@@ -47,4 +47,5 @@ VALUES
 (43, N'AttributeTypePurpose', N'Purpose', 'How the attribute type will be used for analysis and reporting', 1),
 (44, N'FundingSource', N'Funding Source', '', 1),
 (45, N'IsPostMaintenanceAssessment', N'Post Maintenance Assessment?', 'Whether the assessment was conducted as a follow-up to a maintenance activity', 1),
-(46, N'FundingEvent', N'Funding Event', 'A discrete activity (e.g. Project planning, major maintenance, capital construction) that invests in a BMP. A funding event consists of one or funding sources and associated expenditures', 1)
+(46, N'FundingEvent', N'Funding Event', 'A discrete activity (e.g. Project planning, major maintenance, capital construction) that invests in a BMP. A funding event consists of one or funding sources and associated expenditures', 1),
+(47, N'FieldVisit', N'Field Visit', 'A visit to a Treatment BMP which can consist of an Assessment, a Maintenance Record, and a Post-Maintenance Assessment', 1)
