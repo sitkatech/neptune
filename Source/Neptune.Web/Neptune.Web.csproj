@@ -233,13 +233,29 @@
     <Compile Include="Security\TreatmentBMPDeleteFeature.cs" />
     <Compile Include="Security\UserDeleteFeature.cs" />
     <Compile Include="Security\UserEditRoleFeature.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentViewData.cs" />
+    <Compile Include="Views\FieldVisit\AttributesViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewModel.cs" />
+    <Compile Include="Views\FieldVisit\Assessment.cs" />
+    <Compile Include="Views\FieldVisit\LocationViewData.cs" />
+    <Compile Include="Views\FieldVisit\Maintain.cs" />
+    <Compile Include="Views\FieldVisit\ManageVisitViewData.cs" />
+    <Compile Include="Views\FieldVisit\PhotosViewData.cs" />
+    <Compile Include="Views\FieldVisit\PostMaintenanceAssessment.cs" />
+    <Compile Include="Views\FieldVisit\ManageVisit.cs" />
+    <Compile Include="Views\FieldVisit\Location.cs" />
+    <Compile Include="Views\FieldVisit\Photos.cs" />
+    <Compile Include="Views\FieldVisit\Attributes.cs" />
+    <Compile Include="Views\FieldVisit\WrapUpVisit.cs" />
     <Compile Include="Views\FieldVisit\Inventory.cs" />
+    <Compile Include="Views\FieldVisit\MaintainViewData.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisit.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewData.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewModel.cs" />
+    <Compile Include="Views\FieldVisit\PostMaintenanceAssessmentViewData.cs" />
+    <Compile Include="Views\FieldVisit\WrapUpVisitViewData.cs" />
     <Compile Include="Views\FundingSource\Detail.cs" />
     <Compile Include="Views\FundingSource\DetailViewData.cs" />
     <Compile Include="Views\FundingSource\Edit.cs" />
@@ -1065,6 +1081,14 @@
     <Content Include="Views\FieldVisit\SiteLayout.cshtml" />
     <Content Include="Views\FieldVisit\NewFieldVisit.cshtml" />
     <Content Include="Views\FieldVisit\Inventory.cshtml" />
+    <Content Include="Views\FieldVisit\Assessment.cshtml" />
+    <Content Include="Views\FieldVisit\Maintain.cshtml" />
+    <Content Include="Views\FieldVisit\PostMaintenanceAssessment.cshtml" />
+    <Content Include="Views\FieldVisit\WrapUpVisit.cshtml" />
+    <Content Include="Views\FieldVisit\ManageVisit.cshtml" />
+    <Content Include="Views\FieldVisit\Photos.cshtml" />
+    <Content Include="Views\FieldVisit\Location.cshtml" />
+    <Content Include="Views\FieldVisit\Attributes.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

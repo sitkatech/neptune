@@ -20,7 +20,7 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(FieldVisit fieldVisit)
         {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assess(fieldVisit));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisit));
         }
     }
 

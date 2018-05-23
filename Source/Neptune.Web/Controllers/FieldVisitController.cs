@@ -90,53 +90,72 @@ namespace Neptune.Web.Controllers
             var viewData = new InventoryViewData(CurrentPerson, fieldVisit);
             return RazorView<Inventory, InventoryViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new LocationViewData(CurrentPerson, fieldVisit);
+            return RazorView<Location, LocationViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new PhotosViewData(CurrentPerson, fieldVisit);
+            return RazorView<Photos, PhotosViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new AttributesViewData(CurrentPerson, fieldVisit);
+            return RazorView<Attributes, AttributesViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult Assess(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        public ViewResult Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new AssessmentViewData(CurrentPerson, fieldVisit);
+            return RazorView<Assessment, AssessmentViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new MaintainViewData(CurrentPerson, fieldVisit);
+            return RazorView<Maintain, MaintainViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new PostMaintenanceAssessmentViewData(CurrentPerson, fieldVisit);
+            return RazorView<PostMaintenanceAssessment, PostMaintenanceAssessmentViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
+            return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult ManageVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new ManageVisitViewData(CurrentPerson, fieldVisit);
+            return RazorView<ManageVisit, ManageVisitViewData>(viewData);
         }
     }
 }
