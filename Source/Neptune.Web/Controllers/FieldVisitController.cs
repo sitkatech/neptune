@@ -86,7 +86,9 @@ namespace Neptune.Web.Controllers
         [FieldVisitEditFeature]
         public ViewResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
-            throw new NotImplementedException();
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new InventoryViewData(CurrentPerson, fieldVisit);
+            return RazorView<Inventory, InventoryViewData>(viewData);
         }
         [HttpGet]
         [FieldVisitEditFeature]

@@ -235,6 +235,7 @@
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewModel.cs" />
+    <Compile Include="Views\FieldVisit\Inventory.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisit.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewData.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewModel.cs" />
@@ -1062,6 +1063,7 @@
     <Content Include="Views\Shared\SortOrder\EditSortOrder.cshtml" />
     <Content Include="Views\FieldVisit\SiteLayout.cshtml" />
     <Content Include="Views\FieldVisit\NewFieldVisit.cshtml" />
+    <Content Include="Views\FieldVisit\Inventory.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
