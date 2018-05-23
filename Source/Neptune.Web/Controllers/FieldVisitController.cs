@@ -25,6 +25,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
@@ -38,9 +40,46 @@ namespace Neptune.Web.Controllers
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new NewFieldVisitViewModel(treatmentBMP.InProgressFieldVisit != null);
+            return ViewNew(treatmentBMP, viewModel);
+        }
+
+        private PartialViewResult ViewNew(TreatmentBMP treatmentBMP, NewFieldVisitViewModel viewModel)
+        {
             var viewData = new NewFieldVisitViewData(treatmentBMP);
-            var viewModel = new NewFieldVisitViewModel();
             return RazorPartialView<NewFieldVisit, NewFieldVisitViewData, NewFieldVisitViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitCreateFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewFieldVisitViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewNew(treatmentBMP, viewModel);
+            }
+
+            FieldVisit fieldVisit;
+            if (viewModel.Continue == null)
+            {
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+                HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
+            } else if (viewModel.Continue == false)
+            {
+                var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
+                oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+            }
+            else // if Continue == true
+            {
+                fieldVisit = treatmentBMP.InProgressFieldVisit;
+            }
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Inventory(fieldVisit)));
         }
 
         [HttpGet]

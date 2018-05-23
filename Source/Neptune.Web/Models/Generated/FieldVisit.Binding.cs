@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FieldVisit(int fieldVisitID, int treatmentBMPID, int? fieldVisitStatusID, int? initialAssessmentID, int? maintenanceRecordID, int? postMaintenanceAssessmentID, int performedByPersonID, DateTime visitDate) : this()
+        public FieldVisit(int fieldVisitID, int treatmentBMPID, int fieldVisitStatusID, int? initialAssessmentID, int? maintenanceRecordID, int? postMaintenanceAssessmentID, int performedByPersonID, DateTime visitDate) : this()
         {
             this.FieldVisitID = fieldVisitID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -45,12 +45,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FieldVisit(int treatmentBMPID, int performedByPersonID, DateTime visitDate) : this()
+        public FieldVisit(int treatmentBMPID, int fieldVisitStatusID, int performedByPersonID, DateTime visitDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FieldVisitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
+            this.FieldVisitStatusID = fieldVisitStatusID;
             this.PerformedByPersonID = performedByPersonID;
             this.VisitDate = visitDate;
         }
@@ -58,13 +59,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public FieldVisit(TreatmentBMP treatmentBMP, Person performedByPerson, DateTime visitDate) : this()
+        public FieldVisit(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson, DateTime visitDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FieldVisitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.FieldVisits.Add(this);
+            this.FieldVisitStatusID = fieldVisitStatus.FieldVisitStatusID;
             this.PerformedByPersonID = performedByPerson.PersonID;
             this.PerformedByPerson = performedByPerson;
             performedByPerson.FieldVisitsWhereYouAreThePerformedByPerson.Add(this);
@@ -74,9 +76,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static FieldVisit CreateNewBlank(TreatmentBMP treatmentBMP, Person performedByPerson)
+        public static FieldVisit CreateNewBlank(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson)
         {
-            return new FieldVisit(treatmentBMP, performedByPerson, default(DateTime));
+            return new FieldVisit(treatmentBMP, fieldVisitStatus, performedByPerson, default(DateTime));
         }
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace Neptune.Web.Models
         public int FieldVisitID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
-        public int? FieldVisitStatusID { get; set; }
+        public int FieldVisitStatusID { get; set; }
         public int? InitialAssessmentID { get; set; }
         public int? MaintenanceRecordID { get; set; }
         public int? PostMaintenanceAssessmentID { get; set; }
@@ -117,7 +119,7 @@ namespace Neptune.Web.Models
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
-        public FieldVisitStatus FieldVisitStatus { get { return FieldVisitStatusID.HasValue ? FieldVisitStatus.AllLookupDictionary[FieldVisitStatusID.Value] : null; } }
+        public FieldVisitStatus FieldVisitStatus { get { return FieldVisitStatus.AllLookupDictionary[FieldVisitStatusID]; } }
         public virtual TreatmentBMPAssessment InitialAssessment { get; set; }
         public virtual TreatmentBMPAssessment PostMaintenanceAssessment { get; set; }
         public virtual MaintenanceRecord MaintenanceRecord { get; set; }

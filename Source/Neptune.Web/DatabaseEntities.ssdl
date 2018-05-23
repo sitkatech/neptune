@@ -414,7 +414,7 @@ warning 6035: The relationship 'FK_FieldDefinitionDataImage_FieldDefinitionData_
     <Property Name="FieldVisitID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="FieldVisitStatusID" Type="int" />
+    <Property Name="FieldVisitStatusID" Type="int" Nullable="false" />
     <Property Name="InitialAssessmentID" Type="int" />
     <Property Name="MaintenanceRecordID" Type="int" />
     <Property Name="PostMaintenanceAssessmentID" Type="int" />

@@ -19,14 +19,39 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using LtInfo.Common.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class NewFieldVisitViewModel : FormViewModel
+    public class NewFieldVisitViewModel : FormViewModel, IValidatableObject
     {
-        [Required(ErrorMessage = "You must select an option.")]
-        public bool Continue { get; set; }
+        public bool AskToContinue { get; set; }
+        public bool? Continue { get; set; }
+
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public NewFieldVisitViewModel()
+        {
+        }
+
+        public NewFieldVisitViewModel(bool askToContinue)
+        {
+            AskToContinue = askToContinue;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var errors = new List<ValidationResult>();
+
+            if (AskToContinue && Continue == null)
+            {
+                errors.Add(new ValidationResult("You must select an option."));
+            }
+
+            return errors;
+        }
     }
 }

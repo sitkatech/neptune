@@ -417,7 +417,7 @@
     <Property Name="FieldVisitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
-    <Property Name="FieldVisitStatusID" Type="Int32" />
+    <Property Name="FieldVisitStatusID" Type="Int32" Nullable="false" />
     <Property Name="InitialAssessmentID" Type="Int32" />
     <Property Name="MaintenanceRecordID" Type="Int32" />
     <Property Name="PostMaintenanceAssessmentID" Type="Int32" />

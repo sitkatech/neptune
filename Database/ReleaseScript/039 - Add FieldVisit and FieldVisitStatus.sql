@@ -28,7 +28,7 @@ create table dbo.FieldVisit(
 FieldVisitID int not null identity(1,1) constraint PK_FieldVisit_FieldVisitID primary key,
 TenantID int not null constraint FK_FieldVisit_Tenant_TenantID foreign key references dbo.Tenant(TenantID),
 TreatmentBMPID int not null constraint FK_FieldVisit_TreatmentBMP_TreatmentBMPID foreign key references dbo.TreatmentBMP(TreatmentBMPID),
-FieldVisitStatusID int null constraint FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID foreign key references dbo.FieldVisitStatus(FieldVisitStatusID),
+FieldVisitStatusID int not null constraint FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID foreign key references dbo.FieldVisitStatus(FieldVisitStatusID),
 InitialAssessmentID int null constraint FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID foreign key references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID),
 MaintenanceRecordID int null constraint FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID foreign key references dbo.MaintenanceRecord(MaintenanceRecordID),
 PostMaintenanceAssessmentID int null constraint FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID foreign key references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID),

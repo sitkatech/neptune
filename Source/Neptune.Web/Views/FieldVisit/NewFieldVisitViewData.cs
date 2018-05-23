@@ -33,10 +33,9 @@ namespace Neptune.Web.Views.FieldVisit
         public bool AskToContinue { get; }
         public DateTime? InProgressVisitDate { get; }
 
-        public NewFieldVisitViewData(Models.TreatmentBMP treatmentBMP) 
+        public NewFieldVisitViewData(Models.TreatmentBMP treatmentBMP)
         {
-            FieldVisit = treatmentBMP.FieldVisits.SingleOrDefault(
-                x => x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
+            FieldVisit = treatmentBMP.InProgressFieldVisit;
 
             AskToContinue = FieldVisit != null;
 

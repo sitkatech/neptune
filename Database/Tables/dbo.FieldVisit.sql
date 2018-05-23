@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[FieldVisit](
 	[FieldVisitID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
-	[FieldVisitStatusID] [int] NULL,
+	[FieldVisitStatusID] [int] NOT NULL,
 	[InitialAssessmentID] [int] NULL,
 	[MaintenanceRecordID] [int] NULL,
 	[PostMaintenanceAssessmentID] [int] NULL,
