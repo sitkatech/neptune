@@ -20,16 +20,13 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.FieldVisit.FieldVisitSection
-
 @{
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
 }
-
 @section JavascriptAndStylesContent
 {
     @RenderSection("JavascriptAndStylesContent", false)
 }
-
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
@@ -43,13 +40,11 @@
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
                         </li>
-
                         @*TODO: Generate submenu*@
                     }
                 </ul>
             </nav>
         </div>
-
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
                 <h2>@ViewDataTyped.SectionName</h2>

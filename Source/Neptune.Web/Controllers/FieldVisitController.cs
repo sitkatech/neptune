@@ -33,6 +33,13 @@ namespace Neptune.Web.Controllers
     public class FieldVisitController : NeptuneBaseController
     {
         [HttpGet]
+        [FieldVisitCreateFeature]
+        public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
