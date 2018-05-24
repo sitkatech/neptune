@@ -59,9 +59,13 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Applicable Observation Types
+                @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Any())
+                {
+                    <span class="pull-right"> @SortOrderHelper.SortOrderModalLink(ViewDataTyped.ObservationTypeSortOrderUrl, ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions) </span>
+                }
             </div>
             <div class="panel-body">
-                <div class="row"><div class="col-xs-12" style="margin-bottom: 10px;">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.ObservationTypeSortOrderUrl, ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</div></div>
+                <div class="row"></div>
                 <div class="row">
                     <div class="col-xs-12">
                         <table class="table">
@@ -97,9 +101,13 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 @purpose.CustomAttributeTypePurposeDisplayName
+                @if (ViewDataTyped.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID == purpose.CustomAttributeTypePurposeID))
+                {
+                    <span class="pull-right">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.AttributeTypeSortOrderUrl(purpose.CustomAttributeTypePurposeID), ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</span>
+                }
             </div>
             <div class="panel-body">
-                <div class="row"><div class="col-xs-12" style="margin-bottom: 10px;">@SortOrderHelper.SortOrderModalLink(ViewDataTyped.AttributeTypeSortOrderUrl(purpose.CustomAttributeTypePurposeID), ViewDataTyped.UserHasTreatmentBMPTypeManagePermissions)</div></div>
+                <div class="row"></div>
                 <div class="row">
                     <div class="col-xs-12">
                         @{

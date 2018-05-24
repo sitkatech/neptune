@@ -30,18 +30,22 @@ namespace Neptune.Web.Views.Home
 {
     public class IndexViewData : NeptuneViewData
     {
-        public readonly ViewPageContentViewData CustomHomePageTextViewData;
-        public readonly ViewPageContentViewData CustomHomePageAdditionalInfoTextViewData;
-        public readonly ViewPageContentViewData CustomHomePageMapTextViewData;
+        public ViewPageContentViewData CustomHomePageTextViewData { get; }
+        public ViewPageContentViewData CustomHomePageAdditionalInfoTextViewData { get; }
+        public ViewPageContentViewData CustomHomePageMapTextViewData { get; }
         
-        public readonly JurisdictionsMapViewData JurisdictionsMapViewData;
-        public readonly JurisdictionsMapInitJson JurisdictionsMapInitJson;
+        public JurisdictionsMapViewData JurisdictionsMapViewData { get; }
+        public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }
         
         // todo: ?
-        public readonly string FullMapUrl = string.Empty;
-        public readonly List<Models.NeptuneHomePageImage> NeptuneHomePageCarouselImages;
+        public string FullMapUrl { get; } = string.Empty;
+        public List<Models.NeptuneHomePageImage> NeptuneHomePageCarouselImages { get; }
+        public LaunchPadViewData LaunchPadViewData { get; }
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePageHomePage, Models.NeptunePage neptunePageAdditionalInfo, Models.NeptunePage neptunePageMapInfo, List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData, JurisdictionsMapInitJson jurisdictionsMapInitJson) : base(currentPerson, neptunePageHomePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePageHomePage,
+            Models.NeptunePage neptunePageAdditionalInfo, Models.NeptunePage neptunePageMapInfo,
+            List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
+            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(currentPerson, neptunePageHomePage)
         {
             PageTitle = MultiTenantHelpers.GetToolDisplayName();
 
@@ -51,6 +55,7 @@ namespace Neptune.Web.Views.Home
             JurisdictionsMapViewData = jurisdictionsMapViewData;
             JurisdictionsMapInitJson = jurisdictionsMapInitJson;
             NeptuneHomePageCarouselImages = neptuneHomePageImages;
+            LaunchPadViewData = launchPadViewData;
         }
     }
 }
