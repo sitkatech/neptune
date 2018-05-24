@@ -157,5 +157,22 @@ namespace Neptune.Web.Controllers
             var viewData = new ManageVisitViewData(CurrentPerson, fieldVisit);
             return RazorView<ManageVisit, ManageVisitViewData>(viewData);
         }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson, TreatmentBMP treatmentBMP)
+        {
+            gridSpec = new FieldVisitGridSpec(currentPerson);
+            return HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x =>
+                x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
+        }
     }
 }

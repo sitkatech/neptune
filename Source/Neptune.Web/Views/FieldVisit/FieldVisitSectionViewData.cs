@@ -13,6 +13,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string ScoreUrl { get; }
         public string SectionName { get; }
         public bool FieldVisitInformationComplete { get; }
+        public string SubsectionName { get; set; }
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, string sectionName)
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldVisits)

@@ -207,6 +207,34 @@
                 <div class="col-xs-12">
                     <div class="panel panelNeptune">
                         <div class="panel-heading panelTitle">
+                            Field Visits
+                            @*@if (ViewDataTyped.CurrentPersonCanManage)
+                            {
+                                <span class="pull-right">
+                                    <a href="@ViewDataTyped.NewFieldVisitUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
+                                </span>
+                            }*@
+                        </div>
+                        <div class="panel-body">
+                            @if (ViewDataTyped.TreatmentBMP.FieldVisits.Any())
+                            {
+                                @Html.DhtmlxGrid(ViewDataTyped.FieldVisitGridSpec, ViewDataTyped.FieldVisitGridName, ViewDataTyped.FieldVisitGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                            }
+                            @if (!ViewDataTyped.TreatmentBMP.FieldVisits.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+                            {
+                                <p class="systemText">
+                                    No @FieldDefinition.FieldVisit.GetFieldDefinitionLabelPluralized() for this BMP.
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panelNeptune">
+                        <div class="panel-heading panelTitle">
                             Assessments
                             @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
                             {
