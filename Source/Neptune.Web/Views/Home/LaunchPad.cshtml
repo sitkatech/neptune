@@ -1,0 +1,124 @@
+﻿@using Neptune.Web.Models
+@using Neptune.Web.Views.Home
+@using Neptune.Web.Views.Shared
+
+@inherits LaunchPad
+
+<style>
+    .launchPadAction, .launchPadJurisdictionListItem {
+        margin-bottom: 5px;
+    }
+    .launchPadJurisdictionList {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+
+@if (ViewDataTyped.IsLoggedIn)
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Launch Pad</h2>
+            <p>Welcome @ViewDataTyped.CurrentPerson.FirstName.</p>
+
+            @if (ViewDataTyped.IsAdmin)
+            {
+                <p>
+                    Administrators are by definition assigned to manage <a href="@ViewDataTyped.JurisdictionIndexUrl">all Jurisdictions</a>.
+                </p>
+            }
+            else if (ViewDataTyped.Jurisdictions.Count() == 1)
+            {
+                var jurisdiction = ViewDataTyped.Jurisdictions.Single();
+                <p>
+                    Your assigned Jurisdiction:
+                    &nbsp;@jurisdiction.OrganizationDisplayName
+                    <a href="@jurisdiction.GetDetailUrl()" class="btn btn-neptune btn-xs">View Jurisdiction Details</a>
+                </p>
+            }
+            else if (ViewDataTyped.Jurisdictions.Any())
+            {
+                <p>
+                    Your assigned Jurisdictions:
+                </p>
+                <ul class="launchPadJurisdictionList">
+                    @foreach (var jurisdiction in ViewDataTyped.Jurisdictions)
+                    {
+                        <li class="launchPadJurisdictionListItem">
+                            @jurisdiction.OrganizationDisplayName
+                            <a href="@jurisdiction.GetDetailUrl()" class="btn btn-neptune btn-xs">View Jurisdiction Details</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>You are not assigned to a Jurisdiction</p>
+            }
+        </div>
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <a href="@ViewDataTyped.FindABmpUrl" class="col-xs-6 col-md-4 btn btn-neptune">Find a BMP</a>
+                <div class="col-xs-6 col-md-8">
+                    Start here to view, edit, assess, or maintain a BMP
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <a href="@ViewDataTyped.ExploreBmpTypesUrl" class="col-xs-6 col-md-4 btn btn-neptune">Explore BMP Types</a>
+                <div class="col-xs-6 col-md-8">
+                    See details of the @ViewDataTyped.NumberOfBmpTypes different types of BMPs
+                </div>
+            </div>
+        </div>
+        @if (ViewDataTyped.IsJurisdictionManager)
+        {
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <a href="@ViewDataTyped.AddABmpUrl" class="col-xs-6 col-md-4 btn btn-neptune">Add a BMP</a>
+                    <div class="col-xs-6 col-md-8">
+                        Start here to add a new BMP
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="col-xs-12 col-sm-6 launchPadAction">
+            <div class="row">
+                <a href="@ViewDataTyped.ViewAssessmentAndMaintenanceRecordsUrl" class="col-xs-6 col-md-4 btn btn-neptune">View Assessment and<br />Maintenance Records</a>
+                <div class="col-xs-6 col-md-8">
+                    View records of completed assessment and maintenance events
+                </div>
+            </div>
+        </div>
+        @if (ViewDataTyped.IsJurisdictionManager)
+        {
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <a href="@ViewDataTyped.InviteANewUserUrl" class="col-xs-6 col-md-4 btn btn-neptune">Invite a New User</a>
+                    <div class="col-xs-6 col-md-8">
+                        Invite a new user and assign them roles
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <a href="@ViewDataTyped.EditUserRolesUrl" class="col-xs-6 col-md-4 btn btn-neptune">Edit User Roles</a>
+                    <div class="col-xs-6 col-md-8">
+                        Edit roles of an existing user in your jurisdiction
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <a href="@ViewDataTyped.AddAFundingSourceUrl" class="col-xs-6 col-md-4 btn btn-neptune">Add a Funding Source</a>
+                    <div class="col-xs-6 col-md-8">
+                        Set up sources of projects and O&amp;M funding
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    { ViewPageContent.RenderPartialView(Html, ViewDataTyped.LaunchPadViewPageContentViewData); }
+    <hr />
+}

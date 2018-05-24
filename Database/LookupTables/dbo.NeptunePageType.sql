@@ -24,4 +24,5 @@ values
 (19, 'ManageCustomAttributeTypesList', 'Manage Custom Attribute Types List', 2),
 (20, 'Legal', 'Legal', 2),
 (21, 'FundingSourcesList', 'Funding Sources List', 2),
-(22, 'FindABMP', 'Find a BMP', 2)
+(22, 'FindABMP', 'Find a BMP', 2),
+(23, 'LaunchPad', 'Launch Pad', 2)
