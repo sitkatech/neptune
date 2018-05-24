@@ -5,8 +5,9 @@ namespace Neptune.Web.Views.FieldVisit
     public class AttributesViewData : FieldVisitSectionViewData
     {
         public AttributesViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit,
-            "Attributes") // todo: subsection name
+            Models.FieldVisitSection.Inventory.FieldVisitSectionName) // todo: subsection name
         {
+            SubsectionName = "Attributes";
         }
     }
 }

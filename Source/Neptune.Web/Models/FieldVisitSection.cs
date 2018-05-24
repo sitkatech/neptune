@@ -23,10 +23,20 @@ namespace Neptune.Web.Models
             FieldVisitSubsectionData LocationSubsection = new FieldVisitSubsectionData
             {
                 SubsectionName = "Location",
-                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Location(fieldVisit))
+                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Location(fieldVisit))
+            };
+            FieldVisitSubsectionData PhotosSubsection = new FieldVisitSubsectionData
+            {
+                SubsectionName = "Photos",
+                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Photos(fieldVisit))
+            };
+            FieldVisitSubsectionData AttributesSubsection = new FieldVisitSubsectionData
+            {
+                SubsectionName = "Attributes",
+                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
             };
 
-            return new List<FieldVisitSubsectionData> {LocationSubsection};
+            return new List<FieldVisitSubsectionData> {LocationSubsection, PhotosSubsection, AttributesSubsection};
         }
     }
 
