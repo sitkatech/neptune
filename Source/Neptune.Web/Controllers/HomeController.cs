@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Neptune.Web.Security;
@@ -57,7 +58,9 @@ namespace Neptune.Web.Controllers
 
             // map stuff
 
-            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson(true).Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show).ToList();
+            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson(true)
+                .Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show)
+                .ToList();
 
             var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
             {
@@ -66,10 +69,14 @@ namespace Neptune.Web.Controllers
             };
             var projectLocationsMapViewData = new JurisdictionsMapViewData(projectLocationsMapInitJson.MapDivID);
 
+            var launchPadNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LaunchPad);
+            var numberOfBmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Count();
+            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes);
 
             var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,
                 neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo,
-                neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson);
+                neptuneHomePageImages, projectLocationsMapViewData, projectLocationsMapInitJson,
+                launchPadViewData);
 
             return RazorView<Index, IndexViewData>(viewData);
         }
