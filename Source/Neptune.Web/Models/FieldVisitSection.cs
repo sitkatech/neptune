@@ -59,7 +59,7 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class FieldVisitSectionMaintain
+    public partial class FieldVisitSectionMaintenance
     {
         public override string GetSectionUrl(FieldVisit fieldVisit)
         {

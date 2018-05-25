@@ -14,8 +14,9 @@ namespace Neptune.Web.Views.FieldVisit
         public string SectionName { get; }
         public bool FieldVisitInformationComplete { get; }
         public string SubsectionName { get; set; }
+        public string SectionHeader { get; set; }
 
-        public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, string sectionName)
+        public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldVisits)
         {
             FieldVisit = fieldVisit;
@@ -30,7 +31,7 @@ namespace Neptune.Web.Views.FieldVisit
                 
             }
 
-            SectionName = sectionName;
+            SectionName = fieldVisitSection.FieldVisitSectionName;
 
             // todo: entity names?
             EntityName = "Treatment BMP Field Visits";
@@ -39,6 +40,8 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityName = fieldVisit.TreatmentBMP?.FormattedNameAndType ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
+
+            SectionHeader = fieldVisitSection.SectionHeader;
         }
     }
 }

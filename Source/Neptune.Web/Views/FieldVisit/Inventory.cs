@@ -19,18 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
-
 namespace Neptune.Web.Views.FieldVisit
 {
     public abstract class Inventory : LtInfo.Common.Mvc.TypedWebViewPage<InventoryViewData>
     {
-    }
-
-    public class InventoryViewData : FieldVisitSectionViewData
-    {
-        public InventoryViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit, Models.FieldVisitSection.Inventory.FieldVisitSectionName)
-        {
-        }
     }
 }

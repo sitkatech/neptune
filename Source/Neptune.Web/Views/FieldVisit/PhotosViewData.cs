@@ -5,7 +5,7 @@ namespace Neptune.Web.Views.FieldVisit
     public class PhotosViewData : FieldVisitSectionViewData
     {
         public PhotosViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit,
-            Models.FieldVisitSection.Inventory.FieldVisitSectionName) // todo: handle subsection name elegantly
+            Models.FieldVisitSection.Inventory)
         {
             SubsectionName = "Photos";
             

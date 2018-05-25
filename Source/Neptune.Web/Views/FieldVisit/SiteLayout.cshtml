@@ -23,10 +23,11 @@
 @{
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
 }
+
 @section JavascriptAndStylesContent
 {
     @RenderSection("JavascriptAndStylesContent", false)
-    
+
     <style>
         nav#wizardNav ul li.activeGroup a,
         nav#wizardNav ul li.activeGroup span {
@@ -35,10 +36,17 @@
             cursor: pointer;
         }
 
-        ul.fieldVisitTierTwoMenu { 
+        ul.fieldVisitTierTwoMenu {
             border-left: 3px solid;
             border-bottom: 3px solid;
             border-color: #0099ab;
+        }
+
+        @@media (max-width: 768px) {
+            ul.fieldVisitTierTwoMenu {
+                border-right: 3px solid;
+                border-color: #0099ab;
+            }
         }
 
         nav#wizardNav ul.fieldVisitTierTwoMenu li a {
@@ -47,20 +55,24 @@
             padding-left: 45px;
         }
 
-        nav#wizardNav ul li.activeGroup a.activeItem:after {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            margin-top: -10px;
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 8px solid #0099ab;
-            z-index: 900;
+        @@media (min-width: 769px) {
+            nav#wizardNav ul li.activeGroup a.activeItem:after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                margin-top: -10px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: 8px solid #0099ab;
+                z-index: 900;
+            }
+
+            nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:after { border-left: 8px solid #e49937 !important; }
         }
 
         nav#wizardNav ul.fieldVisitTierTwoMenu a:hover {
@@ -69,17 +81,13 @@
         }
 
         nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem,
-        nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:hover
-        {
+        nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:hover {
             background-color: #e49937;
             color: #fff;
         }
-
-        nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:after {
-            border-left: 8px solid #e49937 !important;
-        }
     </style>
 }
+
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
@@ -95,15 +103,15 @@
                             </a>
                             @if (sectionIsActive)
                             {
-                            <ul class="nav nav-stacked fieldVisitTierTwoMenu">
-                                @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))
-                                {
-                                    var subsectionIsActive = ViewDataTyped.SubsectionName == fieldVisitSubsection.SubsectionName;
-                                    <li>
-                                        <a class="@(subsectionIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSubsection.SubsectionUrl">@fieldVisitSubsection.SubsectionName</a>
-                                    </li>
-                                }
-                            </ul>
+                                <ul class="nav nav-stacked fieldVisitTierTwoMenu">
+                                    @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))
+                                    {
+                                        var subsectionIsActive = ViewDataTyped.SubsectionName == fieldVisitSubsection.SubsectionName;
+                                        <li>
+                                            <a class="@(subsectionIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSubsection.SubsectionUrl">@fieldVisitSubsection.SubsectionName</a>
+                                        </li>
+                                    }
+                                </ul>
                             }
                         </li>
                     }
@@ -112,7 +120,7 @@
         </div>
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
-                <h2>@(ViewDataTyped.SubsectionName ?? ViewDataTyped.SectionName)</h2>
+                <h2>@ViewDataTyped.SectionHeader</h2>
                 <hr>
             </div>
 

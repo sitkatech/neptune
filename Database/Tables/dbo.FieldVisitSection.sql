@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[FieldVisitSection](
 	[FieldVisitSectionID] [int] NOT NULL,
 	[FieldVisitSectionName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[FieldVisitSectionDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[SectionHeader] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SortOrder] [int] NOT NULL,
  CONSTRAINT [PK_FieldVisitSection_FieldVisitSectionID] PRIMARY KEY CLUSTERED 
 (
