@@ -51,7 +51,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewNewFundingEventFundingSources(EditViewModel viewModel, TreatmentBMP treatmentBMP)
         {
             var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(allFundingSources, FundingEventType.All, treatmentBMP);
+            var viewData = new EditViewData(allFundingSources, FundingEventType.All.OrderBy(x => x.SortOrder).ToList(), treatmentBMP);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -96,7 +96,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewEditFundingEventFundingSources(FundingEvent fundingEvent, EditViewModel viewModel)
         {
             var allFundingSources = HttpRequestStorage.DatabaseEntities.FundingSources.ToList().Select(x => new FundingSourceSimple(x)).OrderBy(p => p.DisplayName).ToList();
-            var viewData = new EditViewData(fundingEvent, allFundingSources, FundingEventType.All);
+            var viewData = new EditViewData(fundingEvent, allFundingSources, FundingEventType.All.OrderBy(x => x.SortOrder).ToList());
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

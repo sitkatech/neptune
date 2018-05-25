@@ -25,9 +25,8 @@
 @using Neptune.Web.Views.Shared.JurisdictionControls
 @using SitkaController = Neptune.Web.Common.SitkaController
 @inherits Index
-@{
-    SetLayout("~/Views/Shared/NavAndHeaderLayout.cshtml", ViewDataTyped);
-}
+
+@{ @SetLayout("~/Views/Shared/NavAndHeaderLayout.cshtml", ViewDataTyped) }
 
 @section JavascriptAndStylesContent
 {
@@ -102,6 +101,8 @@
 }
 
 <div class="container neptuneContent">
+    @{ LaunchPad.RenderPartialView(Html, ViewDataTyped.LaunchPadViewData); }
+
     @if (!ViewDataTyped.NeptuneHomePageCarouselImages.Any())
     {
         <h2 class="pageTitle">@ViewDataTyped.PageTitle</h2>
@@ -138,7 +139,7 @@
                 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.CustomHomePageAdditionalInfoTextViewData); }
             </div>
         </div>
-    
+
         <div class="col-md-4" style="margin-top: 20px;">
             <h4 style="margin-bottom: 5px;">Participating Jurisdictions</h4>
             <div>
@@ -151,18 +152,18 @@
     </div>
 
     <script type="text/javascript">
-        jQuery(document).ready(function () {
-            NeptuneMaps.Map.prototype.bindPopupToFeature = function (layer, feature) {
+        jQuery(document).ready(function() {
+            NeptuneMaps.Map.prototype.bindPopupToFeature = function(layer, feature) {
                 if (!Sitka.Methods.isUndefinedNullOrEmpty(feature.properties["Short Name"])) {
                     layer.bindTooltip(feature.properties["Short Name"], { direction: "auto", sticky: "true" });
 
                     var originalFillOpacity = layer.options.fillOpacity;
                     layer.on("mouseover",
-                        function () {
+                        function() {
                             layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
                         });
                     layer.on("mouseout",
-                        function () {
+                        function() {
                             layer.setStyle({ fillOpacity: originalFillOpacity });
                         });
                 };

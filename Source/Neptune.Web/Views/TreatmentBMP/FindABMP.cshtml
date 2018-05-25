@@ -93,58 +93,59 @@
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
     <div class="row">
         <div class="col-sm-4 col-md-3">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off" />
-                        <span class="input-group-btn">
-                            <a id="treatmentBMPFinderButton" class="btn btn-default">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </a>
-                        </span>
-                    </div>
-                </div>
+            <div class="input-group">
+                <input type="text" id="treatmentBMPFinder" class="typeahead form-control" placeholder="Search by BMP name" autocomplete="off"/>
+                <span class="input-group-btn">
+                    <a id="treatmentBMPFinderButton" class="btn btn-default">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </a>
+                </span>
             </div>
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <a style="margin: 10px 0; width: 100%" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone" style="margin-right: 4px;"></i>Find nearby BMPs</a>
-                </div>
-            </div>
         </div>
-        <div class="col-sm-8 col-md-9">
+        <div class="col-sm-4 col-md-3">
+            <a style="width: 100%" class="btn btn-neptune" ng-click="zoomMapToCurrentLocation()"><i class="glyphicon glyphicon-phone" style="margin-right: 4px;"></i>Find nearby BMPs</a>
+
+        </div>
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
             <div id="mapContainer">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row" style="margin-top: 10px;">
-        <div class="col-sm-4 col-md-3">
+        <div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
             <div class="panel panelNeptune">
                 <div class="panel-heading panelTitle">
                     <h3>
                         BMPs in Map View
                     </h3>
                 </div>
-                <ul class="list-group" ng-if="visibleBMPCount() <= 15" >
+                <ul class="list-group" ng-if="visibleBMPCount() <= 15">
                     <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
-                            <strong>{{treatmentBMP.DisplayName}}</strong>
-                            <div class="help-block">
-                                {{treatmentBMP.TreatmentBMPTypeName}}
-                            </div>
+                        <strong>{{treatmentBMP.DisplayName}}</strong>
+                        <div class="help-block">
+                            {{treatmentBMP.TreatmentBMPTypeName}}
+                        </div>
                     </li>
                 </ul>
                 <div class="panel-body" ng-if="visibleBMPCount() > 15">
-                    <p class="systemText">Zoom in on the map or search by BMP name to see a list of BMPs</p>
+                    <p class="systemText">{{visibleBMPCount()}} BMPs shown on map - Zoom closer see a list</p>
                 </div>
-                
+
             </div>
         </div>
 
-        <div class="col-sm-8 col-md-9" id="mapSummaryResults"></div>
     </div>
-    <hr />
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-sm-4 col-md-3">
+        </div>
+
+        <div class="col-sm-8 col-md-12" id="mapSummaryResults"></div>
+    </div>
+    <hr/>
     <div class="row">
         <div class="col-sm-12">
             <h4 style="margin-top: 0;">Didn't find the BMP you are looking for?</h4>

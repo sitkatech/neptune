@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -265,6 +265,8 @@
     <Compile Include="Views\FundingSource\Index.cs" />
     <Compile Include="Views\FundingSource\IndexGridSpec.cs" />
     <Compile Include="Views\FundingSource\IndexViewData.cs" />
+    <Compile Include="Views\Home\LaunchPad.cs" />
+    <Compile Include="Views\Home\LaunchPadViewData.cs" />
     <Compile Include="Views\MaintenanceRecord\Detail.cs" />
     <Compile Include="Views\MaintenanceRecord\DetailViewData.cs" />
     <Compile Include="Views\MaintenanceRecord\EditMaintenanceRecord.cs" />
@@ -1079,6 +1081,7 @@
     <Content Include="Views\TreatmentBMP\Index.cshtml" />
     <Content Include="Views\TreatmentBMP\FindABMP.cshtml" />
     <Content Include="Views\Shared\SortOrder\EditSortOrder.cshtml" />
+    <Content Include="Views\Home\LaunchPad.cshtml" />
     <Content Include="Views\FieldVisit\SiteLayout.cshtml" />
     <Content Include="Views\FieldVisit\NewFieldVisit.cshtml" />
     <Content Include="Views\FieldVisit\Inventory.cshtml" />

@@ -1,23 +1,23 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="NavAndHeaderLayout.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="NavAndHeaderLayout.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using System.Diagnostics
 @using Neptune.Web.Common
 @using Neptune.Web.Models
@@ -51,17 +51,17 @@ Source code is available upon request via <support@sitkatech.com>.
     <link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
     @*swich commented lines for testing purposes*@
     @*<link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />*@
-    
+
 
     @RenderSection("JavascriptAndStylesContent", false)
 </head>
 <body>
     <div class="expandToFillScreen">
-        <div class="header">                          
-                <a href="@ViewDataTyped.NeptuneHomeUrl">
-                    <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()"/>
-                    <span class="headerText">@MultiTenantHelpers.GetTenantDisplayName()</span>
-                </a>
+        <div class="header">
+            <a href="@ViewDataTyped.NeptuneHomeUrl">
+                <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()" />
+                <span class="headerText">@MultiTenantHelpers.GetTenantDisplayName()</span>
+            </a>
         </div>
         <div id="mainnavandcontent">
             <nav class="navbar neptuneNavbar">
@@ -84,33 +84,35 @@ Source code is available upon request via <support@sitkatech.com>.
                             }
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <p class="navbar-text">
-                                        Welcome
-                                        <a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">@ViewDataTyped.CurrentPerson.FullNameFirstLast</a>
-                                    </p>
-                                }
-                            </li>
-                            <li>
-                                @ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
-                            </li>
-                            <li>
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <a href="@ViewDataTyped.LogOutUrl" title="Log Out">Log Out</a>
-                                }
-                                else
-                                {
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <span>Welcome&nbsp;&nbsp;@ViewDataTyped.CurrentPerson.FullNameFirstLast</span>
+                                        <span class="glyphicon glyphicon-menu-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
+                                        <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">View Account</a></li>
+                                        <li>@ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)</li>
+                                        <li class="divider"></li>
+                                        <li><a href="@ViewDataTyped.LogOutUrl">Log Out</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    @ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
+                                </li>
+                                <li>
                                     <a href="@ViewDataTyped.LogInUrl" title="Log In">Log In</a>
-                                }
-                            </li>
+                                </li>
+                            }
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
-            
+
             @RenderSection("BeforeBodyContainer", false)
 
             @RenderBody()
@@ -135,8 +137,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </html>
 
 <script>
-    jQuery(document).ready(function() {
-  
+    jQuery(document).ready(function () {
+
         jQuery(window).scroll(function () {
             // this is fragile, the 10px buffer is for when the document height is just equal to the height of the view port + the height of the header
             var outerHeight = jQuery(document).height();
