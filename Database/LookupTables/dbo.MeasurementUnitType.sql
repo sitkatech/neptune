@@ -18,4 +18,8 @@ insert into dbo.MeasurementUnitType(MeasurementUnitTypeID, MeasurementUnitTypeNa
 (15, 'Cubic Feet', 'cubic feet', 'cu ft', 'cu ft', 0, 1),
 (16, 'Gallons', 'gallons', 'gallons', 'gallon', 0, 1),
 (17, 'Minutes', 'minutes', 'minutes', 'minute', 0, 1),
-(18, 'CubicFeetPerSecond', 'cubic feet per second', 'cfs', 'cfs', 0, 1)
+(18, 'CubicFeetPerSecond', 'cubic feet per second', 'cfs', 'cfs', 0, 1),
+(19, 'GallonsPerDay', 'gallons per day', 'gpd', 'gallon per day', 1, 1),
+(20, 'Pounds', 'pounds', 'lb', 'pound', 1, 1),
+(21, 'Tons', 'tons', 'cfs', 'cfs', 1, 1),
+(22, 'CubicYards', 'cubic yards', 'cu yd', 'cubic yard', 1, 1)
