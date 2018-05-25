@@ -58,3 +58,6 @@ Alter Table dbo.MaintenanceRecord Add Constraint AK_MaintenanceRecord_Maintenanc
  	foreign key (MaintenanceRecordID, TreatmentBMPID) references dbo.MaintenanceRecord(MaintenanceRecordID, TreatmentBMPID)
  Alter Table dbo.FieldVisit Add Constraint FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID
  	foreign key (PostMaintenanceAssessmentID, TreatmentBMPID) references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID, TreatmentBMPID)
+
+--
+create unique index CK_AtMostOneFieldVisitMayBeInProgressAtAnyTimePerBMP on dbo.FieldVisit(TreatmentBMPID) where FieldVisitStatusID = 1 -- Where 1 is InProgress
