@@ -23,14 +23,18 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class SummaryForMapViewData : NeptuneViewData
     {
 
-        public readonly Models.TreatmentBMP TreatmentBMP;
-        public readonly string AssessmentUrl;
+        public Models.TreatmentBMP TreatmentBMP{ get; }
+        public string AssessmentUrl{ get; }
+        public Models.TreatmentBMPImage KeyPhoto { get; }
+        public string FieldVisitUrl { get; }
+        public bool UserHasFieldVisitPermissions { get; }
 
         public SummaryForMapViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP) : base(currentPerson)
         {
@@ -39,8 +43,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             // todo: we don't have the concept of a keyphoto yet
             //KeyPhoto = treatmentBMP.TreatmentBMPImages.SingleOrDefault(x => x.IsKeyPhoto);
             KeyPhoto = treatmentBMP.TreatmentBMPImages.FirstOrDefault();
+            FieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(TreatmentBMP));
+            UserHasFieldVisitPermissions = new FieldVisitCreateFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
         }
-
-        public Models.TreatmentBMPImage KeyPhoto { get; }
     }
 }

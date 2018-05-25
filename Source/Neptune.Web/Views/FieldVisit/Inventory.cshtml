@@ -1,0 +1,46 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="Inventory.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Views.FieldVisit
+
+@inherits Inventory
+
+@{
+    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
+}
+
+<div class="row" style="margin-bottom: 21px;">
+    <div class="col-xs-12">
+        <p>I want to:</p>
+        <a href="@ViewDataTyped.LocationUrl" class="btn btn-neptune" style="display: inline-block;">
+            <span>Review and Update the BMP Inventory</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
+        </a>
+        <a href="@ViewDataTyped.AssessUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+    </div>
+</div>
+
+@* TODO: neutered to cut scope--may bring back later
+    <div class="row">
+    <div class="col-xs-12">
+        <p>Can't find this BMP?</p>
+        <a href="#" class="btn btn-warning">Flag for Deletion <span class="glyphicon glyphicon-trash" style="margin-left: 10px;"></span></a>
+        <p class="help-block">If this BMP does not exist or it is not the correct type, you may flag it for deletion</p>
+    </div>
+</div>*@
