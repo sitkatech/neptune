@@ -55,11 +55,10 @@
                                     ng-model="ObservationTypeCollectionMethodID"
                                     ng-change="updateCollectionMethod()"
                                     ng-required="true">
-                                <option value=""></option>
                                 <option ng-repeat="observationTypeCollectionMethod in AngularViewData.ObservationTypeCollectionMethods"
                                         ng-selected="AngularModel.ObservationTypeCollectionMethodID == observationTypeCollectionMethod.ID"
-                                        ng-value="observationTypeCollectionMethod.ID"
-                                        title="{{observationTypeCollectionMethod.Definition}}">
+                                        title="{{observationTypeCollectionMethod.Definition}}"
+                                        value="{{observationTypeCollectionMethod.ID}}">
                                     {{observationTypeCollectionMethod.DisplayName}}
                                 </option>
                             </select>
