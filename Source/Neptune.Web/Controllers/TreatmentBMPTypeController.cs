@@ -126,8 +126,8 @@ namespace Neptune.Web.Controllers
         {
             var instructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageTreatmentBMPTypeInstructions);
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPTypeID) ? SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPTypeID)) : SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(x => x.New());
-            var observationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.ToList();
-            var customAttributeTypes = treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.ToList();
+            var observationTypes = treatmentBMPType?.TreatmentBMPTypeAssessmentObservationTypes.ToList() ?? new List<TreatmentBMPTypeAssessmentObservationType>();
+            var customAttributeTypes = treatmentBMPType?.TreatmentBMPTypeCustomAttributeTypes.ToList() ?? new List<TreatmentBMPTypeCustomAttributeType>();
             var allTreatmentBMPAssessmentObservationTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList();
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             var viewData = new EditViewData(CurrentPerson, observationTypes, submitUrl, instructionsNeptunePage, treatmentBMPType, customAttributeTypes, allTreatmentBMPAssessmentObservationTypes, allCustomAttributeTypes);
