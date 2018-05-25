@@ -20,20 +20,8 @@ namespace Neptune.Web.Views.FieldVisit
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldVisits)
         {
             FieldVisit = fieldVisit;
-
-            // todo
-            if (!ModelObjectHelpers.IsRealPrimaryKeyValue(fieldVisit.PrimaryKey))
-            {
-                
-            }
-            else
-            {
-                
-            }
-
             SectionName = fieldVisitSection.FieldVisitSectionName;
 
-            // todo: entity names?
             EntityName = "Treatment BMP Field Visits";
             // todo: are we goign to have a Field Visit Index Page?
             //EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Index());

@@ -30,14 +30,14 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public Models.FieldVisit FieldVisit { get; }
 
-        public bool AskToContinue { get; }
+        public bool InProgressFieldVisitExists { get; }
         public DateTime? InProgressVisitDate { get; }
 
         public NewFieldVisitViewData(Models.TreatmentBMP treatmentBMP)
         {
             FieldVisit = treatmentBMP.InProgressFieldVisit;
 
-            AskToContinue = FieldVisit != null;
+            InProgressFieldVisitExists = FieldVisit != null;
 
             InProgressVisitDate = FieldVisit?.VisitDate;
         }

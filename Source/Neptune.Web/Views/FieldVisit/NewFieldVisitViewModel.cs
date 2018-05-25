@@ -27,7 +27,8 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class NewFieldVisitViewModel : FormViewModel, IValidatableObject
     {
-        public bool AskToContinue { get; set; }
+        [Required]
+        public bool? InProgressFieldVisitExists { get; set; }
         public bool? Continue { get; set; }
 
         /// <summary>
@@ -37,16 +38,16 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public NewFieldVisitViewModel(bool askToContinue)
+        public NewFieldVisitViewModel(bool inProgressFieldVisitExists)
         {
-            AskToContinue = askToContinue;
+            InProgressFieldVisitExists = inProgressFieldVisitExists;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
 
-            if (AskToContinue && Continue == null)
+            if (InProgressFieldVisitExists.Value && Continue == null)
             {
                 errors.Add(new ValidationResult("You must select an option."));
             }

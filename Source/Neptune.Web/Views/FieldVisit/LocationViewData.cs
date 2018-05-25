@@ -5,7 +5,7 @@ namespace Neptune.Web.Views.FieldVisit
     public class LocationViewData : FieldVisitSectionViewData
     {
         public LocationViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit,
-            Models.FieldVisitSection.Inventory) //todo: handle subsection names elegantly
+            Models.FieldVisitSection.Inventory)
         {
             SubsectionName = "Location";
         }

@@ -25,7 +25,8 @@ Source code is available upon request via <support@sitkatech.com>.
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary()
-    if(ViewDataTyped.AskToContinue)
+    @*Handle the case where ths treatment bmp has an in-progress field visit already*@
+    if(ViewDataTyped.InProgressFieldVisitExists)
      {
          <div>
              There is a @FieldDefinition.FieldVisit.GetFieldDefinitionLabel() already in progress. Do you want to
@@ -49,5 +50,5 @@ Source code is available upon request via <support@sitkatech.com>.
     {
         <text>Begin a new @FieldDefinition.FieldVisit.GetFieldDefinitionLabel()?</text>
     }
-    @Html.HiddenFor(m=>m.AskToContinue);
+    @Html.HiddenFor(m=>m.InProgressFieldVisitExists);
 }

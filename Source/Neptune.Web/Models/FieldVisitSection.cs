@@ -8,7 +8,7 @@ namespace Neptune.Web.Models
     public abstract partial class FieldVisitSection
     {
         public abstract string GetSectionUrl(FieldVisit fieldVisit);
-        public abstract List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit);
+        public abstract IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit);
     }
 
     public partial class FieldVisitSectionInventory : FieldVisitSection
@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Inventory(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             FieldVisitSubsectionData LocationSubsection = new FieldVisitSubsectionData
             {
@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
         }
@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Maintain(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
         }
@@ -79,7 +79,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PostMaintenanceAssessment(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
         }
@@ -92,7 +92,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
         }
@@ -105,7 +105,7 @@ namespace Neptune.Web.Models
             return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.ManageVisit(fieldVisit));
         }
 
-        public override List<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
+        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
         }

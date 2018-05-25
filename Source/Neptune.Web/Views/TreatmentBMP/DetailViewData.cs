@@ -64,6 +64,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public MaintenanceRecordGridSpec MaintenanceRecordGridSpec { get; }
         public string MaintenanceRecordGridUrl { get; }
         public string NewMaintenanceRecordUrl { get; }
+        public string NewFieldVisitUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
@@ -97,6 +98,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             MaintenanceRecordGridUrl =
                 SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(c =>
                     c.MaintenanceRecordsGridJsonData(treatmentBMP));
+
+            NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
 
             NewMaintenanceRecordUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
