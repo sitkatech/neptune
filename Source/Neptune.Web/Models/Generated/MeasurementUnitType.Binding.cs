@@ -36,6 +36,10 @@ namespace Neptune.Web.Models
         public static readonly MeasurementUnitTypeGallons Gallons = MeasurementUnitTypeGallons.Instance;
         public static readonly MeasurementUnitTypeMinutes Minutes = MeasurementUnitTypeMinutes.Instance;
         public static readonly MeasurementUnitTypeCubicFeetPerSecond CubicFeetPerSecond = MeasurementUnitTypeCubicFeetPerSecond.Instance;
+        public static readonly MeasurementUnitTypeGallonsPerDay GallonsPerDay = MeasurementUnitTypeGallonsPerDay.Instance;
+        public static readonly MeasurementUnitTypePounds Pounds = MeasurementUnitTypePounds.Instance;
+        public static readonly MeasurementUnitTypeTons Tons = MeasurementUnitTypeTons.Instance;
+        public static readonly MeasurementUnitTypeCubicYards CubicYards = MeasurementUnitTypeCubicYards.Instance;
 
         public static readonly List<MeasurementUnitType> All;
         public static readonly ReadOnlyDictionary<int, MeasurementUnitType> AllLookupDictionary;
@@ -45,7 +49,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static MeasurementUnitType()
         {
-            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond };
+            All = new List<MeasurementUnitType> { Acres, SquareFeet, Kilogram, Count, Percent, MilligamsPerLiter, Meters, Feet, Inches, InchesPerHour, Seconds, PercentDecline, PercentIncrease, PercentDeviation, CubicFeet, Gallons, Minutes, CubicFeetPerSecond, GallonsPerDay, Pounds, Tons, CubicYards };
             AllLookupDictionary = new ReadOnlyDictionary<int, MeasurementUnitType>(All.ToDictionary(x => x.MeasurementUnitTypeID));
         }
 
@@ -131,10 +135,14 @@ namespace Neptune.Web.Models
                     return CubicFeet;
                 case MeasurementUnitTypeEnum.CubicFeetPerSecond:
                     return CubicFeetPerSecond;
+                case MeasurementUnitTypeEnum.CubicYards:
+                    return CubicYards;
                 case MeasurementUnitTypeEnum.Feet:
                     return Feet;
                 case MeasurementUnitTypeEnum.Gallons:
                     return Gallons;
+                case MeasurementUnitTypeEnum.GallonsPerDay:
+                    return GallonsPerDay;
                 case MeasurementUnitTypeEnum.Inches:
                     return Inches;
                 case MeasurementUnitTypeEnum.InchesPerHour:
@@ -155,10 +163,14 @@ namespace Neptune.Web.Models
                     return PercentDeviation;
                 case MeasurementUnitTypeEnum.PercentIncrease:
                     return PercentIncrease;
+                case MeasurementUnitTypeEnum.Pounds:
+                    return Pounds;
                 case MeasurementUnitTypeEnum.Seconds:
                     return Seconds;
                 case MeasurementUnitTypeEnum.SquareFeet:
                     return SquareFeet;
+                case MeasurementUnitTypeEnum.Tons:
+                    return Tons;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -184,7 +196,11 @@ namespace Neptune.Web.Models
         CubicFeet = 15,
         Gallons = 16,
         Minutes = 17,
-        CubicFeetPerSecond = 18
+        CubicFeetPerSecond = 18,
+        GallonsPerDay = 19,
+        Pounds = 20,
+        Tons = 21,
+        CubicYards = 22
     }
 
     public partial class MeasurementUnitTypeAcres : MeasurementUnitType
@@ -293,5 +309,29 @@ namespace Neptune.Web.Models
     {
         private MeasurementUnitTypeCubicFeetPerSecond(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
         public static readonly MeasurementUnitTypeCubicFeetPerSecond Instance = new MeasurementUnitTypeCubicFeetPerSecond(18, @"CubicFeetPerSecond", @"cubic feet per second", @"cfs", @"cfs", 0, true);
+    }
+
+    public partial class MeasurementUnitTypeGallonsPerDay : MeasurementUnitType
+    {
+        private MeasurementUnitTypeGallonsPerDay(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeGallonsPerDay Instance = new MeasurementUnitTypeGallonsPerDay(19, @"GallonsPerDay", @"gallons per day", @"gpd", @"gallon per day", 1, true);
+    }
+
+    public partial class MeasurementUnitTypePounds : MeasurementUnitType
+    {
+        private MeasurementUnitTypePounds(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypePounds Instance = new MeasurementUnitTypePounds(20, @"Pounds", @"pounds", @"lb", @"pound", 1, true);
+    }
+
+    public partial class MeasurementUnitTypeTons : MeasurementUnitType
+    {
+        private MeasurementUnitTypeTons(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeTons Instance = new MeasurementUnitTypeTons(21, @"Tons", @"tons", @"cfs", @"cfs", 1, true);
+    }
+
+    public partial class MeasurementUnitTypeCubicYards : MeasurementUnitType
+    {
+        private MeasurementUnitTypeCubicYards(int measurementUnitTypeID, string measurementUnitTypeName, string measurementUnitTypeDisplayName, string legendDisplayName, string singularDisplayName, int numberOfSignificantDigits, bool includeSpaceBeforeLegendLabel) : base(measurementUnitTypeID, measurementUnitTypeName, measurementUnitTypeDisplayName, legendDisplayName, singularDisplayName, numberOfSignificantDigits, includeSpaceBeforeLegendLabel) {}
+        public static readonly MeasurementUnitTypeCubicYards Instance = new MeasurementUnitTypeCubicYards(22, @"CubicYards", @"cubic yards", @"cu yd", @"cubic yard", 1, true);
     }
 }
