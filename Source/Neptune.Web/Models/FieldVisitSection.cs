@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System;
+using System.Linq;
+using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Models
 {
@@ -20,23 +22,21 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            FieldVisitSubsectionData LocationSubsection = new FieldVisitSubsectionData
+            yield return new FieldVisitSubsectionData
             {
                 SubsectionName = "Location",
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Location(fieldVisit))
             };
-            FieldVisitSubsectionData PhotosSubsection = new FieldVisitSubsectionData
+            yield return new FieldVisitSubsectionData
             {
                 SubsectionName = "Photos",
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Photos(fieldVisit))
             };
-            FieldVisitSubsectionData AttributesSubsection = new FieldVisitSubsectionData
+            yield return new FieldVisitSubsectionData
             {
                 SubsectionName = "Attributes",
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
             };
-
-            return new List<FieldVisitSubsectionData> {LocationSubsection, PhotosSubsection, AttributesSubsection};
         }
     }
 
@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return new List<FieldVisitSubsectionData>();
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit);
         }
     }
 
@@ -81,7 +81,7 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return new List<FieldVisitSubsectionData>();
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit);
         }
     }
 
@@ -108,6 +108,22 @@ namespace Neptune.Web.Models
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
+        }
+    }
+
+    public class FieldVisitSectionImpl
+    {
+        public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit)
+        {
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            foreach (var fart in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
+            {
+                yield return new FieldVisitSubsectionData()
+                {
+                    SubsectionName = fart.TreatmentBMPAssessmentObservationTypeName
+                };
+            }
         }
     }
 }
