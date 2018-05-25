@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[FundingEventType](
 	[FundingEventTypeID] [int] NOT NULL,
 	[FundingEventTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[FundingEventTypeDisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[SortOrder] [int] NOT NULL,
  CONSTRAINT [PK_FundingEventType_FundingEventTypeID] PRIMARY KEY CLUSTERED 
 (
 	[FundingEventTypeID] ASC

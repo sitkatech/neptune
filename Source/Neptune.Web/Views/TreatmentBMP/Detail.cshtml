@@ -252,7 +252,7 @@
                         <div class="panel-body" style="max-height: 800px; overflow: auto;">
                             @if (ViewDataTyped.TreatmentBMP.FundingEvents.Any())
                             {
-                                foreach (var fundingEvent in ViewDataTyped.TreatmentBMP.FundingEvents)
+                                foreach (var fundingEvent in ViewDataTyped.TreatmentBMP.FundingEvents.OrderBy(x => x.FundingEventType.SortOrder))
                                 {
                                     <div class="row">
                                         <div class="col-sm-9">
