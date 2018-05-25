@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using LtInfo.Common.Views
 @inherits Neptune.Web.Views.TreatmentBMP.SummaryForMap
 
@@ -90,7 +91,10 @@ Source code is available upon request via <support@sitkatech.com>.
     <div class="col-sm-12 text-right">
         <div class="help-block">Begin an inspection to update BMP information, assess or maintain the BMP</div>
         <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" class="btn btn-neptune">View Details</a>
-        <a href="#" class="btn btn-neptune">Begin Inspection</a>
+        @if(ViewDataTyped.UserHasFieldVisitPermissions)
+        {
+            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.FieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+        }
     </div>
 </div>
 <br/>

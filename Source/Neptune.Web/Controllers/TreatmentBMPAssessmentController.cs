@@ -339,12 +339,12 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> AssessmentGridJsonData(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPs, gridSpec);
+            var treatmentBMPAssessments = GetTreatmentBMPAssessmentsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPAssessments, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<TreatmentBMPAssessment> GetTreatmentBMPsAndGridSpec(out TreatmentBMPAssessmentGridSpec gridSpec, Person currentPerson, TreatmentBMP treatmentBMP)
+        private List<TreatmentBMPAssessment> GetTreatmentBMPAssessmentsAndGridSpec(out TreatmentBMPAssessmentGridSpec gridSpec, Person currentPerson, TreatmentBMP treatmentBMP)
         {
             gridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson);
             return HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
