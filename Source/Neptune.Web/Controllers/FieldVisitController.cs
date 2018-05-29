@@ -24,8 +24,6 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
@@ -75,7 +73,8 @@ namespace Neptune.Web.Controllers
             {
                 fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
                 HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
-            } else if (viewModel.Continue == false)
+            }
+            else if (viewModel.Continue == false)
             {
                 var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
@@ -88,7 +87,8 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Inventory(fieldVisit)));
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Inventory(fieldVisit)));
         }
 
         [HttpGet]
@@ -126,6 +126,7 @@ namespace Neptune.Web.Controllers
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit);
             return RazorView<Attributes, AttributesViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -134,6 +135,7 @@ namespace Neptune.Web.Controllers
             var viewData = new AssessmentViewData(CurrentPerson, fieldVisit);
             return RazorView<Assessment, AssessmentViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -142,6 +144,7 @@ namespace Neptune.Web.Controllers
             var viewData = new MaintainViewData(CurrentPerson, fieldVisit);
             return RazorView<Maintain, MaintainViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -150,6 +153,7 @@ namespace Neptune.Web.Controllers
             var viewData = new PostMaintenanceAssessmentViewData(CurrentPerson, fieldVisit);
             return RazorView<PostMaintenanceAssessment, PostMaintenanceAssessmentViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -158,6 +162,7 @@ namespace Neptune.Web.Controllers
             var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
             return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
         }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult ManageVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -169,7 +174,8 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
+            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
@@ -177,7 +183,8 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson, TreatmentBMP treatmentBMP)
+        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
+            TreatmentBMP treatmentBMP)
         {
             gridSpec = new FieldVisitGridSpec(currentPerson);
             return HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x =>
@@ -185,14 +192,16 @@ namespace Neptune.Web.Controllers
         }
 
         #region Assessment-Related Actions
+
         #region New and Edit Information
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult NewAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey,
             int fieldVisitAssessmentTypeID)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMP = fieldVisit.TreatmentBMP;
             var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
 
@@ -207,7 +216,7 @@ namespace Neptune.Web.Controllers
             int fieldVisitAssessmentTypeID, AssessmentInformationViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMP = fieldVisit.TreatmentBMP;
             var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
 
@@ -220,7 +229,7 @@ namespace Neptune.Web.Controllers
             int fieldVisitAssessmentTypeID)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
             var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
@@ -234,7 +243,7 @@ namespace Neptune.Web.Controllers
             int fieldVisitAssessmentTypeID, AssessmentInformationViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
             return EditPostImpl(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
         }
@@ -250,8 +259,8 @@ namespace Neptune.Web.Controllers
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
             {
-
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments
+                    .AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 switch (fieldVisitAssessmentType)
                 {
@@ -269,16 +278,18 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.EditAssessment(fieldVisit, (int)fieldVisitAssessmentType)));
+                ? GetNextObservationTypeViewResult(fieldVisit, null, fieldVisitAssessmentType)
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                    c.EditAssessment(fieldVisit, (int) fieldVisitAssessmentType)));
         }
 
         private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment,
             AssessmentInformationViewModel viewModel, FieldVisit fieldVisit,
             FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-            var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
-            stormwaterJurisdictionPeople.AddRange(new[] { CurrentPerson });
+            var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction
+                .PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
+            stormwaterJurisdictionPeople.AddRange(new[] {CurrentPerson});
 
             if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
             {
@@ -287,62 +298,88 @@ namespace Neptune.Web.Controllers
 
             stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
 
-            var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
+            var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(
+                p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
 
             var viewData = new AssessmentInformationViewData(CurrentPerson, fieldVisit, peopleSelectList,
                 fieldVisitAssessmentType);
-            return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
+            return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(
+                viewData, viewModel);
         }
+
         #endregion
 
         #region Observation Types
+
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        public ViewResult DiscreteCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-            var viewModel = new DiscreteCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var viewModel =
+                new DiscreteCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
+            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue,
+                treatmentBMPAssessmentObservationType, viewModel);
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, DiscreteCollectionMethodViewModel viewModel)
+        public ActionResult DiscreteCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID, DiscreteCollectionMethodViewModel viewModel)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue,
+                    treatmentBMPAssessmentObservationType, viewModel);
             }
 
-            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
+            var treatmentBMPObservation =
+                GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
+                    treatmentBMPAssessmentObservationType);
             viewModel.UpdateModel(treatmentBMPObservation);
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                    c.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
         }
 
         private static TreatmentBMPObservation GetExistingTreatmentBMPObservationOrCreateNew(
-            TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+            TreatmentBMPAssessment treatmentBMPAssessment,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
-                .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+                .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                           treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             if (treatmentBMPObservation == null)
             {
-                var TreatmentBMPTypeAssessmentObservationType =
-                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
-                        x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-                Check.RequireNotNull(TreatmentBMPTypeAssessmentObservationType,
-                    $"Not a valid Observation Type ID {TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
-                treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType,
-                    treatmentBMPAssessment.TreatmentBMPType, TreatmentBMPAssessmentObservationType, string.Empty);
+                var treatmentBMPTypeAssessmentObservationType =
+                    treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
+                        x =>
+                            x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType
+                                .TreatmentBMPAssessmentObservationTypeID);
+                Check.RequireNotNull(treatmentBMPTypeAssessmentObservationType,
+                    $"Not a valid Observation Type ID {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
+                treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment,
+                    treatmentBMPTypeAssessmentObservationType,
+                    treatmentBMPAssessment.TreatmentBMPType, treatmentBMPAssessmentObservationType, string.Empty);
             }
 
             return treatmentBMPObservation;
@@ -350,167 +387,244 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        public ViewResult RateCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-            var viewModel = new RateCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var viewModel =
+                new RateCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
+            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate,
+                treatmentBMPAssessmentObservationType, viewModel);
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, RateCollectionMethodViewModel viewModel)
+        public ActionResult RateCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID, RateCollectionMethodViewModel viewModel)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate,
+                    treatmentBMPAssessmentObservationType, viewModel);
             }
 
-            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
+            var treatmentBMPObservation =
+                GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
+                    treatmentBMPAssessmentObservationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.RateCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                    c.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
         }
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        public ViewResult PassFailCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-            var viewModel = new PassFailCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var viewModel =
+                new PassFailCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
+            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail,
+                treatmentBMPAssessmentObservationType, viewModel);
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PassFailCollectionMethodViewModel viewModel)
+        public ActionResult PassFailCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID, PassFailCollectionMethodViewModel viewModel)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail,
+                    treatmentBMPAssessmentObservationType, viewModel);
             }
 
-            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
+            var treatmentBMPObservation =
+                GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
+                    treatmentBMPAssessmentObservationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.PassFailCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                    c.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
         }
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
+        public ViewResult PercentageCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
 
-            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-            var viewModel = new PercentageCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
+            var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var viewModel =
+                new PercentageCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
+            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage,
+                treatmentBMPAssessmentObservationType, viewModel);
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PercentageCollectionMethodViewModel viewModel)
+        public ActionResult PercentageCollectionMethod(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey,
+            int fieldVisitAssessmentTypeID, PercentageCollectionMethodViewModel viewModel)
         {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage,
+                    treatmentBMPAssessmentObservationType, viewModel);
             }
 
-            var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
+            var treatmentBMPObservation =
+                GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
+                    treatmentBMPAssessmentObservationType);
             viewModel.UpdateModel(treatmentBMPObservation);
 
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.PercentageCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                    c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
         }
 
-        private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, CollectionMethodSectionViewModel viewModel)
+        private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment,
+            ObservationTypeCollectionMethod observationTypeCollectionMethod,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
+            CollectionMethodSectionViewModel viewModel)
         {
-            var viewData = new CollectionMethodSectionViewData(CurrentPerson, treatmentBmpAssessment, observationTypeCollectionMethod, TreatmentBMPAssessmentObservationType);
-            return RazorView<CollectionMethodSection, CollectionMethodSectionViewData, CollectionMethodSectionViewModel>(viewData, viewModel);
+            var viewData = new CollectionMethodSectionViewData(CurrentPerson, treatmentBmpAssessment,
+                observationTypeCollectionMethod, treatmentBMPAssessmentObservationType);
+            return
+                RazorView<CollectionMethodSection, CollectionMethodSectionViewData, CollectionMethodSectionViewModel>(
+                    viewData, viewModel);
         }
+
         #endregion
 
-        [HttpGet]
-        [FieldVisitEditFeature]
-        public ViewResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
-        {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var viewModel = new ScoreViewModel(treatmentBMPAssessment);
-            return ViewScore(treatmentBMPAssessment, viewModel);
-        }
+        #region Kill this?
+        // todo: kill this?
+        //[HttpGet]
+        //[FieldVisitEditFeature]
+        //public ViewResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
+        //{
+        //    var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+        //    var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+        //    var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+        //    var viewModel = new ScoreViewModel(treatmentBMPAssessment);
+        //    return ViewScore(treatmentBMPAssessment, viewModel);
+        //}
 
-        [HttpPost]
-        [FieldVisitEditFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ScoreViewModel viewModel)
-        {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewScore(treatmentBMPAssessment, viewModel);
-            }
+        //[HttpPost]
+        //[FieldVisitEditFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey,
+        //    ScoreViewModel viewModel)
+        //{
+        //    var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+        //    var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+        //    var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewScore(treatmentBMPAssessment, viewModel);
+        //    }
 
-            viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
+        //    viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
 
-            SetMessageForDisplay("Score successfully saved.");
+        //    SetMessageForDisplay("Score successfully saved.");
 
-            return viewModel.AutoAdvance
-                ? RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Detail(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
-                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
-        }
-        private ViewResult ViewScore(TreatmentBMPAssessment treatmentBMPAssessment, ScoreViewModel viewModel)
-        {
-            var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
-            return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
-        }
+        //    return viewModel.AutoAdvance
+        //        ? RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c =>
+        //            c.Detail(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
+        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c =>
+        //            c.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
+        //}
+
+        //private ViewResult ViewScore(TreatmentBMPAssessment treatmentBMPAssessment, ScoreViewModel viewModel)
+        //{
+        //    var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
+        //    return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
+        //}
+        #endregion
 
         #region Helper methods for Assessment
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson, false, false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson,
+                false, false);
         }
 
-        private RedirectResult GetNextObservationTypeViewResult(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        private RedirectResult GetNextObservationTypeViewResult(FieldVisit fieldVisit,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
             //Null TreatmentBMPAssessmentObservationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
-            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
+            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes()
+                .OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
 
-            var nextObservationType = TreatmentBMPAssessmentObservationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x => String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0);
+            var nextObservationType = treatmentBMPAssessmentObservationType == null
+                ? orderedObservationTypes.First()
+                : orderedObservationTypes.FirstOrDefault(x =>
+                    String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName,
+                        treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0);
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore
-                ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
+                ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                    ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
+                    : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
                 : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment));
             return nextObservationTypeViewResult;
         }
+
         #endregion
 
         #endregion
