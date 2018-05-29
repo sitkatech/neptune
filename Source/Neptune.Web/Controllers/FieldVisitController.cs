@@ -211,7 +211,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult Edit(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+        public ViewResult EditAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey,
             int fieldVisitAssessmentTypeID)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -225,7 +225,7 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+        public ActionResult EditAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey,
             int fieldVisitAssessmentTypeID, AssessmentInformationViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -265,7 +265,7 @@ namespace Neptune.Web.Controllers
 
             return viewModel.AutoAdvance
                 ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
-                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Edit(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
+                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.EditAssessment(fieldVisit, (int)fieldVisitAssessmentType)));
         }
 
         private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -308,5 +308,11 @@ namespace Neptune.Web.Controllers
             return nextObservationTypeViewResult;
         }
         #endregion
+    }
+
+    public enum FieldVisitAssessmentType
+    {
+        Initial,
+        PostMaintenance
     }
 }

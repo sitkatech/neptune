@@ -138,18 +138,18 @@ namespace Neptune.Web.Models
             var treatmentBMP = fieldVisit.TreatmentBMP;
             var fieldVisitAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
-            yield return new FieldVisitSubsectionData()
+            yield return new FieldVisitSubsectionData
             {
                 SubsectionName = "Assessment Information",
                 SubsectionUrl = fieldVisitAssessment == null ?
-                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>x.New(treatmentBMP)) :
-                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x=>x.Edit(fieldVisitAssessment))
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>x.NewAssessment(fieldVisit, (int)fieldVisitAssessmentType)) :
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.EditAssessment(fieldVisit, (int)fieldVisitAssessmentType))
             };
 
             foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
             {
-                yield return new FieldVisitSubsectionData()
+                yield return new FieldVisitSubsectionData
                 {
                     SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
                     // TODO
@@ -157,11 +157,5 @@ namespace Neptune.Web.Models
                 };
             }
         }
-    }
-
-    public enum FieldVisitAssessmentType
-    {
-        Initial,
-        PostMaintenance
     }
 }

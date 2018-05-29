@@ -8,8 +8,9 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public AssessmentViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit, Models.FieldVisitSection.Assessment)
         {
-            BeginAssessmentUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                x.NewAssessment(fieldVisit, (int) FieldVisitAssessmentType.Initial));
+            BeginAssessmentUrl = fieldVisit.InitialAssessment == null
+                ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.NewAssessment(fieldVisit, (int) FieldVisitAssessmentType.Initial))
+                : SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditAssessment(fieldVisit, (int) FieldVisitAssessmentType.Initial));
             MaintenanceUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Maintain(fieldVisit));
         }
 

@@ -19,6 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Controllers;
+
 namespace Neptune.Web.Models
 {
     public partial class FieldVisit

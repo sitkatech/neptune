@@ -50,84 +50,85 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        [HttpGet]
-        [TreatmentBMPManageFeature]
-        public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
-            var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
-            return ViewEdit(treatmentBMPAssessment, viewModel);
-        }
+        // neutered per #112. todo: delete this commented code once sure you don't need it hanging around
+        //[HttpGet]
+        //[TreatmentBMPManageFeature]
+        //public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        //{
+        //    var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+        //    var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
+        //    var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
+        //    return ViewEdit(treatmentBMPAssessment, viewModel);
+        //}
 
-        [HttpPost]
-        [TreatmentBMPManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, AssessmentInformationViewModel viewModel)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
-            return EditPostImpl(treatmentBMPAssessment, viewModel);
-        }
+        //[HttpPost]
+        //[TreatmentBMPManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, AssessmentInformationViewModel viewModel)
+        //{
+        //    var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+        //    var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
+        //    return EditPostImpl(treatmentBMPAssessment, viewModel);
+        //}
 
-        [HttpGet]
-        [TreatmentBMPAssessmentManageFeature]
-        public ViewResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
-        {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
-            return ViewEdit(treatmentBMPAssessment, viewModel);
-        }
+        //[HttpGet]
+        //[TreatmentBMPAssessmentManageFeature]
+        //public ViewResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
+        //{
+        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+        //    var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
+        //    return ViewEdit(treatmentBMPAssessment, viewModel);
+        //}
 
-        [HttpPost]
-        [TreatmentBMPAssessmentManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, AssessmentInformationViewModel viewModel)
-        {
-            var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            return EditPostImpl(treatmentBMPAssessment, viewModel);
-        }
+        //[HttpPost]
+        //[TreatmentBMPAssessmentManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, AssessmentInformationViewModel viewModel)
+        //{
+        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
+        //    return EditPostImpl(treatmentBMPAssessment, viewModel);
+        //}
 
-        private ActionResult EditPostImpl(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewEdit(treatmentBMPAssessment, viewModel);
-            }
+        //private ActionResult EditPostImpl(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewEdit(treatmentBMPAssessment, viewModel);
+        //    }
 
-            if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
-            {
+        //    if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
+        //    {
 
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-            }
+        //        HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
+        //        HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    }
 
-            viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
+        //    viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
             
-            SetMessageForDisplay("Assessment Information successfully saved.");
+        //    SetMessageForDisplay("Assessment Information successfully saved.");
 
-            return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
-                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Edit(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
-        }
+        //    return viewModel.AutoAdvance
+        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
+        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Edit(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
+        //}
 
-        private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
-        {
-            var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
-            stormwaterJurisdictionPeople.AddRange(new[] {CurrentPerson});
+        //private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
+        //{
+        //    var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
+        //    stormwaterJurisdictionPeople.AddRange(new[] {CurrentPerson});
 
-            if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
-            {
-                stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.Person);
-            }
+        //    if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
+        //    {
+        //        stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.Person);
+        //    }
 
-            stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
+        //    stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
 
-            var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
+        //    var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
 
-            var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList);
-            return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
-        }
+        //    var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList);
+        //    return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
+        //}
 
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]

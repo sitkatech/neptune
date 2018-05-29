@@ -242,12 +242,6 @@
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
                         Assessments
-                        @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
-                        {
-                            <span class="pull-right">
-                                <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
-                            </span>
-                        }
                     </div>
                     <div class="panel-body">
                         @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())

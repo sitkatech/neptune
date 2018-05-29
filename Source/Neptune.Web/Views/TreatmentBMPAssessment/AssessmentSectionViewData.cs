@@ -26,10 +26,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
             else
             {
-                AssessmentInformationUrl =
-                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                        x.Edit(TreatmentBMPAssessment));
-                AssessmentInformationComplete = true;
+                //AssessmentInformationUrl =
+                //    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
+                //        x.Edit(TreatmentBMPAssessment));
+                //AssessmentInformationComplete = true;
             }
 
             ScoreUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
