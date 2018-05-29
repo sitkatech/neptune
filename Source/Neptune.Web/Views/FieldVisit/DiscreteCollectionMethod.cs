@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulation.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DiscreteCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -23,13 +23,13 @@ using System.Web.Mvc;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class PassFailCollectionMethod : TypedWebPartialViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
+    public abstract class DiscreteCollectionMethod : TypedWebPartialViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, PassFailCollectionMethodViewData viewData, PassFailCollectionMethodViewModel viewModel)
+        public static void RenderPartialView(HtmlHelper html, DiscreteCollectionMethodViewData viewData, DiscreteCollectionMethodViewModel viewModel)
         {
-            html.RenderRazorSitkaPartial<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(viewData, viewModel);
+            html.RenderRazorSitkaPartial<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
         }
     }
 }

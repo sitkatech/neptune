@@ -1,4 +1,4 @@
-﻿namespace Neptune.Web.Views.TreatmentBMPAssessment
+﻿namespace Neptune.Web.Views.FieldVisit
 {
     public class BaseCollectionMethodFormViewData
     {

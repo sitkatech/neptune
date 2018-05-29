@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="AssessmentInformation.cs" company="Tahoe Regional Planning Agency">
+<copyright file="PercentageCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,11 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class AssessmentInformation : TypedWebViewPage<AssessmentInformationViewData, AssessmentInformationViewModel>
+    public abstract class PercentageCollectionMethod : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, PercentageCollectionMethodViewData viewData, PercentageCollectionMethodViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
+        }
     }
 }

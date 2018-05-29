@@ -33,6 +33,7 @@ using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
 using Newtonsoft.Json;
@@ -407,6 +408,7 @@ namespace Neptune.Web.Controllers
             return Content("");
         }
 
+        // todo: partially neutered this to make the compiler happy.
         [HttpPost]
         [NeptuneAdminFeature]
         public ActionResult Preview(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
@@ -421,7 +423,7 @@ namespace Neptune.Web.Controllers
                 return Content(modelStateSerialized);
             }
 
-            PartialViewResult result;
+            PartialViewResult result = null;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, DateTime.Now, CurrentPerson.PersonID, null, string.Empty, false,
@@ -432,31 +434,31 @@ namespace Neptune.Web.Controllers
                 x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
                 x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
             var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
-            switch (observationTypeCollectionMethod.ToEnum)
-            {
-                case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
-                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-                    result = RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData, discreteCollectionMethodViewModel);
-                    break;
-                case ObservationTypeCollectionMethodEnum.PassFail:
-                    var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
-                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-                    result = RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
-                    break;
-                case ObservationTypeCollectionMethodEnum.Percentage:
-                    var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
-                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-                    result = RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
-                    break;
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
-                    var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-                    result = RazorPartialView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
-                    break;
-                default:
-                    throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
-            }
+            //switch (observationTypeCollectionMethod.ToEnum)
+            //{
+            //    case ObservationTypeCollectionMethodEnum.DiscreteValue:
+            //        var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
+            //        var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+            //        result = RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData, discreteCollectionMethodViewModel);
+            //        break;
+            //    case ObservationTypeCollectionMethodEnum.PassFail:
+            //        var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
+            //        var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+            //        result = RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+            //        break;
+            //    case ObservationTypeCollectionMethodEnum.Percentage:
+            //        var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
+            //        var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+            //        result = RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+            //        break;
+            //    case ObservationTypeCollectionMethodEnum.Rate:
+            //        var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
+            //        var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+            //        result = RazorPartialView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+            //        break;
+            //    default:
+            //        throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
+            //}
 
             return result;
         }

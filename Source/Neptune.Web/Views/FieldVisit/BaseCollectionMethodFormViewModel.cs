@@ -1,6 +1,6 @@
 ﻿using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
     public class BaseCollectionMethodFormViewModel : CollectionMethodSectionViewModel
     {
@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         }
 
         public BaseCollectionMethodFormViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
         {
         }
     }

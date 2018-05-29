@@ -327,8 +327,8 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel =
                 new DiscreteCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue,
-                treatmentBMPAssessmentObservationType, viewModel);
+            return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.DiscreteValue,
+                treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
         }
 
         [HttpPost]
@@ -345,8 +345,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue,
-                    treatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.DiscreteValue,
+                    treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
             }
 
             var treatmentBMPObservation =
@@ -401,8 +401,8 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel =
                 new RateCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate,
-                treatmentBMPAssessmentObservationType, viewModel);
+            return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.Rate,
+                treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
         }
 
         [HttpPost]
@@ -418,8 +418,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate,
-                    treatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.Rate,
+                    treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
             }
 
             var treatmentBMPObservation =
@@ -451,8 +451,8 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel =
                 new PassFailCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail,
-                treatmentBMPAssessmentObservationType, viewModel);
+            return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.PassFail,
+                treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
         }
 
         [HttpPost]
@@ -468,8 +468,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail,
-                    treatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.PassFail,
+                    treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
             }
 
             var treatmentBMPObservation =
@@ -501,8 +501,8 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel =
                 new PercentageCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
-            return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage,
-                treatmentBMPAssessmentObservationType, viewModel);
+            return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.Percentage,
+                treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
         }
 
         [HttpPost]
@@ -518,8 +518,8 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage,
-                    treatmentBMPAssessmentObservationType, viewModel);
+                return ViewCollectionMethod(fieldVisit, ObservationTypeCollectionMethod.Percentage,
+                    treatmentBMPAssessmentObservationType, viewModel, fieldVisitAssessmentType);
             }
 
             var treatmentBMPObservation =
@@ -535,13 +535,13 @@ namespace Neptune.Web.Controllers
                     c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
         }
 
-        private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment,
+        private ViewResult ViewCollectionMethod(FieldVisit fieldVisit,
             ObservationTypeCollectionMethod observationTypeCollectionMethod,
             TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
-            CollectionMethodSectionViewModel viewModel)
+            CollectionMethodSectionViewModel viewModel, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-            var viewData = new CollectionMethodSectionViewData(CurrentPerson, treatmentBmpAssessment,
-                observationTypeCollectionMethod, treatmentBMPAssessmentObservationType);
+            var viewData = new CollectionMethodSectionViewData(CurrentPerson, fieldVisit,
+                observationTypeCollectionMethod, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType);
             return
                 RazorView<CollectionMethodSection, CollectionMethodSectionViewData, CollectionMethodSectionViewModel>(
                     viewData, viewModel);

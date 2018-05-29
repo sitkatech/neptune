@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="AssessmentInformationViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,21 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Web.Mvc;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class AssessmentInformationViewData : AssessmentSectionViewData
+    public class RateCollectionMethodViewModel : BaseCollectionMethodFormViewModel
     {
-        public readonly IEnumerable<SelectListItem> JurisdictionPeople;
-
-        public const string ThisSectionName = "Assessment Information";
-        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople)
-            : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
+        /// <summary>
+        /// Needed by the ModelBinder
+        /// </summary>
+        public RateCollectionMethodViewModel()
         {
-            JurisdictionPeople = jurisdictionPeople;
-        }  
+        }
+
+        public RateCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
+        {
+        }
     }
 }

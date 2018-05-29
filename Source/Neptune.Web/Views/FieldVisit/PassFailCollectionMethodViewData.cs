@@ -24,37 +24,41 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class PercentageCollectionMethodViewData : BaseCollectionMethodFormViewData
+    public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
-        public PercentageCollectionMethodViewDataForAngular ViewDataForAngular { get; }
-        public string MeasurementUnitLabelAndUnit { get; }
+        public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
+        public string PassingScoreLabel { get; }
+        public string FailingScoreLabel { get; }
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PercentageCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public PassFailCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-            ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.PercentageSchema);
-            MeasurementUnitLabelAndUnit = $"{TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = TreatmentBMPAssessmentObservationType.PercentageSchema.AssessmentDescription;
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
+            PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
+            FailingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
+            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                x.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
-        public class PercentageCollectionMethodViewDataForAngular
+        public class PassFailCollectionMethodViewDataForAngular
         {
             public List<SelectItemSimple> PropertiesToObserve { get; }
 
-            public PercentageCollectionMethodViewDataForAngular(PercentageObservationTypeSchema percentageObservationTypeSchema)
+            public PassFailCollectionMethodViewDataForAngular(PassFailObservationTypeSchema passFailObservationTypeSchema)
             {
                 PropertiesToObserve = new List<SelectItemSimple>();
                 var count = 1;
-                percentageObservationTypeSchema.PropertiesToObserve.ForEach(x =>
+                passFailObservationTypeSchema.PropertiesToObserve.ForEach(x =>
                 {
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
-                    count += 1;
+                    count++;
                 });
+
             }
         }
     }
