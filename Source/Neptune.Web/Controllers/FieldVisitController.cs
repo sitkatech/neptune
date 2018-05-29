@@ -21,10 +21,14 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using LtInfo.Common.Models;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -174,5 +178,135 @@ namespace Neptune.Web.Controllers
             return HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x =>
                 x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
         }
+
+        #region Assessment-Related Actions
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult NewAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            int fieldVisitAssessmentTypeID)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
+
+            var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
+            return ViewEdit(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult NewAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            int fieldVisitAssessmentTypeID, AssessmentInformationViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
+
+            return EditPostImpl(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
+        }
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult Edit(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            int fieldVisitAssessmentTypeID)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+
+            var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
+            return ViewEdit(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Edit(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            int fieldVisitAssessmentTypeID, AssessmentInformationViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            return EditPostImpl(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
+        }
+
+        private ActionResult EditPostImpl(TreatmentBMPAssessment treatmentBMPAssessment,
+            AssessmentInformationViewModel viewModel, FieldVisit fieldVisit,
+            FieldVisitAssessmentType fieldVisitAssessmentType)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewEdit(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
+            }
+
+            if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
+            {
+
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                switch (fieldVisitAssessmentType)
+                {
+                    case FieldVisitAssessmentType.Initial:
+                        fieldVisit.InitialAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
+                        break;
+                    case FieldVisitAssessmentType.PostMaintenance:
+                        fieldVisit.PostMaintenanceAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
+                        break;
+                }
+            }
+
+            viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
+
+            SetMessageForDisplay("Assessment Information successfully saved.");
+
+            return viewModel.AutoAdvance
+                ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
+                : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Edit(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
+        }
+
+        private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment,
+            AssessmentInformationViewModel viewModel, FieldVisit fieldVisit,
+            FieldVisitAssessmentType fieldVisitAssessmentType)
+        {
+            var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
+            stormwaterJurisdictionPeople.AddRange(new[] { CurrentPerson });
+
+            if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
+            {
+                stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.Person);
+            }
+
+            stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
+
+            var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
+
+            var viewData = new AssessmentInformationViewData(CurrentPerson, fieldVisit, peopleSelectList,
+                fieldVisitAssessmentType);
+            return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
+        }
+
+        private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
+        {
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson, false, false);
+        }
+
+        private RedirectResult GetNextObservationTypeViewResult(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        {
+            //Null TreatmentBMPAssessmentObservationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
+            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
+
+            var nextObservationType = TreatmentBMPAssessmentObservationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x => String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0);
+            var isNextPageScore = nextObservationType == null;
+
+            var nextObservationTypeViewResult = isNextPageScore
+                ? RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(x => x.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
+                : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment));
+            return nextObservationTypeViewResult;
+        }
+        #endregion
     }
 }

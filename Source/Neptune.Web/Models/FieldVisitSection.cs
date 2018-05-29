@@ -1,3 +1,23 @@
+/*-----------------------------------------------------------------------
+<copyright file="FieldVisitSection.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<author>Sitka Technology Group</author>
+</copyright>
+
+<license>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+Source code is available upon request via <support@sitkatech.com>.
+</license>
+-----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -55,7 +75,7 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit);
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.Initial);
         }
     }
 
@@ -81,7 +101,7 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit);
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.PostMaintenance);
         }
     }
 
@@ -113,9 +133,19 @@ namespace Neptune.Web.Models
 
     public class FieldVisitSectionImpl
     {
-        public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit)
+        public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
+            var fieldVisitAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+
+            yield return new FieldVisitSubsectionData()
+            {
+                SubsectionName = "Assessment Information",
+                SubsectionUrl = fieldVisitAssessment == null ?
+                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>x.New(treatmentBMP)) :
+                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x=>x.Edit(fieldVisitAssessment))
+            };
+
             foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
             {
@@ -127,5 +157,11 @@ namespace Neptune.Web.Models
                 };
             }
         }
+    }
+
+    public enum FieldVisitAssessmentType
+    {
+        Initial,
+        PostMaintenance
     }
 }

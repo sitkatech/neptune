@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\FieldVisit.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -233,6 +234,9 @@
     <Compile Include="Security\TreatmentBMPDeleteFeature.cs" />
     <Compile Include="Security\UserDeleteFeature.cs" />
     <Compile Include="Security\UserEditRoleFeature.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentInformation.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentInformationViewData.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentInformationViewModel.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewData.cs" />
     <Compile Include="Views\FieldVisit\AttributesViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
@@ -1094,6 +1098,7 @@
     <Content Include="Views\FieldVisit\Location.cshtml" />
     <Content Include="Views\FieldVisit\Attributes.cshtml" />
     <Compile Include="Views\FieldVisit\FieldVisitGridSpec.cs" />
+    <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
