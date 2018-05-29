@@ -116,12 +116,14 @@ namespace Neptune.Web.Models
         public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            foreach (var fart in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+            foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
             {
                 yield return new FieldVisitSubsectionData()
                 {
-                    SubsectionName = fart.TreatmentBMPAssessmentObservationTypeName
+                    SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
+                    // TODO
+                    // SubsectionUrl = observationType.AssessmentUrl(TODO)
                 };
             }
         }
