@@ -51,246 +51,6 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        // neutered per #112. todo: delete this commented code once sure you don't need it hanging around
-        //[HttpGet]
-        //[TreatmentBMPManageFeature]
-        //public ViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        //{
-        //    var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-        //    var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
-        //    var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
-        //    return ViewEdit(treatmentBMPAssessment, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, AssessmentInformationViewModel viewModel)
-        //{
-        //    var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-        //    var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
-        //    return EditPostImpl(treatmentBMPAssessment, viewModel);
-        //}
-
-        //[HttpGet]
-        //[TreatmentBMPAssessmentManageFeature]
-        //public ViewResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var viewModel = new AssessmentInformationViewModel(treatmentBMPAssessment, CurrentPerson);
-        //    return ViewEdit(treatmentBMPAssessment, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPAssessmentManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult Edit(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, AssessmentInformationViewModel viewModel)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    return EditPostImpl(treatmentBMPAssessment, viewModel);
-        //}
-
-        //private ActionResult EditPostImpl(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEdit(treatmentBMPAssessment, viewModel);
-        //    }
-
-        //    if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
-        //    {
-
-        //        HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
-        //        HttpRequestStorage.DatabaseEntities.SaveChanges();
-        //    }
-
-        //    viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
-            
-        //    SetMessageForDisplay("Assessment Information successfully saved.");
-
-        //    return viewModel.AutoAdvance
-        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, null)
-        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.Edit(treatmentBMPAssessment.TreatmentBMPAssessmentID)));
-        //}
-
-        //private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment, AssessmentInformationViewModel viewModel)
-        //{
-        //    var stormwaterJurisdictionPeople = treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction.PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
-        //    stormwaterJurisdictionPeople.AddRange(new[] {CurrentPerson});
-
-        //    if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
-        //    {
-        //        stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.Person);
-        //    }
-
-        //    stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
-
-        //    var peopleSelectList = stormwaterJurisdictionPeople.ToSelectList(p => p.PersonID.ToString(CultureInfo.InvariantCulture), p => p.FullNameFirstLastAndOrgAbbreviation);
-
-        //    var viewData = new AssessmentInformationViewData(CurrentPerson, treatmentBMPAssessment, peopleSelectList);
-        //    return RazorView<AssessmentInformation, AssessmentInformationViewData, AssessmentInformationViewModel>(viewData, viewModel);
-        //}
-
-        //[HttpGet]
-        //[TreatmentBMPAssessmentManageFeature]
-        //public ViewResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-
-        //    var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //    var viewModel = new DiscreteCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-        //    return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPAssessmentManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult DiscreteCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, DiscreteCollectionMethodViewModel viewModel)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.DiscreteValue, TreatmentBMPAssessmentObservationType, viewModel);
-        //    }
-
-        //    var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
-        //    viewModel.UpdateModel(treatmentBMPObservation);
-        //    SetMessageForDisplay("Assessment Information successfully saved.");
-
-        //    return viewModel.AutoAdvance
-        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
-        //}
-
-        //private static TreatmentBMPObservation GetExistingTreatmentBMPObservationOrCreateNew(
-        //    TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
-        //{
-        //    var treatmentBMPObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList()
-        //        .Find(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //    if (treatmentBMPObservation == null)
-        //    {
-        //        var TreatmentBMPTypeAssessmentObservationType =
-        //            treatmentBMPAssessment.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(x =>
-        //                x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //        Check.RequireNotNull(TreatmentBMPTypeAssessmentObservationType,
-        //            $"Not a valid Observation Type ID {TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID} for Treatment BMP Type ID {treatmentBMPAssessment.TreatmentBMPTypeID}");
-        //        treatmentBMPObservation = new TreatmentBMPObservation(treatmentBMPAssessment, TreatmentBMPTypeAssessmentObservationType,
-        //            treatmentBMPAssessment.TreatmentBMPType, TreatmentBMPAssessmentObservationType, string.Empty);
-        //    }
-
-        //    return treatmentBMPObservation;
-        //}
-        
-        //[HttpGet]
-        //[TreatmentBMPAssessmentManageFeature]
-        //public ViewResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-
-        //    var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //    var viewModel = new RateCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-        //    return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPAssessmentManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult RateCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, RateCollectionMethodViewModel viewModel)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Rate, TreatmentBMPAssessmentObservationType, viewModel);
-        //    }
-
-        //    var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
-        //    viewModel.UpdateModel(treatmentBMPObservation);
-
-        //    SetMessageForDisplay("Assessment Information successfully saved.");
-
-        //    return viewModel.AutoAdvance
-        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.RateCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
-        //}
-
-        //[HttpGet]
-        //[TreatmentBMPAssessmentManageFeature]
-        //public ViewResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-
-        //    var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //    var viewModel = new PassFailCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-        //    return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPAssessmentManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult PassFailCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PassFailCollectionMethodViewModel viewModel)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.PassFail, TreatmentBMPAssessmentObservationType, viewModel);
-        //    }
-
-        //    var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
-        //    viewModel.UpdateModel(treatmentBMPObservation);
-
-        //    SetMessageForDisplay("Assessment Information successfully saved.");
-
-        //    return viewModel.AutoAdvance
-        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.PassFailCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
-        //}
-        
-        //[HttpGet]
-        //[TreatmentBMPAssessmentManageFeature]
-        //public ViewResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-
-        //    var existingObservation = treatmentBMPAssessment.TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
-        //    var viewModel = new PercentageCollectionMethodViewModel(existingObservation, TreatmentBMPAssessmentObservationType);
-        //    return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
-        //}
-
-        //[HttpPost]
-        //[TreatmentBMPAssessmentManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult PercentageCollectionMethod(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, TreatmentBMPAssessmentObservationTypePrimaryKey treatmentBMPAssessmentObservationTypePrimaryKey, PercentageCollectionMethodViewModel viewModel)
-        //{
-        //    var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-        //    var TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewCollectionMethod(treatmentBMPAssessment, ObservationTypeCollectionMethod.Percentage, TreatmentBMPAssessmentObservationType, viewModel);
-        //    }
-
-        //    var treatmentBMPObservation = GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType);
-        //    viewModel.UpdateModel(treatmentBMPObservation);
-
-        //    SetMessageForDisplay("Assessment Information successfully saved.");
-
-        //    return viewModel.AutoAdvance
-        //        ? GetNextObservationTypeViewResult(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)
-        //        : RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(c => c.PercentageCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType)));
-        //}
-
-        //private ViewResult ViewCollectionMethod(TreatmentBMPAssessment treatmentBmpAssessment, ObservationTypeCollectionMethod observationTypeCollectionMethod, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType, CollectionMethodSectionViewModel viewModel)
-        //{
-        //    var viewData = new CollectionMethodSectionViewData(CurrentPerson, treatmentBmpAssessment, observationTypeCollectionMethod, TreatmentBMPAssessmentObservationType);
-        //    return RazorView<CollectionMethodSection, CollectionMethodSectionViewData, CollectionMethodSectionViewModel>(viewData, viewModel);
-        //}
-
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
         public PartialViewResult Delete(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
@@ -330,11 +90,6 @@ namespace Neptune.Web.Controllers
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
-        }
-
-        private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
-        {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType);
         }
 
         [NeptuneViewFeature]
@@ -385,21 +140,7 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
-        }   
- 
-        //private RedirectResult GetNextObservationTypeViewResult(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
-        //{
-        //    //Null TreatmentBMPAssessmentObservationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
-        //    var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
-
-        //    var nextObservationType = TreatmentBMPAssessmentObservationType == null ? orderedObservationTypes.First() : orderedObservationTypes.FirstOrDefault(x =>  String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0); 
-        //    var isNextPageScore = nextObservationType == null;
-
-        //    var nextObservationTypeViewResult = isNextPageScore
-        //        ? RedirectToAction(new SitkaRoute<TreatmentBMPAssessmentController>(x => x.Score(treatmentBMPAssessment.TreatmentBMPAssessmentID)))
-        //        : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment));
-        //    return nextObservationTypeViewResult;
-        //}
+        }
         
         [HttpGet]
         [NeptuneAdminFeature]
@@ -408,59 +149,59 @@ namespace Neptune.Web.Controllers
             return Content("");
         }
 
-        // todo: partially neutered this to make the compiler happy.
-        [HttpPost]
-        [NeptuneAdminFeature]
-        public ActionResult Preview(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                var modelStateSerialized = JObject
-                    .FromObject(ModelState.ToDictionary(x => x.Key,
-                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
-                Response.StatusCode = 400;
-                Response.ContentType = "application/json";
-                return Content(modelStateSerialized);
-            }
-
-            PartialViewResult result = null;
-            var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, null, string.Empty, 
-                string.Empty);
-            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
-            var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
-                x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
-                x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
-                x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
-            var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
-            //switch (observationTypeCollectionMethod.ToEnum)
-            //{
-            //    case ObservationTypeCollectionMethodEnum.DiscreteValue:
-            //        var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
-            //        var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-            //        result = RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData, discreteCollectionMethodViewModel);
-            //        break;
-            //    case ObservationTypeCollectionMethodEnum.PassFail:
-            //        var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
-            //        var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-            //        result = RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
-            //        break;
-            //    case ObservationTypeCollectionMethodEnum.Percentage:
-            //        var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
-            //        var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-            //        result = RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
-            //        break;
-            //    case ObservationTypeCollectionMethodEnum.Rate:
-            //        var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
-            //        var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
-            //        result = RazorPartialView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
-            //        break;
-            //    default:
-            //        throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
-            //}
-
-            return result;
-        }
+        // todo: neutered for now, may bring back later.
+        //[HttpPost]
+        //[NeptuneAdminFeature]
+        //public ActionResult Preview(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        var modelStateSerialized = JObject
+        //            .FromObject(ModelState.ToDictionary(x => x.Key,
+        //                x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+        //        Response.StatusCode = 400;
+        //        Response.ContentType = "application/json";
+        //        return Content(modelStateSerialized);
+        //    }
+        //
+        //    PartialViewResult result = null;
+        //    var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
+        //        ModelObjectHelpers.NotYetAssignedID,
+        //        ModelObjectHelpers.NotYetAssignedID, null, string.Empty, 
+        //        string.Empty);
+        //    var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+        //    var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
+        //        x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
+        //        x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
+        //        x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+        //    var TreatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
+        //    switch (observationTypeCollectionMethod.ToEnum)
+        //    {
+        //        case ObservationTypeCollectionMethodEnum.DiscreteValue:
+        //            var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
+        //            var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+        //            result = RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData, discreteCollectionMethodViewModel);
+        //            break;
+        //        case ObservationTypeCollectionMethodEnum.PassFail:
+        //            var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
+        //            var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+        //            result = RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+        //            break;
+        //        case ObservationTypeCollectionMethodEnum.Percentage:
+        //            var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
+        //            var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+        //            result = RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+        //            break;
+        //        case ObservationTypeCollectionMethodEnum.Rate:
+        //            var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
+        //            var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType);
+        //            result = RazorPartialView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+        //            break;
+        //        default:
+        //            throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
+        //    }
+        //
+        //    return result;
+        //}
     }
 }
