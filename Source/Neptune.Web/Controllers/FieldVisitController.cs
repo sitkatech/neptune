@@ -33,6 +33,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
+using Neptune.Web.Views.Shared.SortOrder;
 using Neptune.Web.Views.TreatmentBMPAssessment;
 using AssessmentInformation = Neptune.Web.Views.FieldVisit.AssessmentInformation;
 using AssessmentInformationViewData = Neptune.Web.Views.FieldVisit.AssessmentInformationViewData;
@@ -615,15 +616,14 @@ namespace Neptune.Web.Controllers
             TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
-            //Null TreatmentBMPAssessmentObservationType means we are on the Assessment Information page, in which case dummy in a sort order which is guaranteed to return the actual lowest sort order as the next page.            
-            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes()
-                .OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName);
+
+            var orderedObservationTypes = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType
+                .TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName()
+                .Select(x => x.TreatmentBMPAssessmentObservationType).ToList();
 
             var nextObservationType = treatmentBMPAssessmentObservationType == null
                 ? orderedObservationTypes.First()
-                : orderedObservationTypes.FirstOrDefault(x =>
-                    String.CompareOrdinal(x.TreatmentBMPAssessmentObservationTypeName,
-                        treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName) > 0);
+                : orderedObservationTypes.ElementAtOrDefault(orderedObservationTypes.IndexOf(treatmentBMPAssessmentObservationType) + 1);
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore
