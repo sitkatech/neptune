@@ -34,14 +34,16 @@
         <div class="col-xs-12 col-sm-3">
             <nav id="wizardNav">
                 <ul class="nav nav-stacked">
-                    <li class="@(ViewDataTyped.SectionName =="Assessment Information" ? "active" : string.Empty)">
-                        <a href="@ViewDataTyped.AssessmentInformationUrl"><span style="margin-left: 22px">Assessment Information</span></a>
+                    <li class="@(ViewDataTyped.SectionName == "Assessment Information" ? "active" : string.Empty)">
+                        <a href="@ViewDataTyped.AssessmentInformationUrl">
+                            <span style="margin-left: 22px">Assessment Information</span>
+                        </a>
                     </li>
-                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType))
+                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType))
                     {
-                        <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
-                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : TreatmentBMPAssessmentObservationType.AssessmentUrl(ViewDataTyped.TreatmentBMPAssessment))">
-                                @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(TreatmentBMPAssessmentObservationType))
+                        <li class="@(ViewDataTyped.SectionName == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
+                            <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@("#") ">
+                                @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(treatmentBMPAssessmentObservationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }
@@ -49,12 +51,14 @@
                                 {
                                     <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
                                 }
-                                <span>@TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName</span>
+                                <span>@treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName</span>
                             </a>
                         </li>
                     }
-                    <li class="@(ViewDataTyped.SectionName =="Score" ? "active" : string.Empty)">
-                        <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : ViewDataTyped.ScoreUrl)"><span style="margin-left: 22px">Score</span></a>
+                    <li class="@(ViewDataTyped.SectionName == "Score" ? "active" : string.Empty)">
+                        <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@(!ViewDataTyped.AssessmentInformationComplete ? "#" : ViewDataTyped.ScoreUrl)">
+                            <span style="margin-left: 22px">Score</span>
+                        </a>
                     </li>
                 </ul>
             </nav>

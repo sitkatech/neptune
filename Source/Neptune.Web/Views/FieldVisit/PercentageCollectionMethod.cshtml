@@ -1,27 +1,27 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulation.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="PercentageCollectionMethod.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@inherits Neptune.Web.Views.TreatmentBMPAssessment.PercentageCollectionMethod
+@inherits Neptune.Web.Views.FieldVisit.PercentageCollectionMethod
 
 <style>
     .red {
@@ -47,7 +47,7 @@ Source code is available upon request via <support@sitkatech.com>.
     // ]]>
 </script>
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp"id="PercentageCollectionMethodControllerApp" ng-controller="PercentageCollectionMethodController" ng-init="initializeData()" ng-submit="submit()" name="observationForm">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="PercentageCollectionMethodControllerApp" ng-controller="PercentageCollectionMethodController" ng-init="initializeData()" ng-submit="submit()" name="observationForm">
     <div class="row">
         <div class="col-xs-12">
             <div class="form-horizontal">
@@ -58,11 +58,11 @@ Source code is available upon request via <support@sitkatech.com>.
                 <div>
                     <table class="table observationList" ng-hide="ObservationData.SingleValueObservations.length === 0">
                         <thead>
-                        <tr class="row">
-                            <th class="col-xs-3">@Html.Label("Measurement Type")</th>
-                            <th class="col-xs-2">@Html.Label(ViewDataTyped.MeasurementUnitLabelAndUnit)</th>
-                            <th class="col-xs-7">@Html.Label("Notes")</th>
-                        </tr>
+                            <tr class="row">
+                                <th class="col-xs-3">@Html.Label("Measurement Type")</th>
+                                <th class="col-xs-2">@Html.Label(ViewDataTyped.MeasurementUnitLabelAndUnit)</th>
+                                <th class="col-xs-7">@Html.Label("Notes")</th>
+                            </tr>
                         </thead>
                         <tr class="row" ng-repeat="observation in ObservationData.SingleValueObservations track by $index">
                             <td class="col-xs-3">
@@ -74,16 +74,16 @@ Source code is available upon request via <support@sitkatech.com>.
                             <td class="col-xs-7">
                                 <input class="form-control" type="text" ng-model="observation.Notes" style="width: 100%" />
                             </td>
-                        </tr>                        
-                        <tfoot>
-                        <tr class="row">
-                            <td class="col-xs-3">
-                                Other
-                            </td>
-                            <td class="col-xs-2 text-center" style="font-weight: bold" ng-class="percentIsNegative() ? 'red' : ''">
-                                {{calculateRemainingPercent()}}%
-                            </td>
                         </tr>
+                        <tfoot>
+                            <tr class="row">
+                                <td class="col-xs-3">
+                                    Other
+                                </td>
+                                <td class="col-xs-2 text-center" style="font-weight: bold" ng-class="percentIsNegative() ? 'red' : ''">
+                                    {{calculateRemainingPercent()}}%
+                                </td>
+                            </tr>
                         </tfoot>
                     </table>
                     <div class="clearfix"></div>

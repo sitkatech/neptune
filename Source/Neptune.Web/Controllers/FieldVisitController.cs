@@ -621,12 +621,10 @@ namespace Neptune.Web.Controllers
                 ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
                     ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
                     : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
-                : Redirect(nextObservationType.AssessmentUrl(treatmentBMPAssessment));
+                : Redirect(nextObservationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType));
             return nextObservationTypeViewResult;
         }
-
         #endregion
-
         #endregion
     }
 
