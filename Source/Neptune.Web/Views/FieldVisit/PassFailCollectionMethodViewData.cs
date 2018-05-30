@@ -22,9 +22,10 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
     public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
@@ -34,15 +35,16 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public PassFailCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.PassFailSchema);
-            PassingScoreLabel = TreatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
-            FailingScoreLabel = TreatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
-            AssessmentDescription = TreatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
+            PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
+            FailingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                x.PassFailCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
+            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                x.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public class PassFailCollectionMethodViewDataForAngular

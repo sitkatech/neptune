@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulation.cs" company="Tahoe Regional Planning Agency">
+<copyright file="PercentageCollectionMethodViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,17 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.Mvc;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class DiscreteCollectionMethod : TypedWebPartialViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
+    public class PercentageCollectionMethodViewModel : BaseCollectionMethodFormViewModel
     {
-        public static void RenderPartialView(HtmlHelper html, DiscreteCollectionMethodViewData viewData, DiscreteCollectionMethodViewModel viewModel)
+        /// <summary>
+        /// Needed by the ModelBinder
+        /// </summary>
+        public PercentageCollectionMethodViewModel()
         {
-            html.RenderRazorSitkaPartial<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
+        }
+
+        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
+        {
         }
     }
 }

@@ -61,3 +61,6 @@ Alter Table dbo.MaintenanceRecord Add Constraint AK_MaintenanceRecord_Maintenanc
 
 --
 create unique index CK_AtMostOneFieldVisitMayBeInProgressAtAnyTimePerBMP on dbo.FieldVisit(TreatmentBMPID) where FieldVisitStatusID = 1 -- Where 1 is InProgress
+create unique nonclustered index CK_NoTwoFieldVisitsMayShareAnInitialAssessment on dbo.FieldVisit(InitialiAssessmentID) where InitialAssessmentID is not null
+create unique nonclustered index CK_NoTwoFieldVisitsMayShareAnPostMaintenanceAssessment on dbo.FieldVisit(PostMaintenanceiAssessmentID) where PostMaintenanceAssessmentID is not null
+alter table dbo.FieldVisit add constraint CK_InitialAssessmentMustBeDifferentFromPMAssessmentIfNotBothNull check (InitialAssessmentID <> PostMaintenanceAssessmentID OR (InitialAssessmentID is null AND PostMaintenanceAssessmentID is null))

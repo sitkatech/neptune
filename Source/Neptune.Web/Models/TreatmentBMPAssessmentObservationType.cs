@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq;
 using LtInfo.Common.Views;
+using Neptune.Web.Controllers;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
@@ -28,9 +29,9 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPAssessmentObservationType : IAuditableEntity
     {
-        public string AssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment)
+        public string AssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-            return ObservationTypeSpecification.ObservationTypeCollectionMethod.GetAssessmentUrl(treatmentBMPAssessment, this);
+            return ObservationTypeSpecification.ObservationTypeCollectionMethod.GetAssessmentUrl(fieldVisit, fieldVisitAssessmentType, this);
         }
 
         public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)

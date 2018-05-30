@@ -5,9 +5,9 @@ using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class CollectionMethodSectionViewModel : AssessmentSectionViewModel
+    public class CollectionMethodSectionViewModel : FieldVisitSectionViewModel
     {
         public int? TreatmentBMPAssessmentID { get; set; }
         public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
@@ -17,10 +17,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
         }
 
-        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
-            TreatmentBMPAssessmentObservationTypeID = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
+            TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
             ObservationData = treatmentBMPObservation?.ObservationData;
         }
 
@@ -33,10 +33,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
             var validationResults = new List<ValidationResult>();
 
-            var TreatmentBMPAssessmentObservationType =
+            var treatmentBMPAssessmentObservationType =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
                     x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
-            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
             if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
             {
                 validationResults.Add(new ValidationResult("Schema invalid."));

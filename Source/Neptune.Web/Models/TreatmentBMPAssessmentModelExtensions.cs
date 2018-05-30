@@ -35,11 +35,12 @@ namespace Neptune.Web.Models
             return DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
         }
 
-        public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
-        public static string GetEditUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
-        {
-            return EditUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
-        }
+        // todo: how to handle editing assessments now that assessment is part of field visit?
+        //public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Edit(UrlTemplate.Parameter1Int)));
+        //public static string GetEditUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
+        //{
+        //    return EditUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
+        //}
 
         public static readonly UrlTemplate<int> EditScoreUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Score(UrlTemplate.Parameter1Int)));
         public static string GetEditScoreUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
@@ -55,7 +56,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetDateAsDetailUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            return treatmentBMPAssessment == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID), treatmentBMPAssessment.AssessmentDate.ToShortDateString());
+            return treatmentBMPAssessment == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID), treatmentBMPAssessment.GetAssessmentDate.ToShortDateString());
         }
 
 

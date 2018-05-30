@@ -15,8 +15,8 @@ namespace Neptune.Web.Models
         public abstract List<ValidationResult> ValidateObservationType(string json);
         public abstract bool ValidateObservationDataJson(string json);
 
-        public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType);
-        public abstract string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType);
+        public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
+        public abstract string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
 
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
@@ -80,10 +80,10 @@ namespace Neptune.Web.Models
             return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(TreatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -163,15 +163,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.RateCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -231,15 +231,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
@@ -310,15 +310,15 @@ namespace Neptune.Web.Models
             return true;
         }
 
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(TreatmentBMPAssessment treatmentBMPAssessment,
-            TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(treatmentBMPAssessment, TreatmentBMPAssessmentObservationType));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)

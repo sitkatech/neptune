@@ -1,5 +1,5 @@
-﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
+/*-----------------------------------------------------------------------
+<copyright file="FieldVisit.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,17 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using Neptune.Web.Controllers;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Models
 {
-    public class PercentageCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public partial class FieldVisit
     {
-        /// <summary>
-        /// Needed by the ModelBinder
-        /// </summary>
-        public PercentageCollectionMethodViewModel()
+        public TreatmentBMPAssessment GetAssessmentByType(FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-        }
-
-        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
-        {
+            return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                ? InitialAssessment
+                : PostMaintenanceAssessment;
         }
     }
 }

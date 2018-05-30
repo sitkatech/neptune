@@ -21,19 +21,20 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class PassFailCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public class DiscreteCollectionMethodViewModel : BaseCollectionMethodFormViewModel
     {
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public PassFailCollectionMethodViewModel()
+        public DiscreteCollectionMethodViewModel()
         {
         }
 
-        public PassFailCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
+        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+            : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
         {
         }
     }

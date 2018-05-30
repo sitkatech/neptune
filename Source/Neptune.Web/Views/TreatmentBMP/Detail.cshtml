@@ -41,9 +41,12 @@
 }
 
 @section RightOfPageTitle{
-    @if(ViewDataTyped.CurrentPersonCanManage){<div class="pull-right">
-        @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
-    </div>}
+    @if (ViewDataTyped.CurrentPersonCanManage)
+    {
+        <div class="pull-right">
+            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+        </div>
+    }
 }
 
 <div class="row">
@@ -243,12 +246,6 @@
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
                         Assessments
-                        @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete() && ViewDataTyped.CurrentPersonCanManage)
-                        {
-                            <span class="pull-right">
-                                <a href="@ViewDataTyped.NewAssessmentUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
-                            </span>
-                        }
                     </div>
                     <div class="panel-body">
                         @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())

@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulation.cs" company="Tahoe Regional Planning Agency">
+<copyright file="RateCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -23,13 +23,9 @@ using System.Web.Mvc;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class PercentageCollectionMethod : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
+    public abstract class RateCollectionMethod : TypedWebViewPage<RateCollectionMethodViewData, RateCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, PercentageCollectionMethodViewData viewData, PercentageCollectionMethodViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
-        }
     }
 }

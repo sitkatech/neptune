@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 
             EntityName = Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized();
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
-            SubEntityName = treatmentBMP.FormattedNameAndType;
+            SubEntityName = treatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMP.GetDetailUrl();
             PageTitle = "Benchmark & Threshold";
         }

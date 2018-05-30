@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.TreatmentBMP TreatmentBMP { get; }
         public MapInitJson MapInitJson { get; }
         public string AddBenchmarkAndThresholdUrl { get; }
-        public string NewAssessmentUrl { get; }
+
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
         public bool CurrentPersonCanEditTreatmentBMP { get; }
@@ -70,13 +70,12 @@ namespace Neptune.Web.Views.TreatmentBMP
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
         {
             TreatmentBMP = treatmentBMP;
-            PageTitle = treatmentBMP.FormattedNameAndType;
+            PageTitle = treatmentBMP.TreatmentBMPName;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             MapInitJson = mapInitJson;
             ImageCarouselViewData = imageCarouselViewData;
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
-            NewAssessmentUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.New(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CurrentPersonCanEditTreatmentBMP = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);

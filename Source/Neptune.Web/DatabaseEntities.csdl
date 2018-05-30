@@ -236,10 +236,6 @@
       <End Role="PrimaryContactPerson" EntitySet="Person" />
       <End Role="TenantAttributesWhereYouAreThePrimaryContactPerson" EntitySet="TenantAttribute" />
     </AssociationSet>
-    <AssociationSet Name="FK_TreatmentBMPAssessment_Person_PersonID" Association="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID">
-      <End Role="Person" EntitySet="Person" />
-      <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
-    </AssociationSet>
     <AssociationSet Name="FK_StormwaterJurisdiction_StateProvince_StateProvinceID" Association="Neptune.Web.Models.FK_StormwaterJurisdiction_StateProvince_StateProvinceID">
       <End Role="StateProvince" EntitySet="StateProvince" />
       <End Role="StormwaterJurisdictions" EntitySet="StormwaterJurisdiction" />
@@ -669,7 +665,6 @@
     <NavigationProperty Name="StormwaterJurisdictionPeople" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_Person_PersonID" FromRole="Person" ToRole="StormwaterJurisdictionPeople" />
     <NavigationProperty Name="SupportRequestLogsWhereYouAreTheRequestPerson" Relationship="Neptune.Web.Models.FK_SupportRequestLog_Person_RequestPersonID_PersonID" FromRole="RequestPerson" ToRole="SupportRequestLogsWhereYouAreTheRequestPerson" />
     <NavigationProperty Name="TenantAttributesWhereYouAreThePrimaryContactPerson" Relationship="Neptune.Web.Models.FK_TenantAttribute_Person_PrimaryContactPersonID_PersonID" FromRole="PrimaryContactPerson" ToRole="TenantAttributesWhereYouAreThePrimaryContactPerson" />
-    <NavigationProperty Name="TreatmentBMPAssessments" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="Person" ToRole="TreatmentBMPAssessments" />
   </EntityType>
   <EntityType Name="StateProvince">
     <Key>
@@ -784,16 +779,11 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
-    <Property Name="AssessmentDate" Type="DateTime" Nullable="false" />
-    <Property Name="PersonID" Type="Int32" Nullable="false" />
     <Property Name="AlternateAssessmentScore" Type="Double" />
     <Property Name="AlternateAssessmentRationale" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
-    <Property Name="IsPrivate" Type="Boolean" Nullable="false" />
     <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
-    <Property Name="IsPostMaintenanceAssessment" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="FieldVisitsWhereYouAreTheInitialAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" FromRole="InitialAssessment" ToRole="FieldVisitsWhereYouAreTheInitialAssessment" />
     <NavigationProperty Name="FieldVisitsWhereYouAreThePostMaintenanceAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID" FromRole="PostMaintenanceAssessment" ToRole="FieldVisitsWhereYouAreThePostMaintenanceAssessment" />
-    <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="TreatmentBMPAssessments" ToRole="Person" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMPAssessments" ToRole="TreatmentBMP" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPAssessments" ToRole="TreatmentBMPType" />
     <NavigationProperty Name="TreatmentBMPObservations" Relationship="Neptune.Web.Models.FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPAssessment" ToRole="TreatmentBMPObservations" />
@@ -1505,18 +1495,6 @@
       </Principal>
       <Dependent Role="TenantAttributesWhereYouAreThePrimaryContactPerson">
         <PropertyRef Name="PrimaryContactPersonID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TreatmentBMPAssessment_Person_PersonID">
-    <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
-    <End Role="TreatmentBMPAssessments" Type="Neptune.Web.Models.TreatmentBMPAssessment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Person">
-        <PropertyRef Name="PersonID" />
-      </Principal>
-      <Dependent Role="TreatmentBMPAssessments">
-        <PropertyRef Name="PersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

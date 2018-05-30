@@ -22,9 +22,10 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Models;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
     public class PercentageCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
@@ -33,13 +34,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string AssessmentDescription { get; }
         public string SubmitUrl { get; }        
 
-        public PercentageCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public PercentageCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(TreatmentBMPAssessmentObservationType.PercentageSchema);
-            MeasurementUnitLabelAndUnit = $"{TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = TreatmentBMPAssessmentObservationType.PercentageSchema.AssessmentDescription;
+            ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PercentageSchema);
+            MeasurementUnitLabelAndUnit = $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.PercentageSchema.AssessmentDescription;
 
-            SubmitUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(treatmentBmpAssessment, TreatmentBMPAssessmentObservationType));
+            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
         public class PercentageCollectionMethodViewDataForAngular

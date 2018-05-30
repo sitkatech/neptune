@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="AssessmentInformation.cs" company="Tahoe Regional Planning Agency">
+<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,11 +19,22 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common.Mvc;
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class AssessmentInformation : TypedWebViewPage<AssessmentInformationViewData, AssessmentInformationViewModel>
+    public class RateCollectionMethodViewModel : BaseCollectionMethodFormViewModel
     {
+        /// <summary>
+        /// Needed by the ModelBinder
+        /// </summary>
+        public RateCollectionMethodViewModel()
+        {
+        }
+
+        public RateCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
+        {
+        }
     }
 }

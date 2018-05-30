@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.FieldVisit
             EntityName = "Treatment BMP Field Visits";
             // todo: are we goign to have a Field Visit Index Page?
             //EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Index());
-            SubEntityName = fieldVisit.TreatmentBMP?.FormattedNameAndType ?? "Preview Treatment BMP Field Visit";
+            SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();
 

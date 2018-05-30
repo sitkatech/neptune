@@ -7,13 +7,9 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
-	[AssessmentDate] [datetime] NOT NULL,
-	[PersonID] [int] NOT NULL,
 	[AlternateAssessmentScore] [float] NULL,
 	[AlternateAssessmentRationale] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[IsPrivate] [bit] NOT NULL,
 	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[IsPostMaintenanceAssessment] [bit] NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAssessment_TreatmentBMPAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAssessmentID] ASC
@@ -35,16 +31,6 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_Person_PersonID] FOREIGN KEY([PersonID])
-REFERENCES [dbo].[Person] ([PersonID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_Person_PersonID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_Person_PersonID_TenantID] FOREIGN KEY([PersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_Person_PersonID_TenantID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPAssessment_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])

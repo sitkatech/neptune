@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DiscreteCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,23 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class DiscreteCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public abstract class DiscreteCollectionMethod : TypedWebViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
     {
-        /// <summary>
-        /// Needed by the ModelBinder
-        /// </summary>
-        public DiscreteCollectionMethodViewModel()
-        {
-        }
-
-        public DiscreteCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
-            : base(treatmentBMPObservation, TreatmentBMPAssessmentObservationType)
-        {
-        }
     }
 }

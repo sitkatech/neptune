@@ -23,7 +23,6 @@ namespace Neptune.Web.Models
         public static readonly FieldVisitSectionMaintenance Maintenance = FieldVisitSectionMaintenance.Instance;
         public static readonly FieldVisitSectionPostMaintenanceAssessment PostMaintenanceAssessment = FieldVisitSectionPostMaintenanceAssessment.Instance;
         public static readonly FieldVisitSectionWrapUpVisit WrapUpVisit = FieldVisitSectionWrapUpVisit.Instance;
-        public static readonly FieldVisitSectionManageVisit ManageVisit = FieldVisitSectionManageVisit.Instance;
 
         public static readonly List<FieldVisitSection> All;
         public static readonly ReadOnlyDictionary<int, FieldVisitSection> AllLookupDictionary;
@@ -33,7 +32,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldVisitSection()
         {
-            All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, WrapUpVisit, ManageVisit };
+            All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, WrapUpVisit };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSection>(All.ToDictionary(x => x.FieldVisitSectionID));
         }
 
@@ -113,8 +112,6 @@ namespace Neptune.Web.Models
                     return Inventory;
                 case FieldVisitSectionEnum.Maintenance:
                     return Maintenance;
-                case FieldVisitSectionEnum.ManageVisit:
-                    return ManageVisit;
                 case FieldVisitSectionEnum.PostMaintenanceAssessment:
                     return PostMaintenanceAssessment;
                 case FieldVisitSectionEnum.WrapUpVisit:
@@ -131,8 +128,7 @@ namespace Neptune.Web.Models
         Assessment = 2,
         Maintenance = 3,
         PostMaintenanceAssessment = 4,
-        WrapUpVisit = 5,
-        ManageVisit = 6
+        WrapUpVisit = 5
     }
 
     public partial class FieldVisitSectionInventory : FieldVisitSection
@@ -163,11 +159,5 @@ namespace Neptune.Web.Models
     {
         private FieldVisitSectionWrapUpVisit(int fieldVisitSectionID, string fieldVisitSectionName, string fieldVisitSectionDisplayName, string sectionHeader, int sortOrder) : base(fieldVisitSectionID, fieldVisitSectionName, fieldVisitSectionDisplayName, sectionHeader, sortOrder) {}
         public static readonly FieldVisitSectionWrapUpVisit Instance = new FieldVisitSectionWrapUpVisit(5, @"WrapUpVisit", @"Wrap-up Visit", @"Wrap-up Visit", 50);
-    }
-
-    public partial class FieldVisitSectionManageVisit : FieldVisitSection
-    {
-        private FieldVisitSectionManageVisit(int fieldVisitSectionID, string fieldVisitSectionName, string fieldVisitSectionDisplayName, string sectionHeader, int sortOrder) : base(fieldVisitSectionID, fieldVisitSectionName, fieldVisitSectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly FieldVisitSectionManageVisit Instance = new FieldVisitSectionManageVisit(6, @"ManageVisit", @"Manage Visit", @"Manage Visit", 60);
     }
 }

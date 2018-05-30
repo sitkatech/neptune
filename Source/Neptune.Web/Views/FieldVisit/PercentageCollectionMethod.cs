@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ManageVisit.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="PercentageCollectionMethod.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -19,9 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+using LtInfo.Common.Mvc;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class ManageVisit : LtInfo.Common.Mvc.TypedWebViewPage<ManageVisitViewData>
+    public abstract class PercentageCollectionMethod : TypedWebViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
     {
     }
 }

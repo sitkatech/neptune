@@ -44,7 +44,6 @@ namespace Neptune.Web.Models
         }
        
         public string AuditDescriptionString => TreatmentBMPName;
-        public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
         public FieldVisit InProgressFieldVisit => FieldVisits.SingleOrDefault(x => x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
 
         public bool IsBenchmarkAndThresholdsComplete()
@@ -72,7 +71,7 @@ namespace Neptune.Web.Models
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.AssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
             return latestAssessment;
         }
 

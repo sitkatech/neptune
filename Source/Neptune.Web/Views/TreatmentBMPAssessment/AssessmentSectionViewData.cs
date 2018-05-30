@@ -26,10 +26,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             }
             else
             {
-                AssessmentInformationUrl =
-                    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                        x.Edit(TreatmentBMPAssessment));
-                AssessmentInformationComplete = true;
+                //AssessmentInformationUrl =
+                //    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
+                //        x.Edit(TreatmentBMPAssessment));
+                //AssessmentInformationComplete = true;
             }
 
             ScoreUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
@@ -39,9 +39,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
 
             EntityName = "Treatment BMP Assessments";
             EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());
-            SubEntityName = treatmentBMPAssessment.TreatmentBMP?.FormattedNameAndType ?? "Preview Treatment BMP Assessment";
+            SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Assessment";
             SubEntityUrl = treatmentBMPAssessment.TreatmentBMP?.GetDetailUrl() ?? "#";
-            PageTitle = treatmentBMPAssessment.AssessmentDate.ToStringDate();
+            PageTitle = treatmentBMPAssessment.GetAssessmentDate.ToStringDate();
         }
     }
 }

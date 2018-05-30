@@ -21,19 +21,22 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.TreatmentBMPAssessment
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class AssessmentInformationViewData : AssessmentSectionViewData
+    public class AssessmentInformationViewData : FieldVisitSectionViewData
     {
         public readonly IEnumerable<SelectListItem> JurisdictionPeople;
+        public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
 
-        public const string ThisSectionName = "Assessment Information";
-        public AssessmentInformationViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBmpAssessment, IEnumerable<SelectListItem> jurisdictionPeople)
-            : base(currentPerson, treatmentBmpAssessment, ThisSectionName)
+        public AssessmentInformationViewData(Person currentPerson, Models.FieldVisit fieldVisit, IEnumerable<SelectListItem> jurisdictionPeople, FieldVisitAssessmentType fieldVisitAssessmentType)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
             JurisdictionPeople = jurisdictionPeople;
+            SubsectionName = "Assessment Information";
+            TreatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
         }  
     }
 }
