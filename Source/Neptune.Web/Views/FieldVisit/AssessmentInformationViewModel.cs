@@ -36,24 +36,12 @@ namespace Neptune.Web.Views.FieldVisit
         public int TreatmentBMPAssessmentID { get; set; }
         public int CurrentPersonID { get; set; }
 
-        [Required]
-        [DisplayName("Conducted By")]
-        public int AssessmentPersonID { get; set; }
-
-        [Required]
-        [DisplayName("Date of Assessment")]
-        public DateTime AssessmentDate { get; set; }
-
         [StringLength(Models.TreatmentBMPAssessment.FieldLengths.Notes)]
         [DisplayName("Field Notes")]
         public string AssessmentNotes { get; set; }
 
         [FieldDefinitionDisplay(FieldDefinitionEnum.AssessmentForInternalUseOnly)]
         public bool? IsPrivate { get; set; }
-
-        [FieldDefinitionDisplay(FieldDefinitionEnum.IsPostMaintenanceAssessment)]
-        [Required]
-        public bool? IsPostMaintenanceAssessment { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -67,20 +55,14 @@ namespace Neptune.Web.Views.FieldVisit
             CurrentPersonID = currentPerson.PersonID;
             TreatmentBMPID = treatmentBMPAssessment.TreatmentBMPID;
             TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-            AssessmentPersonID = treatmentBMPAssessment.Person.PersonID;
-            AssessmentDate = treatmentBMPAssessment.AssessmentDate;
             AssessmentNotes = treatmentBMPAssessment.Notes;
             IsPrivate = treatmentBMPAssessment.IsPrivate;
-            IsPostMaintenanceAssessment = treatmentBMPAssessment.IsPostMaintenanceAssessment;
 
         }
 
         public void UpdateModel(Models.TreatmentBMPAssessment treatmentBMPAssessment, Person currentPerson)
         {
-            treatmentBMPAssessment.PersonID = AssessmentPersonID;
-            treatmentBMPAssessment.AssessmentDate = AssessmentDate;
             treatmentBMPAssessment.Notes = AssessmentNotes;
-            treatmentBMPAssessment.IsPostMaintenanceAssessment = IsPostMaintenanceAssessment.Value;
 
             if (currentPerson.Role == Models.Role.Admin)
             {
@@ -95,10 +77,9 @@ namespace Neptune.Web.Views.FieldVisit
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
-            var isAssessmentPersonAdmin = HttpRequestStorage.DatabaseEntities.People.GetPerson(AssessmentPersonID).Role == Models.Role.Admin;
             var isCurrentPersonAdmin = HttpRequestStorage.DatabaseEntities.People.GetPerson(CurrentPersonID).Role == Models.Role.Admin;
 
-            if (!IsPrivate.HasValue && !isAssessmentPersonAdmin && !isCurrentPersonAdmin)
+            if (!IsPrivate.HasValue && !isCurrentPersonAdmin)
             {
                 validationResults.Add(new SitkaValidationResult<AssessmentInformationViewModel, bool?>("For Internal Use Only is required.", x => x.IsPrivate));
             }

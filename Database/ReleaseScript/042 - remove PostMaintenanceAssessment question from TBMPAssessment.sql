@@ -1,0 +1,2 @@
+alter table dbo.TreatmentBMPAssessment
+Drop column IsPostMaintenanceAssessment

@@ -44,7 +44,6 @@ namespace Neptune.Web.Models
         }
        
         public string AuditDescriptionString => TreatmentBMPName;
-        public string FormattedNameAndType => $"{TreatmentBMPName} ({TreatmentBMPType.TreatmentBMPTypeName})";
         public FieldVisit InProgressFieldVisit => FieldVisits.SingleOrDefault(x => x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
 
         public bool IsBenchmarkAndThresholdsComplete()

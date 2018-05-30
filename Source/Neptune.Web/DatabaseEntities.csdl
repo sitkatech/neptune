@@ -790,7 +790,6 @@
     <Property Name="AlternateAssessmentRationale" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
     <Property Name="IsPrivate" Type="Boolean" Nullable="false" />
     <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
-    <Property Name="IsPostMaintenanceAssessment" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="FieldVisitsWhereYouAreTheInitialAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" FromRole="InitialAssessment" ToRole="FieldVisitsWhereYouAreTheInitialAssessment" />
     <NavigationProperty Name="FieldVisitsWhereYouAreThePostMaintenanceAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID" FromRole="PostMaintenanceAssessment" ToRole="FieldVisitsWhereYouAreThePostMaintenanceAssessment" />
     <NavigationProperty Name="Person" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_Person_PersonID" FromRole="TreatmentBMPAssessments" ToRole="Person" />

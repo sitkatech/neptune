@@ -402,7 +402,6 @@
           <ScalarProperty Name="AlternateAssessmentRationale" ColumnName="AlternateAssessmentRationale" />
           <ScalarProperty Name="IsPrivate" ColumnName="IsPrivate" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
-          <ScalarProperty Name="IsPostMaintenanceAssessment" ColumnName="IsPostMaintenanceAssessment" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

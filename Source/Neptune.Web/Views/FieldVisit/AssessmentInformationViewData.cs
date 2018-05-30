@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.FieldVisit
         public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
 
         public AssessmentInformationViewData(Person currentPerson, Models.FieldVisit fieldVisit, IEnumerable<SelectListItem> jurisdictionPeople, FieldVisitAssessmentType fieldVisitAssessmentType)
-            : base(currentPerson, fieldVisit, Models.FieldVisitSection.Assessment)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
             JurisdictionPeople = jurisdictionPeople;
             SubsectionName = "Assessment Information";

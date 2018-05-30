@@ -260,6 +260,8 @@ namespace Neptune.Web.Controllers
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
             {
+                treatmentBMPAssessment.PersonID = CurrentPerson.PersonID;
+                treatmentBMPAssessment.AssessmentDate = DateTime.Now;
                 HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments
                     .AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -609,7 +611,7 @@ namespace Neptune.Web.Controllers
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
             return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson,
-                false, false);
+                false);
         }
 
         private RedirectResult GetNextObservationTypeViewResult(FieldVisit fieldVisit,

@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         public const string OrganizationSitka = "Sitka Technology Group";
         public const string OrganizationUnknown = "(Unknown or Unspecified Organization)";
         
-        public string DisplayName => IsUnknown ? "Unknown or unspecified" : $"{OrganizationName}{(!String.IsNullOrWhiteSpace(OrganizationShortName) ? $" ({OrganizationShortName})" : String.Empty)}{(!IsActive ? " (Inactive)" : String.Empty)}";
+        public string DisplayName => IsUnknown ? "Unknown or unspecified" : $"{OrganizationName}{(!IsActive ? " (Inactive)" : String.Empty)}";
 
         public string OrganizationNamePossessive
         {
