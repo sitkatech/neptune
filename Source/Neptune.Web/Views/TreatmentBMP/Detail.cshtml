@@ -41,9 +41,12 @@
 }
 
 @section RightOfPageTitle{
-    @if(ViewDataTyped.CurrentPersonCanManage){<div class="pull-right">
-        @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
-    </div>}
+    @if (ViewDataTyped.CurrentPersonCanManage)
+    {
+        <div class="pull-right">
+            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+        </div>
+    }
 }
 
 <div class="row">
