@@ -59,7 +59,7 @@ namespace Neptune.Web.Views.FundingEvent
 
 
             var fundingEventFundingSourcesToUpdate =
-                FundingEvent.FundingEventFundingSources.Select(x => x.ToFundingEventFundingSource()).ToList();
+                FundingEvent?.FundingEventFundingSources?.Select(x => x.ToFundingEventFundingSource()).ToList() ?? new List<FundingEventFundingSource>();
 
             currentFundingEvent.FundingEventFundingSources.Merge(fundingEventFundingSourcesToUpdate,
                 allFundingEventFundingSources,

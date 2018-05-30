@@ -1,18 +1,23 @@
-﻿@using Neptune.Web.Models
+﻿@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
 
 @inherits LaunchPad
 
 <style>
-    .launchPadHeader, .launchPadAction { margin-bottom: 10px; }
+    .launchPadHeader, .launchPadAction {
+        margin-bottom: 10px;
+    }
 
     .launchPadJurisdictionList {
         max-height: 200px;
         overflow-y: auto;
     }
 
-    .launchPadActionButton { width: 100%; }
+    .launchPadActionButton {
+        width: 100%;
+    }
 </style>
 
 @if (ViewDataTyped.IsLoggedIn)
@@ -21,7 +26,7 @@
         <div class="col-xs-12 launchPadHeader">
             <h2>Launch Pad</h2>
             <h4>Welcome @ViewDataTyped.CurrentPerson.FirstName,</h4>
-            @if (ViewDataTyped.CurrentPerson.Role == Role.Unassigned)
+            @if (ViewDataTyped.IsUnassigned)
             {
                 <p>You do not have a role assigned. <a href="#">Request Support</a> or contact your jurisdiction manager to request a role.</p>
             }
@@ -61,51 +66,72 @@
         <div class="col-xs-12">
             <h4>Common Tasks</h4>
         </div>
-        <div class="col-xs-12 col-sm-6 launchPadAction">
-            <div class="row">
-                <div class="col-xs-6 col-md-5 col-lg-4">
-                    <a href="@ViewDataTyped.FindABmpUrl" class="btn btn-neptune launchPadActionButton">Find a BMP</a>
-                </div>
-                <div class="col-xs-6 col-md-7 col-lg-8">
-                    Start here to view, edit, assess, or maintain a BMP
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 launchPadAction">
-            <div class="row">
-                <div class="col-xs-6 col-md-5 col-lg-4">
-                    <a href="@ViewDataTyped.ExploreBmpTypesUrl" class="btn btn-neptune launchPadActionButton">Explore BMP Types</a>
-                </div>
-                <div class="col-xs-6 col-md-7 col-lg-8">
-                    See details of the @ViewDataTyped.NumberOfBmpTypes different types of BMPs
-                </div>
-            </div>
-        </div>
-        @if (ViewDataTyped.IsJurisdictionManager)
+        @if (ViewDataTyped.IsUnassigned)
         {
             <div class="col-xs-12 col-sm-6 launchPadAction">
                 <div class="row">
                     <div class="col-xs-6 col-md-5 col-lg-4">
-                        <a href="@ViewDataTyped.AddABmpUrl" class="btn btn-neptune launchPadActionButton">Add a BMP</a>
+                        @ModalDialogFormHelper.ModalDialogFormLink("Request a Role", ViewDataTyped.RequestSupportUrl, "Request a Role", 800, "Send", "Cancel", new List<string>(){"btn", "btn-neptune"}, null, null)
                     </div>
                     <div class="col-xs-6 col-md-7 col-lg-8">
-                        Start here to add a new BMP
+                        You are not yet assigned a Role or associated with a jurisdiction; start here to request an appropriate role and jurisdiction assignment
+                    </div>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <div class="col-xs-6 col-md-5 col-lg-4">
+                        <a href="@ViewDataTyped.FindABmpUrl" class="btn btn-neptune launchPadActionButton">Find a BMP</a>
+                    </div>
+                    <div class="col-xs-6 col-md-7 col-lg-8">
+                        Start here to view, edit, assess, or maintain a BMP
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <div class="col-xs-6 col-md-5 col-lg-4">
+                        <a href="@ViewDataTyped.ExploreBmpTypesUrl" class="btn btn-neptune launchPadActionButton">View BMP Types</a>
+                    </div>
+                    <div class="col-xs-6 col-md-7 col-lg-8">
+                        See details of the @ViewDataTyped.NumberOfBmpTypes different types of BMPs
+                    </div>
+                </div>
+            </div>
+            if (ViewDataTyped.IsJurisdictionManager)
+             {
+                 <div class="col-xs-12 col-sm-6 launchPadAction">
+                     <div class="row">
+                         <div class="col-xs-6 col-md-5 col-lg-4">
+                             <a href="@ViewDataTyped.AddABmpUrl" class="btn btn-neptune launchPadActionButton">Add a BMP</a>
+                         </div>
+                         <div class="col-xs-6 col-md-7 col-lg-8">
+                             Start here to add a new BMP
+                         </div>
+                     </div>
+                 </div>
+             }
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <div class="col-xs-6 col-md-5 col-lg-4">
+                        <a href="@ViewDataTyped.ViewAssessmentAndMaintenanceRecordsUrl" class="btn btn-neptune launchPadActionButton">View Field Records</a>
+                    </div>
+                    <div class="col-xs-6 col-md-7 col-lg-8">
+                        View records of completed assessment and maintenance events
                     </div>
                 </div>
             </div>
         }
-        <div class="col-xs-12 col-sm-6 launchPadAction">
-            <div class="row">
-                <div class="col-xs-6 col-md-5 col-lg-4">
-                    <a href="@ViewDataTyped.ViewAssessmentAndMaintenanceRecordsUrl" class="btn btn-neptune launchPadActionButton">View Assessment and<br/>Maintenance Records</a>
-                </div>
-                <div class="col-xs-6 col-md-7 col-lg-8">
-                    View records of completed assessment and maintenance events
-                </div>
-            </div>
-        </div>
         @if (ViewDataTyped.IsJurisdictionManager)
         {
+            <div class="col-xs-12">
+                <h4>Admin Tasks</h4>
+            </div>
+
             <div class="col-xs-12 col-sm-6 launchPadAction">
                 <div class="row">
                     <div class="col-xs-6 col-md-5 col-lg-4">
@@ -123,16 +149,6 @@
                     </div>
                     <div class="col-xs-6 col-md-7 col-lg-8">
                         Edit roles of an existing user in your jurisdiction
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-6 launchPadAction">
-                <div class="row">
-                    <div class="col-xs-6 col-md-5 col-lg-4">
-                        <a href="@ViewDataTyped.AddAFundingSourceUrl" class="btn btn-neptune launchPadActionButton">Add a Funding Source</a>
-                    </div>
-                    <div class="col-xs-6 col-md-7 col-lg-8">
-                        Set up sources of projects and O&amp;M funding
                     </div>
                 </div>
             </div>

@@ -13,11 +13,13 @@ namespace Neptune.Web.Views.Home
         public Person CurrentPerson { get; }
         public bool IsLoggedIn { get; }
         public bool IsAdmin { get; }
+        public bool IsUnassigned { get; }
         public bool IsJurisdictionManager { get; }
         public IEnumerable<StormwaterJurisdiction> Jurisdictions { get; }
         public int NumberOfBmpTypes { get; set; }
         public ViewPageContentViewData LaunchPadViewPageContentViewData { get; }
         public string JurisdictionIndexUrl { get; }
+        public string RequestSupportUrl { get; set; }
         public string FindABmpUrl { get; set; }
         public string ExploreBmpTypesUrl { get; set; }
         public string AddABmpUrl { get; set; }
@@ -31,6 +33,7 @@ namespace Neptune.Web.Views.Home
             CurrentPerson = currentPerson;
             IsLoggedIn = !CurrentPerson.IsAnonymousUser;
             IsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
+            IsUnassigned = CurrentPerson.Role == Models.Role.Unassigned;
             IsJurisdictionManager = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             Jurisdictions = CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
             NumberOfBmpTypes = numberOfBmpTypes;
@@ -38,6 +41,7 @@ namespace Neptune.Web.Views.Home
                 new ViewPageContentViewData(launchPadNeptunePage, CurrentPerson);
 
             JurisdictionIndexUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(c => c.Index());
+            RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.RequestToChangePrivileges());
             FindABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.FindABMP());
             ExploreBmpTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
             AddABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.New());

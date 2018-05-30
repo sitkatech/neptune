@@ -117,5 +117,22 @@ namespace Neptune.Web.Controllers
         {
             return Support(viewModel);
         }
+
+        [AnonymousUnclassifiedFeature]
+        [CrossAreaRoute]
+        [HttpGet]
+        public PartialViewResult RequestToChangePrivileges()
+        {
+            return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);
+        }
+
+        [AnonymousUnclassifiedFeature]
+        [CrossAreaRoute]
+        [HttpPost]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult RequestToChangePrivileges(SupportFormViewModel viewModel)
+        {
+            return Support(viewModel);
+        }
     }
 }

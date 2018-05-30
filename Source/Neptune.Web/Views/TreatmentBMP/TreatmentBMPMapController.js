@@ -23,16 +23,16 @@
             $scope.$apply();
         }
 
-        var url = "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Outfall_Inspections/FeatureServer/0";
-        var outfallsPopup = function (layer) {
-            return L.Util.template('<p>Facility ID: {FACILITYID}<br>Facility Type: {FACTYPE}',
-                layer.feature.properties);
-        };
-        var layerName = "Outfalls";
-        $scope.neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
+        //OCs layer we were referencing here died. Removing for now.
 
+        //var url = "https://www.ocgis.com/arcpub/rest/services/Map_Layers/Outfall_Inspections/FeatureServer/0";
+        //var outfallsPopup = function (layer) {
+        //    return L.Util.template('<p>Facility ID: {FACILITYID}<br>Facility Type: {FACTYPE}',
+        //        layer.feature.properties);
+        //};
+        //var layerName = "Outfalls";
+        //$scope.neptuneMap.addEsriReferenceLayer(url, layerName, outfallsPopup);
         
-
         $scope.$watch(function () {
             var foundIDs = [];
             var map = $scope.neptuneMap.map;

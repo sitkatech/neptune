@@ -59,7 +59,7 @@
                     <div class="col-xs-12 col-sm-4">
                         @if (!ModelObjectHelpers.IsRealPrimaryKeyValue(Model.TreatmentBMPID))
                         {
-                            @Html.DropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems, new Dictionary<string, object> {{"style", "width: auto"}, {"class", "form-control"}})
+                            @Html.SearchableDropDownListFor(m => m.TreatmentBMPTypeID, ViewDataTyped.TreatmentBMPTypeSelectListItems)
                             @Html.ValidationMessageFor(m => m.TreatmentBMPTypeID)
                         }
                         else
