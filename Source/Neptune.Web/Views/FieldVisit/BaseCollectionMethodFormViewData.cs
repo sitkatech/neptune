@@ -1,6 +1,11 @@
-﻿namespace Neptune.Web.Views.FieldVisit
+﻿using Neptune.Web.Models;
+
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class BaseCollectionMethodFormViewData
+    public class BaseCollectionMethodFormViewData : FieldVisitSectionViewData
     {
+        public BaseCollectionMethodFormViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection) : base(currentPerson, fieldVisit, fieldVisitSection)
+        {
+        }
     }
 }

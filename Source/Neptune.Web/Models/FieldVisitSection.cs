@@ -152,8 +152,7 @@ namespace Neptune.Web.Models
                 yield return new FieldVisitSubsectionData
                 {
                     SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
-                    // TODO
-                    // SubsectionUrl = observationType.AssessmentUrl(TODO)
+                    SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType)
                 };
             }
         }

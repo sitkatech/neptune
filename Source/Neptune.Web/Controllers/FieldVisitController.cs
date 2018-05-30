@@ -274,6 +274,7 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("Assessment Information successfully saved.");
 

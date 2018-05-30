@@ -21,19 +21,19 @@ namespace Neptune.Web.Views.FieldVisit
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     ObservationPartialViewData = new DiscreteCollectionMethodViewData(treatmentBMPAssessment,
-                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType);
+                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, currentPerson);
                     break;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     ObservationPartialViewData = new PassFailCollectionMethodViewData(treatmentBMPAssessment,
-                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType);
+                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, currentPerson);
                     break;
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     ObservationPartialViewData = new PercentageCollectionMethodViewData(treatmentBMPAssessment,
-                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType);
+                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, currentPerson);
                     break;
                 case ObservationTypeCollectionMethodEnum.Rate:
                     ObservationPartialViewData = new RateCollectionMethodViewData(treatmentBMPAssessment,
-                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType);
+                        treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, currentPerson);
                     break;
                 default:
                     throw new ArgumentException(
