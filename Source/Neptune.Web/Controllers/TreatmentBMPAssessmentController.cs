@@ -19,25 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPAssessment;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Controllers
 {
@@ -82,7 +72,6 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMPAssessment(TreatmentBMPAssessment treatmentBMPAssessment, ConfirmDialogFormViewModel viewModel)
         {
-            var waterYear = treatmentBMPAssessment.GetWaterYear();
             var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate.ToShortDateString()}?"
