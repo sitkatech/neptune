@@ -38,10 +38,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             // todo: how to handle editing assessments now that it's part of field visit?
             //Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-            Add("Conducted By", x => x.Person.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Date", x => x.AssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
+            Add("Conducted By", x => x.GetFieldVisitPerson.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Date", x => x.GetAssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Score", x => x.AlternateAssessmentScore ?? x.CalculateAssessmentScore(), 80);
-            Add(Models.FieldDefinition.AssessmentForInternalUseOnly.ToGridHeaderString(), x => x.IsPrivate.ToYesNo(), 80);
         }
     }
 }

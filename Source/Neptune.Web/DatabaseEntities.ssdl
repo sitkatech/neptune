@@ -240,10 +240,6 @@
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
     </AssociationSet>
-    <AssociationSet Name="FK_TreatmentBMPAssessment_Person_PersonID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPAssessment_Person_PersonID">
-      <End Role="Person" EntitySet="Person" />
-      <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
-    </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
@@ -635,7 +631,6 @@ warning 6035: The relationship 'FK_Organization_Person_PrimaryContactPersonID_Te
 warning 6035: The relationship 'FK_StormwaterJurisdictionPerson_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_SupportRequestLog_Person_RequestPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TenantAttribute_Person_PrimaryContactPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_TreatmentBMPAssessment_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="Person">
     <Key>
@@ -773,11 +768,8 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
-    <Property Name="AssessmentDate" Type="datetime" Nullable="false" />
-    <Property Name="PersonID" Type="int" Nullable="false" />
     <Property Name="AlternateAssessmentScore" Type="float" />
     <Property Name="AlternateAssessmentRationale" Type="varchar" MaxLength="1000" />
-    <Property Name="IsPrivate" Type="bit" Nullable="false" />
     <Property Name="Notes" Type="varchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
@@ -1486,18 +1478,6 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Principal>
       <Dependent Role="TreatmentBMPs">
         <PropertyRef Name="TreatmentBMPTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TreatmentBMPAssessment_Person_PersonID">
-    <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
-    <End Role="TreatmentBMPAssessments" Type="Neptune.Web.Models.Store.TreatmentBMPAssessment" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Person">
-        <PropertyRef Name="PersonID" />
-      </Principal>
-      <Dependent Role="TreatmentBMPAssessments">
-        <PropertyRef Name="PersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

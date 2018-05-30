@@ -32,38 +32,32 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, DateTime assessmentDate, int personID, double? alternateAssessmentScore, string alternateAssessmentRationale, bool isPrivate, string notes) : this()
+        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, double? alternateAssessmentScore, string alternateAssessmentRationale, string notes) : this()
         {
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
-            this.AssessmentDate = assessmentDate;
-            this.PersonID = personID;
             this.AlternateAssessmentScore = alternateAssessmentScore;
             this.AlternateAssessmentRationale = alternateAssessmentRationale;
-            this.IsPrivate = isPrivate;
             this.Notes = notes;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID, DateTime assessmentDate, int personID, bool isPrivate) : this()
+        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
-            this.AssessmentDate = assessmentDate;
-            this.PersonID = personID;
-            this.IsPrivate = isPrivate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, DateTime assessmentDate, Person person, bool isPrivate) : this()
+        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,19 +67,14 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPAssessments.Add(this);
-            this.AssessmentDate = assessmentDate;
-            this.PersonID = person.PersonID;
-            this.Person = person;
-            person.TreatmentBMPAssessments.Add(this);
-            this.IsPrivate = isPrivate;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, Person person)
+        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType, default(DateTime), person, default(bool));
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType);
         }
 
         /// <summary>
@@ -131,11 +120,8 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
-        public DateTime AssessmentDate { get; set; }
-        public int PersonID { get; set; }
         public double? AlternateAssessmentScore { get; set; }
         public string AlternateAssessmentRationale { get; set; }
-        public bool IsPrivate { get; set; }
         public string Notes { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
@@ -146,7 +132,6 @@ namespace Neptune.Web.Models
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
-        public virtual Person Person { get; set; }
 
         public static class FieldLengths
         {

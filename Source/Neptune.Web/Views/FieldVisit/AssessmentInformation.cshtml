@@ -43,18 +43,6 @@
                         @Html.TextAreaWithMaxLengthFor(m => m.AssessmentNotes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string>() { "form-control" })
                     </div>
                 </div>
-
-                @if (ViewDataTyped.CurrentPerson.Role != Role.Admin)
-                {
-                    <div class="form-group">
-                        <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.IsPrivate, true)
-                        </div>
-                        <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.IsPrivate, BooleanFormats.GetYesNoSelectList(), new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </div>

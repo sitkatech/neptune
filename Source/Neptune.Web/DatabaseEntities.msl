@@ -396,11 +396,8 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="AssessmentDate" ColumnName="AssessmentDate" />
-          <ScalarProperty Name="PersonID" ColumnName="PersonID" />
           <ScalarProperty Name="AlternateAssessmentScore" ColumnName="AlternateAssessmentScore" />
           <ScalarProperty Name="AlternateAssessmentRationale" ColumnName="AlternateAssessmentRationale" />
-          <ScalarProperty Name="IsPrivate" ColumnName="IsPrivate" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
         </MappingFragment>
       </EntityTypeMapping>

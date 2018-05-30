@@ -39,11 +39,11 @@ namespace Neptune.Web.Models
             return canManageStormwaterJurisdiction;
         }
 
-        public string AuditDescriptionString => $"Assessmentment Dated {AssessmentDate}";
+        public string AuditDescriptionString => $"Assessmentment Dated {GetAssessmentDate}";
 
         public int GetWaterYear()
         {
-            return AssessmentDate.GetFiscalYear();
+            return GetAssessmentDate.GetFiscalYear();
         }
 
         public bool IsAssessmentComplete()
@@ -55,11 +55,6 @@ namespace Neptune.Web.Models
         {
             return IsAssessmentComplete() || AlternateAssessmentScore != null;
         }
-
-        public bool IsPublicRegularAssessment()
-        {
-            return !IsPrivate;
-        }        
 
         public double? CalculateAssessmentScore()
         {
@@ -116,5 +111,16 @@ namespace Neptune.Web.Models
 
             return treatmentBMPObservation != null;
         }
+
+        public FieldVisit GetFieldVisit()
+        {
+            return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault() ??
+                   FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault();
+        }
+
+        public Person GetFieldVisitPerson => GetFieldVisit().PerformedByPerson;
+
+
+        public DateTime GetAssessmentDate => GetFieldVisit().VisitDate;
     }
 }

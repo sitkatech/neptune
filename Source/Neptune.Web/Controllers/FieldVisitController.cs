@@ -137,6 +137,25 @@ namespace Neptune.Web.Controllers
             return RazorView<Assessment, AssessmentViewData>(viewData);
         }
 
+        [HttpPost]
+        [FieldVisitEditFeature]
+        public ActionResult Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, AssessmentViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(FieldVisitAssessmentType.Initial);
+            if (treatmentBMPAssessment == null)
+            {
+                treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment,fieldVisit,FieldVisitAssessmentType.Initial);
+                return GetNextObservationTypeViewResult(fieldVisit, null, FieldVisitAssessmentType.Initial);
+            }
+            else
+            {
+
+                return GetNextObservationTypeViewResult(fieldVisit, null, FieldVisitAssessmentType.Initial);
+            }
+        }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -153,6 +172,25 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new PostMaintenanceAssessmentViewData(CurrentPerson, fieldVisit);
             return RazorView<PostMaintenanceAssessment, PostMaintenanceAssessmentViewData>(viewData);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        public ActionResult PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, PostMaintenanceAssessmentViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(FieldVisitAssessmentType.PostMaintenance);
+            if (treatmentBMPAssessment == null)
+            {
+                treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.PostMaintenance);
+                return GetNextObservationTypeViewResult(fieldVisit, null, FieldVisitAssessmentType.PostMaintenance);
+            }
+            else
+            {
+
+                return GetNextObservationTypeViewResult(fieldVisit, null, FieldVisitAssessmentType.PostMaintenance);
+            }
         }
 
         [HttpGet]
@@ -219,7 +257,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(treatmentBMP);
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
             return EditPostImpl(treatmentBMPAssessment, viewModel, fieldVisit, fieldVisitAssessmentType);
         }
@@ -260,24 +298,10 @@ namespace Neptune.Web.Controllers
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMPAssessment.PrimaryKey))
             {
-                treatmentBMPAssessment.PersonID = CurrentPerson.PersonID;
-                treatmentBMPAssessment.AssessmentDate = DateTime.Now;
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments
-                    .AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-                switch (fieldVisitAssessmentType)
-                {
-                    case FieldVisitAssessmentType.Initial:
-                        fieldVisit.InitialAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-                        break;
-                    case FieldVisitAssessmentType.PostMaintenance:
-                        fieldVisit.PostMaintenanceAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-                        break;
-                }
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, fieldVisitAssessmentType);
             }
 
             viewModel.UpdateModel(treatmentBMPAssessment, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("Assessment Information successfully saved.");
 
@@ -285,6 +309,25 @@ namespace Neptune.Web.Controllers
                 ? GetNextObservationTypeViewResult(fieldVisit, null, fieldVisitAssessmentType)
                 : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
                     c.EditAssessment(fieldVisit, (int) fieldVisitAssessmentType)));
+        }
+
+        private static void SaveNewAssessmentToFieldVisit(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisit fieldVisit,
+            FieldVisitAssessmentType fieldVisitAssessmentType)
+        {
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments
+                .AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            switch (fieldVisitAssessmentType)
+            {
+                case FieldVisitAssessmentType.Initial:
+                    fieldVisit.InitialAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
+                    break;
+                case FieldVisitAssessmentType.PostMaintenance:
+                    fieldVisit.PostMaintenanceAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
+                    break;
+            }
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
         }
 
         private ViewResult ViewEdit(TreatmentBMPAssessment treatmentBMPAssessment,
@@ -295,9 +338,9 @@ namespace Neptune.Web.Controllers
                 .PeopleWhoCanManageStormwaterJurisdictionExceptSitka().ToList();
             stormwaterJurisdictionPeople.AddRange(new[] {CurrentPerson});
 
-            if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.Person))
+            if (!stormwaterJurisdictionPeople.Contains(treatmentBMPAssessment.GetFieldVisitPerson))
             {
-                stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.Person);
+                stormwaterJurisdictionPeople.Add(treatmentBMPAssessment.GetFieldVisitPerson);
             }
 
             stormwaterJurisdictionPeople = stormwaterJurisdictionPeople.Distinct().ToList();
@@ -331,8 +374,10 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
             var viewModel =
                 new DiscreteCollectionMethodViewModel(existingObservation, treatmentBMPAssessmentObservationType);
-            var viewData = new DiscreteCollectionMethodViewData(fieldVisit, treatmentBMPAssessmentObservationType,fieldVisitAssessmentType,CurrentPerson);
-            return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
+            var viewData = new DiscreteCollectionMethodViewData(fieldVisit, treatmentBMPAssessmentObservationType,
+                fieldVisitAssessmentType, CurrentPerson);
+            return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                DiscreteCollectionMethodViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
@@ -349,8 +394,10 @@ namespace Neptune.Web.Controllers
             var treatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationTypePrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                var viewData = new DiscreteCollectionMethodViewData(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, CurrentPerson);
-                return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
+                var viewData = new DiscreteCollectionMethodViewData(fieldVisit, treatmentBMPAssessmentObservationType,
+                    fieldVisitAssessmentType, CurrentPerson);
+                return RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                    DiscreteCollectionMethodViewModel>(viewData, viewModel);
             }
 
             var treatmentBMPObservation =
@@ -360,9 +407,11 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType,
+                    fieldVisitAssessmentType)
                 : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                    c.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
+                    c.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType,
+                        fieldVisitAssessmentTypeID)));
         }
 
         private static TreatmentBMPObservation GetExistingTreatmentBMPObservationOrCreateNew(
@@ -440,9 +489,11 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType,
+                    fieldVisitAssessmentType)
                 : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                    c.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
+                    c.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType,
+                        fieldVisitAssessmentTypeID)));
         }
 
         [HttpGet]
@@ -464,7 +515,8 @@ namespace Neptune.Web.Controllers
             var viewData = new PassFailCollectionMethodViewData(fieldVisit,
                 treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, CurrentPerson);
             return
-                RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(
+                RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel
+                >(
                     viewData, viewModel);
         }
 
@@ -484,7 +536,8 @@ namespace Neptune.Web.Controllers
                 var viewData = new PassFailCollectionMethodViewData(fieldVisit,
                     treatmentBMPAssessmentObservationType, fieldVisitAssessmentType, CurrentPerson);
                 return
-                    RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(
+                    RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData,
+                        PassFailCollectionMethodViewModel>(
                         viewData, viewModel);
             }
 
@@ -496,9 +549,11 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType,
+                    fieldVisitAssessmentType)
                 : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                    c.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
+                    c.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType,
+                        fieldVisitAssessmentTypeID)));
         }
 
         [HttpGet]
@@ -554,14 +609,17 @@ namespace Neptune.Web.Controllers
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return viewModel.AutoAdvance
-                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentType)
+                ? GetNextObservationTypeViewResult(fieldVisit, treatmentBMPAssessmentObservationType,
+                    fieldVisitAssessmentType)
                 : RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                    c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, fieldVisitAssessmentTypeID)));
+                    c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType,
+                        fieldVisitAssessmentTypeID)));
         }
 
         #endregion
 
         #region Kill this?
+
         // todo: kill this?
         //[HttpGet]
         //[FieldVisitEditFeature]
@@ -604,18 +662,19 @@ namespace Neptune.Web.Controllers
         //    var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
         //    return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         //}
+
         #endregion
 
         #region Helper methods for Assessment
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson,
-                false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType);
         }
 
         private RedirectResult GetNextObservationTypeViewResult(FieldVisit fieldVisit,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType)
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
+            FieldVisitAssessmentType fieldVisitAssessmentType)
         {
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
@@ -625,7 +684,8 @@ namespace Neptune.Web.Controllers
 
             var nextObservationType = treatmentBMPAssessmentObservationType == null
                 ? orderedObservationTypes.First()
-                : orderedObservationTypes.ElementAtOrDefault(orderedObservationTypes.IndexOf(treatmentBMPAssessmentObservationType) + 1);
+                : orderedObservationTypes.ElementAtOrDefault(
+                    orderedObservationTypes.IndexOf(treatmentBMPAssessmentObservationType) + 1);
             var isNextPageScore = nextObservationType == null;
 
             var nextObservationTypeViewResult = isNextPageScore
@@ -635,7 +695,9 @@ namespace Neptune.Web.Controllers
                 : Redirect(nextObservationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType));
             return nextObservationTypeViewResult;
         }
+
         #endregion
+
         #endregion
     }
 

@@ -25,7 +25,7 @@ namespace Neptune.Web.Controllers
         {
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson);
             var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList()
-                .Where(x => x.IsPublicRegularAssessment()).OrderByDescending(x => x.AssessmentDate).ToList();
+                .OrderByDescending(x => x.GetAssessmentDate).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
             return gridJsonNetJObjectResult;

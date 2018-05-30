@@ -136,15 +136,6 @@ namespace Neptune.Web.Models
         public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var fieldVisitAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
-
-            yield return new FieldVisitSubsectionData
-            {
-                SubsectionName = "Assessment Information",
-                SubsectionUrl = fieldVisitAssessment == null ?
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>x.NewAssessment(fieldVisit, (int)fieldVisitAssessmentType)) :
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.EditAssessment(fieldVisit, (int)fieldVisitAssessmentType))
-            };
 
             foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))

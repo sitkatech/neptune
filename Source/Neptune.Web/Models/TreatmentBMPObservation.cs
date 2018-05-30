@@ -68,7 +68,7 @@ namespace Neptune.Web.Models
             {
                 var assessment = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetTreatmentBMPAssessment(TreatmentBMPAssessmentID);
                 var treatmentBMP = assessment == null ? null : HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(assessment.TreatmentBMPID);
-                var assessmentDate = assessment?.AssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
+                var assessmentDate = assessment?.GetAssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
                 var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
 
                 return $"Observation for BMP {treatmentBMPName} ({TreatmentBMPAssessmentObservationType?.TreatmentBMPAssessmentObservationTypeName}) on Assessment Dated {assessmentDate}";

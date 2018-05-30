@@ -29,19 +29,19 @@ Source code is available upon request via <support@sitkatech.com>.
     if(ViewDataTyped.InProgressFieldVisitExists)
      {
          <div>
-             There is a @FieldDefinition.FieldVisit.GetFieldDefinitionLabel() already in progress. Do you want to
+             There is a @FieldDefinition.FieldVisit.GetFieldDefinitionLabel() already in progress. Do you want to:
          </div>
          <div class="form-group">
              <div class="radio">
                  <label>
                      @Html.RadioButtonFor(m => m.Continue, true)
-                     <strong>Continue the existing @FieldDefinition.FieldVisit.GetFieldDefinitionLabel() from @ViewDataTyped.InProgressVisitDate.Value.ToShortDateString()</strong>
+                     <strong>Continue the existing visit from @ViewDataTyped.InProgressVisitDate.Value.ToShortDateString()</strong>
                  </label>
              </div>
              <div class="radio" style="margin-top: 10px;">
                  <label>
                      @Html.RadioButtonFor(m => m.Continue, false)
-                     <strong>Close the existing @FieldDefinition.FieldVisit.GetFieldDefinitionLabel() and begin a new one?</strong>
+                     <strong>Close the existing visit and begin a new one?</strong>
                  </label>
              </div>
          </div>

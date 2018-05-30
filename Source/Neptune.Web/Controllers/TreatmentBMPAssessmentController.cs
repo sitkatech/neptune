@@ -325,7 +325,7 @@ namespace Neptune.Web.Controllers
             var waterYear = treatmentBMPAssessment.GetWaterYear();
             var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.AssessmentDate.ToShortDateString()}?"
+                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate.ToShortDateString()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPAssessmentController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPAssessment), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
@@ -334,7 +334,7 @@ namespace Neptune.Web.Controllers
 
         private TreatmentBMPAssessment CreatePlaceholderTreatmentBMPAssessment(TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, DateTime.Now, CurrentPerson, false);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType);
         }
 
         [NeptuneViewFeature]
@@ -426,7 +426,7 @@ namespace Neptune.Web.Controllers
             PartialViewResult result = null;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, DateTime.Now, CurrentPerson.PersonID, null, string.Empty, false,
+                ModelObjectHelpers.NotYetAssignedID, null, string.Empty, 
                 string.Empty);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
             var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>

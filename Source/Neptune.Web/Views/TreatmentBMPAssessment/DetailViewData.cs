@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMPAssessment.TreatmentBMP.GetDetailUrl();
-            PageTitle = treatmentBMPAssessment.AssessmentDate.ToStringDate();
+            PageTitle = treatmentBMPAssessment.GetAssessmentDate.ToStringDate();
         }
     }
 }

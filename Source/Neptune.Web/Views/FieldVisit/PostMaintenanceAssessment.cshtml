@@ -51,9 +51,16 @@
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12">
         <p>I want to:</p>
-        <a href="@ViewDataTyped.BeginAssessmentUrl" class="btn btn-neptune" style="display: inline-block;">
-            <span>Begin the BMP Assessment</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
-        </a>
-        <a href="@ViewDataTyped.MaintenanceUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Maintenance <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+        @using (Html.BeginForm())
+        {
+            <button class="btn btn-neptune" style="display: inline-block;">
+                <span>
+                    @(ViewDataTyped.FieldVisit.PostMaintenanceAssessment == null ? "Begin the BMP Assessment" : "Continue the BMP Assessment")
+                </span>
+                <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
+            </button>
+
+            <a href="@ViewDataTyped.MaintenanceUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Maintenance <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+        }
     </div>
 </div>

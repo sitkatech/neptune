@@ -56,7 +56,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetDateAsDetailUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            return treatmentBMPAssessment == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID), treatmentBMPAssessment.AssessmentDate.ToShortDateString());
+            return treatmentBMPAssessment == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID), treatmentBMPAssessment.GetAssessmentDate.ToShortDateString());
         }
 
 

@@ -37,8 +37,8 @@ namespace Neptune.Web.Views.Assessment
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Conducted By", x => x.Person.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Date", x => x.AssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
+            Add("Conducted By", x => x.GetFieldVisitPerson.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Date", x => x.GetAssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Water Year", x => x.GetWaterYear().ToString("0000"), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Score", x => x.AlternateAssessmentScore ?? x.CalculateAssessmentScore(), 80);
             Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);

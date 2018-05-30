@@ -71,7 +71,7 @@ namespace Neptune.Web.Models
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.AssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
             return latestAssessment;
         }
 

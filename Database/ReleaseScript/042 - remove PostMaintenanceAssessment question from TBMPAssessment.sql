@@ -1,2 +1,14 @@
 alter table dbo.TreatmentBMPAssessment
 Drop column IsPostMaintenanceAssessment
+
+alter table dbo.TreatmentBMPAssessment drop constraint FK_TreatmentBMPAssessment_Person_PersonID
+alter table dbo.TreatmentBMPAssessment drop constraint FK_TreatmentBMPAssessment_Person_PersonID_TenantID
+
+alter table dbo.TreatmentBMPAssessment
+Drop column PersonID
+
+alter table dbo.TreatmentBMPAssessment
+Drop column AssessmentDate
+
+alter table dbo.TreatmentBMPAssessment
+Drop column IsPrivate
