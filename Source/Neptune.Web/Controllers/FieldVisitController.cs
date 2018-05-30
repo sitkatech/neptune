@@ -203,15 +203,6 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [FieldVisitEditFeature]
-        public ViewResult ManageVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
-        {
-            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new ManageVisitViewData(CurrentPerson, fieldVisit);
-            return RazorView<ManageVisit, ManageVisitViewData>(viewData);
-        }
-
-        [HttpGet]
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)

@@ -45,11 +45,11 @@
                             <a class="@(!ViewDataTyped.AssessmentInformationComplete ? "disabled" : string.Empty)" href="@("#") ">
                                 @if (ViewDataTyped.TreatmentBMPAssessment.IsObservationComplete(treatmentBMPAssessmentObservationType))
                                 {
-                                    <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
+                                    <span class='glyphicon glyphicon-ok field-validation-success text-left' style='margin-right: 4px'></span>
                                 }
                                 else
                                 {
-                                    <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
+                                    <span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>
                                 }
                                 <span>@treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName</span>
                             </a>

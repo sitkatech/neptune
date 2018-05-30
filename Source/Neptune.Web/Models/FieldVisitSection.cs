@@ -23,6 +23,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using System;
 using System.Linq;
+using System.Web;
 using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Models
@@ -64,6 +65,7 @@ namespace Neptune.Web.Models
     {
         public string SubsectionName { get; set; }
         public string SubsectionUrl { get; set; }
+        public HtmlString AssessmentCompletionStatusIndicator { get; set; }
     }
 
     public partial class FieldVisitSectionAssessment
@@ -118,24 +120,12 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class FieldVisitSectionManageVisit
-    {
-        public override string GetSectionUrl(FieldVisit fieldVisit)
-        {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.ManageVisit(fieldVisit));
-        }
-
-        public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
-        {
-            return new List<FieldVisitSubsectionData>();
-        }
-    }
-
     public class FieldVisitSectionImpl
     {
         public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
             foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
@@ -143,7 +133,10 @@ namespace Neptune.Web.Models
                 yield return new FieldVisitSubsectionData
                 {
                     SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
-                    SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType)
+                    SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType),
+                    AssessmentCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
+                    ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
+                        : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
                 };
             }
         }

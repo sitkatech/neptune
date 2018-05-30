@@ -246,10 +246,8 @@
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
     <Compile Include="Views\FieldVisit\Maintain.cs" />
-    <Compile Include="Views\FieldVisit\ManageVisitViewData.cs" />
     <Compile Include="Views\FieldVisit\PhotosViewData.cs" />
     <Compile Include="Views\FieldVisit\PostMaintenanceAssessment.cs" />
-    <Compile Include="Views\FieldVisit\ManageVisit.cs" />
     <Compile Include="Views\FieldVisit\Location.cs" />
     <Compile Include="Views\FieldVisit\Photos.cs" />
     <Compile Include="Views\FieldVisit\Attributes.cs" />
@@ -1086,7 +1084,6 @@
     <Content Include="Views\FieldVisit\Maintain.cshtml" />
     <Content Include="Views\FieldVisit\PostMaintenanceAssessment.cshtml" />
     <Content Include="Views\FieldVisit\WrapUpVisit.cshtml" />
-    <Content Include="Views\FieldVisit\ManageVisit.cshtml" />
     <Content Include="Views\FieldVisit\Photos.cshtml" />
     <Content Include="Views\FieldVisit\Location.cshtml" />
     <Content Include="Views\FieldVisit\Attributes.cshtml" />
