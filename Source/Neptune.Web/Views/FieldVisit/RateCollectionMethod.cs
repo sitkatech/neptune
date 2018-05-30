@@ -25,11 +25,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class RateCollectionMethod : TypedWebPartialViewPage<RateCollectionMethodViewData, RateCollectionMethodViewModel>
+    public abstract class RateCollectionMethod : TypedWebViewPage<RateCollectionMethodViewData, RateCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, RateCollectionMethodViewData viewData, RateCollectionMethodViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(viewData, viewModel);
-        }
     }
 }

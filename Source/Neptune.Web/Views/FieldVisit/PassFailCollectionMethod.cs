@@ -25,11 +25,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class PassFailCollectionMethod : TypedWebPartialViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
+    public abstract class PassFailCollectionMethod : TypedWebViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, PassFailCollectionMethodViewData viewData, PassFailCollectionMethodViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(viewData, viewModel);
-        }
     }
 }

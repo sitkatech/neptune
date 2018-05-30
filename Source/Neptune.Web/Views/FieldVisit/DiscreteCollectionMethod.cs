@@ -25,11 +25,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class DiscreteCollectionMethod : TypedWebPartialViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
+    public abstract class DiscreteCollectionMethod : TypedWebViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, DiscreteCollectionMethodViewData viewData, DiscreteCollectionMethodViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<DiscreteCollectionMethod, DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>(viewData, viewModel);
-        }
     }
 }

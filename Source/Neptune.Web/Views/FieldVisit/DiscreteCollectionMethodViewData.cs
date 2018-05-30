@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.FieldVisit
         public DiscreteCollectionMethodViewData(Models.FieldVisit fieldVisit,
             Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
             FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-        : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
+        : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
             ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema);
             MeasurementUnitLabelAndUnit =
@@ -46,8 +46,6 @@ namespace Neptune.Web.Views.FieldVisit
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-            SubsectionName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
-            SectionHeader = $"{SectionHeader} - {SubsectionName}";
         }
 
         public class DiscreteCollectionMethodViewDataForAngular

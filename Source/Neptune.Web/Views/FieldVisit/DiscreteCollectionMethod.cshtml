@@ -23,6 +23,10 @@
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.FieldVisit.DiscreteCollectionMethod
 
+@{
+    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
+}
+
 <script type="text/javascript" src="@Url.Content("~/Views/FieldVisit/DiscreteCollectionMethodController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[

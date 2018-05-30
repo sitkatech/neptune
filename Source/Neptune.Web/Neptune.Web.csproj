@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -417,8 +417,6 @@
     <Compile Include="Views\FieldVisit\BaseCollectionMethodForm.cs" />
     <Compile Include="Views\FieldVisit\BaseCollectionMethodFormViewData.cs" />
     <Compile Include="Views\FieldVisit\BaseCollectionMethodFormViewModel.cs" />
-    <Compile Include="Views\FieldVisit\CollectionMethodSection.cs" />
-    <Compile Include="Views\FieldVisit\CollectionMethodSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\CollectionMethodSectionViewModel.cs" />
     <Compile Include="Views\CustomAttributeType\Detail.cs" />
     <Compile Include="Views\CustomAttributeType\DetailViewData.cs" />
@@ -1070,7 +1068,6 @@
     <Content Include="Views\CustomAttributeType\Manage.cshtml" />
     <Content Include="Views\Shared\EditAttributes\EditAttributes.cshtml" />
     <Content Include="Views\MaintenanceRecord\EditMaintenanceRecord.cshtml" />
-    <Content Include="Views\FieldVisit\CollectionMethodSection.cshtml" />
     <Content Include="Views\FundingSource\Detail.cshtml" />
     <Content Include="Views\FundingSource\Edit.cshtml" />
     <Content Include="Views\FundingSource\Index.cshtml" />

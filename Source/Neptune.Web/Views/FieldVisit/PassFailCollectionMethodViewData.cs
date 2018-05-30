@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string SubmitUrl { get; }        
 
         public PassFailCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
             PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;

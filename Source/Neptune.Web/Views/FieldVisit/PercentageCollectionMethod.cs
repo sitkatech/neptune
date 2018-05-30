@@ -25,11 +25,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class PercentageCollectionMethod : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
+    public abstract class PercentageCollectionMethod : TypedWebViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, PercentageCollectionMethodViewData viewData, PercentageCollectionMethodViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(viewData, viewModel);
-        }
     }
 }

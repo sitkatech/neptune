@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string SubmitUrl { get; }        
 
         public PercentageCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
+            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
             ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PercentageSchema);
             MeasurementUnitLabelAndUnit = $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
