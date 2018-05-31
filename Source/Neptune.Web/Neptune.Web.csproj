@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\FieldVisitModelExtensions.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -225,7 +226,9 @@
     <Compile Include="Models\FundingEventFundingSourceSimple.cs" />
     <Compile Include="Models\TreatmentBMPSimple.cs" />
     <Compile Include="Security\FieldVisitCreateFeature.cs" />
+    <Compile Include="Security\FieldVisitDeleteFeature.cs" />
     <Compile Include="Security\FieldVisitEditFeature.cs" />
+    <Compile Include="Security\FieldVisitViewFeature.cs" />
     <Compile Include="Security\FundingEventManageFeature.cs" />
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />
@@ -246,6 +249,8 @@
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
     <Compile Include="Views\FieldVisit\Maintain.cs" />
+    <Compile Include="Views\FieldVisit\Index.cs" />
+    <Compile Include="Views\FieldVisit\IndexViewData.cs" />
     <Compile Include="Views\FieldVisit\PhotosViewData.cs" />
     <Compile Include="Views\FieldVisit\PostMaintenanceAssessment.cs" />
     <Compile Include="Views\FieldVisit\Location.cs" />
@@ -1089,6 +1094,7 @@
     <Content Include="Views\FieldVisit\Attributes.cshtml" />
     <Compile Include="Views\FieldVisit\FieldVisitGridSpec.cs" />
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
+    <Content Include="Views\FieldVisit\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -1,5 +1,5 @@
-/*-----------------------------------------------------------------------
-<copyright file="FieldVisit.cs" company="Tahoe Regional Planning Agency">
+﻿/*-----------------------------------------------------------------------
+<copyright file="Index.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,20 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using Neptune.Web.Controllers;
-
-namespace Neptune.Web.Models
+namespace Neptune.Web.Views.FieldVisit
 {
-    public partial class FieldVisit : IAuditableEntity
+    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
     {
-        public TreatmentBMPAssessment GetAssessmentByType(FieldVisitAssessmentType fieldVisitAssessmentType)
-        {
-            return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
-                ? InitialAssessment
-                : PostMaintenanceAssessment;
-        }
-
-        public string AuditDescriptionString => $"Field Visit deleted";
     }
 }

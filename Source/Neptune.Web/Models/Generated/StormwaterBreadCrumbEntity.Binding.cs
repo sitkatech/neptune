@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         public static readonly StormwaterBreadCrumbEntityUsers Users = StormwaterBreadCrumbEntityUsers.Instance;
         public static readonly StormwaterBreadCrumbEntityAssessments Assessments = StormwaterBreadCrumbEntityAssessments.Instance;
         public static readonly StormwaterBreadCrumbEntityFieldVisits FieldVisits = StormwaterBreadCrumbEntityFieldVisits.Instance;
+        public static readonly StormwaterBreadCrumbEntityFieldRecords FieldRecords = StormwaterBreadCrumbEntityFieldRecords.Instance;
 
         public static readonly List<StormwaterBreadCrumbEntity> All;
         public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntity> AllLookupDictionary;
@@ -33,7 +34,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static StormwaterBreadCrumbEntity()
         {
-            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments, FieldVisits };
+            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntity>(All.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
         }
 
@@ -109,6 +110,8 @@ namespace Neptune.Web.Models
             {
                 case StormwaterBreadCrumbEntityEnum.Assessments:
                     return Assessments;
+                case StormwaterBreadCrumbEntityEnum.FieldRecords:
+                    return FieldRecords;
                 case StormwaterBreadCrumbEntityEnum.FieldVisits:
                     return FieldVisits;
                 case StormwaterBreadCrumbEntityEnum.Jurisdiction:
@@ -132,7 +135,8 @@ namespace Neptune.Web.Models
         Jurisdiction = 3,
         Users = 4,
         Assessments = 5,
-        FieldVisits = 6
+        FieldVisits = 6,
+        FieldRecords = 7
     }
 
     public partial class StormwaterBreadCrumbEntityTreatmentBMP : StormwaterBreadCrumbEntity
@@ -169,5 +173,11 @@ namespace Neptune.Web.Models
     {
         private StormwaterBreadCrumbEntityFieldVisits(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
         public static readonly StormwaterBreadCrumbEntityFieldVisits Instance = new StormwaterBreadCrumbEntityFieldVisits(6, @"FieldVisits", @"Field Visits", @"glyphicon-globe", @"registrationColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityFieldRecords : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityFieldRecords(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityFieldRecords Instance = new StormwaterBreadCrumbEntityFieldRecords(7, @"FieldRecords", @"Field Records", @"glyphicon-globe", @"registrationColor");
     }
 }

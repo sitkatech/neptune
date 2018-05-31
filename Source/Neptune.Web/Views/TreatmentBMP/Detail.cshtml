@@ -242,34 +242,6 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12">
-                <div class="panel panelNeptune">
-                    <div class="panel-heading panelTitle">
-                        Assessments
-                    </div>
-                    <div class="panel-body">
-                        @if (!ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
-                        {
-                            <p class="systemText">
-                                BMP cannot be assessed until benchmark and threshold values for each observation type are entered
-                            </p>
-                        }
-                        @if (ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any())
-                        {
-                            @Html.DhtmlxGrid(ViewDataTyped.AssessmentGridSpec, ViewDataTyped.AssessmentGridName, ViewDataTyped.AssessmentGridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-                        }
-                        @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPAssessments.Any() && ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdsComplete())
-                        {
-                            <p class="systemText">
-                                BMP has not been assessed
-                            </p>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <div class="panel panelNeptune">
                     <div class="panel-heading panelTitle">
@@ -366,43 +338,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
+                                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
                                     {
                                         <tr>
-                                            <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
-                                            <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
-                                            <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), TreatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                            <td>@treatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
+                                            <td>@treatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
+                                            <td>@treatmentBMPAssessmentObservationType.GetFormattedThresholdValue(treatmentBMPAssessmentObservationType.GetThresholdValue(ViewDataTyped.TreatmentBMP), treatmentBMPAssessmentObservationType.GetBenchmarkValue(ViewDataTyped.TreatmentBMP))</td>
                                         </tr>
                                     }
 
                                 </tbody>
                             </table>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="panel panelNeptune">
-                    <div class="panel-heading panelTitle">
-                        Maintenance History
-                        @if (ViewDataTyped.CurrentPersonCanManage)
-                        {
-                            <span class="pull-right">
-                                <a href="@ViewDataTyped.NewMaintenanceRecordUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")</a>
-                            </span>
-                        }
-                    </div>
-                    <div class="panel-body">
-                        @if (ViewDataTyped.TreatmentBMP.MaintenanceRecords.Any())
-                        {
-                            @Html.DhtmlxGrid(ViewDataTyped.MaintenanceRecordGridSpec, ViewDataTyped.MaintenanceRecordGridName, ViewDataTyped.MaintenanceRecordGridUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-                        }
-                        else
-                        {
-                            <p class="systemText">There are no @FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabelPluralized() for this @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()</p>
                         }
                     </div>
                 </div>

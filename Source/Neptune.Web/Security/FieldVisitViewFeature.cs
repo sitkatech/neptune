@@ -1,6 +1,6 @@
-/*-----------------------------------------------------------------------
-<copyright file="FieldVisit.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+﻿/*-----------------------------------------------------------------------
+<copyright file="FieldVisitViewFeature.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -19,19 +19,10 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Controllers;
-
-namespace Neptune.Web.Models
+namespace Neptune.Web.Security
 {
-    public partial class FieldVisit : IAuditableEntity
+    [SecurityFeatureDescription("View Field Visit")]
+    public class FieldVisitViewFeature : NeptuneViewFeature
     {
-        public TreatmentBMPAssessment GetAssessmentByType(FieldVisitAssessmentType fieldVisitAssessmentType)
-        {
-            return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
-                ? InitialAssessment
-                : PostMaintenanceAssessment;
-        }
-
-        public string AuditDescriptionString => $"Field Visit deleted";
     }
 }
