@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("# of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);                
             Add("Last Maintenance Date", x => x.LastMaintainedDateTime(), 130, DhtmlxGridColumnFormatType.Date);
             Add("# of Maintenance Events", x => x.MaintenanceRecords.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
-            Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesOrEmpty(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }
