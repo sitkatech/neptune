@@ -116,6 +116,19 @@ namespace Neptune.Web.Views.TreatmentBMP
             {
                 treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
                 treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
+
+                var treatmentBmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x =>
+                    x.TreatmentBMPTypeID == TreatmentBMPTypeID);
+                foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
+                {
+                    var treatmentBmpBenchmarkAndThreshold =
+                        new Models.TreatmentBMPBenchmarkAndThreshold(treatmentBMP,
+                            a, treatmentBmpType,
+                            a.TreatmentBMPAssessmentObservationType,
+                            a.DefaultBenchmarkValue ?? 0,
+                            a.DefaultThresholdValue ?? 0);
+                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
+                }
             }
 
             treatmentBMP.SystemOfRecordID = SystemOfRecordID;
