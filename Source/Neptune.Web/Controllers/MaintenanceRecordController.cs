@@ -27,6 +27,17 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
+        {
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes;
+            var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords.ToList();
+            var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
         [HttpGet]
         [TreatmentBMPManageFeature]
         public ViewResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)

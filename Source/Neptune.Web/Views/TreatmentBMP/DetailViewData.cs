@@ -47,10 +47,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string FieldVisitGridName { get; }
         public string FieldVisitGridDataUrl { get; }
 
-        public TreatmentBMPAssessmentGridSpec AssessmentGridSpec { get; }
-        public string AssessmentGridName { get; }
-        public string AssessmentGridDataUrl { get; }
-
         public string NewTreatmentBMPDocumentUrl { get; }
         public string NewTreatmentBMPImageUrl { get; }
         public string EditTreatmentBMPImagesUrl { get; }
@@ -59,11 +55,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public ImageCarouselViewData ImageCarouselViewData { get; }
         public string EditTreatmentBMPPerformanceAndModelingAttributesUrl { get; }
         public string EditTreatmentBMPOtherDesignAttributesUrl { get; }
-
-        public string MaintenanceRecordGridName { get; }
-        public MaintenanceRecordGridSpec MaintenanceRecordGridSpec { get; }
-        public string MaintenanceRecordGridUrl { get; }
-        public string NewMaintenanceRecordUrl { get; }
         public string NewFieldVisitUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
@@ -87,20 +78,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson);
             FieldVisitGridName = "FieldVisit";
             FieldVisitGridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.FieldVisitGridJsonData(treatmentBMP));
-
-            AssessmentGridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson);
-            AssessmentGridName = "Assessment";
-            AssessmentGridDataUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.AssessmentGridJsonData(treatmentBMP));
-
-            MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(CurrentPerson, treatmentBMP);
-            MaintenanceRecordGridName = "MaintenanceRecord";
-            MaintenanceRecordGridUrl =
-                SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(c =>
-                    c.MaintenanceRecordsGridJsonData(treatmentBMP));
-
             NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
 
-            NewMaintenanceRecordUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
             NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
             EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));

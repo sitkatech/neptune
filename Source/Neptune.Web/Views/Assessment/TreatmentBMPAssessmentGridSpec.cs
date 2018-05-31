@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -30,7 +31,8 @@ namespace Neptune.Web.Views.Assessment
 {
     public class TreatmentBMPAssessmentGridSpec : GridSpec<Models.TreatmentBMPAssessment>
     {
-        public TreatmentBMPAssessmentGridSpec(Person currentPerson)
+        public TreatmentBMPAssessmentGridSpec(Person currentPerson,
+            IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
@@ -44,6 +46,14 @@ namespace Neptune.Web.Views.Assessment
             Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.AlternativeScore.ToGridHeaderString(), x => x.AlternateAssessmentScore.HasValue ? "Yes" : "No", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Alternative Score Rationale", x => x.AlternateAssessmentRationale, 200);
+            foreach (Models.TreatmentBMPAssessmentObservationType observationType in allObservationTypes)
+            {
+                Add(observationType.TreatmentBMPAssessmentObservationTypeName,
+                    x => x?.TreatmentBMPObservations?.SingleOrDefault(y =>
+                                 y.TreatmentBMPAssessmentObservationTypeID ==
+                                 observationType.TreatmentBMPAssessmentObservationTypeID)?.CalculateObservationValue()
+                             ?.ToString() ?? "N/A", 150, DhtmlxGridColumnFilterType.Text);
+            }
         }
     }
 }

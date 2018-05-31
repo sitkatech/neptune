@@ -44,7 +44,33 @@
                 Field Record Table
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:600px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assessment Record Table
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBMPAssessmentGridSpec, ViewDataTyped.TreatmentBMPAssessmentGridName, ViewDataTyped.TreatmentBMPAssessmentGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Maintenance Record Table
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.MaintenanceRecordGridSpec, ViewDataTyped.MaintenanceRecordGridName, ViewDataTyped.MaintenanceRecordGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
     </div>

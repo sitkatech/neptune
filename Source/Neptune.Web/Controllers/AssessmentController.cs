@@ -16,14 +16,14 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.Assessment);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
-            var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson);
+            var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
             var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList()
                 .OrderByDescending(x => x.GetAssessmentDate).ToList();
             var gridJsonNetJObjectResult =
