@@ -75,15 +75,15 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
-            Add("Performed By", x => x.PerformedByOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
-            Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Organization", x => x.PerformedByOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Performed By", x => x.EnteredByPerson.GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
             foreach (var attributeType in allMaintenanceAttributeTypes)
             {
-                Add(attributeType.CustomAttributeTypeName,
+                Add(attributeType.DisplayNameWithUnits(),
                     x => x?.MaintenanceRecordObservations?
                         .SingleOrDefault(y => y.CustomAttributeTypeID == attributeType.CustomAttributeTypeID)?
                         .GetObservationValueWithUnits() ?? "N/A", 150, DhtmlxGridColumnFilterType.Text);

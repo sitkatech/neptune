@@ -31,8 +31,8 @@ namespace Neptune.Web.Views.FieldVisit
             EntityName = "Field Records";
             GridSpec = new FieldVisitGridSpec(currentPerson)
             {
-                ObjectNameSingular = "Field Record",
-                ObjectNamePlural = "Field Records",
+                ObjectNameSingular = "Field Visit",
+                ObjectNamePlural = "Field Visits",
                 SaveFiltersInCookie = true
             };
             GridName = "fieldVisitsGrid";

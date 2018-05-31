@@ -39,6 +39,12 @@ namespace Neptune.Web.Models
             return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
         }
 
+        public string DisplayNameWithUnits()
+        {
+            return
+                $"{TreatmentBMPAssessmentObservationTypeName} {(MeasurementUnitType != null ? $"({MeasurementUnitType.MeasurementUnitTypeDisplayName})" : string.Empty)}";
+        }
+
         public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
         public bool ThresholdIsRelativePercentOfBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
         public bool TargetIsSweetSpot => ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;

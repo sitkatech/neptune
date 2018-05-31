@@ -34,21 +34,19 @@ namespace Neptune.Web.Views.Assessment
         public TreatmentBMPAssessmentGridSpec(Person currentPerson,
             IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
         {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Conducted By", x => x.GetFieldVisitPerson.FullNameFirstLast, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Performed By", x => x.GetFieldVisitPerson.GetFullNameFirstLastAsUrl(), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Date", x => x.GetAssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Water Year", x => x.GetWaterYear().ToString("0000"), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Score", x => x.AlternateAssessmentScore ?? x.CalculateAssessmentScore(), 80);
             Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(Models.FieldDefinition.AlternativeScore.ToGridHeaderString(), x => x.AlternateAssessmentScore.HasValue ? "Yes" : "No", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Alternative Score Rationale", x => x.AlternateAssessmentRationale, 200);
             foreach (Models.TreatmentBMPAssessmentObservationType observationType in allObservationTypes)
             {
-                Add(observationType.TreatmentBMPAssessmentObservationTypeName,
+                Add(observationType.DisplayNameWithUnits(),
                     x => x?.TreatmentBMPObservations?.SingleOrDefault(y =>
                                  y.TreatmentBMPAssessmentObservationTypeID ==
                                  observationType.TreatmentBMPAssessmentObservationTypeID)?.CalculateObservationValue()

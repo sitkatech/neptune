@@ -23,7 +23,7 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
-    public partial class FieldVisit
+    public partial class FieldVisit : IAuditableEntity
     {
         public TreatmentBMPAssessment GetAssessmentByType(FieldVisitAssessmentType fieldVisitAssessmentType)
         {
@@ -31,5 +31,7 @@ namespace Neptune.Web.Models
                 ? InitialAssessment
                 : PostMaintenanceAssessment;
         }
+
+        public string AuditDescriptionString => $"Field Visit deleted";
     }
 }
