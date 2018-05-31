@@ -24,13 +24,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 AssessmentInformationUrl = "#";
                 AssessmentInformationComplete = false;
             }
-            else
-            {
-                //AssessmentInformationUrl =
-                //    SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
-                //        x.Edit(TreatmentBMPAssessment));
-                //AssessmentInformationComplete = true;
-            }
 
             ScoreUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(x =>
                 x.Score(TreatmentBMPAssessment));
