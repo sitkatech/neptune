@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public readonly bool CurrentPersonCanManage;
         public readonly bool CanEdit;
         public readonly ScoreDetailViewData ScoreDetailViewData;
+        public readonly string EditBenchmarkAndThresholdUrl;
 
         
         public DetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
@@ -40,6 +41,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             TreatmentBMPAssessment = treatmentBMPAssessment;
             CurrentPersonCanManage = CurrentPerson.CanManageStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);
             ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
+            EditBenchmarkAndThresholdUrl =
+                SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x =>
+                    x.Instructions(treatmentBMPAssessment.TreatmentBMP));
 
             CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson);
 
