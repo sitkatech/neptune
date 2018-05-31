@@ -22,22 +22,15 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared.SortOrder;
-using Neptune.Web.Views.TreatmentBMPAssessment;
-using AssessmentInformation = Neptune.Web.Views.FieldVisit.AssessmentInformation;
-using AssessmentInformationViewData = Neptune.Web.Views.FieldVisit.AssessmentInformationViewData;
-using AssessmentInformationViewModel = Neptune.Web.Views.FieldVisit.AssessmentInformationViewModel;
 
 namespace Neptune.Web.Controllers
 {
@@ -57,6 +50,15 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet]
+        [FieldVisitViewFeature]
+        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData()
+        {
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }

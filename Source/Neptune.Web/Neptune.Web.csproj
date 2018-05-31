@@ -247,6 +247,8 @@
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
     <Compile Include="Views\FieldVisit\Maintain.cs" />
+    <Compile Include="Views\FieldVisit\Index.cs" />
+    <Compile Include="Views\FieldVisit\IndexViewData.cs" />
     <Compile Include="Views\FieldVisit\PhotosViewData.cs" />
     <Compile Include="Views\FieldVisit\PostMaintenanceAssessment.cs" />
     <Compile Include="Views\FieldVisit\Location.cs" />
@@ -1090,6 +1092,7 @@
     <Content Include="Views\FieldVisit\Attributes.cshtml" />
     <Compile Include="Views\FieldVisit\FieldVisitGridSpec.cs" />
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
+    <Content Include="Views\FieldVisit\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
