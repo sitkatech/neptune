@@ -19,12 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
+using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -34,12 +37,32 @@ namespace Neptune.Web.Views.FieldVisit
         {
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
+
+            Add(string.Empty,
+                x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
+                    new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
+            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Status", x => x.FieldVisitStatus.FieldVisitStatusDisplayName, 85, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Initial Assessment?", x => (x.InitialAssessment != null) ? "Yes" : "No", 95, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Maintenance Occurred?", x => (x.MaintenanceRecord != null) ? "Yes" : "No", 85, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Post-Maintenance Assessment?", x => (x.PostMaintenanceAssessment != null) ? "Yes" : "No", 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Status", x => x.GetStatusAsWorkflowUrl(), 85,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Initial Assessment?",
+                x => x.InitialAssessmentID != null
+                    ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), "Yes",
+                           new Dictionary<string, string> ())
+                    : new HtmlString("No"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Maintenance Occurred?",
+                x => x.MaintenanceRecordID != null
+                    ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "Yes",
+                        new Dictionary<string, string>())
+                    : new HtmlString("No"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Post-Maintenance Assessment?",
+                x => x.PostMaintenanceAssessmentID != null
+                    ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), "Yes",
+                        new Dictionary<string, string>())
+                    : new HtmlString("No"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
         }
     }
 }

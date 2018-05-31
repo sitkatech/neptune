@@ -18,5 +18,11 @@ namespace Neptune.Web.Models
         {
             return CustomAttributeTypeOptionsSchema != null ? JsonConvert.DeserializeObject<List<string>>(CustomAttributeTypeOptionsSchema) : new List<string>();
         }
+
+        public string DisplayNameWithUnits()
+        {
+            return
+                $"{CustomAttributeTypeName} {(MeasurementUnitType != null ? $"({MeasurementUnitType.MeasurementUnitTypeDisplayName})" : string.Empty)}";
+        }
     }
 }

@@ -22,27 +22,79 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
+using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.SortOrder;
-using Neptune.Web.Views.TreatmentBMPAssessment;
-using AssessmentInformation = Neptune.Web.Views.FieldVisit.AssessmentInformation;
-using AssessmentInformationViewData = Neptune.Web.Views.FieldVisit.AssessmentInformationViewData;
-using AssessmentInformationViewModel = Neptune.Web.Views.FieldVisit.AssessmentInformationViewModel;
 
 namespace Neptune.Web.Controllers
 {
     public class FieldVisitController : NeptuneBaseController
     {
+        [HttpGet]
+        [FieldVisitViewFeature]
+        public ViewResult Index()
+        {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FieldRecords);
+            var maintenanceAttributeTypes =
+                HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x=>x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, maintenanceAttributeTypes, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
+            return RazorView<Index, IndexViewData>(viewData);
+        }
+
+        [HttpGet]
+        [FieldVisitViewFeature]
+        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
+            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        [HttpGet]
+        [FieldVisitViewFeature]
+        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
+        {
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+            try
+            {
+                var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+
+                return gridJsonNetJObjectResult;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Field Visits for a given Treatment BMP and out-returns the appropriate grid spec.
+        /// If treatmentBMP is null, returns all Field Visits 
+        /// </summary>
+        /// <param name="gridSpec"></param>
+        /// <param name="currentPerson"></param>
+        /// <param name="treatmentBMP"></param>
+        /// <returns></returns>
+        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
+            TreatmentBMP treatmentBMP)
+        {
+            gridSpec = new FieldVisitGridSpec(currentPerson);
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits;
+            return (treatmentBMP != null
+                ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                : fieldVisits).ToList();
+        }
+
         [HttpGet]
         [FieldVisitCreateFeature]
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
@@ -200,25 +252,6 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
             return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
-            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
-            TreatmentBMP treatmentBMP)
-        {
-            gridSpec = new FieldVisitGridSpec(currentPerson);
-            return HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x =>
-                x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
         }
 
         #region Assessment-Related Actions
@@ -535,6 +568,81 @@ namespace Neptune.Web.Controllers
 
         #endregion
         #endregion
+
+
+
+        [HttpGet]
+        [FieldVisitDeleteFeature]
+        public PartialViewResult Delete(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewDeleteFieldVisit(fieldVisit, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteFieldVisit(fieldVisit, viewModel);
+            }
+
+            var fieldVisitInitialAssessment = fieldVisit.InitialAssessment;
+            if (fieldVisitInitialAssessment != null)
+            {
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitInitialAssessment);
+            }
+            var fieldVisitMaintenanceRecord = fieldVisit.MaintenanceRecord;
+            if (fieldVisitMaintenanceRecord != null)
+            {
+                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Remove(fieldVisitMaintenanceRecord);
+            }
+            var fieldVisitPostMaintenanceAssessment = fieldVisit.PostMaintenanceAssessment;
+            if (fieldVisitPostMaintenanceAssessment != null)
+            {
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitPostMaintenanceAssessment);
+            }
+            fieldVisit.DeleteFull();
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            SetMessageForDisplay("Successfully deleted the field visit.");
+
+            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index()));
+        }
+
+        private PartialViewResult ViewDeleteFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to delete the field visit from '{fieldVisit.VisitDate}'?{AssociatedFieldVisitEntitiesString(fieldVisit)}";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        private static string AssociatedFieldVisitEntitiesString(FieldVisit fieldVisit)
+        {
+            var entitiesSubstrings = new List<string>
+            {
+                (fieldVisit.InitialAssessment != null) ? "initial assessment" : null,
+                fieldVisit.PostMaintenanceAssessment != null ? "post-maintenance assessment" : null,
+                fieldVisit.MaintenanceRecord != null ? "maintenance record" : null
+            };
+            var entitiesConcatenated = string.Join(", ", entitiesSubstrings.Where(x => x != null));
+            var lastComma = entitiesConcatenated?.LastIndexOf(",");
+            string associatedFieldVisitEntitiesString;
+            if (lastComma.HasValue && lastComma.Value > -1)
+            {
+                associatedFieldVisitEntitiesString = entitiesConcatenated.Insert(lastComma.Value + 1, " and");
+            }
+            else
+            {
+                associatedFieldVisitEntitiesString = entitiesConcatenated;
+            }
+
+            return (!associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "");
+        }
     }
 
     public enum FieldVisitAssessmentType

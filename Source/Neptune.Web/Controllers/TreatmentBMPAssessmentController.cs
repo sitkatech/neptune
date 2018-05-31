@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
+using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -63,6 +64,8 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMPAssessment.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
+            treatmentBMPAssessment.FieldVisitsWhereYouAreTheInitialAssessment.ForEach(x=>x.InitialAssessmentID = null);
+            treatmentBMPAssessment.FieldVisitsWhereYouAreThePostMaintenanceAssessment.ForEach(x=>x.PostMaintenanceAssessmentID = null);
             treatmentBMPAssessment.DeleteTreatmentBMPAssessment();
 
             SetMessageForDisplay("BMP Assessment successfully deleted.");
