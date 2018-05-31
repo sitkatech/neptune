@@ -226,6 +226,7 @@
     <Compile Include="Models\TreatmentBMPSimple.cs" />
     <Compile Include="Security\FieldVisitCreateFeature.cs" />
     <Compile Include="Security\FieldVisitEditFeature.cs" />
+    <Compile Include="Security\FieldVisitViewFeature.cs" />
     <Compile Include="Security\FundingEventManageFeature.cs" />
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />

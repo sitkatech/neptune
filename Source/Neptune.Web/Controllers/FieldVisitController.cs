@@ -44,6 +44,42 @@ namespace Neptune.Web.Controllers
     public class FieldVisitController : NeptuneBaseController
     {
         [HttpGet]
+        [FieldVisitViewFeature]
+        public ViewResult Index()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        [FieldVisitViewFeature]
+        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
+            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        /// <summary>
+        /// Gets the Field Visits for a given Treatment BMP and out-returns the appropriate grid spec.
+        /// If treatmentBMP is null, returns all Field Visits 
+        /// </summary>
+        /// <param name="gridSpec"></param>
+        /// <param name="currentPerson"></param>
+        /// <param name="treatmentBMP"></param>
+        /// <returns></returns>
+        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
+            TreatmentBMP treatmentBMP)
+        {
+            gridSpec = new FieldVisitGridSpec(currentPerson);
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits;
+            return (treatmentBMP != null
+                ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
+                : fieldVisits).ToList();
+        }
+
+        [HttpGet]
         [FieldVisitCreateFeature]
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -200,25 +236,6 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
             return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
-            TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
-            TreatmentBMP treatmentBMP)
-        {
-            gridSpec = new FieldVisitGridSpec(currentPerson);
-            return HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x =>
-                x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
         }
 
         #region Assessment-Related Actions
