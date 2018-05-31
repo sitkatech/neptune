@@ -19,7 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
+using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
@@ -35,11 +37,27 @@ namespace Neptune.Web.Views.FieldVisit
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Status", x => x.FieldVisitStatus.FieldVisitStatusDisplayName, 85, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Initial Assessment?", x => (x.InitialAssessment != null) ? "Yes" : "No", 95, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Maintenance Occurred?", x => (x.MaintenanceRecord != null) ? "Yes" : "No", 85, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Post-Maintenance Assessment?", x => (x.PostMaintenanceAssessment != null) ? "Yes" : "No", 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Status", x => x.FieldVisitStatus.FieldVisitStatusDisplayName, 85,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Initial Assessment",
+                x => x.InitialAssessmentID != null
+                    ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), "View",
+                        new Dictionary<string, string> {{"class", "gridButton"}})
+                    : new HtmlString(string.Empty), 95, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Maintenance Occurred?",
+                x => x.MaintenanceRecordID != null
+                    ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "View",
+                        new Dictionary<string, string> {{"class", "gridButton"}})
+                    : new HtmlString(string.Empty), 85,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Post-Maintenance Assessment?",
+                x => x.PostMaintenanceAssessmentID != null
+                    ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), "View",
+                        new Dictionary<string, string> {{"class", "gridButton"}})
+                    : new HtmlString(string.Empty), 120,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }
