@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.FieldVisit
             EntityName = "Field Records";
             GridSpec = new FieldVisitGridSpec(currentPerson) {ObjectNameSingular = "Field Record", ObjectNamePlural = "Field Records", SaveFiltersInCookie = true};
             GridName = "fieldVisitsGrid";
-            GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(j => j.FieldVisitGridJsonData());
+            GridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }
     }

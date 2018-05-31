@@ -40,7 +40,9 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public ViewResult Index()
         {
-            throw new NotImplementedException();
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FieldRecords);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            return RazorView<Index, IndexViewData>(viewData);
         }
 
         [HttpGet]
@@ -48,7 +50,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData(
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
@@ -56,9 +58,9 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitViewFeature]
-        public GridJsonNetJObjectResult<FieldVisit> FieldVisitGridJsonData()
+        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+           var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
