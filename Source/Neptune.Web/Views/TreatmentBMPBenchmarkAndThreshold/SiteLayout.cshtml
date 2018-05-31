@@ -33,11 +33,11 @@ Source code is available upon request via <support@sitkatech.com>.
                     <li class="@(ViewDataTyped.SectionName == InstructionsViewData.InstructionsSectionName ? "active" : string.Empty)">
                         <a href="@ViewDataTyped.InstructionsUrl"><span style="margin-left: 22px">Instructions</span></a>
                     </li>
-                    @foreach (var TreatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
+                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x=>x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
                     {
-                        <li class="@(ViewDataTyped.SectionName == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
-                            <a href="@TreatmentBMPAssessmentObservationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
-                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType))
+                        <li class="@(ViewDataTyped.SectionName == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName ? "active" : string.Empty)">
+                            <a href="@treatmentBMPAssessmentObservationType.BenchmarkAndThresholdUrl(ViewDataTyped.TreatmentBMP)">                                
+                                @if (ViewDataTyped.TreatmentBMP.IsBenchmarkAndThresholdCompleteForObservationType(treatmentBMPAssessmentObservationType))
                                 {
                                     <span class="glyphicon glyphicon-ok field-validation-success text-left" style="margin-right: 4px"></span>
                                 }
@@ -45,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                 {
                                     <span class="glyphicon glyphicon-exclamation-sign field-validation-warning text-left" style="margin-right: 4px"></span>
                                 }
-                                @TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
+                                @treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName
                             </a>
                         </li>
                     }

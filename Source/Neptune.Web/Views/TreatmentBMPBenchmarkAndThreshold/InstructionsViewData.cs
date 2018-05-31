@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             : base(currentPerson, treatmentBMP)
         {
             NextSectionUrl = treatmentBMP.HasSettableBenchmarkAndThresholdValues()
-                ? TreatmentBMP.TreatmentBMPType.GetObservationTypes().OrderBy(x => x.TreatmentBMPAssessmentObservationTypeName).First(x => x.HasBenchmarkAndThreshold).BenchmarkAndThresholdUrl(treatmentBMP)
+                ? TreatmentBMP.TreatmentBMPType.GetObservationTypes().First(x => x.HasBenchmarkAndThreshold).BenchmarkAndThresholdUrl(treatmentBMP)
                 : SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(treatmentBMP.TreatmentBMPTypeID));
         
         }

@@ -537,9 +537,9 @@ namespace Neptune.Web.Controllers
                 ? orderedObservationTypes.First()
                 : orderedObservationTypes.ElementAtOrDefault(
                     orderedObservationTypes.IndexOf(treatmentBMPAssessmentObservationType) + 1);
-            var isNextPageScore = nextObservationType == null;
+            var isLastPage = nextObservationType == null;
 
-            var nextObservationTypeViewResult = isNextPageScore
+            var nextObservationTypeViewResult = isLastPage
                 ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
                     ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
                     : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))

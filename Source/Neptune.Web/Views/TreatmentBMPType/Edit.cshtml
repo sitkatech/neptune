@@ -98,8 +98,8 @@
                     <th></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.TreatmentBMPAssessmentObservationType)</th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.ObservationCollectionMethod)</th>
-                    <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
-                    <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.DefaultBenchmarkValue)</th>
+                    <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.DefaultThresholdValue)</th>
                     <th class="text-right">@Html.LabelWithSugarFor(FieldDefinition.AssessmentScoreWeight)</th>
                     <th style="width: 32px"></th>
                     <th class="text-left">@Html.LabelWithSugarFor(FieldDefinition.AssessmentFailsIfObservationFails) </th>
@@ -112,13 +112,13 @@
                     <td class="text-left" ng-bind="getObservationCollectionMethodTypeName(treatmentBMPTypeObservationTypeSimple)"></td>
 
                     @*if observation type is not pass/fail*@
-                    <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID)" class="text-right">
+                    <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID)" class="text-left">
                         <div class="input-group">
                             <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultBenchmarkValue" class="form-control" aria-describedby="benchmarkUnit{{$index}}" />
                             <span class="input-group-addon" id="benchmarkUnit{{$index}}" ng-bind="getObservationTypeBenchmarkUnit(treatmentBMPTypeObservationTypeSimple)"></span>
                         </div>
                     </td>
-                    <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID)" class="text-right">
+                    <td ng-if="observationTypeHasBenchmarkAndThresholds(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID)" class="text-left">
                         <div class="input-group">
                             <span ng-if="observationTypeTargetIsSweetSpot(treatmentBMPTypeObservationTypeSimple.TreatmentBMPAssessmentObservationTypeID)" class="input-group-addon">+/-</span>
                             <input type="number" ng-model="treatmentBMPTypeObservationTypeSimple.DefaultThresholdValue" class="form-control" aria-describedby="thresholdUnit{{$index}}" />
