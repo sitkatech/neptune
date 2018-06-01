@@ -116,14 +116,6 @@
       <End Role="Organization" EntitySet="Organization" />
       <End Role="FundingSources" EntitySet="FundingSource" />
     </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
-      <End Role="PerformedByOrganization" EntitySet="Organization" />
-      <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" EntitySet="MaintenanceRecord" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
-      <End Role="EnteredByPerson" EntitySet="Person" />
-      <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" EntitySet="MaintenanceRecord" />
-    </AssociationSet>
     <AssociationSet Name="FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="MaintenanceRecords" EntitySet="MaintenanceRecord" />
@@ -492,11 +484,8 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="MaintenanceRecordID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="MaintenanceRecordDate" Type="datetime" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
     <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
-    <Property Name="EnteredByPersonID" Type="int" Nullable="false" />
-    <Property Name="PerformedByOrganizationID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="MaintenanceRecordObservation">
     <Key>
@@ -587,7 +576,6 @@ warning 6035: The relationship 'FK_NeptunePageImage_NeptunePage_NeptunePageID_Te
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FundingSource_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_MaintenanceRecord_Organization_PerformedByOrganizationID_TenantID_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_Person_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_StormwaterJurisdiction_Organization_OrganizationID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
@@ -624,7 +612,6 @@ warning 6035: The relationship 'FK_Organization_OrganizationType_OrganizationTyp
 warning 6035: The relationship 'FK_AuditLog_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_FieldVisit_Person_PerformedByPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_FileResource_Person_CreatePersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-warning 6035: The relationship 'FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_ModeledCatchmentGeometryStaging_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_Notification_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_Organization_Person_PrimaryContactPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -1106,30 +1093,6 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Principal>
       <Dependent Role="FundingSources">
         <PropertyRef Name="OrganizationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID">
-    <End Role="PerformedByOrganization" Type="Neptune.Web.Models.Store.Organization" Multiplicity="1" />
-    <End Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PerformedByOrganization">
-        <PropertyRef Name="OrganizationID" />
-      </Principal>
-      <Dependent Role="MaintenanceRecordsWhereYouAreThePerformedByOrganization">
-        <PropertyRef Name="PerformedByOrganizationID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID">
-    <End Role="EnteredByPerson" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
-    <End Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson" Type="Neptune.Web.Models.Store.MaintenanceRecord" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="EnteredByPerson">
-        <PropertyRef Name="PersonID" />
-      </Principal>
-      <Dependent Role="MaintenanceRecordsWhereYouAreTheEnteredByPerson">
-        <PropertyRef Name="EnteredByPersonID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

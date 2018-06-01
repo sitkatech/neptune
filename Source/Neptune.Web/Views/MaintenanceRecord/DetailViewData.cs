@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = maintenanceRecord.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = maintenanceRecord.TreatmentBMP.GetDetailUrl();
-            PageTitle = maintenanceRecord.MaintenanceRecordDate.ToShortDateString();
+            PageTitle = maintenanceRecord.GetMaintenanceRecordDate.ToShortDateString();
             EditUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditMaintenanceRecord(maintenanceRecord.GetFieldVisit()));
             EditObservationsUrl = SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.EditObservations(maintenanceRecord));
             MaintenanceRecord = maintenanceRecord;

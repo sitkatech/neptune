@@ -236,8 +236,7 @@ namespace Neptune.Web.Controllers
 
             if (maintenanceRecord == null)
             {
-                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, DateTime.Now,
-                    viewModel.MaintenanceRecordTypeID.Value, CurrentPerson.PersonID, CurrentPerson.OrganizationID);
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.Value);
                 HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;

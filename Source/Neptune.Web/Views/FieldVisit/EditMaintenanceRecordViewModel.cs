@@ -28,21 +28,6 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewModel : FieldVisitSectionViewModel
     {
-        /// <summary>
-        /// Needed by ModelBinder
-        /// </summary>
-        public EditMaintenanceRecordViewModel()
-        {
-        }
-
-        public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord)
-        {
-            MaintenanceRecordDate = maintenanceRecord.MaintenanceRecordDate;
-            PerformedByOrganizationID = maintenanceRecord.PerformedByOrganizationID;
-            MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
-            MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
-        }
-
         [Required]
         [StringLength(Models.MaintenanceRecord.FieldLengths.MaintenanceRecordDescription)]
         [Display(Name = "Description")]
@@ -60,12 +45,24 @@ namespace Neptune.Web.Views.FieldVisit
         [Required]
         public DateTime? MaintenanceRecordDate { get; set; }
 
+
         public void UpdateModel(Models.MaintenanceRecord maintenanceRecord)
         {
-            maintenanceRecord.MaintenanceRecordDate = MaintenanceRecordDate.Value;
-            maintenanceRecord.PerformedByOrganizationID = PerformedByOrganizationID.Value;
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
+        }
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public EditMaintenanceRecordViewModel()
+        {
+        }
+
+        public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord)
+        {
+            MaintenanceRecordDate = maintenanceRecord.GetMaintenanceRecordDate;
+            MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
+            MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
         }
     }
 }
