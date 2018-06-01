@@ -50,19 +50,19 @@ namespace Neptune.Web.Views.FieldVisit
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Initial Assessment?",
                 x => x.InitialAssessmentID != null
-                    ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), "Yes",
+                    ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), x.InitialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
                            new Dictionary<string, string> ())
-                    : new HtmlString("No"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Maintenance Occurred?",
                 x => x.MaintenanceRecordID != null
-                    ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "Yes",
+                    ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "Performed",
                         new Dictionary<string, string>())
-                    : new HtmlString("No"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Post-Maintenance Assessment?",
                 x => x.PostMaintenanceAssessmentID != null
-                    ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), "Yes",
+                    ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), x.PostMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
                         new Dictionary<string, string>())
-                    : new HtmlString("No"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+                    : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
         }
     }
 }

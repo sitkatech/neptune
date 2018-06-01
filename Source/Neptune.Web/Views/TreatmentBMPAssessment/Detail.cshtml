@@ -31,8 +31,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 }
 
-@* TODO: how to handle editing assessments now that it's part of field visit?
-    @section RightOfPageTitle
+
+@section RightOfPageTitle
 {
     @if (ViewDataTyped.CanEdit)
     {
@@ -40,7 +40,7 @@ Source code is available upon request via <support@sitkatech.com>.
             <a class="btn btn-neptune headerButtonText treatmentBMPTypeButton" href="@ViewDataTyped.TreatmentBMPAssessment.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Assessment</a>
         </span>
     }
-}*@
+}
 
 <div class="row">    
     <div class="col-xs-12 col-md-6">
