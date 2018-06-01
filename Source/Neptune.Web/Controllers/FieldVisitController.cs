@@ -252,16 +252,16 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, maintenanceRecord);
+            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit);
             
         }
 
         private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
-            MaintenanceRecord maintenanceRecord)
+            FieldVisit fieldVisit)
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, maintenanceRecord);
+            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }

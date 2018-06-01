@@ -29,17 +29,12 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class EditMaintenanceRecordViewData : NeptuneViewData
+    public class EditMaintenanceRecordViewData : FieldVisitSectionViewData
     {
         public EditMaintenanceRecordViewData(Person currentPerson, List<Models.Organization> organizations,
-            Models.TreatmentBMP treatmentBMP, bool isNew, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson)
+            Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit) : base(currentPerson,fieldVisit,Models.FieldVisitSection.Maintenance)
         {
-            EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
-            EntityUrl = treatmentBMPIndexUrl;
-            SubEntityName = treatmentBMP.TreatmentBMPName;
-            SubEntityUrl = treatmentBMP.GetDetailUrl();
-            PageTitle = isNew ? "New Maintenance Record" : "Edit Maintenance Record";
             IsNew = isNew;
 
             AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
@@ -51,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
 
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
-            MaintenanceRecordUrl = maintenanceRecord?.GetDetailUrl();
+            MaintenanceRecordUrl = fieldVisit.MaintenanceRecord?.GetDetailUrl();
         }
 
         public bool IsNew { get; }

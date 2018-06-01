@@ -9,10 +9,7 @@ namespace Neptune.Web.Views.FieldVisit
     public class FieldVisitSectionViewData : NeptuneViewData
     {
         public Models.FieldVisit FieldVisit { get; }
-        public string FieldVisitInformationUrl { get; }
-        public string ScoreUrl { get; }
         public string SectionName { get; }
-        public bool FieldVisitInformationComplete { get; }
         public string SubsectionName { get; set; }
         public string SectionHeader { get; set; }
 
@@ -23,8 +20,7 @@ namespace Neptune.Web.Views.FieldVisit
             SectionName = fieldVisitSection.FieldVisitSectionName;
 
             EntityName = "Treatment BMP Field Visits";
-            // todo: are we goign to have a Field Visit Index Page?
-            //EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Index());
+            EntityUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Index());
             SubEntityName = fieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = fieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = fieldVisit.VisitDate.ToStringDate();

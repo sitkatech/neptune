@@ -26,7 +26,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class EditMaintenanceRecordViewModel : FormViewModel
+    public class EditMaintenanceRecordViewModel : FieldVisitSectionViewModel
     {
         /// <summary>
         /// Needed by ModelBinder
