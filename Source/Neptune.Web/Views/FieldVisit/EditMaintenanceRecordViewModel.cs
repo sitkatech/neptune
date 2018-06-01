@@ -18,9 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
+
 using System.ComponentModel.DataAnnotations;
-using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
@@ -37,20 +36,6 @@ namespace Neptune.Web.Views.FieldVisit
         [FieldDefinitionDisplay(FieldDefinitionEnum.MaintenanceRecordType)]
         public int? MaintenanceRecordTypeID { get; set; }
 
-        [Required]
-        [Display(Name = "Performed By")]
-        public int? PerformedByOrganizationID { get; set; }
-
-        [Display(Name = "Date")]
-        [Required]
-        public DateTime? MaintenanceRecordDate { get; set; }
-
-
-        public void UpdateModel(Models.MaintenanceRecord maintenanceRecord)
-        {
-            maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
-            maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
-        }
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
@@ -60,9 +45,14 @@ namespace Neptune.Web.Views.FieldVisit
 
         public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord)
         {
-            MaintenanceRecordDate = maintenanceRecord.GetMaintenanceRecordDate;
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
+        }
+
+        public void UpdateModel(Models.FieldVisit fieldVisit)
+        {
+            fieldVisit.MaintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
+            fieldVisit.MaintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
         }
     }
 }

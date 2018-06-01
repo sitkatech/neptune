@@ -252,7 +252,6 @@ namespace Neptune.Web.Controllers
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
             return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit);
-            
         }
 
         private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
@@ -263,6 +262,32 @@ namespace Neptune.Web.Controllers
             var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            EditMaintenanceRecordViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit);
+            }
+
+            viewModel.UpdateModel(fieldVisit);
+
+            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
+
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.PostMaintenanceAssessment(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
