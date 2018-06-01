@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.FieldVisit
         public EditMaintenanceRecordViewData(Person currentPerson, List<Models.Organization> organizations,
             Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit) : base(currentPerson,fieldVisit,Models.FieldVisitSection.Maintenance)
         {
-            var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
+            SubsectionName = "Edit Maintenance Record";
             IsNew = isNew;
 
             AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
