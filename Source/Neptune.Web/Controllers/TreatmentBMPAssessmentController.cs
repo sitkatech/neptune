@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
 using MoreLinq;
@@ -84,21 +82,6 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
-        [NeptuneViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPAssessment> AssessmentGridJsonData(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPAssessments = GetTreatmentBMPAssessmentsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPAssessments, gridSpec);
-            return gridJsonNetJObjectResult;
-        }
-
-        private List<TreatmentBMPAssessment> GetTreatmentBMPAssessmentsAndGridSpec(out TreatmentBMPAssessmentGridSpec gridSpec, Person currentPerson, TreatmentBMP treatmentBMP)
-        {
-            gridSpec = new TreatmentBMPAssessmentGridSpec(currentPerson);
-            return HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID).ToList();
-        }
-      
         [HttpGet]
         [TreatmentBMPAssessmentManageFeature]
         public ViewResult Score(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)

@@ -122,5 +122,15 @@ namespace Neptune.Web.Models
 
 
         public DateTime GetAssessmentDate => GetFieldVisit().VisitDate;
+
+        public bool IsInitialAssessment()
+        {
+            return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault() != null;
+        }
+
+        public bool IsPostMaintenanceAssessment()
+        {
+            return FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault() != null;
+        }
     }
 }
