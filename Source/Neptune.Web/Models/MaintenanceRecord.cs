@@ -5,14 +5,9 @@ namespace Neptune.Web.Models
 {
     public partial class MaintenanceRecord
     {
-        public FieldVisit GetFieldVisit()
-        {
-            return FieldVisits.SingleOrDefault();
-        }
-
-        public DateTime GetMaintenanceRecordDate => GetFieldVisit().VisitDate;
-        public virtual Person GetMaintenanceRecordPerson => GetFieldVisit().PerformedByPerson;
-        public virtual Organization GetMaintenanceRecordOrganization => GetFieldVisit().PerformedByPerson.Organization;
+        public DateTime GetMaintenanceRecordDate {get {return FieldVisit.VisitDate; } } 
+        public Person GetMaintenanceRecordPerson => FieldVisit.PerformedByPerson;
+        public Organization GetMaintenanceRecordOrganization => FieldVisit.PerformedByPerson.Organization;
 
     }
 }

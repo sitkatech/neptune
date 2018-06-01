@@ -83,7 +83,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FieldVisitsWhereYouAreTheInitialAssessment.Any() || FieldVisitsWhereYouAreThePostMaintenanceAssessment.Any() || TreatmentBMPObservations.Any();
+            return (FieldVisitWhereYouAreTheInitialAssessment != null) || (FieldVisitWhereYouAreThePostMaintenanceAssessment != null) || TreatmentBMPObservations.Any();
         }
 
         /// <summary>
@@ -126,8 +126,12 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
 
-        public virtual ICollection<FieldVisit> FieldVisitsWhereYouAreTheInitialAssessment { get; set; }
-        public virtual ICollection<FieldVisit> FieldVisitsWhereYouAreThePostMaintenanceAssessment { get; set; }
+        protected virtual ICollection<FieldVisit> FieldVisitsWhereYouAreTheInitialAssessment { get; set; }
+        [NotMapped]
+        public FieldVisit FieldVisitWhereYouAreTheInitialAssessment { get { return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault(); } set { FieldVisitsWhereYouAreTheInitialAssessment = new List<FieldVisit>{value};} }
+        protected virtual ICollection<FieldVisit> FieldVisitsWhereYouAreThePostMaintenanceAssessment { get; set; }
+        [NotMapped]
+        public FieldVisit FieldVisitWhereYouAreThePostMaintenanceAssessment { get { return FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault(); } set { FieldVisitsWhereYouAreThePostMaintenanceAssessment = new List<FieldVisit>{value};} }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

@@ -10,8 +10,7 @@ namespace Neptune.Web.Models
         public static readonly UrlTemplate<int> EditUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.EditMaintenanceRecord(UrlTemplate.Parameter1Int)));
         public static string GetEditUrl(this MaintenanceRecord maintenanceRecord)
         {
-            // todo: single or default :(
-            return EditUrlTemplate.ParameterReplace(maintenanceRecord.GetFieldVisit().FieldVisitID);
+            return EditUrlTemplate.ParameterReplace(maintenanceRecord.FieldVisit.FieldVisitID);
         }
 
         public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));

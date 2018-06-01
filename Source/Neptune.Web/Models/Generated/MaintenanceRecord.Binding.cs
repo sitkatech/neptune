@@ -78,7 +78,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FieldVisits.Any() || MaintenanceRecordObservations.Any();
+            return (FieldVisit != null) || MaintenanceRecordObservations.Any();
         }
 
         /// <summary>
@@ -114,12 +114,14 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
-        public virtual ICollection<FieldVisit> FieldVisits { get; set; }
+        protected virtual ICollection<FieldVisit> FieldVisits { get; set; }
+        [NotMapped]
+        public FieldVisit FieldVisit { get { return FieldVisits.SingleOrDefault(); } set { FieldVisits = new List<FieldVisit>{value};} }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID]; } }
-
+        
         public static class FieldLengths
         {
             public const int MaintenanceRecordDescription = 500;

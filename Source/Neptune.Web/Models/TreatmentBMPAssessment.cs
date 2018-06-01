@@ -114,8 +114,8 @@ namespace Neptune.Web.Models
 
         public FieldVisit GetFieldVisit()
         {
-            return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault() ??
-                   FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault();
+            return FieldVisitWhereYouAreTheInitialAssessment ??
+                   FieldVisitWhereYouAreThePostMaintenanceAssessment;
         }
 
         public Person GetFieldVisitPerson => GetFieldVisit().PerformedByPerson;
@@ -125,12 +125,12 @@ namespace Neptune.Web.Models
 
         public bool IsInitialAssessment()
         {
-            return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault() != null;
+            return FieldVisitWhereYouAreTheInitialAssessment != null;
         }
 
         public bool IsPostMaintenanceAssessment()
         {
-            return FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault() != null;
+            return FieldVisitWhereYouAreThePostMaintenanceAssessment != null;
         }
     }
 }

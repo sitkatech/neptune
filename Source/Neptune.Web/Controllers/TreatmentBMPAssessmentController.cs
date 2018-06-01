@@ -62,8 +62,14 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMPAssessment.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
-            treatmentBMPAssessment.FieldVisitsWhereYouAreTheInitialAssessment.ForEach(x=>x.InitialAssessmentID = null);
-            treatmentBMPAssessment.FieldVisitsWhereYouAreThePostMaintenanceAssessment.ForEach(x=>x.PostMaintenanceAssessmentID = null);
+            if (treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment!= null)
+            {
+                treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment.InitialAssessmentID = null;
+            }
+            if (treatmentBMPAssessment.FieldVisitWhereYouAreThePostMaintenanceAssessment != null)
+            {
+                treatmentBMPAssessment.FieldVisitWhereYouAreThePostMaintenanceAssessment.PostMaintenanceAssessmentID = null;
+            }
             treatmentBMPAssessment.DeleteTreatmentBMPAssessment();
 
             SetMessageForDisplay("BMP Assessment successfully deleted.");
