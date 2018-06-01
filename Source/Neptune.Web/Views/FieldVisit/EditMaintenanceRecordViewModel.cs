@@ -24,7 +24,7 @@ using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.MaintenanceRecord
+namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewModel : FormViewModel
     {

@@ -90,7 +90,11 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return new List<FieldVisitSubsectionData>();
+            yield return new FieldVisitSubsectionData
+            {
+                SubsectionName = "Edit Maintenance Record",
+                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.EditMaintenanceRecord(fieldVisit))
+            };
         }
     }
 

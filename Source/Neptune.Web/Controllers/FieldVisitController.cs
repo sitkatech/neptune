@@ -22,9 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
@@ -65,16 +67,9 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
-            try
-            {
-                var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
-                return gridJsonNetJObjectResult;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return gridJsonNetJObjectResult;
         }
 
         /// <summary>
@@ -213,8 +208,62 @@ namespace Neptune.Web.Controllers
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new MaintainViewData(CurrentPerson, fieldVisit);
-            return RazorView<Maintain, MaintainViewData>(viewData);
+            var viewModel = new MaintainViewModel(fieldVisit);
+            return ViewMaintain(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewMaintain(FieldVisit fieldVisit, MaintainViewModel viewModel)
+        {
+            var allMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
+            var viewData = new MaintainViewData(CurrentPerson, fieldVisit, allMaintenanceRecordTypes);
+            return RazorView<Maintain, MaintainViewData, MaintainViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey, MaintainViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewMaintain(fieldVisit, viewModel);
+            }
+
+            if (maintenanceRecord == null)
+            {
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, DateTime.Now,
+                    viewModel.MaintenanceRecordTypeID.Value, CurrentPerson.PersonID, CurrentPerson.OrganizationID);
+                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;
+            }
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
+        }
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+            var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
+            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, maintenanceRecord);
+            
+        }
+
+        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
+            MaintenanceRecord maintenanceRecord)
+        {
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
+                .ToList();
+            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, maintenanceRecord);
+            return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
+                EditMaintenanceRecordViewModel>(viewData, viewModel);
         }
 
         [HttpGet]

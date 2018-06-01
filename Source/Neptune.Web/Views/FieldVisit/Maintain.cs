@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Maintain : LtInfo.Common.Mvc.TypedWebViewPage<MaintainViewData>
+    public abstract class Maintain : LtInfo.Common.Mvc.TypedWebViewPage<MaintainViewData, MaintainViewModel>
     {
     }
 }

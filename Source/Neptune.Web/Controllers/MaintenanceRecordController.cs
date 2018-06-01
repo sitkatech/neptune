@@ -38,46 +38,46 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [HttpGet]
-        [TreatmentBMPManageFeature]
-        public ViewResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
-        {
-            return ViewNew(
-                new EditMaintenanceRecordViewModel
-                {
-                    MaintenanceRecordDate = DateTime.Now,
-                    PerformedByOrganizationID = CurrentPerson.OrganizationID
-                }, treatmentBmpPrimaryKey.EntityObject, null);
-        }
+        //[HttpGet]
+        //[TreatmentBMPManageFeature]
+        //public ViewResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
+        //{
+        //    return ViewNew(
+        //        new EditMaintenanceRecordViewModel
+        //        {
+        //            MaintenanceRecordDate = DateTime.Now,
+        //            PerformedByOrganizationID = CurrentPerson.OrganizationID
+        //        }, treatmentBmpPrimaryKey.EntityObject, null);
+        //}
 
-        [HttpPost]
-        [TreatmentBMPManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey, EditMaintenanceRecordViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewNew(viewModel, treatmentBmpPrimaryKey.EntityObject, null);
-            }
+        //[HttpPost]
+        //[TreatmentBMPManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult New(TreatmentBMPPrimaryKey treatmentBmpPrimaryKey, EditMaintenanceRecordViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewNew(viewModel, treatmentBmpPrimaryKey.EntityObject, null);
+        //    }
 
-            var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
+        //    var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
 
-            // These values will not be null by this point because they are required on the ViewModel
-            var newMaintenanceRecord =
-                new MaintenanceRecord(treatmentBmp.TreatmentBMPID, viewModel.MaintenanceRecordDate.Value,
-                    viewModel.MaintenanceRecordTypeID.Value, CurrentPerson.PersonID,
-                    viewModel.PerformedByOrganizationID.Value);
+        //    // These values will not be null by this point because they are required on the ViewModel
+        //    var newMaintenanceRecord =
+        //        new MaintenanceRecord(treatmentBmp.TreatmentBMPID, viewModel.MaintenanceRecordDate.Value,
+        //            viewModel.MaintenanceRecordTypeID.Value, CurrentPerson.PersonID,
+        //            viewModel.PerformedByOrganizationID.Value);
 
 
-            HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(newMaintenanceRecord);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+        //    HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(newMaintenanceRecord);
+        //    HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            viewModel.UpdateModel(newMaintenanceRecord);
+        //    viewModel.UpdateModel(newMaintenanceRecord);
 
-            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully added.");
+        //    SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully added.");
 
-            return new RedirectResult(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x=>x.Detail(newMaintenanceRecord)));
-        }
+        //    return new RedirectResult(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x=>x.Detail(newMaintenanceRecord)));
+        //}
 
         [HttpGet]
         public ViewResult Detail(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
@@ -87,50 +87,50 @@ namespace Neptune.Web.Controllers
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
-        private ViewResult ViewNew(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP,
-            MaintenanceRecord maintenanceRecord)
-        {
-            return ViewEdit(viewModel, treatmentBMP, true, maintenanceRecord);
-        }
+        //private ViewResult ViewNew(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP,
+        //    MaintenanceRecord maintenanceRecord)
+        //{
+        //    return ViewEdit(viewModel, treatmentBMP, true, maintenanceRecord);
+        //}
 
-        [HttpGet]
-        [MaintenanceRecordManageFeature]
-        public ViewResult Edit(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
-        {
-            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
-            var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEdit(viewModel, maintenanceRecord.TreatmentBMP, false, maintenanceRecord);
-        }
+        //[HttpGet]
+        //[MaintenanceRecordManageFeature]
+        //public ViewResult Edit(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey)
+        //{
+        //    var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
+        //    var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
+        //    return ViewEdit(viewModel, maintenanceRecord.TreatmentBMP, false, maintenanceRecord);
+        //}
 
-        [HttpPost]
-        [MaintenanceRecordManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
-            EditMaintenanceRecordViewModel viewModel)
-        {
-            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
+        //[HttpPost]
+        //[MaintenanceRecordManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult Edit(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
+        //    EditMaintenanceRecordViewModel viewModel)
+        //{
+        //    var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
 
-            if (!ModelState.IsValid)
-            {
-                return ViewNew(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewNew(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
+        //    }
 
-            viewModel.UpdateModel(maintenanceRecord);
+        //    viewModel.UpdateModel(maintenanceRecord);
 
-            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully edited.");
+        //    SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully edited.");
 
-            return new RedirectResult(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.Detail(maintenanceRecord)));
-        }
+        //    return new RedirectResult(SitkaRoute<MaintenanceRecordController>.BuildUrlFromExpression(x => x.Detail(maintenanceRecord)));
+        //}
 
-        private ViewResult ViewEdit(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
-            MaintenanceRecord maintenanceRecord)
-        {
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
-                .ToList();
-            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, maintenanceRecord);
-            return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
-                EditMaintenanceRecordViewModel>(viewData, viewModel);
-        }
+        //private ViewResult ViewEdit(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
+        //    MaintenanceRecord maintenanceRecord)
+        //{
+        //    var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
+        //        .ToList();
+        //    var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, maintenanceRecord);
+        //    return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
+        //        EditMaintenanceRecordViewModel>(viewData, viewModel);
+        //}
 
         [HttpGet]
         [MaintenanceRecordManageFeature]
@@ -184,22 +184,22 @@ namespace Neptune.Web.Controllers
                 EditMaintenanceRecordObservationsViewModel>(viewData, viewModel);
         }
 
-        [HttpPost]
-        [MaintenanceRecordManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditObservations(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
-            EditMaintenanceRecordObservationsViewModel viewModel)
-        {
-            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
-            }
+        //[HttpPost]
+        //[MaintenanceRecordManageFeature]
+        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        //public ActionResult EditObservations(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
+        //    EditMaintenanceRecordObservationsViewModel viewModel)
+        //{
+        //    var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
+        //    }
 
-            viewModel.UpdateModel(maintenanceRecord);
-            SetMessageForDisplay("Maintenance Record Observations Successfully saved.");
-            return RedirectToAction(
-                new SitkaRoute<MaintenanceRecordController>(c => c.Detail(maintenanceRecordPrimaryKey)));
-        }
+        //    viewModel.UpdateModel(maintenanceRecord);
+        //    SetMessageForDisplay("Maintenance Record Observations Successfully saved.");
+        //    return RedirectToAction(
+        //        new SitkaRoute<MaintenanceRecordController>(c => c.Detail(maintenanceRecordPrimaryKey)));
+        //}
     }
 }
