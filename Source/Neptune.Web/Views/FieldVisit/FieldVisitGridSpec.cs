@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Status", x => x.GetStatusAsWorkflowUrl(), 85,
+            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.GetStatusAsWorkflowUrl(), 85,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Initial Assessment?",
                 x => x.InitialAssessmentID != null
