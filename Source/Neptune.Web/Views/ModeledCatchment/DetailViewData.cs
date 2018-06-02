@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.ModeledCatchment
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<ModeledCatchmentController>.BuildUrlFromExpression(x => x.Index());
             MapInitJson = mapInitJson;
-            CurrentPersonCanManage = CurrentPerson.CanManageStormwaterJurisdiction(ModeledCatchment.StormwaterJurisdiction);
+            CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(ModeledCatchment.StormwaterJurisdiction);
         }
     }
 }
