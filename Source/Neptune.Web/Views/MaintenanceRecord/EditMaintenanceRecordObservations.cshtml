@@ -29,4 +29,7 @@
     </div>
 </div>
 
-@{ Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);}
+@using (Html.BeginForm())
+{
+    Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);
+}

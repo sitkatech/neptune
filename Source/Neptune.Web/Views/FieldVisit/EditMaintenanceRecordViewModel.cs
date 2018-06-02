@@ -22,10 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.ComponentModel.DataAnnotations;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class EditMaintenanceRecordViewModel : FieldVisitSectionViewModel
+    public class EditMaintenanceRecordViewModel : EditAttributesViewModel
     {
         [Required]
         [StringLength(Models.MaintenanceRecord.FieldLengths.MaintenanceRecordDescription)]
@@ -43,7 +44,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord)
+        public EditMaintenanceRecordViewModel(Models.MaintenanceRecord maintenanceRecord) : base(maintenanceRecord.TreatmentBMP, CustomAttributeTypePurpose.Maintenance)
         {
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
@@ -51,6 +52,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public void UpdateModel(Models.FieldVisit fieldVisit)
         {
+            // todo: drop the bass
             fieldVisit.MaintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             fieldVisit.MaintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
         }

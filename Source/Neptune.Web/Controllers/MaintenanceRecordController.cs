@@ -179,27 +179,27 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditObservations(EditMaintenanceRecordObservationsViewModel viewModel,
             TreatmentBMP treatmentBMP, MaintenanceRecord maintenanceRecord)
         {
-            var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance, maintenanceRecord);
+            var viewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson, treatmentBMP, CustomAttributeTypePurpose.Maintenance, maintenanceRecord, true);
             return RazorView<EditMaintenanceRecordObservations, EditMaintenanceRecordObservationsViewData,
                 EditMaintenanceRecordObservationsViewModel>(viewData, viewModel);
         }
 
-        //[HttpPost]
-        //[MaintenanceRecordManageFeature]
-        //[AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        //public ActionResult EditObservations(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
-        //    EditMaintenanceRecordObservationsViewModel viewModel)
-        //{
-        //    var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
-        //    }
+        [HttpPost]
+        [MaintenanceRecordManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditObservations(MaintenanceRecordPrimaryKey maintenanceRecordPrimaryKey,
+            EditMaintenanceRecordObservationsViewModel viewModel)
+        {
+            var maintenanceRecord = maintenanceRecordPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditObservations(viewModel, maintenanceRecord.TreatmentBMP, maintenanceRecord);
+            }
 
-        //    viewModel.UpdateModel(maintenanceRecord);
-        //    SetMessageForDisplay("Maintenance Record Observations Successfully saved.");
-        //    return RedirectToAction(
-        //        new SitkaRoute<MaintenanceRecordController>(c => c.Detail(maintenanceRecordPrimaryKey)));
-        //}
+            viewModel.UpdateModel(maintenanceRecord);
+            SetMessageForDisplay("Maintenance Record Observations Successfully saved.");
+            return RedirectToAction(
+                new SitkaRoute<MaintenanceRecordController>(c => c.Detail(maintenanceRecordPrimaryKey)));
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace Neptune.Web.Models
         public abstract IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit);
     }
 
-    public partial class FieldVisitSectionInventory : FieldVisitSection
+    public partial class FieldVisitSectionInventory
     {
         public override string GetSectionUrl(FieldVisit fieldVisit)
         {

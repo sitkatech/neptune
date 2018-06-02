@@ -33,6 +33,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
+using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.SortOrder;
 
@@ -259,7 +260,8 @@ namespace Neptune.Web.Controllers
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit);
+            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true);
+            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
         }

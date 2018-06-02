@@ -26,16 +26,18 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewData : FieldVisitSectionViewData
     {
         public EditMaintenanceRecordViewData(Person currentPerson, List<Models.Organization> organizations,
-            Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit) : base(currentPerson,fieldVisit,Models.FieldVisitSection.Maintenance)
+            Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit, EditAttributesViewData editMaintenanceRecordObservationsViewData) : base(currentPerson,fieldVisit,Models.FieldVisitSection.Maintenance)
         {
             SubsectionName = "Edit Maintenance Record";
             IsNew = isNew;
+            EditMaintenanceRecordObservationsViewData = editMaintenanceRecordObservationsViewData;
 
             AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
                 x => x.OrganizationName,"Choose an Organization");
@@ -56,5 +58,6 @@ namespace Neptune.Web.Views.FieldVisit
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string TreatmentBMPUrl { get; }
         public object MaintenanceRecordUrl { get; }
+        public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
     }
 }
