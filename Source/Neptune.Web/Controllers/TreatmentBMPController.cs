@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ViewResult New()
         {
             var viewModel = new EditViewModel();
@@ -95,7 +95,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ActionResult New(EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -119,7 +119,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [JurisdictionManageFeature]
+        [TreatmentBMPEditFeature]
         public ViewResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -129,7 +129,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
@@ -242,7 +242,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPEditFeature]
         public ViewResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -253,7 +253,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPManageFeature]
+        [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditAttributes(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, CustomAttributeTypePurposePrimaryKey customAttributeTypePurposePrimaryKey, EditAttributesViewModel viewModel)
         {
