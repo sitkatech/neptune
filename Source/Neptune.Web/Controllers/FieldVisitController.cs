@@ -66,17 +66,10 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            try
-            {
-                var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
-                var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
-                return gridJsonNetJObjectResult;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return gridJsonNetJObjectResult;
         }
 
         /// <summary>
@@ -703,7 +696,7 @@ namespace Neptune.Web.Controllers
             var lastComma = entitiesConcatenated.LastIndexOf(",",StringComparison.InvariantCulture);
             var associatedFieldVisitEntitiesString = lastComma > -1 ? entitiesConcatenated.Insert(lastComma + 1, " and") : entitiesConcatenated;
 
-            return (!associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "");
+            return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
         }
     }
 
