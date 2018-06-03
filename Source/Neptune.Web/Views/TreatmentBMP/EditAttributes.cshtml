@@ -31,5 +31,7 @@
 
 @using (Html.BeginForm())
 {
-    Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);
+    <div class="formPage">
+        Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped, Model);
+    </div>
 }

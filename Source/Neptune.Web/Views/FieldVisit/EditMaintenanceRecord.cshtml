@@ -31,7 +31,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.ValidationSummary()
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-xs-3 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
@@ -47,8 +46,6 @@
             </div>
         </div>
     </div>
-
-    <hr />
 
     Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped.EditMaintenanceRecordObservationsViewData, Model);
 
