@@ -29,13 +29,13 @@ namespace Neptune.Web.Models
     {
         public bool CanEdit(Person currentPerson)
         {
-            var canManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
             return canManageStormwaterJurisdiction;
         }
 
         public bool CanDelete(Person currentPerson)
         {
-            var canManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            var canManageStormwaterJurisdiction = currentPerson.IsAssignedToStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
             return canManageStormwaterJurisdiction;
         }
 

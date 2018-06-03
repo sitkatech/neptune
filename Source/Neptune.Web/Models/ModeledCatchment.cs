@@ -33,7 +33,7 @@ namespace Neptune.Web.Models
 
         public bool CanDelete(Person currentPerson)
         {
-            return currentPerson.CanManageStormwaterJurisdiction(StormwaterJurisdiction);
+            return currentPerson.IsAssignedToStormwaterJurisdiction(StormwaterJurisdiction);
         }
 
     }

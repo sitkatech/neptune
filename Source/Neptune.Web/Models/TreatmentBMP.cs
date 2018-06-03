@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
 
         public bool CanEdit(Person person)
         {
-            return new JurisdictionManageFeature().HasPermissionByPerson(person);
+            return new TreatmentBMPEditFeature().HasPermission(person, this).HasPermission;
         }
 
         public bool CanDelete(Person person)

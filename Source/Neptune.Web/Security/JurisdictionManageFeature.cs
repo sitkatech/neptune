@@ -25,7 +25,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows Creating and Editing Stormwater Assests")]
+    [SecurityFeatureDescription("Allows Managing Jurisdicton Assets")]
     public class JurisdictionManageFeature : NeptuneFeature
     {
         public JurisdictionManageFeature()

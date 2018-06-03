@@ -96,7 +96,7 @@ namespace Neptune.Web.Models
             return $"{NeptuneWebConfiguration.KeystoneUserProfileUrl}{person.PersonGuid}";
         }
 
-        public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
+        public static bool IsAssignedToStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
         {
             return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
         }

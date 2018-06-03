@@ -234,8 +234,10 @@
     <Compile Include="Security\FundingSourceCreateFeature.cs" />
     <Compile Include="Security\FundingSourceEditFeature.cs" />
     <Compile Include="Security\FundingSourceViewFeature.cs" />
+    <Compile Include="Security\JurisdictionEditFeature.cs" />
     <Compile Include="Security\MaintenanceRecordManageFeature.cs" />
     <Compile Include="Security\TreatmentBMPDeleteFeature.cs" />
+    <Compile Include="Security\TreatmentBMPEditFeature.cs" />
     <Compile Include="Security\UserDeleteFeature.cs" />
     <Compile Include="Security\UserEditRoleFeature.cs" />
     <Compile Include="Views\FieldVisit\AssessmentInformation.cs" />

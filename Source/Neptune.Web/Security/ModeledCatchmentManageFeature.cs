@@ -43,7 +43,7 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, ModeledCatchment contextModelObject)
         {
-            bool hasPrivs = person.CanManageStormwaterJurisdiction(contextModelObject.StormwaterJurisdiction);
+            bool hasPrivs = person.IsAssignedToStormwaterJurisdiction(contextModelObject.StormwaterJurisdiction);
 
             if (!hasPrivs)
             {
