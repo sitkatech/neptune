@@ -33,5 +33,20 @@ namespace Neptune.Web.Models
         }
 
         public string AuditDescriptionString => $"Field Visit deleted";
+
+        public void DetachMaintenanceRecord()
+        {
+            MaintenanceRecordID = null;
+        }
+
+        public void DetachPostMaintenanceAssessment()
+        {
+            PostMaintenanceAssessmentID = null;
+        }
+
+        public void DetachInitialAssessment()
+        {
+            InitialAssessmentID = null;
+        }
     }
 }

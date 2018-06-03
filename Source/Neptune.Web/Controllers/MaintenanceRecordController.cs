@@ -152,6 +152,9 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(viewModel);
             }
 
+            maintenanceRecord.MaintenanceRecordObservations.DeleteMaintenanceRecordObservation();
+            maintenanceRecord.FieldVisit?.DetachMaintenanceRecord();
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
             maintenanceRecord.DeleteMaintenanceRecord();
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");

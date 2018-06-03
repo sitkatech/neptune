@@ -62,18 +62,7 @@ namespace Neptune.Web.Models
             return Math.Abs(score.Value - 2) < 0.01;
         }
 
-        public string AuditDescriptionString
-        {
-            get
-            {
-                var assessment = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetTreatmentBMPAssessment(TreatmentBMPAssessmentID);
-                var treatmentBMP = assessment == null ? null : HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(assessment.TreatmentBMPID);
-                var assessmentDate = assessment?.GetAssessmentDate.ToShortDateString() ?? ViewUtilities.NotFoundString;
-                var treatmentBMPName = treatmentBMP != null ? treatmentBMP.TreatmentBMPName : ViewUtilities.NotFoundString;
-
-                return $"Observation for BMP {treatmentBMPName} ({TreatmentBMPAssessmentObservationType?.TreatmentBMPAssessmentObservationTypeName}) on Assessment Dated {assessmentDate}";
-            }
-        }
+        public string AuditDescriptionString => $"Observation Deleted";
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {

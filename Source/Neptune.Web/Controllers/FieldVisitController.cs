@@ -666,23 +666,14 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteFieldVisit(fieldVisit, viewModel);
             }
 
-            var fieldVisitInitialAssessment = fieldVisit.InitialAssessment;
-            if (fieldVisitInitialAssessment != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitInitialAssessment);
-            }
-            var fieldVisitMaintenanceRecord = fieldVisit.MaintenanceRecord;
-            if (fieldVisitMaintenanceRecord != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Remove(fieldVisitMaintenanceRecord);
-            }
-            var fieldVisitPostMaintenanceAssessment = fieldVisit.PostMaintenanceAssessment;
-            if (fieldVisitPostMaintenanceAssessment != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitPostMaintenanceAssessment);
-            }
-            fieldVisit.DeleteFull();
+            fieldVisit.InitialAssessment?.DeleteFull();
+            //fieldVisit.MaintenanceRecord?.MaintenanceRecordObservations?.ForEach(x=>x.MaintenanceRecordObservationValues?.DeleteMaintenanceRecordObservationValue());
+            //fieldVisit.MaintenanceRecord?.MaintenanceRecordObservations.DeleteMaintenanceRecordObservation();
+            fieldVisit.MaintenanceRecord?.DeleteFull();
+            fieldVisit.PostMaintenanceAssessment?.DeleteTreatmentBMPAssessment();
+            fieldVisit.DeleteFieldVisit();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             SetMessageForDisplay("Successfully deleted the field visit.");
 
             return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index()));
