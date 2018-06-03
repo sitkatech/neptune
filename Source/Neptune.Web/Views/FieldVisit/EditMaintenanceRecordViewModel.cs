@@ -51,6 +51,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
             MaintenanceRecordTypeID = maintenanceRecord.MaintenanceRecordTypeID;
             MaintenanceRecordDescription = maintenanceRecord.MaintenanceRecordDescription;
+            CustomAttributes = maintenanceRecord.MaintenanceRecordObservations.Select(x => new CustomAttributeSimple(x)).ToList();
         }
 
         public void UpdateModel(Models.FieldVisit fieldVisit)

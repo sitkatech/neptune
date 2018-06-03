@@ -19,8 +19,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
         public EditMaintenanceRecordObservationsViewModel(Models.MaintenanceRecord maintenanceRecord)
         {
-            CustomAttributes =
-                maintenanceRecord.MaintenanceRecordObservations.Select(x => new CustomAttributeSimple(x)).ToList();
+            // todo: kill?
         }
 
         public void UpdateModel(Models.MaintenanceRecord maintenanceRecord)
