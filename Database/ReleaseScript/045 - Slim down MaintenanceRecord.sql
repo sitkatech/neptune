@@ -1,0 +1,20 @@
+-- blast away the past
+delete from dbo.FieldVisit
+delete from dbo.MaintenanceRecord
+
+alter table dbo.MaintenanceRecord
+drop column MaintenanceRecordDate
+
+alter table dbo.MaintenanceRecord
+drop constraint FK_MaintenanceRecord_Person_EnteredByPersonID_TenantID_PersonID_TenantID
+alter table dbo.MaintenanceRecord
+drop constraint FK_MaintenanceRecord_Person_EnteredByPersonID_PersonID
+alter table dbo.MaintenanceRecord
+drop column EnteredByPersonID
+
+alter table dbo.MaintenanceRecord
+drop constraint FK_MaintenanceRecord_Organization_PerformedByOrganizationID_TenantID_OrganizationID_TenantID
+alter table dbo.MaintenanceRecord
+drop constraint FK_MaintenanceRecord_Organization_PerformedByOrganizationID_OrganizationID
+alter table dbo.MaintenanceRecord
+drop column PerformedByOrganizationID

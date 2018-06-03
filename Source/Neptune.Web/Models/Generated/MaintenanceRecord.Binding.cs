@@ -31,58 +31,45 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, DateTime maintenanceRecordDate, string maintenanceRecordDescription, int maintenanceRecordTypeID, int enteredByPersonID, int performedByOrganizationID) : this()
+        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, string maintenanceRecordDescription, int maintenanceRecordTypeID) : this()
         {
             this.MaintenanceRecordID = maintenanceRecordID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.MaintenanceRecordDescription = maintenanceRecordDescription;
             this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
-            this.EnteredByPersonID = enteredByPersonID;
-            this.PerformedByOrganizationID = performedByOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int treatmentBMPID, DateTime maintenanceRecordDate, int maintenanceRecordTypeID, int enteredByPersonID, int performedByOrganizationID) : this()
+        public MaintenanceRecord(int treatmentBMPID, int maintenanceRecordTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
-            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
-            this.EnteredByPersonID = enteredByPersonID;
-            this.PerformedByOrganizationID = performedByOrganizationID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public MaintenanceRecord(TreatmentBMP treatmentBMP, DateTime maintenanceRecordDate, MaintenanceRecordType maintenanceRecordType, Person enteredByPerson, Organization performedByOrganization) : this()
+        public MaintenanceRecord(TreatmentBMP treatmentBMP, MaintenanceRecordType maintenanceRecordType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.MaintenanceRecords.Add(this);
-            this.MaintenanceRecordDate = maintenanceRecordDate;
             this.MaintenanceRecordTypeID = maintenanceRecordType.MaintenanceRecordTypeID;
-            this.EnteredByPersonID = enteredByPerson.PersonID;
-            this.EnteredByPerson = enteredByPerson;
-            enteredByPerson.MaintenanceRecordsWhereYouAreTheEnteredByPerson.Add(this);
-            this.PerformedByOrganizationID = performedByOrganization.OrganizationID;
-            this.PerformedByOrganization = performedByOrganization;
-            performedByOrganization.MaintenanceRecordsWhereYouAreThePerformedByOrganization.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, MaintenanceRecordType maintenanceRecordType, Person enteredByPerson, Organization performedByOrganization)
+        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, MaintenanceRecordType maintenanceRecordType)
         {
-            return new MaintenanceRecord(treatmentBMP, default(DateTime), maintenanceRecordType, enteredByPerson, performedByOrganization);
+            return new MaintenanceRecord(treatmentBMP, maintenanceRecordType);
         }
 
         /// <summary>
@@ -91,7 +78,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FieldVisits.Any() || MaintenanceRecordObservations.Any();
+            return (FieldVisit != null) || MaintenanceRecordObservations.Any();
         }
 
         /// <summary>
@@ -122,22 +109,19 @@ namespace Neptune.Web.Models
         public int MaintenanceRecordID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
-        public DateTime MaintenanceRecordDate { get; set; }
         public string MaintenanceRecordDescription { get; set; }
         public int MaintenanceRecordTypeID { get; set; }
-        public int EnteredByPersonID { get; set; }
-        public int PerformedByOrganizationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
-        public virtual ICollection<FieldVisit> FieldVisits { get; set; }
+        protected virtual ICollection<FieldVisit> FieldVisits { get; set; }
+        [NotMapped]
+        public FieldVisit FieldVisit { get { return FieldVisits.SingleOrDefault(); } set { FieldVisits = new List<FieldVisit>{value};} }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID]; } }
-        public virtual Person EnteredByPerson { get; set; }
-        public virtual Organization PerformedByOrganization { get; set; }
-
+        
         public static class FieldLengths
         {
             public const int MaintenanceRecordDescription = 500;

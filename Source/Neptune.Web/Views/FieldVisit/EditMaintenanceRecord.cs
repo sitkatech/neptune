@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.MaintenanceRecord
+namespace Neptune.Web.Views.FieldVisit
 {
     public abstract class EditMaintenanceRecord : TypedWebViewPage<EditMaintenanceRecordViewData,
         EditMaintenanceRecordViewModel>

@@ -19,13 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.ModalDialog;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -46,9 +44,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
 
-            Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
-            Add("Performed By", x => x.PerformedByOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
-            Add("Entered By", x => x.EnteredByPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Date", x => x.GetMaintenanceRecordDate.ToString("g"), 150);
+            Add("Performed By", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
+            Add("Entered By", x => x.GetMaintenanceRecordPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);
@@ -74,9 +72,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 40, DhtmlxGridColumnFilterType.None);
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            Add("Date", x => x.MaintenanceRecordDate.ToString("g"), 150);
-            Add("Organization", x => x.PerformedByOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Performed By", x => x.EnteredByPerson.GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Date", x => x.GetMaintenanceRecordDate.ToString("g"), 150);
+            Add("Organization", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Performed By", x => x.GetMaintenanceRecordPerson.GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);

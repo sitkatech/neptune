@@ -19,6 +19,27 @@ CREATE TABLE [dbo].[FieldVisit](
 ) ON [PRIMARY]
 
 GO
+CREATE UNIQUE NONCLUSTERED INDEX [AK_FieldVisit_InitialAssessmentID] ON [dbo].[FieldVisit]
+(
+	[InitialAssessmentID] ASC
+)
+WHERE ([InitialAssessmentID] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [AK_FieldVisit_MaintenanceRecordID] ON [dbo].[FieldVisit]
+(
+	[MaintenanceRecordID] ASC
+)
+WHERE ([MaintenanceRecordID] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [AK_FieldVisit_PostMaintenanceAssessmentID] ON [dbo].[FieldVisit]
+(
+	[PostMaintenanceAssessmentID] ASC
+)
+WHERE ([PostMaintenanceAssessmentID] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
 CREATE UNIQUE NONCLUSTERED INDEX [CK_AtMostOneFieldVisitMayBeInProgressAtAnyTimePerBMP] ON [dbo].[FieldVisit]
 (
 	[TreatmentBMPID] ASC
@@ -100,3 +121,7 @@ ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Treatm
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TreatmentBMPID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPID_TreatmentBMPAssessmentID_TreatmentBMPID]
+GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [CK_InitialAssessmentMustBeDifferentFromPMAssessmentIfNotBothNull] CHECK  (([InitialAssessmentID]<>[PostMaintenanceAssessmentID] OR [InitialAssessmentID] IS NULL AND [PostMaintenanceAssessmentID] IS NULL))
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [CK_InitialAssessmentMustBeDifferentFromPMAssessmentIfNotBothNull]

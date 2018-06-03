@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected Organization()
         {
             this.FundingSources = new HashSet<FundingSource>();
-            this.MaintenanceRecordsWhereYouAreThePerformedByOrganization = new HashSet<MaintenanceRecord>();
             this.People = new HashSet<Person>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TreatmentBMPsWhereYouAreTheOwnerOrganization = new HashSet<TreatmentBMP>();
@@ -88,13 +87,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FundingSources.Any() || MaintenanceRecordsWhereYouAreThePerformedByOrganization.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
+            return FundingSources.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(MaintenanceRecord).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
 
 
         /// <summary>
@@ -104,11 +103,6 @@ namespace Neptune.Web.Models
         {
 
             foreach(var x in FundingSources.ToList())
-            {
-                x.DeleteFull();
-            }
-
-            foreach(var x in MaintenanceRecordsWhereYouAreThePerformedByOrganization.ToList())
             {
                 x.DeleteFull();
             }
@@ -145,7 +139,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return OrganizationID; } set { OrganizationID = value; } }
 
         public virtual ICollection<FundingSource> FundingSources { get; set; }
-        public virtual ICollection<MaintenanceRecord> MaintenanceRecordsWhereYouAreThePerformedByOrganization { get; set; }
         public virtual ICollection<Person> People { get; set; }
         protected virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         [NotMapped]

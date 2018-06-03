@@ -94,7 +94,7 @@
         }
     </style>
 }
-
+@Html.ValidationSummary()
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
@@ -136,10 +136,6 @@
             <div class="wizardHeader">
                 <h2>@ViewDataTyped.SectionHeader</h2>
                 <hr>
-            </div>
-
-            <div class="validationError">
-                @Html.ValidationSummary()
             </div>
 
             <div class="wizardMain">

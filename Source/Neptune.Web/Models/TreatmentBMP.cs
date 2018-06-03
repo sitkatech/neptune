@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
         {
             return !MaintenanceRecords.Any()
                 ? null
-                : (DateTime?) MaintenanceRecords.Select(x => x.MaintenanceRecordDate)
+                : (DateTime?) MaintenanceRecords.Select(x => x.GetMaintenanceRecordDate)
                     .Max();
         }
 
@@ -120,7 +120,7 @@ namespace Neptune.Web.Models
         {
             return !MaintenanceRecords.Any()
                 ? "Never"
-                : MaintenanceRecords.Select(x => x.MaintenanceRecordDate)
+                : MaintenanceRecords.Select(x => x.GetMaintenanceRecordDate)
                     .Max().ToString("g");
 
         }

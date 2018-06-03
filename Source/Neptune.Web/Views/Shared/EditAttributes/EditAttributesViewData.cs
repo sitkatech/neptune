@@ -30,12 +30,14 @@ namespace Neptune.Web.Views.Shared.EditAttributes
 {
     public class EditAttributesViewData : NeptuneViewData
     {
-        public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
+        public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; }
         public string ParentDetailUrl { get; set; }
+        public bool IsSubForm { get; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
+            IsSubForm = isSubForm;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;

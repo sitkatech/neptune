@@ -22,9 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
@@ -65,16 +67,9 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
             var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
-            try
-            {
-                var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
-                return gridJsonNetJObjectResult;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return gridJsonNetJObjectResult;
         }
 
         /// <summary>
@@ -213,8 +208,87 @@ namespace Neptune.Web.Controllers
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new MaintainViewData(CurrentPerson, fieldVisit);
-            return RazorView<Maintain, MaintainViewData>(viewData);
+            var viewModel = new MaintainViewModel(fieldVisit);
+            return ViewMaintain(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewMaintain(FieldVisit fieldVisit, MaintainViewModel viewModel)
+        {
+            var allMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
+            var viewData = new MaintainViewData(CurrentPerson, fieldVisit, allMaintenanceRecordTypes);
+            return RazorView<Maintain, MaintainViewData, MaintainViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey, MaintainViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewMaintain(fieldVisit, viewModel);
+            }
+
+            if (maintenanceRecord == null)
+            {
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.GetValueOrDefault());
+                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;
+            }
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
+        }
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+            var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
+            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit);
+        }
+
+        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
+            FieldVisit fieldVisit)
+        {
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
+                .ToList();
+            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true);
+            var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
+            return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
+                EditMaintenanceRecordViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey,
+            EditMaintenanceRecordViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit);
+            }
+
+            viewModel.UpdateModel(fieldVisit);
+
+            SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
+
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.PostMaintenanceAssessment(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -591,23 +665,12 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteFieldVisit(fieldVisit, viewModel);
             }
 
-            var fieldVisitInitialAssessment = fieldVisit.InitialAssessment;
-            if (fieldVisitInitialAssessment != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitInitialAssessment);
-            }
-            var fieldVisitMaintenanceRecord = fieldVisit.MaintenanceRecord;
-            if (fieldVisitMaintenanceRecord != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Remove(fieldVisitMaintenanceRecord);
-            }
-            var fieldVisitPostMaintenanceAssessment = fieldVisit.PostMaintenanceAssessment;
-            if (fieldVisitPostMaintenanceAssessment != null)
-            {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Remove(fieldVisitPostMaintenanceAssessment);
-            }
-            fieldVisit.DeleteFull();
+            fieldVisit.InitialAssessment?.DeleteFull();
+            fieldVisit.MaintenanceRecord?.DeleteFull();
+            fieldVisit.PostMaintenanceAssessment?.DeleteFull();
+            fieldVisit.DeleteFieldVisit();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             SetMessageForDisplay("Successfully deleted the field visit.");
 
             return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index()));
@@ -630,18 +693,10 @@ namespace Neptune.Web.Controllers
                 fieldVisit.MaintenanceRecord != null ? "maintenance record" : null
             };
             var entitiesConcatenated = string.Join(", ", entitiesSubstrings.Where(x => x != null));
-            var lastComma = entitiesConcatenated?.LastIndexOf(",");
-            string associatedFieldVisitEntitiesString;
-            if (lastComma.HasValue && lastComma.Value > -1)
-            {
-                associatedFieldVisitEntitiesString = entitiesConcatenated.Insert(lastComma.Value + 1, " and");
-            }
-            else
-            {
-                associatedFieldVisitEntitiesString = entitiesConcatenated;
-            }
+            var lastComma = entitiesConcatenated.LastIndexOf(",",StringComparison.InvariantCulture);
+            var associatedFieldVisitEntitiesString = lastComma > -1 ? entitiesConcatenated.Insert(lastComma + 1, " and") : entitiesConcatenated;
 
-            return (!associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "");
+            return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
         }
     }
 
