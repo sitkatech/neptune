@@ -19,13 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
-using LtInfo.Common.ModalDialog;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
 using Neptune.Web.Security;

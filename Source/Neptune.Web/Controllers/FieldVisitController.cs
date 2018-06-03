@@ -33,7 +33,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
-using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.SortOrder;
 
@@ -237,7 +236,7 @@ namespace Neptune.Web.Controllers
 
             if (maintenanceRecord == null)
             {
-                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.Value);
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.GetValueOrDefault());
                 HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;
@@ -696,16 +695,8 @@ namespace Neptune.Web.Controllers
                 fieldVisit.MaintenanceRecord != null ? "maintenance record" : null
             };
             var entitiesConcatenated = string.Join(", ", entitiesSubstrings.Where(x => x != null));
-            var lastComma = entitiesConcatenated?.LastIndexOf(",");
-            string associatedFieldVisitEntitiesString;
-            if (lastComma.HasValue && lastComma.Value > -1)
-            {
-                associatedFieldVisitEntitiesString = entitiesConcatenated.Insert(lastComma.Value + 1, " and");
-            }
-            else
-            {
-                associatedFieldVisitEntitiesString = entitiesConcatenated;
-            }
+            var lastComma = entitiesConcatenated.LastIndexOf(",",StringComparison.InvariantCulture);
+            var associatedFieldVisitEntitiesString = lastComma > -1 ? entitiesConcatenated.Insert(lastComma + 1, " and") : entitiesConcatenated;
 
             return (!associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "");
         }

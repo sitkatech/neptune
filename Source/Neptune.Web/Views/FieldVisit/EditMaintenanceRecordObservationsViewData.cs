@@ -1,7 +1,7 @@
 using Neptune.Web.Models;
 using Neptune.Web.Views.Shared.EditAttributes;
 
-namespace Neptune.Web.Views.MaintenanceRecord
+namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordObservationsViewData : EditAttributesViewData
     {
