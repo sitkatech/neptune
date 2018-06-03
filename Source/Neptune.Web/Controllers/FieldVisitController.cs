@@ -66,10 +66,17 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
+            try
+            {
+                var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+                var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
-            return gridJsonNetJObjectResult;
+                return gridJsonNetJObjectResult;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -666,10 +673,8 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.InitialAssessment?.DeleteFull();
-            //fieldVisit.MaintenanceRecord?.MaintenanceRecordObservations?.ForEach(x=>x.MaintenanceRecordObservationValues?.DeleteMaintenanceRecordObservationValue());
-            //fieldVisit.MaintenanceRecord?.MaintenanceRecordObservations.DeleteMaintenanceRecordObservation();
             fieldVisit.MaintenanceRecord?.DeleteFull();
-            fieldVisit.PostMaintenanceAssessment?.DeleteTreatmentBMPAssessment();
+            fieldVisit.PostMaintenanceAssessment?.DeleteFull();
             fieldVisit.DeleteFieldVisit();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
