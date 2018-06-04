@@ -39,24 +39,28 @@ namespace Neptune.Web.Views.FieldVisit
         /// </summary>
         public AttributesViewModel()
         {
-
         }
 
         public AttributesViewModel(Models.FieldVisit fieldVisit)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            CustomAttributes = treatmentBMP.CustomAttributes.Select(x => new CustomAttributeSimple(x)).ToList();
+            CustomAttributes = treatmentBMP.CustomAttributes
+                .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID !=
+                            CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID)
+                .Select(x => new CustomAttributeSimple(x)).ToList();
         }
 
         public void UpdateModel(Models.FieldVisit fieldVisit, Person currentPerson)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
+            var customAttributeSimplesWithValues = CustomAttributes.Where(x =>
+                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
             var customAttributesToUpdate = new List<CustomAttribute>();
             var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
             foreach (var x in customAttributeSimplesWithValues)
             {
-                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
+                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID,
+                    x.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
                 customAttributesToUpdate.Add(customAttribute);
                 foreach (var value in x.CustomAttributeValues)
                 {
@@ -70,7 +74,8 @@ namespace Neptune.Web.Views.FieldVisit
 
             var existingCustomAttributes = treatmentBMP.CustomAttributes.ToList();
 
-            var existingCustomAttributeValues = existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
+            var existingCustomAttributeValues =
+                existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
 
             existingCustomAttributes.Merge(customAttributesToUpdate, customAttributesInDatabase,
                 (x, y) => x.TreatmentBMPID == y.TreatmentBMPID

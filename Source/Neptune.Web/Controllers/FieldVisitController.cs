@@ -34,6 +34,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Controllers
@@ -177,7 +178,9 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
         {
-            var viewData = new AttributesViewData(CurrentPerson, fieldVisit);
+            EditAttributesViewData editAttributesViewData =
+                new EditAttributesViewData(CurrentPerson, fieldVisit, true);
+            var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
         }
 
@@ -192,7 +195,7 @@ namespace Neptune.Web.Controllers
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
-            viewModel.UpdateModel(fieldVisit);
+            viewModel.UpdateModel(fieldVisit, CurrentPerson);
 
             return ViewAttributes(fieldVisit, viewModel);
         }
