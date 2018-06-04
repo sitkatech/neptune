@@ -62,7 +62,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 .TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                     x.CustomAttributeType.CustomAttributeTypePurposeID !=
                     CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList().OrderBy(x =>
-                    x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeDisplayName)
+                    x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID)
                 .ThenByOrderThenName().ToList();
         }
     }

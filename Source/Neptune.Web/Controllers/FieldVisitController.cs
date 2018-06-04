@@ -196,6 +196,7 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
+            fieldVisit.InventoryUpdated = true;
 
             return ViewAttributes(fieldVisit, viewModel);
         }
