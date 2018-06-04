@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[FieldVisit](
 	[PostMaintenanceAssessmentID] [int] NULL,
 	[PerformedByPersonID] [int] NOT NULL,
 	[VisitDate] [datetime] NOT NULL,
+	[InventoryUpdated] [bit] NOT NULL,
  CONSTRAINT [PK_FieldVisit_FieldVisitID] PRIMARY KEY CLUSTERED 
 (
 	[FieldVisitID] ASC
