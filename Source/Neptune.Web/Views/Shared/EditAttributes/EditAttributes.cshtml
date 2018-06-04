@@ -47,7 +47,7 @@
                                             <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID" />
                                             @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
                                             {
-                                                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true" style="width: 150px">
+                                                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true">
                                                     <input type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" />
                                                     <div class="input-group-addon">
                                                         <span class="glyphicon glyphicon-th"></span>
@@ -59,7 +59,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-5">
                                                         <div class="input-group">
-                                                            <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" style="width: 100px;"/>
+                                                            <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit"/>
                                                             <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                         </div>
                                                     </div>
