@@ -19,9 +19,69 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
+using System.Linq;
+using LtInfo.Common;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.EditAttributes;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Attributes : LtInfo.Common.Mvc.TypedWebViewPage<AttributesViewData>
+    public abstract class Attributes : LtInfo.Common.Mvc.TypedWebViewPage<AttributesViewData, AttributesViewModel>
     {
+    }
+
+    public class AttributesViewModel : EditAttributesViewModel
+    {
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public AttributesViewModel()
+        {
+
+        }
+
+        public AttributesViewModel(Models.FieldVisit fieldVisit)
+        {
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            CustomAttributes = treatmentBMP.CustomAttributes.Select(x => new CustomAttributeSimple(x)).ToList();
+        }
+
+        public void UpdateModel(Models.FieldVisit fieldVisit, Person currentPerson)
+        {
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
+            var customAttributesToUpdate = new List<CustomAttribute>();
+            var customAttributeValuesToUpdate = new List<CustomAttributeValue>();
+            foreach (var x in customAttributeSimplesWithValues)
+            {
+                var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
+                customAttributesToUpdate.Add(customAttribute);
+                foreach (var value in x.CustomAttributeValues)
+                {
+                    var customAttributeValue = new CustomAttributeValue(customAttribute, value);
+                    customAttributeValuesToUpdate.Add(customAttributeValue);
+                }
+            }
+
+            var customAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributes.Local;
+            var customAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributeValues.Local;
+
+            var existingCustomAttributes = treatmentBMP.CustomAttributes.ToList();
+
+            var existingCustomAttributeValues = existingCustomAttributes.SelectMany(x => x.CustomAttributeValues).ToList();
+
+            existingCustomAttributes.Merge(customAttributesToUpdate, customAttributesInDatabase,
+                (x, y) => x.TreatmentBMPID == y.TreatmentBMPID
+                          && x.TreatmentBMPTypeID == y.TreatmentBMPTypeID
+                          && x.CustomAttributeTypeID == y.CustomAttributeTypeID
+                          && x.CustomAttributeID == y.CustomAttributeID);
+
+            existingCustomAttributeValues.Merge(customAttributeValuesToUpdate, customAttributeValuesInDatabase,
+                (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
+                          && x.CustomAttributeID == y.CustomAttributeID,
+                (x, y) => { x.AttributeValue = y.AttributeValue; });
+        }
     }
 }

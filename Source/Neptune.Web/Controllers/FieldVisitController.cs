@@ -171,8 +171,30 @@ namespace Neptune.Web.Controllers
         public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new AttributesViewModel(fieldVisit);
+            return ViewAttributes(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
+        {
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit);
-            return RazorView<Attributes, AttributesViewData>(viewData);
+            return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid) {
+                return ViewAttributes(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModel(fieldVisit);
+
+            return ViewAttributes(fieldVisit, viewModel);
         }
 
         [HttpGet]
