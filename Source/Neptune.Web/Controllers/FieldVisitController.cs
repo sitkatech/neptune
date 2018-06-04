@@ -119,14 +119,14 @@ namespace Neptune.Web.Controllers
             FieldVisit fieldVisit;
             if (viewModel.Continue == null)
             {
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
                 HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
             }
             else if (viewModel.Continue == false)
             {
                 var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
             }
             else // if Continue == true
             {
