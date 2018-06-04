@@ -121,7 +121,7 @@ namespace Neptune.Web.Models
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID]; } }
-        
+
         public static class FieldLengths
         {
             public const int MaintenanceRecordDescription = 500;
