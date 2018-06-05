@@ -19,9 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.Models;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Photos : LtInfo.Common.Mvc.TypedWebViewPage<PhotosViewData>
+    public abstract class Photos : LtInfo.Common.Mvc.TypedWebViewPage<PhotosViewData,PhotosViewModel>
+    {
+    }
+
+    public class PhotosViewModel : FormViewModel
     {
     }
 }

@@ -155,7 +155,21 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new LocationViewData(CurrentPerson, fieldVisit);
-            return RazorView<Location, LocationViewData>(viewData);
+            return RazorView<Location, LocationViewData, LocationViewModel>(viewData, new LocationViewModel());
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
+        {
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Photos(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Location(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -164,7 +178,21 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new PhotosViewData(CurrentPerson, fieldVisit);
-            return RazorView<Photos, PhotosViewData>(viewData);
+            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, new PhotosViewModel());
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
+        {
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Attributes(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Photos(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -187,7 +215,7 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
+        public ActionResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
 
@@ -198,7 +226,13 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
 
-            return ViewAttributes(fieldVisit, viewModel);
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Assessment(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Attributes(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]

@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.FieldVisit
 
 @inherits Photos
@@ -27,3 +28,18 @@
 }
 
 Coming Soon!
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <hr />
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+        </div>
+    </div>
+}

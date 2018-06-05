@@ -19,9 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.Models;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Location : LtInfo.Common.Mvc.TypedWebViewPage<LocationViewData>
+    public abstract class Location : LtInfo.Common.Mvc.TypedWebViewPage<LocationViewData, LocationViewModel>
+    {
+    }
+
+    public class LocationViewModel : FormViewModel
     {
     }
 }
