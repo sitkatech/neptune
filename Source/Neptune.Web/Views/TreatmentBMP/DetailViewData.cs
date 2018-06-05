@@ -56,6 +56,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditTreatmentBMPPerformanceAndModelingAttributesUrl { get; }
         public string EditTreatmentBMPOtherDesignAttributesUrl { get; }
         public string NewFieldVisitUrl { get; }
+        public string LocationEditUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
@@ -86,6 +87,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewFundingSourcesUrl = SitkaRoute<FundingEventController>.BuildUrlFromExpression(c => c.NewFundingEvent(treatmentBMP));
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.PerformanceAndModelingAttributes));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
+
+            LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocation(treatmentBMP));
         }
 
         

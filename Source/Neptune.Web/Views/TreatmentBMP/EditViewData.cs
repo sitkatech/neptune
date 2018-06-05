@@ -32,12 +32,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditViewData : NeptuneViewData
     {
-
         public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems { get; }
-        public MapInitJson MapInitJson { get; }
-        public string MapFormID { get; }
-        public string TreatmentBMPInformationContainer { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
@@ -45,9 +41,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
             IEnumerable<Models.StormwaterJurisdiction> stormwaterJurisdictions,
-            IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
-            MapInitJson mapInitJson,
-            string mapFormID, List<Models.Organization> organizations) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes, List<Models.Organization> organizations) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
@@ -63,9 +57,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
             OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.DisplayName, "Same as the BMP Jurisdiction");
-            MapInitJson = mapInitJson;
-            MapFormID = mapFormID;
-            TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";
             TreatmentBMPIndexUrl = treatmentBMPIndexUrl;  
         }
     }

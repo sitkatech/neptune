@@ -9,9 +9,9 @@ namespace Neptune.Web.Views.FieldVisit
         public PostMaintenanceAssessmentViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(
             currentPerson, fieldVisit, Models.FieldVisitSection.PostMaintenanceAssessment)
         {
-            MaintenanceUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Maintain(fieldVisit));
+            WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
         }
 
-        public string MaintenanceUrl { get; }
+        public string WrapupUrl { get; }
     }
 }

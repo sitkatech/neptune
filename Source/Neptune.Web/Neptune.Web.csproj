@@ -245,12 +245,14 @@
     <Compile Include="Views\FieldVisit\AssessmentInformationViewModel.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewData.cs" />
     <Compile Include="Views\FieldVisit\AttributesViewData.cs" />
+    <Compile Include="Views\FieldVisit\AttributesViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewModel.cs" />
     <Compile Include="Views\FieldVisit\Assessment.cs" />
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
+    <Compile Include="Views\FieldVisit\LocationViewModel.cs" />
     <Compile Include="Views\FieldVisit\Maintain.cs" />
     <Compile Include="Views\FieldVisit\Index.cs" />
     <Compile Include="Views\FieldVisit\IndexViewData.cs" />
@@ -412,6 +414,9 @@
     <Compile Include="Views\NeptunePage\NeptunePageDetails.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageDetailsViewData.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
+    <Compile Include="Views\Shared\Location\EditLocation.cs" />
+    <Compile Include="Views\Shared\Location\EditLocationViewData.cs" />
+    <Compile Include="Views\Shared\Location\EditLocationViewModel.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrder.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrderViewData.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrderViewModel.cs" />
@@ -883,6 +888,9 @@
     <Compile Include="Views\TreatmentBMP\EditAttributesViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\Index.cs" />
     <Compile Include="Views\TreatmentBMP\FindABMP.cs" />
+    <Compile Include="Views\TreatmentBMP\EditLocation.cs" />
+    <Compile Include="Views\TreatmentBMP\EditLocationViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\LocationViewModel.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -1095,6 +1103,8 @@
     <Compile Include="Views\FieldVisit\FieldVisitGridSpec.cs" />
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
     <Content Include="Views\FieldVisit\Index.cshtml" />
+    <Content Include="Views\Shared\Location\EditLocation.cshtml" />
+    <Content Include="Views\TreatmentBMP\EditLocation.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

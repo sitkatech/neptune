@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Attributes : LtInfo.Common.Mvc.TypedWebViewPage<AttributesViewData>
+    public abstract class Attributes : LtInfo.Common.Mvc.TypedWebViewPage<AttributesViewData, AttributesViewModel>
     {
     }
 }

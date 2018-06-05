@@ -8,7 +8,7 @@ namespace Neptune.Web.Views.FieldVisit
             Models.FieldVisitSection.Inventory)
         {
             SubsectionName = "Photos";
-            
+            SectionHeader = "Photos";
         }
     }
 }

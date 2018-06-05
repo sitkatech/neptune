@@ -19,12 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
+using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
@@ -90,8 +92,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         {
             var errors = new List<ValidationResult>();
 
-            var customAttributeTypeIDs = CustomAttributes.Select(x => x.CustomAttributeTypeID).ToList();
-            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
+            var customAttributeTypes = GetCustomAttributeTypes();
 
 
             var requiredAttributeDoesNotHaveValue = customAttributeTypes.Any(x =>
@@ -111,7 +112,23 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 return errors;
             }
 
-            foreach (var customAttributeSimple in CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
+            CheckTypeExpectations(customAttributeTypes, errors);
+
+            return errors;
+        }
+
+        protected List<Models.CustomAttributeType> GetCustomAttributeTypes()
+        {
+            var customAttributeTypeIDs = CustomAttributes.Select(x => x.CustomAttributeTypeID).ToList();
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes
+                .Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
+            return customAttributeTypes;
+        }
+
+        protected void CheckTypeExpectations(List<Models.CustomAttributeType> customAttributeTypes, List<ValidationResult> errors)
+        {
+            foreach (var customAttributeSimple in CustomAttributes.Where(x =>
+                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
             {
                 var customAttributeType = customAttributeTypes.Single(x =>
                     x.CustomAttributeTypeID == customAttributeSimple.CustomAttributeTypeID);
@@ -120,16 +137,14 @@ namespace Neptune.Web.Views.Shared.EditAttributes
 
                 foreach (var value in customAttributeSimple.CustomAttributeValues)
                 {
-                    if (!customAttributeDataType.ValueIsCorrectDataType(value))
+                    if (!string.IsNullOrWhiteSpace(value) && !customAttributeDataType.ValueIsCorrectDataType(value))
                     {
                         errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>(
-                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).", m => m.CustomAttributes));
+                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).",
+                            m => m.CustomAttributes));
                     }
                 }
-                
             }
-
-            return errors;
         }
     }
 }

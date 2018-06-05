@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="Location.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="LocationViewModel.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,9 +19,24 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Views.Shared.Location;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class Location : LtInfo.Common.Mvc.TypedWebViewPage<LocationViewData, LocationViewModel>
+    public class LocationViewModel : EditLocationViewModel
     {
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public LocationViewModel()
+        {
+
+        }
+
+        public LocationViewModel(Models.FieldVisit fieldVisit)
+        {
+            TreatmentBMPPointY = fieldVisit.TreatmentBMP.LocationPoint.YCoordinate;
+            TreatmentBMPPointX = fieldVisit.TreatmentBMP.LocationPoint.XCoordinate;
+        }
     }
 }

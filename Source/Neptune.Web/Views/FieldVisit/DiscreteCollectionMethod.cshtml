@@ -23,7 +23,8 @@
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.FieldVisit.DiscreteCollectionMethod
 
-@{
+@if (!ViewDataTyped.ForObservationTypePreview)
+{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 

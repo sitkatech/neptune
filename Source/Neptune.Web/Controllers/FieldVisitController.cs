@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Microsoft.Ajax.Utilities;
@@ -34,7 +35,11 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.Shared.EditAttributes;
+using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.SortOrder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Controllers
 {
@@ -119,14 +124,14 @@ namespace Neptune.Web.Controllers
             FieldVisit fieldVisit;
             if (viewModel.Continue == null)
             {
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
                 HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
             }
             else if (viewModel.Continue == false)
             {
                 var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
             }
             else // if Continue == true
             {
@@ -153,8 +158,54 @@ namespace Neptune.Web.Controllers
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new LocationViewData(CurrentPerson, fieldVisit);
-            return RazorView<Location, LocationViewData>(viewData);
+            var viewModel = new LocationViewModel(fieldVisit);
+
+            return ViewLocation(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewLocation(FieldVisit fieldVisit, LocationViewModel viewModel)
+        {
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+            var mapFormID = "treatmentBMPLocation";
+            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var boundingBox = treatmentBMP?.LocationPoint != null
+                ? new BoundingBox(treatmentBMP.LocationPoint)
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson =
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                {
+                    AllowFullScreen = false
+                };
+            var editLocationViewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
+            var viewData = new LocationViewData(CurrentPerson, fieldVisit, editLocationViewData);
+
+            return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewLocation(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
+            fieldVisit.InventoryUpdated = true;
+
+            SetMessageForDisplay("Successfully updated Treatment BMP Location.");
+
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Photos(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Location(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -163,7 +214,21 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new PhotosViewData(CurrentPerson, fieldVisit);
-            return RazorView<Photos, PhotosViewData>(viewData);
+            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, new PhotosViewModel());
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
+        {
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Attributes(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Photos(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -171,8 +236,41 @@ namespace Neptune.Web.Controllers
         public ViewResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new AttributesViewData(CurrentPerson, fieldVisit);
-            return RazorView<Attributes, AttributesViewData>(viewData);
+            var viewModel = new AttributesViewModel(fieldVisit);
+            return ViewAttributes(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
+        {
+            EditAttributesViewData editAttributesViewData =
+                new EditAttributesViewData(CurrentPerson, fieldVisit, true);
+            var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
+            return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Attributes(FieldVisitPrimaryKey fieldVisitPrimaryKey, AttributesViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid) {
+                return ViewAttributes(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModel(fieldVisit, CurrentPerson);
+            fieldVisit.InventoryUpdated = true;
+
+            SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
+
+            return viewModel.AutoAdvance
+                ? new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Assessment(fieldVisitPrimaryKey)))
+                : new RedirectResult(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.Attributes(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
@@ -325,7 +423,26 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
-            return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
+            return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, new WrapUpVisitViewModel());
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, WrapUpVisitViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
+            if (!ModelState.IsValid)
+            {
+                return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, viewModel);
+            }
+
+            fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+
+            SetMessageForDisplay($"Successfully completed the Field Visit for {fieldVisit.TreatmentBMP.GetDisplayNameAsUrl()}.");
+
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.FindABMP()));
         }
 
         #region Assessment-Related Actions
@@ -698,6 +815,77 @@ namespace Neptune.Web.Controllers
 
             return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
         }
+
+
+        // This Get has to exist so that the jQuery posting on the front-end will work
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ContentResult PreviewObservationType()
+        {
+            return Content("");
+        }
+
+        // This Post looks like it has zero references, but it actually is consumed by the jQuery posting on the front-end
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult PreviewObservationType(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelStateSerialized = JObject
+                    .FromObject(ModelState.ToDictionary(x => x.Key,
+                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                return Content(modelStateSerialized);
+            }
+
+            ViewResult result;
+            var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
+                ModelObjectHelpers.NotYetAssignedID,
+                ModelObjectHelpers.NotYetAssignedID, null, string.Empty,
+                string.Empty);
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
+                x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
+                x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
+                x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var treatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
+                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result =
+                        RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                            DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData,
+                            discreteCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
+                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
+                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
+                    var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    
+                    // TODO: Do all like this
+                    //result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    break;
+                default:
+                    throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
+            }
+
+            return result;
+        }
+
     }
 
     public enum FieldVisitAssessmentType

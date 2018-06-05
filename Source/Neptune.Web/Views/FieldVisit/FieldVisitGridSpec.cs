@@ -48,6 +48,8 @@ namespace Neptune.Web.Views.FieldVisit
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.GetStatusAsWorkflowUrl(), 85,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Inventory Updated?", x => new HtmlString(x.InventoryUpdated ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Required Attributes Entered?", x => new HtmlString(!x.RequiredAttributeDoesNotHaveValue() ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
             Add("Initial Assessment?",
                 x => x.InitialAssessmentID != null
                     ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), x.InitialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",

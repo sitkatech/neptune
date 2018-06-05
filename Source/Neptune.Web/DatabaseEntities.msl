@@ -99,6 +99,7 @@
           <ScalarProperty Name="PostMaintenanceAssessmentID" ColumnName="PostMaintenanceAssessmentID" />
           <ScalarProperty Name="PerformedByPersonID" ColumnName="PerformedByPersonID" />
           <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+          <ScalarProperty Name="InventoryUpdated" ColumnName="InventoryUpdated" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

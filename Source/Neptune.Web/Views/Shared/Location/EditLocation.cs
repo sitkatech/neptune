@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="Location.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="EditLocation.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -19,9 +19,19 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-namespace Neptune.Web.Views.FieldVisit
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+
+namespace Neptune.Web.Views.Shared.Location
 {
-    public abstract class Location : LtInfo.Common.Mvc.TypedWebViewPage<LocationViewData, LocationViewModel>
+    public abstract class
+        EditLocation : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditLocationViewData, EditLocationViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, EditLocationViewData viewData,
+            EditLocationViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData,
+                viewModel);
+        }
     }
 }

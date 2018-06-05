@@ -35,7 +35,8 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public bool IsSubForm { get; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm) : base(currentPerson,
+            StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             IsSubForm = isSubForm;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
@@ -45,9 +46,24 @@ namespace Neptune.Web.Views.Shared.EditAttributes
             SubEntityUrl = treatmentBMP.GetDetailUrl();
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()} Attributes";
 
-            TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x=>x.CustomAttributeType.CustomAttributeTypePurposeID == customAttributeTypePurpose.CustomAttributeTypePurposeID)
-                .ToList().SortByOrderThenName().ToList();
             ParentDetailUrl = treatmentBMP.GetDetailUrl();
+
+            TreatmentBMPTypeCustomAttributeTypes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes
+                .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                            customAttributeTypePurpose.CustomAttributeTypePurposeID)
+                .ToList().SortByOrderThenName().ToList();
+        }
+
+        public EditAttributesViewData(Person currentPerson, Models.FieldVisit fieldVisit, bool isSubForm) : base(
+            currentPerson, StormwaterBreadCrumbEntity.FieldVisits)
+        {
+            IsSubForm = isSubForm;
+            TreatmentBMPTypeCustomAttributeTypes = fieldVisit.TreatmentBMP.TreatmentBMPType
+                .TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurposeID !=
+                    CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).ToList().OrderBy(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurpose.CustomAttributeTypePurposeID)
+                .ThenByOrderThenName().ToList();
         }
     }
 }

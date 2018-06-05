@@ -26,4 +26,12 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
-Coming Soon!
+@using (Html.BeginForm())
+{
+    <button class="btn btn-neptune" style="display: inline-block;">
+        <span>
+            Finalize Visit
+        </span>
+        <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px;"></span>
+    </button>
+}

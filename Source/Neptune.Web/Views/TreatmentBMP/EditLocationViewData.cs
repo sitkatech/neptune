@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="Location.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="EditLocationViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,10 +18,16 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMP
 {
-    public abstract class Location : LtInfo.Common.Mvc.TypedWebViewPage<LocationViewData, LocationViewModel>
+    public class EditLocationViewData : Neptune.Web.Views.Shared.Location.EditLocationViewData
     {
+        public EditLocationViewData(Person currentPerson,
+            Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, string mapFormID) : base(currentPerson, treatmentBMP, mapInitJson, mapFormID)
+        {
+            
+        }
     }
 }

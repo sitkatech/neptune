@@ -40,5 +40,10 @@ namespace Neptune.Web.Views.Shared.SortOrder
         {
             return sortableList.OrderBy(x => x.SortOrder).ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase);
         }
+
+        public static IOrderedEnumerable<T> ThenByOrderThenName<T>(this IOrderedEnumerable<T> presortedList) where T : IHaveASortOrder
+        {
+            return presortedList.ThenBy(x => x.SortOrder).ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase);
+        }
     }
 }

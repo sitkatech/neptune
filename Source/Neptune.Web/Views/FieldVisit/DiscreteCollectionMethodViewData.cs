@@ -46,6 +46,16 @@ namespace Neptune.Web.Views.FieldVisit
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
+        }        
+
+        public DiscreteCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment,
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
+        //: base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
+        {
+            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema);
+            MeasurementUnitLabelAndUnit =
+                $"{treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.AssessmentDescription;
         }
 
         public class DiscreteCollectionMethodViewDataForAngular
