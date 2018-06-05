@@ -54,7 +54,10 @@
             color: #333;
         }
 
-        nav#wizardNav ul.fieldVisitTierTwoMenu li a span { color: #f0ad4e; background-color: inherit; }
+            nav#wizardNav ul.fieldVisitTierTwoMenu li a span {
+                color: #f0ad4e;
+                background-color: inherit;
+            }
 
 
         @@media (min-width: 769px) {
@@ -74,7 +77,9 @@
                 z-index: 900;
             }
 
-            nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:after { border-left: 8px solid #e49937 !important; }
+            nav#wizardNav ul.fieldVisitTierTwoMenu a.activeItem:after {
+                border-left: 8px solid #e49937 !important;
+            }
         }
 
         nav#wizardNav ul.fieldVisitTierTwoMenu a:hover {
@@ -95,6 +100,19 @@
     </style>
 }
 @Html.ValidationSummary()
+@if (Html.ViewData.ModelState.IsValid && ViewDataTyped.ValidationWarnings.Any())
+{
+    <div class="alert alert-warning">
+        <ul>
+            @foreach (string warning in ViewDataTyped.ValidationWarnings)
+            {
+                <li>
+                    <span>@warning</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
