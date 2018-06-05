@@ -351,7 +351,26 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
-            return RazorView<WrapUpVisit, WrapUpVisitViewData>(viewData);
+            return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, new WrapUpVisitViewModel());
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, WrapUpVisitViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
+            if (!ModelState.IsValid)
+            {
+                return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, viewModel);
+            }
+
+            fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+
+            SetMessageForDisplay($"Successfully completed the Field Visit for {fieldVisit.TreatmentBMP.GetDisplayNameAsUrl()}.");
+
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.Detail(fieldVisit.TreatmentBMP)));
         }
 
         #region Assessment-Related Actions

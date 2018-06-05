@@ -19,9 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.Models;
+
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class WrapUpVisit : LtInfo.Common.Mvc.TypedWebViewPage<WrapUpVisitViewData>
+    public abstract class WrapUpVisit : LtInfo.Common.Mvc.TypedWebViewPage<WrapUpVisitViewData, WrapUpVisitViewModel>
+    {
+    }
+
+    public class WrapUpVisitViewModel : FormViewModel
     {
     }
 }
