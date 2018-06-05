@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
             EditAttributesViewData = editAttributesViewData;
             SubsectionName = "Attributes";
-            SectionHeader = "BMP Attributes";
+            SectionHeader = "Attributes";
             if (fieldVisit.RequiredAttributeDoesNotHaveValue())
             {
                 ValidationWarnings.Add("Required attributes are missing values.");
