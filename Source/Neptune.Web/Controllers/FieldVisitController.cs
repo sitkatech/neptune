@@ -370,7 +370,7 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay($"Successfully completed the Field Visit for {fieldVisit.TreatmentBMP.GetDisplayNameAsUrl()}.");
 
-            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.Detail(fieldVisit.TreatmentBMP)));
+            return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.FindABMP()));
         }
 
         #region Assessment-Related Actions
