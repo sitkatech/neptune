@@ -148,7 +148,10 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
+            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
             {
@@ -162,17 +165,7 @@ namespace Neptune.Web.Controllers
                 }
             }
 
-            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
-
-            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
-
-            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
-            var boundingBox = treatmentBMP?.LocationPoint !=null ? new BoundingBox(treatmentBMP.LocationPoint) : BoundingBox.MakeNewDefaultBoundingBox();
-            var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false) { AllowFullScreen = false };
-            var mapFormID = "treatmentBMPLocation";
-
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
-            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, mapInitJson, mapFormID, organizations);
+            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
