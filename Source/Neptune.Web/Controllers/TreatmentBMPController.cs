@@ -268,5 +268,55 @@ namespace Neptune.Web.Controllers
             var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose);
             return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
+
+
+
+        [HttpGet]
+        [TreatmentBMPEditFeature]
+        public ViewResult EditLocation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new EditLocationViewModel(treatmentBMP);
+
+            return ViewEditLocation(treatmentBMP, viewModel);
+        }
+
+        private ViewResult ViewEditLocation(TreatmentBMP treatmentBMP, EditLocationViewModel viewModel)
+        {
+            var mapFormID = "treatmentBMPEditLocation";
+            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var boundingBox = treatmentBMP?.LocationPoint != null
+                ? new BoundingBox(treatmentBMP.LocationPoint)
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson =
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                {
+                    AllowFullScreen = false
+                };
+            var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP,mapInitJson, mapFormID);
+
+            return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditLocation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditLocationViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewEditLocation(treatmentBMP, viewModel);
+            }
+
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+
+            SetMessageForDisplay("Successfully updated Treatment BMP Location.");
+
+            return new RedirectResult(
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
+                    x.Detail(treatmentBMPPrimaryKey)));
+        }
     }
 }

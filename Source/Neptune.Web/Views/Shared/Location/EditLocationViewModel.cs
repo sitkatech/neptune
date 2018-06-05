@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity.Spatial;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
@@ -47,23 +46,10 @@ namespace Neptune.Web.Views.Shared.Location
         {
         }
 
-        public EditLocationViewModel(Models.TreatmentBMP treatmentBMP, DbGeometry treatmentBMPPoint)
-        {
-            if (treatmentBMPPoint != null)
-            {
-                TreatmentBMPPointX = treatmentBMPPoint.XCoordinate;
-                TreatmentBMPPointY = treatmentBMPPoint.YCoordinate;
-            }
-            else
-            {
-                TreatmentBMPPointX = null;
-                TreatmentBMPPointY = null;
-            }
-        }
-
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
-            treatmentBMP.LocationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.Value, TreatmentBMPPointY.Value, MapInitJson.CoordinateSystemId);
+            // note that these nullables will never be null due to the Required attribute
+            treatmentBMP.LocationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(), TreatmentBMPPointY.GetValueOrDefault(), MapInitJson.CoordinateSystemId);
         }
 
     }

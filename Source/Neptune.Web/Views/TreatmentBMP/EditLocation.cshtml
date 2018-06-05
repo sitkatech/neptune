@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 
 @inherits Neptune.Web.Views.TreatmentBMP.EditLocation
@@ -33,22 +34,21 @@
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
 }
 
-@{
-    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
-}
 
-@using (Html.BeginForm())
-{
-    Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped, Model);
-    <hr/>
-    <div class="row">
-        <div class="col-xs-12 col-sm-2">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-        </div>
+    <div class="formPage">
+        @using (Html.BeginForm())
+        {
+            Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped, Model);
+            <hr />
+            <div class="row">
+                <div class="col-xs-12 col-sm-2">
+                    <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                </div>
 
-        <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
-        </div>
+                <div class="col-xs-12 col-sm-10" style="text-align: right">
+                    <button type="submit" class="btn btn-neptune">Save</button>
+                    <a href="@ViewDataTyped.TreatmentBMP.GetDetailUrl()" type="submit" class="btn btn-neptune" value="true">Cancel</a>
+                </div>
+            </div>
+        }
     </div>
-}

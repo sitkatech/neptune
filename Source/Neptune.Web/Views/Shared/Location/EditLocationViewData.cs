@@ -47,8 +47,7 @@ namespace Neptune.Web.Views.Shared.Location
                 TreatmentBMP = treatmentBMP;
             }
 
-            PageTitle =
-                $"{(treatmentBMP != null ? "EditLocation" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+            PageTitle = "Edit Location";
 
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;

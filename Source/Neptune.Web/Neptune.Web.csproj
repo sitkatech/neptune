@@ -1104,7 +1104,7 @@
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
     <Content Include="Views\FieldVisit\Index.cshtml" />
     <Content Include="Views\Shared\Location\EditLocation.cshtml" />
-    <Content Include="Views\TreatmentBMP\Location.cshtml" />
+    <Content Include="Views\TreatmentBMP\EditLocation.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

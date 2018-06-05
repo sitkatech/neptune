@@ -31,10 +31,10 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         }
 
-        public EditLocationViewModel(Models.FieldVisit fieldVisit)
+        public EditLocationViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            TreatmentBMPPointY = fieldVisit.TreatmentBMP.LocationPoint.YCoordinate;
-            TreatmentBMPPointX = fieldVisit.TreatmentBMP.LocationPoint.XCoordinate;
+            TreatmentBMPPointY = treatmentBMP.LocationPoint.YCoordinate;
+            TreatmentBMPPointX = treatmentBMP.LocationPoint.XCoordinate;
         }
     }
 }
