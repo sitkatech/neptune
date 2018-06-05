@@ -53,6 +53,7 @@ namespace Neptune.Web
                 "~/Views/Shared/ProjectUpdateDiffControls/{0}.cshtml",
                 "~/Views/Shared/EditAttributes/{0}.cshtml",
                 "~/Views/Shared/SortOrder/{0}.cshtml",
+                "~/Views/Shared/Location/{0}.cshtml",
 
             } };
             // read the log4net configuration from the web.config file
