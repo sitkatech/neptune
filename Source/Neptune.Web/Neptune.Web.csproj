@@ -245,6 +245,7 @@
     <Compile Include="Views\FieldVisit\AssessmentInformationViewModel.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewData.cs" />
     <Compile Include="Views\FieldVisit\AttributesViewData.cs" />
+    <Compile Include="Views\FieldVisit\AttributesViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewModel.cs" />

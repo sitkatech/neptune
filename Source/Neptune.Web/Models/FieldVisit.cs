@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
@@ -47,6 +48,15 @@ namespace Neptune.Web.Models
         public void DetachInitialAssessment()
         {
             InitialAssessmentID = null;
+        }
+
+        public bool RequiredAttributeDoesNotHaveValue()
+        {
+            return TreatmentBMP.CustomAttributes.Any(x =>
+            {
+                return x.CustomAttributeType.IsRequired &&
+                       (x.CustomAttributeValues == null || x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)));
+            });
         }
     }
 }
