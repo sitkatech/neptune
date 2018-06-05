@@ -413,9 +413,9 @@
     <Compile Include="Views\NeptunePage\NeptunePageDetails.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageDetailsViewData.cs" />
     <Compile Include="Views\NeptunePage\NeptunePageGridSpec.cs" />
-    <Compile Include="Views\Shared\Location\Edit.cs" />
-    <Compile Include="Views\Shared\Location\EditViewData.cs" />
-    <Compile Include="Views\Shared\Location\EditViewModel.cs" />
+    <Compile Include="Views\Shared\Location\EditLocation.cs" />
+    <Compile Include="Views\Shared\Location\EditLocationViewData.cs" />
+    <Compile Include="Views\Shared\Location\EditLocationViewModel.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrder.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrderViewData.cs" />
     <Compile Include="Views\Shared\SortOrder\EditSortOrderViewModel.cs" />
@@ -1099,7 +1099,7 @@
     <Compile Include="Views\FieldVisit\FieldVisitGridSpec.cs" />
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
     <Content Include="Views\FieldVisit\Index.cshtml" />
-    <Content Include="Views\Shared\Location\Edit.cshtml" />
+    <Content Include="Views\Shared\Location\EditLocation.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

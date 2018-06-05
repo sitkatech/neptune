@@ -20,10 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -32,7 +28,6 @@ namespace Neptune.Web.Views.Shared.Location
 {
     public class EditLocationViewData : NeptuneViewData
     {
-
         public MapInitJson MapInitJson { get; }
         public string MapFormID { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
@@ -42,7 +37,8 @@ namespace Neptune.Web.Views.Shared.Location
             IEnumerable<Models.StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             MapInitJson mapInitJson,
-            string mapFormID, List<Models.Organization> organizations) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            string mapFormID, List<Models.Organization> organizations) : base(currentPerson,
+            StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
@@ -53,7 +49,9 @@ namespace Neptune.Web.Views.Shared.Location
                 SubEntityUrl = treatmentBMP.GetDetailUrl();
                 TreatmentBMP = treatmentBMP;
             }
-            PageTitle = $"{(treatmentBMP != null ? "EditLocation" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+
+            PageTitle =
+                $"{(treatmentBMP != null ? "EditLocation" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
