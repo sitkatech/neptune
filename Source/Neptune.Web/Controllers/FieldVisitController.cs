@@ -155,17 +155,28 @@ namespace Neptune.Web.Controllers
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var mapFormID = "treatmentBMPLocation";
+            var viewModel = new LocationViewModel(fieldVisit);
 
+            return ViewLocation(fieldVisit, viewModel);
+        }
+
+        private ViewResult ViewLocation(FieldVisit fieldVisit, LocationViewModel viewModel)
+        {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-
+            var mapFormID = "treatmentBMPLocation";
             var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
-            var boundingBox = treatmentBMP?.LocationPoint != null ? new BoundingBox(treatmentBMP.LocationPoint) : BoundingBox.MakeNewDefaultBoundingBox();
-            var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false) { AllowFullScreen = false };
-
+            var boundingBox = treatmentBMP?.LocationPoint != null
+                ? new BoundingBox(treatmentBMP.LocationPoint)
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson =
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                {
+                    AllowFullScreen = false
+                };
             var editLocationViewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
             var viewData = new LocationViewData(CurrentPerson, fieldVisit, editLocationViewData);
-            return RazorView<Location, LocationViewData, LocationViewModel>(viewData, new LocationViewModel());
+
+            return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
@@ -173,7 +184,18 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
         {
-            // todo: literally anything
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewLocation(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
+            fieldVisit.InventoryUpdated = true;
+
+            SetMessageForDisplay("Successfully updated Treatment BMP Location.");
+
             return viewModel.AutoAdvance
                 ? new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
@@ -236,6 +258,8 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
+
+            SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
 
             return viewModel.AutoAdvance
                 ? new RedirectResult(

@@ -38,14 +38,11 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
-Coming Soon!
-
 @using (Html.BeginForm())
 {
     Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped.EditLocationViewData, Model);
-
+    <hr/>
     <div class="row">
-        <hr />
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>

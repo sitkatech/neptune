@@ -10,6 +10,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
             EditLocationViewData = editLocationViewData;
             SubsectionName = "Location";
+            SectionHeader = "BMP Location";
         }
 
         public EditLocationViewData EditLocationViewData { get; }

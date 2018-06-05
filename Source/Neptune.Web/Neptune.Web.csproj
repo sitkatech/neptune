@@ -252,6 +252,7 @@
     <Compile Include="Views\FieldVisit\Assessment.cs" />
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
+    <Compile Include="Views\FieldVisit\LocationViewModel.cs" />
     <Compile Include="Views\FieldVisit\Maintain.cs" />
     <Compile Include="Views\FieldVisit\Index.cs" />
     <Compile Include="Views\FieldVisit\IndexViewData.cs" />
