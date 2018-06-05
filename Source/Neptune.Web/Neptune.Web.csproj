@@ -888,6 +888,9 @@
     <Compile Include="Views\TreatmentBMP\EditAttributesViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\Index.cs" />
     <Compile Include="Views\TreatmentBMP\FindABMP.cs" />
+    <Compile Include="Views\TreatmentBMP\EditLocation.cs" />
+    <Compile Include="Views\TreatmentBMP\EditLocationViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\LocationViewModel.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -1101,6 +1104,7 @@
     <Content Include="Views\FieldVisit\AssessmentInformation.cshtml" />
     <Content Include="Views\FieldVisit\Index.cshtml" />
     <Content Include="Views\Shared\Location\EditLocation.cshtml" />
+    <Content Include="Views\TreatmentBMP\Location.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
