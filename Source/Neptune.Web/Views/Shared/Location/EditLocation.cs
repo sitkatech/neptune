@@ -18,9 +18,20 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+
 namespace Neptune.Web.Views.Shared.Location
 {
-    public abstract class EditLocation : LtInfo.Common.Mvc.TypedWebViewPage<EditLocationViewData, EditLocationViewModel>
+    public abstract class
+        EditLocation : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditLocationViewData, EditLocationViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, EditLocationViewData viewData,
+            EditLocationViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData,
+                viewModel);
+        }
     }
 }

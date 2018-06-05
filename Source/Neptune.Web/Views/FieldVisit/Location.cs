@@ -19,7 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using LtInfo.Common.Models;
+using Neptune.Web.Views.Shared.Location;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.FieldVisit
     {
     }
 
-    public class LocationViewModel : FormViewModel
+    public class LocationViewModel : EditLocationViewModel
     {
     }
 }

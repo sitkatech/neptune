@@ -35,6 +35,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
+using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Controllers
@@ -154,7 +155,16 @@ namespace Neptune.Web.Controllers
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new LocationViewData(CurrentPerson, fieldVisit);
+            var mapFormID = "treatmentBMPLocation";
+
+            var treatmentBMP = fieldVisit.TreatmentBMP;
+
+            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var boundingBox = treatmentBMP?.LocationPoint != null ? new BoundingBox(treatmentBMP.LocationPoint) : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson = new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false) { AllowFullScreen = false };
+
+            var editLocationViewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
+            var viewData = new LocationViewData(CurrentPerson, fieldVisit, editLocationViewData);
             return RazorView<Location, LocationViewData, LocationViewModel>(viewData, new LocationViewModel());
         }
 
@@ -163,6 +173,7 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey, LocationViewModel viewModel)
         {
+            // todo: literally anything
             return viewModel.AutoAdvance
                 ? new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>

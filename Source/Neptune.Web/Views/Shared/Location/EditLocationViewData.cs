@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -34,10 +33,8 @@ namespace Neptune.Web.Views.Shared.Location
 
         public EditLocationViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
-            IEnumerable<Models.StormwaterJurisdiction> stormwaterJurisdictions,
-            IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             MapInitJson mapInitJson,
-            string mapFormID, List<Models.Organization> organizations) : base(currentPerson,
+            string mapFormID) : base(currentPerson,
             StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
@@ -55,6 +52,9 @@ namespace Neptune.Web.Views.Shared.Location
 
             MapInitJson = mapInitJson;
             MapFormID = mapFormID;
+            TreatmentBMPInformationContainer = $"{mapInitJson.MapDivID}LocationInformationContainer";
         }
+
+        public string TreatmentBMPInformationContainer { get; }
     }
 }
