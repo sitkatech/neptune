@@ -46,6 +46,14 @@ namespace Neptune.Web.Views.FieldVisit
                 x.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
+        public RateCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
+        {
+            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.RateObservationTypeSchema);
+            MeasurementUnitLabelAndUnit =
+                $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.RateObservationTypeSchema.AssessmentDescription;
+        }
+
         public class RateCollectionMethodViewDataForAngular
         {
             public List<SelectItemSimple> PropertiesToObserve { get; }

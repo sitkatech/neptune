@@ -29,6 +29,8 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
     {
+        
+
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string PassingScoreLabel { get; }
         public string FailingScoreLabel { get; }
@@ -45,6 +47,14 @@ namespace Neptune.Web.Views.FieldVisit
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
+        }
+
+        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson): base(currentPerson)
+        {
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
+            PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
+            FailingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
         }
 
         public class PassFailCollectionMethodViewDataForAngular

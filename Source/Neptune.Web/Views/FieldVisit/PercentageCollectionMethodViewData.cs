@@ -44,6 +44,13 @@ namespace Neptune.Web.Views.FieldVisit
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
         }
 
+        public PercentageCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
+        {
+            ViewDataForAngular = new PercentageCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PercentageSchema);
+            MeasurementUnitLabelAndUnit = $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.PercentageSchema.AssessmentDescription;
+        }
+
         public class PercentageCollectionMethodViewDataForAngular
         {
             public List<SelectItemSimple> PropertiesToObserve { get; }

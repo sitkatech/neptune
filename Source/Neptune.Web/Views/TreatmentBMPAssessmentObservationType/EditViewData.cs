@@ -101,7 +101,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             RateObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Rate.ObservationTypeCollectionMethodID;
             PassFailObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID;
             PercentageObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Percentage.ObservationTypeCollectionMethodID;
-            PreviewUrl = SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.Preview());
+            PreviewUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PreviewObservationType());
         }
     }
 

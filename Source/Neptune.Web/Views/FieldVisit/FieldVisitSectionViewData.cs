@@ -30,5 +30,10 @@ namespace Neptune.Web.Views.FieldVisit
             SectionHeader = fieldVisitSection.SectionHeader;
             ValidationWarnings = new List<string>();
         }
+
+        protected FieldVisitSectionViewData(Person currentPerson) : base(currentPerson)
+        {
+            ValidationWarnings = new List<string>();
+        }
     }
 }

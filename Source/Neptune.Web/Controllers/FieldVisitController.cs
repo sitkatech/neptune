@@ -26,6 +26,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Microsoft.Ajax.Utilities;
@@ -37,6 +38,8 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.SortOrder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Controllers
 {
@@ -812,6 +815,77 @@ namespace Neptune.Web.Controllers
 
             return !associatedFieldVisitEntitiesString.IsNullOrWhiteSpace() ? $" This will delete the associated {associatedFieldVisitEntitiesString}." : "";
         }
+
+
+        // This Get has to exist so that the jQuery posting on the front-end will work
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ContentResult PreviewObservationType()
+        {
+            return Content("");
+        }
+
+        // This Post looks like it has zero references, but it actually is consumed by the jQuery posting on the front-end
+        [HttpPost]
+        [NeptuneAdminFeature]
+        public ActionResult PreviewObservationType(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelStateSerialized = JObject
+                    .FromObject(ModelState.ToDictionary(x => x.Key,
+                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                return Content(modelStateSerialized);
+            }
+
+            ViewResult result;
+            var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
+                ModelObjectHelpers.NotYetAssignedID,
+                ModelObjectHelpers.NotYetAssignedID, null, string.Empty,
+                string.Empty);
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
+                x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
+                x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
+                x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var treatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
+                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result =
+                        RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                            DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData,
+                            discreteCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
+                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
+                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+                    break;
+                case ObservationTypeCollectionMethodEnum.Rate:
+                    var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
+                    var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
+                    result = RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    
+                    // TODO: Do all like this
+                    //result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    break;
+                default:
+                    throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
+            }
+
+            return result;
+        }
+
     }
 
     public enum FieldVisitAssessmentType

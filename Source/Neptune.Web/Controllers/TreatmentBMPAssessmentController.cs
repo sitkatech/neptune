@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
-using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -121,13 +120,6 @@ namespace Neptune.Web.Controllers
         {
             var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
-        }
-        
-        [HttpGet]
-        [NeptuneAdminFeature]
-        public ContentResult Preview()
-        {
-            return Content("");
         }
     }
 }
