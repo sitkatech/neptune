@@ -65,7 +65,7 @@
                                                     <div class="row">
                                                         <div class="col-sm-12">
                                                             <div class="input-group">
-                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit"/>
+                                                                <input class="form-control" type="number" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" ng-currency/>
                                                                 <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                             </div>
                                                         </div>
