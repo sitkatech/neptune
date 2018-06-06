@@ -28,4 +28,7 @@ namespace Neptune.Web.Views.FieldVisit
     public abstract class PassFailCollectionMethod : TypedWebViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
     {
     }
+    public abstract class PassFailCollectionMethodPartial : TypedWebPartialViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
+    {
+    }
 }

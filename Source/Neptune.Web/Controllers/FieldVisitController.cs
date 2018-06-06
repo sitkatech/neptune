@@ -841,7 +841,7 @@ namespace Neptune.Web.Controllers
                 return Content(modelStateSerialized);
             }
 
-            ViewResult result;
+            PartialViewResult result;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, null, string.Empty,
@@ -858,27 +858,25 @@ namespace Neptune.Web.Controllers
                     var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
                     var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
                     result =
-                        RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                        RazorPartialView<DiscreteCollectionMethodPartial, DiscreteCollectionMethodViewData,
                             DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData,
                             discreteCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
                     var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+                    result = RazorPartialView<PassFailCollectionMethodPartial, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
                     var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+                    result = RazorPartialView<PercentageCollectionMethodPartial, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Rate:
                     var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
                     var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
-                    
                     // TODO: Do all like this
-                    //result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
                     break;
                 default:
                     throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");

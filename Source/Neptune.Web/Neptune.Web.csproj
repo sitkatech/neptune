@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -751,6 +751,7 @@
     <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
     <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
     <Content Include="Content\img\OCStormwater\manifest.json" />
+    <Content Include="DiscreteCollectionMethodPartial.cshtml" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
@@ -1107,6 +1108,10 @@
     <Content Include="Views\FieldVisit\Index.cshtml" />
     <Content Include="Views\Shared\Location\EditLocation.cshtml" />
     <Content Include="Views\TreatmentBMP\EditLocation.cshtml" />
+    <Content Include="Views\FieldVisit\ObservationTypePreview\DiscreteCollectionMethodPartial.cshtml" />
+    <Content Include="Views\FieldVisit\ObservationTypePreview\RateCollectionMethodPartial.cshtml" />
+    <Content Include="Views\FieldVisit\ObservationTypePreview\PercentageCollectionMethodPartial.cshtml" />
+    <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

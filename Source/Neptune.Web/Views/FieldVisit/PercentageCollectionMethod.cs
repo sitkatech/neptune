@@ -28,4 +28,8 @@ namespace Neptune.Web.Views.FieldVisit
     public abstract class PercentageCollectionMethod : TypedWebViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
     {
     }
+    public abstract class PercentageCollectionMethodPartial : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
+    {
+    }
+
 }
