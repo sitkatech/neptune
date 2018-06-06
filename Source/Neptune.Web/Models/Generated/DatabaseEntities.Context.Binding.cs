@@ -165,6 +165,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(fieldVisitStatus, "FieldVisitStatus", primaryKey);
                     return fieldVisitStatus;
 
+                case "FieldVisitType":
+                    var fieldVisitType = FieldVisitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(fieldVisitType, "FieldVisitType", primaryKey);
+                    return fieldVisitType;
+
                 case "FileResourceMimeType":
                     var fileResourceMimeType = FileResourceMimeType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(fileResourceMimeType, "FileResourceMimeType", primaryKey);
