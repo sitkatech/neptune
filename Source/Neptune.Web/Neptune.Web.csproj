@@ -495,6 +495,7 @@
     <Compile Include="Controllers\TenantController.cs" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.js" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.min.js" />
+    <Content Include="Content\autonumeric.min.js" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.min.css" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.standalone.css" />

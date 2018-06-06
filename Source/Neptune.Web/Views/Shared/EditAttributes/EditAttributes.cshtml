@@ -29,6 +29,16 @@
     </div>
 }
 
+
+<script src="@Url.Content("~/Content/autonumeric.min.js")"></script>
+
+<script>
+    var decimal;
+    jQuery(document).ready(function () {
+        decimal = AutoNumeric.multiple('.numericAttribute', {allowDecimalPadding: false});
+    });
+</script>
+
 <div class="row">
     <div class="col-xs-12">
         <div class="row">
@@ -68,10 +78,11 @@
                                             }
                                             else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Integer || attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Decimal)
                                             {
+                                                
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="input-group">
-                                                            <input class="form-control" type="number" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" ng-currency />
+                                                            <input class="form-control numericAttribute" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" />
                                                             <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                         </div>
                                                     </div>
