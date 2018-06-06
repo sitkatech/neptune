@@ -107,11 +107,11 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 return customAttributeSimple != null;
             });
 
-            if (requiredAttributeDoesNotHaveValue)
-            {
-                errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
-                return errors;
-            }
+            //if (requiredAttributeDoesNotHaveValue)
+            //{
+            //    errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
+            //    return errors;
+            //}
 
             CheckTypeExpectations(customAttributeTypes, errors);
 

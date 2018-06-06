@@ -243,8 +243,9 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
         {
+            var missingRequiredAttributes = fieldVisit.RequiredAttributeDoesNotHaveValue();
             EditAttributesViewData editAttributesViewData =
-                new EditAttributesViewData(CurrentPerson, fieldVisit, true);
+                new EditAttributesViewData(CurrentPerson, fieldVisit, true, missingRequiredAttributes);
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
         }
@@ -350,15 +351,20 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit);
+            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit, maintenanceRecord);
         }
 
-        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
-            FieldVisit fieldVisit)
+        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel,
+            TreatmentBMP treatmentBMP, bool isNew,
+            FieldVisit fieldVisit, MaintenanceRecord maintenanceRecord)
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true);
+            var missingRequiredAttributes = maintenanceRecord.MaintenanceRecordObservations.Any(x =>
+                x.CustomAttributeType.IsRequired && (x.MaintenanceRecordObservationValues == null ||
+                                                     x.MaintenanceRecordObservationValues.All(y =>
+                                                         string.IsNullOrWhiteSpace(y.ObservationValue))));
+            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true, missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
@@ -374,10 +380,10 @@ namespace Neptune.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit);
+                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
-            viewModel.UpdateModel(fieldVisit);
+            viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 

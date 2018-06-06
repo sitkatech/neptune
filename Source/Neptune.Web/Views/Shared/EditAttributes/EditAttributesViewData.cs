@@ -33,12 +33,14 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public List<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; }
         public string ParentDetailUrl { get; set; }
         public bool IsSubForm { get; }
+        public bool MissingRequiredAttributes { get; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm) : base(currentPerson,
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes) : base(currentPerson,
             StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             IsSubForm = isSubForm;
+            MissingRequiredAttributes = missingRequiredAttributes;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
@@ -54,10 +56,11 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 .ToList().SortByOrderThenName().ToList();
         }
 
-        public EditAttributesViewData(Person currentPerson, Models.FieldVisit fieldVisit, bool isSubForm) : base(
+        public EditAttributesViewData(Person currentPerson, Models.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes) : base(
             currentPerson, StormwaterBreadCrumbEntity.FieldVisits)
         {
             IsSubForm = isSubForm;
+            MissingRequiredAttributes = missingRequiredAttributes;
             TreatmentBMPTypeCustomAttributeTypes = fieldVisit.TreatmentBMP.TreatmentBMPType
                 .TreatmentBMPTypeCustomAttributeTypes.Where(x =>
                     x.CustomAttributeType.CustomAttributeTypePurposeID !=

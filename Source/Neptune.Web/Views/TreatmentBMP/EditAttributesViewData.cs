@@ -25,7 +25,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class EditAttributesViewData : Shared.EditAttributes.EditAttributesViewData
     {
-        public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, CustomAttributeTypePurpose customAttributeTypePurpose) : base(currentPerson, treatmentBMP, customAttributeTypePurpose, false)
+        public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool missingRequiredAttributes) : base(currentPerson, treatmentBMP, customAttributeTypePurpose, false, missingRequiredAttributes)
         {
         }
     }

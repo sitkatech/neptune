@@ -53,7 +53,7 @@ namespace Neptune.Web.Views.FieldVisit
             CustomAttributes = maintenanceRecord.MaintenanceRecordObservations.Select(x => new CustomAttributeSimple(x)).ToList();
         }
 
-        public void UpdateModel(Models.FieldVisit fieldVisit)
+        public void UpdateModel(Models.FieldVisit fieldVisit, List<Models.CustomAttributeType> allCustomAttributeTypes)
         {
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
@@ -74,7 +74,8 @@ namespace Neptune.Web.Views.FieldVisit
 
                 foreach (var value in x.CustomAttributeValues)
                 {
-                    var customAttributeValue = new MaintenanceRecordObservationValue(customAttribute, value);
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(y => y.CustomAttributeTypeID == x.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    var customAttributeValue = new MaintenanceRecordObservationValue(customAttribute, valueParsedForDataType);
                     customAttributeValuesToUpdate.Add(customAttributeValue);
                 }
             }

@@ -43,6 +43,10 @@ namespace Neptune.Web.Models
 
         public override string ValueParsedForDataType(string customAttributeValue)
         {
+            if (string.IsNullOrWhiteSpace(customAttributeValue))
+            {
+                return customAttributeValue;
+            }
             int _;
             if (int.TryParse(customAttributeValue, out _))
             {
@@ -73,6 +77,10 @@ namespace Neptune.Web.Models
 
         public override string ValueParsedForDataType(string customAttributeValue)
         {
+            if (string.IsNullOrWhiteSpace(customAttributeValue))
+            {
+                return customAttributeValue;
+            }
             decimal _;
             if (decimal.TryParse(customAttributeValue, out _))
             {
@@ -102,6 +110,10 @@ namespace Neptune.Web.Models
 
         public override string ValueParsedForDataType(string customAttributeValue)
         {
+            if (string.IsNullOrWhiteSpace(customAttributeValue))
+            {
+                return customAttributeValue;
+            }
             DateTime _;
             if (System.DateTime.TryParse(customAttributeValue, out _))
             {
