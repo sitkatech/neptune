@@ -487,7 +487,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
-    <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
+    <Property Name="MaintenanceRecordTypeID" Type="int" />
   </EntityType>
   <EntityType Name="MaintenanceRecordObservation">
     <Key>
@@ -740,6 +740,7 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     <Property Name="SystemOfRecordID" Type="varchar" MaxLength="100" />
     <Property Name="YearBuilt" Type="int" />
     <Property Name="OwnerOrganizationID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementProgramID" Type="varchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.

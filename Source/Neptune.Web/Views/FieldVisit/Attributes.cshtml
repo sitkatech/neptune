@@ -27,6 +27,20 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
+@if (Html.ViewData.ModelState.IsValid && ViewDataTyped.ValidationWarnings.Any())
+{
+    <div class="alert alert-warning">
+        <ul>
+            @foreach (string warning in ViewDataTyped.ValidationWarnings)
+            {
+                <li>
+                    <span>@warning</span>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
 @using (Html.BeginForm())
 {
     Neptune.Web.Views.Shared.EditAttributes.EditAttributes.RenderPartialView(Html, ViewDataTyped.EditAttributesViewData, Model);

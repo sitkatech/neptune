@@ -31,7 +31,6 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewModel : EditAttributesViewModel
     {
-        [Required]
         [StringLength(Models.MaintenanceRecord.FieldLengths.MaintenanceRecordDescription)]
         [Display(Name = "Description")]
         public string MaintenanceRecordDescription { get; set; }

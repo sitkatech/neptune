@@ -489,7 +489,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
-    <Property Name="MaintenanceRecordTypeID" Type="Int32" Nullable="false" />
+    <Property Name="MaintenanceRecordTypeID" Type="Int32" />
     <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID" FromRole="MaintenanceRecord" ToRole="FieldVisits" />
     <NavigationProperty Name="TreatmentBMP" Relationship="Neptune.Web.Models.FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID" FromRole="MaintenanceRecords" ToRole="TreatmentBMP" />
     <NavigationProperty Name="MaintenanceRecordObservations" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID" FromRole="MaintenanceRecord" ToRole="MaintenanceRecordObservations" />
@@ -745,6 +745,7 @@
     <Property Name="SystemOfRecordID" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="YearBuilt" Type="Int32" />
     <Property Name="OwnerOrganizationID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementProgramID" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="CustomAttributes" />
     <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FieldVisits" />
     <NavigationProperty Name="FundingEvents" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FundingEvents" />

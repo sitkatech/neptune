@@ -109,6 +109,15 @@
                         @Html.ValidationMessageFor(m => m.SystemOfRecordID)
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m => m.WaterQualityManagementProgramID)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.TextBoxFor(m => m.WaterQualityManagementProgramID, new Dictionary<string, object> { { "style", "width: auto" }, { "class", "form-control" } })
+                        @Html.ValidationMessageFor(m => m.WaterQualityManagementProgramID)
+                    </div>
+                </div>
             </div>
         </div>
         <hr/>

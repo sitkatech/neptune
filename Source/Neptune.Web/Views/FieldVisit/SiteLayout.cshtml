@@ -100,19 +100,6 @@
     </style>
 }
 @Html.ValidationSummary()
-@if (Html.ViewData.ModelState.IsValid && ViewDataTyped.ValidationWarnings.Any())
-{
-    <div class="alert alert-warning">
-        <ul>
-            @foreach (string warning in ViewDataTyped.ValidationWarnings)
-            {
-                <li>
-                    <span>@warning</span>
-                </li>
-            }
-        </ul>
-    </div>
-}
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">

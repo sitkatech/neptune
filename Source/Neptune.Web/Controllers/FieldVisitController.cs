@@ -307,7 +307,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewModel = new MaintainViewModel(fieldVisit);
+            var viewModel = new MaintainViewModel();
             return ViewMaintain(fieldVisit, viewModel);
         }
 
@@ -335,7 +335,7 @@ namespace Neptune.Web.Controllers
 
             if (maintenanceRecord == null)
             {
-                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.GetValueOrDefault());
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID);
                 HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;

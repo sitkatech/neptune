@@ -26,6 +26,8 @@ using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 
@@ -41,6 +43,10 @@ namespace Neptune.Web.Views.FieldVisit
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty,
+                x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x)),new FieldVisitEditFeature().HasPermission(currentPerson, x).HasPermission), 30,
+                DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

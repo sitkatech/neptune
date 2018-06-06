@@ -385,6 +385,7 @@
           <ScalarProperty Name="SystemOfRecordID" ColumnName="SystemOfRecordID" />
           <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
           <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
+          <ScalarProperty Name="WaterQualityManagementProgramID" ColumnName="WaterQualityManagementProgramID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
