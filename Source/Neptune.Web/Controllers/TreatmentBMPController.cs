@@ -257,7 +257,8 @@ namespace Neptune.Web.Controllers
                 return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
             }
 
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose);
+            var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
             SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
