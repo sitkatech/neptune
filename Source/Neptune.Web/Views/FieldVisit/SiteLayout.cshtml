@@ -113,7 +113,7 @@
                             <a class="@(topLevelIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSection.GetSectionUrl(ViewDataTyped.FieldVisit)">
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
-                            @if (sectionIsActive && !topLevelIsActive)
+                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)) )
                             {
                                 <ul class="nav nav-stacked fieldVisitTierTwoMenu">
                                     @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))

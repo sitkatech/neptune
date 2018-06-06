@@ -32,6 +32,8 @@ namespace Neptune.Web.Models
     {
         public abstract string GetSectionUrl(FieldVisit fieldVisit);
         public abstract IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit);
+
+        public abstract bool ExpandMenu(FieldVisit fieldVisit);
     }
 
     public partial class FieldVisitSectionInventory
@@ -59,6 +61,11 @@ namespace Neptune.Web.Models
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
             };
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.InventoryUpdated;
+        }
     }
 
     public class FieldVisitSubsectionData
@@ -79,6 +86,11 @@ namespace Neptune.Web.Models
         {
             return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.Initial);
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.InitialAssessmentID != null;
+        }
     }
 
     public partial class FieldVisitSectionMaintenance
@@ -96,6 +108,11 @@ namespace Neptune.Web.Models
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.EditMaintenanceRecord(fieldVisit))
             };
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.MaintenanceRecordID != null;
+        }
     }
 
     public partial class FieldVisitSectionPostMaintenanceAssessment
@@ -109,6 +126,11 @@ namespace Neptune.Web.Models
         {
             return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.PostMaintenance);
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.PostMaintenanceAssessmentID != null;
+        }
     }
 
     public partial class FieldVisitSectionWrapUpVisit
@@ -121,6 +143,11 @@ namespace Neptune.Web.Models
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
+        }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return false;
         }
     }
 
