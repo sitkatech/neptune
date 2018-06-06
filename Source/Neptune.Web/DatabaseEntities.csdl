@@ -767,8 +767,6 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="Int32" Nullable="false" />
-    <Property Name="AlternateAssessmentScore" Type="Double" />
-    <Property Name="AlternateAssessmentRationale" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
     <Property Name="Notes" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="FieldVisitsWhereYouAreTheInitialAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TreatmentBMPAssessmentID" FromRole="InitialAssessment" ToRole="FieldVisitsWhereYouAreTheInitialAssessment" />
     <NavigationProperty Name="FieldVisitsWhereYouAreThePostMaintenanceAssessment" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMPAssessment_PostMaintenanceAssessmentID_TreatmentBMPAssessmentID" FromRole="PostMaintenanceAssessment" ToRole="FieldVisitsWhereYouAreThePostMaintenanceAssessment" />

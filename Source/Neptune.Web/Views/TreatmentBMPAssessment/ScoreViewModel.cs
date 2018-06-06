@@ -33,17 +33,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPAssessmentID { get; set; }
 
-        [DisplayName("Use an Alternative Score?")]
-        public bool UseAlternateScore { get; set; }
-
-        [FieldDefinitionDisplay(FieldDefinitionEnum.AlternativeScore)]
-        [Range(0, 5, ErrorMessage = "Score must be between 0-5")]
-        public double? AlternativeAssessmentScore { get; set; }
-
-        [DisplayName("Reason for Alternative Score")]
-        [StringLength(Models.TreatmentBMPAssessment.FieldLengths.AlternateAssessmentRationale)]
-        public string AlternativeAssessmentScoreRationale { get; set; }
-
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -55,46 +44,18 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         {
             TreatmentBMPID = treatmentBMPAssessment.TreatmentBMPID;
             TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
-            if (treatmentBMPAssessment.AlternateAssessmentScore != null)
-            {
-                UseAlternateScore = true;
-                AlternativeAssessmentScore = treatmentBMPAssessment.AlternateAssessmentScore;
-                AlternativeAssessmentScoreRationale = treatmentBMPAssessment.AlternateAssessmentRationale;
-            }
-            else
-            {
-                UseAlternateScore = false;
-            }
+            
             
         }
 
         public void UpdateModel(Models.TreatmentBMPAssessment treatmentBMPAssessment, Person currentPerson)
         {
-            if (UseAlternateScore)
-            {
-                treatmentBMPAssessment.AlternateAssessmentScore = AlternativeAssessmentScore;
-                treatmentBMPAssessment.AlternateAssessmentRationale = AlternativeAssessmentScoreRationale;
-            }
-            else
-            {
-                treatmentBMPAssessment.AlternateAssessmentScore = null;
-                treatmentBMPAssessment.AlternateAssessmentRationale = null;
-            }
+            
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
-
-            if ((UseAlternateScore && AlternativeAssessmentScore == null) || (UseAlternateScore && AlternativeAssessmentScoreRationale == null))
-            {
-                validationResults.Add(new SitkaValidationResult<ScoreViewModel, bool>("Both Score and Rationale are required to use an optional Alternative Score.", x => x.UseAlternateScore));
-            }
-
-            if (AlternativeAssessmentScore.ToString().Length > 3)
-            {
-                validationResults.Add(new SitkaValidationResult<ScoreViewModel, double?>("Alternative Score can only have one decimal value.", x => x.AlternativeAssessmentScore));
-            }
 
             return validationResults;
         }

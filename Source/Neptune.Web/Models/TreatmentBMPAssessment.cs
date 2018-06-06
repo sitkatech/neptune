@@ -53,7 +53,7 @@ namespace Neptune.Web.Models
 
         public bool HasCalculatedOrAlternateScore()
         {
-            return IsAssessmentComplete() || AlternateAssessmentScore != null;
+            return IsAssessmentComplete();
         }
 
         public double? CalculateAssessmentScore()

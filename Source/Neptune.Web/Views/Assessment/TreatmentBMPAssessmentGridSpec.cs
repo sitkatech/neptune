@@ -40,7 +40,6 @@ namespace Neptune.Web.Views.Assessment
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Date", x => x.GetAssessmentDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Water Year", x => x.GetWaterYear().ToString("0000"), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Score", x => x.AlternateAssessmentScore ?? x.CalculateAssessmentScore(), 80);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => x.GetFieldVisitPerson.GetFullNameFirstLastAsUrl(), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.GetFieldVisit().FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);

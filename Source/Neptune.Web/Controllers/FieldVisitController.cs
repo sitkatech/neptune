@@ -844,8 +844,7 @@ namespace Neptune.Web.Controllers
             PartialViewResult result;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, null, string.Empty,
-                string.Empty);
+                ModelObjectHelpers.NotYetAssignedID, null);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
             var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
                 x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&

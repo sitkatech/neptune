@@ -396,8 +396,6 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="AlternateAssessmentScore" ColumnName="AlternateAssessmentScore" />
-          <ScalarProperty Name="AlternateAssessmentRationale" ColumnName="AlternateAssessmentRationale" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
         </MappingFragment>
       </EntityTypeMapping>

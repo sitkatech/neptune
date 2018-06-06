@@ -758,8 +758,6 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
-    <Property Name="AlternateAssessmentScore" Type="float" />
-    <Property Name="AlternateAssessmentRationale" Type="varchar" MaxLength="1000" />
     <Property Name="Notes" Type="varchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:
