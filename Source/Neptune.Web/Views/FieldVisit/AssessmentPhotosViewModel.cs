@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public IList<TreatmentBmpAssessmentPhotoSimple> TreatmentBmpAssessmentPhotoSimples { get; set; }
 
-        [DisplayName("Photo to upload")]
+        [DisplayName("Upload a photo")]
         [SitkaFileExtensions("jpg|jpeg|gif|png")]
         public HttpPostedFileBase Photo { get; set; }
 

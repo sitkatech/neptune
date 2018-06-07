@@ -12,8 +12,7 @@ namespace Neptune.Web.Models
         [DisplayName("Caption")]
         [MaxLength(TreatmentBMPAssessmentPhoto.FieldLengths.Caption)]
         public string Caption { get; set; }
-
-        [Required]
+        
         [DisplayName("Delete?")]
         public bool FlagForDeletion { get; set; }
     }

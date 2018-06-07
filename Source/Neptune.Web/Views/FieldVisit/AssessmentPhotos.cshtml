@@ -1,6 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Microsoft.Ajax.Utilities
 @using Neptune.Web.Views.FieldVisit
 
 @inherits AssessmentPhotos
@@ -37,17 +36,33 @@
         }
         jQuery(function() {
             jQuery("#@Html.IdFor(m => m.Photo)").on("change", onChangeFileInput);
+            HookupCheckIfFormIsDirtyNoDisable();
         });
         // ]]>
     </script>
     <style>
+        .imagePreviewRibbon {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            right: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f0ad4e;
+            background: rgba(240, 173, 78, 0.8);
+            color: #f0f0f0;
+            line-height: 30px;
+        }
+
         .switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 34px;
+            width: 52px;
+            height: 26px;
         }
+
         .switch input { display: none; }
+
         .slider {
             position: absolute;
             cursor: pointer;
@@ -59,24 +74,26 @@
             -webkit-transition: .2s;
             transition: .2s;
         }
+
         .slider:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 18px;
+            width: 18px;
             left: 4px;
             bottom: 4px;
             background-color: white;
             -webkit-transition: .2s;
             transition: .2s;
         }
+
         input:checked + .slider {
             background-color: #d9534f;
             border: 1px solid #d43f3a;
         }
-        input:focus + .slider {
-            box-shadow: 0 0 1px #d9534f;
-        }
+
+        input:focus + .slider { box-shadow: 0 0 1px #d9534f; }
+
         input:checked + .slider:before {
             -webkit-transform: translateX(26px);
             -ms-transform: translateX(26px);
@@ -84,12 +101,10 @@
             left: 3px;
             bottom: 3px;
         }
-        .slider.round {
-            border-radius: 34px;
-        }
-        .slider.round:before {
-            border-radius: 50%;
-        }
+
+        .slider.round { border-radius: 26px; }
+
+        .slider.round:before { border-radius: 50%; }
     </style>
 }
 
@@ -112,7 +127,8 @@
                         </div>
                     </div>
                     <div id="treatmentBmpAssessmentPhotoPreview" class="col-xs-12 col-sm-6 text-center" style="display: none;">
-                        <img src="#" alt="Preview of image to upload." class="col-xs-12 col-sm-6" style="width: 100%;"/>
+                        <img src="#" alt="Preview of image to upload." class="col-xs-12 col-sm-6 imagePreview" style="width: 100%;"/>
+                        <div class="imagePreviewRibbon">Preview</div>
                     </div>
                 </div>
             </div>
