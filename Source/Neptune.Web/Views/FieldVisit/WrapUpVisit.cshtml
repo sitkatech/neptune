@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common
 @using Neptune.Web.Views.FieldVisit
 
 @inherits WrapUpVisit
@@ -26,12 +27,74 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
+<h4>Field Visit Overview</h4>
+<div class="row">
+    <label class="col-sm-1 control-label">Status</label>
+    <div class="col-sm-11">@ViewDataTyped.FieldVisit.FieldVisitStatus.FieldVisitStatusDisplayName</div>
+</div>
+<div class="row">
+    <label class="col-sm-1 control-label">Person</label>
+    <div class="col-sm-11">@ViewDataTyped.FieldVisit.PerformedByPerson.FullNameFirstLast</div>
+</div>
+<div class="row">
+    <label class="col-sm-1 control-label">Date</label>
+    <div class="col-sm-11">@ViewDataTyped.FieldVisit.VisitDate.ToShortDateString()</div>
+</div>
+
+<h4>Status of Records</h4>
+
+<div class="row">
+    <label class="col-sm-4 control-label">Inventory Updated</label>
+    <div class="col-sm-8">@ViewDataTyped.FieldVisit.InventoryUpdated.ToYesNo()</div>
+</div>
+@if (ViewDataTyped.FieldVisit.InventoryUpdated)
+{
+    <div class="row">
+        <label class="col-sm-4 control-label">All Required Attributes Provided?</label>
+        <div class="col-sm-8">@((!ViewDataTyped.FieldVisit.RequiredAttributeDoesNotHaveValue()).ToYesNo())</div>
+    </div>
+}
+
+<div class="row">
+    <label class="col-sm-4 control-label">Initial Assessment Status</label>
+    <div class="col-sm-8">@(ViewDataTyped.FieldVisit.InitialAssessment == null ? "Not Performed" : (ViewDataTyped.FieldVisit.InitialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress"))</div>
+</div>
+@if (ViewDataTyped.FieldVisit.InitialAssessment != null)
+{
+    <div class="row">
+        <label class="col-sm-4 control-label">Assessment Score</label>
+        <div class="col-sm-8">@(ViewDataTyped.FieldVisit.InitialAssessment.IsAssessmentComplete() ? ViewDataTyped.FieldVisit.InitialAssessment.FormattedScore() : "The assessment score cannot be calculated because the assessment is not complete.")</div>
+    </div>
+}
+
+<div class="row">
+    <label class="col-sm-4 control-label">Maintenance Status</label>
+    <div class="col-sm-8">@(ViewDataTyped.FieldVisit.MaintenanceRecord == null ? "Not Performed" : (ViewDataTyped.FieldVisit.MaintenanceRecord.IsMissingRequiredAttributes ? "In Progress" : "Complete"))</div>
+</div>
+
+<div class="row">
+    <label class="col-sm-4 control-label">Post-Maintenance Assessment Status</label>
+    <div class="col-sm-8">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment == null ? "Not Performed" : (ViewDataTyped.FieldVisit.PostMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress"))</div>
+</div>
+@if (ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null)
+{
+    <div class="row">
+        <label class="col-sm-4 control-label">Post-Maintenance Assessment Score</label>
+        <div class="col-sm-8">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment.IsAssessmentComplete() ? ViewDataTyped.FieldVisit.PostMaintenanceAssessment.FormattedScore() : "The assessment score cannot be calculated because the assessment is not complete.")</div>
+    </div>
+}
+
+
 @using (Html.BeginForm())
 {
-    <button class="btn btn-neptune" style="display: inline-block;">
-        <span>
-            Finalize Visit
-        </span>
-        <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px;"></span>
-    </button>
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-neptune" style="display: inline-block;">
+                <span>
+                    Finalize Visit
+                </span>
+                <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px;"></span>
+            </button>
+        </div>
+    </div>
 }
