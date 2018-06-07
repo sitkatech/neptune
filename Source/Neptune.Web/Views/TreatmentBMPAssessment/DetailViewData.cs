@@ -19,22 +19,26 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMPAssessment
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly Models.TreatmentBMPAssessment TreatmentBMPAssessment;
-        public readonly bool CurrentPersonCanManage;
-        public readonly bool CanEdit;
-        public readonly ScoreDetailViewData ScoreDetailViewData;
-        public readonly string EditBenchmarkAndThresholdUrl;
+        public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
+        public bool CurrentPersonCanManage { get; }
+        public bool CanEdit { get; }
+        public ScoreDetailViewData ScoreDetailViewData { get; }
+        public string EditBenchmarkAndThresholdUrl { get; }
+        public ImageCarouselViewData ImageCarouselViewData { get; }
 
-        
+
+
         public DetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
@@ -52,6 +56,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             SubEntityName = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = treatmentBMPAssessment.TreatmentBMP.GetDetailUrl();
             PageTitle = treatmentBMPAssessment.GetAssessmentDate.ToStringDate();
+
+            var carouselImages = TreatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
+            ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
         }
     }
 }
