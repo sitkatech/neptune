@@ -40,6 +40,7 @@ using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.SortOrder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
 {
@@ -446,6 +447,7 @@ namespace Neptune.Web.Controllers
         }
 
         #region Assessment-Related Actions
+
         #region Observation Types
 
         [HttpGet]
@@ -706,6 +708,8 @@ namespace Neptune.Web.Controllers
                         fieldVisitAssessmentTypeID)));
         }
 
+
+
         #endregion
         #region Helper methods for Assessment
 
@@ -758,9 +762,51 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+        #region Assessment Photos
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var viewModel = new AssessmentPhotosViewModel(treatmentBMPAssessment);
+            return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID,
+            AssessmentPhotosViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            if (!ModelState.IsValid)
+            {
+                return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
+            }
+
+            viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
+            SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
+            
+            return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID))); // TODO better redirect
+        }
+
+        private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType, AssessmentPhotosViewModel viewModel)
+        {
+            var fieldVisitSection = fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                ? (FieldVisitSection) FieldVisitSection.Assessment
+                : FieldVisitSection.PostMaintenanceAssessment;
+            var viewData = new AssessmentPhotosViewData(CurrentPerson, treatmentBMPAssessment, fieldVisitSection);
+            return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);
+        }
+
         #endregion
 
-
+        #endregion
 
         [HttpGet]
         [FieldVisitDeleteFeature]

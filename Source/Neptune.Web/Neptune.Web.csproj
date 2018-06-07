@@ -185,6 +185,9 @@
     <Compile Include="Models\Generated\TreatmentBMPAssessmentObservationType.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessmentObservationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessmentObservationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentPhoto.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentPhoto.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentPhotoPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.DatabaseContextExtensions.cs" />
@@ -223,6 +226,7 @@
     <Compile Include="Models\IHaveASortOrder.cs" />
     <Compile Include="Models\MaintenanceRecord.cs" />
     <Compile Include="Models\MaintenanceRecordObservation.cs" />
+    <Compile Include="Models\TreatmentBMPAssessmentPhoto.cs" />
     <Compile Include="Models\TreatmentBMPFundingSource.cs" />
     <Compile Include="Models\FundingEventFundingSourceSimple.cs" />
     <Compile Include="Models\TreatmentBMPSimple.cs" />
@@ -243,6 +247,9 @@
     <Compile Include="Views\FieldVisit\AssessmentInformation.cs" />
     <Compile Include="Views\FieldVisit\AssessmentInformationViewData.cs" />
     <Compile Include="Views\FieldVisit\AssessmentInformationViewModel.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentPhotos.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentPhotosViewData.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentPhotosViewModel.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewData.cs" />
     <Compile Include="Views\FieldVisit\AttributesViewData.cs" />
     <Compile Include="Views\FieldVisit\AttributesViewModel.cs" />
@@ -262,6 +269,7 @@
     <Compile Include="Views\FieldVisit\Location.cs" />
     <Compile Include="Views\FieldVisit\Photos.cs" />
     <Compile Include="Views\FieldVisit\Attributes.cs" />
+    <Compile Include="Models\TreatmentBmpAssessmentPhotoSimple.cs" />
     <Compile Include="Views\FieldVisit\WrapUpVisit.cs" />
     <Compile Include="Views\FieldVisit\Inventory.cs" />
     <Compile Include="Views\FieldVisit\MaintainViewData.cs" />
@@ -1105,6 +1113,7 @@
     <Content Include="Views\FieldVisit\Index.cshtml" />
     <Content Include="Views\Shared\Location\EditLocation.cshtml" />
     <Content Include="Views\TreatmentBMP\EditLocation.cshtml" />
+    <Content Include="Views\FieldVisit\AssessmentPhotos.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
