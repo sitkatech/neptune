@@ -100,6 +100,7 @@
           <ScalarProperty Name="PerformedByPersonID" ColumnName="PerformedByPersonID" />
           <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
           <ScalarProperty Name="InventoryUpdated" ColumnName="InventoryUpdated" />
+          <ScalarProperty Name="FieldVisitTypeID" ColumnName="FieldVisitTypeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -384,6 +385,7 @@
           <ScalarProperty Name="SystemOfRecordID" ColumnName="SystemOfRecordID" />
           <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
           <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
+          <ScalarProperty Name="WaterQualityManagementProgramID" ColumnName="WaterQualityManagementProgramID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -394,8 +396,6 @@
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="TreatmentBMPID" ColumnName="TreatmentBMPID" />
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
-          <ScalarProperty Name="AlternateAssessmentScore" ColumnName="AlternateAssessmentScore" />
-          <ScalarProperty Name="AlternateAssessmentRationale" ColumnName="AlternateAssessmentRationale" />
           <ScalarProperty Name="Notes" ColumnName="Notes" />
         </MappingFragment>
       </EntityTypeMapping>

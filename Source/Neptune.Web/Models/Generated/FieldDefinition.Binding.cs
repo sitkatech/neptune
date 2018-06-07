@@ -542,7 +542,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionMaintenanceRecordType : FieldDefinition
     {
         private FieldDefinitionMaintenanceRecordType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionMaintenanceRecordType Instance = new FieldDefinitionMaintenanceRecordType(41, @"MaintenanceRecordType", @"Maintenance Record Type", @"Whether the maintenance performed was Preventative or Corrective maintenance", true);
+        public static readonly FieldDefinitionMaintenanceRecordType Instance = new FieldDefinitionMaintenanceRecordType(41, @"MaintenanceRecordType", @"Maintenance Type", @"Whether the maintenance performed was Preventative or Corrective maintenance", true);
     }
 
     public partial class FieldDefinitionMaintenanceRecord : FieldDefinition

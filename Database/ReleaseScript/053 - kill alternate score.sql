@@ -1,0 +1,6 @@
+alter table dbo.TreatmentBMPAssessment
+drop constraint CK_TreatmentBMPAssessment_AlternateAssessmentScoreAndAlternateAssessmentRationaleBothOrNone
+alter table dbo.TreatmentBMPAssessment
+drop column AlternateAssessmentScore
+alter table dbo.TreatmentBMPAssessment
+drop column AlternateAssessmentRationale

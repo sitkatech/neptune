@@ -7,8 +7,6 @@ CREATE TABLE [dbo].[TreatmentBMPAssessment](
 	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
-	[AlternateAssessmentScore] [float] NULL,
-	[AlternateAssessmentRationale] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_TreatmentBMPAssessment_TreatmentBMPAssessmentID] PRIMARY KEY CLUSTERED 
 (
@@ -56,7 +54,3 @@ ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [FK_Treat
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMPAssessment_AlternateAssessmentScoreAndAlternateAssessmentRationaleBothOrNone] CHECK  (([AlternateAssessmentScore] IS NULL AND [AlternateAssessmentRationale] IS NULL OR [AlternateAssessmentScore] IS NOT NULL AND [AlternateAssessmentRationale] IS NOT NULL))
-GO
-ALTER TABLE [dbo].[TreatmentBMPAssessment] CHECK CONSTRAINT [CK_TreatmentBMPAssessment_AlternateAssessmentScoreAndAlternateAssessmentRationaleBothOrNone]

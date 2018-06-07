@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[FieldVisit](
 	[PerformedByPersonID] [int] NOT NULL,
 	[VisitDate] [datetime] NOT NULL,
 	[InventoryUpdated] [bit] NOT NULL,
+	[FieldVisitTypeID] [int] NOT NULL,
  CONSTRAINT [PK_FieldVisit_FieldVisitID] PRIMARY KEY CLUSTERED 
 (
 	[FieldVisitID] ASC
@@ -52,6 +53,11 @@ ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_FieldV
 REFERENCES [dbo].[FieldVisitStatus] ([FieldVisitStatusID])
 GO
 ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_FieldVisitStatus_FieldVisitStatusID]
+GO
+ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_FieldVisitType_FieldVisitTypeID] FOREIGN KEY([FieldVisitTypeID])
+REFERENCES [dbo].[FieldVisitType] ([FieldVisitTypeID])
+GO
+ALTER TABLE [dbo].[FieldVisit] CHECK CONSTRAINT [FK_FieldVisit_FieldVisitType_FieldVisitTypeID]
 GO
 ALTER TABLE [dbo].[FieldVisit]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_MaintenanceRecord_MaintenanceRecordID] FOREIGN KEY([MaintenanceRecordID])
 REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID])

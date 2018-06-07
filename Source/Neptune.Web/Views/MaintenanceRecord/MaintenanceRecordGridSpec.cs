@@ -76,7 +76,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add("Organization", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => x.GetMaintenanceRecordPerson.GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
-                x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
+                x => x.MaintenanceRecordType?.MaintenanceRecordTypeDisplayName ?? "Not set", 100,
                 DhtmlxGridColumnFilterType.Text);
             Add("Description", x => x.MaintenanceRecordDescription, 300, DhtmlxGridColumnFilterType.Text);
             foreach (var attributeType in allMaintenanceAttributeTypes)

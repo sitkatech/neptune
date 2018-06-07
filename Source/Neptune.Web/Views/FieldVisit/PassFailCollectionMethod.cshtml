@@ -100,3 +100,9 @@
         <input type="hidden" name="@Html.NameFor(m => m.ObservationData)" ng-value="AngularModel.ObservationData" />
     </div>
 </form>
+
+@* Call RenderBody to allow the partial shim around this view to work *@
+@if (ViewDataTyped.ForObservationTypePreview)
+{
+    @RenderBody()
+}

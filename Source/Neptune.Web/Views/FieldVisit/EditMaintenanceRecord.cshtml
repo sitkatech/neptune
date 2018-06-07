@@ -33,15 +33,15 @@
 {
     <div class="form-horizontal">
         <div class="form-group">
-            <div class="col-xs-3 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
-            <div class="col-xs-9">
+            <div class="col-xs-12 col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
+            <div class="col-xs-12 col-sm-9">
                 @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() { { "style", "width: auto" }, { "class", "form-control" } })
 
             </div>
         </div>
         <div class="form-group">
-            <div class="col-xs-3 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDescription)</div>
-            <div class="col-xs-9">
+            <div class="col-xs-12 col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordDescription)</div>
+            <div class="col-xs-12 col-sm-9">
                 @Html.TextAreaWithMaxLengthFor(m => m.MaintenanceRecordDescription, new TextAreaForExtensions.TextAreaDimensions(null, 6), null, new List<string>() { "form-control" })
             </div>
         </div>

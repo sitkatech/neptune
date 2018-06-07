@@ -22,124 +22,141 @@
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.Shared.EditAttributes.EditAttributes
 
+@if (Html.ViewData.ModelState.IsValid && ViewDataTyped.MissingRequiredAttributes)
+{
+    <div class="alert alert-warning">
+        Required Attributes are missing values.
+    </div>
+}
 
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="form-horizontal">
-                        @{
-                            var attributeTypesGroupedByPurpose = ViewDataTyped.TreatmentBMPTypeCustomAttributeTypes.GroupBy(x => x.CustomAttributeType.CustomAttributeTypePurpose);
-                            var i = 0;
-                        }
-                        @foreach (var attributeTypeGroup in attributeTypesGroupedByPurpose)
+
+<script src="@Url.Content("~/Content/autonumeric.min.js")"></script>
+
+<script>
+    var decimal;
+    jQuery(document).ready(function () {
+        decimal = AutoNumeric.multiple('.numericAttribute', {allowDecimalPadding: false});
+    });
+</script>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-horizontal">
+                    @{
+                        var attributeTypesGroupedByPurpose = ViewDataTyped.TreatmentBMPTypeCustomAttributeTypes.GroupBy(x => x.CustomAttributeType.CustomAttributeTypePurpose);
+                        var i = 0;
+                    }
+                    @foreach (var attributeTypeGroup in attributeTypesGroupedByPurpose)
+                    {
+                        <h4>@attributeTypeGroup.Key.CustomAttributeTypePurposeDisplayName</h4>
+                        foreach (var attribute in attributeTypeGroup)
                         {
-                            <h4>@attributeTypeGroup.Key.CustomAttributeTypePurposeDisplayName</h4>
-                            foreach (var attribute in attributeTypeGroup)
-                            {
-                                var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == attribute.CustomAttributeTypeID);
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">
-                                        @attribute.CustomAttributeType.CustomAttributeTypeName
-                                        @if (attribute.CustomAttributeType.IsRequired)
-                                        {
-                                            <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
-                                        }
-                                    </label>
-                                    <div class="col-sm-5">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID"/>
-                                                <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID"/>
-                                                @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
-                                                {
-                                                    <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true">
-                                                        <input type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)"/>
-                                                        <div class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-th"></span>
+                            var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == attribute.CustomAttributeTypeID);
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    @attribute.CustomAttributeType.CustomAttributeTypeName
+                                    @if (attribute.CustomAttributeType.IsRequired)
+                                    {
+                                        <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
+                                    }
+                                </label>
+                                <div class="col-sm-5">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
+                                            <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeTypeID" value="@attribute.CustomAttributeTypeID" />
+                                            @if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.DateTime)
+                                            {
+                                                <div class="input-group date" data-date-format="m/d/yyyy" data-provide="datepicker" data-date-autoclose="true" data-date-clear-btn="true">
+                                                    <input type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" class="form-control" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" />
+                                                    <div class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-th"></span>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Integer || attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Decimal)
+                                            {
+                                                
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group">
+                                                            <input class="form-control numericAttribute" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit" />
+                                                            <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
                                                         </div>
                                                     </div>
-                                                }
-                                                else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Integer || attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.Decimal)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="input-group">
-                                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" aria-describedby="attributeUnit"/>
-                                                                <span class="input-group-addon" id="attributeUnit">@(attribute.CustomAttributeType.MeasurementUnitType != null ? attribute.CustomAttributeType.MeasurementUnitType.MeasurementUnitTypeDisplayName : "")</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.PickFromList)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
+                                                </div>
+                                            }
+                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.PickFromList)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-sm-12">
 
-                                                            <select class="form-control" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]">
-                                                                <option value=""></option>
-                                                                @foreach (var option in attribute.CustomAttributeType.GetOptionsSchemaAsListOfString())
-                                                                {
-                                                                    <option value="@option" selected="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues[0] == option)">@option</option>
-                                                                }
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-
-                                                            @for (var j = 0; j < attribute.CustomAttributeType.GetOptionsSchemaAsListOfString().Count; j++)
+                                                        <select class="form-control" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]">
+                                                            <option value=""></option>
+                                                            @foreach (var option in attribute.CustomAttributeType.GetOptionsSchemaAsListOfString())
                                                             {
-                                                                var option = attribute.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
-
-                                                                <input type="checkbox"
-                                                                       id="@string.Format("multiselect_{0}{1}", option, i)"
-                                                                       value="@option"
-                                                                       name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues"
-                                                                       checked="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any(value => value == option))">
-                                                                <label for="@string.Format("multiselect_{0}{1}", option, i)">@option</label>
-                                                                <br/>
+                                                                <option value="@option" selected="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues[0] == option)">@option</option>
                                                             }
-                                                        </div>
+                                                        </select>
                                                     </div>
-                                                }
-                                                else
-                                                {
-                                                    <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)"/>
-                                                }
-                                            </div>
+                                                </div>
+                                            }
+                                            else if (attribute.CustomAttributeType.CustomAttributeDataType == CustomAttributeDataType.MultiSelect)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+
+                                                        @for (var j = 0; j < attribute.CustomAttributeType.GetOptionsSchemaAsListOfString().Count; j++)
+                                                        {
+                                                            var option = attribute.CustomAttributeType.GetOptionsSchemaAsListOfString()[j];
+
+                                                            <input type="checkbox"
+                                                                   id="@string.Format("multiselect_{0}{1}", option, i)"
+                                                                   value="@option"
+                                                                   name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues"
+                                                                   checked="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null && currentMetadata.CustomAttributeValues.Any(value => value == option))">
+                                                            <label for="@string.Format("multiselect_{0}{1}", option, i)">@option</label>
+                                                            <br />
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <input class="form-control" type="text" name="@(Html.NameFor(m => m.CustomAttributes))[@i].CustomAttributeValues[0]" value="@(currentMetadata != null && currentMetadata.CustomAttributeValues != null ? currentMetadata.CustomAttributeValues[0] : null)" />
+                                            }
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <p style="margin-top: 5px;" class="systemText">@attribute.CustomAttributeType.CustomAttributeTypeDescription</p>
-                                            </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <p style="margin-top: 5px;" class="systemText">@attribute.CustomAttributeType.CustomAttributeTypeDescription</p>
                                         </div>
                                     </div>
                                 </div>
-                                i++;
-                            }
+                            </div>
+                            i++;
                         }
-                    </div>
+                    }
                 </div>
             </div>
-            @if (!ViewDataTyped.IsSubForm)
-            {
-                <div class="row">
-                    <hr/>
-                    <div class="col-xs-12 col-sm-2">
-                        <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-                    </div>
-                    <div class="col-xs-12 col-sm-10" style="text-align: right">
-                        <button action="p" type="submit" class="btn btn-neptune">Save</button>
-                        <a href="@ViewDataTyped.ParentDetailUrl" class="btn btn-neptune">Cancel</a>
-                    </div>
-                </div>
-            }
         </div>
+        @if (!ViewDataTyped.IsSubForm)
+        {
+            <div class="row">
+                <hr />
+                <div class="col-xs-12 col-sm-2">
+                    <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                </div>
+                <div class="col-xs-12 col-sm-10" style="text-align: right">
+                    <button action="p" type="submit" class="btn btn-neptune">Save</button>
+                    <a href="@ViewDataTyped.ParentDetailUrl" class="btn btn-neptune">Cancel</a>
+                </div>
+            </div>
+        }
     </div>
+</div>
 
 <script type="text/javascript">
     // <![CDATA[

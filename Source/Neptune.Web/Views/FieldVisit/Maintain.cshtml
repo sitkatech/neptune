@@ -27,8 +27,6 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
-Coming Soon!
-
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12">
         <p>I want to:</p>
@@ -36,12 +34,7 @@ Coming Soon!
         {
             using (Html.BeginForm())
             {
-                <div class="row">
-                    <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
-                    <div class="col-xs-8">
-                        @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
-                    </div>
-                </div>
+                
                 <div class="row">
                     <div class="col-xs-12" style="margin-top: 10px;">
                         <button class="btn btn-neptune" style="display: inline-block;">
@@ -57,7 +50,6 @@ Coming Soon!
         }
         else
         {
-            @Html.HiddenFor(m => m.MaintenanceRecordTypeID)
             <a href="@ViewDataTyped.EditMaintenanceRecordUrl" class="btn btn-neptune" style="display: inline-block;">Edit the Maintenance Record <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
             <a href="@ViewDataTyped.PostMaintenanceAssessmentUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Post-Maintenance Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
         }

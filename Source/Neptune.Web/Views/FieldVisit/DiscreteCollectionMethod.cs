@@ -28,4 +28,7 @@ namespace Neptune.Web.Views.FieldVisit
     public abstract class DiscreteCollectionMethod : TypedWebViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
     {
     }
+    public abstract class DiscreteCollectionMethodPartial : TypedWebPartialViewPage<DiscreteCollectionMethodViewData, DiscreteCollectionMethodViewModel>
+    {
+    }
 }
