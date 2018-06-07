@@ -40,10 +40,60 @@
         });
         // ]]>
     </script>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .2s;
+            transition: .2s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .2s;
+            transition: .2s;
+        }
+        input:checked + .slider {
+            background-color: #d9534f;
+            border: 1px solid #d43f3a;
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #d9534f;
+        }
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+            left: 3px;
+            bottom: 3px;
+        }
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 }
 
-@using (Html.BeginForm())
-{
+<form method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-xs-12">
             <div class="well">
@@ -82,25 +132,42 @@
         {
             var treatmentBmpAssessmentPhotoSimple = Model.TreatmentBmpAssessmentPhotoSimples[i];
             var treatmentBmpAssessmentPhoto = ViewDataTyped.PhotosByID[treatmentBmpAssessmentPhotoSimple.TreatmentBmpAssessmentPhotoID];
+            @Html.HiddenFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].TreatmentBmpAssessmentPhotoID)
             <div class="col-xs-12">
                 <div class="media">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object"
-                                 src="@treatmentBmpAssessmentPhoto.FileResource.FileResourceUrlScaledThumbnail(128)"
-                                 alt="@treatmentBmpAssessmentPhoto.Caption"/>
-                        </a>
+                    <div class="media-left media-middle">
+                        <div style="display: block; width: 200px; max-height: 200px;">
+                            <a href="@treatmentBmpAssessmentPhoto.FileResource.FileResourceUrl" class="gallery" rel="group1" data-caption="@treatmentBmpAssessmentPhoto.Caption" title="@treatmentBmpAssessmentPhoto.Caption">
+                                <img class="media-object" style="margin: auto;"
+                                     src="@treatmentBmpAssessmentPhoto.FileResource.FileResourceUrlScaledThumbnail(200)"
+                                     alt="@treatmentBmpAssessmentPhoto.Caption"/>
+                            </a>
+                        </div>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">@treatmentBmpAssessmentPhoto.FileResource.</h4>
+                        <h4 class="media-heading text-right">@treatmentBmpAssessmentPhoto.FileResource.OriginalCompleteFileName</h4>
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <div class="col-xs-12 col-sm-3">
+                                <div class="col-xs-12 col-sm-4 col-md-2 control-label">
                                     @Html.LabelWithSugarFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].Caption)
                                 </div>
-                                <div class="col-xs-12 col-sm-9">
-                                    @Html.(m => m.TreatmentBmpAssessmentPhotoSimples[i].Caption)
+                                <div class="col-xs-12 col-sm-8 col-md-10">
+                                    @Html.TextAreaWithMaxLengthFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].Caption, new TextAreaForExtensions.TextAreaDimensions(null, 2), null, new List<string> { "form-control" })
                                     @Html.ValidationMessageFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].Caption)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-4 col-md-2 control-label">
+                                    @Html.LabelWithSugarFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].FlagForDeletion)
+                                </div>
+                                <div class="col-xs-12 col-sm-8 col-md-10">
+                                    <label class="switch" for="@Html.IdFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].FlagForDeletion)">
+                                        <input type="checkbox" value="True"
+                                               name="@Html.NameFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].FlagForDeletion)"
+                                               id="@Html.IdFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].FlagForDeletion)" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.TreatmentBmpAssessmentPhotoSimples[i].FlagForDeletion)
                                 </div>
                             </div>
                         </div>
@@ -119,4 +186,4 @@
             <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
     </div>
-}
+</form>

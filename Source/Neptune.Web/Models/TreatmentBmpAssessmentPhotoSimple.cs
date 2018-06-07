@@ -14,7 +14,7 @@ namespace Neptune.Web.Models
         public string Caption { get; set; }
 
         [Required]
-        [DisplayName("Flag for deletion?")]
-        public bool? FlagForDeletion { get; set; }
+        [DisplayName("Delete?")]
+        public bool FlagForDeletion { get; set; }
     }
 }

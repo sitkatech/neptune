@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using DocumentFormat.OpenXml.Wordprocessing;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
@@ -47,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
             // Merge existing photos
             var treatmentBMPAssessmentPhotosToUpdate = TreatmentBmpAssessmentPhotoSimples.Select(x =>
-                    x.FlagForDeletion ?? false // Exclude from list to update if flagged for deletion
+                    x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new TreatmentBMPAssessmentPhoto(ModelObjectHelpers.NotYetAssignedID,
                             ModelObjectHelpers.NotYetAssignedID)
