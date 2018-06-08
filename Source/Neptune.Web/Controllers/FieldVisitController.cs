@@ -37,6 +37,7 @@ using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
+using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using Neptune.Web.Views.Shared.SortOrder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -800,7 +801,10 @@ namespace Neptune.Web.Controllers
             var fieldVisitSection = fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
                 ? (FieldVisitSection) FieldVisitSection.Assessment
                 : FieldVisitSection.PostMaintenanceAssessment;
-            var viewData = new AssessmentPhotosViewData(CurrentPerson, treatmentBMPAssessment, fieldVisitSection);
+
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, treatmentBMPAssessment);
+
+            var viewData = new AssessmentPhotosViewData(CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData);
             return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);
         }
 

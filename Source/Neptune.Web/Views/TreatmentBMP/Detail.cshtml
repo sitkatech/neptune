@@ -191,8 +191,10 @@
             <div class="panel-heading panelTitle">
                 Images
                 <span class="pull-right">
-                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewTreatmentBMPImageUrl, "Upload New Treatment BMP Image", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditTreatmentBMPImagesUrl, "Edit Treatment BMP Images", new List<string>(), ViewDataTyped.CurrentPersonCanManage && ViewDataTyped.TreatmentBMP.TreatmentBMPImages.Any())
+                    @if (ViewDataTyped.CurrentPersonCanManage)
+                    {
+                        <a href="@ViewDataTyped.ManageTreatmentBMPImagesUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
+                    }
                 </span>
             </div>
             <div class="panel-body">

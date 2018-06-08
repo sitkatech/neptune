@@ -1,57 +1,48 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.FieldVisit
 {
     public class AssessmentPhotosViewModel : FormViewModel
     {
-        public IList<TreatmentBmpAssessmentPhotoSimple> TreatmentBmpAssessmentPhotoSimples { get; set; }
-
-        [DisplayName("Upload a photo")]
-        [SitkaFileExtensions("jpg|jpeg|gif|png")]
-        public HttpPostedFileBase Photo { get; set; }
-
-        [DisplayName("Caption")]
-        [MaxLength(TreatmentBMPAssessmentPhoto.FieldLengths.Caption)]
-        public string Caption { get; set; }
+        public ManagePhotosWithPreviewViewModel ManagePhotosWithPreviewForm { get; set; }
 
         /// <summary>
         /// Needed by model binder
         /// </summary>
         public AssessmentPhotosViewModel()
         {
-            TreatmentBmpAssessmentPhotoSimples = new List<TreatmentBmpAssessmentPhotoSimple>();
+            ManagePhotosWithPreviewForm = new ManagePhotosWithPreviewViewModel();
         }
 
         public AssessmentPhotosViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            TreatmentBmpAssessmentPhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
-                new TreatmentBmpAssessmentPhotoSimple
-                {
-                    TreatmentBmpAssessmentPhotoID = x.TreatmentBMPAssessmentPhotoID,
-                    Caption = x.Caption,
-                    FlagForDeletion = false
-                }).ToList();
+            ManagePhotosWithPreviewForm = new ManagePhotosWithPreviewViewModel
+            {
+                PhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
+                    new ManagePhotoWithPreviewPhotoSimple
+                    {
+                        PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
+                        Caption = x.Caption,
+                        FlagForDeletion = false
+                    }).ToList()
+            };
         }
 
         public void UpdateModels(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
             // Merge existing photos
-            var treatmentBMPAssessmentPhotosToUpdate = TreatmentBmpAssessmentPhotoSimples.Select(x =>
+            var treatmentBMPAssessmentPhotosToUpdate = ManagePhotosWithPreviewForm.PhotoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new TreatmentBMPAssessmentPhoto(ModelObjectHelpers.NotYetAssignedID,
                             ModelObjectHelpers.NotYetAssignedID)
                         {
-                            TreatmentBMPAssessmentPhotoID = x.TreatmentBmpAssessmentPhotoID,
+                            TreatmentBMPAssessmentPhotoID = x.PrimaryKey,
                             Caption = x.Caption
                         })
                 .Where(x => x != null)
@@ -62,11 +53,11 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => { x.Caption = y.Caption; });
 
             // Create new photo if it exists
-            if (Photo != null)
+            if (ManagePhotosWithPreviewForm.Photo != null)
             {
-                var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(ManagePhotosWithPreviewForm.Photo, currentPerson);
                 HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Add( 
-                    new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment) {Caption = Caption});
+                    new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment) {Caption = ManagePhotosWithPreviewForm.Caption });
             }
         }
     }

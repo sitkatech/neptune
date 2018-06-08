@@ -1,10 +1,8 @@
-﻿@using Neptune.Web.Views.FieldVisit
-@using Neptune.Web.Views.Shared.ManagePhotosWithPreview
-
-@inherits AssessmentPhotos
-
-@{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+﻿@using Neptune.Web.Views.Shared.ManagePhotosWithPreview
+@using Neptune.Web.Views.TreatmentBMPImage
+@inherits ManageTreatmentBMPImages
 
 <form method="post" enctype="multipart/form-data">
     @{ ManagePhotosWithPreview.RenderPartialView(Html, ViewDataTyped.ManagePhotosWithPreviewViewData, Model.ManagePhotosWithPreviewForm); }
 </form>
+
