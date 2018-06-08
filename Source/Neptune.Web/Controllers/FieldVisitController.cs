@@ -37,9 +37,11 @@ using Neptune.Web.Views.FieldVisit;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
+using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using Neptune.Web.Views.Shared.SortOrder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
 {
@@ -452,6 +454,7 @@ namespace Neptune.Web.Controllers
         }
 
         #region Assessment-Related Actions
+
         #region Observation Types
 
         [HttpGet]
@@ -712,6 +715,8 @@ namespace Neptune.Web.Controllers
                         fieldVisitAssessmentTypeID)));
         }
 
+
+
         #endregion
         #region Helper methods for Assessment
 
@@ -737,9 +742,7 @@ namespace Neptune.Web.Controllers
             var isLastPage = nextObservationType == null;
 
             var nextObservationTypeViewResult = isLastPage
-                ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
-                    ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
-                    : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
+                ? Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)))
                 : Redirect(nextObservationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType));
             return nextObservationTypeViewResult;
         }
@@ -764,9 +767,58 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+        #region Assessment Photos
+
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public ViewResult AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType)fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var viewModel = new AssessmentPhotosViewModel(treatmentBMPAssessment);
+            return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult AssessmentPhotos(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID,
+            AssessmentPhotosViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            if (!ModelState.IsValid)
+            {
+                return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
+            }
+
+            viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
+            SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
+            
+            return viewModel.AutoAdvance
+                ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                    ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
+                    : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
+                : Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)));
+        }
+
+        private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType, AssessmentPhotosViewModel viewModel)
+        {
+            var fieldVisitSection = fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                ? (FieldVisitSection) FieldVisitSection.Assessment
+                : FieldVisitSection.PostMaintenanceAssessment;
+
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, treatmentBMPAssessment);
+
+            var viewData = new AssessmentPhotosViewData(CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData);
+            return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);
+        }
+
         #endregion
 
-
+        #endregion
 
         [HttpGet]
         [FieldVisitDeleteFeature]

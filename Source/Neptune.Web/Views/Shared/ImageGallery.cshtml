@@ -18,7 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using Neptune.Web.Views
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.ModalDialog
 @using LtInfo.Common.Views
@@ -46,7 +45,7 @@ Source code is available upon request via <support@sitkatech.com>.
         {
             var selectKeyPhotoButton = jQuery(this);
             var selectKeyPhotoButtonLabel = selectKeyPhotoButton.find("label");
-            var selectionMode = selectKeyPhotoButtonLabel.html() == "Done";
+            var selectionMode = selectKeyPhotoButtonLabel.html() === "Done";
             var filmStrip = galleryScope.find("ul.filmStrip");
             var galleryImagesContainer = galleryScope.find(".gallery");
             var galleryImages = filmStrip.find("li");
@@ -83,21 +82,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
                 filmStrip.css("background-color", "transparent"); //reset background color
                 galleryImages.unbind("click"); //unbind key image selection event
-
-                var selectImageUrl = "@ViewDataTyped.SelectKeyImageUrl";
-                var selectedImageId = filmStrip.find("li .setKeyPhoto").first().attr("data-image-id");
-                if (selectedImageId != @ViewDataTyped.CurrentKeyPhotoID)
-                {
-                    var url = new Sitka.UrlTemplate(selectImageUrl).ParameterReplace(selectedImageId);
-                SitkaAjax.post(url, new Object(), function(data)
-                {
-                    if (!data.Success)
-                    {
-                        alert(data.Message);
-                    }
-                },
-                function() { alert("There was an error setting your Key @ViewDataTyped.ImageEntityName."); });
-            }
         }
         });
     });
@@ -108,15 +92,6 @@ Source code is available upon request via <support@sitkatech.com>.
     @if (ViewDataTyped.UserCanAddPhotos)
     {
         <div class="pull-right">
-            @if (ViewDataTyped.GalleryImages.Any() && ViewDataTyped.UserCanSelectKeyPhoto)
-            {
-                <span class="keyPhotoButton">
-                    <span style="display: inline-block; vertical-align: top">
-                        <img src="~/Content/img/keys.png" alt="Select Key @ViewDataTyped.ImageEntityName" />
-                    </span>
-                    <label>Select Key @ViewDataTyped.ImageEntityName</label>
-                </span>
-            }
             <span style="display: inline-block; vertical-align: top">
                 @ModalDialogFormHelper.ModalDialogFormLink(string.Format("<span class='glyphicon glyphicon-plus-sign' style='margin-right: 3px'></span>Add {0}", ViewDataTyped.ImageEntityName), ViewDataTyped.AddNewPhotoUrl, string.Format("Add New {0}", ViewDataTyped.ImageEntityName), 700, "Upload", "Cancel", new List<string> { "AddPhotoButtonClass", "btn", "btn-neptune" }, null, null)
             </span>
@@ -132,9 +107,6 @@ Source code is available upon request via <support@sitkatech.com>.
                     <li style="overflow: hidden">
                         <div class="@Html.Raw(string.Join(" ", galleryImage.AdditionalCssClasses).HtmlEncodeWithBreaks())">
                             <div class="icons">
-                                <span data-image-id="@galleryImage.PrimaryKey" class="keyPhotoIcon @Html.Raw(galleryImage.IsKeyPhoto ? "setKeyPhoto" : string.Empty)">
-                                    <img src="/Content/img/keys.png" alt="Key @ViewDataTyped.ImageEntityName" />
-                                </span>
                                 <span class="EditPhotoButtonClass">
                                     @ModalDialogFormHelper.MakeEditIconLink(galleryImage.EditUrl, string.Format("Edit {0}", ViewDataTyped.ImageEntityName), ViewDataTyped.UserCanAddPhotos)
                                 </span>

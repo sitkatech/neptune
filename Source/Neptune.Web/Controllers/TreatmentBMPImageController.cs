@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
-using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 using Neptune.Web.Views.TreatmentBMPImage;
 
 namespace Neptune.Web.Controllers
@@ -11,63 +11,38 @@ namespace Neptune.Web.Controllers
     {
         [HttpGet]
         [TreatmentBMPManageFeature]
-        public PartialViewResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public ViewResult ManageTreatmentBMPImages(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new EditViewModel(treatmentBMP);
-            return ViewEditTreatmentBMPImages(treatmentBMP, viewModel);
+            var viewModel = new ManageTreatmentBMPImagesViewModel(treatmentBMP);
+            return ViewManageTreatmentBMPImages(viewModel, treatmentBMP);
         }
 
         [HttpPost]
         [TreatmentBMPManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
+        public ActionResult ManageTreatmentBMPImages(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ManageTreatmentBMPImagesViewModel viewModel)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditTreatmentBMPImages(treatmentBMP, viewModel);
+                return ViewManageTreatmentBMPImages(viewModel, treatmentBMP);
             }
 
-            viewModel.UpdateModel(treatmentBMP);
+            viewModel.UpdateModels(CurrentPerson, treatmentBMP);
+            SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 
-            return new ModalDialogFormJsonResult();
+            return Redirect(
+                SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c =>
+                    c.ManageTreatmentBMPImages(treatmentBMP)));
         }
 
-        private PartialViewResult ViewEditTreatmentBMPImages(TreatmentBMP treatmentBMP, EditViewModel viewModel)
+        private ViewResult ViewManageTreatmentBMPImages(ManageTreatmentBMPImagesViewModel viewModel,
+            TreatmentBMP treatmentBMP)
         {
-            var viewData = new EditViewData(CurrentPerson, treatmentBMP);
-            return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
-        }
-
-        [HttpGet]
-        [TreatmentBMPManageFeature]
-        public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
-        {
-            var viewModel = new NewViewModel();
-            return ViewNewTreatmentBMPImage(viewModel);
-        }
-
-        [HttpPost]
-        [TreatmentBMPManageFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, NewViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return ViewNewTreatmentBMPImage(viewModel);
-            }
-
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson);
-
-            return new ModalDialogFormJsonResult();
-        }
-
-        private PartialViewResult ViewNewTreatmentBMPImage(NewViewModel viewModel)
-        {
-            var viewData = new NewViewData(CurrentPerson);
-            return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, treatmentBMP);
+            var viewData = new ManageTreatmentBMPImagesViewData(CurrentPerson, treatmentBMP, managePhotosWithPreviewViewData);
+            return RazorView<ManageTreatmentBMPImages, ManageTreatmentBMPImagesViewData, ManageTreatmentBMPImagesViewModel>(viewData, viewModel);
         }
     }
 }

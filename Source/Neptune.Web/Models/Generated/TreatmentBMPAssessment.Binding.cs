@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         {
             this.FieldVisitsWhereYouAreTheInitialAssessment = new HashSet<FieldVisit>();
             this.FieldVisitsWhereYouAreThePostMaintenanceAssessment = new HashSet<FieldVisit>();
+            this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
@@ -81,13 +82,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return (FieldVisitWhereYouAreTheInitialAssessment != null) || (FieldVisitWhereYouAreThePostMaintenanceAssessment != null) || TreatmentBMPObservations.Any();
+            return (FieldVisitWhereYouAreTheInitialAssessment != null) || (FieldVisitWhereYouAreThePostMaintenanceAssessment != null) || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPObservations.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessment).Name, typeof(FieldVisit).Name, typeof(TreatmentBMPObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessment).Name, typeof(FieldVisit).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPObservation).Name};
 
 
         /// <summary>
@@ -102,6 +103,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in FieldVisitsWhereYouAreThePostMaintenanceAssessment.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPAssessmentPhotos.ToList())
             {
                 x.DeleteFull();
             }
@@ -128,6 +134,7 @@ namespace Neptune.Web.Models
         protected virtual ICollection<FieldVisit> FieldVisitsWhereYouAreThePostMaintenanceAssessment { get; set; }
         [NotMapped]
         public FieldVisit FieldVisitWhereYouAreThePostMaintenanceAssessment { get { return FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault(); } set { FieldVisitsWhereYouAreThePostMaintenanceAssessment = new List<FieldVisit>{value};} }
+        public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }

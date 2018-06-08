@@ -140,7 +140,6 @@ namespace Neptune.Web.Controllers
                 neptuneHomePageImages,
                 userCanAddPhotosToHomePage,
                 newPhotoForProjectUrl,
-                null,
                 true,
                 x => x.CaptionOnFullView,
                 "Photo");
