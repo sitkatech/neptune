@@ -178,8 +178,6 @@
                 data: postData,
                 method: "POST",
                 error: function (jqXhr, status, error) {
-                    console.log(status);
-                    console.log(error);
                     jQuery(".previewErrorAlert").remove();
                     var listItems = _.chain(jqXhr.responseJSON)
                         .values()

@@ -52,11 +52,20 @@ namespace Neptune.Web.Models
 
         public bool RequiredAttributeDoesNotHaveValue()
         {
-            return TreatmentBMP.CustomAttributes.Any(x =>
-            {
-                return x.CustomAttributeType.IsRequired &&
-                       (x.CustomAttributeValues == null || x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)));
-            });
+            // pick-many-from-list attributes will not be posted at all if none of their options are selected, so we need to check if any of the required custom attribute types are missing from the list of custom attributes
+            return TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+                       x.CustomAttributeType.CustomAttributeTypePurposeID !=
+                       CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID &&
+                       x.CustomAttributeType.IsRequired &&
+                       !TreatmentBMP.CustomAttributes.Select(y => y.CustomAttributeTypeID)
+                           .Contains(x.CustomAttributeTypeID)) ||
+                   TreatmentBMP.CustomAttributes.Any(x =>
+                       x.CustomAttributeType.CustomAttributeTypePurposeID !=
+                       CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID &&
+                       x.CustomAttributeType.IsRequired &&
+                       (x.CustomAttributeValues == null ||
+                        x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)))
+                   );
         }
     }
 }

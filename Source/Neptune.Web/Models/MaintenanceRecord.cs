@@ -9,5 +9,10 @@ namespace Neptune.Web.Models
         public Person GetMaintenanceRecordPerson => FieldVisit.PerformedByPerson;
         public Organization GetMaintenanceRecordOrganization => FieldVisit.PerformedByPerson.Organization;
 
+        public bool IsMissingRequiredAttributes =>
+            MaintenanceRecordObservations.Any(x =>
+                x.CustomAttributeType.IsRequired && (x.MaintenanceRecordObservationValues == null ||
+                                                     x.MaintenanceRecordObservationValues.All(y =>
+                                                         string.IsNullOrWhiteSpace(y.ObservationValue))));
     }
 }
