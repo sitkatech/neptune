@@ -49,16 +49,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentBMPType)]
         public int TreatmentBMPTypeID { get; set; }
 
-        [Required(ErrorMessage =  "Must specify a BMP Longitude")]
-        [DisplayName("Longitude")]
-        [Range(-180, 180, ErrorMessage = "Longitude must be between -180 and 180")]
-        public double? TreatmentBMPPointX { get; set; }
-
-        [Required(ErrorMessage = "Must specify a BMP Latitude")]
-        [DisplayName("Latitude")]
-        [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
-        public double? TreatmentBMPPointY { get; set; }
-
         [DisplayName("Notes")]
         [StringLength(Models.TreatmentBMP.FieldLengths.Notes)]
         public string Notes { get; set; }
@@ -74,7 +64,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         [Range(1980, 2050, ErrorMessage = "Please enter a valid year range")]
         public int? YearBuilt { get; set; }
 
-
+        [DisplayName("WQMP ID")]
+        [StringLength(Models.TreatmentBMP.FieldLengths.WaterQualityManagementProgramID)]
+        public string WaterQualityManagementProgramID { get; set; }
 
         /// <summary>
         /// Needed by the ModelBinder
@@ -89,28 +81,18 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPName = treatmentBMP.TreatmentBMPName;
             StormwaterJurisdictionID = treatmentBMP.StormwaterJurisdictionID;
             TreatmentBMPTypeID = treatmentBMP.TreatmentBMPTypeID;
-            if (treatmentBMPPoint != null)
-            {
-                TreatmentBMPPointX = treatmentBMPPoint.XCoordinate;
-                TreatmentBMPPointY = treatmentBMPPoint.YCoordinate;
-            }
-            else
-            {
-                TreatmentBMPPointX = null;
-                TreatmentBMPPointY = null;
-            }
-
             Notes = treatmentBMP.Notes;
             SystemOfRecordID = treatmentBMP.SystemOfRecordID;
             OwnerOrganizationID = treatmentBMP.OwnerOrganizationID;
             YearBuilt = treatmentBMP.YearBuilt;
+            WaterQualityManagementProgramID = treatmentBMP.WaterQualityManagementProgramID;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
-            treatmentBMP.LocationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.Value, TreatmentBMPPointY.Value, MapInitJson.CoordinateSystemId);
             treatmentBMP.Notes = Notes;
+            treatmentBMP.WaterQualityManagementProgramID = WaterQualityManagementProgramID;
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {

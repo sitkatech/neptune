@@ -26,22 +26,14 @@
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
-
-Coming Soon!
-
+<p>The maintenance workflow allows input of observations to quantify the type and amount of maintenance performed.</p>
+<p>Some observation are required for the Maintenance Record to be considered complete. The required observations are identified with <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 12px; "></span> icon. </p>
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12">
-        <p>I want to:</p>
+    <div class="col-xs-12 text-right">
         @if (ViewDataTyped.IsNew)
         {
             using (Html.BeginForm())
             {
-                <div class="row">
-                    <div class="col-xs-4 control-label">@Html.LabelWithSugarFor(m => m.MaintenanceRecordTypeID)</div>
-                    <div class="col-xs-8">
-                        @Html.DropDownListFor(m => m.MaintenanceRecordTypeID, ViewDataTyped.AllMaintenanceRecordTypes, new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-xs-12" style="margin-top: 10px;">
                         <button class="btn btn-neptune" style="display: inline-block;">
@@ -57,7 +49,6 @@ Coming Soon!
         }
         else
         {
-            @Html.HiddenFor(m => m.MaintenanceRecordTypeID)
             <a href="@ViewDataTyped.EditMaintenanceRecordUrl" class="btn btn-neptune" style="display: inline-block;">Edit the Maintenance Record <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
             <a href="@ViewDataTyped.PostMaintenanceAssessmentUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Post-Maintenance Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
         }

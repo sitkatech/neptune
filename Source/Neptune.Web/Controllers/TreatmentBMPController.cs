@@ -257,7 +257,8 @@ namespace Neptune.Web.Controllers
                 return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
             }
 
-            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose);
+            var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
+            viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
             SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -265,7 +266,27 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP,
             CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose);
+            var missingRequiredAttributes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                customAttributeTypePurpose.CustomAttributeTypePurposeID &&
+                                                x.CustomAttributeType.IsRequired &&
+                                                !treatmentBMP
+                                                    .CustomAttributes
+                                                    .Select(
+                                                        y =>
+                                                            y.CustomAttributeTypeID)
+                                                    .Contains(
+                                                        x.CustomAttributeTypeID)) ||
+                                            treatmentBMP.CustomAttributes.Any(x =>
+                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                customAttributeTypePurpose.CustomAttributeTypePurposeID &&
+                                                x.CustomAttributeType.IsRequired &&
+                                                (x.CustomAttributeValues == null ||
+                                                 x.CustomAttributeValues.All(
+                                                     y => string.IsNullOrEmpty(y.AttributeValue)))
+                                            );
+            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose,
+                missingRequiredAttributes);
             return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 

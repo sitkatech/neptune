@@ -20,8 +20,10 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using LtInfo.Common.Models;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -30,6 +32,9 @@ namespace Neptune.Web.Views.FieldVisit
         [Required]
         public bool? InProgressFieldVisitExists { get; set; }
         public bool? Continue { get; set; }
+        [Required]
+        [DisplayName("Field Visit Type")]
+        public int? FieldVisitTypeID { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder
@@ -38,9 +43,10 @@ namespace Neptune.Web.Views.FieldVisit
         {
         }
 
-        public NewFieldVisitViewModel(bool inProgressFieldVisitExists)
+        public NewFieldVisitViewModel(Models.FieldVisit inProgressFieldVisit)
         {
-            InProgressFieldVisitExists = inProgressFieldVisitExists;
+            InProgressFieldVisitExists = inProgressFieldVisit != null;
+            FieldVisitTypeID = inProgressFieldVisit?.FieldVisitTypeID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -32,6 +32,8 @@ namespace Neptune.Web.Models
     {
         public abstract string GetSectionUrl(FieldVisit fieldVisit);
         public abstract IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit);
+
+        public abstract bool ExpandMenu(FieldVisit fieldVisit);
     }
 
     public partial class FieldVisitSectionInventory
@@ -59,13 +61,18 @@ namespace Neptune.Web.Models
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
             };
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.InventoryUpdated;
+        }
     }
 
     public class FieldVisitSubsectionData
     {
         public string SubsectionName { get; set; }
         public string SubsectionUrl { get; set; }
-        public HtmlString AssessmentCompletionStatusIndicator { get; set; }
+        public HtmlString SectionCompletionStatusIndicator { get; set; }
     }
 
     public partial class FieldVisitSectionAssessment
@@ -78,6 +85,11 @@ namespace Neptune.Web.Models
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.Initial);
+        }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.InitialAssessmentID != null;
         }
     }
 
@@ -96,6 +108,11 @@ namespace Neptune.Web.Models
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.EditMaintenanceRecord(fieldVisit))
             };
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.MaintenanceRecordID != null;
+        }
     }
 
     public partial class FieldVisitSectionPostMaintenanceAssessment
@@ -109,6 +126,11 @@ namespace Neptune.Web.Models
         {
             return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.PostMaintenance);
         }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return fieldVisit.PostMaintenanceAssessmentID != null;
+        }
     }
 
     public partial class FieldVisitSectionWrapUpVisit
@@ -121,6 +143,11 @@ namespace Neptune.Web.Models
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
             return new List<FieldVisitSubsectionData>();
+        }
+
+        public override bool ExpandMenu(FieldVisit fieldVisit)
+        {
+            return false;
         }
     }
 
@@ -138,7 +165,7 @@ namespace Neptune.Web.Models
                 {
                     SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
                     SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType),
-                    AssessmentCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
+                    SectionCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
                         ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
                         : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
                 };
@@ -148,7 +175,7 @@ namespace Neptune.Web.Models
             {
                 SubsectionName = "Photos",
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)),
-                AssessmentCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
+                SectionCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
                     ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
                     : new HtmlString("<span style=\"width: 19px; display: inline-block;\"></span>")
             };

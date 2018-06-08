@@ -49,14 +49,5 @@ namespace Neptune.Web.Models
         {
             InitialAssessmentID = null;
         }
-
-        public bool RequiredAttributeDoesNotHaveValue()
-        {
-            return TreatmentBMP.CustomAttributes.Any(x =>
-            {
-                return x.CustomAttributeType.IsRequired &&
-                       (x.CustomAttributeValues == null || x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)));
-            });
-        }
     }
 }

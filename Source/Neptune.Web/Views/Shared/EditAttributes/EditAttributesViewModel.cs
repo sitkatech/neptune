@@ -51,7 +51,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson,
-            CustomAttributeTypePurpose customAttributeTypePurpose)
+            CustomAttributeTypePurpose customAttributeTypePurpose, List<Models.CustomAttributeType> allCustomAttributeTypes)
         {
             var customAttributeSimplesWithValues = CustomAttributes.Where(x => x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0);
             var customAttributesToUpdate = new List<CustomAttribute>();
@@ -61,8 +61,9 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 var customAttribute = new CustomAttribute(treatmentBMP.TreatmentBMPID, x.TreatmentBMPTypeCustomAttributeTypeID, treatmentBMP.TreatmentBMPTypeID, x.CustomAttributeTypeID);
                 customAttributesToUpdate.Add(customAttribute);
                 foreach (var value in x.CustomAttributeValues)
-                {                    
-                    var customAttributeValue = new CustomAttributeValue(customAttribute, value);                   
+                {
+                    var valueParsedForDataType = allCustomAttributeTypes.Single(y=>y.CustomAttributeTypeID == x.CustomAttributeTypeID).CustomAttributeDataType.ValueParsedForDataType(value);
+                    var customAttributeValue = new CustomAttributeValue(customAttribute, valueParsedForDataType);                   
                     customAttributeValuesToUpdate.Add(customAttributeValue);
                 }
             }
@@ -106,11 +107,11 @@ namespace Neptune.Web.Views.Shared.EditAttributes
                 return customAttributeSimple != null;
             });
 
-            if (requiredAttributeDoesNotHaveValue)
-            {
-                errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
-                return errors;
-            }
+            //if (requiredAttributeDoesNotHaveValue)
+            //{
+            //    errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
+            //    return errors;
+            //}
 
             CheckTypeExpectations(customAttributeTypes, errors);
 

@@ -418,6 +418,7 @@ warning 6035: The relationship 'FK_FieldDefinitionDataImage_FieldDefinitionData_
     <Property Name="PerformedByPersonID" Type="int" Nullable="false" />
     <Property Name="VisitDate" Type="datetime" Nullable="false" />
     <Property Name="InventoryUpdated" Type="bit" Nullable="false" />
+    <Property Name="FieldVisitTypeID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldDefinitionDataImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -496,7 +497,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_MaintenanceRecor
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="MaintenanceRecordDescription" Type="varchar" MaxLength="500" />
-    <Property Name="MaintenanceRecordTypeID" Type="int" Nullable="false" />
+    <Property Name="MaintenanceRecordTypeID" Type="int" />
   </EntityType>
   <EntityType Name="MaintenanceRecordObservation">
     <Key>
@@ -749,6 +750,7 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     <Property Name="SystemOfRecordID" Type="varchar" MaxLength="100" />
     <Property Name="YearBuilt" Type="int" />
     <Property Name="OwnerOrganizationID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementProgramID" Type="varchar" MaxLength="100" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -767,8 +769,6 @@ warning 6035: The relationship 'FK_TreatmentBMPObservation_TreatmentBMPAssessmen
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
-    <Property Name="AlternateAssessmentScore" Type="float" />
-    <Property Name="AlternateAssessmentRationale" Type="varchar" MaxLength="1000" />
     <Property Name="Notes" Type="varchar" MaxLength="1000" />
   </EntityType>
   <!--Errors Found During Generation:

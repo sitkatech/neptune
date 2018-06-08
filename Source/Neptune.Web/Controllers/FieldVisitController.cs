@@ -102,7 +102,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new NewFieldVisitViewModel(treatmentBMP.InProgressFieldVisit != null);
+            var viewModel = new NewFieldVisitViewModel(treatmentBMP.InProgressFieldVisit);
             return ViewNew(treatmentBMP, viewModel);
         }
 
@@ -124,16 +124,17 @@ namespace Neptune.Web.Controllers
             }
 
             FieldVisit fieldVisit;
+            var fieldVisitType = FieldVisitType.AllLookupDictionary[viewModel.FieldVisitTypeID.GetValueOrDefault()];
             if (viewModel.Continue == null)
             {
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType);
                 HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
             }
             else if (viewModel.Continue == false)
             {
                 var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType);
             }
             else // if Continue == true
             {
@@ -244,8 +245,9 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
         {
+            var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue(fieldVisit);
             EditAttributesViewData editAttributesViewData =
-                new EditAttributesViewData(CurrentPerson, fieldVisit, true);
+                new EditAttributesViewData(CurrentPerson, fieldVisit, true, missingRequiredAttributes);
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
             return RazorView<Attributes, AttributesViewData, AttributesViewModel>(viewData, viewModel);
         }
@@ -308,7 +310,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Maintain(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewModel = new MaintainViewModel(fieldVisit);
+            var viewModel = new MaintainViewModel();
             return ViewMaintain(fieldVisit, viewModel);
         }
 
@@ -336,7 +338,7 @@ namespace Neptune.Web.Controllers
 
             if (maintenanceRecord == null)
             {
-                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID, viewModel.MaintenanceRecordTypeID.GetValueOrDefault());
+                maintenanceRecord = new MaintenanceRecord(fieldVisit.TreatmentBMPID);
                 HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;
@@ -351,15 +353,19 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
-            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit);
+            return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit, maintenanceRecord);
         }
 
-        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel, TreatmentBMP treatmentBMP, bool isNew,
-            FieldVisit fieldVisit)
+        private ViewResult ViewEditMaintenanceRecord(EditMaintenanceRecordViewModel viewModel,
+            TreatmentBMP treatmentBMP, bool isNew,
+            FieldVisit fieldVisit, MaintenanceRecord maintenanceRecord)
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true);
+            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes;
+            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,
+                fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
+                missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
@@ -375,10 +381,10 @@ namespace Neptune.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit);
+                return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
-            viewModel.UpdateModel(fieldVisit);
+            viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 
@@ -871,7 +877,7 @@ namespace Neptune.Web.Controllers
 
         // This Get has to exist so that the jQuery posting on the front-end will work
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ContentResult PreviewObservationType()
         {
             return Content("");
@@ -879,7 +885,7 @@ namespace Neptune.Web.Controllers
 
         // This Post looks like it has zero references, but it actually is consumed by the jQuery posting on the front-end
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ActionResult PreviewObservationType(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -892,11 +898,10 @@ namespace Neptune.Web.Controllers
                 return Content(modelStateSerialized);
             }
 
-            ViewResult result;
+            PartialViewResult result;
             var treatmentBmpAssessment = new TreatmentBMPAssessment(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, null, string.Empty,
-                string.Empty);
+                ModelObjectHelpers.NotYetAssignedID, null);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
             var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
                 x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
@@ -909,27 +914,25 @@ namespace Neptune.Web.Controllers
                     var discreteCollectionMethodViewModel = new DiscreteCollectionMethodViewModel();
                     var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
                     result =
-                        RazorView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData,
+                        RazorPartialView<DiscreteCollectionMethodPartial, DiscreteCollectionMethodViewData,
                             DiscreteCollectionMethodViewModel>(discreteCollectionMethodViewData,
                             discreteCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     var passFailCollectionMethodViewModel = new PassFailCollectionMethodViewModel();
                     var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<PassFailCollectionMethod, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
+                    result = RazorPartialView<PassFailCollectionMethodPartial, PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>(passFailCollectionMethodViewData, passFailCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     var percentageCollectionMethodViewModel = new PercentageCollectionMethodViewModel();
                     var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<PercentageCollectionMethod, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
+                    result = RazorPartialView<PercentageCollectionMethodPartial, PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>(percentageCollectionMethodViewData, percentageCollectionMethodViewModel);
                     break;
                 case ObservationTypeCollectionMethodEnum.Rate:
                     var rateCollectionMethodViewModel = new RateCollectionMethodViewModel();
                     var rateCollectionMethodViewData = new RateCollectionMethodViewData(treatmentBmpAssessment, treatmentBMPAssessmentObservationType, CurrentPerson);
-                    result = RazorView<RateCollectionMethod, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
-                    
                     // TODO: Do all like this
-                    //result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
+                    result = RazorPartialView<RateCollectionMethodPartial, RateCollectionMethodViewData, RateCollectionMethodViewModel>(rateCollectionMethodViewData, rateCollectionMethodViewModel);
                     break;
                 default:
                     throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");

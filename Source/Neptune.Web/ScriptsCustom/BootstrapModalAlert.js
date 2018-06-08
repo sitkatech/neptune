@@ -30,7 +30,7 @@ function createBootstrapAlert(alertText, alertTitle, closeButtonText)
                     "</div>" +
                     "<div class='modal-body'>" + alertText + "</div>" +
                     "<div class='modal-footer'>" +
-                        "<button type='button' class='btn btn-xs btn-neptune' data-dismiss='modal'>" + closeButtonText + "</button>" +
+                        "<button type='button' class='btn btn-sm btn-neptune pull-right' data-dismiss='modal'>" + closeButtonText + "</button>" +
                     "</div>" +
                 "</div>" +
             "</div>" +

@@ -39,7 +39,7 @@ namespace Neptune.Web.Models
             return canManageStormwaterJurisdiction;
         }
 
-        public string AuditDescriptionString => $"Assessmentment deleted.";
+        public string AuditDescriptionString => $"Assessment deleted.";
 
         public int GetWaterYear()
         {
@@ -51,9 +51,19 @@ namespace Neptune.Web.Models
             return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(IsObservationComplete);
         }
 
+        public string AssessmentStatus()
+        {
+            var completedObservationCount =
+                TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count(IsObservationComplete);
+            var totalObservationCount = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count;
+            return IsAssessmentComplete()
+                ? "Complete"
+                : $"In Progress ({completedObservationCount} of {totalObservationCount} observations complete)";
+        }
+
         public bool HasCalculatedOrAlternateScore()
         {
-            return IsAssessmentComplete() || AlternateAssessmentScore != null;
+            return IsAssessmentComplete();
         }
 
         public double? CalculateAssessmentScore()
@@ -91,8 +101,10 @@ namespace Neptune.Web.Models
                 {
                     var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore();
 
-                    var TreatmentBMPAssessmentObservationType = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
-                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType.GetTreatmentBMPTypeObservationType(TreatmentBMPAssessmentObservationType).AssessmentScoreWeight.Value);
+                    var treatmentBMPAssessmentObservationType = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
+                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType
+                        .GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType).AssessmentScoreWeight
+                        .Value);
                     return observationScore * observationWeight;
                 });
 
@@ -105,9 +117,11 @@ namespace Neptune.Web.Models
             return score?.ToString("0.0") ?? "-";
         }
 
-        public bool IsObservationComplete(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public bool IsObservationComplete(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x => x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
+            var treatmentBMPObservation = TreatmentBMPObservations.ToList().FirstOrDefault(x =>
+                x.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID ==
+                treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             return treatmentBMPObservation != null;
         }

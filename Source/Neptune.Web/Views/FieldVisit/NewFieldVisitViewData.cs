@@ -21,7 +21,11 @@ Source code is available upon request via <support@sitkatech.com>.
 
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -29,8 +33,8 @@ namespace Neptune.Web.Views.FieldVisit
     public class NewFieldVisitViewData : NeptuneUserControlViewData
     {
         public Models.FieldVisit FieldVisit { get; }
-
         public bool InProgressFieldVisitExists { get; }
+        public IEnumerable<SelectListItem> AllFieldVisitTypes { get; }
         public DateTime? InProgressVisitDate { get; }
 
         public NewFieldVisitViewData(Models.TreatmentBMP treatmentBMP)
@@ -40,6 +44,11 @@ namespace Neptune.Web.Views.FieldVisit
             InProgressFieldVisitExists = FieldVisit != null;
 
             InProgressVisitDate = FieldVisit?.VisitDate;
+
+            AllFieldVisitTypes = FieldVisitType.All.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.FieldVisitTypeID.ToString(CultureInfo.InvariantCulture), x => x.FieldVisitTypeDisplayName,
+                "Choose a type");
         }
+
     }
 }

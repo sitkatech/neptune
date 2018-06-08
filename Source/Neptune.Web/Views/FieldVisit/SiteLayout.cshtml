@@ -100,19 +100,6 @@
     </style>
 }
 @Html.ValidationSummary()
-@if (Html.ViewData.ModelState.IsValid && ViewDataTyped.ValidationWarnings.Any())
-{
-    <div class="alert alert-warning">
-        <ul>
-            @foreach (string warning in ViewDataTyped.ValidationWarnings)
-            {
-                <li>
-                    <span>@warning</span>
-                </li>
-            }
-        </ul>
-    </div>
-}
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
@@ -126,7 +113,7 @@
                             <a class="@(topLevelIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSection.GetSectionUrl(ViewDataTyped.FieldVisit)">
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
-                            @if (sectionIsActive && !topLevelIsActive)
+                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)) )
                             {
                                 <ul class="nav nav-stacked fieldVisitTierTwoMenu">
                                     @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))
@@ -134,9 +121,9 @@
                                         var subsectionIsActive = ViewDataTyped.SubsectionName == fieldVisitSubsection.SubsectionName;
                                         <li>
                                             <a class="@(subsectionIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSubsection.SubsectionUrl">
-                                                @if (fieldVisitSubsection.AssessmentCompletionStatusIndicator != null)
+                                                @if (fieldVisitSubsection.SectionCompletionStatusIndicator != null)
                                                 {
-                                                    @fieldVisitSubsection.AssessmentCompletionStatusIndicator
+                                                    @fieldVisitSubsection.SectionCompletionStatusIndicator
                                                     ;
                                                 }
                                                 @fieldVisitSubsection.SubsectionName
@@ -153,7 +140,6 @@
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
                 <h2>@ViewDataTyped.SectionHeader</h2>
-                <hr>
             </div>
 
             <div class="wizardMain">

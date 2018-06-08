@@ -35,13 +35,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public TreatmentBMPTypeGridSpec TreatmentBMPTypeGridSpec { get; }
         public string TreatmentBMPTypeGridName { get; }
         public string TreatmentBMPTypeGridDataUrl { get; }
+        public EditViewModel ViewModelForPreview { get; }
+        public string PreviewUrl { get; }
 
 
         public DetailViewData(Person currentPerson,
             Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
-            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
+            EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.Index());
             PageTitle = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
 
@@ -58,6 +60,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
             TreatmentBMPTypeGridName = "treatmentBMPTypeGridForObservationType";
             TreatmentBMPTypeGridDataUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(tc => tc.TreatmentBMPTypeGridJsonData(TreatmentBMPAssessmentObservationType));
+            ViewModelForPreview = new EditViewModel(treatmentBMPAssessmentObservationType);
+            PreviewUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PreviewObservationType());
         }
     }
 }

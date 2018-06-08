@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FieldVisit(int fieldVisitID, int treatmentBMPID, int fieldVisitStatusID, int? initialAssessmentID, int? maintenanceRecordID, int? postMaintenanceAssessmentID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated) : this()
+        public FieldVisit(int fieldVisitID, int treatmentBMPID, int fieldVisitStatusID, int? initialAssessmentID, int? maintenanceRecordID, int? postMaintenanceAssessmentID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated, int fieldVisitTypeID) : this()
         {
             this.FieldVisitID = fieldVisitID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -41,12 +41,13 @@ namespace Neptune.Web.Models
             this.PerformedByPersonID = performedByPersonID;
             this.VisitDate = visitDate;
             this.InventoryUpdated = inventoryUpdated;
+            this.FieldVisitTypeID = fieldVisitTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FieldVisit(int treatmentBMPID, int fieldVisitStatusID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated) : this()
+        public FieldVisit(int treatmentBMPID, int fieldVisitStatusID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated, int fieldVisitTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FieldVisitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -56,12 +57,13 @@ namespace Neptune.Web.Models
             this.PerformedByPersonID = performedByPersonID;
             this.VisitDate = visitDate;
             this.InventoryUpdated = inventoryUpdated;
+            this.FieldVisitTypeID = fieldVisitTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public FieldVisit(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson, DateTime visitDate, bool inventoryUpdated) : this()
+        public FieldVisit(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson, DateTime visitDate, bool inventoryUpdated, FieldVisitType fieldVisitType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.FieldVisitID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -74,14 +76,15 @@ namespace Neptune.Web.Models
             performedByPerson.FieldVisitsWhereYouAreThePerformedByPerson.Add(this);
             this.VisitDate = visitDate;
             this.InventoryUpdated = inventoryUpdated;
+            this.FieldVisitTypeID = fieldVisitType.FieldVisitTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static FieldVisit CreateNewBlank(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson)
+        public static FieldVisit CreateNewBlank(TreatmentBMP treatmentBMP, FieldVisitStatus fieldVisitStatus, Person performedByPerson, FieldVisitType fieldVisitType)
         {
-            return new FieldVisit(treatmentBMP, fieldVisitStatus, performedByPerson, default(DateTime), default(bool));
+            return new FieldVisit(treatmentBMP, fieldVisitStatus, performedByPerson, default(DateTime), default(bool), fieldVisitType);
         }
 
         /// <summary>
@@ -118,6 +121,7 @@ namespace Neptune.Web.Models
         public int PerformedByPersonID { get; set; }
         public DateTime VisitDate { get; set; }
         public bool InventoryUpdated { get; set; }
+        public int FieldVisitTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return FieldVisitID; } set { FieldVisitID = value; } }
 
@@ -128,6 +132,7 @@ namespace Neptune.Web.Models
         public virtual TreatmentBMPAssessment PostMaintenanceAssessment { get; set; }
         public virtual MaintenanceRecord MaintenanceRecord { get; set; }
         public virtual Person PerformedByPerson { get; set; }
+        public FieldVisitType FieldVisitType { get { return FieldVisitType.AllLookupDictionary[FieldVisitTypeID]; } }
 
         public static class FieldLengths
         {

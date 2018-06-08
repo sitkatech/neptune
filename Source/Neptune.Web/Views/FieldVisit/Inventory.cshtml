@@ -25,12 +25,12 @@
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
-
+<p>You may review the BMP inventory data, including setting the location of the BMP, adding photos, and completing the attributes necessary to track and analyze the BMPs performance.</p>
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12">
-        <p>I want to:</p>
+    <div class="col-xs-12 text-right">
+        
         <a href="@ViewDataTyped.LocationUrl" class="btn btn-neptune" style="display: inline-block;">
-            <span>Review and Update the BMP Inventory</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
+            <span>Review Inventory</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
         </a>
         <a href="@ViewDataTyped.AssessUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
     </div>

@@ -1095,3 +1095,6 @@ nav.navbar-fixed-top {
 .neptune-modal-dialog .btn-neptune {
   font-size: 15px;
 }
+hr {
+  border-top-color: #ccc;
+}

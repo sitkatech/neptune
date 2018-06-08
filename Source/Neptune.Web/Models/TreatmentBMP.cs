@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Linq;
-using LtInfo.Common.Views;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
@@ -66,7 +65,7 @@ namespace Neptune.Web.Models
             {
                 return string.Empty;
             }
-            return latestAssessment.AlternateAssessmentScore.HasValue ? latestAssessment.AlternateAssessmentScore.ToString() : latestAssessment.FormattedScore();
+            return latestAssessment.FormattedScore();
         }
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
@@ -75,15 +74,10 @@ namespace Neptune.Web.Models
             return latestAssessment;
         }
 
-        public bool HasDependentObjectsBesidesBenchmarksAndThresholds()
-        {
-            return TreatmentBMPAssessments.Any();
-        }
-
-        public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public bool IsBenchmarkAndThresholdCompleteForObservationType(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             return TreatmentBMPBenchmarkAndThresholds.SingleOrDefault(x =>
-                       x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
+                       x.TreatmentBMPAssessmentObservationTypeID == treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID) != null;
         }
 
         public string GetCustomAttributeValueWithUnits(TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeType)
@@ -116,13 +110,30 @@ namespace Neptune.Web.Models
                     .Max();
         }
 
-        public string LastMaintainedDateAsString()
+        public string CustomAttributeStatus()
         {
-            return !MaintenanceRecords.Any()
-                ? "Never"
-                : MaintenanceRecords.Select(x => x.GetMaintenanceRecordDate)
-                    .Max().ToString("g");
+            var nonMaintenanceTreatmentBMPTypeCustomAttributeTypes =
+                TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance).ToList();
 
+            var completedObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(this));
+
+            var totalObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired);
+
+            return completedObservationCount == totalObservationCount
+                ? "All Required Data Provided"
+                : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
+        }
+
+        public bool RequiredAttributeDoesNotHaveValue(FieldVisit fieldVisit)
+        {
+            return this.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
+                CustomAttributeTypePurpose.Maintenance &&
+                !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
+            );
         }
     }
 }
