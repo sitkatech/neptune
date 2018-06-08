@@ -825,7 +825,7 @@ namespace Neptune.Web.Controllers
 
         // This Get has to exist so that the jQuery posting on the front-end will work
         [HttpGet]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ContentResult PreviewObservationType()
         {
             return Content("");
@@ -833,7 +833,7 @@ namespace Neptune.Web.Controllers
 
         // This Post looks like it has zero references, but it actually is consumed by the jQuery posting on the front-end
         [HttpPost]
-        [NeptuneAdminFeature]
+        [JurisdictionEditFeature]
         public ActionResult PreviewObservationType(Views.TreatmentBMPAssessmentObservationType.EditViewModel viewModel)
         {
             if (!ModelState.IsValid)

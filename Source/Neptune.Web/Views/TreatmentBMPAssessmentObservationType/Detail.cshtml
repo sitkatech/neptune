@@ -84,9 +84,9 @@
 
 @section RightOfPageTitle
 {
+    <button type="button" class="btn btn-default" onclick="previewObservationType()" title="Preview what the Observation Type will look like in a Treatment BMP Assessment form">Preview</button>
     @if (new NeptuneAdminFeature().HasPermissionByPerson(ViewDataTyped.CurrentPerson))
     {
-        <button type="button" class="btn btn-default" onclick="previewObservationType()" title="Preview what the Observation Type will look like in a Treatment BMP Assessment form">Preview</button>
         <a class="btn btn-neptune headerButtonText observationTypeButton" href="@ViewDataTyped.TreatmentBMPAssessmentObservationType.GetEditUrl()">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") Edit Observation Type</a>
     }
 }

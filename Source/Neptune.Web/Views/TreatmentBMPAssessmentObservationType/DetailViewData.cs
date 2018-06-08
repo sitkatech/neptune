@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
-            EntityName = Models.FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabelPluralized();
+            EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.Index());
             PageTitle = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
 

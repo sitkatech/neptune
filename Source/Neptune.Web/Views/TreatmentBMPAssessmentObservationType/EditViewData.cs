@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
     public class EditViewData : NeptuneViewData
     {
         public ViewDataForAngular ViewDataForAngular { get; } 
-        public string ObservationTypeIndexUrl { get; }
+        public string ObservationTypeCancelUrl { get; }
         public string SubmitUrl { get; }
 
         public int PassFailObservationThresholdTypeID { get; }
@@ -60,7 +60,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             }
 
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
-            ObservationTypeIndexUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());
+            ObservationTypeCancelUrl = TreatmentBMPAssessmentObservationType == null
+                ? SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index())
+                : SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x =>
+                    x.Detail(TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID));
             SubmitUrl = submitUrl;
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;

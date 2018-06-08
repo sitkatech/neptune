@@ -758,7 +758,9 @@
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
     <Content Include="ScriptsCustom\bootstrap-ckeditor-fix.js" />
     <Content Include="ScriptsCustom\BootstrapModalAlert.js" />
-    <Content Include="ScriptsCustom\BootstrapModalAlert.min.js" />
+    <Content Include="ScriptsCustom\BootstrapModalAlert.min.js">
+      <DependentUpon>BootstrapModalAlert.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\CkEditorReady.js" />
     <Content Include="ScriptsCustom\CkEditorReady.min.js" />
     <Content Include="ScriptsCustom\DatePickerReady.js" />
