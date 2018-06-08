@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
@@ -8,27 +9,27 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public sealed class AssessmentPhotosViewModel : ManagePhotosWithPreviewViewModel
+    public sealed class PhotosViewModel : ManagePhotosWithPreviewViewModel
     {
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public AssessmentPhotosViewModel()
+        public PhotosViewModel()
         {
         }
 
-        public AssessmentPhotosViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)
+        public PhotosViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            PhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
+            PhotoSimples = treatmentBMP.TreatmentBMPImages.Select(x =>
                 new ManagePhotoWithPreviewPhotoSimple
                 {
-                    PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
+                    PrimaryKey = x.TreatmentBMPImageID,
                     Caption = x.Caption,
                     FlagForDeletion = false
                 }).ToList();
         }
 
-        public void UpdateModels(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
+        public void UpdateModels(Person currentPerson, Models.TreatmentBMP treatmentBMP)
         {
             // Merge existing photos
             var photoSimples = PhotoSimples ??
@@ -36,24 +37,24 @@ namespace Neptune.Web.Views.FieldVisit
             var treatmentBMPAssessmentPhotosToUpdate = photoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
-                        : new TreatmentBMPAssessmentPhoto(ModelObjectHelpers.NotYetAssignedID,
-                            ModelObjectHelpers.NotYetAssignedID)
+                        : new Models.TreatmentBMPImage(ModelObjectHelpers.NotYetAssignedID,
+                            ModelObjectHelpers.NotYetAssignedID, DateTime.Now)
                         {
-                            TreatmentBMPAssessmentPhotoID = x.PrimaryKey,
+                            TreatmentBMPImageID = x.PrimaryKey
                         })
                 .Where(x => x != null)
                 .ToList();
-            treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Merge(treatmentBMPAssessmentPhotosToUpdate,
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Local,
-                (x, y) => x.TreatmentBMPAssessmentPhotoID == y.TreatmentBMPAssessmentPhotoID,
+            treatmentBMP.TreatmentBMPImages.Merge(treatmentBMPAssessmentPhotosToUpdate,
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Local,
+                (x, y) => x.TreatmentBMPImageID == y.TreatmentBMPImageID,
                 (x, y) => { x.Caption = y.Caption; });
 
             // Create new photo if it exists
             if (Photo != null)
             {
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Add( 
-                    new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment));
+                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Add(
+                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, DateTime.Now));
             }
         }
     }

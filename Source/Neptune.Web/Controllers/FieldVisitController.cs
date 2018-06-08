@@ -216,8 +216,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new PhotosViewData(CurrentPerson, fieldVisit);
-            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, new PhotosViewModel());
+            var viewModel = new PhotosViewModel(fieldVisit.TreatmentBMP);
+            return ViewPhotos(fieldVisit, viewModel);
         }
 
         [HttpPost]
@@ -225,6 +225,15 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
         {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                ViewPhotos(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
+            SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
+
             return viewModel.AutoAdvance
                 ? new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
@@ -232,6 +241,13 @@ namespace Neptune.Web.Controllers
                 : new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                         x.Photos(fieldVisitPrimaryKey)));
+        }
+
+        private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel)
+        {
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, fieldVisit.TreatmentBMP);
+            var viewData = new PhotosViewData(CurrentPerson, fieldVisit, managePhotosWithPreviewViewData);
+            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, viewModel);
         }
 
         [HttpGet]

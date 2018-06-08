@@ -137,7 +137,7 @@
 </div>
 <hr />
 <div class="row">
-    @if (!Model.PhotoSimples.Any())
+    @if (Model.PhotoSimples == null || !Model.PhotoSimples.Any())
     {
         <div class="col-xs-12">
             <p>
@@ -145,7 +145,7 @@
             </p>
         </div>
     }
-    @for (var i = 0; i < Model.PhotoSimples.Count; i++)
+    @for (var i = 0; i < (Model.PhotoSimples != null ? Model.PhotoSimples.Count : 0); i++)
     {
         var photoSimple = Model.PhotoSimples[i];
         var fileResourcePhoto = ViewDataTyped.PhotosByID.ContainsKey(photoSimple.PrimaryKey) ? ViewDataTyped.PhotosByID[photoSimple.PrimaryKey] : null;

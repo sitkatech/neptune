@@ -42,21 +42,20 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPImage(int fileResourceID, int treatmentBMPID, string caption, DateTime uploadDate) : this()
+        public TreatmentBMPImage(int fileResourceID, int treatmentBMPID, DateTime uploadDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPImageID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FileResourceID = fileResourceID;
             this.TreatmentBMPID = treatmentBMPID;
-            this.Caption = caption;
             this.UploadDate = uploadDate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPImage(FileResource fileResource, TreatmentBMP treatmentBMP, string caption, DateTime uploadDate) : this()
+        public TreatmentBMPImage(FileResource fileResource, TreatmentBMP treatmentBMP, DateTime uploadDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPImageID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -66,7 +65,6 @@ namespace Neptune.Web.Models
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.TreatmentBMPImages.Add(this);
-            this.Caption = caption;
             this.UploadDate = uploadDate;
         }
 
@@ -75,7 +73,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPImage CreateNewBlank(FileResource fileResource, TreatmentBMP treatmentBMP)
         {
-            return new TreatmentBMPImage(fileResource, treatmentBMP, default(string), default(DateTime));
+            return new TreatmentBMPImage(fileResource, treatmentBMP, default(DateTime));
         }
 
         /// <summary>

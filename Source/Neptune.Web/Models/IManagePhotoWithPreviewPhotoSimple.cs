@@ -9,7 +9,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get; set; }
 
         [DisplayName("Caption")]
-        [Required]
         public string Caption { get; set; }
 
         [DisplayName("Delete")]

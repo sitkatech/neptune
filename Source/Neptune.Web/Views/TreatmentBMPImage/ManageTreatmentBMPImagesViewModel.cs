@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.TreatmentBMPImage
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new Models.TreatmentBMPImage(ModelObjectHelpers.NotYetAssignedID,
-                            ModelObjectHelpers.NotYetAssignedID, x.Caption, DateTime.Now)
+                            ModelObjectHelpers.NotYetAssignedID, DateTime.Now)
                         {
                             TreatmentBMPImageID = x.PrimaryKey
                         })
@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.TreatmentBMPImage
             {
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
                 HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Add(
-                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, Caption, DateTime.Now));
+                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, DateTime.Now));
             }
         }
     }
