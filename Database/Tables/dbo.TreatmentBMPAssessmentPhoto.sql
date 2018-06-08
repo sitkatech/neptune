@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[TreatmentBMPAssessmentPhoto](
 	[TenantID] [int] NOT NULL,
 	[FileResourceID] [int] NOT NULL,
 	[TreatmentBMPAssessmentID] [int] NOT NULL,
-	[Caption] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Caption] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_TreatmentBMPAssessmentPhoto_TreatmentBMPAssessmentPhotoID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPAssessmentPhotoID] ASC

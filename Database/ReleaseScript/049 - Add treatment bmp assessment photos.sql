@@ -8,7 +8,7 @@ create table dbo.TreatmentBMPAssessmentPhoto (
 	TreatmentBMPAssessmentID int not null constraint FK_TreatmentBMPAssessmentPhoto_TreatmentBMPAssessment_TreatmentBMPAssessmentID foreign key references dbo.TreatmentBMPAssessment(TreatmentBMPAssessmentID),
 
 	-- Other attributes
-	Caption varchar(1000) null,
+	Caption varchar(1000) not null,
 
 	-- Double FKs
 	constraint FK_TreatmentBMPAssessmentPhoto_FileResource_FileResourceID_TenantID foreign key (FileResourceID, TenantID) references dbo.FileResource(FileResourceID, TenantID),

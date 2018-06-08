@@ -1,5 +1,4 @@
-﻿@using LtInfo.Common.BootstrapWrappers
-@using LtInfo.Common.HtmlHelperExtensions
+﻿@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared.ManagePhotosWithPreview
 
 @inherits ManagePhotosWithPreview
@@ -8,9 +7,9 @@
 <script type="text/javascript" language="javascript">
         // <![CDATA[
         function onLoadFileReader(event) {
-            var treatmentBmpAssessmentPhotoPreview = jQuery("#treatmentBmpAssessmentPhotoPreview");
-            treatmentBmpAssessmentPhotoPreview.find("img").attr("src", event.target.result);
-            treatmentBmpAssessmentPhotoPreview.show();
+            var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
+            fileResourcePhotoPreview.find("img").attr("src", event.target.result);
+            fileResourcePhotoPreview.show();
 
             var newPhotoCaptionFormGroup = jQuery("#newPhotoCaptionFormGroup");
             newPhotoCaptionFormGroup.show();
@@ -22,9 +21,9 @@
                 fileReader.onload = onLoadFileReader;
                 fileReader.readAsDataURL(file);
             } else {
-                var treatmentBmpAssessmentPhotoPreview = jQuery("#treatmentBmpAssessmentPhotoPreview");
-                treatmentBmpAssessmentPhotoPreview.find("img").attr("src", "#");
-                treatmentBmpAssessmentPhotoPreview.hide();
+                var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
+                fileResourcePhotoPreview.find("img").attr("src", "#");
+                fileResourcePhotoPreview.hide();
 
                 var newPhotoCaptionFormGroup = jQuery("#newPhotoCaptionFormGroup");
                 newPhotoCaptionFormGroup.find(":input").val("");
@@ -111,7 +110,6 @@
             border-radius: 50%;
         }
 </style>
-
 <div class="row">
     <div class="col-xs-12">
         <div class="well">
@@ -129,7 +127,7 @@
                         @Html.ValidationMessageFor(m => m.Caption)
                     </div>
                 </div>
-                <div id="treatmentBmpAssessmentPhotoPreview" class="col-xs-12 col-sm-6 text-center" style="display: none;">
+                <div id="fileResourcePhotoPreview" class="col-xs-12 col-sm-6 text-center" style="display: none;">
                     <img src="#" alt="Preview of image to upload." class="col-xs-12 col-sm-6 imagePreview" style="width: 100%;" />
                     <div class="imagePreviewRibbon">Preview</div>
                 </div>
@@ -149,22 +147,23 @@
     }
     @for (var i = 0; i < Model.PhotoSimples.Count; i++)
     {
-        var treatmentBmpAssessmentPhotoSimple = Model.PhotoSimples[i];
-        var treatmentBmpAssessmentPhoto = ViewDataTyped.PhotosByID[treatmentBmpAssessmentPhotoSimple.PrimaryKey];
+        var photoSimple = Model.PhotoSimples[i];
+        var fileResourcePhoto = ViewDataTyped.PhotosByID.ContainsKey(photoSimple.PrimaryKey) ? ViewDataTyped.PhotosByID[photoSimple.PrimaryKey] : null;
         @Html.HiddenFor(m => m.PhotoSimples[i].PrimaryKey)
         <div class="col-xs-12">
             <div class="media">
                 <div class="media-left media-middle">
                     <div style="display: block; width: 200px; max-height: 200px;">
-                        <a href="@treatmentBmpAssessmentPhoto.FileResource.FileResourceUrl" class="gallery" rel="group1" data-caption="@treatmentBmpAssessmentPhoto.Caption" title="@treatmentBmpAssessmentPhoto.Caption">
+                        <a href="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.FileResourceUrl : null)" class="gallery" rel="group1"
+                           data-caption="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)" title="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)">
                             <img class="media-object" style="margin: auto;"
-                                 src="@treatmentBmpAssessmentPhoto.FileResource.FileResourceUrlScaledThumbnail(200)"
-                                 alt="@treatmentBmpAssessmentPhoto.Caption" />
+                                 src="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.FileResourceUrlScaledThumbnail(200) : null)"
+                                 alt="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)" />
                         </a>
                     </div>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading text-right">@treatmentBmpAssessmentPhoto.FileResource.OriginalCompleteFileName</h4>
+                    <h4 class="media-heading text-right">@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.OriginalCompleteFileName : null)</h4>
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-4 col-md-2 control-label">
@@ -194,14 +193,4 @@
             </div>
         </div>
     }
-</div>
-<div class="row">
-    <hr />
-    <div class="col-xs-12 col-sm-2">
-        <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-    </div>
-    <div class="col-xs-12 col-sm-10" style="text-align: right">
-        <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-        <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
-    </div>
 </div>

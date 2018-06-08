@@ -150,7 +150,7 @@ namespace Neptune.Web.Models
                 SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)),
                 AssessmentCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
                     ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
-                    : new HtmlString("")
+                    : new HtmlString("<span style=\"width: 19px; display: inline-block;\"></span>")
             };
         }
     }

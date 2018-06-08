@@ -41,19 +41,20 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessmentPhoto(int fileResourceID, int treatmentBMPAssessmentID) : this()
+        public TreatmentBMPAssessmentPhoto(int fileResourceID, int treatmentBMPAssessmentID, string caption) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentPhotoID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.FileResourceID = fileResourceID;
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
+            this.Caption = caption;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessmentPhoto(FileResource fileResource, TreatmentBMPAssessment treatmentBMPAssessment) : this()
+        public TreatmentBMPAssessmentPhoto(FileResource fileResource, TreatmentBMPAssessment treatmentBMPAssessment, string caption) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentPhotoID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -63,6 +64,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPAssessmentID = treatmentBMPAssessment.TreatmentBMPAssessmentID;
             this.TreatmentBMPAssessment = treatmentBMPAssessment;
             treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Add(this);
+            this.Caption = caption;
         }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMPAssessmentPhoto CreateNewBlank(FileResource fileResource, TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            return new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment);
+            return new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment, default(string));
         }
 
         /// <summary>

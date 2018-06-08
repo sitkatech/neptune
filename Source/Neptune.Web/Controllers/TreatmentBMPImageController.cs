@@ -41,7 +41,7 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP)
         {
             var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, treatmentBMP);
-            var viewData = new ManageTreatmentBMPImagesViewData(CurrentPerson, managePhotosWithPreviewViewData);
+            var viewData = new ManageTreatmentBMPImagesViewData(CurrentPerson, treatmentBMP, managePhotosWithPreviewViewData);
             return RazorView<ManageTreatmentBMPImages, ManageTreatmentBMPImagesViewData, ManageTreatmentBMPImagesViewModel>(viewData, viewModel);
         }
     }

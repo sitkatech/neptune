@@ -806,7 +806,7 @@
     <Property Name="TenantID" Type="Int32" Nullable="false" />
     <Property Name="FileResourceID" Type="Int32" Nullable="false" />
     <Property Name="TreatmentBMPAssessmentID" Type="Int32" Nullable="false" />
-    <Property Name="Caption" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="Caption" Type="String" Nullable="false" MaxLength="1000" Unicode="false" FixedLength="false" />
     <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessmentPhoto_FileResource_FileResourceID" FromRole="TreatmentBMPAssessmentPhotos" ToRole="FileResource" />
     <NavigationProperty Name="TreatmentBMPAssessment" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessmentPhoto_TreatmentBMPAssessment_TreatmentBMPAssessmentID" FromRole="TreatmentBMPAssessmentPhotos" ToRole="TreatmentBMPAssessment" />
   </EntityType>

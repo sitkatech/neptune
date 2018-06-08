@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -9,37 +9,32 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.TreatmentBMPImage
 {
-    public class ManageTreatmentBMPImagesViewModel : FormViewModel
+    public sealed class ManageTreatmentBMPImagesViewModel : ManagePhotosWithPreviewViewModel
     {
         /// <summary>
         ///  Needed by model binder
         /// </summary>
         public ManageTreatmentBMPImagesViewModel()
         {
-            ManagePhotosWithPreviewForm = new ManagePhotosWithPreviewViewModel();
         }
 
         public ManageTreatmentBMPImagesViewModel(Models.TreatmentBMP treatmentBMP)
         {
-            ManagePhotosWithPreviewForm = new ManagePhotosWithPreviewViewModel
-            {
-                PhotoSimples = treatmentBMP.TreatmentBMPImages.Select(x =>
-                    new ManagePhotoWithPreviewPhotoSimple
-                    {
-                        PrimaryKey = x.TreatmentBMPImageID,
-                        Caption = x.Caption,
-                        FlagForDeletion = false
-                    }).ToList()
-            };
+            PhotoSimples = treatmentBMP.TreatmentBMPImages.Select(x =>
+                new ManagePhotoWithPreviewPhotoSimple
+                {
+                    PrimaryKey = x.TreatmentBMPImageID,
+                    Caption = x.Caption,
+                    FlagForDeletion = false
+                }).ToList();
         }
-
-        public HttpPostedFileBase Photo { get; set; }
-        public ManagePhotosWithPreviewViewModel ManagePhotosWithPreviewForm { get; set; }
 
         public void UpdateModels(Person currentPerson, Models.TreatmentBMP treatmentBMP)
         {
             // Merge existing photos
-            var treatmentBMPAssessmentPhotosToUpdate = ManagePhotosWithPreviewForm.PhotoSimples.Select(x =>
+            var photoSimples = PhotoSimples ??
+                               new List<ManagePhotoWithPreviewPhotoSimple>();
+            var treatmentBMPAssessmentPhotosToUpdate = photoSimples.Select(x =>
                     x.FlagForDeletion // Exclude from list to update if flagged for deletion
                         ? null
                         : new Models.TreatmentBMPImage(ModelObjectHelpers.NotYetAssignedID,
@@ -55,11 +50,11 @@ namespace Neptune.Web.Views.TreatmentBMPImage
                 (x, y) => { x.Caption = y.Caption; });
 
             // Create new photo if it exists
-            if (ManagePhotosWithPreviewForm.Photo != null)
+            if (Photo != null)
             {
-                var fileResource = FileResource.CreateNewFromHttpPostedFile(ManagePhotosWithPreviewForm.Photo, currentPerson);
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
                 HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Add(
-                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, ManagePhotosWithPreviewForm.Caption, DateTime.Now));
+                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, Caption, DateTime.Now));
             }
         }
     }
