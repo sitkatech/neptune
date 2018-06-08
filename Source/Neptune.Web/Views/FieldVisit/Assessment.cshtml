@@ -28,22 +28,19 @@
 }
 
 <p>
-    The BMP assessment workflow allows input of treatment BMP observations to help determine maintenance urgency. A BMP assessment is a compilation of distinct rapid observations and/or measurements made at treatment BMPs, which results in a score between 0-5.
+    The assessment workflow allows input of observations to quantify the BMPs performance. An assessment consists of several rapid observations and/or measurements made at a BMP, which results in a score between 0-5.
 </p>
 <p>
-    Use the navigation to the left to view and enter your assessment details in the field or after an assessment is conducted. Be sure to click Save on each page. In order to recieve an assessment score you are required to enter observations in each section. Once all required observations are completed, your score will appear on the score page.
+    Use the navigation to the left to view and enter your assessment details. Be sure to click Save on each page. In order to recieve an assessment score you are required to enter observations in each section.
 </p>
-<p>You will see some icons next to some pages – here is what they mean:</p>
+<p>You will see these icons next to the observation pages – here is what they mean:</p>
 
 <ul class="list-unstyled">
     <li>
-        <span class="glyphicon glyphicon-exclamation-sign field-validation-warning displayIcon"></span> Required information has not been completely provided (section incomplete).
+        <span class="glyphicon glyphicon-exclamation-sign field-validation-warning displayIcon"></span>&nbsp;&nbsp;Required information has not been completely provided (section incomplete)
     </li>
     <li>
-        <span class="glyphicon glyphicon-ok field-validation-success displayIcon"></span> Required information has been provided (section complete).
-    </li>
-    <li>
-        <sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> <span>User input required - Fields with this icon are required. Fields without this icon are optional or only required under certain conditions.</span>
+        <span class="glyphicon glyphicon-ok field-validation-success displayIcon"></span>&nbsp;&nbsp;Required information has been provided (section complete)
     </li>
 </ul>
 <hr>
@@ -54,7 +51,7 @@
         {
             <button class="btn btn-neptune" style="display: inline-block;">
                 <span>
-                    @(ViewDataTyped.FieldVisit.InitialAssessment == null ? "Begin the BMP Assessment" : "Continue the BMP Assessment")
+                    @(ViewDataTyped.FieldVisit.InitialAssessment == null ? "Begin Assessment" : "Continue Assessment")
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>

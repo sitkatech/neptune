@@ -109,5 +109,31 @@ namespace Neptune.Web.Models
                 : (DateTime?) MaintenanceRecords.Select(x => x.GetMaintenanceRecordDate)
                     .Max();
         }
+
+        public string CustomAttributeStatus()
+        {
+            var nonMaintenanceTreatmentBMPTypeCustomAttributeTypes =
+                TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Where(x =>
+                    x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.Maintenance).ToList();
+
+            var completedObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.IsCompleteForTreatmentBMP(this));
+
+            var totalObservationCount = nonMaintenanceTreatmentBMPTypeCustomAttributeTypes.Count(x =>
+                x.CustomAttributeType.IsRequired);
+
+            return completedObservationCount == totalObservationCount
+                ? "All Required Data Provided"
+                : $"In Progress ({completedObservationCount} of {totalObservationCount} required attributes entered)";
+        }
+
+        public bool RequiredAttributeDoesNotHaveValue(FieldVisit fieldVisit)
+        {
+            return this.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+                x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
+                CustomAttributeTypePurpose.Maintenance &&
+                !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
+            );
+        }
     }
 }

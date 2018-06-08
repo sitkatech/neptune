@@ -121,9 +121,9 @@
                                         var subsectionIsActive = ViewDataTyped.SubsectionName == fieldVisitSubsection.SubsectionName;
                                         <li>
                                             <a class="@(subsectionIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSubsection.SubsectionUrl">
-                                                @if (fieldVisitSubsection.AssessmentCompletionStatusIndicator != null)
+                                                @if (fieldVisitSubsection.SectionCompletionStatusIndicator != null)
                                                 {
-                                                    @fieldVisitSubsection.AssessmentCompletionStatusIndicator
+                                                    @fieldVisitSubsection.SectionCompletionStatusIndicator
                                                     ;
                                                 }
                                                 @fieldVisitSubsection.SubsectionName
@@ -140,7 +140,6 @@
         <div id="wizardContent" class="col-xs-12 col-sm-9">
             <div class="wizardHeader">
                 <h2>@ViewDataTyped.SectionHeader</h2>
-                <hr>
             </div>
 
             <div class="wizardMain">

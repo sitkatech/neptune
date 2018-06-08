@@ -72,7 +72,7 @@ namespace Neptune.Web.Models
     {
         public string SubsectionName { get; set; }
         public string SubsectionUrl { get; set; }
-        public HtmlString AssessmentCompletionStatusIndicator { get; set; }
+        public HtmlString SectionCompletionStatusIndicator { get; set; }
     }
 
     public partial class FieldVisitSectionAssessment
@@ -165,7 +165,7 @@ namespace Neptune.Web.Models
                 {
                     SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
                     SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType),
-                    AssessmentCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
+                    SectionCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
                     ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
                         : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
                 };

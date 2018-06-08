@@ -243,7 +243,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewAttributes(FieldVisit fieldVisit, AttributesViewModel viewModel)
         {
-            var missingRequiredAttributes = fieldVisit.RequiredAttributeDoesNotHaveValue();
+            var missingRequiredAttributes = fieldVisit.TreatmentBMP.RequiredAttributeDoesNotHaveValue(fieldVisit);
             EditAttributesViewData editAttributesViewData =
                 new EditAttributesViewData(CurrentPerson, fieldVisit, true, missingRequiredAttributes);
             var viewData = new AttributesViewData(CurrentPerson, fieldVisit, editAttributesViewData);
