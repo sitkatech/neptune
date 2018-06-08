@@ -266,12 +266,27 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditAttributes(EditAttributesViewModel viewModel, TreatmentBMP treatmentBMP,
             CustomAttributeTypePurpose customAttributeTypePurpose)
         {
-            var missingRequiredAttributes = treatmentBMP.CustomAttributes.Any(x =>
-            {
-                return x.CustomAttributeType.IsRequired &&
-                       (x.CustomAttributeValues == null || x.CustomAttributeValues.All(y => string.IsNullOrEmpty(y.AttributeValue)));
-            });
-            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose, missingRequiredAttributes);
+            var missingRequiredAttributes = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                customAttributeTypePurpose.CustomAttributeTypePurposeID &&
+                                                x.CustomAttributeType.IsRequired &&
+                                                !treatmentBMP
+                                                    .CustomAttributes
+                                                    .Select(
+                                                        y =>
+                                                            y.CustomAttributeTypeID)
+                                                    .Contains(
+                                                        x.CustomAttributeTypeID)) ||
+                                            treatmentBMP.CustomAttributes.Any(x =>
+                                                x.CustomAttributeType.CustomAttributeTypePurposeID ==
+                                                customAttributeTypePurpose.CustomAttributeTypePurposeID &&
+                                                x.CustomAttributeType.IsRequired &&
+                                                (x.CustomAttributeValues == null ||
+                                                 x.CustomAttributeValues.All(
+                                                     y => string.IsNullOrEmpty(y.AttributeValue)))
+                                            );
+            var viewData = new EditAttributesViewData(CurrentPerson, treatmentBMP, customAttributeTypePurpose,
+                missingRequiredAttributes);
             return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 

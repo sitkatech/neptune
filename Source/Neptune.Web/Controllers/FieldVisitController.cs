@@ -360,11 +360,10 @@ namespace Neptune.Web.Controllers
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var missingRequiredAttributes = maintenanceRecord.MaintenanceRecordObservations.Any(x =>
-                x.CustomAttributeType.IsRequired && (x.MaintenanceRecordObservationValues == null ||
-                                                     x.MaintenanceRecordObservationValues.All(y =>
-                                                         string.IsNullOrWhiteSpace(y.ObservationValue))));
-            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,fieldVisit.TreatmentBMP,CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true, missingRequiredAttributes);
+            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes;
+            var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,
+                fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
+                missingRequiredAttributes);
             var viewData = new EditMaintenanceRecordViewData(CurrentPerson, organizations, treatmentBMP, isNew, fieldVisit, editMaintenanceRecordObservationsViewData);
             return RazorView<EditMaintenanceRecord, EditMaintenanceRecordViewData,
                 EditMaintenanceRecordViewModel>(viewData, viewModel);
