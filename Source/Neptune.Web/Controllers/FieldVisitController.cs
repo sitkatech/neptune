@@ -736,9 +736,7 @@ namespace Neptune.Web.Controllers
             var isLastPage = nextObservationType == null;
 
             var nextObservationTypeViewResult = isLastPage
-                ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
-                    ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
-                    : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
+                ? Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)))
                 : Redirect(nextObservationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType));
             return nextObservationTypeViewResult;
         }
@@ -793,7 +791,11 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             
-            return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID))); // TODO better redirect
+            return viewModel.AutoAdvance
+                ? (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
+                    ? RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)))
+                    : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit))))
+                : Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)));
         }
 
         private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType, AssessmentPhotosViewModel viewModel)
