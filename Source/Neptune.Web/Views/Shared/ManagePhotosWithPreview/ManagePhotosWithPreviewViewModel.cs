@@ -9,7 +9,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
 {
-    public abstract class ManagePhotosWithPreviewViewModel : FormViewModel, IValidatableObject
+    public abstract class ManagePhotosWithPreviewViewModel : FormViewModel
     {
         public virtual IList<ManagePhotoWithPreviewPhotoSimple> PhotoSimples { get; set; }
 
@@ -19,14 +19,5 @@ namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
 
         [DisplayName("Caption")]
         public virtual string Caption { get; set; }
-
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Photo != null && string.IsNullOrWhiteSpace(Caption))
-            {
-                yield return new SitkaValidationResult<ManagePhotosWithPreviewViewModel, string>("Caption is required.", m => m.Caption);
-            }
-        }
     }
 }

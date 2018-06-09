@@ -64,7 +64,7 @@ namespace Neptune.Web.Controllers
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP, true);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -73,7 +73,7 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null, false);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
             return gridJsonNetJObjectResult;
@@ -86,11 +86,12 @@ namespace Neptune.Web.Controllers
         /// <param name="gridSpec"></param>
         /// <param name="currentPerson"></param>
         /// <param name="treatmentBMP"></param>
+        /// <param name="detailPage"></param>
         /// <returns></returns>
         private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
-            TreatmentBMP treatmentBMP)
+            TreatmentBMP treatmentBMP, bool detailPage)
         {
-            gridSpec = new FieldVisitGridSpec(currentPerson);
+            gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits;
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
@@ -216,8 +217,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new PhotosViewData(CurrentPerson, fieldVisit);
-            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, new PhotosViewModel());
+            var viewModel = new PhotosViewModel(fieldVisit.TreatmentBMP);
+            return ViewPhotos(fieldVisit, viewModel);
         }
 
         [HttpPost]
@@ -225,6 +226,15 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Photos(FieldVisitPrimaryKey fieldVisitPrimaryKey, PhotosViewModel viewModel)
         {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                ViewPhotos(fieldVisit, viewModel);
+            }
+
+            viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
+            SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
+
             return viewModel.AutoAdvance
                 ? new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
@@ -232,6 +242,13 @@ namespace Neptune.Web.Controllers
                 : new RedirectResult(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                         x.Photos(fieldVisitPrimaryKey)));
+        }
+
+        private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel)
+        {
+            var managePhotosWithPreviewViewData = new ManagePhotosWithPreviewViewData(CurrentPerson, fieldVisit.TreatmentBMP);
+            var viewData = new PhotosViewData(CurrentPerson, fieldVisit, managePhotosWithPreviewViewData);
+            return RazorView<Photos, PhotosViewData, PhotosViewModel>(viewData, viewModel);
         }
 
         [HttpGet]

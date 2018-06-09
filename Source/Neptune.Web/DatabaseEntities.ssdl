@@ -792,7 +792,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_Tre
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="FileResourceID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPAssessmentID" Type="int" Nullable="false" />
-    <Property Name="Caption" Type="varchar" Nullable="false" MaxLength="1000" />
+    <Property Name="Caption" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="TreatmentBMPBenchmarkAndThreshold">
     <Key>
@@ -827,7 +827,7 @@ warning 6035: The relationship 'FK_TreatmentBMPTypeAssessmentObservationType_Tre
     <Property Name="TenantID" Type="int" Nullable="false" />
     <Property Name="FileResourceID" Type="int" Nullable="false" />
     <Property Name="TreatmentBMPID" Type="int" Nullable="false" />
-    <Property Name="Caption" Type="varchar" Nullable="false" MaxLength="500" />
+    <Property Name="Caption" Type="varchar" MaxLength="500" />
     <Property Name="UploadDate" Type="date" Nullable="false" />
   </EntityType>
   <EntityType Name="TreatmentBMPObservation">
