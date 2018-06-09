@@ -64,7 +64,7 @@ namespace Neptune.Web.Controllers
             TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey?.EntityObject;
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP);
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, treatmentBMP, true);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -73,7 +73,7 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null);
+            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null, false);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
 
             return gridJsonNetJObjectResult;
@@ -86,11 +86,12 @@ namespace Neptune.Web.Controllers
         /// <param name="gridSpec"></param>
         /// <param name="currentPerson"></param>
         /// <param name="treatmentBMP"></param>
+        /// <param name="detailPage"></param>
         /// <returns></returns>
         private List<FieldVisit> GetFieldVisitsAndGridSpec(out FieldVisitGridSpec gridSpec, Person currentPerson,
-            TreatmentBMP treatmentBMP)
+            TreatmentBMP treatmentBMP, bool detailPage)
         {
-            gridSpec = new FieldVisitGridSpec(currentPerson);
+            gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits;
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)

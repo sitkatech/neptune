@@ -213,7 +213,7 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
-    <Compile Include="Models\IManagePhotoWithPreviewPhotoSimple.cs" />
+    <Compile Include="Models\ManagePhotoWithPreviewPhotoSimple.cs" />
     <Compile Include="Views\FieldVisit\PhotosViewModel.cs" />
     <Compile Include="Views\TreatmentBMPImage\ManageTreatmentBMPImages.cs" />
     <Compile Include="Views\Shared\ManagePhotosWithPreview\ManagePhotosWithPreview.cs" />

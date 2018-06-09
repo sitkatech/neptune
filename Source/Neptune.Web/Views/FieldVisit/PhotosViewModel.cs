@@ -40,6 +40,7 @@ namespace Neptune.Web.Views.FieldVisit
                         : new Models.TreatmentBMPImage(ModelObjectHelpers.NotYetAssignedID,
                             ModelObjectHelpers.NotYetAssignedID, DateTime.Now)
                         {
+                            Caption = x.Caption,
                             TreatmentBMPImageID = x.PrimaryKey
                         })
                 .Where(x => x != null)
@@ -54,7 +55,7 @@ namespace Neptune.Web.Views.FieldVisit
             {
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
                 HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Add(
-                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, DateTime.Now));
+                    new Models.TreatmentBMPImage(fileResource, treatmentBMP, DateTime.Now) { Caption = Caption });
             }
         }
     }

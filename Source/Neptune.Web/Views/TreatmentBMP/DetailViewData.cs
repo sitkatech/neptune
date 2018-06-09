@@ -71,7 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
 
-            FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson);
+            FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson, true);
             FieldVisitGridName = "FieldVisit";
             FieldVisitGridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.FieldVisitGridJsonData(treatmentBMP));
             NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
