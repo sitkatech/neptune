@@ -18,7 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
+
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -29,22 +29,20 @@ using Neptune.Web.Views.Shared;
 using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
 {
     public class HelpController : NeptuneBaseController
     {
-        public const string MessageForContactSubmittedSuccessfully = "Thank you for contacting us. We will get back to you soon!";
-
         [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
         [HttpGet]
-        public PartialViewResult Support()
+        public ViewResult Support()
         {
             return ViewSupport(null, "");
         }
         
-        private PartialViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
+        private ViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
         {
             var currentPageUrl = string.Empty;
             if (Request.UrlReferrer != null)
@@ -71,20 +69,20 @@ namespace Neptune.Web.Controllers
             return ViewSupportImpl(viewModel, string.Empty);
         }
 
-        private PartialViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
+        private ViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
         {
-            var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder);
+            var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder).ToList();
 
             var supportRequestTypes =
                 allSupportRequestTypes.OrderBy(x => x.SupportRequestTypeSortOrder)
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
-            
-            var viewData = new SupportFormViewData(successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList());
-            return RazorPartialView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
+            var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
+            return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
         [HttpPost]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Support(SupportFormViewModel viewModel)
@@ -98,19 +96,17 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            return new ModalDialogFormJsonResult();
+            return RedirectToAction(new SitkaRoute<HelpController>(x => x.Support()));
         }
 
-        [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
+        [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public PartialViewResult RequestOrganizationNameChange()
+        public ViewResult RequestOrganizationNameChange()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestOrganizationNameChange, string.Empty);
         }
 
         [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
         [HttpPost]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RequestOrganizationNameChange(SupportFormViewModel viewModel)
@@ -118,10 +114,9 @@ namespace Neptune.Web.Controllers
             return Support(viewModel);
         }
 
-        [AnonymousUnclassifiedFeature]
-        [CrossAreaRoute]
+        [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public PartialViewResult RequestToChangePrivileges()
+        public ViewResult RequestToChangePrivileges()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);
         }

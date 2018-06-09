@@ -24,17 +24,16 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.User;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
-using Neptune.Web.KeystoneDataService;
 using Organization = Neptune.Web.Models.Organization;
 
 namespace Neptune.Web.Controllers
@@ -245,99 +244,96 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }
 
+        [NeptuneAdminFeature]
         [HttpGet]
-        [SitkaAdminFeature]
-        public PartialViewResult PullUserFromKeystone()
+        public ActionResult Invite()
         {
-            var viewModel = new PullUserFromKeystoneViewModel();
-
-            return ViewPullUserFromKeystone(viewModel);
+            var viewModel = new InviteViewModel();
+            return ViewInvite(viewModel);
         }
 
-        [HttpPost]
-        [SitkaAdminFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult PullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
+        private ActionResult ViewInvite(InviteViewModel viewModel)
         {
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.InviteUser);
+            var viewData = new InviteViewData(CurrentPerson, HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList(), neptunePage);
+            return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
+        }
+
+        [NeptuneAdminFeature]
+        [HttpPost]
+        public ActionResult Invite(InviteViewModel viewModel)
+        {
+            var toolDisplayName = MultiTenantHelpers.GetToolDisplayName();
+            var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index());
+            var inviteModel = new KeystoneService.KeystoneInviteModel
+            {
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                Email = viewModel.Email,
+                SiteName = toolDisplayName,
+                Subject = $"Invitation to the {toolDisplayName}",
+                WelcomeText = $"You have been invited by a colleague to create an account in the {toolDisplayName} {homeUrl}. The {toolDisplayName} application is a collaborative effort of Orange County Public Works, MS4 Permittees, and other organizations.",
+                RedirectURL = homeUrl,
+                SupportBlock = $"If you have any questions, please visit our support page at {homeUrl}",
+                OrganizationGuid = viewModel.OrganizationGuid,
+                SignatureBlock = $"The {toolDisplayName} team"
+            };
+
+            var keystoneService = new KeystoneService(HttpRequestStorage.GetHttpContextUserThroughOwin());
+            var response = keystoneService.Invite(inviteModel);
+            if (response.StatusCode != HttpStatusCode.OK || response.Error != null)
+            {
+                ModelState.AddModelError("Email", $"There was a problem inviting the user to Keystone: {response.Error.Message}.");
+                if (response.Error.ModelState != null)
+                {
+                    foreach (var modelStateKey in response.Error.ModelState.Keys)
+                    {
+                        foreach (var err in response.Error.ModelState[modelStateKey])
+                        {
+                            ModelState.AddModelError(modelStateKey, err);
+                        }
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                return ViewPullUserFromKeystone(viewModel);
+                return ViewInvite(viewModel);
             }
 
-            var keystoneClient = new KeystoneDataClient();
-
-            UserProfile keystoneUser = keystoneClient.GetUserProfileByUsername(NeptuneWebConfiguration.KeystoneWebServiceApplicationGuid, viewModel.LoginName);
-            if (keystoneUser == null)
+            var keystoneUser = response.Payload.Claims;
+            var existingUser = HttpRequestStorage.DatabaseEntities.People.GetPersonByPersonGuid(keystoneUser.UserGuid);
+            if (existingUser != null)
             {
-                SetErrorForDisplay($"Person not added. The {FieldDefinition.Username.GetFieldDefinitionLabel()} was not found in Keystone");
-                return new ModalDialogFormJsonResult();
+                return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(existingUser)));
             }
 
-            if (!keystoneUser.OrganizationGuid.HasValue)
-            {
-                SetErrorForDisplay($"Person not added. They have no {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
-            }
+            var newUser = CreateNewFirmaPerson(keystoneUser, keystoneUser.OrganizationGuid);
 
-            KeystoneDataService.Organization keystoneOrganization = null;
-            try
-            {
-                keystoneOrganization = keystoneClient.GetOrganization(keystoneUser.OrganizationGuid.Value);
-            }
-            catch (Exception)
-            {
-                SetErrorForDisplay($"Person not added. Could not find their {FieldDefinition.Organization.GetFieldDefinitionLabel()} in Keystone");
-            }
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            if (keystoneOrganization == null)
-            {
-                SetErrorForDisplay("Person not added. Could not find their Organization in Keystone");
+            SetMessageForDisplay($"{newUser.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to assign them a role</a>.");
+            return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(newUser)));
+        }
 
+        private static Person CreateNewFirmaPerson(KeystoneService.KeystoneUserClaims keystoneUser, Guid? organizationGuid)
+        {
+            Organization organization;
+            if (organizationGuid.HasValue)
+            {
+                organization = HttpRequestStorage.DatabaseEntities.Organizations.GetOrganizationByOrganizationGuid(organizationGuid.Value);
             }
             else
             {
-                var firmaOrganization =
-                    HttpRequestStorage.DatabaseEntities.Organizations.SingleOrDefault(
-                        x => x.OrganizationGuid == keystoneUser.OrganizationGuid);
-                if (firmaOrganization == null)
-                {
-                    var defaultOrganizationType = HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
-                    firmaOrganization = new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
-                    {
-                        OrganizationGuid = keystoneOrganization.OrganizationGuid,
-                        OrganizationShortName = keystoneOrganization.ShortName,
-                        OrganizationUrl = keystoneOrganization.URL
-                    };
-                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(firmaOrganization);
-                }
-
-                var firmaPerson =
-                    HttpRequestStorage.DatabaseEntities.People.SingleOrDefault(
-                        x => x.PersonGuid == keystoneUser.UserGuid);
-                if (firmaPerson != null)
-                {
-                    firmaPerson.OrganizationID = firmaOrganization.OrganizationID;
-                }
-                else
-                {
-                    firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
-                        keystoneUser.Email, Role.Unassigned, DateTime.Now, true, firmaOrganization, false,
-                        keystoneUser.LoginName);
-                    HttpRequestStorage.DatabaseEntities.AllPeople.Add(firmaPerson);
-                }
-
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-                SetMessageForDisplay($"{firmaPerson.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to <a href=\"{firmaPerson.GetDetailUrl()}\">assign them a role</a>.");
+                organization = HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
             }
-            return new ModalDialogFormJsonResult();
 
-
+            var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
+                keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,
+                keystoneUser.LoginName);
+            HttpRequestStorage.DatabaseEntities.AllPeople.Add(firmaPerson);
+            return firmaPerson;
         }
 
-        private PartialViewResult ViewPullUserFromKeystone(PullUserFromKeystoneViewModel viewModel)
-        {
-            var viewData = new PullUserFromKeystoneViewData();
-            return RazorPartialView<PullUserFromKeystone, PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>(viewData, viewModel);
-        }
     }
 }

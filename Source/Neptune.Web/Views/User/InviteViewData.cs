@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PullUserFromKeystone.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="DetailViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,9 +18,23 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Collections.Generic;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
+using Neptune.Web.Models;
+
 namespace Neptune.Web.Views.User
 {
-    public abstract class PullUserFromKeystone : LtInfo.Common.Mvc.TypedWebPartialViewPage<PullUserFromKeystoneViewData, PullUserFromKeystoneViewModel>
+    public class InviteViewData : NeptuneViewData
     {
+        public IEnumerable<SelectListItem> AllOrganizations { get; }
+
+        public InviteViewData(Person currentPerson, List<Models.Organization> organizations, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage)
+        {
+            PageTitle = "Invite User";
+            EntityName = "Users";
+            AllOrganizations = organizations.ToSelectList(x => x.OrganizationGuid.ToString(), x => x.OrganizationName);
+        }
     }
 }

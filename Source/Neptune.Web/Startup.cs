@@ -103,7 +103,6 @@ namespace Neptune.Web
                     }
                 }
             });
-
         }
 
         public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)

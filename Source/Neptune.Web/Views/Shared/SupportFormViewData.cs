@@ -20,20 +20,27 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared
 {
-    public class SupportFormViewData
+    public class SupportFormViewData : NeptuneViewData
     {
         public readonly List<SupportRequestTypeSimple> SupportRequestTypeSimples;
         public readonly string SuccessMessage;
         public readonly bool IsUserAnonymous;
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
+        public string CancelUrl { get; }
 
-        public SupportFormViewData(string successMessage, bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes, List<SupportRequestTypeSimple> supportRequestTypeSimples)
+        public SupportFormViewData(Person currentPerson, Models.NeptunePage neptunePage, string successMessage,
+            bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
+            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl) : base(currentPerson, neptunePage)
         {
+            EntityName = MultiTenantHelpers.GetTenantDisplayName();
+            PageTitle = "Request Support";
             SupportRequestTypeSimples = supportRequestTypeSimples;
+            CancelUrl = cancelUrl;
             SuccessMessage = successMessage;
             IsUserAnonymous = isUserAnonymous;
             SupportRequestTypes = supportRequestTypes;

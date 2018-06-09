@@ -26,4 +26,6 @@ values
 (21, 'FundingSourcesList', 'Funding Sources List', 2),
 (22, 'FindABMP', 'Find a BMP', 2),
 (23, 'LaunchPad', 'Launch Pad', 2),
-(24, 'FieldRecords', 'Field Records', 2)
+(24, 'FieldRecords', 'Field Records', 2),
+(25, 'RequestSupport', 'Request Support', 2),
+(26, 'InviteUser', 'Invite User', 2)

@@ -1,27 +1,29 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="SupportForm.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="SupportForm.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.HtmlHelperExtensions
-@using Newtonsoft.Json.Linq
 @inherits SupportForm
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
 @using (Html.BeginForm())
 {
     <div class="form-horizontal">
@@ -54,7 +56,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 }
                 else
                 {
-                <div class="form-control-static">@Model.RequestPersonEmail</div>
+                    <div class="form-control-static">@Model.RequestPersonEmail</div>
                     @Html.HiddenFor(x => x.RequestPersonEmail)
                 }
             </div>
@@ -97,11 +99,20 @@ Source code is available upon request via <support@sitkatech.com>.
 
         @if (ViewDataTyped.IsUserAnonymous)
         {
-        <div style="margin-bottom: 5px">
-            This question is testing whether you are a human visitor and to prevent automated spam submissions:
-        </div>
-        SitkaRecaptcha.RenderPartialView(Html);
+            <div style="margin-bottom: 5px">
+                This question is testing whether you are a human visitor and to prevent automated spam submissions:
+            </div>
+            SitkaRecaptcha.RenderPartialView(Html);
         }
     </div>
-    
+
+    <hr>
+    <div class="row">
+        <div class="col-xs-12" style="text-align: right">
+            <button class="btn btn-neptune" style="display: inline-block;" type="submit">
+                Submit Request
+            </button>
+            <a href="@ViewDataTyped.CancelUrl" class="btn btn-neptune" style="display: inline-block;">Cancel</a>
+        </div>
+    </div>
 }

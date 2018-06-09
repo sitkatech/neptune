@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -213,6 +213,7 @@
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypeCustomAttributeTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPTypePrimaryKey.Binding.cs" />
+    <Compile Include="Common\KeystoneService.cs" />
     <Compile Include="Models\ManagePhotoWithPreviewPhotoSimple.cs" />
     <Compile Include="Views\FieldVisit\PhotosViewModel.cs" />
     <Compile Include="Views\TreatmentBMPImage\ManageTreatmentBMPImages.cs" />
@@ -996,9 +997,6 @@
     <Compile Include="Views\TreatmentBMP\SummaryForMap.cs" />
     <Compile Include="Views\TreatmentBMP\SummaryForMapViewData.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPGridSpec.cs" />
-    <Compile Include="Views\User\PullUserFromKeystone.cs" />
-    <Compile Include="Views\User\PullUserFromKeystoneViewData.cs" />
-    <Compile Include="Views\User\PullUserFromKeystoneViewModel.cs" />
     <Compile Include="Views\Shared\SupportForm.cs" />
     <Compile Include="Views\Shared\SupportFormViewData.cs" />
     <Compile Include="Views\Shared\SupportFormViewModel.cs" />
@@ -1038,7 +1036,6 @@
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\User\EditJurisdictionsController.js" />
     <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
-    <Content Include="Views\User\PullUserFromKeystone.cshtml" />
     <Content Include="Views\Tenant\Detail.cshtml" />
     <Content Include="Views\Tenant\EditBasics.cshtml" />
     <Content Include="Views\Tenant\EditBoundingBox.cshtml" />
@@ -1125,6 +1122,7 @@
     <Content Include="Views\FieldVisit\ObservationTypePreview\RateCollectionMethodPartial.cshtml" />
     <Content Include="Views\FieldVisit\ObservationTypePreview\PercentageCollectionMethodPartial.cshtml" />
     <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
+    <Content Include="Views\User\Invite.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -1548,6 +1546,9 @@
     <Compile Include="Views\User\DetailViewData.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\User\Invite.cs" />
+    <Compile Include="Views\User\InviteViewData.cs" />
+    <Compile Include="Views\User\InviteViewModel.cs" />
     <Compile Include="Views\User\UserNotificationGridSpec.cs" />
     <Compile Include="Views\Organization\Edit.cs" />
     <Compile Include="Views\Organization\EditViewData.cs" />

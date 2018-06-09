@@ -23,7 +23,6 @@
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.HtmlHelperExtensions
-@using LtInfo.Common.ModalDialog
 @using NeptuneWebConfiguration = LtInfo.Common.SitkaWebConfiguration
 @inherits NavAndHeaderLayout
 <!DOCTYPE html>
@@ -93,7 +92,7 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
                                         <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">View Account</a></li>
-                                        <li>@ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)</li>
+                                        <li><a href="@ViewDataTyped.RequestSupportUrl" title="Log In">Request Support</a></li>
                                         <li class="divider"></li>
                                         <li><a href="@ViewDataTyped.LogOutUrl">Log Out</a></li>
                                     </ul>
@@ -102,7 +101,7 @@
                             else
                             {
                                 <li>
-                                    @ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)
+                                    <a href="@ViewDataTyped.RequestSupportUrl" title="Log In">Request Support</a>
                                 </li>
                                 <li>
                                     <a href="@ViewDataTyped.LogInUrl" title="Log In">Log In</a>
