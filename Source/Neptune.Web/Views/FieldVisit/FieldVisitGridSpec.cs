@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class FieldVisitGridSpec : GridSpec<Models.FieldVisit>
     {
-        public FieldVisitGridSpec(Person currentPerson)
+        public FieldVisitGridSpec(Person currentPerson, bool detailPage)
         {
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
@@ -47,9 +47,20 @@ namespace Neptune.Web.Views.FieldVisit
                 x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(
                     SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x)),new FieldVisitEditFeature().HasPermission(currentPerson, x).HasPermission), 30,
                 DhtmlxGridColumnFilterType.None);
-            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
+            if (!detailPage)
+            {
+                Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
+            }
+
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+
+            if (!detailPage)
+            {
+                Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
+                    x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
+                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            }
+
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.GetStatusAsWorkflowUrl(), 85,

@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
 @using LtInfo.Common.HtmlHelperExtensions
-@using LtInfo.Common.ModalDialog
 @using LtInfo.Common.Mvc
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.Organization.Edit
@@ -27,7 +26,7 @@ Source code is available upon request via <support@sitkatech.com>.
 {
     if (ViewDataTyped.IsInKeystone)
     {
-        <p class="systemText">This @FieldDefinition.Organization.GetFieldDefinitionLabel() is managed in Keystone. To change this @FieldDefinition.Organization.GetFieldDefinitionLabel()'s name, please send an @ModalDialogFormHelper.ModalDialogFormLink("email to support", ViewDataTyped.RequestOrganizationChangeUrl, "Request Support", 800, "Submit Request", "Cancel", new List<string>(), null, null)</p>
+        <p class="systemText">This @FieldDefinition.Organization.GetFieldDefinitionLabel() is managed in Keystone. To change this @FieldDefinition.Organization.GetFieldDefinitionLabel()'s name, please send an <a href="@ViewDataTyped.RequestOrganizationChangeUrl">email to support</a></p>
     }
     <div class="form-horizontal">
         <div class="form-group">

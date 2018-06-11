@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.User
         public string KeystoneUrl { get; }
         public string KeystoneRegisterUserUrl { get; }
 
-        public string PullUserFromKeystoneUrl { get; }
+        public string InviteUserUrl { get; }
         public bool UserIsAdmin { get; }
 
         public IndexViewData(Person currentPerson) : base(currentPerson)
@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.User
             KeystoneUrl = NeptuneWebConfiguration.KeystoneUrl;
             KeystoneRegisterUserUrl = NeptuneWebConfiguration.KeystoneRegisterUrl;
 
-            PullUserFromKeystoneUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.PullUserFromKeystone());
+            InviteUserUrl = SitkaRoute<UserController>.BuildUrlFromExpression(x => x.Invite());
             UserIsAdmin = new UserEditFeature().HasPermissionByPerson(currentPerson);
         }
     }

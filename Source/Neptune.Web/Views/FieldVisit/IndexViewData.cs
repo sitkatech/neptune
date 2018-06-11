@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.FieldVisit
         {
             PageTitle = "All Field Records";
             EntityName = "Field Records";
-            GridSpec = new FieldVisitGridSpec(currentPerson)
+            GridSpec = new FieldVisitGridSpec(currentPerson, false)
             {
                 ObjectNameSingular = "Field Visit",
                 ObjectNamePlural = "Field Visits",

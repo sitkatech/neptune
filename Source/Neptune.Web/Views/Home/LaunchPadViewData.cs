@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.Home
             AddABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.New());
             ViewAssessmentAndMaintenanceRecordsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
             FieldFieldVisitsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
-            InviteANewUserUrl = "#"; // TODO add invite user url
+            InviteANewUserUrl = SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Invite());
             EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Index());
             AddAFundingSourceUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
         }

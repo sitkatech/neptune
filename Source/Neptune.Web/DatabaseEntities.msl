@@ -411,6 +411,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TreatmentBMPAssessmentPhoto">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPAssessmentPhoto">
+        <MappingFragment StoreEntitySet="TreatmentBMPAssessmentPhoto">
+          <ScalarProperty Name="TreatmentBMPAssessmentPhotoID" ColumnName="TreatmentBMPAssessmentPhotoID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="TreatmentBMPAssessmentID" ColumnName="TreatmentBMPAssessmentID" />
+          <ScalarProperty Name="Caption" ColumnName="Caption" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="TreatmentBMPBenchmarkAndThreshold">
       <EntityTypeMapping TypeName="Neptune.Web.Models.TreatmentBMPBenchmarkAndThreshold">
         <MappingFragment StoreEntitySet="TreatmentBMPBenchmarkAndThreshold">

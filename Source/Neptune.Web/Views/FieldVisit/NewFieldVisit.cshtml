@@ -47,8 +47,8 @@ Source code is available upon request via <support@sitkatech.com>.
              </div>
          </div>
          <div class="form-group" style="display: none;" id="fieldVisitType">
-             <div class="col-xs-5 control-label">@Html.LabelWithSugarFor(m => m.FieldVisitTypeID)</div>
-             <div class="col-xs-7">
+             <div class="col-xs-12 col-sm-5 control-label">@Html.LabelWithSugarFor(m => m.FieldVisitTypeID)</div>
+             <div class="col-xs-12 col-sm-7">
                  @Html.DropDownListFor(m => m.FieldVisitTypeID, ViewDataTyped.AllFieldVisitTypes, new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
 
              </div>
@@ -59,10 +59,9 @@ Source code is available upon request via <support@sitkatech.com>.
         <text>Begin a new @FieldDefinition.FieldVisit.GetFieldDefinitionLabel()?</text>
                                                                                
         <div class="form-group">
-            <div class="col-xs-5 control-label">@Html.LabelWithSugarFor(m => m.FieldVisitTypeID)</div>
-            <div class="col-xs-7">
+            <div class="col-xs-12 col-sm-5 control-label">@Html.LabelWithSugarFor(m => m.FieldVisitTypeID)</div>
+            <div class="col-xs-12 col-sm-7">
                 @Html.DropDownListFor(m => m.FieldVisitTypeID, ViewDataTyped.AllFieldVisitTypes, new Dictionary<string, object>() {{"style", "width: auto"}, {"class", "form-control"}})
-
             </div>
         </div>
     }

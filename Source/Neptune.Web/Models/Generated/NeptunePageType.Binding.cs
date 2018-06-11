@@ -42,6 +42,8 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeFindABMP FindABMP = NeptunePageTypeFindABMP.Instance;
         public static readonly NeptunePageTypeLaunchPad LaunchPad = NeptunePageTypeLaunchPad.Instance;
         public static readonly NeptunePageTypeFieldRecords FieldRecords = NeptunePageTypeFieldRecords.Instance;
+        public static readonly NeptunePageTypeRequestSupport RequestSupport = NeptunePageTypeRequestSupport.Instance;
+        public static readonly NeptunePageTypeInviteUser InviteUser = NeptunePageTypeInviteUser.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -51,7 +53,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -139,6 +141,8 @@ namespace Neptune.Web.Models
                     return HomeMapInfo;
                 case NeptunePageTypeEnum.HomePage:
                     return HomePage;
+                case NeptunePageTypeEnum.InviteUser:
+                    return InviteUser;
                 case NeptunePageTypeEnum.Jurisdiction:
                     return Jurisdiction;
                 case NeptunePageTypeEnum.LaunchPad:
@@ -167,6 +171,8 @@ namespace Neptune.Web.Models
                     return ModeledCatchment;
                 case NeptunePageTypeEnum.OrganizationsList:
                     return OrganizationsList;
+                case NeptunePageTypeEnum.RequestSupport:
+                    return RequestSupport;
                 case NeptunePageTypeEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case NeptunePageTypeEnum.TreatmentBMPType:
@@ -202,7 +208,9 @@ namespace Neptune.Web.Models
         FundingSourcesList = 21,
         FindABMP = 22,
         LaunchPad = 23,
-        FieldRecords = 24
+        FieldRecords = 24,
+        RequestSupport = 25,
+        InviteUser = 26
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -347,5 +355,17 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeFieldRecords(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeFieldRecords Instance = new NeptunePageTypeFieldRecords(24, @"FieldRecords", @"Field Records", 2);
+    }
+
+    public partial class NeptunePageTypeRequestSupport : NeptunePageType
+    {
+        private NeptunePageTypeRequestSupport(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeRequestSupport Instance = new NeptunePageTypeRequestSupport(25, @"RequestSupport", @"Request Support", 2);
+    }
+
+    public partial class NeptunePageTypeInviteUser : NeptunePageType
+    {
+        private NeptunePageTypeInviteUser(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeInviteUser Instance = new NeptunePageTypeInviteUser(26, @"InviteUser", @"Invite User", 2);
     }
 }

@@ -88,6 +88,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessmentObservationType> AllTreatmentBMPAssessmentObservationTypes { get; set; }
         public virtual IQueryable<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get { return AllTreatmentBMPAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TreatmentBMPAssessmentPhoto> AllTreatmentBMPAssessmentPhotos { get; set; }
+        public virtual IQueryable<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get { return AllTreatmentBMPAssessmentPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
         public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
@@ -315,6 +317,9 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPAssessmentObservationType":
                     return TreatmentBMPAssessmentObservationTypes.GetTreatmentBMPAssessmentObservationType(primaryKey);
+
+                case "TreatmentBMPAssessmentPhoto":
+                    return TreatmentBMPAssessmentPhotos.GetTreatmentBMPAssessmentPhoto(primaryKey);
 
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);

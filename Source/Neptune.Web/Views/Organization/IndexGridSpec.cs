@@ -43,6 +43,7 @@ namespace Neptune.Web.Views.Organization
             Add(Models.FieldDefinition.PrimaryContact.ToGridHeaderString(), a => userViewFeature.HasPermission(currentPerson, a.PrimaryContactPerson).HasPermission ? a.PrimaryContactPersonAsUrl : new HtmlString(a.PrimaryContactPersonAsString), 120);
             Add("# of Users", a => a.People.Count, 90);
             Add("Is Active", a => a.IsActive.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Is in Keystone", a => a.IsInKeystone.ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
         }
     }
 }

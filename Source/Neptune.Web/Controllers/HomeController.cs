@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Neptune.Web.Security;
@@ -45,13 +44,13 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public ViewResult Index()
         {
-            var neptunePageTypeHomePage = NeptunePageType.ToType(NeptunePageTypeEnum.HomePage);
+            var neptunePageTypeHomePage = NeptunePageType.HomePage;
             var neptunePageByPageTypeHomePage = NeptunePage.GetNeptunePageByPageType(neptunePageTypeHomePage);
 
-            var neptunePageTypeHomePageAdditionalInfo = NeptunePageType.ToType(NeptunePageTypeEnum.HomeAdditionalInfo);
+            var neptunePageTypeHomePageAdditionalInfo = NeptunePageType.HomeAdditionalInfo;
             var neptunePageByPageTypeHomePageAdditionalInfo = NeptunePage.GetNeptunePageByPageType(neptunePageTypeHomePageAdditionalInfo);
 
-            var neptunePageTypeHomePageMapInfo = NeptunePageType.ToType(NeptunePageTypeEnum.HomeMapInfo);
+            var neptunePageTypeHomePageMapInfo = NeptunePageType.HomeMapInfo;
             var neptunePageByPageTypeHomePageMapInfo = NeptunePage.GetNeptunePageByPageType(neptunePageTypeHomePageMapInfo);
 
             var neptuneHomePageImages = HttpRequestStorage.DatabaseEntities.NeptuneHomePageImages.ToList().OrderBy(x => x.SortOrder).ToList();
@@ -140,7 +139,6 @@ namespace Neptune.Web.Controllers
                 neptuneHomePageImages,
                 userCanAddPhotosToHomePage,
                 newPhotoForProjectUrl,
-                null,
                 true,
                 x => x.CaptionOnFullView,
                 "Photo");

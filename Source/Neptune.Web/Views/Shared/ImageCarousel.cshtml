@@ -28,7 +28,6 @@ Source code is available upon request via <support@sitkatech.com>.
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
-
     }
 
     #imageCarousel .carousel-caption {
@@ -41,13 +40,6 @@ Source code is available upon request via <support@sitkatech.com>.
                       
     }
 </style>
-
-<script type="text/javascript">
-    // <![CDATA[
-
-   
-    // ]]>
-</script>
 
 @* ReSharper disable once UnknownCssClass -- slide on carousel is used to animate the transition, not recognized by inspector *@
 @if (ViewDataTyped.CarouselImages.Count != 0)
@@ -64,7 +56,7 @@ Source code is available upon request via <support@sitkatech.com>.
             @for (var i = 0; i < ViewDataTyped.CarouselImages.Count; i++)
             {
                 var carouselImage = ViewDataTyped.CarouselImages[i];
-                <a href="@carouselImage.FileResource.FileResourceUrl" class="item fancifyMe@(i == 0 ? " active" : null)" style="background-image: url('@carouselImage.FileResource.FileResourceUrl')"
+                <a href="@carouselImage.FileResource.FileResourceUrl" class="item gallery@(i == 0 ? " active" : null)" style="background-image: url('@carouselImage.FileResource.FileResourceUrl')"
                    data-caption="@carouselImage.Caption" title="@carouselImage.Caption" rel="group1">
                     <div class="carousel-caption">
                         @carouselImage.Caption

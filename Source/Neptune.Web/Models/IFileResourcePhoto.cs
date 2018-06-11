@@ -25,12 +25,10 @@ namespace Neptune.Web.Models
 {
     public interface IFileResourcePhoto
     {
-        int? EntityImageIDAsNullable { get; }
         DateTime CreateDate { get; }
         int PrimaryKey { get; }
         FileResource FileResource { get; set; }
         string DeleteUrl { get; }
-        bool IsKeyPhoto { get; }
         string CaptionOnFullView { get; }
         string CaptionOnGallery { get; }
         string Caption { get; set; }

@@ -121,5 +121,39 @@ namespace Neptune.Web.Controllers
             var viewData = new ScoreViewData(CurrentPerson, treatmentBMPAssessment);
             return RazorView<Score, ScoreViewData, ScoreViewModel>(viewData, viewModel);
         }
+
+        [HttpGet]
+        [TreatmentBMPAssessmentManageFeature]
+        public PartialViewResult DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey)
+        {
+            var treatmentBMPAssessmentPhoto = treatmentBMPAssessmentPhotoPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(treatmentBMPAssessmentPhoto.TreatmentBMPAssessmentPhotoID);
+            return ViewDeletePhoto(viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPAssessmentManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ViewDeletePhoto(viewModel);
+            }
+
+            var treatmentBMPAssessmentPhoto = treatmentBMPAssessmentPhotoPrimaryKey.EntityObject;
+            HttpRequestStorage.DatabaseEntities.AllFileResources.Remove(treatmentBMPAssessmentPhoto.FileResource);
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Remove(treatmentBMPAssessmentPhoto);
+
+            SetMessageForDisplay("Successfully deleted Treatment BMP Assessment Photo.");
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewDeletePhoto(ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData("Are you sure you want to delete this photo?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
     }
 }

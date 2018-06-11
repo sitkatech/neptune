@@ -24,9 +24,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.FieldVisit;
-using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
-using Neptune.Web.Views.TreatmentBMPAssessment;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -39,7 +37,6 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
-        public bool CurrentPersonCanEditTreatmentBMP { get; }
 
         public bool CanEditBenchmarkAndThresholds { get; }
 
@@ -48,8 +45,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string FieldVisitGridDataUrl { get; }
 
         public string NewTreatmentBMPDocumentUrl { get; }
-        public string NewTreatmentBMPImageUrl { get; }
-        public string EditTreatmentBMPImagesUrl { get; }
         public string NewFundingSourcesUrl { get; }
 
         public ImageCarouselViewData ImageCarouselViewData { get; }
@@ -57,6 +52,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditTreatmentBMPOtherDesignAttributesUrl { get; }
         public string NewFieldVisitUrl { get; }
         public string LocationEditUrl { get; }
+        public string ManageTreatmentBMPImagesUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
@@ -70,27 +66,23 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
-            CurrentPersonCanEditTreatmentBMP = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             UserHasCustomAttributeTypeManagePermissions =
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
 
-            FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson);
+            FieldVisitGridSpec = new FieldVisitGridSpec(CurrentPerson, true);
             FieldVisitGridName = "FieldVisit";
             FieldVisitGridDataUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.FieldVisitGridJsonData(treatmentBMP));
             NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(treatmentBMP));
 
             NewTreatmentBMPDocumentUrl = SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.New(treatmentBMP));
-            NewTreatmentBMPImageUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.New(treatmentBMP));
-            EditTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.Edit(treatmentBMP));
             NewFundingSourcesUrl = SitkaRoute<FundingEventController>.BuildUrlFromExpression(c => c.NewFundingEvent(treatmentBMP));
             EditTreatmentBMPPerformanceAndModelingAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.PerformanceAndModelingAttributes));
             EditTreatmentBMPOtherDesignAttributesUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.EditAttributes(treatmentBMP, CustomAttributeTypePurpose.OtherDesignAttributes));
 
             LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocation(treatmentBMP));
+            ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.ManageTreatmentBMPImages(TreatmentBMP));
         }
-
-        
     }
 }
