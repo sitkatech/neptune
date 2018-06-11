@@ -578,11 +578,9 @@
     <Content Include="Content\Bootstrap\neptune\base.theme.css">
       <DependentUpon>base.theme.less</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\base.theme.css" />
     <Content Include="Content\Bootstrap\neptune\base.theme.min.css">
       <DependentUpon>base.theme.css</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\base.theme.min.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css">
       <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
     </Content>
@@ -730,7 +728,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\Bootstrap\neptune\base.theme.less" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css.map" />
