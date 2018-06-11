@@ -324,6 +324,7 @@ footer p {
   font-size: 14px;
   color: #fff;
   background-color: #337ab7;
+  margin-bottom: 2px;
 }
 .btn-primary:hover {
   color: #fff;
