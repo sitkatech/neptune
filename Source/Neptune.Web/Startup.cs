@@ -53,6 +53,16 @@ namespace Neptune.Web
 
                 Notifications = new OpenIdConnectAuthenticationNotifications
                 {
+                    AuthenticationFailed = (context) =>
+                    {
+                        if ((context.Exception.Message.StartsWith("OICE_20004") || context.Exception.Message.Contains("IDX10311")))
+                        {
+                            context.SkipToNextMiddleware();
+                            return Task.FromResult(0);
+                        }
+
+                        return Task.FromResult(0);
+                    },
                     SecurityTokenValidated = n =>
                     {
                         var claimsIdentity = n.AuthenticationTicket.Identity;

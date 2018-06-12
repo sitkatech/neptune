@@ -57,7 +57,8 @@ namespace Neptune.Web.Controllers
         [LoggedInUnclassifiedFeature]
         public ActionResult LogOn()
         {
-            return Redirect(!string.IsNullOrWhiteSpace(Request["returnUrl"]) ? Request["returnUrl"] : HomeUrl);
+            var returnUrl = Request["returnUrl"];
+            return Redirect(!string.IsNullOrWhiteSpace(returnUrl) && returnUrl != "%2F" ? returnUrl : HomeUrl);
         }
 
         [AnonymousUnclassifiedFeature]
