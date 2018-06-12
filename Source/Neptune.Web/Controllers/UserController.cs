@@ -244,7 +244,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         [HttpGet]
         public ActionResult Invite()
         {
@@ -259,7 +259,7 @@ namespace Neptune.Web.Controllers
             return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         [HttpPost]
         public ActionResult Invite(InviteViewModel viewModel)
         {
