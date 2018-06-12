@@ -22,7 +22,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     26, DhtmlxGridColumnFilterType.None);
             }
 
-            Add("Name", x => x.GetNameAsUrl(), 200);
+            Add("Name", x => x.GetNameAsUrl(), 300);
             Add("Maintenance Contact User", x => x.MaintenanceUserPerson.GetFullNameFirstLastAsUrl(), 150, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Maintenance Contact Organization", x => x.MaintenanceOrganziation.GetDisplayNameAsUrl(), 150, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Priority", x => x.WaterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);

@@ -1,11 +1,19 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditViewModel
+    public class EditViewModel : FormViewModel, IValidatableObject
     {
+        [Required]
+        [DisplayName("Water Quality Management Plan")]
+        public int? WaterQualityManagementPlanID { get; set; }
+
         [Required]
         [DisplayName("Name")]
         [MaxLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
@@ -48,6 +56,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public EditViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
+            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             StormwaterJurisdictionID = waterQualityManagementPlan.StormwaterJurisdictionID;
             MaintenanceUserPersonID = waterQualityManagementPlan.MaintenanceUserPersonID;
@@ -75,6 +84,16 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 WaterQualityManagementPlanDevelopmentTypeID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanLandUseID =
                 WaterQualityManagementPlanLandUseID ?? ModelObjectHelpers.NotYetAssignedID;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Any(x =>
+                x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
+                x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
+            {
+                yield return new SitkaValidationResult<EditViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
+            }
         }
     }
 }
