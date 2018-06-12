@@ -37,27 +37,39 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
+        public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
 
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
-            IEnumerable<Models.StormwaterJurisdiction> stormwaterJurisdictions,
-            IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes, List<Models.Organization> organizations) : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
+            IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
+            IEnumerable<Models.Organization> organizations,
+            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans)
+            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
-            if (treatmentBMP != null)
-            {
-                SubEntityName = treatmentBMP.TreatmentBMPName;
-                SubEntityUrl = treatmentBMP.GetDetailUrl();
-                TreatmentBMP = treatmentBMP;
-            }
+
+            SubEntityName = treatmentBMP?.TreatmentBMPName;
+            SubEntityUrl = treatmentBMP?.GetDetailUrl();
+            TreatmentBMP = treatmentBMP;
+
             PageTitle = $"{(treatmentBMP != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
-            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
-            TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
-            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.DisplayName, "Same as the BMP Jurisdiction");
-            TreatmentBMPIndexUrl = treatmentBMPIndexUrl;  
+            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
+                    y => y.OrganizationDisplayName);
+            TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName)
+                .ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
+                    y => y.TreatmentBMPTypeName);
+            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName)
+                .ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
+                    y => y.DisplayName, "Same as the BMP Jurisdiction");
+            TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
+            WaterQualityManagementPlanSelectListItems =
+                waterQualityManagementPlans.ToSelectListWithEmptyFirstRow(
+                    x => x.WaterQualityManagementPlanID.ToString(), x => x.WaterQualityManagementPlanName);
         }
     }
 }

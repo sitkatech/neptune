@@ -38,17 +38,18 @@ namespace Neptune.Web.Controllers
     public class TreatmentBMPController : NeptuneBaseController
     {
         [NeptuneViewFeature]
+        // ReSharper disable once InconsistentNaming
         public ViewResult FindABMP()
         {
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
-            var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBMPs, false, false));
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            var mapInitJson = new SearchMapInitJson("StormwaterIndexMap", StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJson.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
 
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
-            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBMPs);
+            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
         [NeptuneViewFeature]
@@ -62,12 +63,12 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
         {
-            var treatmentBMPs = GetTreatmentBMPsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
+            var treatmentBmps = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmps, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<TreatmentBMP> GetTreatmentBMPsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson)
+        private List<TreatmentBMP> GetTreatmentBmpsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson)
         {
             gridSpec = new TreatmentBMPGridSpec(currentPerson);
             return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
@@ -115,7 +116,9 @@ namespace Neptune.Web.Controllers
 
         private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel, Person currentPerson)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, currentPerson.OrganizationID);
+            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID ?? ModelObjectHelpers.NotYetAssignedID,
+                viewModel.StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID,
+                currentPerson.OrganizationID);
         }
 
         [HttpGet]
@@ -123,8 +126,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
-            var viewModel = new EditViewModel(treatmentBMP, treatmentBMPLocationPoint);
+            var viewModel = new EditViewModel(treatmentBMP);
             return ViewEdit(viewModel);
         }
 
@@ -152,20 +154,20 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList();
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
             {
                 var currentJurisdiction =
                     HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(
-                        viewModel.StormwaterJurisdictionID);
-
+                        viewModel.StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID);
                 if (!stormwaterJurisdictions.Contains(currentJurisdiction))
                 {
                     stormwaterJurisdictions.Add(currentJurisdiction);
                 }
             }
 
-            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations);
+            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations, waterQualityManagementPlans);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -199,12 +201,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = true;
-            var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the '{treatmentBMP.TreatmentBMPName}' treatment BMP?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Detail(treatmentBMP), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to delete the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
@@ -220,11 +217,11 @@ namespace Neptune.Web.Controllers
         public JsonResult FindByName(string term)
         {
             var searchString = term.Trim();
-            var allTreatmentBMPsMatchingSearchString =
+            var allTreatmentBmPsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
                     x => x.TreatmentBMPName.Contains(searchString)).ToList();
 
-            var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
+            var listItems = allTreatmentBmPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.Value, bmp.LocationPoint.XCoordinate.Value, bmp.TreatmentBMPID);
                 var listItem = new ListItem(bmp.TreatmentBMPName, JsonConvert.SerializeObject(treatmentBMPMapSummaryData));
@@ -240,7 +237,6 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var customAttributeTypePurpose = customAttributeTypePurposePrimaryKey.EntityObject;
-            var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
             var viewModel = new EditAttributesViewModel(treatmentBMP, customAttributeTypePurpose);
             return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
         }
