@@ -15,6 +15,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[YearBuilt] [int] NULL,
 	[OwnerOrganizationID] [int] NOT NULL,
 	[WaterQualityManagementProgramID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[WaterQualityManagementPlanID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -71,3 +72,13 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Tr
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID] FOREIGN KEY([WaterQualityManagementPlanID], [TenantID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID], [TenantID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID]

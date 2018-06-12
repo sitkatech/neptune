@@ -44,6 +44,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeFieldRecords FieldRecords = NeptunePageTypeFieldRecords.Instance;
         public static readonly NeptunePageTypeRequestSupport RequestSupport = NeptunePageTypeRequestSupport.Instance;
         public static readonly NeptunePageTypeInviteUser InviteUser = NeptunePageTypeInviteUser.Instance;
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlan WaterQualityMaintenancePlan = NeptunePageTypeWaterQualityMaintenancePlan.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -53,7 +54,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -177,6 +178,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMP;
                 case NeptunePageTypeEnum.TreatmentBMPType:
                     return TreatmentBMPType;
+                case NeptunePageTypeEnum.WaterQualityMaintenancePlan:
+                    return WaterQualityMaintenancePlan;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -210,7 +213,8 @@ namespace Neptune.Web.Models
         LaunchPad = 23,
         FieldRecords = 24,
         RequestSupport = 25,
-        InviteUser = 26
+        InviteUser = 26,
+        WaterQualityMaintenancePlan = 27
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -367,5 +371,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeInviteUser(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeInviteUser Instance = new NeptunePageTypeInviteUser(26, @"InviteUser", @"Invite User", 2);
+    }
+
+    public partial class NeptunePageTypeWaterQualityMaintenancePlan : NeptunePageType
+    {
+        private NeptunePageTypeWaterQualityMaintenancePlan(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlan Instance = new NeptunePageTypeWaterQualityMaintenancePlan(27, @"WaterQualityMaintenancePlan", @"Water Quality Maintenance Plan", 2);
     }
 }

@@ -37,17 +37,17 @@ namespace Neptune.Web.Views.TreatmentBMP
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             }
             if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
-            {                
+            {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             }
-            
+
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.OrganizationDisplayName), 170);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPType.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Notes", x => x.Notes, 195);
             Add("Last Assessment Date", x => x.GetMostRecentAssessment()?.GetAssessmentDate, 130);
             Add("Last Assessed Score", x => x.GetMostRecentScoreAsString(), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            Add("# of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);                
+            Add("# of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Last Maintenance Date", x => x.LastMaintainedDateTime(), 130, DhtmlxGridColumnFormatType.Date);
             Add("# of Maintenance Events", x => x.MaintenanceRecords.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);

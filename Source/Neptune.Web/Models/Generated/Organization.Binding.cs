@@ -27,6 +27,7 @@ namespace Neptune.Web.Models
             this.People = new HashSet<Person>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TreatmentBMPsWhereYouAreTheOwnerOrganization = new HashSet<TreatmentBMP>();
+            this.WaterQualityManagementPlansWhereYouAreTheMaintenanceOrganziation = new HashSet<WaterQualityManagementPlan>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -87,13 +88,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FundingSources.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any();
+            return FundingSources.Any() || People.Any() || (StormwaterJurisdiction != null) || TreatmentBMPsWhereYouAreTheOwnerOrganization.Any() || WaterQualityManagementPlansWhereYouAreTheMaintenanceOrganziation.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Organization).Name, typeof(FundingSource).Name, typeof(Person).Name, typeof(StormwaterJurisdiction).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -121,6 +122,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
+
+            foreach(var x in WaterQualityManagementPlansWhereYouAreTheMaintenanceOrganziation.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllOrganizations.Remove(this);                
         }
 
@@ -144,6 +150,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheOwnerOrganization { get; set; }
+        public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlansWhereYouAreTheMaintenanceOrganziation { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person PrimaryContactPerson { get; set; }
         public virtual FileResource LogoFileResource { get; set; }

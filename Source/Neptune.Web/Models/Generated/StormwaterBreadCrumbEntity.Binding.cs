@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         public static readonly StormwaterBreadCrumbEntityAssessments Assessments = StormwaterBreadCrumbEntityAssessments.Instance;
         public static readonly StormwaterBreadCrumbEntityFieldVisits FieldVisits = StormwaterBreadCrumbEntityFieldVisits.Instance;
         public static readonly StormwaterBreadCrumbEntityFieldRecords FieldRecords = StormwaterBreadCrumbEntityFieldRecords.Instance;
+        public static readonly StormwaterBreadCrumbEntityWaterQualityManagementPlan WaterQualityManagementPlan = StormwaterBreadCrumbEntityWaterQualityManagementPlan.Instance;
 
         public static readonly List<StormwaterBreadCrumbEntity> All;
         public static readonly ReadOnlyDictionary<int, StormwaterBreadCrumbEntity> AllLookupDictionary;
@@ -34,7 +35,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static StormwaterBreadCrumbEntity()
         {
-            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords };
+            All = new List<StormwaterBreadCrumbEntity> { TreatmentBMP, ModeledCatchment, Jurisdiction, Users, Assessments, FieldVisits, FieldRecords, WaterQualityManagementPlan };
             AllLookupDictionary = new ReadOnlyDictionary<int, StormwaterBreadCrumbEntity>(All.ToDictionary(x => x.StormwaterBreadCrumbEntityID));
         }
 
@@ -122,6 +123,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMP;
                 case StormwaterBreadCrumbEntityEnum.Users:
                     return Users;
+                case StormwaterBreadCrumbEntityEnum.WaterQualityManagementPlan:
+                    return WaterQualityManagementPlan;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -136,7 +139,8 @@ namespace Neptune.Web.Models
         Users = 4,
         Assessments = 5,
         FieldVisits = 6,
-        FieldRecords = 7
+        FieldRecords = 7,
+        WaterQualityManagementPlan = 8
     }
 
     public partial class StormwaterBreadCrumbEntityTreatmentBMP : StormwaterBreadCrumbEntity
@@ -179,5 +183,11 @@ namespace Neptune.Web.Models
     {
         private StormwaterBreadCrumbEntityFieldRecords(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
         public static readonly StormwaterBreadCrumbEntityFieldRecords Instance = new StormwaterBreadCrumbEntityFieldRecords(7, @"FieldRecords", @"Field Records", @"glyphicon-globe", @"registrationColor");
+    }
+
+    public partial class StormwaterBreadCrumbEntityWaterQualityManagementPlan : StormwaterBreadCrumbEntity
+    {
+        private StormwaterBreadCrumbEntityWaterQualityManagementPlan(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
+        public static readonly StormwaterBreadCrumbEntityWaterQualityManagementPlan Instance = new StormwaterBreadCrumbEntityWaterQualityManagementPlan(8, @"WaterQualityManagementPlan", @"Water Quality Management Plan", @"glyphicon-list-alt", @"waterQualityManagementPlanColor");
     }
 }

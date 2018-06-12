@@ -1,0 +1,134 @@
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.WaterQualityManagementPlan
+
+@inherits Detail
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Basics
+                @if (ViewDataTyped.CurrentPersonCanManage)
+                {
+                    <span class="pull-right">
+                        <a href="@ViewDataTyped.WaterQualityManagementPlan.GetEditUrl()">
+                            @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")
+                        </a>
+                    </span>
+                }
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Name</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.Jurisdiction, "Jurisdiction")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Maintenance Contact Person")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.MaintenanceUserPerson.GetFullNameFirstLastAndOrgAsUrl()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Maintenance Contact Organization")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.MaintenanceOrganziation.GetDisplayNameAsUrl()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Priority")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Status")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanStatus.WaterQualityManagementPlanStatusDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Development Type")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.Label("Land Use")</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Another Panel
+            </div>
+            <div class="panel-body">
+                Hey John, what if there was another panel?
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Treatment BMPs
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Documents
+                <span class="pull-right">
+                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
+                </span>
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.Any())
+                {
+                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.OrderBy(x => x.DisplayName).ToList();
+                    foreach (var waterQualityManagementPlanDocument in waterQualityManagementPlanDocuments)
+                    {
+                        if (ViewDataTyped.CurrentPersonCanManage)
+                        {
+                            <span>
+                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditWaterQualityManagementPlanDocumentUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
+                                @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteWaterQualityManagementPlanDocumentUrl(), new List<string>(), true)
+                            </span>
+                        }
+
+                        <a href="@waterQualityManagementPlanDocument.FileResource.FileResourceUrl">
+                            @waterQualityManagementPlanDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                        </a>
+
+                        <dl class="dl-horizontal">
+                            <dt>@Html.Label("Uploaded On")</dt>
+                            <dd>@waterQualityManagementPlanDocument.UploadDate.ToShortDateString()</dd>
+                            <dt>@Html.Label("File Type")</dt>
+                            <dd>@waterQualityManagementPlanDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                            <dt>@Html.Label("Description")</dt>
+                            <dd>@waterQualityManagementPlanDocument.Description</dd>
+                        </dl>
+                        if (waterQualityManagementPlanDocument != waterQualityManagementPlanDocuments.Last())
+                        {
+                            <hr />
+                        }
+                    }
+                }
+                else
+                {
+                    <p class="systemText">No documents have been uploaded for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
