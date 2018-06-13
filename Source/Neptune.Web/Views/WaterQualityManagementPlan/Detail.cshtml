@@ -30,7 +30,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Basics
-                @if (ViewDataTyped.CurrentPersonCanManage)
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
                         @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.WaterQualityManagementPlan.GetEditUrl(), string.Format("Edit {0} Basics", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
@@ -124,6 +124,12 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Treatment BMPs
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                {
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl, "Edit Treatment BMPs", new List<string>(), true)
+                    </span>
+                }
             </div>
             <div class="panel-body">
                 @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
@@ -134,9 +140,12 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Documents
-                <span class="pull-right">
-                    @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
-                </span>
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlanDocuments)
+                {
+                    <span class="pull-right">
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", new List<string>(), true)
+                    </span>
+                }
             </div>
             <div class="panel-body">
                 @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.Any())
@@ -144,7 +153,7 @@
                     var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.OrderBy(x => x.DisplayName).ToList();
                     foreach (var waterQualityManagementPlanDocument in waterQualityManagementPlanDocuments)
                     {
-                        if (ViewDataTyped.CurrentPersonCanManage)
+                        if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                         {
                             <span>
                                 @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditWaterQualityManagementPlanDocumentUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)

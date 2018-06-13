@@ -1,0 +1,62 @@
+﻿@using Neptune.Web.Models
+@using Neptune.Web.Views.WaterQualityManagementPlan
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+
+@inherits EditWqmpTreatmentBmps
+
+<script type="text/javascript" src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpTreatmentBmpsController.js")"></script>
+<script type="text/javascript">
+    jQuery(function() {
+        angular.module("NeptuneApp").factory("angularModelAndViewData", function () {
+            return {
+                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None)),
+                AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None))
+            };
+        });
+        angular.bootstrap(jQuery('[ng-controller="EditWqmpTreatmentBmpsController"]'), ["NeptuneApp"]);
+    });
+</script>
+
+<div class="row" ng-controller="EditWqmpTreatmentBmpsController">
+    @using (Html.BeginForm())
+    {
+        <div class="col-xs-12">
+            @Html.ValidationSummary()
+        </div>
+        <div class="col-xs-12">
+            <p>
+                Select a @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel() from the dropdown then click <strong>Add</strong> to add it to the list.
+                When you're finished editing the @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized(), click <strong>Save</strong> to submit your changes.
+            </p>
+        </div>
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label">Select a Treatment BMP</label>
+                        <div class="input-group">
+                            <select ng-options="treatmentBmp.DisplayName for treatmentBmp in unselectedTreatmentBmps()" ng-model="treatmentBmp" class="form-control"></select>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-neptune" ng-click="addTreatmentBmp()">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" ng-repeat="treatmentBmpID in AngularModel.TreatmentBmpIDs">
+                    <span>
+                        <a href="#" ng-click="removeTreatmentBmp(treatmentBmpID)">
+                            <i class="glyphicon glyphicon-trash" title="Remove @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()"></i>
+                        </a>
+                    </span><span ng-bind="getTreatmentBmpDisplayName(treatmentBmpID)"></span>
+                </div>
+            </div>
+        </div>
+        <input ng-repeat="treatmentBmpID in AngularModel.TreatmentBmpIDs" type="hidden" name="@Html.NameFor(m => m.TreatmentBmpIDs)" ng-value="treatmentBmpID" />
+    }
+</div>

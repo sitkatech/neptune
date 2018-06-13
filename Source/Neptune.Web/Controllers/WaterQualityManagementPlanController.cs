@@ -154,11 +154,52 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewDelete(WaterQualityManagementPlan waterQualityManagementPlan, ConfirmDialogFormViewModel viewModel)
+        private PartialViewResult ViewDelete(WaterQualityManagementPlan waterQualityManagementPlan,
+            ConfirmDialogFormViewModel viewModel)
         {
             var viewData = new ConfirmDialogFormViewData(
                 $"Are you sure you want to delete \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\"?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public PartialViewResult EditWqmpTreatmentBmps(
+            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpTreatmentBmpsViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpTreatmentBmps(
+            WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
+            EditWqmpTreatmentBmpsViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan);
+            SetMessageForDisplay(
+                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " +
+                $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
+            EditWqmpTreatmentBmpsViewModel viewModel)
+        {
+            var viewData = new EditWqmpTreatmentBmpsViewData(waterQualityManagementPlan);
+            return RazorPartialView<EditWqmpTreatmentBmps,
+                EditWqmpTreatmentBmpsViewData,
+                EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
         }
     }
 }
