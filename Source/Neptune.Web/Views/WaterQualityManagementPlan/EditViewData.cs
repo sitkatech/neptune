@@ -11,10 +11,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
         public IEnumerable<SelectListItem> PersonSelectListItems { get; }
         public IEnumerable<SelectListItem> OrganizationSelectListItems { get; }
-        public IEnumerable<SelectListItem> WaterQualityManagementPlanPrioritySelectListItems { get; }
-        public IEnumerable<SelectListItem> WaterQualityManagementPlanStatusSelectListItems { get; }
-        public IEnumerable<SelectListItem> WaterQualityManagementPlanDevelopmentTypeSelectListItems { get; }
-        public IEnumerable<SelectListItem> WaterQualityManagementPlanLandUseSelectListItems { get; }
+        public IEnumerable<WaterQualityManagementPlanPriority> WaterQualityManagementPlanPriorities { get; }
+        public IEnumerable<WaterQualityManagementPlanStatus> WaterQualityManagementPlanStatuses { get; }
+        public IEnumerable<WaterQualityManagementPlanDevelopmentType> WaterQualityManagementPlanDevelopmentTypes { get; }
+        public IEnumerable<WaterQualityManagementPlanLandUse> WaterQualityManagementPlanLandUses { get; }
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions, IEnumerable<Person> people,
             IEnumerable<Models.Organization> organizations)
@@ -26,22 +26,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 people.ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(), x => x.FullNameFirstLastAndOrg);
             OrganizationSelectListItems =
                 organizations.ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(), x => x.DisplayName);
-            WaterQualityManagementPlanPrioritySelectListItems = WaterQualityManagementPlanPriority.All
-                .OrderBy(x => x.SortOrder).ToSelectListWithEmptyFirstRow(
-                    x => x.WaterQualityManagementPlanPriorityID.ToString(),
-                    x => x.WaterQualityManagementPlanPriorityDisplayName);
-            WaterQualityManagementPlanStatusSelectListItems = WaterQualityManagementPlanStatus.All
-                .OrderBy(x => x.SortOrder).ToSelectListWithEmptyFirstRow(
-                    x => x.WaterQualityManagementPlanStatusID.ToString(),
-                    x => x.WaterQualityManagementPlanStatusDisplayName);
-            WaterQualityManagementPlanDevelopmentTypeSelectListItems = WaterQualityManagementPlanDevelopmentType.All
-                .OrderBy(x => x.SortOrder).ToSelectListWithEmptyFirstRow(
-                    x => x.WaterQualityManagementPlanDevelopmentTypeID.ToString(),
-                    x => x.WaterQualityManagementPlanDevelopmentTypeDisplayName);
-            WaterQualityManagementPlanLandUseSelectListItems = WaterQualityManagementPlanLandUse.All
-                .OrderBy(x => x.SortOrder).ToSelectListWithEmptyFirstRow(
-                    x => x.WaterQualityManagementPlanLandUseID.ToString(),
-                    x => x.WaterQualityManagementPlanLandUseDisplayName);
+            WaterQualityManagementPlanPriorities = WaterQualityManagementPlanPriority.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
+            WaterQualityManagementPlanStatuses = WaterQualityManagementPlanStatus.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
+            WaterQualityManagementPlanDevelopmentTypes = WaterQualityManagementPlanDevelopmentType.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
+            WaterQualityManagementPlanLandUses = WaterQualityManagementPlanLandUse.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
         }
     }
 }

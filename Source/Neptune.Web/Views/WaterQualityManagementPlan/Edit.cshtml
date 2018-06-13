@@ -50,7 +50,15 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPriorityID)
                     </div>
                     <div class="col-xs-12 col-sm-8">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanPriorityID, ViewDataTyped.WaterQualityManagementPlanPrioritySelectListItems, new { @class = "form-control" })
+                        @foreach (var priority in ViewDataTyped.WaterQualityManagementPlanPriorities)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanPriorityID, priority.WaterQualityManagementPlanPriorityID)
+                                    @priority.WaterQualityManagementPlanPriorityDisplayName
+                                </label>
+                            </div>
+                        }
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPriorityID)
                     </div>
                 </div>
@@ -59,7 +67,15 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanStatusID)
                     </div>
                     <div class="col-xs-12 col-sm-8">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanStatusID, ViewDataTyped.WaterQualityManagementPlanStatusSelectListItems, new { @class = "form-control" })
+                        @foreach (var status in ViewDataTyped.WaterQualityManagementPlanStatuses)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanStatusID, status.WaterQualityManagementPlanStatusID)
+                                    @status.WaterQualityManagementPlanStatusDisplayName
+                                </label>
+                            </div>
+                        }
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanStatusID)
                     </div>
                 </div>
@@ -68,7 +84,15 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-8">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanDevelopmentTypeID, ViewDataTyped.WaterQualityManagementPlanDevelopmentTypeSelectListItems, new { @class = "form-control" })
+                        @foreach (var developmentType in ViewDataTyped.WaterQualityManagementPlanDevelopmentTypes)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanDevelopmentTypeID, developmentType.WaterQualityManagementPlanDevelopmentTypeID)
+                                    @developmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName
+                                </label>
+                            </div>
+                        }
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
                     </div>
                 </div>
@@ -77,7 +101,15 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanLandUseID)
                     </div>
                     <div class="col-xs-12 col-sm-8">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanLandUseID, ViewDataTyped.WaterQualityManagementPlanLandUseSelectListItems, new { @class = "form-control" })
+                        @foreach (var landUse in ViewDataTyped.WaterQualityManagementPlanLandUses)
+                        {
+                            <div class="radio">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanLandUseID, landUse.WaterQualityManagementPlanLandUseID)
+                                    @landUse.WaterQualityManagementPlanLandUseDisplayName
+                                </label>
+                            </div>
+                        }
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
                     </div>
                 </div>
