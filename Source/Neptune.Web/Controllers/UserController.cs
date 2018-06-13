@@ -244,7 +244,7 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         [HttpGet]
         public ActionResult Invite()
         {
@@ -255,16 +255,19 @@ namespace Neptune.Web.Controllers
         private ActionResult ViewInvite(InviteViewModel viewModel)
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.InviteUser);
-            var viewData = new InviteViewData(CurrentPerson, HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList(), neptunePage);
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList();
+            var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl);
             return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
         }
 
-        [NeptuneAdminFeature]
+        [JurisdictionManageFeature]
         [HttpPost]
         public ActionResult Invite(InviteViewModel viewModel)
         {
             var toolDisplayName = MultiTenantHelpers.GetToolDisplayName();
             var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index());
+            var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support());
             var inviteModel = new KeystoneService.KeystoneInviteModel
             {
                 FirstName = viewModel.FirstName,
@@ -272,9 +275,9 @@ namespace Neptune.Web.Controllers
                 Email = viewModel.Email,
                 SiteName = toolDisplayName,
                 Subject = $"Invitation to the {toolDisplayName}",
-                WelcomeText = $"You have been invited by a colleague to create an account in the {toolDisplayName} {homeUrl}. The {toolDisplayName} application is a collaborative effort of Orange County Public Works, MS4 Permittees, and other organizations.",
+                WelcomeText = $"You have been invited by a colleague to create an account in the <a href=\"{homeUrl}\">{toolDisplayName}</a>. The {toolDisplayName} application is a collaborative effort of Orange County Public Works, MS4 Permittees, and other organizations.",
                 RedirectURL = homeUrl,
-                SupportBlock = $"If you have any questions, please visit our support page at {homeUrl}",
+                SupportBlock = $"If you have any questions, please visit our <a href=\"{supportUrl}\">support page</a>",
                 OrganizationGuid = viewModel.OrganizationGuid,
                 SignatureBlock = $"The {toolDisplayName} team"
             };

@@ -28,7 +28,6 @@ using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
 using LtInfo.Common;
 using LtInfo.Common.Mvc;
-using LtInfo.Common.MvcResults;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
@@ -78,6 +77,7 @@ namespace Neptune.Web.Controllers
                     .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            viewModel.ReturnUrl = cancelUrl;
             var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
             return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
@@ -96,7 +96,8 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            return RedirectToAction(new SitkaRoute<HelpController>(x => x.Support()));
+            var returnUrl = viewModel.ReturnUrl ?? SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            return Redirect(returnUrl);
         }
 
         [LoggedInUnclassifiedFeature]

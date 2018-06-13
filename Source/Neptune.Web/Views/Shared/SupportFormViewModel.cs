@@ -64,6 +64,7 @@ namespace Neptune.Web.Views.Shared
         public SupportRequestTypeEnum? SupportRequestTypeEnum { get; set; }
 
         public string CurrentPageUrl { get; set; }
+        public string ReturnUrl { get; set; }
 
         // Needed by model binder
         public SupportFormViewModel()
