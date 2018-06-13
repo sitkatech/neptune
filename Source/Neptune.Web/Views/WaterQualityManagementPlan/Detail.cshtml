@@ -156,8 +156,8 @@
                         if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                         {
                             <span>
-                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditWaterQualityManagementPlanDocumentUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
-                                @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteWaterQualityManagementPlanDocumentUrl(), new List<string>(), true)
+                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
+                                @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteUrl(), new List<string>(), true)
                             </span>
                         }
 

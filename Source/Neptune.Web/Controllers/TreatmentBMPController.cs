@@ -63,8 +63,9 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBMPGridJsonData()
         {
-            var treatmentBmps = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmps, gridSpec);
+            // ReSharper disable once InconsistentNaming
+            var treatmentBMPs = GetTreatmentBmpsAndGridSpec(out var gridSpec, CurrentPerson);
+            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
@@ -217,11 +218,12 @@ namespace Neptune.Web.Controllers
         public JsonResult FindByName(string term)
         {
             var searchString = term.Trim();
-            var allTreatmentBmPsMatchingSearchString =
+            // ReSharper disable once InconsistentNaming
+            var allTreatmentBMPsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
                     x => x.TreatmentBMPName.Contains(searchString)).ToList();
 
-            var listItems = allTreatmentBmPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
+            var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
                 var treatmentBMPMapSummaryData = new SearchMapSummaryData(bmp.GetMapSummaryUrl(), bmp.LocationPoint, bmp.LocationPoint.YCoordinate.Value, bmp.LocationPoint.XCoordinate.Value, bmp.TreatmentBMPID);
                 var listItem = new ListItem(bmp.TreatmentBMPName, JsonConvert.SerializeObject(treatmentBMPMapSummaryData));

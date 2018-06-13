@@ -81,3 +81,5 @@ select
 	TenantID,
 	NeptunePageContent = null
 from dbo.Tenant
+
+exec sp_rename 'AK_WaterQualityManagementPlanDocumentID_TenantID', 'AK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID_TenantID', 'OBJECT'
