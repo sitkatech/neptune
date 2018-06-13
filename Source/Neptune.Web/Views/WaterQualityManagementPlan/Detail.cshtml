@@ -6,12 +6,22 @@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.WaterQualityManagementPlan
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 
 @inherits Detail
 
 @section JavascriptAndStylesContent
 {
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script>
+        var map;
+        jQuery(function() {
+            var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+            map = new NeptuneMaps.Map(mapInitJson);
+        });
+    </script>
 }
 
 <div class="row">
@@ -65,10 +75,10 @@
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Another Panel
+                Location
             </div>
             <div class="panel-body">
-                Hey John, what if there was another panel?
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
             </div>
         </div>
     </div>

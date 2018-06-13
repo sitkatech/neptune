@@ -20,10 +20,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             IEnumerable<Models.Organization> organizations)
         {
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
-                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(),
-                    x => x.OrganizationDisplayName);
-            PersonSelectListItems =
-                people.ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(), x => x.FullNameFirstLastAndOrg);
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(), x => x.OrganizationDisplayName);
+            PersonSelectListItems = people.ToSelectListWithEmptyFirstRow(x => x.PersonID.ToString(), x => x.FullNameFirstLastAndOrg);
             OrganizationSelectListItems =
                 organizations.ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(), x => x.DisplayName);
             WaterQualityManagementPlanPriorities = WaterQualityManagementPlanPriority.All

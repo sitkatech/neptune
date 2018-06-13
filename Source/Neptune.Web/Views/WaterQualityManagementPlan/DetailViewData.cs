@@ -14,10 +14,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public TreatmentBMPGridSpec TreatmentBmpGridSpec { get; }
         public string TreatmentBmpGridName { get; }
         public string TreatmentBmpGridDataUrl { get; }
+        public MapInitJson MapInitJson { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
-            TreatmentBMPGridSpec treatmentBMPGridSpec) : base(currentPerson,
-            StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+            TreatmentBMPGridSpec treatmentBMPGridSpec, MapInitJson mapInitJson)
+            : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = WaterQualityManagementPlan.WaterQualityManagementPlanName;
@@ -33,6 +34,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBmpGridName = "treatmentBmpGrid";
             TreatmentBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.TreatmentBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+            MapInitJson = mapInitJson;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
@@ -45,7 +46,10 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec);
+            var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, new List<LayerGeoJson>(),
+                BoundingBox.MakeNewDefaultBoundingBox());
+
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson);
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
