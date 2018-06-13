@@ -1,0 +1,85 @@
+create table dbo.WaterQualityManagementPlanLandUse (
+	WaterQualityManagementPlanLandUseID int not null constraint PK_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID primary key,
+	WaterQualityManagementPlanLandUseName varchar(100) not null constraint AK_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseName unique,
+	WaterQualityManagementPlanLandUseDisplayName varchar(100) not null constraint AK_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseDisplayName unique,
+	SortOrder int not null
+)
+
+create table dbo.WaterQualityManagementPlanPriority (
+	WaterQualityManagementPlanPriorityID int not null constraint PK_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID primary key,
+	WaterQualityManagementPlanPriorityName varchar(100) not null constraint AK_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityName unique,
+	WaterQualityManagementPlanPriorityDisplayName varchar(100) not null constraint AK_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityDisplayName unique,
+	SortOrder int not null
+)
+
+create table dbo.WaterQualityManagementPlanStatus (
+	WaterQualityManagementPlanStatusID int not null constraint PK_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID primary key,
+	WaterQualityManagementPlanStatusName varchar(100) not null constraint AK_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusName unique,
+	WaterQualityManagementPlanStatusDisplayName varchar(100) not null constraint AK_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusDisplayName unique,
+	SortOrder int not null
+)
+
+create table dbo.WaterQualityManagementPlanDevelopmentType (
+	WaterQualityManagementPlanDevelopmentTypeID int not null constraint PK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID primary key,
+	WaterQualityManagementPlanDevelopmentTypeName varchar(100) not null constraint AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeName unique,
+	WaterQualityManagementPlanDevelopmentTypeDisplayName varchar(100) not null constraint AK_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeDisplayName unique,
+	SortOrder int not null
+)
+
+create table dbo.WaterQualityManagementPlan(
+	WaterQualityManagementPlanID int not null identity(1, 1) constraint PK_WaterQualityManagementPlan_WaterQualityManagementPlanID primary key,
+	TenantID int not null constraint FK_WaterQualityManagementPlan_Tenant_TenantID foreign key references dbo.Tenant(TenantID),
+	StormwaterJurisdictionID int not null constraint FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID foreign key references dbo.StormwaterJurisdiction(StormwaterJurisdictionID),
+
+	WaterQualityManagementPlanLandUseID int not null constraint FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID foreign key references dbo.WaterQualityManagementPlanLandUse(WaterQualityManagementPlanLandUseID),
+	WaterQualityManagementPlanPriorityID int not null constraint FK_WaterQualityManagementPlan_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID foreign key references dbo.WaterQualityManagementPlanPriority(WaterQualityManagementPlanPriorityID),
+	WaterQualityManagementPlanStatusID int not null constraint FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatusID foreign key references dbo.WaterQualityManagementPlanStatus(WaterQualityManagementPlanStatusID),
+	WaterQualityManagementPlanDevelopmentTypeID int not null constraint FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentTypeID foreign key references dbo.WaterQualityManagementPlanDevelopmentType(WaterQualityManagementPlanDevelopmentTypeID),
+
+	WaterQualityManagementPlanName varchar(100) not null constraint AK_WaterQualityManagementPlan_WaterQualityManagementPlanName unique,
+	ApprovalDate datetime null,
+	MaintenanceContactName varchar(100) null,
+	MaintenanceContactOrganization varchar(100) null,
+	MaintenanceContactPhone varchar(100) null,
+	MaintenanceContactAddress1 varchar(100) null,
+	MaintenanceContactAddress2 varchar(100) null,
+	MaintenanceContactCity varchar(100) null,
+	MaintenanceContactState varchar(100) null,
+	MaintenanceContactZip varchar(100) null,
+
+	constraint FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID foreign key (StormwaterJurisdictionID, TenantID) references dbo.StormwaterJurisdiction(StormwaterJurisdictionID, TenantID),
+	constraint AK_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID unique (WaterQualityManagementPlanID, TenantID)
+)
+
+create table dbo.WaterQualityManagementPlanDocument(
+	WaterQualityManagementPlanDocumentID int not null identity(1, 1) constraint PK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID primary key,
+	TenantID int not null constraint FK_WaterQualityManagementPlanDocument_Tenant_TenantID foreign key references dbo.Tenant(TenantID),
+	WaterQualityManagementPlanID int not null constraint FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID foreign key references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID),
+	FileResourceID int not null constraint FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID foreign key references dbo.FileResource(FileResourceID),
+	DisplayName varchar(100) not null,
+	[Description] varchar(1000) null,
+	UploadDate datetime not null,
+	constraint FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID foreign key (WaterQualityManagementPlanID, TenantID) references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID, TenantID),
+	constraint FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID_TenantID foreign key (FileResourceID, TenantID) references dbo.FileResource(FileResourceID, TenantID),
+	constraint AK_WaterQualityManagementPlanDocumentID_TenantID unique (WaterQualityManagementPlanDocumentID, TenantID),
+	constraint AK_WaterQualityManagementPlanDocument_DisplayName_WaterQualityManagementPlanID unique (DisplayName, WaterQualityManagementPlanID)
+)
+
+alter table dbo.TreatmentBMP drop column WaterQualityManagementProgramID
+alter table dbo.TreatmentBMP add WaterQualityManagementPlanID int null
+alter table dbo.TreatmentBMP add constraint FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID foreign key (WaterQualityManagementPlanID) references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID)
+alter table dbo.TreatmentBMP add constraint FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID foreign key (WaterQualityManagementPlanID, TenantID) references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID, TenantID)
+
+
+insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
+values
+(27, 'WaterQualityMaintenancePlan', 'Water Quality Maintenance Plan', 2)
+
+insert into dbo.NeptunePage(NeptunePageTypeID, TenantID, NeptunePageContent)
+select
+	NeptunePageTypeID = 27,
+	TenantID,
+	NeptunePageContent = null
+from dbo.Tenant
+
+exec sp_rename 'AK_WaterQualityManagementPlanDocumentID_TenantID', 'AK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID_TenantID', 'OBJECT'

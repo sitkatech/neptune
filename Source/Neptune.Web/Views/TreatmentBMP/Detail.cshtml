@@ -81,24 +81,26 @@
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.StormwaterJurisdiction.Organization.GetDisplayNameAsUrl()</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.Label("Owner")</label>
+                    <label class="col-sm-5 control-label text-right">Owner</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.Label("Year Built")</label>
+                    <label class="col-sm-5 control-label text-right">Year Built</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.YearBuilt</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.Label("ID in System of Record")</label>
+                    <label class="col-sm-5 control-label text-right">ID in System of Record</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.SystemOfRecordID</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.Label("Notes")</label>
+                    <label class="col-sm-5 control-label text-right">Notes</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@Html.Label("WQMP ID")</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.WaterQualityManagementProgramID</div>
+                    <label class="col-sm-5 control-label text-right">Water Quality<br>Management Plan</label>
+                    <div class="col-sm-7">
+                        @(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null ? ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetNameAsUrl() : new HtmlString("<em class=\"text-muted\">None Set</em>"))
+                    </div>
                 </div>
             </div>
         </div>
@@ -411,13 +413,12 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script type="text/javascript">
+    var map;
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        var map = new NeptuneMaps.Map(mapInitJson);
-
+        map = new NeptuneMaps.Map(mapInitJson);
     });
 </script>

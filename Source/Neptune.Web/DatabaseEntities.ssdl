@@ -41,6 +41,8 @@
     <EntitySet Name="TreatmentBMPType" EntityType="Neptune.Web.Models.Store.TreatmentBMPType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPTypeAssessmentObservationType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeAssessmentObservationType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPTypeCustomAttributeType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlan" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlan" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanDocument" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.Store.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -233,6 +235,10 @@
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
     </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.Store.FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+      <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
+      <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
+    </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="TreatmentBMPAssessments" EntitySet="TreatmentBMPAssessment" />
@@ -312,6 +318,18 @@
     <AssociationSet Name="FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.Store.FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="TreatmentBMPTypeCustomAttributeTypes" EntitySet="TreatmentBMPTypeCustomAttributeType" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID">
+      <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="WaterQualityManagementPlanDocuments" EntitySet="WaterQualityManagementPlanDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+      <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
+      <End Role="WaterQualityManagementPlanDocuments" EntitySet="WaterQualityManagementPlanDocument" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AuditLog">
@@ -431,6 +449,7 @@ warning 6035: The relationship 'FK_TenantAttribute_FileResource_TenantStyleSheet
 warning 6035: The relationship 'FK_TreatmentBMPAssessmentPhoto_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPDocument_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMPImage_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="FileResource">
     <Key>
@@ -669,6 +688,7 @@ warning 6035: The relationship 'FK_StormwaterJurisdiction_StateProvince_StatePro
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="StormwaterJurisdiction">
     <Key>
@@ -750,7 +770,7 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     <Property Name="SystemOfRecordID" Type="varchar" MaxLength="100" />
     <Property Name="YearBuilt" Type="int" />
     <Property Name="OwnerOrganizationID" Type="int" Nullable="false" />
-    <Property Name="WaterQualityManagementProgramID" Type="varchar" MaxLength="100" />
+    <Property Name="WaterQualityManagementPlanID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -889,6 +909,44 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
     <Property Name="TreatmentBMPTypeID" Type="int" Nullable="false" />
     <Property Name="CustomAttributeTypeID" Type="int" Nullable="false" />
     <Property Name="SortOrder" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
+  <EntityType Name="WaterQualityManagementPlan">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="StormwaterJurisdictionID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanLandUseID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanPriorityID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanStatusID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanDevelopmentTypeID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="ApprovalDate" Type="datetime" />
+    <Property Name="MaintenanceContactName" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactOrganization" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactPhone" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactAddress1" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactAddress2" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactCity" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactState" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactZip" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanDocument">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanDocumentID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanDocumentID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanID" Type="int" Nullable="false" />
+    <Property Name="FileResourceID" Type="int" Nullable="false" />
+    <Property Name="DisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="Description" Type="varchar" MaxLength="1000" />
+    <Property Name="UploadDate" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
@@ -1466,6 +1524,18 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+    <End Role="WaterQualityManagementPlan" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="0..1" />
+    <End Role="TreatmentBMPs" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlan">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPs">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
     <End Role="TreatmentBMP" Type="Neptune.Web.Models.Store.TreatmentBMP" Multiplicity="1" />
     <End Role="TreatmentBMPAssessments" Type="Neptune.Web.Models.Store.TreatmentBMPAssessment" Multiplicity="*" />
@@ -1703,6 +1773,42 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
       </Principal>
       <Dependent Role="TreatmentBMPTypeCustomAttributeTypes">
         <PropertyRef Name="TreatmentBMPTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID">
+    <End Role="StormwaterJurisdiction" Type="Neptune.Web.Models.Store.StormwaterJurisdiction" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StormwaterJurisdiction">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanDocuments" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanDocuments">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+    <End Role="WaterQualityManagementPlan" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanDocuments" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlan">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanDocuments">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

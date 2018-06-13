@@ -65,6 +65,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionFundingEvent FundingEvent = FieldDefinitionFundingEvent.Instance;
         public static readonly FieldDefinitionFieldVisit FieldVisit = FieldDefinitionFieldVisit.Instance;
         public static readonly FieldDefinitionFieldVisitStatus FieldVisitStatus = FieldDefinitionFieldVisitStatus.Instance;
+        public static readonly FieldDefinitionWaterQualityManagementPlan WaterQualityManagementPlan = FieldDefinitionWaterQualityManagementPlan.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -74,7 +75,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -248,6 +249,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMPType;
                 case FieldDefinitionEnum.Username:
                     return Username;
+                case FieldDefinitionEnum.WaterQualityManagementPlan:
+                    return WaterQualityManagementPlan;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -302,7 +305,8 @@ namespace Neptune.Web.Models
         IsPostMaintenanceAssessment = 45,
         FundingEvent = 46,
         FieldVisit = 47,
-        FieldVisitStatus = 48
+        FieldVisitStatus = 48,
+        WaterQualityManagementPlan = 49
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -585,5 +589,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionFieldVisitStatus(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionFieldVisitStatus Instance = new FieldDefinitionFieldVisitStatus(48, @"FieldVisitStatus", @"Field Visit Status", @"Completion status of the Field Visit. A Field Visit can be In Progress, Complete, or left Unresolved. A Treatment BMP may only have one In Progress Field Visit at any given time.", true);
+    }
+
+    public partial class FieldDefinitionWaterQualityManagementPlan : FieldDefinition
+    {
+        private FieldDefinitionWaterQualityManagementPlan(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionWaterQualityManagementPlan Instance = new FieldDefinitionWaterQualityManagementPlan(49, @"WaterQualityManagementPlan", @"Water Quality Management Plan", @"TODO will come back and enter a default definition for Water Quality Management Plan.", true);
     }
 }

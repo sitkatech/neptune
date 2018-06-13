@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
             this.ModeledCatchments = new HashSet<ModeledCatchment>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
+            this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -83,13 +84,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return ModeledCatchments.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any();
+            return ModeledCatchments.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -112,6 +113,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull();
             }
+
+            foreach(var x in WaterQualityManagementPlans.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.Remove(this);                
         }
 
@@ -128,6 +134,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<ModeledCatchment> ModeledCatchments { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
+        public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Organization Organization { get; set; }
         public virtual StateProvince StateProvince { get; set; }

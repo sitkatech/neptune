@@ -41,6 +41,8 @@
     <EntitySet Name="TreatmentBMPType" EntityType="Neptune.Web.Models.TreatmentBMPType" />
     <EntitySet Name="TreatmentBMPTypeAssessmentObservationType" EntityType="Neptune.Web.Models.TreatmentBMPTypeAssessmentObservationType" />
     <EntitySet Name="TreatmentBMPTypeCustomAttributeType" EntityType="Neptune.Web.Models.TreatmentBMPTypeCustomAttributeType" />
+    <EntitySet Name="WaterQualityManagementPlan" EntityType="Neptune.Web.Models.WaterQualityManagementPlan" />
+    <EntitySet Name="WaterQualityManagementPlanDocument" EntityType="Neptune.Web.Models.WaterQualityManagementPlanDocument" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -145,6 +147,10 @@
       <End Role="FileResource" EntitySet="FileResource" />
       <End Role="TreatmentBMPImages" EntitySet="TreatmentBMPImage" />
     </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID" Association="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
+      <End Role="FileResource" EntitySet="FileResource" />
+      <End Role="WaterQualityManagementPlanDocuments" EntitySet="WaterQualityManagementPlanDocument" />
+    </AssociationSet>
     <AssociationSet Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
       <End Role="TreatmentBMP" EntitySet="TreatmentBMP" />
       <End Role="FundingEvents" EntitySet="FundingEvent" />
@@ -245,8 +251,16 @@
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
       <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
     </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID">
+      <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID">
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
+      <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+      <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
       <End Role="TreatmentBMPs" EntitySet="TreatmentBMP" />
     </AssociationSet>
     <AssociationSet Name="FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" Association="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID">
@@ -312,6 +326,10 @@
     <AssociationSet Name="FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID" Association="Neptune.Web.Models.FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID">
       <End Role="TreatmentBMPType" EntitySet="TreatmentBMPType" />
       <End Role="TreatmentBMPTypeCustomAttributeTypes" EntitySet="TreatmentBMPTypeCustomAttributeType" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+      <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
+      <End Role="WaterQualityManagementPlanDocuments" EntitySet="WaterQualityManagementPlanDocument" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AuditLog">
@@ -452,6 +470,7 @@
     <NavigationProperty Name="TreatmentBMPAssessmentPhotos" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessmentPhoto_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPAssessmentPhotos" />
     <NavigationProperty Name="TreatmentBMPDocuments" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPDocuments" />
     <NavigationProperty Name="TreatmentBMPImages" Relationship="Neptune.Web.Models.FK_TreatmentBMPImage_FileResource_FileResourceID" FromRole="FileResource" ToRole="TreatmentBMPImages" />
+    <NavigationProperty Name="WaterQualityManagementPlanDocuments" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID" FromRole="FileResource" ToRole="WaterQualityManagementPlanDocuments" />
   </EntityType>
   <EntityType Name="FundingEvent">
     <Key>
@@ -691,6 +710,7 @@
     <NavigationProperty Name="StateProvince" Relationship="Neptune.Web.Models.FK_StormwaterJurisdiction_StateProvince_StateProvinceID" FromRole="StormwaterJurisdictions" ToRole="StateProvince" />
     <NavigationProperty Name="StormwaterJurisdictionPeople" Relationship="Neptune.Web.Models.FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="StormwaterJurisdictionPeople" />
     <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="TreatmentBMPs" />
+    <NavigationProperty Name="WaterQualityManagementPlans" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="StormwaterJurisdiction" ToRole="WaterQualityManagementPlans" />
   </EntityType>
   <EntityType Name="StormwaterJurisdictionPerson">
     <Key>
@@ -755,7 +775,7 @@
     <Property Name="SystemOfRecordID" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="YearBuilt" Type="Int32" />
     <Property Name="OwnerOrganizationID" Type="Int32" Nullable="false" />
-    <Property Name="WaterQualityManagementProgramID" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="WaterQualityManagementPlanID" Type="Int32" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="CustomAttributes" />
     <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FieldVisits" />
     <NavigationProperty Name="FundingEvents" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FundingEvents" />
@@ -764,6 +784,7 @@
     <NavigationProperty Name="OwnerOrganization" Relationship="Neptune.Web.Models.FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID" FromRole="TreatmentBMPsWhereYouAreTheOwnerOrganization" ToRole="OwnerOrganization" />
     <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="TreatmentBMPs" ToRole="StormwaterJurisdiction" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPs" ToRole="TreatmentBMPType" />
+    <NavigationProperty Name="WaterQualityManagementPlan" Relationship="Neptune.Web.Models.FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID" FromRole="TreatmentBMPs" ToRole="WaterQualityManagementPlan" />
     <NavigationProperty Name="TreatmentBMPAssessments" Relationship="Neptune.Web.Models.FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPAssessments" />
     <NavigationProperty Name="TreatmentBMPBenchmarkAndThresholds" Relationship="Neptune.Web.Models.FK_TreatmentBMPBenchmarkAndThreshold_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPBenchmarkAndThresholds" />
     <NavigationProperty Name="TreatmentBMPDocuments" Relationship="Neptune.Web.Models.FK_TreatmentBMPDocument_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="TreatmentBMPDocuments" />
@@ -918,6 +939,45 @@
     <NavigationProperty Name="CustomAttributeType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeCustomAttributeType_CustomAttributeType_CustomAttributeTypeID" FromRole="TreatmentBMPTypeCustomAttributeTypes" ToRole="CustomAttributeType" />
     <NavigationProperty Name="MaintenanceRecordObservations" Relationship="Neptune.Web.Models.FK_MaintenanceRecordObservation_TreatmentBMPTypeCustomAttributeType_TreatmentBMPTypeCustomAttributeTypeID" FromRole="TreatmentBMPTypeCustomAttributeType" ToRole="MaintenanceRecordObservations" />
     <NavigationProperty Name="TreatmentBMPType" Relationship="Neptune.Web.Models.FK_TreatmentBMPTypeCustomAttributeType_TreatmentBMPType_TreatmentBMPTypeID" FromRole="TreatmentBMPTypeCustomAttributeTypes" ToRole="TreatmentBMPType" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlan">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="StormwaterJurisdictionID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanLandUseID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanPriorityID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanStatusID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanDevelopmentTypeID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="ApprovalDate" Type="DateTime" />
+    <Property Name="MaintenanceContactName" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactOrganization" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactPhone" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactAddress1" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactAddress2" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactCity" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactState" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactZip" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="StormwaterJurisdiction" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID" FromRole="WaterQualityManagementPlans" ToRole="StormwaterJurisdiction" />
+    <NavigationProperty Name="TreatmentBMPs" Relationship="Neptune.Web.Models.FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID" FromRole="WaterQualityManagementPlan" ToRole="TreatmentBMPs" />
+    <NavigationProperty Name="WaterQualityManagementPlanDocuments" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID" FromRole="WaterQualityManagementPlan" ToRole="WaterQualityManagementPlanDocuments" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanDocument">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanDocumentID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanDocumentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanID" Type="Int32" Nullable="false" />
+    <Property Name="FileResourceID" Type="Int32" Nullable="false" />
+    <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="Description" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+    <Property Name="UploadDate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="FileResource" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID" FromRole="WaterQualityManagementPlanDocuments" ToRole="FileResource" />
+    <NavigationProperty Name="WaterQualityManagementPlan" Relationship="Neptune.Web.Models.FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID" FromRole="WaterQualityManagementPlanDocuments" ToRole="WaterQualityManagementPlan" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Person" Multiplicity="1" />
@@ -1231,6 +1291,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
+    <End Role="FileResource" Type="Neptune.Web.Models.FileResource" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanDocuments" Type="Neptune.Web.Models.WaterQualityManagementPlanDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FileResource">
+        <PropertyRef Name="FileResourceID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanDocuments">
+        <PropertyRef Name="FileResourceID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_FundingEvent_TreatmentBMP_TreatmentBMPID">
     <End Role="TreatmentBMP" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="1" />
     <End Role="FundingEvents" Type="Neptune.Web.Models.FundingEvent" Multiplicity="*" />
@@ -1531,6 +1603,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID">
+    <End Role="StormwaterJurisdiction" Type="Neptune.Web.Models.StormwaterJurisdiction" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StormwaterJurisdiction">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="StormwaterJurisdictionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID">
     <End Role="TreatmentBMPType" Type="Neptune.Web.Models.TreatmentBMPType" Multiplicity="1" />
     <End Role="TreatmentBMPs" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="*" />
@@ -1540,6 +1624,18 @@
       </Principal>
       <Dependent Role="TreatmentBMPs">
         <PropertyRef Name="TreatmentBMPTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+    <End Role="WaterQualityManagementPlan" Type="Neptune.Web.Models.WaterQualityManagementPlan" Multiplicity="0..1" />
+    <End Role="TreatmentBMPs" Type="Neptune.Web.Models.TreatmentBMP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlan">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Principal>
+      <Dependent Role="TreatmentBMPs">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1732,6 +1828,18 @@
       </Principal>
       <Dependent Role="TreatmentBMPTypeCustomAttributeTypes">
         <PropertyRef Name="TreatmentBMPTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+    <End Role="WaterQualityManagementPlan" Type="Neptune.Web.Models.WaterQualityManagementPlan" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanDocuments" Type="Neptune.Web.Models.WaterQualityManagementPlanDocument" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlan">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanDocuments">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

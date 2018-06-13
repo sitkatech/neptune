@@ -385,7 +385,7 @@
           <ScalarProperty Name="SystemOfRecordID" ColumnName="SystemOfRecordID" />
           <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
           <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
-          <ScalarProperty Name="WaterQualityManagementProgramID" ColumnName="WaterQualityManagementProgramID" />
+          <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -507,6 +507,42 @@
           <ScalarProperty Name="TreatmentBMPTypeID" ColumnName="TreatmentBMPTypeID" />
           <ScalarProperty Name="CustomAttributeTypeID" ColumnName="CustomAttributeTypeID" />
           <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WaterQualityManagementPlan">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlan">
+        <MappingFragment StoreEntitySet="WaterQualityManagementPlan">
+          <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="StormwaterJurisdictionID" ColumnName="StormwaterJurisdictionID" />
+          <ScalarProperty Name="WaterQualityManagementPlanLandUseID" ColumnName="WaterQualityManagementPlanLandUseID" />
+          <ScalarProperty Name="WaterQualityManagementPlanPriorityID" ColumnName="WaterQualityManagementPlanPriorityID" />
+          <ScalarProperty Name="WaterQualityManagementPlanStatusID" ColumnName="WaterQualityManagementPlanStatusID" />
+          <ScalarProperty Name="WaterQualityManagementPlanDevelopmentTypeID" ColumnName="WaterQualityManagementPlanDevelopmentTypeID" />
+          <ScalarProperty Name="WaterQualityManagementPlanName" ColumnName="WaterQualityManagementPlanName" />
+          <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+          <ScalarProperty Name="MaintenanceContactName" ColumnName="MaintenanceContactName" />
+          <ScalarProperty Name="MaintenanceContactOrganization" ColumnName="MaintenanceContactOrganization" />
+          <ScalarProperty Name="MaintenanceContactPhone" ColumnName="MaintenanceContactPhone" />
+          <ScalarProperty Name="MaintenanceContactAddress1" ColumnName="MaintenanceContactAddress1" />
+          <ScalarProperty Name="MaintenanceContactAddress2" ColumnName="MaintenanceContactAddress2" />
+          <ScalarProperty Name="MaintenanceContactCity" ColumnName="MaintenanceContactCity" />
+          <ScalarProperty Name="MaintenanceContactState" ColumnName="MaintenanceContactState" />
+          <ScalarProperty Name="MaintenanceContactZip" ColumnName="MaintenanceContactZip" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WaterQualityManagementPlanDocument">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanDocument">
+        <MappingFragment StoreEntitySet="WaterQualityManagementPlanDocument">
+          <ScalarProperty Name="WaterQualityManagementPlanDocumentID" ColumnName="WaterQualityManagementPlanDocumentID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
+          <ScalarProperty Name="FileResourceID" ColumnName="FileResourceID" />
+          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
