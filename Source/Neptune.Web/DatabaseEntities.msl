@@ -524,6 +524,7 @@
           <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
           <ScalarProperty Name="MaintenanceContactName" ColumnName="MaintenanceContactName" />
           <ScalarProperty Name="MaintenanceContactOrganization" ColumnName="MaintenanceContactOrganization" />
+          <ScalarProperty Name="MaintenanceContactPhone" ColumnName="MaintenanceContactPhone" />
           <ScalarProperty Name="MaintenanceContactAddress1" ColumnName="MaintenanceContactAddress1" />
           <ScalarProperty Name="MaintenanceContactAddress2" ColumnName="MaintenanceContactAddress2" />
           <ScalarProperty Name="MaintenanceContactCity" ColumnName="MaintenanceContactCity" />

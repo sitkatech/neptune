@@ -955,6 +955,7 @@
     <Property Name="ApprovalDate" Type="DateTime" />
     <Property Name="MaintenanceContactName" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceContactOrganization" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="MaintenanceContactPhone" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceContactAddress1" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceContactAddress2" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
     <Property Name="MaintenanceContactCity" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />

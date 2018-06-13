@@ -929,6 +929,7 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
     <Property Name="ApprovalDate" Type="datetime" />
     <Property Name="MaintenanceContactName" Type="varchar" MaxLength="100" />
     <Property Name="MaintenanceContactOrganization" Type="varchar" MaxLength="100" />
+    <Property Name="MaintenanceContactPhone" Type="varchar" MaxLength="100" />
     <Property Name="MaintenanceContactAddress1" Type="varchar" MaxLength="100" />
     <Property Name="MaintenanceContactAddress2" Type="varchar" MaxLength="100" />
     <Property Name="MaintenanceContactCity" Type="varchar" MaxLength="100" />

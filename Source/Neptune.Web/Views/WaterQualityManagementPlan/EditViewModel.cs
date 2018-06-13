@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -38,6 +39,33 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [Required]
         [DisplayName("Land Use")]
         public int? WaterQualityManagementPlanLandUseID { get; set; }
+        
+        [DisplayName("Approval Date")]
+        public DateTime? ApprovalDate { get; set; }
+
+        [DisplayName("Name")]
+        public string MaintenanceContactName { get; set; }
+
+        [DisplayName("Organization")]
+        public string MaintenanceContactOrganization { get; set; }
+
+        [DisplayName("Address Line 1")]
+        public string MaintenanceContactAddress1 { get; set; }
+
+        [DisplayName("Address Line 2")]
+        public string MaintenanceContactAddress2 { get; set; }
+
+        [DisplayName("City")]
+        public string MaintenanceContactCity { get; set; }
+
+        [DisplayName("State")]
+        public string MaintenanceContactState { get; set; }
+
+        [DisplayName("Zip")]
+        public string MaintenanceContactZip { get; set; }
+
+        [DisplayName("Phone")]
+        public string MaintenanceContactPhone { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -55,6 +83,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanStatusID = waterQualityManagementPlan.WaterQualityManagementPlanStatusID;
             WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlan.WaterQualityManagementPlanDevelopmentTypeID;
             WaterQualityManagementPlanLandUseID = waterQualityManagementPlan.WaterQualityManagementPlanLandUseID;
+            ApprovalDate = waterQualityManagementPlan.ApprovalDate;
+            MaintenanceContactName = waterQualityManagementPlan.MaintenanceContactName;
+            MaintenanceContactOrganization = waterQualityManagementPlan.MaintenanceContactOrganization;
+            MaintenanceContactAddress1 = waterQualityManagementPlan.MaintenanceContactAddress1;
+            MaintenanceContactAddress2 = waterQualityManagementPlan.MaintenanceContactAddress2;
+            MaintenanceContactCity = waterQualityManagementPlan.MaintenanceContactCity;
+            MaintenanceContactState = waterQualityManagementPlan.MaintenanceContactState;
+            MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
+            MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -70,6 +107,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 WaterQualityManagementPlanDevelopmentTypeID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanLandUseID =
                 WaterQualityManagementPlanLandUseID ?? ModelObjectHelpers.NotYetAssignedID;
+            waterQualityManagementPlan.ApprovalDate = ApprovalDate;
+            waterQualityManagementPlan.MaintenanceContactName = MaintenanceContactName;
+            waterQualityManagementPlan.MaintenanceContactOrganization = MaintenanceContactOrganization;
+            waterQualityManagementPlan.MaintenanceContactAddress1 = MaintenanceContactAddress1;
+            waterQualityManagementPlan.MaintenanceContactAddress2 = MaintenanceContactAddress2;
+            waterQualityManagementPlan.MaintenanceContactCity = MaintenanceContactCity;
+            waterQualityManagementPlan.MaintenanceContactState = MaintenanceContactState;
+            waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
+            waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

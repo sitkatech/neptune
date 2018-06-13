@@ -1,7 +1,6 @@
 ﻿using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.ModalDialog;
 using LtInfo.Common.Views;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {

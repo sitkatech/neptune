@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[ApprovalDate] [datetime] NULL,
 	[MaintenanceContactName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactOrganization] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactPhone] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactAddress1] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactAddress2] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactCity] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

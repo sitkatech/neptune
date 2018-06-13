@@ -40,6 +40,7 @@ create table dbo.WaterQualityManagementPlan(
 	ApprovalDate datetime null,
 	MaintenanceContactName varchar(100) null,
 	MaintenanceContactOrganization varchar(100) null,
+	MaintenanceContactPhone varchar(100) null,
 	MaintenanceContactAddress1 varchar(100) null,
 	MaintenanceContactAddress2 varchar(100) null,
 	MaintenanceContactCity varchar(100) null,

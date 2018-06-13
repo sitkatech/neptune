@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -43,6 +43,7 @@ namespace Neptune.Web.Models
             this.ApprovalDate = approvalDate;
             this.MaintenanceContactName = maintenanceContactName;
             this.MaintenanceContactOrganization = maintenanceContactOrganization;
+            this.MaintenanceContactPhone = maintenanceContactPhone;
             this.MaintenanceContactAddress1 = maintenanceContactAddress1;
             this.MaintenanceContactAddress2 = maintenanceContactAddress2;
             this.MaintenanceContactCity = maintenanceContactCity;
@@ -136,6 +137,7 @@ namespace Neptune.Web.Models
         public DateTime? ApprovalDate { get; set; }
         public string MaintenanceContactName { get; set; }
         public string MaintenanceContactOrganization { get; set; }
+        public string MaintenanceContactPhone { get; set; }
         public string MaintenanceContactAddress1 { get; set; }
         public string MaintenanceContactAddress2 { get; set; }
         public string MaintenanceContactCity { get; set; }
@@ -158,6 +160,7 @@ namespace Neptune.Web.Models
             public const int WaterQualityManagementPlanName = 100;
             public const int MaintenanceContactName = 100;
             public const int MaintenanceContactOrganization = 100;
+            public const int MaintenanceContactPhone = 100;
             public const int MaintenanceContactAddress1 = 100;
             public const int MaintenanceContactAddress2 = 100;
             public const int MaintenanceContactCity = 100;

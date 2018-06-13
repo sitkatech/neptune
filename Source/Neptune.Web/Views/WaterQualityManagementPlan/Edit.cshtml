@@ -10,28 +10,28 @@
             {
                 @Html.HiddenFor(m => m.WaterQualityManagementPlanID)
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanName)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @Html.TextBoxFor(m => m.WaterQualityManagementPlanName, new {@class = "form-control"})
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanName)
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @Html.SearchableDropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.StormwaterJurisdictionSelectListItems)
                         @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPriorityID)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @foreach (var priority in ViewDataTyped.WaterQualityManagementPlanPriorities)
                         {
                             <div class="radio">
@@ -45,10 +45,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanStatusID)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @foreach (var status in ViewDataTyped.WaterQualityManagementPlanStatuses)
                         {
                             <div class="radio">
@@ -62,10 +62,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDevelopmentTypeID)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @foreach (var developmentType in ViewDataTyped.WaterQualityManagementPlanDevelopmentTypes)
                         {
                             <div class="radio">
@@ -79,10 +79,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-xs-12 col-sm-4 control-label">
+                    <div class="col-xs-12 col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanLandUseID)
                     </div>
-                    <div class="col-xs-12 col-sm-8">
+                    <div class="col-xs-12 col-sm-9">
                         @foreach (var landUse in ViewDataTyped.WaterQualityManagementPlanLandUses)
                         {
                             <div class="radio">
@@ -95,6 +95,90 @@
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.ApprovalDate)
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @Html.EditorFor(m => m.ApprovalDate, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(m => m.ApprovalDate)
+                    </div>
+                </div>
+                <fielset>
+                    <legend>Maintenance Contact</legend>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactName)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactName, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactName)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactOrganization)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactOrganization, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactOrganization)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactAddress1)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactAddress1, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactAddress1)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactAddress2)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactAddress2, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactAddress2)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactCity)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactCity, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactCity)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactState)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactState, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactState)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactZip)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactZip, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactZip)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.MaintenanceContactPhone)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.MaintenanceContactPhone, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.MaintenanceContactPhone)
+                        </div>
+                    </div>
+                </fielset>
             }
         </div>
     </div>
