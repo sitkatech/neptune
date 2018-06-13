@@ -97,10 +97,6 @@
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">WQMP ID</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.WaterQualityManagementProgramID</div>
-                </div>
-                <div class="row">
                     <label class="col-sm-5 control-label text-right">Water Quality<br>Management Plan</label>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null ? ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetNameAsUrl() : new HtmlString("<em class=\"text-muted\">None Set</em>"))
@@ -417,12 +413,12 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script type="text/javascript">
+    var map;
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        var map = new NeptuneMaps.Map(mapInitJson);
+        map = new NeptuneMaps.Map(mapInitJson);
     });
 </script>

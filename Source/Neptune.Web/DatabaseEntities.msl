@@ -385,7 +385,6 @@
           <ScalarProperty Name="SystemOfRecordID" ColumnName="SystemOfRecordID" />
           <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
           <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
-          <ScalarProperty Name="WaterQualityManagementProgramID" ColumnName="WaterQualityManagementProgramID" />
           <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -517,13 +516,19 @@
           <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
           <ScalarProperty Name="TenantID" ColumnName="TenantID" />
           <ScalarProperty Name="StormwaterJurisdictionID" ColumnName="StormwaterJurisdictionID" />
-          <ScalarProperty Name="MaintenanceUserPersonID" ColumnName="MaintenanceUserPersonID" />
-          <ScalarProperty Name="MaintenanceOrganziationID" ColumnName="MaintenanceOrganziationID" />
           <ScalarProperty Name="WaterQualityManagementPlanLandUseID" ColumnName="WaterQualityManagementPlanLandUseID" />
           <ScalarProperty Name="WaterQualityManagementPlanPriorityID" ColumnName="WaterQualityManagementPlanPriorityID" />
           <ScalarProperty Name="WaterQualityManagementPlanStatusID" ColumnName="WaterQualityManagementPlanStatusID" />
           <ScalarProperty Name="WaterQualityManagementPlanDevelopmentTypeID" ColumnName="WaterQualityManagementPlanDevelopmentTypeID" />
           <ScalarProperty Name="WaterQualityManagementPlanName" ColumnName="WaterQualityManagementPlanName" />
+          <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+          <ScalarProperty Name="MaintenanceContactName" ColumnName="MaintenanceContactName" />
+          <ScalarProperty Name="MaintenanceContactOrganization" ColumnName="MaintenanceContactOrganization" />
+          <ScalarProperty Name="MaintenanceContactAddress1" ColumnName="MaintenanceContactAddress1" />
+          <ScalarProperty Name="MaintenanceContactAddress2" ColumnName="MaintenanceContactAddress2" />
+          <ScalarProperty Name="MaintenanceContactCity" ColumnName="MaintenanceContactCity" />
+          <ScalarProperty Name="MaintenanceContactState" ColumnName="MaintenanceContactState" />
+          <ScalarProperty Name="MaintenanceContactZip" ColumnName="MaintenanceContactZip" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -86,9 +86,7 @@ namespace Neptune.Web.Controllers
 
             var waterQualityManagementPlan = new WaterQualityManagementPlan(ModelObjectHelpers.NotYetAssignedID,
                 ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, null);
+                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, null);
             viewModel.UpdateModels(waterQualityManagementPlan);
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlans.Add(waterQualityManagementPlan);
 
@@ -126,10 +124,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
-            var people = HttpRequestStorage.DatabaseEntities.People.ToList();
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList().Where(x => !x.IsUnknown).ToList();
-
-            var viewData = new EditViewData(stormwaterJurisdictions, people, organizations);
+            var viewData = new EditViewData(stormwaterJurisdictions);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

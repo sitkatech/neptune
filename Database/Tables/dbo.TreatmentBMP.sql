@@ -14,7 +14,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[YearBuilt] [int] NULL,
 	[OwnerOrganizationID] [int] NOT NULL,
-	[WaterQualityManagementProgramID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[WaterQualityManagementPlanID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (

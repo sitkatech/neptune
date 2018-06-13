@@ -6,13 +6,19 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[WaterQualityManagementPlanID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
-	[MaintenanceUserPersonID] [int] NOT NULL,
-	[MaintenanceOrganziationID] [int] NOT NULL,
 	[WaterQualityManagementPlanLandUseID] [int] NOT NULL,
 	[WaterQualityManagementPlanPriorityID] [int] NOT NULL,
 	[WaterQualityManagementPlanStatusID] [int] NOT NULL,
 	[WaterQualityManagementPlanDevelopmentTypeID] [int] NOT NULL,
 	[WaterQualityManagementPlanName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ApprovalDate] [datetime] NULL,
+	[MaintenanceContactName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactOrganization] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactAddress1] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactAddress2] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactCity] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactState] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MaintenanceContactZip] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC
@@ -28,21 +34,6 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_Organization_MaintenanceOrganziationID_OrganizationID] FOREIGN KEY([MaintenanceOrganziationID])
-REFERENCES [dbo].[Organization] ([OrganizationID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_Organization_MaintenanceOrganziationID_OrganizationID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_Person_MaintenanceUserPersonID_PersonID] FOREIGN KEY([MaintenanceUserPersonID])
-REFERENCES [dbo].[Person] ([PersonID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_Person_MaintenanceUserPersonID_PersonID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_Person_PersonID_TenantID] FOREIGN KEY([MaintenanceUserPersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_Person_PersonID_TenantID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])

@@ -24,14 +24,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public int? StormwaterJurisdictionID { get; set; }
 
         [Required]
-        [DisplayName("Maintenance Contact User")]
-        public int? MaintenanceUserPersonID { get; set; }
-
-        [Required]
-        [DisplayName("Maintenance Contact Organization")]
-        public int? MaintenanceOrganziationID { get; set; }
-
-        [Required]
         [DisplayName("Priority")]
         public int? WaterQualityManagementPlanPriorityID { get; set; }
 
@@ -59,8 +51,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             StormwaterJurisdictionID = waterQualityManagementPlan.StormwaterJurisdictionID;
-            MaintenanceUserPersonID = waterQualityManagementPlan.MaintenanceUserPersonID;
-            MaintenanceOrganziationID = waterQualityManagementPlan.MaintenanceOrganziationID;
             WaterQualityManagementPlanPriorityID = waterQualityManagementPlan.WaterQualityManagementPlanPriorityID;
             WaterQualityManagementPlanStatusID = waterQualityManagementPlan.WaterQualityManagementPlanStatusID;
             WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlan.WaterQualityManagementPlanDevelopmentTypeID;
@@ -72,10 +62,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
             waterQualityManagementPlan.StormwaterJurisdictionID =
                 StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID;
-            waterQualityManagementPlan.MaintenanceUserPersonID =
-                MaintenanceUserPersonID ?? ModelObjectHelpers.NotYetAssignedID;
-            waterQualityManagementPlan.MaintenanceOrganziationID =
-                MaintenanceOrganziationID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
                 WaterQualityManagementPlanPriorityID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanStatusID =

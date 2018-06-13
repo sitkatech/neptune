@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, string waterQualityManagementProgramID, int? waterQualityManagementPlanID) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -49,7 +49,6 @@ namespace Neptune.Web.Models
             this.SystemOfRecordID = systemOfRecordID;
             this.YearBuilt = yearBuilt;
             this.OwnerOrganizationID = ownerOrganizationID;
-            this.WaterQualityManagementProgramID = waterQualityManagementProgramID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
         }
 
@@ -169,7 +168,6 @@ namespace Neptune.Web.Models
         public string SystemOfRecordID { get; set; }
         public int? YearBuilt { get; set; }
         public int OwnerOrganizationID { get; set; }
-        public string WaterQualityManagementProgramID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
@@ -194,7 +192,6 @@ namespace Neptune.Web.Models
             public const int TreatmentBMPName = 50;
             public const int Notes = 200;
             public const int SystemOfRecordID = 100;
-            public const int WaterQualityManagementProgramID = 100;
         }
     }
 }

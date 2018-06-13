@@ -62,10 +62,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         [Range(1980, 2050, ErrorMessage = "Please enter a valid year range")]
         public int? YearBuilt { get; set; }
 
-        [DisplayName("WQMP ID")]
-        [StringLength(Models.TreatmentBMP.FieldLengths.WaterQualityManagementProgramID)]
-        public string WaterQualityManagementProgramID { get; set; }
-
         [DisplayName("Water Quality Management Plan")]
         public int? WaterQualityManagementPlanID { get; set; }
 
@@ -86,7 +82,6 @@ namespace Neptune.Web.Views.TreatmentBMP
             SystemOfRecordID = treatmentBMP.SystemOfRecordID;
             OwnerOrganizationID = treatmentBMP.OwnerOrganizationID;
             YearBuilt = treatmentBMP.YearBuilt;
-            WaterQualityManagementProgramID = treatmentBMP.WaterQualityManagementProgramID;
             WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlanID;
         }
 
@@ -94,7 +89,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
-            treatmentBMP.WaterQualityManagementProgramID = WaterQualityManagementProgramID;
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {
