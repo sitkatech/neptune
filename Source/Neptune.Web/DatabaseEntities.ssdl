@@ -42,7 +42,11 @@
     <EntitySet Name="TreatmentBMPTypeAssessmentObservationType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeAssessmentObservationType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TreatmentBMPTypeCustomAttributeType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WaterQualityManagementPlan" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlan" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanDevelopmentType" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanDevelopmentType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WaterQualityManagementPlanDocument" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanLandUse" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanLandUse" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanPriority" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanPriority" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanStatus" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanStatus" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.Store.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -321,6 +325,22 @@
     </AssociationSet>
     <AssociationSet Name="FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID">
       <End Role="StormwaterJurisdiction" EntitySet="StormwaterJurisdiction" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID">
+      <End Role="WaterQualityManagementPlanDevelopmentType" EntitySet="WaterQualityManagementPlanDevelopmentType" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID">
+      <End Role="WaterQualityManagementPlanLandUse" EntitySet="WaterQualityManagementPlanLandUse" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID">
+      <End Role="WaterQualityManagementPlanPriority" EntitySet="WaterQualityManagementPlanPriority" />
+      <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID">
+      <End Role="WaterQualityManagementPlanStatus" EntitySet="WaterQualityManagementPlanStatus" />
       <End Role="WaterQualityManagementPlans" EntitySet="WaterQualityManagementPlan" />
     </AssociationSet>
     <AssociationSet Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
@@ -936,6 +956,15 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
     <Property Name="MaintenanceContactState" Type="varchar" MaxLength="100" />
     <Property Name="MaintenanceContactZip" Type="varchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="WaterQualityManagementPlanDevelopmentType">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanDevelopmentTypeID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanDevelopmentTypeID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanDevelopmentTypeName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="WaterQualityManagementPlanDevelopmentTypeDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="SortOrder" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="WaterQualityManagementPlanDocument">
     <Key>
       <PropertyRef Name="WaterQualityManagementPlanDocumentID" />
@@ -947,6 +976,33 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
     <Property Name="DisplayName" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="Description" Type="varchar" MaxLength="1000" />
     <Property Name="UploadDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanLandUse">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanLandUseID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanLandUseID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanLandUseName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="WaterQualityManagementPlanLandUseDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="SortOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanPriority">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanPriorityID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanPriorityID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanPriorityName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="WaterQualityManagementPlanPriorityDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="SortOrder" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanStatus">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanStatusID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanStatusID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanStatusName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="WaterQualityManagementPlanStatusDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="SortOrder" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
@@ -1788,6 +1844,54 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID">
+    <End Role="WaterQualityManagementPlanDevelopmentType" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanDevelopmentType" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlanDevelopmentType">
+        <PropertyRef Name="WaterQualityManagementPlanDevelopmentTypeID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="WaterQualityManagementPlanDevelopmentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID">
+    <End Role="WaterQualityManagementPlanLandUse" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanLandUse" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlanLandUse">
+        <PropertyRef Name="WaterQualityManagementPlanLandUseID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="WaterQualityManagementPlanLandUseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID">
+    <End Role="WaterQualityManagementPlanPriority" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanPriority" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlanPriority">
+        <PropertyRef Name="WaterQualityManagementPlanPriorityID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="WaterQualityManagementPlanPriorityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID">
+    <End Role="WaterQualityManagementPlanStatus" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanStatus" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlans" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlanStatus">
+        <PropertyRef Name="WaterQualityManagementPlanStatusID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlans">
+        <PropertyRef Name="WaterQualityManagementPlanStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_WaterQualityManagementPlanDocument_FileResource_FileResourceID">
     <End Role="FileResource" Type="Neptune.Web.Models.Store.FileResource" Multiplicity="1" />
     <End Role="WaterQualityManagementPlanDocuments" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" Multiplicity="*" />
@@ -1821,4 +1925,56 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
   <Function Name="TrimX" ReturnType="varchar(max)" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="str" Type="varchar(max)" Mode="In" />
   </Function>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Neptune.dbo.LEGAL_LOTS_ATTRIBUTES_4326' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+
+<EntityType Name="LEGAL_LOTS_ATTRIBUTES_4326">
+  <Property Name="OBJECTID" Type="int" />
+  <Property Name="LEGAL_DESCR" Type="varchar" MaxLength="256" />
+  <Property Name="RECORDER_NO" Type="varchar" MaxLength="12" />
+  <Property Name="MAIL_ADDRESS" Type="varchar" MaxLength="102" />
+  <Property Name="ZONECLASS" Type="varchar" MaxLength="10" />
+  <Property Name="DESCRIPTIO" Type="varchar" MaxLength="50" />
+  <Property Name="CATEGORY" Type="varchar" MaxLength="50" />
+  <Property Name="ZONE_AND_Housing" Type="varchar" MaxLength="50" />
+  <Property Name="Dist_Regs" Type="varchar" MaxLength="255" />
+  <Property Name="Link" Type="varchar" MaxLength="255" />
+  <Property Name="OWNER_NAMES" Type="varchar" MaxLength="96" />
+  <Property Name="SITE_ADDRESS" Type="varchar" MaxLength="102" />
+  <Property Name="COLOR" Type="varchar" MaxLength="50" />
+  <Property Name="ASSESSMENT_NO" Type="varchar" MaxLength="22" />
+  <Property Name="SITE_ADDR_NO" Type="varchar" MaxLength="10" />
+  <Property Name="SITE_STREET_PREFIX" Type="varchar" MaxLength="4" />
+  <Property Name="SITE_STREET_NAME" Type="varchar" MaxLength="52" />
+  <Property Name="SITE_STREET_SUFFIX" Type="varchar" MaxLength="4" />
+  <Property Name="SITE_CITY_STATE" Type="varchar" MaxLength="56" />
+  <Property Name="SITE_ZIP5" Type="varchar" MaxLength="5" />
+  <Property Name="MAIL_ADDR_NO" Type="varchar" MaxLength="10" />
+  <Property Name="MAIL_PREFIX" Type="varchar" MaxLength="4" />
+  <Property Name="MAIL_STREET" Type="varchar" MaxLength="52" />
+  <Property Name="MAIL_CITY_STATE" Type="varchar" MaxLength="56" />
+  <Property Name="MAIL_UNIT_NO" Type="varchar" MaxLength="6" />
+  <Property Name="MAIL_SUFFIX" Type="varchar" MaxLength="4" />
+  <Property Name="MAIL_ZIP5" Type="varchar" MaxLength="5" />
+  <Property Name="LOT_SIZE" Type="varchar" MaxLength="10" />
+  <Property Name="DOC_REF_NO" Type="varchar" MaxLength="14" />
+  <Property Name="DOC_REF_DATE" Type="varchar" MaxLength="8" />
+  <Property Name="FabricOID" Type="int" />
+  <Property Name="USE_DQ_LANDUSE" Type="varchar" MaxLength="4" />
+  <Property Name="ModifyDate" Type="datetime2" />
+  <Property Name="SQFT_HOME" Type="int" />
+  <Property Name="SQFT_LOT" Type="int" />
+  <Property Name="SALE_AMT" Type="float" />
+  <Property Name="SALE_TYPE" Type="varchar" MaxLength="2" />
+  <Property Name="DOC_SELLER_NAME" Type="varchar" MaxLength="52" />
+  <Property Name="DOC_BUYER_NAME" Type="varchar" MaxLength="52" />
+  <Property Name="DOC_DEED_TYPE" Type="varchar" MaxLength="4" />
+  <Property Name="SALE_RECORD_DATE" Type="datetime2" />
+  <Property Name="ASSD_AMT" Type="float" />
+  <Property Name="LAND_VAL" Type="float" />
+  <Property Name="BLDG_VAL" Type="float" />
+  <Property Name="SHAPE_Length" Type="float" />
+  <Property Name="SHAPE_Area" Type="float" />
+  <Property Name="GEOM" Type="geometry" />
+</EntityType>-->
 </Schema>

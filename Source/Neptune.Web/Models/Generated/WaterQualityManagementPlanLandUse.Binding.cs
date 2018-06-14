@@ -3,11 +3,10 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanLandUse]
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -16,136 +15,92 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public abstract partial class WaterQualityManagementPlanLandUse : IHavePrimaryKey
+    [Table("[dbo].[WaterQualityManagementPlanLandUse]")]
+    public partial class WaterQualityManagementPlanLandUse : IHavePrimaryKey, ICanDeleteFull
     {
-        public static readonly WaterQualityManagementPlanLandUseResidential Residential = WaterQualityManagementPlanLandUseResidential.Instance;
-        public static readonly WaterQualityManagementPlanLandUseCommercial Commercial = WaterQualityManagementPlanLandUseCommercial.Instance;
-        public static readonly WaterQualityManagementPlanLandUseIndustrial Industrial = WaterQualityManagementPlanLandUseIndustrial.Instance;
-        public static readonly WaterQualityManagementPlanLandUseOther Other = WaterQualityManagementPlanLandUseOther.Instance;
-
-        public static readonly List<WaterQualityManagementPlanLandUse> All;
-        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse> AllLookupDictionary;
-
         /// <summary>
-        /// Static type constructor to coordinate static initialization order
+        /// Default Constructor; only used by EF
         /// </summary>
-        static WaterQualityManagementPlanLandUse()
+        protected WaterQualityManagementPlanLandUse()
         {
-            All = new List<WaterQualityManagementPlanLandUse> { Residential, Commercial, Industrial, Other };
-            AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanLandUse>(All.ToDictionary(x => x.WaterQualityManagementPlanLandUseID));
+            this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
         }
 
         /// <summary>
-        /// Protected constructor only for use in instantiating the set of static lookup values that match database
+        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        protected WaterQualityManagementPlanLandUse(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder)
+        public WaterQualityManagementPlanLandUse(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : this()
         {
-            WaterQualityManagementPlanLandUseID = waterQualityManagementPlanLandUseID;
-            WaterQualityManagementPlanLandUseName = waterQualityManagementPlanLandUseName;
-            WaterQualityManagementPlanLandUseDisplayName = waterQualityManagementPlanLandUseDisplayName;
-            SortOrder = sortOrder;
+            this.WaterQualityManagementPlanLandUseID = waterQualityManagementPlanLandUseID;
+            this.WaterQualityManagementPlanLandUseName = waterQualityManagementPlanLandUseName;
+            this.WaterQualityManagementPlanLandUseDisplayName = waterQualityManagementPlanLandUseDisplayName;
+            this.SortOrder = sortOrder;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public WaterQualityManagementPlanLandUse(string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.WaterQualityManagementPlanLandUseID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.WaterQualityManagementPlanLandUseName = waterQualityManagementPlanLandUseName;
+            this.WaterQualityManagementPlanLandUseDisplayName = waterQualityManagementPlanLandUseDisplayName;
+            this.SortOrder = sortOrder;
+        }
+
+
+        /// <summary>
+        /// Creates a "blank" object of this type and populates primitives with defaults
+        /// </summary>
+        public static WaterQualityManagementPlanLandUse CreateNewBlank()
+        {
+            return new WaterQualityManagementPlanLandUse(default(string), default(string), default(int));
+        }
+
+        /// <summary>
+        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
+        /// </summary>
+        /// <returns></returns>
+        public bool HasDependentObjects()
+        {
+            return WaterQualityManagementPlans.Any();
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlanLandUse).Name, typeof(WaterQualityManagementPlan).Name};
+
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in WaterQualityManagementPlans.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanLandUses.Remove(this);                
         }
 
         [Key]
-        public int WaterQualityManagementPlanLandUseID { get; private set; }
-        public string WaterQualityManagementPlanLandUseName { get; private set; }
-        public string WaterQualityManagementPlanLandUseDisplayName { get; private set; }
-        public int SortOrder { get; private set; }
+        public int WaterQualityManagementPlanLandUseID { get; set; }
+        public string WaterQualityManagementPlanLandUseName { get; set; }
+        public string WaterQualityManagementPlanLandUseDisplayName { get; set; }
+        public int SortOrder { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return WaterQualityManagementPlanLandUseID; } }
+        public int PrimaryKey { get { return WaterQualityManagementPlanLandUseID; } set { WaterQualityManagementPlanLandUseID = value; } }
 
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public bool Equals(WaterQualityManagementPlanLandUse other)
+        public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
+
+        public static class FieldLengths
         {
-            if (other == null)
-            {
-                return false;
-            }
-            return other.WaterQualityManagementPlanLandUseID == WaterQualityManagementPlanLandUseID;
+            public const int WaterQualityManagementPlanLandUseName = 100;
+            public const int WaterQualityManagementPlanLandUseDisplayName = 100;
         }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as WaterQualityManagementPlanLandUse);
-        }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override int GetHashCode()
-        {
-            return WaterQualityManagementPlanLandUseID;
-        }
-
-        public static bool operator ==(WaterQualityManagementPlanLandUse left, WaterQualityManagementPlanLandUse right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(WaterQualityManagementPlanLandUse left, WaterQualityManagementPlanLandUse right)
-        {
-            return !Equals(left, right);
-        }
-
-        public WaterQualityManagementPlanLandUseEnum ToEnum { get { return (WaterQualityManagementPlanLandUseEnum)GetHashCode(); } }
-
-        public static WaterQualityManagementPlanLandUse ToType(int enumValue)
-        {
-            return ToType((WaterQualityManagementPlanLandUseEnum)enumValue);
-        }
-
-        public static WaterQualityManagementPlanLandUse ToType(WaterQualityManagementPlanLandUseEnum enumValue)
-        {
-            switch (enumValue)
-            {
-                case WaterQualityManagementPlanLandUseEnum.Commercial:
-                    return Commercial;
-                case WaterQualityManagementPlanLandUseEnum.Industrial:
-                    return Industrial;
-                case WaterQualityManagementPlanLandUseEnum.Other:
-                    return Other;
-                case WaterQualityManagementPlanLandUseEnum.Residential:
-                    return Residential;
-                default:
-                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
-            }
-        }
-    }
-
-    public enum WaterQualityManagementPlanLandUseEnum
-    {
-        Residential = 1,
-        Commercial = 2,
-        Industrial = 3,
-        Other = 4
-    }
-
-    public partial class WaterQualityManagementPlanLandUseResidential : WaterQualityManagementPlanLandUse
-    {
-        private WaterQualityManagementPlanLandUseResidential(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseResidential Instance = new WaterQualityManagementPlanLandUseResidential(1, @"Residential", @"Residential", 10);
-    }
-
-    public partial class WaterQualityManagementPlanLandUseCommercial : WaterQualityManagementPlanLandUse
-    {
-        private WaterQualityManagementPlanLandUseCommercial(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseCommercial Instance = new WaterQualityManagementPlanLandUseCommercial(2, @"Commercial", @"Commercial", 20);
-    }
-
-    public partial class WaterQualityManagementPlanLandUseIndustrial : WaterQualityManagementPlanLandUse
-    {
-        private WaterQualityManagementPlanLandUseIndustrial(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseIndustrial Instance = new WaterQualityManagementPlanLandUseIndustrial(3, @"Industrial", @"Industrial", 30);
-    }
-
-    public partial class WaterQualityManagementPlanLandUseOther : WaterQualityManagementPlanLandUse
-    {
-        private WaterQualityManagementPlanLandUseOther(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseOther Instance = new WaterQualityManagementPlanLandUseOther(4, @"Other", @"Other", 40);
     }
 }
