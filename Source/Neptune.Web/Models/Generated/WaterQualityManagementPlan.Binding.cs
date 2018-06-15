@@ -78,17 +78,9 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanLandUseID = waterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseID;
-            this.WaterQualityManagementPlanLandUse = waterQualityManagementPlanLandUse;
-            waterQualityManagementPlanLandUse.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanPriorityID = waterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityID;
-            this.WaterQualityManagementPlanPriority = waterQualityManagementPlanPriority;
-            waterQualityManagementPlanPriority.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanStatusID = waterQualityManagementPlanStatus.WaterQualityManagementPlanStatusID;
-            this.WaterQualityManagementPlanStatus = waterQualityManagementPlanStatus;
-            waterQualityManagementPlanStatus.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeID;
-            this.WaterQualityManagementPlanDevelopmentType = waterQualityManagementPlanDevelopmentType;
-            waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
         }
 
@@ -158,10 +150,10 @@ namespace Neptune.Web.Models
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        public virtual WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get; set; }
-        public virtual WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority { get; set; }
-        public virtual WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get; set; }
-        public virtual WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get; set; }
+        public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID]; } }
+        public WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority { get { return WaterQualityManagementPlanPriority.AllLookupDictionary[WaterQualityManagementPlanPriorityID]; } }
+        public WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get { return WaterQualityManagementPlanStatus.AllLookupDictionary[WaterQualityManagementPlanStatusID]; } }
+        public WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get { return WaterQualityManagementPlanDevelopmentType.AllLookupDictionary[WaterQualityManagementPlanDevelopmentTypeID]; } }
 
         public static class FieldLengths
         {

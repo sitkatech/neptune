@@ -108,14 +108,10 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get { return AllTreatmentBMPTypeCustomAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPType> AllTreatmentBMPTypes { get; set; }
         public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanDevelopmentType> WaterQualityManagementPlanDevelopmentTypes { get; set; }
         public virtual DbSet<WaterQualityManagementPlanDocument> AllWaterQualityManagementPlanDocuments { get; set; }
         public virtual IQueryable<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get { return AllWaterQualityManagementPlanDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanLandUse> WaterQualityManagementPlanLandUses { get; set; }
-        public virtual DbSet<WaterQualityManagementPlanPriority> WaterQualityManagementPlanPriorities { get; set; }
         public virtual DbSet<WaterQualityManagementPlan> AllWaterQualityManagementPlans { get; set; }
         public virtual IQueryable<WaterQualityManagementPlan> WaterQualityManagementPlans { get { return AllWaterQualityManagementPlans.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanStatus> WaterQualityManagementPlanStatuses { get; set; }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -357,22 +353,30 @@ namespace Neptune.Web.Models
                     return TreatmentBMPTypes.GetTreatmentBMPType(primaryKey);
 
                 case "WaterQualityManagementPlanDevelopmentType":
-                    return WaterQualityManagementPlanDevelopmentTypes.GetWaterQualityManagementPlanDevelopmentType(primaryKey);
+                    var waterQualityManagementPlanDevelopmentType = WaterQualityManagementPlanDevelopmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanDevelopmentType, "WaterQualityManagementPlanDevelopmentType", primaryKey);
+                    return waterQualityManagementPlanDevelopmentType;
 
                 case "WaterQualityManagementPlanDocument":
                     return WaterQualityManagementPlanDocuments.GetWaterQualityManagementPlanDocument(primaryKey);
 
                 case "WaterQualityManagementPlanLandUse":
-                    return WaterQualityManagementPlanLandUses.GetWaterQualityManagementPlanLandUse(primaryKey);
+                    var waterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanLandUse, "WaterQualityManagementPlanLandUse", primaryKey);
+                    return waterQualityManagementPlanLandUse;
 
                 case "WaterQualityManagementPlanPriority":
-                    return WaterQualityManagementPlanPriorities.GetWaterQualityManagementPlanPriority(primaryKey);
+                    var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanPriority, "WaterQualityManagementPlanPriority", primaryKey);
+                    return waterQualityManagementPlanPriority;
 
                 case "WaterQualityManagementPlan":
                     return WaterQualityManagementPlans.GetWaterQualityManagementPlan(primaryKey);
 
                 case "WaterQualityManagementPlanStatus":
-                    return WaterQualityManagementPlanStatuses.GetWaterQualityManagementPlanStatus(primaryKey);
+                    var waterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanStatus, "WaterQualityManagementPlanStatus", primaryKey);
+                    return waterQualityManagementPlanStatus;
                 default:
                     throw new NotImplementedException(string.Format("No loader for type \"{0}\"", type.FullName));
             }

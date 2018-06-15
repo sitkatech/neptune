@@ -3,10 +3,11 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[WaterQualityManagementPlanStatus]
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
+using System.Data;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -15,92 +16,116 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[WaterQualityManagementPlanStatus]")]
-    public partial class WaterQualityManagementPlanStatus : IHavePrimaryKey, ICanDeleteFull
+    public abstract partial class WaterQualityManagementPlanStatus : IHavePrimaryKey
     {
+        public static readonly WaterQualityManagementPlanStatusActive Active = WaterQualityManagementPlanStatusActive.Instance;
+        public static readonly WaterQualityManagementPlanStatusInactive Inactive = WaterQualityManagementPlanStatusInactive.Instance;
+
+        public static readonly List<WaterQualityManagementPlanStatus> All;
+        public static readonly ReadOnlyDictionary<int, WaterQualityManagementPlanStatus> AllLookupDictionary;
+
         /// <summary>
-        /// Default Constructor; only used by EF
+        /// Static type constructor to coordinate static initialization order
         /// </summary>
-        protected WaterQualityManagementPlanStatus()
+        static WaterQualityManagementPlanStatus()
         {
-            this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
+            All = new List<WaterQualityManagementPlanStatus> { Active, Inactive };
+            AllLookupDictionary = new ReadOnlyDictionary<int, WaterQualityManagementPlanStatus>(All.ToDictionary(x => x.WaterQualityManagementPlanStatusID));
         }
 
         /// <summary>
-        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
+        /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        public WaterQualityManagementPlanStatus(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName, int sortOrder) : this()
+        protected WaterQualityManagementPlanStatus(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName, int sortOrder)
         {
-            this.WaterQualityManagementPlanStatusID = waterQualityManagementPlanStatusID;
-            this.WaterQualityManagementPlanStatusName = waterQualityManagementPlanStatusName;
-            this.WaterQualityManagementPlanStatusDisplayName = waterQualityManagementPlanStatusDisplayName;
-            this.SortOrder = sortOrder;
-        }
-
-        /// <summary>
-        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
-        /// </summary>
-        public WaterQualityManagementPlanStatus(string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName, int sortOrder) : this()
-        {
-            // Mark this as a new object by setting primary key with special value
-            this.WaterQualityManagementPlanStatusID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            
-            this.WaterQualityManagementPlanStatusName = waterQualityManagementPlanStatusName;
-            this.WaterQualityManagementPlanStatusDisplayName = waterQualityManagementPlanStatusDisplayName;
-            this.SortOrder = sortOrder;
-        }
-
-
-        /// <summary>
-        /// Creates a "blank" object of this type and populates primitives with defaults
-        /// </summary>
-        public static WaterQualityManagementPlanStatus CreateNewBlank()
-        {
-            return new WaterQualityManagementPlanStatus(default(string), default(string), default(int));
-        }
-
-        /// <summary>
-        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
-        /// </summary>
-        /// <returns></returns>
-        public bool HasDependentObjects()
-        {
-            return WaterQualityManagementPlans.Any();
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlanStatus).Name, typeof(WaterQualityManagementPlan).Name};
-
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteFull()
-        {
-
-            foreach(var x in WaterQualityManagementPlans.ToList())
-            {
-                x.DeleteFull();
-            }
-            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanStatuses.Remove(this);                
+            WaterQualityManagementPlanStatusID = waterQualityManagementPlanStatusID;
+            WaterQualityManagementPlanStatusName = waterQualityManagementPlanStatusName;
+            WaterQualityManagementPlanStatusDisplayName = waterQualityManagementPlanStatusDisplayName;
+            SortOrder = sortOrder;
         }
 
         [Key]
-        public int WaterQualityManagementPlanStatusID { get; set; }
-        public string WaterQualityManagementPlanStatusName { get; set; }
-        public string WaterQualityManagementPlanStatusDisplayName { get; set; }
-        public int SortOrder { get; set; }
+        public int WaterQualityManagementPlanStatusID { get; private set; }
+        public string WaterQualityManagementPlanStatusName { get; private set; }
+        public string WaterQualityManagementPlanStatusDisplayName { get; private set; }
+        public int SortOrder { get; private set; }
         [NotMapped]
-        public int PrimaryKey { get { return WaterQualityManagementPlanStatusID; } set { WaterQualityManagementPlanStatusID = value; } }
+        public int PrimaryKey { get { return WaterQualityManagementPlanStatusID; } }
 
-        public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
-
-        public static class FieldLengths
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public bool Equals(WaterQualityManagementPlanStatus other)
         {
-            public const int WaterQualityManagementPlanStatusName = 100;
-            public const int WaterQualityManagementPlanStatusDisplayName = 100;
+            if (other == null)
+            {
+                return false;
+            }
+            return other.WaterQualityManagementPlanStatusID == WaterQualityManagementPlanStatusID;
         }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as WaterQualityManagementPlanStatus);
+        }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return WaterQualityManagementPlanStatusID;
+        }
+
+        public static bool operator ==(WaterQualityManagementPlanStatus left, WaterQualityManagementPlanStatus right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(WaterQualityManagementPlanStatus left, WaterQualityManagementPlanStatus right)
+        {
+            return !Equals(left, right);
+        }
+
+        public WaterQualityManagementPlanStatusEnum ToEnum { get { return (WaterQualityManagementPlanStatusEnum)GetHashCode(); } }
+
+        public static WaterQualityManagementPlanStatus ToType(int enumValue)
+        {
+            return ToType((WaterQualityManagementPlanStatusEnum)enumValue);
+        }
+
+        public static WaterQualityManagementPlanStatus ToType(WaterQualityManagementPlanStatusEnum enumValue)
+        {
+            switch (enumValue)
+            {
+                case WaterQualityManagementPlanStatusEnum.Active:
+                    return Active;
+                case WaterQualityManagementPlanStatusEnum.Inactive:
+                    return Inactive;
+                default:
+                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
+            }
+        }
+    }
+
+    public enum WaterQualityManagementPlanStatusEnum
+    {
+        Active = 1,
+        Inactive = 2
+    }
+
+    public partial class WaterQualityManagementPlanStatusActive : WaterQualityManagementPlanStatus
+    {
+        private WaterQualityManagementPlanStatusActive(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName, int sortOrder) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName, sortOrder) {}
+        public static readonly WaterQualityManagementPlanStatusActive Instance = new WaterQualityManagementPlanStatusActive(1, @"Active", @"Active", 10);
+    }
+
+    public partial class WaterQualityManagementPlanStatusInactive : WaterQualityManagementPlanStatus
+    {
+        private WaterQualityManagementPlanStatusInactive(int waterQualityManagementPlanStatusID, string waterQualityManagementPlanStatusName, string waterQualityManagementPlanStatusDisplayName, int sortOrder) : base(waterQualityManagementPlanStatusID, waterQualityManagementPlanStatusName, waterQualityManagementPlanStatusDisplayName, sortOrder) {}
+        public static readonly WaterQualityManagementPlanStatusInactive Instance = new WaterQualityManagementPlanStatusInactive(2, @"Inactive", @"Inactive", 20);
     }
 }

@@ -533,16 +533,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="WaterQualityManagementPlanDevelopmentType">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanDevelopmentType">
-        <MappingFragment StoreEntitySet="WaterQualityManagementPlanDevelopmentType">
-          <ScalarProperty Name="WaterQualityManagementPlanDevelopmentTypeID" ColumnName="WaterQualityManagementPlanDevelopmentTypeID" />
-          <ScalarProperty Name="WaterQualityManagementPlanDevelopmentTypeName" ColumnName="WaterQualityManagementPlanDevelopmentTypeName" />
-          <ScalarProperty Name="WaterQualityManagementPlanDevelopmentTypeDisplayName" ColumnName="WaterQualityManagementPlanDevelopmentTypeDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="WaterQualityManagementPlanDocument">
       <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanDocument">
         <MappingFragment StoreEntitySet="WaterQualityManagementPlanDocument">
@@ -553,36 +543,6 @@
           <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WaterQualityManagementPlanLandUse">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanLandUse">
-        <MappingFragment StoreEntitySet="WaterQualityManagementPlanLandUse">
-          <ScalarProperty Name="WaterQualityManagementPlanLandUseID" ColumnName="WaterQualityManagementPlanLandUseID" />
-          <ScalarProperty Name="WaterQualityManagementPlanLandUseName" ColumnName="WaterQualityManagementPlanLandUseName" />
-          <ScalarProperty Name="WaterQualityManagementPlanLandUseDisplayName" ColumnName="WaterQualityManagementPlanLandUseDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WaterQualityManagementPlanPriority">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanPriority">
-        <MappingFragment StoreEntitySet="WaterQualityManagementPlanPriority">
-          <ScalarProperty Name="WaterQualityManagementPlanPriorityID" ColumnName="WaterQualityManagementPlanPriorityID" />
-          <ScalarProperty Name="WaterQualityManagementPlanPriorityName" ColumnName="WaterQualityManagementPlanPriorityName" />
-          <ScalarProperty Name="WaterQualityManagementPlanPriorityDisplayName" ColumnName="WaterQualityManagementPlanPriorityDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="WaterQualityManagementPlanStatus">
-      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanStatus">
-        <MappingFragment StoreEntitySet="WaterQualityManagementPlanStatus">
-          <ScalarProperty Name="WaterQualityManagementPlanStatusID" ColumnName="WaterQualityManagementPlanStatusID" />
-          <ScalarProperty Name="WaterQualityManagementPlanStatusName" ColumnName="WaterQualityManagementPlanStatusName" />
-          <ScalarProperty Name="WaterQualityManagementPlanStatusDisplayName" ColumnName="WaterQualityManagementPlanStatusDisplayName" />
-          <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

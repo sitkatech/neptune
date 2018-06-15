@@ -51,10 +51,10 @@ REFERENCES [dbo].[Tenant] ([TenantID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_Tenant_TenantID]
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID] FOREIGN KEY([WaterQualityManagementPlanDevelopmentTypeID])
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentTypeID] FOREIGN KEY([WaterQualityManagementPlanDevelopmentTypeID])
 REFERENCES [dbo].[WaterQualityManagementPlanDevelopmentType] ([WaterQualityManagementPlanDevelopmentTypeID])
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID]
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentTypeID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanLandUse_WaterQualityManagementPlanLandUseID] FOREIGN KEY([WaterQualityManagementPlanLandUseID])
 REFERENCES [dbo].[WaterQualityManagementPlanLandUse] ([WaterQualityManagementPlanLandUseID])
@@ -66,7 +66,7 @@ REFERENCES [dbo].[WaterQualityManagementPlanPriority] ([WaterQualityManagementPl
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanPriority_WaterQualityManagementPlanPriorityID]
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID] FOREIGN KEY([WaterQualityManagementPlanStatusID])
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatusID] FOREIGN KEY([WaterQualityManagementPlanStatusID])
 REFERENCES [dbo].[WaterQualityManagementPlanStatus] ([WaterQualityManagementPlanStatusID])
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatus_WaterQualityManagementPlanStatusID]
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanStatusID]
