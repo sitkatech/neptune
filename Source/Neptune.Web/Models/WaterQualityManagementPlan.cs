@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -19,5 +21,18 @@ namespace Neptune.Web.Models
         public string GetDeleteUrl() => DeleteUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);
 
         public HtmlString GetNameAsUrl() => UrlTemplate.MakeHrefString(GetDetailUrl(), WaterQualityManagementPlanName);
+
+        public string MaintenanceContactAddressToString()
+        {
+            return string.Join(" ",
+                new List<string>
+                {
+                    MaintenanceContactAddress1,
+                    MaintenanceContactAddress2,
+                    MaintenanceContactCity,
+                    MaintenanceContactState,
+                    MaintenanceContactZip
+                }.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
     }
 }

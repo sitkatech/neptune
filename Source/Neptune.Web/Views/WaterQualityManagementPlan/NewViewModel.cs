@@ -9,16 +9,16 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditViewModel : FormViewModel, IValidatableObject
+    public class NewViewModel : FormViewModel, IValidatableObject
     {
-        [Required]
-        [DisplayName("Water Quality Management Plan")]
-        public int? WaterQualityManagementPlanID { get; set; }
-
         [Required]
         [DisplayName("WQMP Name")]
         [MaxLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
         public string WaterQualityManagementPlanName { get; set; }
+
+        [Required]
+        [DisplayName("Jurisdiction")]
+        public int? StormwaterJurisdictionID { get; set; }
 
         [Required]
         [DisplayName("Priority")]
@@ -66,14 +66,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public EditViewModel()
+        public NewViewModel()
         {
         }
 
-        public EditViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public NewViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
-            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanName = waterQualityManagementPlan.WaterQualityManagementPlanName;
+            StormwaterJurisdictionID = waterQualityManagementPlan.StormwaterJurisdictionID;
             WaterQualityManagementPlanPriorityID = waterQualityManagementPlan.WaterQualityManagementPlanPriorityID;
             WaterQualityManagementPlanStatusID = waterQualityManagementPlan.WaterQualityManagementPlanStatusID;
             WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlan.WaterQualityManagementPlanDevelopmentTypeID;
@@ -92,6 +92,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
+            waterQualityManagementPlan.StormwaterJurisdictionID =
+                StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
                 WaterQualityManagementPlanPriorityID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlan.WaterQualityManagementPlanStatusID =
@@ -114,10 +116,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Any(x =>
-                x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
-                x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
+                x.WaterQualityManagementPlanName == WaterQualityManagementPlanName))
             {
-                yield return new SitkaValidationResult<EditViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
+                yield return new SitkaValidationResult<NewViewModel, string>("Name is already in use.", m => m.WaterQualityManagementPlanName);
             }
         }
     }

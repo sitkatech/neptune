@@ -140,7 +140,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Documents
-                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlanDocuments)
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
                         @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", new List<string>(), true)

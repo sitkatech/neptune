@@ -10,7 +10,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public bool CurrentPersonCanManageWaterQualityManagementPlans { get; }
-        public bool CurrentPersonCanManageWaterQualityManagementPlanDocuments { get; }
         public string EditWaterQualityManagementPlanTreatmentBmpsUrl { get; }
         public string NewWaterQualityManagementPlanDocumentUrl { get; }
         public TreatmentBMPGridSpec TreatmentBmpGridSpec { get; }
@@ -28,9 +27,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
 
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
-                .HasPermission(currentPerson, waterQualityManagementPlan).HasPermission;
-            CurrentPersonCanManageWaterQualityManagementPlanDocuments = new WaterQualityManagementPlanDocumentManageFeature()
-                .HasPermissionByPerson(currentPerson);
+                .HasPermission(currentPerson, waterQualityManagementPlan)
+                .HasPermission;
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpTreatmentBmps(WaterQualityManagementPlan));

@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Models.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
-        public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
+        public List<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
 
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
@@ -68,8 +68,10 @@ namespace Neptune.Web.Views.TreatmentBMP
                     y => y.DisplayName, "Same as the BMP Jurisdiction");
             TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
             WaterQualityManagementPlanSelectListItems =
-                waterQualityManagementPlans.ToSelectListWithEmptyFirstRow(
-                    x => x.WaterQualityManagementPlanID.ToString(), x => x.WaterQualityManagementPlanName);
+                waterQualityManagementPlans.ToSelectList(
+                    x => x.WaterQualityManagementPlanID.ToString(), x => x.WaterQualityManagementPlanName)
+                .ToList();
+            WaterQualityManagementPlanSelectListItems.Insert(0, new SelectListItem {Text = "No Associated WQMP", Value = string.Empty});
         }
     }
 }
