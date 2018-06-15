@@ -19,7 +19,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.WaterQualityMaintenancePlan);
-            var gridSpec = GetWaterQualityManagementPlanIndexGridSpec();
+            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             var viewData = new IndexViewData(CurrentPerson, neptunePage, gridSpec);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -30,14 +30,8 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.ToList();
 
-            var gridSpec = GetWaterQualityManagementPlanIndexGridSpec();
+            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
-        }
-
-        private WaterQualityManagementPlanIndexGridSpec GetWaterQualityManagementPlanIndexGridSpec()
-        {
-            var currentUserCanManage = new WaterQualityManagementPlanManageFeature().HasPermissionByPerson(CurrentPerson);
-            return new WaterQualityManagementPlanIndexGridSpec(currentUserCanManage);
         }
 
         [HttpGet]
@@ -67,21 +61,18 @@ namespace Neptune.Web.Controllers
         [WaterQualityManagementPlanCreateFeature]
         public PartialViewResult New()
         {
-            var viewModel = new EditViewModel
-            {
-                WaterQualityManagementPlanID = ModelObjectHelpers.NotYetAssignedID
-            };
-            return ViewEdit(viewModel);
+            var viewModel = new NewViewModel();
+            return ViewNew(viewModel);
         }
 
         [HttpPost]
         [WaterQualityManagementPlanCreateFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult New(EditViewModel viewModel)
+        public ActionResult New(NewViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewNew(viewModel);
             }
 
             var waterQualityManagementPlan = new WaterQualityManagementPlan(ModelObjectHelpers.NotYetAssignedID,
@@ -89,10 +80,21 @@ namespace Neptune.Web.Controllers
                 ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, null);
             viewModel.UpdateModels(waterQualityManagementPlan);
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlans.Add(waterQualityManagementPlan);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay($"Successfully created \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
 
-            return new ModalDialogFormJsonResult();
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Detail(waterQualityManagementPlan)));
+        }
+
+        private PartialViewResult ViewNew(NewViewModel viewModel)
+        {
+            var stormwaterJurisdictions = new List<Role> {Role.Admin, Role.SitkaAdmin}.Contains(CurrentPerson.Role)
+                ? HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList()
+                : CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
+            var viewData = new NewViewData(stormwaterJurisdictions);
+            return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -118,7 +120,8 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(waterQualityManagementPlan);
             SetMessageForDisplay($"Successfully updated \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
 
-            return new ModalDialogFormJsonResult();
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Detail(waterQualityManagementPlan)));
         }
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
