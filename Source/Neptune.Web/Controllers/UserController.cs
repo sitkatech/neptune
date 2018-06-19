@@ -249,7 +249,7 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public ActionResult Invite()
         {
-            var viewModel = new InviteViewModel(){StormwaterJurisdictionPersonSimples = new List<StormwaterJurisdictionPersonSimple>()};
+            var viewModel = new InviteViewModel();
             return ViewInvite(viewModel);
         }
 
@@ -258,12 +258,7 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.InviteUser);
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList();
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
-
-            var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
-            var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
-
-            var userJurisdictionsViewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions,stormwaterJurisdictionsCurrentPersonCanManage, false);
-            var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl, userJurisdictionsViewData);
+            var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl);
             return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
         }
 
@@ -317,7 +312,20 @@ namespace Neptune.Web.Controllers
                 return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(existingUser)));
             }
 
+            var setJurisdictions = !CurrentPerson.IsAdministrator();
             var newUser = CreateNewFirmaPerson(keystoneUser, keystoneUser.OrganizationGuid);
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            if (setJurisdictions)
+            {
+                foreach (var stormwaterJurisdictionPerson in CurrentPerson.StormwaterJurisdictionPeople)
+                {
+                    newUser.StormwaterJurisdictionPeople.Add(new StormwaterJurisdictionPerson(stormwaterJurisdictionPerson.StormwaterJurisdictionID, newUser.PersonID));
+                }
+            }
+
+            newUser.RoleID = Role.JurisdictionEditor.RoleID;
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 

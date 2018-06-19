@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
-using Neptune.Web.Views.Shared.UserJurisdictions;
 
 namespace Neptune.Web.Views.User
 {
@@ -31,12 +30,10 @@ namespace Neptune.Web.Views.User
     {
         public IEnumerable<SelectListItem> AllOrganizations { get; }
         public string CancelUrl { get; }
-        public EditUserJurisdictionsViewData UserJurisdictionsViewData { get; }
 
-        public InviteViewData(Person currentPerson, List<Models.Organization> organizations, Models.NeptunePage neptunePage, string cancelUrl, EditUserJurisdictionsViewData userJurisdictionsViewData) : base(currentPerson, neptunePage)
+        public InviteViewData(Person currentPerson, List<Models.Organization> organizations, Models.NeptunePage neptunePage, string cancelUrl) : base(currentPerson, neptunePage)
         {
             CancelUrl = cancelUrl;
-            UserJurisdictionsViewData = userJurisdictionsViewData;
             PageTitle = "Invite User";
             EntityName = "Users";
             AllOrganizations = organizations.ToSelectList(x => x.OrganizationGuid.ToString(), x => x.OrganizationName);
