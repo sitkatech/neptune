@@ -34,6 +34,7 @@ using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
+using Neptune.Web.Views.Shared.UserJurisdictions;
 using Organization = Neptune.Web.Models.Organization;
 
 namespace Neptune.Web.Controllers
@@ -214,14 +215,14 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
-            var viewModel = new EditJurisdictionsViewModel(person, CurrentPerson);
+            var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
             return ViewEditJurisdiction(viewModel);
         }
 
         [HttpPost]
         [UserEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditJurisdictionsViewModel viewModel)
+        public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditUserJurisdictionsViewModel viewModel)
         {
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -235,13 +236,13 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditJurisdiction(EditJurisdictionsViewModel viewModel)
+        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
             var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
 
-            var viewData = new EditJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
-            return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
+            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
+            return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
 
         [JurisdictionManageFeature]

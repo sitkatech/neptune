@@ -26,9 +26,9 @@ using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.User
+namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
-    public class EditJurisdictionsViewModel : FormViewModel, IValidatableObject
+    public class EditUserJurisdictionsViewModel : FormViewModel, IValidatableObject
     {
 
         [Required]
@@ -39,11 +39,11 @@ namespace Neptune.Web.Views.User
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditJurisdictionsViewModel()
+        public EditUserJurisdictionsViewModel()
         {
         }
 
-        public EditJurisdictionsViewModel(Person person, Person currentPerson)
+        public EditUserJurisdictionsViewModel(Person person, Person currentPerson)
         {
             PersonID = person.PersonID;
             StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.OrganizationDisplayName).Select(x => new StormwaterJurisdictionPersonSimple(x, currentPerson)).ToList();
@@ -77,10 +77,7 @@ namespace Neptune.Web.Views.User
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var errors = new List<ValidationResult>();
-           
-
-            return errors;
+            return new List<ValidationResult>();
         }
 
     }

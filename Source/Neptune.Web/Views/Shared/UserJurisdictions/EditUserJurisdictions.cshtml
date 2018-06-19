@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Models
 @using LtInfo.Common.HtmlHelperExtensions
 @using Newtonsoft.Json.Linq
-@inherits Neptune.Web.Views.User.EditJurisdictions
+@inherits Neptune.Web.Views.Shared.UserJurisdictions.EditUserJurisdictions
 <script type="text/javascript">
     // <![CDATA[
     angular.module("NeptuneApp")
@@ -34,7 +34,7 @@ Source code is available upon request via <support@sitkatech.com>.
                     };
             });
 
-    angular.bootstrap(jQuery("#EditJurisdictionsApp"), ["NeptuneApp"]);
+    angular.bootstrap(jQuery("#EditUserJurisdictionsApp"), ["NeptuneApp"]);
 
     jQuery(".selectpicker").selectpicker("refresh");
     jQuery(".modal").on("hidden.bs.modal",
@@ -48,7 +48,7 @@ Source code is available upon request via <support@sitkatech.com>.
     @Html.ValidationSummary()
 </div>
 
-<div id="EditJurisdictionsApp" ng-controller="EditJurisdictionsController">
+<div id="EditUserJurisdictionsApp" ng-controller="EditUserJurisdictionsController">
     <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
     @using (Html.BeginForm())
     {

@@ -23,14 +23,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.User
+namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
-    public class EditJurisdictionsViewData : NeptuneViewData
+    public class EditUserJurisdictionsViewData : NeptuneViewData
     {
         
         public readonly EditViewDataForAngular ViewDataForAngular;
 
-        public EditJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage)
+        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);

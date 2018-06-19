@@ -54,6 +54,7 @@ namespace Neptune.Web
                 "~/Views/Shared/EditAttributes/{0}.cshtml",
                 "~/Views/Shared/SortOrder/{0}.cshtml",
                 "~/Views/Shared/Location/{0}.cshtml",
+                "~/Views/Shared/UserJurisdictions/{0}.cshtml",
                 "~/Views/FieldVisit/ObservationTypePreview/{0}.cshtml",
 
             } };
