@@ -24,6 +24,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @inherits Neptune.Web.Views.Shared.UserJurisdictions.EditUserJurisdictions
 <script type="text/javascript">
     // <![CDATA[
+    jQuery(function() {
     angular.module("NeptuneApp")
         .factory("angularModelAndViewData",
             function()
@@ -40,7 +41,8 @@ Source code is available upon request via <support@sitkatech.com>.
     jQuery(".modal").on("hidden.bs.modal",
         function () {
             jQuery(".bootstrap-select.open").removeClass("open");
-        });
+            });
+    });
     // ]]>
 </script>
 
@@ -49,7 +51,10 @@ Source code is available upon request via <support@sitkatech.com>.
 </div>
 
 <div id="EditUserJurisdictionsApp" ng-controller="EditUserJurisdictionsController">
-    <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
+    @if (ViewDataTyped.Standalone)
+    {
+        <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
+    }
     @using (ViewDataTyped.Standalone ? Html.BeginForm() : null)
     {
         <div class="form-group">

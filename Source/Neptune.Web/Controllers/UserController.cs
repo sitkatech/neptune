@@ -216,7 +216,7 @@ namespace Neptune.Web.Controllers
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
-            return ViewEditJurisdiction(viewModel, personPrimaryKey);
+            return ViewEditJurisdiction(viewModel);
         }
 
         [HttpPost]
@@ -227,7 +227,7 @@ namespace Neptune.Web.Controllers
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditJurisdiction(viewModel, personPrimaryKey);
+                return ViewEditJurisdiction(viewModel);
             }
 
             HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Load();
@@ -236,8 +236,7 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel,
-            PersonPrimaryKey personPrimaryKey)
+        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
             var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
@@ -250,7 +249,7 @@ namespace Neptune.Web.Controllers
         [HttpGet]
         public ActionResult Invite()
         {
-            var viewModel = new InviteViewModel();
+            var viewModel = new InviteViewModel(){StormwaterJurisdictionPersonSimples = new List<StormwaterJurisdictionPersonSimple>()};
             return ViewInvite(viewModel);
         }
 
@@ -259,7 +258,12 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.InviteUser);
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationName).ToList();
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
-            var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl);
+
+            var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
+            var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
+
+            var userJurisdictionsViewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions,stormwaterJurisdictionsCurrentPersonCanManage, false);
+            var viewData = new InviteViewData(CurrentPerson, organizations, neptunePage, cancelUrl, userJurisdictionsViewData);
             return RazorView<Invite, InviteViewData, InviteViewModel>(viewData, viewModel);
         }
 

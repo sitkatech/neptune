@@ -18,9 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
     public abstract class EditUserJurisdictions : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, EditUserJurisdictionsViewData viewData,
+            EditUserJurisdictionsViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<EditUserJurisdictions,EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
+        }
     }
 }

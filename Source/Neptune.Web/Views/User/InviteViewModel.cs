@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Neptune.Web.Views.Shared.UserJurisdictions;
 
 namespace Neptune.Web.Views.User
 {
-    public class InviteViewModel : Shared.UserJurisdictions.EditUserJurisdictionsViewModel
+    public class InviteViewModel : EditUserJurisdictionsViewModel
     {
         [Required]
         [DisplayName("First Name")]
