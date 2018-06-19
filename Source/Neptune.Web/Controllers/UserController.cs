@@ -63,7 +63,7 @@ namespace Neptune.Web.Controllers
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditRolesViewModel(person);
-            return ViewEditRoles(viewModel);
+            return ViewEditRoles(viewModel, person);
         }
 
         [HttpPost]
@@ -74,17 +74,27 @@ namespace Neptune.Web.Controllers
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditRoles(viewModel);
+                return ViewEditRoles(viewModel, person);
             }
             viewModel.UpdateModel(person, CurrentPerson);
             SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditRoles(EditRolesViewModel viewModel)
+        private PartialViewResult ViewEditRoles(EditRolesViewModel viewModel, Person person)
         {
-            var roles = CurrentPerson.IsSitkaAdministrator() ? Role.All : 
-                CurrentPerson.IsAdministrator() ? Role.All.Except(new List<Role> { Role.SitkaAdmin}) : Role.All.Except(new List<Role> { Role.SitkaAdmin, Role.Admin });
+            var roles = CurrentPerson.IsSitkaAdministrator()
+                ? Role.All
+                : (CurrentPerson.IsAdministrator()
+                    ? Role.All.Except(new List<Role> {Role.SitkaAdmin})
+                    : Role.All.Except(new List<Role> {Role.SitkaAdmin, Role.Admin}));
+
+            // if the user being updated is a Jurisdiction Manager, only an admin can downgrade them
+            if (!CurrentPerson.IsAdministrator() && person.Role == Role.JurisdictionManager)
+            {
+                roles = new List<Role>{Role.JurisdictionManager};
+            }
+
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
             var viewData = new EditRolesViewData(rolesAsSelectListItems);
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
