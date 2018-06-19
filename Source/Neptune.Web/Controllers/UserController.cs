@@ -216,7 +216,7 @@ namespace Neptune.Web.Controllers
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
-            return ViewEditJurisdiction(viewModel);
+            return ViewEditJurisdiction(viewModel, personPrimaryKey);
         }
 
         [HttpPost]
@@ -227,7 +227,7 @@ namespace Neptune.Web.Controllers
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditJurisdiction(viewModel);
+                return ViewEditJurisdiction(viewModel, personPrimaryKey);
             }
 
             HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Load();
@@ -236,12 +236,13 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
+        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel,
+            PersonPrimaryKey personPrimaryKey)
         {
             var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
 
-            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
+            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, SitkaRoute<UserController>.BuildUrlFromExpression(x => x.EditJurisdiction(personPrimaryKey)));
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
 

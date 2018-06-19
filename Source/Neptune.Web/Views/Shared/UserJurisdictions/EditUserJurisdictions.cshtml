@@ -50,9 +50,10 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <div id="EditUserJurisdictionsApp" ng-controller="EditUserJurisdictionsController">
     <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
-    @using (Html.BeginForm())
+    @if (!string.IsNullOrWhiteSpace(ViewDataTyped.SubmitUrl))
     {
-
+        @:<form action="@ViewDataTyped.SubmitUrl" method="post">
+    }
         <div class="form-group">
             <label class="control-label">Jurisdiction to Add:</label>
             <div class="input-group">
@@ -79,20 +80,23 @@ Source code is available upon request via <support@sitkatech.com>.
                 <th></th>
             </tr>
             <tr ng-repeat="stormwaterJurisdictionSimple in AngularModel.StormwaterJurisdictionPersonSimples | orderBy: getStormwaterJurisdictionDisplayName">
-                <td style="width:60px;">
-                    <span ng-if="canRemoveRow(stormwaterJurisdictionSimple)" class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer" ></span>
+                <td style="width: 60px;">
+                    <span ng-if="canRemoveRow(stormwaterJurisdictionSimple)" class="glyphicon glyphicon-trash blue" title="Remove row'" alt="Remove row" ng-click="deleteRow(stormwaterJurisdictionSimple)" style="cursor: pointer"></span>
                 </td>
                 <td ng-bind="getStormwaterJurisdictionDisplayName(stormwaterJurisdictionSimple)"></td>
-                <td style="width:0px;">
+                <td style="width: 0px;">
                     <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionPersonID}}"
-                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionPersonID" />
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionPersonID"/>
                     <input type="hidden" value="{{stormwaterJurisdictionSimple.StormwaterJurisdictionID}}"
-                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionID" />
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].StormwaterJurisdictionID"/>
                     <input type="hidden" value="{{stormwaterJurisdictionSimple.PersonID}}"
-                           name="StormwaterJurisdictionPersonSimples[{{$index}}].PersonID" />
+                           name="StormwaterJurisdictionPersonSimples[{{$index}}].PersonID"/>
                 </td>
             </tr>
         </table>
-        @Html.HiddenFor(m => m.PersonID);
+        @Html.HiddenFor(m => m.PersonID)
+    @if (!string.IsNullOrWhiteSpace(ViewDataTyped.SubmitUrl))
+    {
+        @:</form>
     }
 </div>

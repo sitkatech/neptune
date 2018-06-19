@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using LtInfo.Common.Models;
 
 namespace Neptune.Web.Views.User
 {
-    public class InviteViewModel : FormViewModel
+    public class InviteViewModel : Shared.UserJurisdictions.EditUserJurisdictionsViewModel
     {
         [Required]
         [DisplayName("First Name")]
@@ -16,7 +15,6 @@ namespace Neptune.Web.Views.User
         [Required]
         [DisplayName("Email")]
         public string Email { get; set; }
-
         [DisplayName("Organization")]
         public Guid? OrganizationGuid { get; set; }
     }

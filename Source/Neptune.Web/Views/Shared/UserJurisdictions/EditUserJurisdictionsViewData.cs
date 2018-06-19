@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
@@ -28,18 +30,28 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
     public class EditUserJurisdictionsViewData : NeptuneViewData
     {
         
-        public readonly EditViewDataForAngular ViewDataForAngular;
+        public EditViewDataForAngular ViewDataForAngular { get; }
 
-        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage)
+        public string SubmitUrl { get; }
+
+        /// <summary>
+        /// Leave submitUrl blank if EditUserJurisdictions is being rendered inside a larger form.
+        /// </summary>
+        /// <param name="currentPerson"></param>
+        /// <param name="allStormwaterJurisdictions"></param>
+        /// <param name="stormwaterJurisdictionsCurrentPersonCanManage"></param>
+        /// <param name="submitUrl"></param>
+        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, string submitUrl)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
+            SubmitUrl = submitUrl;
         }
 
         public class EditViewDataForAngular
         {
-            public readonly List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions;
-            public readonly List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage;
+            public List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions { get; }
+            public List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage { get; }
 
             public EditViewDataForAngular(List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictions)
             {
