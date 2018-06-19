@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -904,6 +904,9 @@
     <Compile Include="Views\TreatmentBMP\EditLocation.cs" />
     <Compile Include="Views\TreatmentBMP\EditLocationViewData.cs" />
     <Compile Include="Views\TreatmentBMP\LocationViewModel.cs" />
+    <Compile Include="Views\TreatmentBMP\New.cs" />
+    <Compile Include="Views\TreatmentBMP\NewViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\NewViewModel.cs" />
     <Compile Include="Views\User\EditJurisdictions.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewData.cs" />
     <Compile Include="Views\User\EditJurisdictionsViewModel.cs" />
@@ -1120,6 +1123,7 @@
     <Content Include="Views\FieldVisit\ObservationTypePreview\PercentageCollectionMethodPartial.cshtml" />
     <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
     <Content Include="Views\User\Invite.cshtml" />
+    <Content Include="Views\TreatmentBMP\New.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
