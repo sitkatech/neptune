@@ -21,25 +21,30 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.User
+namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
-    public class EditJurisdictionsViewData : NeptuneViewData
+    public class EditUserJurisdictionsViewData : NeptuneViewData
     {
         
-        public readonly EditViewDataForAngular ViewDataForAngular;
+        public EditViewDataForAngular ViewDataForAngular { get; }
 
-        public EditJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage)
+        public bool Standalone { get; }
+
+        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
+            Standalone = standalone;
         }
 
         public class EditViewDataForAngular
         {
-            public readonly List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions;
-            public readonly List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage;
+            public List<StormwaterJurisdictionSimple> AllStormwaterJurisdictions { get; }
+            public List<StormwaterJurisdictionSimple> StormwaterJurisdictionsCurrentPersonCanManage { get; }
 
             public EditViewDataForAngular(List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictions)
             {

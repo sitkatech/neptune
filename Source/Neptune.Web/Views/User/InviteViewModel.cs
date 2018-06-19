@@ -16,7 +16,6 @@ namespace Neptune.Web.Views.User
         [Required]
         [DisplayName("Email")]
         public string Email { get; set; }
-
         [DisplayName("Organization")]
         public Guid? OrganizationGuid { get; set; }
     }

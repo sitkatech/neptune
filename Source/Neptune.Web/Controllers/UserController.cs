@@ -34,6 +34,7 @@ using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
+using Neptune.Web.Views.Shared.UserJurisdictions;
 using Organization = Neptune.Web.Models.Organization;
 
 namespace Neptune.Web.Controllers
@@ -62,7 +63,7 @@ namespace Neptune.Web.Controllers
         {
             var person = personPrimaryKey.EntityObject;
             var viewModel = new EditRolesViewModel(person);
-            return ViewEditRoles(viewModel);
+            return ViewEditRoles(viewModel, person);
         }
 
         [HttpPost]
@@ -73,17 +74,27 @@ namespace Neptune.Web.Controllers
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditRoles(viewModel);
+                return ViewEditRoles(viewModel, person);
             }
             viewModel.UpdateModel(person, CurrentPerson);
             SetMessageForDisplay($"Role successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditRoles(EditRolesViewModel viewModel)
+        private PartialViewResult ViewEditRoles(EditRolesViewModel viewModel, Person person)
         {
-            var roles = CurrentPerson.IsSitkaAdministrator() ? Role.All : 
-                CurrentPerson.IsAdministrator() ? Role.All.Except(new List<Role> { Role.SitkaAdmin}) : Role.All.Except(new List<Role> { Role.SitkaAdmin, Role.Admin });
+            var roles = CurrentPerson.IsSitkaAdministrator()
+                ? Role.All
+                : (CurrentPerson.IsAdministrator()
+                    ? Role.All.Except(new List<Role> {Role.SitkaAdmin})
+                    : Role.All.Except(new List<Role> {Role.SitkaAdmin, Role.Admin}));
+
+            // if the user being updated is a Jurisdiction Manager, only an admin can downgrade them
+            if (!CurrentPerson.IsAdministrator() && person.Role == Role.JurisdictionManager)
+            {
+                roles = new List<Role>{Role.JurisdictionManager};
+            }
+
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
             var viewData = new EditRolesViewData(rolesAsSelectListItems);
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);
@@ -214,14 +225,14 @@ namespace Neptune.Web.Controllers
         public PartialViewResult EditJurisdiction(PersonPrimaryKey personPrimaryKey)
         {
             var person = personPrimaryKey.EntityObject;
-            var viewModel = new EditJurisdictionsViewModel(person, CurrentPerson);
+            var viewModel = new EditUserJurisdictionsViewModel(person, CurrentPerson);
             return ViewEditJurisdiction(viewModel);
         }
 
         [HttpPost]
         [UserEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditJurisdictionsViewModel viewModel)
+        public ActionResult EditJurisdiction(PersonPrimaryKey personPrimaryKey, EditUserJurisdictionsViewModel viewModel)
         {
             var person = personPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -235,13 +246,13 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-        private PartialViewResult ViewEditJurisdiction(EditJurisdictionsViewModel viewModel)
+        private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
             var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
 
-            var viewData = new EditJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
-            return RazorPartialView<EditJurisdictions, EditJurisdictionsViewData, EditJurisdictionsViewModel>(viewData, viewModel);
+            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
+            return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
 
         [JurisdictionManageFeature]
@@ -311,7 +322,20 @@ namespace Neptune.Web.Controllers
                 return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(existingUser)));
             }
 
+            var setJurisdictions = !CurrentPerson.IsAdministrator();
             var newUser = CreateNewFirmaPerson(keystoneUser, keystoneUser.OrganizationGuid);
+
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            if (setJurisdictions)
+            {
+                foreach (var stormwaterJurisdictionPerson in CurrentPerson.StormwaterJurisdictionPeople)
+                {
+                    newUser.StormwaterJurisdictionPeople.Add(new StormwaterJurisdictionPerson(stormwaterJurisdictionPerson.StormwaterJurisdictionID, newUser.PersonID));
+                }
+            }
+
+            newUser.RoleID = Role.JurisdictionEditor.RoleID;
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
