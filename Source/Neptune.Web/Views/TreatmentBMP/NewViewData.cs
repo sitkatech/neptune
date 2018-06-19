@@ -1,25 +1,4 @@
-﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewData.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
-
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
-
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*/
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -30,21 +9,24 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditViewData : NeptuneViewData
+    public class NewViewData : NeptuneViewData
     {
         public IEnumerable<SelectListItem> StormwaterJurisdictionSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPTypeSelectListItems { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
+        public Shared.Location.EditLocationViewData EditLocationViewData { get; }
 
-        public EditViewData(Person currentPerson,
+        public NewViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
-            List<Models.Organization> organizations)
+            List<Models.Organization> organizations,
+            Shared.Location.EditLocationViewData editLocationViewData)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
+            EditLocationViewData = editLocationViewData;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;
@@ -54,12 +36,12 @@ namespace Neptune.Web.Views.TreatmentBMP
                 SubEntityUrl = treatmentBMP.GetDetailUrl();
                 TreatmentBMP = treatmentBMP;
             }
-            PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+            PageTitle = $"New {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
             OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.DisplayName, "Same as the BMP Jurisdiction");
-            TreatmentBMPIndexUrl = treatmentBMPIndexUrl;  
+            TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
         }
     }
 }

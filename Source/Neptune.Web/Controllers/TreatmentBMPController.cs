@@ -90,32 +90,62 @@ namespace Neptune.Web.Controllers
         [JurisdictionEditFeature]
         public ViewResult New()
         {
-            var viewModel = new EditViewModel();
-            return ViewEdit(viewModel);
+            var viewModel = new NewViewModel();
+            return ViewNew(viewModel);
         }
 
         [HttpPost]
         [JurisdictionEditFeature]
-        public ActionResult New(EditViewModel viewModel)
+        public ActionResult New(NewViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewNew(viewModel);
             }
-            
-            var treatmentBMP = MakePlaceholderTreatmentBMP(viewModel, CurrentPerson);
+
+            var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
-            SetMessageForDisplay("Treatment BMP successfully saved.");
+            SetMessageForDisplay("Treatment BMP successfully created.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
-        private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel, Person currentPerson)
+        private ViewResult ViewNew(NewViewModel viewModel)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID, viewModel.StormwaterJurisdictionID, currentPerson.OrganizationID);
+            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID)
+                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID)
+                : null;
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions
+                .ToList()
+                .Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x))
+                .ToList();
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
+            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var boundingBox = treatmentBMP?.LocationPoint != null
+                ? new BoundingBox(treatmentBMP.LocationPoint)
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson =
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                {
+                    AllowFullScreen = false
+                };
+            var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP,
+                mapInitJson, "treatmentBMPLocation");
+
+            if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
+            {
+                stormwaterJurisdictions.Add(
+                    HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(viewModel.StormwaterJurisdictionID));
+                stormwaterJurisdictions = stormwaterJurisdictions.Distinct().ToList();
+            }
+
+            var viewData = new NewViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations, editLocationViewData);
+            return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -123,8 +153,7 @@ namespace Neptune.Web.Controllers
         public ViewResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
-            var viewModel = new EditViewModel(treatmentBMP, treatmentBMPLocationPoint);
+            var viewModel = new EditViewModel(treatmentBMP);
             return ViewEdit(viewModel);
         }
 
@@ -199,12 +228,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = true;
-            var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the '{treatmentBMP.TreatmentBMPName}' treatment BMP?"
-                : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPController>.BuildLinkFromExpression(x => x.Detail(treatmentBMP), "here"));
-
-            var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
+            var viewData = new ConfirmDialogFormViewData(
+                $"Are you sure you want to delete the '{treatmentBMP.TreatmentBMPName}' treatment BMP?", true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
@@ -240,7 +265,6 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var customAttributeTypePurpose = customAttributeTypePurposePrimaryKey.EntityObject;
-            var treatmentBMPLocationPoint = treatmentBMP.LocationPoint;
             var viewModel = new EditAttributesViewModel(treatmentBMP, customAttributeTypePurpose);
             return ViewEditAttributes(viewModel, treatmentBMP, customAttributeTypePurpose);
         }

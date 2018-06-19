@@ -170,7 +170,6 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewLocation(FieldVisit fieldVisit, LocationViewModel viewModel)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var mapFormID = "treatmentBMPLocation";
             var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
             var boundingBox = treatmentBMP?.LocationPoint != null
                 ? new BoundingBox(treatmentBMP.LocationPoint)
@@ -180,7 +179,7 @@ namespace Neptune.Web.Controllers
                 {
                     AllowFullScreen = false
                 };
-            var editLocationViewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
+            var editLocationViewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, "treatmentBMPLocation");
             var viewData = new LocationViewData(CurrentPerson, fieldVisit, editLocationViewData);
 
             return RazorView<Location, LocationViewData, LocationViewModel>(viewData, viewModel);

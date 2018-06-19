@@ -21,7 +21,7 @@
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.Models
-@inherits Neptune.Web.Views.TreatmentBMP.Edit
+@inherits Neptune.Web.Views.TreatmentBMP.New
 
 @section JavascriptAndStylesContent
 {
@@ -119,6 +119,12 @@
             </div>
         </div>
         <hr/>
+        <div class="row">
+            <div class="col-xs-12">
+                @{ Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped.EditLocationViewData, Model); }
+            </div>
+        </div>
+        <hr />
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-horizontal">
