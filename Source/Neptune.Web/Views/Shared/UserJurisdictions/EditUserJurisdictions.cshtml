@@ -50,10 +50,8 @@ Source code is available upon request via <support@sitkatech.com>.
 
 <div id="EditUserJurisdictionsApp" ng-controller="EditUserJurisdictionsController">
     <p>Use this form to set a user's assigned Jurisdictions. You can assign a user to many Jurisdictions. Normal Users can create, assess and manage BMPs within the jurisdictions asssigned below. </p>
-    @if (!string.IsNullOrWhiteSpace(ViewDataTyped.SubmitUrl))
+    @using (ViewDataTyped.Standalone ? Html.BeginForm() : null)
     {
-        @:<form action="@ViewDataTyped.SubmitUrl" method="post">
-    }
         <div class="form-group">
             <label class="control-label">Jurisdiction to Add:</label>
             <div class="input-group">
@@ -95,8 +93,5 @@ Source code is available upon request via <support@sitkatech.com>.
             </tr>
         </table>
         @Html.HiddenFor(m => m.PersonID)
-    @if (!string.IsNullOrWhiteSpace(ViewDataTyped.SubmitUrl))
-    {
-        @:</form>
     }
 </div>

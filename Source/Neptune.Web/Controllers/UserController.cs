@@ -242,7 +242,7 @@ namespace Neptune.Web.Controllers
             var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
             var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
 
-            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, SitkaRoute<UserController>.BuildUrlFromExpression(x => x.EditJurisdiction(personPrimaryKey)));
+            var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
         }
 

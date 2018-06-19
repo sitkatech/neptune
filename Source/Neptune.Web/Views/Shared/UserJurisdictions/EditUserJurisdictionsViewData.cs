@@ -32,20 +32,13 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         
         public EditViewDataForAngular ViewDataForAngular { get; }
 
-        public string SubmitUrl { get; }
+        public bool Standalone { get; }
 
-        /// <summary>
-        /// Leave submitUrl blank if EditUserJurisdictions is being rendered inside a larger form.
-        /// </summary>
-        /// <param name="currentPerson"></param>
-        /// <param name="allStormwaterJurisdictions"></param>
-        /// <param name="stormwaterJurisdictionsCurrentPersonCanManage"></param>
-        /// <param name="submitUrl"></param>
-        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, string submitUrl)
+        public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
             : base(currentPerson, StormwaterBreadCrumbEntity.Users)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
-            SubmitUrl = submitUrl;
+            Standalone = standalone;
         }
 
         public class EditViewDataForAngular
