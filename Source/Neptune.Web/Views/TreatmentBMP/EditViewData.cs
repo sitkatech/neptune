@@ -55,7 +55,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             SubEntityUrl = treatmentBMP?.GetDetailUrl();
             TreatmentBMP = treatmentBMP;
 
-            PageTitle = $"{(treatmentBMP != null ? "Edit" : "New")} {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+            PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
                 .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),

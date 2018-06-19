@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.Shared.Location
         {
         }
 
-        public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
+        public virtual void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
             // note that these nullables will never be null due to the Required attribute
             treatmentBMP.LocationPoint = DbSpatialHelper.MakeDbGeometryFromCoordinates(TreatmentBMPPointX.GetValueOrDefault(), TreatmentBMPPointY.GetValueOrDefault(), MapInitJson.CoordinateSystemId);

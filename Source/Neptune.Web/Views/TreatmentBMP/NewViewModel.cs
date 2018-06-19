@@ -1,25 +1,4 @@
-﻿/*-----------------------------------------------------------------------
-<copyright file="EditViewModel.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
-
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
-
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*/
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,7 +9,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
-    public class EditViewModel : FormViewModel, IValidatableObject
+    public class NewViewModel : EditLocationViewModel, IValidatableObject
     {
         public int TreatmentBMPID { get; set; }
 
@@ -41,11 +20,11 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         [Required]
         [FieldDefinitionDisplay(FieldDefinitionEnum.Jurisdiction)]
-        public int? StormwaterJurisdictionID { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
 
         [Required(ErrorMessage = "Choose a BMP Type")]
         [FieldDefinitionDisplay(FieldDefinitionEnum.TreatmentBMPType)]
-        public int? TreatmentBMPTypeID { get; set; }
+        public int TreatmentBMPTypeID { get; set; }
 
         [DisplayName("Notes")]
         [StringLength(Models.TreatmentBMP.FieldLengths.Notes)]
@@ -68,11 +47,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public EditViewModel()
+        public NewViewModel()
         {
         }
 
-        public EditViewModel(Models.TreatmentBMP treatmentBMP)
+        public NewViewModel(Models.TreatmentBMP treatmentBMP)
         {
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             TreatmentBMPName = treatmentBMP.TreatmentBMPName;
@@ -85,29 +64,29 @@ namespace Neptune.Web.Views.TreatmentBMP
             WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlanID;
         }
 
-        public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
+        public override void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
         {
+            base.UpdateModel(treatmentBMP, currentPerson);
+
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {
-                treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID;
-                treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID ?? ModelObjectHelpers.NotYetAssignedID;
+                treatmentBMP.StormwaterJurisdictionID = StormwaterJurisdictionID;
+                treatmentBMP.TreatmentBMPTypeID = TreatmentBMPTypeID;
 
-                var treatmentBMPTypeAssessmentObservationTypes =
-                    HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x =>
-                        x.TreatmentBMPTypeID == TreatmentBMPTypeID).TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
-                        x.TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold &&
-                        x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue);
-                foreach (var a in treatmentBMPTypeAssessmentObservationTypes)
+                var treatmentBmpType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x =>
+                    x.TreatmentBMPTypeID == TreatmentBMPTypeID);
+                foreach (var a in treatmentBmpType.TreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold && x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue))
                 {
-                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(new Models.TreatmentBMPBenchmarkAndThreshold(treatmentBMP,
-                        a, HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x =>
-                            x.TreatmentBMPTypeID == TreatmentBMPTypeID),
-                        a.TreatmentBMPAssessmentObservationType,
-                        a.DefaultBenchmarkValue ?? 0,
-                        a.DefaultThresholdValue ?? 0));
+                    var treatmentBmpBenchmarkAndThreshold =
+                        new Models.TreatmentBMPBenchmarkAndThreshold(treatmentBMP,
+                            a, treatmentBmpType,
+                            a.TreatmentBMPAssessmentObservationType,
+                            a.DefaultBenchmarkValue ?? 0,
+                            a.DefaultThresholdValue ?? 0);
+                    treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Add(treatmentBmpBenchmarkAndThreshold);
                 }
             }
 
@@ -123,7 +102,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                         .StormwaterJurisdictionID);
                 treatmentBMP.OwnerOrganizationID = stormwaterJurisdiction.OrganizationID;
             }
-            
+
             treatmentBMP.YearBuilt = YearBuilt;
             treatmentBMP.WaterQualityManagementPlanID = WaterQualityManagementPlanID;
         }
@@ -133,7 +112,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             var treatmentBmPsWithSameName = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => x.TreatmentBMPName == TreatmentBMPName);
             if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
             {
-                yield return new SitkaValidationResult<EditViewModel, string>("A BMP with this name already exists.", x => x.TreatmentBMPName);
+                yield return new SitkaValidationResult<NewViewModel, string>("A BMP with this name already exists.", x => x.TreatmentBMPName);
             }
         }
     }

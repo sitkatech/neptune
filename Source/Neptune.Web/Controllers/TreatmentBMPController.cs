@@ -92,34 +92,66 @@ namespace Neptune.Web.Controllers
         [JurisdictionEditFeature]
         public ViewResult New()
         {
-            var viewModel = new EditViewModel();
-            return ViewEdit(viewModel);
+            var viewModel = new NewViewModel();
+            return ViewNew(viewModel);
         }
 
         [HttpPost]
         [JurisdictionEditFeature]
-        public ActionResult New(EditViewModel viewModel)
+        public ActionResult New(NewViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel);
+                return ViewNew(viewModel);
             }
-            
-            var treatmentBMP = MakePlaceholderTreatmentBMP(viewModel, CurrentPerson);
+
+            var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
-            SetMessageForDisplay("Treatment BMP successfully saved.");
+            SetMessageForDisplay("Treatment BMP successfully created.");
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
 
-        private static TreatmentBMP MakePlaceholderTreatmentBMP(EditViewModel viewModel, Person currentPerson)
+        private ViewResult ViewNew(NewViewModel viewModel)
         {
-            return new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID ?? ModelObjectHelpers.NotYetAssignedID,
-                viewModel.StormwaterJurisdictionID ?? ModelObjectHelpers.NotYetAssignedID,
-                currentPerson.OrganizationID);
+            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID)
+                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID)
+                : null;
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions
+                .ToList()
+                .Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x))
+                .ToList();
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
+            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var boundingBox = treatmentBMP?.LocationPoint != null
+                ? new BoundingBox(treatmentBMP.LocationPoint)
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            var mapInitJson =
+                new MapInitJson($"BMP_{CurrentPerson.PersonID}_EditBMP", 10, layerGeoJsons, boundingBox, false)
+                {
+                    AllowFullScreen = false
+                };
+            var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP,
+                mapInitJson, "treatmentBMPLocation");
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Where(x => x.StormwaterJurisdictionID == treatmentBMP.StormwaterJurisdictionID)
+                .ToList();
+
+            if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
+            {
+                stormwaterJurisdictions.Add(
+                    HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(viewModel.StormwaterJurisdictionID));
+                stormwaterJurisdictions = stormwaterJurisdictions.Distinct().ToList();
+            }
+
+            var viewData = new NewViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
+                organizations, editLocationViewData, waterQualityManagementPlans);
+            return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -151,11 +183,18 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEdit(EditViewModel viewModel)
         {
-            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID) ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID) : null;
-            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
+            var treatmentBMP = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPID)
+                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(viewModel.TreatmentBMPID)
+                : null;
+            var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions
+                .ToList()
+                .Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x))
+                .ToList();
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToList();
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList();
-            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Where(x => x.StormwaterJurisdictionID == treatmentBMP.StormwaterJurisdictionID).ToList();
+            var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
+                .Where(x => x.StormwaterJurisdictionID == treatmentBMP.StormwaterJurisdictionID)
+                .ToList();
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
             {
@@ -168,7 +207,8 @@ namespace Neptune.Web.Controllers
                 }
             }
 
-            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes, organizations, waterQualityManagementPlans);
+            var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
+                organizations, waterQualityManagementPlans);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

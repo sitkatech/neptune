@@ -21,10 +21,9 @@
 @using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.FieldVisit
 @using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.Shared.Location
 
 @inherits Location
-
-
 
 @section JavascriptAndStylesContent
 {
@@ -34,13 +33,11 @@
     <link href="@Url.Content("~/Content/leaflet/leaflet.legend/leaflet-legend.css")" rel="stylesheet" type="text/css" />
 }
 
-@{
-    @SetLayout("SiteLayout.cshtml", ViewDataTyped)
-}
+@{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 
 @using (Html.BeginForm())
 {
-    Neptune.Web.Views.Shared.Location.EditLocation.RenderPartialView(Html, ViewDataTyped.EditLocationViewData, Model);
+    EditLocation.RenderPartialView(Html, ViewDataTyped.EditLocationViewData, Model);
     <hr/>
     <div class="row">
         <div class="col-xs-12 col-sm-2">
