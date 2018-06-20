@@ -13,7 +13,7 @@ namespace Neptune.Web.Models
     {
         public abstract bool ValidateObservationTypeJson(string json);
         public abstract List<ValidationResult> ValidateObservationType(string json);
-        public abstract bool ValidateObservationDataJson(string json);
+        public abstract List<ValidationResult> ValidateObservationDataJson(string json);
 
         public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
         public abstract string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
@@ -61,18 +61,28 @@ namespace Neptune.Web.Models
             return validationErrors;
         }
 
-        public override bool ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(string json)
         {
+            var validationResults = new List<ValidationResult>();
             try
             {
                 var schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
+                if (!(schema.SingleValueObservations.Count > 0))
+                {
+                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
+                }
+
+                if (schema.SingleValueObservations.Any(x=>x.ObservationValue == null))
+                {
+                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
+                }
             }
             catch (Exception)
             {
-                return false;
+                validationResults.Add(new ValidationResult("Schema invalid"));
             }
 
-            return true;
+            return validationResults;
         }
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
@@ -149,18 +159,28 @@ namespace Neptune.Web.Models
             return validationErrors;
         }
 
-        public override bool ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(string json)
         {
+            var validationResults = new List<ValidationResult>();
             try
             {
                 var schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
+                if (!(schema.SingleValueObservations.Count > 0))
+                {
+                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
+                }
+
+                if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
+                {
+                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
+                }
             }
             catch (Exception)
             {
-                return false;
+                validationResults.Add(new ValidationResult("Schema invalid"));
             }
 
-            return true;
+            return validationResults;
         }
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
@@ -216,19 +236,19 @@ namespace Neptune.Web.Models
             return validationErrors;
         }
 
-        public override bool ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(string json)
         {
-
+            var validationResults = new List<ValidationResult>();
             try
             {
                 var schema = JsonConvert.DeserializeObject<PassFailObservationSchema>(json);
             }
             catch (Exception)
             {
-                return false;
+                validationResults.Add(new ValidationResult("Schema invalid"));
             }
 
-            return true;
+            return validationResults;
         }
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
@@ -295,19 +315,28 @@ namespace Neptune.Web.Models
 
             return validationErrors;
         }
-
-        public override bool ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(string json)
         {
+            var validationResults = new List<ValidationResult>();
             try
             {
-                var schema = JsonConvert.DeserializeObject<PercentageObservationSchema>(json);
+                var schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
+                if (!(schema.SingleValueObservations.Count > 0))
+                {
+                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
+                }
+
+                if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
+                {
+                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
+                }
             }
             catch (Exception)
             {
-                return false;
+                validationResults.Add(new ValidationResult("Schema invalid"));
             }
 
-            return true;
+            return validationResults;
         }
 
         public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

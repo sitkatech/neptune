@@ -22,13 +22,11 @@ namespace Neptune.Web.Models
         public string MaintenanceRecordStatus()
         {
             var completedObservationCount =
-                MaintenanceRecordObservations.Count(x => x.CustomAttributeType.IsRequired && IsObservationComplete(x));
+                MaintenanceRecordObservations.Count(IsObservationComplete);
             var totalObservationCount =
-                MaintenanceRecordObservations.Count(x => x.CustomAttributeType.IsRequired);
+                MaintenanceRecordObservations.Count;
 
-            return !IsMissingRequiredAttributes
-                ? "All Required Data Provided"
-                : $"In Progress ({completedObservationCount} of {totalObservationCount} required observations complete)";
+            return $"{completedObservationCount} of {totalObservationCount} observations provided";
         }
     }
 }
