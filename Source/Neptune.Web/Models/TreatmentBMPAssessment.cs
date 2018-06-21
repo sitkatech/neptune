@@ -146,5 +146,16 @@ namespace Neptune.Web.Models
         {
             return FieldVisitWhereYouAreThePostMaintenanceAssessment != null;
         }
+
+        public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType observationType)
+        {
+            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .Select(x => x.TreatmentBMPAssessmentObservationType).Contains(observationType))
+                return "N/A";
+            return TreatmentBMPObservations?.SingleOrDefault(y =>
+                           y.TreatmentBMPAssessmentObservationTypeID ==
+                           observationType.TreatmentBMPAssessmentObservationTypeID)?.CalculateObservationValue()
+                       ?.ToString() ?? "Not Provided";
+        }
     }
 }
