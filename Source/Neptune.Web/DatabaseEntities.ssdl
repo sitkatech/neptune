@@ -24,6 +24,7 @@
     <EntitySet Name="Notification" EntityType="Neptune.Web.Models.Store.Notification" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Organization" EntityType="Neptune.Web.Models.Store.Organization" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.Store.OrganizationType" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Parcel" EntityType="Neptune.Web.Models.Store.Parcel" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Person" EntityType="Neptune.Web.Models.Store.Person" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.Store.StateProvince" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StormwaterJurisdiction" EntityType="Neptune.Web.Models.Store.StormwaterJurisdiction" store:Type="Tables" Schema="dbo" />
@@ -639,6 +640,20 @@ warning 6035: The relationship 'FK_Organization_OrganizationType_OrganizationTyp
     <Property Name="LegendColor" Type="varchar" Nullable="false" MaxLength="10" />
     <Property Name="IsDefaultOrganizationType" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Parcel">
+    <Key>
+      <PropertyRef Name="ParcelID" />
+    </Key>
+    <Property Name="ParcelID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="ParcelNumber" Type="varchar" Nullable="false" MaxLength="22" />
+    <Property Name="ParcelGeometry" Type="geometry" Nullable="false" />
+    <Property Name="OwnerName" Type="varchar" MaxLength="100" />
+    <Property Name="ParcelStreetNumber" Type="varchar" MaxLength="10" />
+    <Property Name="ParcelAddress" Type="varchar" MaxLength="150" />
+    <Property Name="ParcelZipCode" Type="varchar" MaxLength="5" />
+    <Property Name="LandUse" Type="varchar" MaxLength="4" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_AuditLog_Person_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_FieldVisit_Person_PerformedByPersonID_TenantID_PersonID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
@@ -948,6 +963,9 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
     <Property Name="Description" Type="varchar" MaxLength="1000" />
     <Property Name="UploadDate" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Neptune.dbo.vGeoServerParcel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+-->
   <Association Name="FK_AuditLog_Person_PersonID">
     <End Role="Person" Type="Neptune.Web.Models.Store.Person" Multiplicity="1" />
     <End Role="AuditLogs" Type="Neptune.Web.Models.Store.AuditLog" Multiplicity="*" />

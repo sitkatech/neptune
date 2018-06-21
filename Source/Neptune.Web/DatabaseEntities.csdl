@@ -24,6 +24,7 @@
     <EntitySet Name="Notification" EntityType="Neptune.Web.Models.Notification" />
     <EntitySet Name="Organization" EntityType="Neptune.Web.Models.Organization" />
     <EntitySet Name="OrganizationType" EntityType="Neptune.Web.Models.OrganizationType" />
+    <EntitySet Name="Parcel" EntityType="Neptune.Web.Models.Parcel" />
     <EntitySet Name="Person" EntityType="Neptune.Web.Models.Person" />
     <EntitySet Name="StateProvince" EntityType="Neptune.Web.Models.StateProvince" />
     <EntitySet Name="StormwaterJurisdiction" EntityType="Neptune.Web.Models.StormwaterJurisdiction" />
@@ -651,6 +652,20 @@
     <Property Name="LegendColor" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
     <Property Name="IsDefaultOrganizationType" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Organizations" Relationship="Neptune.Web.Models.FK_Organization_OrganizationType_OrganizationTypeID" FromRole="OrganizationType" ToRole="Organizations" />
+  </EntityType>
+  <EntityType Name="Parcel">
+    <Key>
+      <PropertyRef Name="ParcelID" />
+    </Key>
+    <Property Name="ParcelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="Int32" Nullable="false" />
+    <Property Name="ParcelNumber" Type="String" Nullable="false" MaxLength="22" Unicode="false" FixedLength="false" />
+    <Property Name="ParcelGeometry" Type="Geometry" Nullable="false" />
+    <Property Name="OwnerName" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="ParcelStreetNumber" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+    <Property Name="ParcelAddress" Type="String" MaxLength="150" Unicode="false" FixedLength="false" />
+    <Property Name="ParcelZipCode" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+    <Property Name="LandUse" Type="String" MaxLength="4" Unicode="false" FixedLength="false" />
   </EntityType>
   <EntityType Name="Person">
     <Key>

@@ -282,6 +282,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Parcel">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.Parcel">
+        <MappingFragment StoreEntitySet="Parcel">
+          <ScalarProperty Name="ParcelID" ColumnName="ParcelID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="ParcelNumber" ColumnName="ParcelNumber" />
+          <ScalarProperty Name="ParcelGeometry" ColumnName="ParcelGeometry" />
+          <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+          <ScalarProperty Name="ParcelStreetNumber" ColumnName="ParcelStreetNumber" />
+          <ScalarProperty Name="ParcelAddress" ColumnName="ParcelAddress" />
+          <ScalarProperty Name="ParcelZipCode" ColumnName="ParcelZipCode" />
+          <ScalarProperty Name="LandUse" ColumnName="LandUse" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Person">
       <EntityTypeMapping TypeName="Neptune.Web.Models.Person">
         <MappingFragment StoreEntitySet="Person">

@@ -74,6 +74,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
         public virtual IQueryable<OrganizationType> OrganizationTypes { get { return AllOrganizationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<Parcel> AllParcels { get; set; }
+        public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
@@ -280,6 +282,9 @@ namespace Neptune.Web.Models
 
                 case "OrganizationType":
                     return OrganizationTypes.GetOrganizationType(primaryKey);
+
+                case "Parcel":
+                    return Parcels.GetParcel(primaryKey);
 
                 case "Person":
                     return People.GetPerson(primaryKey);
