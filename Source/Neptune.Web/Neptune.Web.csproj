@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -225,6 +226,9 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUse.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUsePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcel.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcel.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcelPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriority.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
@@ -238,6 +242,8 @@
     <Compile Include="Views\Parcel\SummaryForMap.cs" />
     <Compile Include="Views\Parcel\SummaryForMapViewData.cs" />
     <Compile Include="Views\Shared\UserJurisdictions\EditUserJurisdictions.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcelsViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcelsViewModel.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmps.cs" />
     <Compile Include="Security\WaterQualityManagementPlanCreateFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDocumentManageFeature.cs" />
@@ -1190,6 +1196,7 @@
     <Content Include="Views\TreatmentBMP\New.cshtml" />
     <Content Include="Views\Parcel\Index.cshtml" />
     <Content Include="Views\Parcel\SummaryForMap.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

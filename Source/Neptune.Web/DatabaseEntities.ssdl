@@ -44,6 +44,7 @@
     <EntitySet Name="TreatmentBMPTypeCustomAttributeType" EntityType="Neptune.Web.Models.Store.TreatmentBMPTypeCustomAttributeType" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WaterQualityManagementPlan" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlan" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WaterQualityManagementPlanDocument" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanDocument" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WaterQualityManagementPlanParcel" EntityType="Neptune.Web.Models.Store.WaterQualityManagementPlanParcel" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_AuditLog_Person_PersonID" Association="Neptune.Web.Models.Store.FK_AuditLog_Person_PersonID">
       <End Role="Person" EntitySet="Person" />
       <End Role="AuditLogs" EntitySet="AuditLog" />
@@ -331,6 +332,14 @@
     <AssociationSet Name="FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID">
       <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
       <End Role="WaterQualityManagementPlanDocuments" EntitySet="WaterQualityManagementPlanDocument" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanParcel_Parcel_ParcelID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanParcel_Parcel_ParcelID">
+      <End Role="Parcel" EntitySet="Parcel" />
+      <End Role="WaterQualityManagementPlanParcels" EntitySet="WaterQualityManagementPlanParcel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WaterQualityManagementPlanParcel_WaterQualityManagementPlan_WaterQualityManagementPlanID" Association="Neptune.Web.Models.Store.FK_WaterQualityManagementPlanParcel_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+      <End Role="WaterQualityManagementPlan" EntitySet="WaterQualityManagementPlan" />
+      <End Role="WaterQualityManagementPlanParcels" EntitySet="WaterQualityManagementPlanParcel" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="AuditLog">
@@ -640,6 +649,9 @@ warning 6035: The relationship 'FK_Organization_OrganizationType_OrganizationTyp
     <Property Name="LegendColor" Type="varchar" Nullable="false" MaxLength="10" />
     <Property Name="IsDefaultOrganizationType" Type="bit" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_WaterQualityManagementPlanParcel_Parcel_ParcelID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+-->
   <EntityType Name="Parcel">
     <Key>
       <PropertyRef Name="ParcelID" />
@@ -928,6 +940,7 @@ warning 6035: The relationship 'FK_MaintenanceRecordObservation_TreatmentBMPType
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+warning 6035: The relationship 'FK_WaterQualityManagementPlanParcel_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
 -->
   <EntityType Name="WaterQualityManagementPlan">
     <Key>
@@ -962,6 +975,15 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlanDocument_WaterQuali
     <Property Name="DisplayName" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="Description" Type="varchar" MaxLength="1000" />
     <Property Name="UploadDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WaterQualityManagementPlanParcel">
+    <Key>
+      <PropertyRef Name="WaterQualityManagementPlanParcelID" />
+    </Key>
+    <Property Name="WaterQualityManagementPlanParcelID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="TenantID" Type="int" Nullable="false" />
+    <Property Name="WaterQualityManagementPlanID" Type="int" Nullable="false" />
+    <Property Name="ParcelID" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'Neptune.dbo.vGeoServerParcel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -1826,6 +1848,30 @@ warning 6002: The table/view 'Neptune.dbo.vGeoServerParcel' does not have a prim
         <PropertyRef Name="WaterQualityManagementPlanID" />
       </Principal>
       <Dependent Role="WaterQualityManagementPlanDocuments">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlanParcel_Parcel_ParcelID">
+    <End Role="Parcel" Type="Neptune.Web.Models.Store.Parcel" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanParcels" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanParcel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parcel">
+        <PropertyRef Name="ParcelID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanParcels">
+        <PropertyRef Name="ParcelID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WaterQualityManagementPlanParcel_WaterQualityManagementPlan_WaterQualityManagementPlanID">
+    <End Role="WaterQualityManagementPlan" Type="Neptune.Web.Models.Store.WaterQualityManagementPlan" Multiplicity="1" />
+    <End Role="WaterQualityManagementPlanParcels" Type="Neptune.Web.Models.Store.WaterQualityManagementPlanParcel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WaterQualityManagementPlan">
+        <PropertyRef Name="WaterQualityManagementPlanID" />
+      </Principal>
+      <Dependent Role="WaterQualityManagementPlanParcels">
         <PropertyRef Name="WaterQualityManagementPlanID" />
       </Dependent>
     </ReferentialConstraint>

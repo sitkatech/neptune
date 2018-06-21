@@ -561,5 +561,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="WaterQualityManagementPlanParcel">
+      <EntityTypeMapping TypeName="Neptune.Web.Models.WaterQualityManagementPlanParcel">
+        <MappingFragment StoreEntitySet="WaterQualityManagementPlanParcel">
+          <ScalarProperty Name="WaterQualityManagementPlanParcelID" ColumnName="WaterQualityManagementPlanParcelID" />
+          <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+          <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
+          <ScalarProperty Name="ParcelID" ColumnName="ParcelID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

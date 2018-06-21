@@ -57,6 +57,7 @@ namespace Neptune.Web.Controllers
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
         }
 
+        #region CRUD Water Quality Management Plan
         [HttpGet]
         [WaterQualityManagementPlanCreateFeature]
         public PartialViewResult New()
@@ -165,6 +166,9 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        #endregion
+
+        #region WQMP Treatment BMPs
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]
         public PartialViewResult EditWqmpTreatmentBmps(
@@ -204,5 +208,38 @@ namespace Neptune.Web.Controllers
                 EditWqmpTreatmentBmpsViewData,
                 EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
         }
+
+        #endregion
+
+        #region WQMP Parcels
+
+        public ViewResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpParcelsViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
+        }
+
+        public ActionResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan);
+            SetMessageForDisplay(""); // TODO set message for displaty
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
+        }
+
+        private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
+        {
+            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan);
+            return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
+        }
+
+        #endregion
     }
 }

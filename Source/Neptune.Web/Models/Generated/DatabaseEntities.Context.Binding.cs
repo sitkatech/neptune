@@ -112,6 +112,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlanDocument> AllWaterQualityManagementPlanDocuments { get; set; }
         public virtual IQueryable<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get { return AllWaterQualityManagementPlanDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanParcel> AllWaterQualityManagementPlanParcels { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get { return AllWaterQualityManagementPlanParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlan> AllWaterQualityManagementPlans { get; set; }
         public virtual IQueryable<WaterQualityManagementPlan> WaterQualityManagementPlans { get { return AllWaterQualityManagementPlans.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
@@ -369,6 +371,9 @@ namespace Neptune.Web.Models
                     var waterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanLandUse, "WaterQualityManagementPlanLandUse", primaryKey);
                     return waterQualityManagementPlanLandUse;
+
+                case "WaterQualityManagementPlanParcel":
+                    return WaterQualityManagementPlanParcels.GetWaterQualityManagementPlanParcel(primaryKey);
 
                 case "WaterQualityManagementPlanPriority":
                     var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
