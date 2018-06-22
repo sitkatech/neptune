@@ -24,19 +24,18 @@ using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
     public class TreatmentBMPGridSpec : GridSpec<Models.TreatmentBMP>
     {
-        public TreatmentBMPGridSpec(Person currentPerson)
+        public TreatmentBMPGridSpec(Person currentPerson, bool showDelete, bool showEdit)
         {
-            if (new JurisdictionManageFeature().HasPermissionByPerson(currentPerson))
+            if (showDelete)
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             }
-            if (new JurisdictionEditFeature().HasPermissionByPerson(currentPerson))
+            if (showEdit)
             {
                 Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.CanEdit(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             }

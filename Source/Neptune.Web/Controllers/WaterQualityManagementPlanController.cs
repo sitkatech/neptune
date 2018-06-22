@@ -39,11 +39,40 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
-            var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, new List<LayerGeoJson>(),
-                BoundingBox.MakeNewDefaultBoundingBox());
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson);
+            var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
+                .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
+            var treatmentBmpGeoJsonFeatureCollection =
+                waterQualityManagementPlan.TreatmentBMPs.ToGeoJsonFeatureCollection();
+            treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
+            {
+                var treatmentBmpID = x.Properties.ContainsKey("TreatmentBMPID")
+                    ? int.Parse(x.Properties["TreatmentBMPID"].ToString())
+                    : (int?) null;
+                if (treatmentBmpID != null)
+                {
+                    x.Properties.Add("PopupUrl", SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.MapPopup(treatmentBmpID)));
+                }
+            });
+
+            var layerGeoJsons = new List<LayerGeoJson>
+            {
+                new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
+                    parcelGeoJsonFeatureCollection,
+                    ParcelModelExtensions.ParcelColor,
+                    1,
+                    LayerInitialVisibility.Show),
+                new LayerGeoJson(FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
+                    treatmentBmpGeoJsonFeatureCollection,
+                    "#935f59",
+                    1,
+                    LayerInitialVisibility.Show)
+            };
+            var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
+                BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
+
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -53,10 +82,22 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var treatmentBmPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
         }
 
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
+            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList();
+            var gridSpec = new ParcelGridSpec();
+            return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
+        }
+
+
+        #region CRUD Water Quality Management Plan
         [HttpGet]
         [WaterQualityManagementPlanCreateFeature]
         public PartialViewResult New()
@@ -165,6 +206,9 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        #endregion
+
+        #region WQMP Treatment BMPs
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]
         public PartialViewResult EditWqmpTreatmentBmps(
@@ -204,5 +248,47 @@ namespace Neptune.Web.Controllers
                 EditWqmpTreatmentBmpsViewData,
                 EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
         }
+
+        #endregion
+
+        #region WQMP Parcels
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpParcelsViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan);
+            SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}."); // TODO set message for displaty
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
+        }
+
+        private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
+        {
+            var tenantAttribute = HttpRequestStorage.Tenant.GetTenantAttribute();
+            var layerGeoJsons = MapInitJsonHelpers.GetParcelMapLayers(tenantAttribute, LayerInitialVisibility.Show)
+                .ToList();
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox());
+            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, tenantAttribute);
+            return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
+        }
+
+        #endregion
     }
 }

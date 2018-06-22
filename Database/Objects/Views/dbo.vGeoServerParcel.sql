@@ -4,5 +4,13 @@ go
 
 create view dbo.vGeoServerParcel
 as
-select ParcelID, ParcelNumber, ParcelGeometry, OwnerName, ParcelStreetNumber, ParcelAddress, ParcelZipCode, LandUse
+select
+	ParcelID,
+	ParcelNumber,
+	ParcelGeometry,
+	OwnerName,
+	ParcelStreetNumber,
+	ParcelAddress,
+	ParcelZipCode,
+	LandUse
 from dbo.Parcel

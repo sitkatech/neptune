@@ -170,7 +170,7 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewLocation(FieldVisit fieldVisit, LocationViewModel viewModel)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var layerGeoJsons = MapInitJson.GetJurisdictionMapLayers();
+            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
             var boundingBox = treatmentBMP?.LocationPoint != null
                 ? new BoundingBox(treatmentBMP.LocationPoint)
                 : BoundingBox.MakeNewDefaultBoundingBox();

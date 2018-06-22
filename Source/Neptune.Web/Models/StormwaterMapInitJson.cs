@@ -21,16 +21,19 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
     public class StormwaterMapInitJson : MapInitJson
     {
-        public StormwaterMapInitJson(string mapDivID) : base(mapDivID, DefaultZoomLevel, GetJurisdictionMapLayers(), BoundingBox.MakeNewDefaultBoundingBox())
+        public StormwaterMapInitJson(string mapDivID) : base(mapDivID, DefaultZoomLevel,
+            MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(), BoundingBox.MakeNewDefaultBoundingBox())
         {
         }
 
-        public StormwaterMapInitJson(string mapDivID, DbGeometry locationPoint) : base(mapDivID, DefaultZoomLevel, GetJurisdictionMapLayers(), new BoundingBox(locationPoint))
+        public StormwaterMapInitJson(string mapDivID, DbGeometry locationPoint) : base(mapDivID, DefaultZoomLevel,
+            MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(), new BoundingBox(locationPoint))
         {
         }
 

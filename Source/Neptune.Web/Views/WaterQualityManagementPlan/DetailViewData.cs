@@ -11,14 +11,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public bool CurrentPersonCanManageWaterQualityManagementPlans { get; }
         public string EditWaterQualityManagementPlanTreatmentBmpsUrl { get; }
+        public string EditWaterQualityManagementPlanParcelsUrl { get; }
         public string NewWaterQualityManagementPlanDocumentUrl { get; }
         public TreatmentBMPGridSpec TreatmentBmpGridSpec { get; }
         public string TreatmentBmpGridName { get; }
         public string TreatmentBmpGridDataUrl { get; }
         public MapInitJson MapInitJson { get; }
+        public ParcelGridSpec ParcelGridSpec { get; }
+        public string ParcelGridName { get; }
+        public string ParcelGridDataUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
-            TreatmentBMPGridSpec treatmentBMPGridSpec, MapInitJson mapInitJson)
+            TreatmentBMPGridSpec treatmentBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -32,6 +36,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpTreatmentBmps(WaterQualityManagementPlan));
+            EditWaterQualityManagementPlanParcelsUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.EditWqmpParcels(WaterQualityManagementPlan));
             NewWaterQualityManagementPlanDocumentUrl =
                 SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(c =>
                     c.New(waterQualityManagementPlan));
@@ -40,6 +47,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.TreatmentBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
             MapInitJson = mapInitJson;
+            ParcelGridSpec = parcelGridSpec;
+            ParcelGridName = "parcelGrid";
+            ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
         }
     }
 }

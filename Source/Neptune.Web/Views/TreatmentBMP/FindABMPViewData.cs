@@ -31,6 +31,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class FindABMPViewData : NeptuneViewData
     {
+        public const int MaxNumberOfBmpsInList = 40;
+
         public TreatmentBMPGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
@@ -48,7 +50,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             PageTitle = "Find a BMP";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            GridSpec = new TreatmentBMPGridSpec(currentPerson) {ObjectNameSingular = "Treatment BMP", ObjectNamePlural = "Treatment BMPs", SaveFiltersInCookie = true};
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            GridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit)
+            {
+                ObjectNameSingular = "Treatment BMP",
+                ObjectNamePlural = "Treatment BMPs",
+                SaveFiltersInCookie = true
+            };
             GridName = "treatmentBMPsGrid";
             GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPGridJsonData());
 

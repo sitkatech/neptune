@@ -98,7 +98,7 @@ namespace Neptune.Web.Controllers
 
         private List<TreatmentBMP> GetJurisdictionTreatmentBMPsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction)
         {
-            gridSpec = new TreatmentBMPGridSpec(currentPerson);
+            gridSpec = new TreatmentBMPGridSpec(currentPerson, false, false);
             return
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
                     .Where(x => x.CanView(CurrentPerson))
