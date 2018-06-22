@@ -34,6 +34,7 @@ using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
+using Neptune.Web.KeystoneDataService;
 using Neptune.Web.Views.Shared.UserJurisdictions;
 using Organization = Neptune.Web.Models.Organization;
 
@@ -339,21 +340,50 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay($"{newUser.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to assign them a role</a>.");
+            SetMessageForDisplay(
+                $"{newUser.GetFullNameFirstLastAndOrgAsUrl()} successfully added. You may want to assign them a role</a>.");
             return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(newUser)));
         }
 
-        private static Person CreateNewFirmaPerson(KeystoneService.KeystoneUserClaims keystoneUser, Guid? organizationGuid)
+        private static Person CreateNewFirmaPerson(KeystoneService.KeystoneUserClaims keystoneUser,
+            Guid? organizationGuid)
         {
             Organization organization;
             if (organizationGuid.HasValue)
             {
-                organization = HttpRequestStorage.DatabaseEntities.Organizations.GetOrganizationByOrganizationGuid(organizationGuid.Value);
+                organization =
+                    HttpRequestStorage.DatabaseEntities.Organizations.GetOrganizationByOrganizationGuid(organizationGuid
+                        .Value);
+
+                if (organization == null)
+                {
+                    var keystoneClient = new KeystoneDataClient();
+
+
+                    var keystoneOrganization = keystoneClient.GetOrganization(organizationGuid.Value);
+
+
+                    var defaultOrganizationType =
+                        HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
+                    var neptuneOrganization =
+                        new Organization(keystoneOrganization.FullName, true, defaultOrganizationType)
+                        {
+                            OrganizationGuid = keystoneOrganization.OrganizationGuid,
+                            OrganizationShortName = keystoneOrganization.ShortName,
+                            OrganizationUrl = keystoneOrganization.URL
+                        };
+                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(neptuneOrganization);
+
+                    HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                    organization = neptuneOrganization;
+                }
             }
             else
             {
                 organization = HttpRequestStorage.DatabaseEntities.Organizations.GetUnknownOrganization();
             }
+
 
             var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
                 keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,

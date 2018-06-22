@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -28,10 +29,9 @@ namespace Neptune.Web.Models
         public readonly LayerGeoJson SearchableLayerGeoJson;
 
         public StormwaterSearchMapInitJson(string mapDivID, LayerGeoJson searchableLayerGeoJson)
-            : base(mapDivID, DefaultZoomLevel, GetJurisdictionMapLayers(), BoundingBox.MakeNewDefaultBoundingBox())
+            : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(), BoundingBox.MakeNewDefaultBoundingBox())
         {
             SearchableLayerGeoJson = searchableLayerGeoJson;
-
         }
 
         public StormwaterSearchMapInitJson(string mapDivID, int zoomLevel, List<LayerGeoJson> layers, BoundingBox boundingBox, LayerGeoJson searchableLayerGeoJson)
@@ -40,5 +40,4 @@ namespace Neptune.Web.Models
             SearchableLayerGeoJson = searchableLayerGeoJson;
         }
     }
-    
 }

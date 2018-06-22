@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected Parcel()
         {
-
+            this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -69,13 +69,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return WaterQualityManagementPlanParcels.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Parcel).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Parcel).Name, typeof(WaterQualityManagementPlanParcel).Name};
 
 
         /// <summary>
@@ -83,6 +83,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in WaterQualityManagementPlanParcels.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllParcels.Remove(this);                
         }
 
@@ -99,6 +104,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ParcelID; } set { ParcelID = value; } }
 
+        public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths

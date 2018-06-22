@@ -64,7 +64,7 @@ namespace Neptune.Web.Views.Jurisdiction
             JurisdictionModeledCatchmentsGridName = "jurisdictionModeledCatchmentGrid";
             JurisdictionModeledCatchmentsGridDataUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.JurisdictionModeledCatchmentGridJsonData(stormwaterJurisdiction));
 
-            TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson)
+            TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson, false, false)
             {
                 ObjectNameSingular = "Treatment BMP",
                 ObjectNamePlural = $"Treatment BMPs for {stormwaterJurisdiction.OrganizationDisplayName}",

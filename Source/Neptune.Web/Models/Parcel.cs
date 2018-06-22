@@ -1,4 +1,9 @@
-﻿namespace Neptune.Web.Models
+﻿using System.Web;
+using LtInfo.Common;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+
+namespace Neptune.Web.Models
 {
     public partial class Parcel : IAuditableEntity
     {
@@ -8,7 +13,6 @@
         }
 
         public string GetParcelAddress() => $"{ParcelAddress}, {ParcelZipCode}";
-
         public string AuditDescriptionString => ParcelNumber;
     }
 }
