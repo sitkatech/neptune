@@ -154,7 +154,7 @@ namespace Neptune.Web.Models
                 return "N/A";
             return TreatmentBMPObservations?.SingleOrDefault(y =>
                            y.TreatmentBMPAssessmentObservationTypeID ==
-                           observationType.TreatmentBMPAssessmentObservationTypeID)?.CalculateObservationValue()
+                           observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue()
                        ?.ToString() ?? "Not Provided";
         }
     }
