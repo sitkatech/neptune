@@ -274,7 +274,7 @@ from dbo.TreatmentBMP tb
 where tb.FromThisImport = 1 and tb.TrashAndDebrisStorageVolume is not null
 
 insert into dbo.CustomAttributeValue(TenantID, CustomAttributeID, AttributeValue)
-select tb.TenantID, ca.CustomAttributeID, tb.NumberOfConnectorPipeScreens
+select tb.TenantID, ca.CustomAttributeID, tb.TrashAndDebrisStorageVolume
 from dbo.TreatmentBMP tb
 join dbo.CustomAttribute ca on tb.TreatmentBMPID = ca.TreatmentBMPID and ca.CustomAttributeTypeID = 94
 where tb.FromThisImport = 1 and tb.TrashAndDebrisStorageVolume is not null
