@@ -272,6 +272,7 @@
     <Compile Include="Views\WaterQualityManagementPlan\New.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\ParcelGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanIndexGridSpec.cs" />
     <Compile Include="Models\WaterQualityManagementPlan.cs" />
     <Compile Include="Controllers\WaterQualityManagementPlanController.cs" />

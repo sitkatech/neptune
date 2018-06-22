@@ -71,7 +71,9 @@ namespace Neptune.Web.Controllers
 
         private List<TreatmentBMP> GetTreatmentBmpsAndGridSpec(out TreatmentBMPGridSpec gridSpec, Person currentPerson)
         {
-            gridSpec = new TreatmentBMPGridSpec(currentPerson);
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            gridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit);
             return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
@@ -376,6 +378,27 @@ namespace Neptune.Web.Controllers
             return new RedirectResult(
                 SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
                     x.Detail(treatmentBMPPrimaryKey)));
+        }
+
+        public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var properties = new Dictionary<string, string>
+            {
+                {"Name", treatmentBMP.GetDisplayNameAsUrl().ToString()},
+                {$"{FieldDefinition.Jurisdiction.GetFieldDefinitionLabel()}", treatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl().ToString()},
+                {"Type", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName},
+            };
+            var dl = new TagBuilder("dl")
+            {
+                InnerHtml = string.Join("", properties.Select(x =>
+                {
+                    var dt = new TagBuilder("dt") {InnerHtml = x.Key};
+                    var dd = new TagBuilder("dd") {InnerHtml = x.Value};
+                    return $"{dt}{dd}";
+                }).ToList())
+            };
+            return Content(dl.ToString());
         }
     }
 }

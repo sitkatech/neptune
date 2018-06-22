@@ -118,7 +118,17 @@
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Associated Parcels
+                Locations
+            </div>
+            <div class="panel-body">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Associated @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
@@ -129,33 +139,14 @@
                 }
             </div>
             <div class="panel-body">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
-                <p>
-                    <small>To zoom, hold down Shift and drag a rectangle.</small>
-                </p>
-                <p>
-                    <strong>Parcel Information</strong>
-                </p>
-                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanParcels.Any())
-                {
-                    <ul>
-                        @foreach (var wqmpParcel in ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanParcels)
-                        {
-                            <li>@wqmpParcel.Parcel.ParcelNumber</li>
-                        }
-                    </ul>
-                }
-                else
-                {
-                    <p>There are no @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized() associated with this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().</p>
-                }
+                @Html.DhtmlxGrid(ViewDataTyped.ParcelGridSpec, ViewDataTyped.ParcelGridName, ViewDataTyped.ParcelGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
             </div>
         </div>
     </div>
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Treatment BMPs
+                @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">

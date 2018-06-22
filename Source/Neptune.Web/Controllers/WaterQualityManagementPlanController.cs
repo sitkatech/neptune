@@ -39,12 +39,22 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
             var treatmentBmpGeoJsonFeatureCollection =
                 waterQualityManagementPlan.TreatmentBMPs.ToGeoJsonFeatureCollection();
+            treatmentBmpGeoJsonFeatureCollection.Features.ForEach(x =>
+            {
+                var treatmentBmpID = x.Properties.ContainsKey("TreatmentBMPID")
+                    ? int.Parse(x.Properties["TreatmentBMPID"].ToString())
+                    : (int?) null;
+                if (treatmentBmpID != null)
+                {
+                    x.Properties.Add("PopupUrl", SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.MapPopup(treatmentBmpID)));
+                }
+            });
 
             var layerGeoJsons = new List<LayerGeoJson>
             {
@@ -62,7 +72,7 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson);
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -72,9 +82,20 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var treatmentBmPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
+            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
         }
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
+            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList();
+            var gridSpec = new ParcelGridSpec();
+            return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
+        }
+
 
         #region CRUD Water Quality Management Plan
         [HttpGet]

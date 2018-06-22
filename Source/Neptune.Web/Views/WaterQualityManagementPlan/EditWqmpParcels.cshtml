@@ -75,7 +75,7 @@
                     <tr ng-repeat="parcelId in AngularModel.ParcelIDs">
                         <td>
                             <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}"/>
-                            <a ng-click="toggleParcel(parcelId)">
+                            <a ng-click="toggleParcel(parcelId); $event.preventDefault();" href="#">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </td>
