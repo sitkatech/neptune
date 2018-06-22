@@ -21,7 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 @using Neptune.Web.Views.Parcel
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common
-@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Index
@@ -75,20 +75,9 @@ Source code is available upon request via <support@sitkatech.com>.
             <hr/>
             <h4>Search Instructions</h4>
             <div>
-                <p>Only current active parcels will be found in this search. To search for historic/inactive parcels use the search bar in the top right of the Parcel Tracker.</p>
                 <p>
-                    When typing an address "Drive" will not show up in the search but "Dr" will instead.
-                </p>
-
-                <p>
-                    APN formats (include hyphens):
-                    <ul>
-                        <li>El Dorado/City of South Lake Tahoe: XXX-XXX-XX</li>
-                        <li>Placer: XXX-XXX-XXX</li>
-                        <li>Washoe: XXX-XXX-XX</li>
-                        <li>Douglas: XXXX-XX-XXX-XXX</li>
-                    </ul>
-                    Do not include trailing -100 or -000.
+                    Search for a @FieldDefinition.Parcel.GetFieldDefinitionLabel() by entering an APN or Address in the search box, or by zooming and clicking on the map.
+                    When a @FieldDefinition.Parcel.GetFieldDefinitionLabel() is selected additional information will display here.
                 </p>
             </div>
         </div>

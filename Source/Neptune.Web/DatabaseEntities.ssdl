@@ -768,6 +768,8 @@ warning 6035: The relationship 'FK_WaterQualityManagementPlan_StormwaterJurisdic
     <Property Name="ToolDisplayName" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="RecaptchaPublicKey" Type="varchar" MaxLength="100" />
     <Property Name="RecaptchaPrivateKey" Type="varchar" MaxLength="100" />
+    <Property Name="MapServiceUrl" Type="varchar" MaxLength="255" />
+    <Property Name="ParcelLayerName" Type="varchar" MaxLength="255" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_CustomAttribute_TreatmentBMP_TreatmentBMPID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.

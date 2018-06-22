@@ -72,7 +72,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(ModeledCatchmentPrimaryKey modeledCatchmentPrimaryKey)
         {
             var modeledCatchment = modeledCatchmentPrimaryKey.EntityObject;
-            var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", 1, MapInitJson.GetJurisdictionMapLayers(), new BoundingBox(modeledCatchment.ModeledCatchmentGeometry));
+            var layerGeoJsons = MapInitJsonHelpers.GetJurisdictionMapLayers().ToList();
+            var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", 1, layerGeoJsons, new BoundingBox(modeledCatchment.ModeledCatchmentGeometry));
 
             if (modeledCatchment.ModeledCatchmentGeometry != null)
             {

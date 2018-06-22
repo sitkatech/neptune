@@ -1,8 +1,104 @@
-﻿@using Neptune.Web.Views.WaterQualityManagementPlan
+﻿@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.WaterQualityManagementPlan
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 
 @inherits EditWqmpParcels
-    
-@using (Html.BeginForm())
-{
 
+@section JavascriptAndStylesContent {
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script type="text/javascript" src="@Url.Content("~/Views/WaterQualityManagementPlan/EditWqmpParcelsController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/typeahead/typeahead.min.js")"></script>
+    <script type="text/javascript">
+        // <![CDATA[
+        angular.module("NeptuneApp").factory("angularModelAndViewData", function() {
+            return {
+                AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
+                AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+            };
+        });
+        // ]]>
+    </script>
+    <style>
+        #@ViewDataTyped.ViewDataForAngular.MapInitJson.MapDivID {
+            height: 500px;
+            margin: 0;
+        }
+    </style>
 }
+
+@Html.ValidationSummary()
+
+<div class="row" ng-app="NeptuneApp" ng-controller="EditWqmpParcelsController">
+    <div class="col-xs-12">
+        <p>
+            Use the map or @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number (APN) search to associate @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized() with this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+            Clicking a @FieldDefinition.Parcel.GetFieldDefinitionLabel() or selecting it in the search box will add it this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+        </p>
+    </div>
+    <div class="col-xs-12 col-sm-8 col-sm-push-4">
+        <div id="mapContainer">
+            <div id="@ViewDataTyped.ViewDataForAngular.MapInitJson.MapDivID"></div>
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        <div class="col-xs-12 col-sm-4 col-sm-pull-8">
+            <div class="input-group" id="scrollable-dropdown-menu" style="margin-bottom: 10px;">
+                @* ReSharper disable once UnknownCssClass *@
+                <input type="text"
+                       id="@ViewDataTyped.ViewDataForAngular.TypeAheadInputId"
+                       class="typeahead form-control"
+                       placeholder="Search by @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number"
+                       autocomplete="off"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" id="@string.Format("{0}Button", ViewDataTyped.ViewDataForAngular.TypeAheadInputId)" ng-click="selectFirstSuggestionFunction()">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </span>
+            </div>
+            <div class="alert alert-warning" ng-if="!AngularModel.ParcelIDs || AngularModel.ParcelIDs.length < 1">
+                No @FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized() selected for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel().
+                Select a @FieldDefinition.Parcel.GetFieldDefinitionLabel().
+            </div>
+            <div ng-if="AngularModel.ParcelIDs.length >= 1">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>@FieldDefinition.Parcel.GetFieldDefinitionLabel() Number</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="parcelId in AngularModel.ParcelIDs">
+                        <td>
+                            <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}"/>
+                            <a ng-click="toggleParcel(parcelId)">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                        <td ng-bind="getParcelNumber(parcelId)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <hr/>
+        </div>
+        <div class="col-xs-12 col-sm-2">
+            <div>
+                @*<sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field*@
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <a href="@ViewDataTyped.SubEntityUrl" class="btn btn-neptune">
+                @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left")
+                Return to Detail
+            </a>
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+        </div>
+    }
+</div>

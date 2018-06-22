@@ -40,8 +40,27 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var gridSpec = new TreatmentBMPGridSpec(CurrentPerson);
-            var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, new List<LayerGeoJson>(),
-                BoundingBox.MakeNewDefaultBoundingBox());
+
+            var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
+                .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
+            var treatmentBmpGeoJsonFeatureCollection =
+                waterQualityManagementPlan.TreatmentBMPs.ToGeoJsonFeatureCollection();
+
+            var layerGeoJsons = new List<LayerGeoJson>
+            {
+                new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
+                    parcelGeoJsonFeatureCollection,
+                    ParcelModelExtensions.ParcelColor,
+                    1,
+                    LayerInitialVisibility.Show),
+                new LayerGeoJson(FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized(),
+                    treatmentBmpGeoJsonFeatureCollection,
+                    "#935f59",
+                    1,
+                    LayerInitialVisibility.Show)
+            };
+            var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
+                BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
             var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson);
             return RazorView<Detail, DetailViewData>(viewData);
@@ -213,6 +232,8 @@ namespace Neptune.Web.Controllers
 
         #region WQMP Parcels
 
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
         public ViewResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -220,6 +241,9 @@ namespace Neptune.Web.Controllers
             return ViewEditWqmpParcels(waterQualityManagementPlan, viewModel);
         }
 
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditWqmpParcels(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpParcelsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -229,14 +253,18 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModels(waterQualityManagementPlan);
-            SetMessageForDisplay(""); // TODO set message for displaty
+            SetMessageForDisplay($"Successfully edited {FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized()} for {FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}."); // TODO set message for displaty
 
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
         }
 
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
-            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan);
+            var tenantAttribute = HttpRequestStorage.Tenant.GetTenantAttribute();
+            var layerGeoJsons = MapInitJsonHelpers.GetParcelMapLayers(tenantAttribute, LayerInitialVisibility.Show)
+                .ToList();
+            var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox());
+            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, tenantAttribute);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }
 

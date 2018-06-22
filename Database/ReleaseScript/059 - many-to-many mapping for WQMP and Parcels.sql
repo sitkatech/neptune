@@ -15,3 +15,12 @@ create table dbo.WaterQualityManagementPlanParcel(
 	constraint FK_WaterQualityManagementPlanParcel_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID foreign key (WaterQualityManagementPlanID, TenantID) references dbo.WaterQualityManagementPlan(WaterQualityManagementPlanID, TenantID),
 	constraint FK_WaterQualityManagementPlanParcel_Parcel_ParcelID_TenantID foreign key (ParcelID, TenantID) references dbo.Parcel(ParcelID, TenantID)
 )
+
+alter table dbo.TenantAttribute add MapServiceUrl varchar(255) null
+alter table dbo.TenantAttribute add ParcelLayerName varchar(255) null
+
+go
+
+update dbo.TenantAttribute
+set
+	ParcelLayerName = 'OCStormwater:Parcels'

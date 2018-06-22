@@ -46,7 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
+    <Compile Include="Models\ParcelModelExtensions.cs" />
+    <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -234,6 +235,8 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
     <Compile Include="Models\Parcel.cs" />
     <Compile Include="Models\Parcel.DatabaseContextExtensions.cs" />
@@ -736,6 +739,7 @@
     <Content Include="Content\img\OCStormwater\ms-icon-150x150.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-310x310.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-70x70.png" />
+    <Content Include="Content\img\pin-s-marker+838383.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-57x57.png" />
@@ -1186,6 +1190,7 @@
     <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
     <Content Include="Views\User\Invite.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\Detail.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcelsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmpsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\Index.cshtml" />
     <Content Include="Views\WaterQualityManagementPlanDocument\New.cshtml" />
