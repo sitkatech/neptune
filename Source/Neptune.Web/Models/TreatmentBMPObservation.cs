@@ -20,8 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using LtInfo.Common.Views;
-using Neptune.Web.Common;
+using System.Globalization;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
@@ -50,6 +49,19 @@ namespace Neptune.Web.Models
         public double? CalculateObservationValue()
         {
             return TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData);
+        }
+
+        public string FormattedObservationValue()
+        {
+            var observationTypeCollectionMethod = TreatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod;
+            var observationValue = observationTypeCollectionMethod.GetObservationValueFromObservationData(ObservationData).GetValueOrDefault();
+
+            if (observationTypeCollectionMethod == ObservationTypeCollectionMethod.PassFail)
+            {
+                return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
+            }
+
+            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName}";
         }
 
         public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)

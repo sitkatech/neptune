@@ -29,7 +29,7 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
-            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes;
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
             var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords.ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
             var gridJsonNetJObjectResult =
