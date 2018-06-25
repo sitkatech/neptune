@@ -5,9 +5,9 @@ namespace Neptune.Web.Models
 {
     public partial class MaintenanceRecord
     {
-        public DateTime GetMaintenanceRecordDate {get {return FieldVisit.VisitDate; } } 
-        public Person GetMaintenanceRecordPerson => FieldVisit.PerformedByPerson;
-        public Organization GetMaintenanceRecordOrganization => FieldVisit.PerformedByPerson.Organization;
+        public DateTime? GetMaintenanceRecordDate => FieldVisit?.VisitDate;
+        public Person GetMaintenanceRecordPerson => FieldVisit?.PerformedByPerson;
+        public Organization GetMaintenanceRecordOrganization => FieldVisit?.PerformedByPerson.Organization;
 
         public bool IsMissingRequiredAttributes =>
             MaintenanceRecordObservations.Any(x =>

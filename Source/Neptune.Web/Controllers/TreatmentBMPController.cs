@@ -138,11 +138,12 @@ namespace Neptune.Web.Controllers
                 {
                     AllowFullScreen = false
                 };
-            var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP,
-                mapInitJson, "treatmentBMPLocation");
+            var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, "treatmentBMPLocation");
+            var treatmentBMPStormwaterJurisdictionIDs = treatmentBMP != null
+                ? new List<int>{treatmentBMP.StormwaterJurisdictionID}
+                : stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList(); // todo: UI needs to adapt to stormwater jurisdiction selected
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
-                .Where(x => x.StormwaterJurisdictionID == treatmentBMP.StormwaterJurisdictionID)
-                .ToList();
+                .Where(x => treatmentBMPStormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.StormwaterJurisdictionID))
             {

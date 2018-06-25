@@ -1,4 +1,5 @@
 using System.Linq;
+using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -22,8 +23,8 @@ namespace Neptune.Web.Views.MaintenanceRecord
             EntityUrl = treatmentBMPIndexUrl;
             SubEntityName = maintenanceRecord.TreatmentBMP.TreatmentBMPName;
             SubEntityUrl = maintenanceRecord.TreatmentBMP.GetDetailUrl();
-            PageTitle = maintenanceRecord.GetMaintenanceRecordDate.ToShortDateString();
-            EditUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditMaintenanceRecord(maintenanceRecord.FieldVisit));
+            PageTitle = maintenanceRecord.GetMaintenanceRecordDate.ToStringDate();
+            EditUrl = maintenanceRecord.FieldVisit != null ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditMaintenanceRecord(maintenanceRecord.FieldVisit)) : null;
             MaintenanceRecord = maintenanceRecord;
             CurrentPersonCanManage = new MaintenanceRecordManageFeature().HasPermissionByPerson(currentPerson);
             BMPTypeHasObservationTypes = maintenanceRecord.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
