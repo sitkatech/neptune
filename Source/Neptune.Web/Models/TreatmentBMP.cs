@@ -106,8 +106,7 @@ namespace Neptune.Web.Models
         {
             return !MaintenanceRecords.Any()
                 ? null
-                : (DateTime?) MaintenanceRecords.Select(x => x.GetMaintenanceRecordDate)
-                    .Max();
+                : (DateTime?) MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate);
         }
 
         public string CustomAttributeStatus()

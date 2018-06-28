@@ -24,7 +24,7 @@ namespace Neptune.Web.Views.FieldVisit
         public bool HasManagePermissions { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
-            IEnumerable<Models.CustomAttributeType> allCustomAttributeTypes, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
+            IEnumerable<Models.CustomAttributeType> maintenanceAttributeTypes, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldRecords, neptunePage)
         {
             PageTitle = "All Field Records";
@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.FieldVisit
             TreatmentBMPAssessmentGridDataUrl =
                 SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.TreatmentBMPAssessmentsGridJsonData());
 
-            MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(currentPerson, allCustomAttributeTypes)
+            MaintenanceRecordGridSpec = new MaintenanceRecordGridSpec(currentPerson, maintenanceAttributeTypes)
             {
                 ObjectNameSingular = "Maintenance Record",
                 ObjectNamePlural = "Maintenance Records",

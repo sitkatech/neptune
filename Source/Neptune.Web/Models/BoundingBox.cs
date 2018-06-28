@@ -207,7 +207,10 @@ namespace Neptune.Web.Models
 
         public static BoundingBox MakeBoundingBoxFromLayerGeoJsonList(List<LayerGeoJson> layerGeoJsons)
         {
-            return !layerGeoJsons.Any() ? MakeNewDefaultBoundingBox() : new BoundingBox(layerGeoJsons.Select(x => MakeBoundingBoxFromGeoJson(x.ToGeoJsonString())).ToList());
+            var nonEmptyLayerGeoJsons = layerGeoJsons.Where(x => x.GeoJsonFeatureCollection.Features.Any()).ToList();
+            return !nonEmptyLayerGeoJsons.Any()
+                ? MakeNewDefaultBoundingBox()
+                : new BoundingBox(nonEmptyLayerGeoJsons.Select(x => MakeBoundingBoxFromGeoJson(x.ToGeoJsonString())).ToList());
         }
 
         public static void DemandIsValid(Point southWestPoint, Point northEastPoint)

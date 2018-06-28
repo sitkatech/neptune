@@ -20,6 +20,7 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views.Shared
 @using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Views.TreatmentBMP
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Views.TreatmentBMP.FindABMP
@@ -123,7 +124,7 @@
                         BMPs in Map View
                     </h3>
                 </div>
-                <ul class="list-group" ng-if="visibleBMPCount() <= 15">
+                <ul class="list-group" ng-if="visibleBMPCount() <= @FindABMPViewData.MaxNumberOfBmpsInList">
                     <li class="list-group-item" ng-repeat="treatmentBMP in visibleBMPs()" ng-click="setActive(treatmentBMP)" ng-class="{'selected-bmp' : isActive(treatmentBMP)}">
                         <strong>{{treatmentBMP.DisplayName}}</strong>
                         <div class="help-block">
@@ -131,7 +132,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="panel-body" ng-if="visibleBMPCount() > 15">
+                <div class="panel-body" ng-if="visibleBMPCount() >  @FindABMPViewData.MaxNumberOfBmpsInList">
                     <p class="systemText">{{visibleBMPCount()}} BMPs shown on map - Zoom closer see a list</p>
                 </div>
 

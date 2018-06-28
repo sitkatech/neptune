@@ -73,6 +73,8 @@ namespace Neptune.Web.Views.FieldVisit
                     ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), x.InitialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
                            new Dictionary<string, string> ())
                     : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Initial Assessment Score", x => x.InitialAssessment?.FormattedScore() ?? "N/A", 95,
+                DhtmlxGridColumnFilterType.Numeric);
             Add("Maintenance Occurred?",
                 x => x.MaintenanceRecordID != null
                     ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "Performed",
@@ -83,6 +85,8 @@ namespace Neptune.Web.Views.FieldVisit
                     ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), x.PostMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
                         new Dictionary<string, string>())
                     : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Post-Maintenance Assessment Score", x => x.PostMaintenanceAssessment?.FormattedScore() ?? "N/A", 95,
+                DhtmlxGridColumnFilterType.Numeric);
         }
     }
 }

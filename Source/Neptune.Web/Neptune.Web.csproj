@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\ParcelModelExtensions.cs" />
+    <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -154,6 +156,9 @@
     <Compile Include="Models\Generated\OrganizationType.Binding.cs" />
     <Compile Include="Models\Generated\OrganizationType.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\OrganizationTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\Parcel.Binding.cs" />
+    <Compile Include="Models\Generated\Parcel.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\ParcelPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Person.Binding.cs" />
     <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PersonPrimaryKey.Binding.cs" />
@@ -222,12 +227,26 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUse.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUsePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcel.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcel.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanParcelPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriority.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
+    <Compile Include="Controllers\ParcelController.cs" />
+    <Compile Include="Models\Parcel.cs" />
+    <Compile Include="Models\Parcel.DatabaseContextExtensions.cs" />
+    <Compile Include="Views\Parcel\Index.cs" />
+    <Compile Include="Views\Parcel\IndexViewData.cs" />
+    <Compile Include="Views\Parcel\SummaryForMap.cs" />
+    <Compile Include="Views\Parcel\SummaryForMapViewData.cs" />
     <Compile Include="Views\Shared\UserJurisdictions\EditUserJurisdictions.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcelsViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcelsViewModel.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmps.cs" />
     <Compile Include="Security\WaterQualityManagementPlanCreateFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDocumentManageFeature.cs" />
@@ -253,6 +272,7 @@
     <Compile Include="Views\WaterQualityManagementPlan\New.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewViewModel.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\ParcelGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanIndexGridSpec.cs" />
     <Compile Include="Models\WaterQualityManagementPlan.cs" />
     <Compile Include="Controllers\WaterQualityManagementPlanController.cs" />
@@ -720,6 +740,7 @@
     <Content Include="Content\img\OCStormwater\ms-icon-150x150.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-310x310.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-70x70.png" />
+    <Content Include="Content\img\pin-s-marker+838383.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-57x57.png" />
@@ -751,6 +772,10 @@
     <Content Include="ScriptsCustom\DatePickerReady.min.js.map" />
     <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.min.js">
+      <DependentUpon>NeptuneMaps.ParcelSearch.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.Stormwater.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.Stormwater.min.js">
       <DependentUpon>NeptuneMaps.Stormwater.js</DependentUpon>
@@ -1166,6 +1191,7 @@
     <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
     <Content Include="Views\User\Invite.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\Detail.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcelsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmpsController.js" />
     <Content Include="Views\WaterQualityManagementPlan\Index.cshtml" />
     <Content Include="Views\WaterQualityManagementPlanDocument\New.cshtml" />
@@ -1174,6 +1200,9 @@
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpTreatmentBmps.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\New.cshtml" />
     <Content Include="Views\TreatmentBMP\New.cshtml" />
+    <Content Include="Views\Parcel\Index.cshtml" />
+    <Content Include="Views\Parcel\SummaryForMap.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

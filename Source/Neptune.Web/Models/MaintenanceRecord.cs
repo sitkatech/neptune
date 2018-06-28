@@ -5,9 +5,9 @@ namespace Neptune.Web.Models
 {
     public partial class MaintenanceRecord
     {
-        public DateTime GetMaintenanceRecordDate {get {return FieldVisit.VisitDate; } } 
-        public Person GetMaintenanceRecordPerson => FieldVisit.PerformedByPerson;
-        public Organization GetMaintenanceRecordOrganization => FieldVisit.PerformedByPerson.Organization;
+        public DateTime? GetMaintenanceRecordDate => FieldVisit?.VisitDate;
+        public Person GetMaintenanceRecordPerson => FieldVisit?.PerformedByPerson;
+        public Organization GetMaintenanceRecordOrganization => FieldVisit?.PerformedByPerson.Organization;
 
         public bool IsMissingRequiredAttributes =>
             MaintenanceRecordObservations.Any(x =>
@@ -22,13 +22,23 @@ namespace Neptune.Web.Models
         public string MaintenanceRecordStatus()
         {
             var completedObservationCount =
-                MaintenanceRecordObservations.Count(x => x.CustomAttributeType.IsRequired && IsObservationComplete(x));
+                MaintenanceRecordObservations.Count(IsObservationComplete);
             var totalObservationCount =
-                MaintenanceRecordObservations.Count(x => x.CustomAttributeType.IsRequired);
+                MaintenanceRecordObservations.Count;
 
-            return !IsMissingRequiredAttributes
-                ? "All Required Data Provided"
-                : $"In Progress ({completedObservationCount} of {totalObservationCount} required observations complete)";
+            return $"{completedObservationCount} of {totalObservationCount} observations provided";
+        }
+
+        public string GetObservationValueWithUnitsForAttributeType(CustomAttributeType customAttributeType)
+        {
+            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Select(x=>x.CustomAttributeType).Contains(customAttributeType))
+                return "N/A";
+            return MaintenanceRecordObservations?
+                       .SingleOrDefault(y =>
+                           y.CustomAttributeTypeID == customAttributeType.CustomAttributeTypeID &&
+                           y.MaintenanceRecordObservationValues.Any(z =>
+                               !string.IsNullOrWhiteSpace(z.ObservationValue)))?
+                       .GetObservationValueWithUnits() ?? "Not Provided";
         }
     }
 }

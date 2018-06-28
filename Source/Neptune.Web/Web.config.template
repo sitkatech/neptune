@@ -40,6 +40,7 @@
     <add key="KeystoneOpenIDClientId" value="Neptune" />
     <add key="KeystoneOpenIDClientSecret" value="864888DF-1676-4960-BE72-06A4D16B0C5C" />
     <add key="DefaultModalDialogButtonCssClasses" value="btn-neptune,btn-xs"/>
+    <add key="ParcelMapServiceUrl" value="${parcel-map-service-url}"/>
   </appSettings>
   <system.net>
     <mailSettings>

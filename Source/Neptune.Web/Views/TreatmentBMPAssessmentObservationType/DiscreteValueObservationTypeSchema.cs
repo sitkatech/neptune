@@ -92,14 +92,14 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
     public class SingleValueObservation
     {
         public string PropertyObserved { get; set; }
-        public double ObservationValue { get; set; }
+        public double? ObservationValue { get; set; }
         public string Notes { get; set; }
     }
 
     public class TimeValuePairObservation
     {
         public string PropertyObserved { get; set; }
-        public double ObservationValue { get; set; }
+        public double? ObservationValue { get; set; }
         public double ObservationTime { get; set; }
         public string Notes { get; set; }
     }

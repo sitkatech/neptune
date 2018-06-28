@@ -117,10 +117,16 @@ namespace Neptune.Web.Views
 
             exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(c => c.Index()), currentPerson, Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized(), "Group4"));
 
+            if (new JurisdictionManageFeature().HasPermissionByPerson(currentPerson))
+            {
+                exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(c => c.Index()), currentPerson, "Parcels", "Group5"));
+            }
+
             if (new WaterQualityManagementPlanViewFeature().HasPermissionByPerson(currentPerson))
             {
-                exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group5"));
+                exploreMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group6"));
             }
+
 
             return exploreMenu;
         }

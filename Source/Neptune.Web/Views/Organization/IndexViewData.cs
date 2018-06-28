@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using Neptune.Web.Security;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Organization

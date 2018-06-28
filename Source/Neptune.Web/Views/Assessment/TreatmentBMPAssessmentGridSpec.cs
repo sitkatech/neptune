@@ -45,13 +45,11 @@ namespace Neptune.Web.Views.Assessment
             Add("Field Visit Type", x => x.GetFieldVisit().FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Is Post-Maintenance Assessment?", x => x.IsPostMaintenanceAssessment() ? "Yes" : "No", 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Status", x => x.HasCalculatedOrAlternateScore() ? "Complete" : "In Progress", 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Score", x => x.FormattedScore(), 80, DhtmlxGridColumnFilterType.Numeric);
             foreach (var observationType in allObservationTypes)
             {
                 Add(observationType.DisplayNameWithUnits(),
-                    x => x?.TreatmentBMPObservations?.SingleOrDefault(y =>
-                                 y.TreatmentBMPAssessmentObservationTypeID ==
-                                 observationType.TreatmentBMPAssessmentObservationTypeID)?.CalculateObservationValue()
-                             ?.ToString() ?? "N/A", 150, DhtmlxGridColumnFilterType.Text);
+                    x => x?.CalculateObservationValueForObservationType(observationType), 150, DhtmlxGridColumnFilterType.Text);
             }
         }
     }

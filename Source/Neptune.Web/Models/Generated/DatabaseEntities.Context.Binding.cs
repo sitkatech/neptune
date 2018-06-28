@@ -74,6 +74,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
         public virtual IQueryable<OrganizationType> OrganizationTypes { get { return AllOrganizationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<Parcel> AllParcels { get; set; }
+        public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
@@ -110,6 +112,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlanDocument> AllWaterQualityManagementPlanDocuments { get; set; }
         public virtual IQueryable<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get { return AllWaterQualityManagementPlanDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanParcel> AllWaterQualityManagementPlanParcels { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get { return AllWaterQualityManagementPlanParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlan> AllWaterQualityManagementPlans { get; set; }
         public virtual IQueryable<WaterQualityManagementPlan> WaterQualityManagementPlans { get { return AllWaterQualityManagementPlans.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
@@ -281,6 +285,9 @@ namespace Neptune.Web.Models
                 case "OrganizationType":
                     return OrganizationTypes.GetOrganizationType(primaryKey);
 
+                case "Parcel":
+                    return Parcels.GetParcel(primaryKey);
+
                 case "Person":
                     return People.GetPerson(primaryKey);
 
@@ -364,6 +371,9 @@ namespace Neptune.Web.Models
                     var waterQualityManagementPlanLandUse = WaterQualityManagementPlanLandUse.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanLandUse, "WaterQualityManagementPlanLandUse", primaryKey);
                     return waterQualityManagementPlanLandUse;
+
+                case "WaterQualityManagementPlanParcel":
+                    return WaterQualityManagementPlanParcels.GetWaterQualityManagementPlanParcel(primaryKey);
 
                 case "WaterQualityManagementPlanPriority":
                     var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

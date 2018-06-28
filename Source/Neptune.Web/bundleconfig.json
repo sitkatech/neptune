@@ -82,5 +82,11 @@
     "inputFiles": [
       "Content/bootstrap-select/bootstrap-select.css"
     ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
+    ]
   }
 ]

@@ -7,7 +7,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class CollectionMethodSectionViewModel : FieldVisitSectionViewModel
+    public class CollectionMethodSectionViewModel : FieldVisitSectionViewModel, IValidatableObject
     {
         public int? TreatmentBMPAssessmentID { get; set; }
         public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
@@ -37,10 +37,7 @@ namespace Neptune.Web.Views.FieldVisit
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
                     x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
-            if (!observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData))
-            {
-                validationResults.Add(new ValidationResult("Schema invalid."));
-            }
+            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData));
 
             return validationResults;
         }

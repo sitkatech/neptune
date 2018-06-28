@@ -50,5 +50,5 @@ VALUES
 (46, N'FundingEvent', N'Funding Event', 'A discrete activity (e.g. Project planning, major maintenance, capital construction) that invests in a BMP. A funding event consists of one or funding sources and associated expenditures', 1),
 (47, N'FieldVisit', N'Field Visit', 'A visit to a Treatment BMP which can consist of an Assessment, a Maintenance Record, and a Post-Maintenance Assessment', 1),
 (48, N'FieldVisitStatus', N'Field Visit Status', 'Completion status of the Field Visit. A Field Visit can be In Progress, Complete, or left Unresolved. A Treatment BMP may only have one In Progress Field Visit at any given time.', 1),
-(49, N'WaterQualityManagementPlan', N'Water Quality Management Plan', N'TODO will come back and enter a default definition for Water Quality Management Plan.', 1)
-
+(49, N'WaterQualityManagementPlan', N'Water Quality Management Plan', N'', 1),
+(50, N'Parcel', N'Parcel', N'', 1)
