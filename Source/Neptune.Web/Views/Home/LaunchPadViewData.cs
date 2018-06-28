@@ -28,6 +28,7 @@ namespace Neptune.Web.Views.Home
         public string FieldFieldVisitsUrl { get; set; }
         public string EditUserRolesUrl { get; set; }
         public string ViewAssessmentAndMaintenanceRecordsUrl { get; }
+        public string ViewWaterQualityManagementPlansUrl { get; }
 
         public LaunchPadViewData(Person currentPerson, Models.NeptunePage launchPadNeptunePage, int numberOfBmpTypes)
         {
@@ -47,6 +48,7 @@ namespace Neptune.Web.Views.Home
             ExploreBmpTypesUrl = SitkaRoute<TreatmentBMPTypeController>.BuildUrlFromExpression(c => c.Index());
             AddABmpUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.New());
             ViewAssessmentAndMaintenanceRecordsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
+            ViewWaterQualityManagementPlansUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Index());
             FieldFieldVisitsUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
             InviteANewUserUrl = SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Invite());
             EditUserRolesUrl = SitkaRoute<UserController>.BuildUrlFromExpression(c => c.Index());
