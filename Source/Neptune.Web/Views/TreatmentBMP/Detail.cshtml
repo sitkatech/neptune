@@ -102,6 +102,23 @@
                         @(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null ? ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetNameAsUrl() : new HtmlString("<em class=\"text-muted\">Not Associated with a WQMP</em>"))
                     </div>
                 </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Lifespan Type</label>
+                    <div class="col-sm-7">
+                        @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")
+                    </div>
+                </div>
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
+                {
+                    
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Lifespan End Date</label>
+                        <div class="col-sm-7">
+                            @* Because of database constraints, TreatmentBMPLifespanEndDate will never be null if LifespanType = FixedEndDate *@
+                            @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanEndDate.GetValueOrDefault().ToShortDateString())
+                        </div>
+                    </div>
+                }
             </div>
         </div>
         <div class="panel panelNeptune">
@@ -116,7 +133,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.OtherDesignAttributes))
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.OtherDesignAttributes))
                 {
                     <p class="systemText">
                         This type of treatment BMP does not have any @CustomAttributeTypePurpose.OtherDesignAttributes.CustomAttributeTypePurposeDisplayName
@@ -159,7 +176,7 @@
                 </span>
             </div>
             <div class="panel-body">
-                @if (!ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x => x.CustomAttributeType.CustomAttributeTypePurpose == CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
+                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.All(x => x.CustomAttributeType.CustomAttributeTypePurpose != CustomAttributeTypePurpose.PerformanceAndModelingAttributes))
                 {
                     <p class="systemText">
                         This type of treatment BMP does not have any @CustomAttributeTypePurpose.PerformanceAndModelingAttributes.CustomAttributeTypePurposeDisplayName

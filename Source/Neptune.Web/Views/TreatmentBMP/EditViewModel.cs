@@ -66,10 +66,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Water Quality Management Plan")]
         public int? WaterQualityManagementPlanID { get; set; }
 
-        [DisplayName("Treatment BMP Lifespan Type")]
+        [DisplayName("Lifespan Type")]
         public int? TreatmentBMPLifespanTypeID { get; set; }
 
-        [DisplayName("Treatment BMP Lifespan End Date")]
+        [DisplayName("Lifespan End Date")]
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
 
         /// <summary>
@@ -91,6 +91,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             YearBuilt = treatmentBMP.YearBuilt;
             WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlanID;
             TreatmentBMPLifespanTypeID = treatmentBMP.TreatmentBMPLifespanTypeID;
+            TreatmentBMPLifespanEndDate = treatmentBMP.TreatmentBMPLifespanEndDate;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -135,6 +136,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.YearBuilt = YearBuilt;
             treatmentBMP.WaterQualityManagementPlanID = WaterQualityManagementPlanID;
             treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
+            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID)
+            {
+                treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanEndDate;
+            }
+            else
+            {
+                treatmentBMP.TreatmentBMPLifespanEndDate = null;
+            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
