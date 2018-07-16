@@ -211,7 +211,7 @@ namespace Neptune.Web.Controllers
             }
 
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
-                organizations, waterQualityManagementPlans);
+                organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

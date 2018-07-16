@@ -115,6 +115,13 @@
                         @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanID, ViewDataTyped.WaterQualityManagementPlanSelectListItems)
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanID)
                     </div>
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m => m.TreatmentBMPLifespanTypeID)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.SearchableDropDownListFor(m => m.TreatmentBMPLifespanTypeID, ViewDataTyped.TreatmentBMPLifespanTypes)
+                        @Html.ValidationMessageFor(m => m.TreatmentBMPLifespanTypeID)
+                    </div>
                 </div>
             </div>
         </div>
