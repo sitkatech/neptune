@@ -66,7 +66,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Water Quality Management Plan")]
         public int? WaterQualityManagementPlanID { get; set; }
 
-        [DisplayName("Lifespan Type")]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredLifespanOfInstallation)]
         public int? TreatmentBMPLifespanTypeID { get; set; }
 
         [DisplayName("Lifespan End Date")]

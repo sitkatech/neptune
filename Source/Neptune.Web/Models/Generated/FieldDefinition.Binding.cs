@@ -67,6 +67,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionFieldVisitStatus FieldVisitStatus = FieldDefinitionFieldVisitStatus.Instance;
         public static readonly FieldDefinitionWaterQualityManagementPlan WaterQualityManagementPlan = FieldDefinitionWaterQualityManagementPlan.Instance;
         public static readonly FieldDefinitionParcel Parcel = FieldDefinitionParcel.Instance;
+        public static readonly FieldDefinitionRequiredLifespanOfInstallation RequiredLifespanOfInstallation = FieldDefinitionRequiredLifespanOfInstallation.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -76,7 +77,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -240,6 +241,8 @@ namespace Neptune.Web.Models
                     return PropertiesToObserve;
                 case FieldDefinitionEnum.ReceivesSystemCommunications:
                     return ReceivesSystemCommunications;
+                case FieldDefinitionEnum.RequiredLifespanOfInstallation:
+                    return RequiredLifespanOfInstallation;
                 case FieldDefinitionEnum.RoleName:
                     return RoleName;
                 case FieldDefinitionEnum.TreatmentBMP:
@@ -310,7 +313,8 @@ namespace Neptune.Web.Models
         FieldVisit = 47,
         FieldVisitStatus = 48,
         WaterQualityManagementPlan = 49,
-        Parcel = 50
+        Parcel = 50,
+        RequiredLifespanOfInstallation = 51
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -605,5 +609,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionParcel(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionParcel Instance = new FieldDefinitionParcel(50, @"Parcel", @"Parcel", @"", true);
+    }
+
+    public partial class FieldDefinitionRequiredLifespanOfInstallation : FieldDefinition
+    {
+        private FieldDefinitionRequiredLifespanOfInstallation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionRequiredLifespanOfInstallation Instance = new FieldDefinitionRequiredLifespanOfInstallation(51, @"RequiredLifespanOfInstallation", @"Required Lifespan of Installation", @"Specifies when or whether a BMP can be removed", true);
     }
 }

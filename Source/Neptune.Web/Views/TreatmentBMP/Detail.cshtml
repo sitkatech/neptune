@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">Lifespan Type</label>
+                    <label class="col-sm-5 control-label text-right">@FieldDefinition.RequiredLifespanOfInstallation.GetFieldDefinitionLabel()</label>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")
                     </div>
