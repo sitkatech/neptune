@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -44,6 +45,12 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Water Quality Management Plan")]
         public int? WaterQualityManagementPlanID { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredLifespanOfInstallation)]
+        public int? TreatmentBMPLifespanTypeID { get; set; }
+
+        [DisplayName("Lifespan End Date")]
+        public DateTime? TreatmentBMPLifespanEndDate { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -62,6 +69,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             OwnerOrganizationID = treatmentBMP.OwnerOrganizationID;
             YearBuilt = treatmentBMP.YearBuilt;
             WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlanID;
+            TreatmentBMPLifespanTypeID = treatmentBMP.TreatmentBMPLifespanTypeID;
+            TreatmentBMPLifespanEndDate = treatmentBMP.TreatmentBMPLifespanEndDate;
         }
 
         public override void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -105,6 +114,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             treatmentBMP.YearBuilt = YearBuilt;
             treatmentBMP.WaterQualityManagementPlanID = WaterQualityManagementPlanID;
+
+            treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
+            treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate : null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -113,6 +125,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             if (treatmentBmPsWithSameName.Any(x => x.TreatmentBMPID != TreatmentBMPID))
             {
                 yield return new SitkaValidationResult<NewViewModel, string>("A BMP with this name already exists.", x => x.TreatmentBMPName);
+            }
+
+            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID &&
+                !TreatmentBMPLifespanEndDate.HasValue)
+            {
+                yield return new SitkaValidationResult<EditViewModel, DateTime?>(
+                    "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
+                    x => x.TreatmentBMPLifespanEndDate);
             }
         }
     }

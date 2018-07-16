@@ -17,7 +17,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
         public Shared.Location.EditLocationViewData EditLocationViewData { get; }
-        public List<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
+        public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
+        public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
 
         public NewViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
@@ -25,7 +26,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             List<Models.Organization> organizations,
             Shared.Location.EditLocationViewData editLocationViewData,
-            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans)
+            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans,
+            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EditLocationViewData = editLocationViewData;
@@ -44,8 +46,21 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
             OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.DisplayName, "Same as the BMP Jurisdiction");
             TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
-            WaterQualityManagementPlanSelectListItems = waterQualityManagementPlans.ToSelectList(x => x.WaterQualityManagementPlanID.ToString(), x => x.WaterQualityManagementPlanName).ToList();
-            WaterQualityManagementPlanSelectListItems.Insert(0, new SelectListItem { Text = "No Associated WQMP", Value = string.Empty });
+            WaterQualityManagementPlanSelectListItems = BuildWaterQualityPlanSelectList(waterQualityManagementPlans);
+
+            TreatmentBMPLifespanTypes = treatmentBMPLifespanTypes.ToSelectListWithEmptyFirstRow(
+                x => x.TreatmentBMPLifespanTypeID.ToString(CultureInfo.InvariantCulture), x => x.TreatmentBMPLifespanTypeDisplayName.ToString(CultureInfo.InvariantCulture), "Unknown");
+        }
+
+        private IEnumerable<SelectListItem> BuildWaterQualityPlanSelectList(
+            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans)
+        {
+            var selectListItems = waterQualityManagementPlans
+                .ToSelectList(x => x.WaterQualityManagementPlanID.ToString(), x => x.WaterQualityManagementPlanName)
+                .ToList();
+            selectListItems.Insert(0,
+                new SelectListItem { Text = "No Associated WQMP", Value = string.Empty });
+            return selectListItems;
         }
     }
 }

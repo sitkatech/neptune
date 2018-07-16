@@ -38,7 +38,6 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string TreatmentBMPIndexUrl { get; }
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
-
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
 
         public EditViewData(Person currentPerson,

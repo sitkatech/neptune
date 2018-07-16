@@ -135,15 +135,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             
             treatmentBMP.YearBuilt = YearBuilt;
             treatmentBMP.WaterQualityManagementPlanID = WaterQualityManagementPlanID;
+
             treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
-            if (TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID)
-            {
-                treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanEndDate;
-            }
-            else
-            {
-                treatmentBMP.TreatmentBMPLifespanEndDate = null;
-            }
+            treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate : null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
