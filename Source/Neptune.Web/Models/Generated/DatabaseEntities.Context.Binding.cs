@@ -344,6 +344,11 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPImage":
                     return TreatmentBMPImages.GetTreatmentBMPImage(primaryKey);
 
+                case "TreatmentBMPLifespanType":
+                    var treatmentBMPLifespanType = TreatmentBMPLifespanType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPLifespanType, "TreatmentBMPLifespanType", primaryKey);
+                    return treatmentBMPLifespanType;
+
                 case "TreatmentBMPObservation":
                     return TreatmentBMPObservations.GetTreatmentBMPObservation(primaryKey);
 
