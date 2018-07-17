@@ -29,7 +29,7 @@ namespace Neptune.Web.Models
     {
         public bool CanView(Person person)
         {
-            return new NeptuneViewFeature().HasPermissionByPerson(person);
+            return new TreatmentBMPViewFeature().HasPermission(person, this).HasPermission;
         }
 
         public bool CanEdit(Person person)

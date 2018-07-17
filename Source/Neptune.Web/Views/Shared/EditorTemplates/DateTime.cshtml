@@ -20,5 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*@
 @model DateTime?
 @{
-    @Html.TextBox("", "", Model.HasValue ? Model.Value.ToShortDateString() : null, new {@class = "sitkaDatePicker form-control", style = "width: auto;"})
+    <div class="input-group" style="width: 50%;" >@Html.TextBox("", "", Model.HasValue ? Model.Value.ToShortDateString() : null, new { @class = "sitkaDatePicker form-control"})
+        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+    </div>
 }

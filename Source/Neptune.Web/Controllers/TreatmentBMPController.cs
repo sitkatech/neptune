@@ -77,7 +77,7 @@ namespace Neptune.Web.Controllers
             return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
-        [NeptuneViewFeature]
+        [TreatmentBMPViewFeature]
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -153,7 +153,7 @@ namespace Neptune.Web.Controllers
             }
 
             var viewData = new NewViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
-                organizations, editLocationViewData, waterQualityManagementPlans);
+                organizations, editLocationViewData, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
@@ -211,7 +211,7 @@ namespace Neptune.Web.Controllers
             }
 
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
-                organizations, waterQualityManagementPlans);
+                organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

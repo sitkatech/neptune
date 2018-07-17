@@ -31,7 +31,7 @@ namespace Neptune.Web.Controllers
 {
     public class TreatmentBMPAssessmentController : NeptuneBaseController
     {
-        [NeptuneViewFeature]
+        [TreatmentBMPAssessmentManageFeature]
         public ViewResult Detail(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;

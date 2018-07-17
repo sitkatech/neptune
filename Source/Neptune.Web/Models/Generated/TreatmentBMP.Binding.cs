@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -50,6 +50,8 @@ namespace Neptune.Web.Models
             this.YearBuilt = yearBuilt;
             this.OwnerOrganizationID = ownerOrganizationID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
+            this.TreatmentBMPLifespanTypeID = treatmentBMPLifespanTypeID;
+            this.TreatmentBMPLifespanEndDate = treatmentBMPLifespanEndDate;
         }
 
         /// <summary>
@@ -169,6 +171,8 @@ namespace Neptune.Web.Models
         public int? YearBuilt { get; set; }
         public int OwnerOrganizationID { get; set; }
         public int? WaterQualityManagementPlanID { get; set; }
+        public int? TreatmentBMPLifespanTypeID { get; set; }
+        public DateTime? TreatmentBMPLifespanEndDate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -186,6 +190,7 @@ namespace Neptune.Web.Models
         public virtual ModeledCatchment ModeledCatchment { get; set; }
         public virtual Organization OwnerOrganization { get; set; }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
+        public TreatmentBMPLifespanType TreatmentBMPLifespanType { get { return TreatmentBMPLifespanTypeID.HasValue ? TreatmentBMPLifespanType.AllLookupDictionary[TreatmentBMPLifespanTypeID.Value] : null; } }
 
         public static class FieldLengths
         {

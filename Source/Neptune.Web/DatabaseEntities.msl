@@ -403,6 +403,8 @@
           <ScalarProperty Name="YearBuilt" ColumnName="YearBuilt" />
           <ScalarProperty Name="OwnerOrganizationID" ColumnName="OwnerOrganizationID" />
           <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
+          <ScalarProperty Name="TreatmentBMPLifespanTypeID" ColumnName="TreatmentBMPLifespanTypeID" />
+          <ScalarProperty Name="TreatmentBMPLifespanEndDate" ColumnName="TreatmentBMPLifespanEndDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,8 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Models\ParcelModelExtensions.cs" />
-    <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogEventType.Binding.cs" />
@@ -205,6 +203,8 @@
     <Compile Include="Models\Generated\TreatmentBMPImage.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPImage.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPImagePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPLifespanType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPLifespanTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservation.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPObservationPrimaryKey.Binding.cs" />
@@ -235,7 +235,10 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\ParcelModelExtensions.cs" />
+    <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
+    <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
     <Compile Include="Models\Parcel.cs" />

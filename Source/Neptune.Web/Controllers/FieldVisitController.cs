@@ -92,7 +92,7 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP, bool detailPage)
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits;
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.ToList().Where(x=> x.TreatmentBMP.CanView(currentPerson));
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
                 : fieldVisits).ToList();

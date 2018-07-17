@@ -24,7 +24,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
-            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList()
+            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson))
                 .OrderByDescending(x => x.GetAssessmentDate).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
