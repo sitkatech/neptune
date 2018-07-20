@@ -104,11 +104,11 @@
                             @if (Request.IsAuthenticated)
                             {
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <span>Welcome&nbsp;&nbsp;@ViewDataTyped.CurrentPerson.FullNameFirstLast</span>
+                                    <a href="#" class="dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Welcome&nbsp;&nbsp;@ViewDataTyped.CurrentPerson.FullNameFirstLast
                                         <span class="glyphicon glyphicon-menu-down"></span>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenuUser">
                                         <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">View Account</a></li>
                                         <li><a href="@ViewDataTyped.RequestSupportUrl" title="Log In">Request Support</a></li>
                                         <li class="divider"></li>
