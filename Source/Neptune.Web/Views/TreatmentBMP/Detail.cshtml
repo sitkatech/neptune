@@ -105,20 +105,15 @@
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@FieldDefinition.RequiredLifespanOfInstallation.GetFieldDefinitionLabel()</label>
                     <div class="col-sm-7">
-                        @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")
+                        @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
+                        {
+                            @* Because of database constraints, TreatmentBMPLifespanEndDate will never be null if LifespanType = FixedEndDate *@
+                            @(string.Format("Maintain until at least {0}",ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanEndDate.GetValueOrDefault().ToShortDateString()))
+                        } else { 
+                            @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")}
                     </div>
                 </div>
-                @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
-                {
-                    
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Lifespan End Date</label>
-                        <div class="col-sm-7">
-                            @* Because of database constraints, TreatmentBMPLifespanEndDate will never be null if LifespanType = FixedEndDate *@
-                            @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanEndDate.GetValueOrDefault().ToShortDateString())
-                        </div>
-                    </div>
-                }
+                
             </div>
         </div>
         <div class="panel panelNeptune">

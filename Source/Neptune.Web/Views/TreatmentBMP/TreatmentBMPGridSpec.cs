@@ -50,6 +50,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Last Maintenance Date", x => x.LastMaintainedDateTime(), 130, DhtmlxGridColumnFormatType.Date);
             Add("# of Maintenance Events", x => x.MaintenanceRecords.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Required Lifespan of Installation", x=>x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown", 170, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Lifespan End Date (if Fixed End Date)", x => x.TreatmentBMPLifespanEndDate, 130, DhtmlxGridColumnFormatType.Date);
         }
     }
 }
