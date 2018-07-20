@@ -69,7 +69,8 @@ namespace Neptune.Web.Models
 
         public static List<Person> GetPeopleWhoReceiveSupportEmails(this IQueryable<Person> people)
         {
-            return people.ToList().Where(x => x.ReceiveSupportEmails && x.IsActive).OrderBy(ht => ht.FullNameLastFirst).ToList();
+            return people.ToList().Where(x => x.Role == Role.Admin && x.ReceiveSupportEmails && x.IsActive)
+                .OrderBy(ht => ht.FullNameLastFirst).ToList();
         }
     }
 }
