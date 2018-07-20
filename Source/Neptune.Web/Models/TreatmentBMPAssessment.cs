@@ -68,10 +68,15 @@ namespace Neptune.Web.Models
 
         public double? CalculateAssessmentScore()
         {
-            if (!IsAssessmentComplete())
+            if (!TreatmentBMP.IsBenchmarkAndThresholdsComplete())
             {
                 return null;
             }
+
+            if (!IsAssessmentComplete())
+            {
+                return null;
+            }           
 
             //if any observations that override the score have a failing score, return 0
             var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
