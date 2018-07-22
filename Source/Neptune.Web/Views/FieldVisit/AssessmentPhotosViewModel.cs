@@ -53,8 +53,7 @@ namespace Neptune.Web.Views.FieldVisit
             if (Photo != null)
             {
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Add( 
-                    new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment) {Caption = Caption});
+                new TreatmentBMPAssessmentPhoto(fileResource, treatmentBMPAssessment) {Caption = Caption};
             }
         }
     }
