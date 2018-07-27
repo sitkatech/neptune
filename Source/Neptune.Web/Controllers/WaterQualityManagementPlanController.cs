@@ -173,7 +173,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [WaterQualityManagementPlanManageFeature]
+        [WaterQualityManagementPlanDeleteFeature]
         public PartialViewResult Delete(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -182,7 +182,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [WaterQualityManagementPlanManageFeature]
+        [WaterQualityManagementPlanDeleteFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Delete(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {

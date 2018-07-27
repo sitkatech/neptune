@@ -4,12 +4,12 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    public class WaterQualityManagementPlanManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<WaterQualityManagementPlan>
+    public class WaterQualityManagementPlanDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<WaterQualityManagementPlan>
     {
         private readonly NeptuneFeatureWithContextImpl<WaterQualityManagementPlan> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public WaterQualityManagementPlanManageFeature()
-            : base(new List<Role> {Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin, Role.JurisdictionEditor})
+        public WaterQualityManagementPlanDeleteFeature()
+            : base(new List<Role> {Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin})
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<WaterQualityManagementPlan>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
