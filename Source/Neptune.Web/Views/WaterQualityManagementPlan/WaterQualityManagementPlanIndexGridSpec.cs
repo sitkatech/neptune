@@ -11,6 +11,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public WaterQualityManagementPlanIndexGridSpec(Person currentPerson)
         {
             var waterQualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
+            var waterQualityManagementPlanDeleteFeature = new WaterQualityManagementPlanDeleteFeature();
+            
             var currentUserCanManage = waterQualityManagementPlanManageFeature.HasPermissionByPerson(currentPerson);
 
             ObjectNameSingular = Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel();
@@ -21,7 +23,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             {
                 Add(string.Empty, x =>
                     {
-                        var userHasDeletePermission = waterQualityManagementPlanManageFeature.HasPermission(currentPerson, x).HasPermission;
+                        var userHasDeletePermission = waterQualityManagementPlanDeleteFeature.HasPermission(currentPerson, x).HasPermission;
                         return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), userHasDeletePermission);
                     }, 26,
                     DhtmlxGridColumnFilterType.None);
