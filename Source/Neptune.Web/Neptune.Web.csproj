@@ -239,6 +239,7 @@
     <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
+    <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
     <Compile Include="Models\Parcel.cs" />

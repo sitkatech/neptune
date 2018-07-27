@@ -6,7 +6,7 @@ namespace Neptune.Web.Security
     public class WaterQualityManagementPlanCreateFeature : NeptuneFeature
     {
         public WaterQualityManagementPlanCreateFeature()
-            : base(new List<Role> { Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin })
+            : base(new List<Role> { Role.JurisdictionManager, Role.Admin, Role.SitkaAdmin, Role.JurisdictionEditor })
         {
         }
     }
