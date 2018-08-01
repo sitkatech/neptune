@@ -184,7 +184,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                 {
                                     <tr>
                                         <td>@observation.PropertyObserved</td>
-                                        <td>@(observation.ObservationValue ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel )</td>
+                                        <td>@(observation.ObservationValue ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel)</td>
                                         <td>@observation.Notes</td>
                                     </tr>
                                 }

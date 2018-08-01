@@ -40,10 +40,10 @@ namespace Neptune.Web.Views.FieldVisit
         public PassFailCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
             : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
-            PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
-            FailingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
-            AssessmentDescription = treatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetPassFailSchema());
+            PassingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel;
+            FailingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetPassFailSchema().AssessmentDescription;
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
@@ -51,10 +51,10 @@ namespace Neptune.Web.Views.FieldVisit
 
         public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson): base(currentPerson)
         {
-            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.PassFailSchema);
-            PassingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel;
-            FailingScoreLabel = treatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel;
-            AssessmentDescription = treatmentBMPAssessmentObservationType.PassFailSchema.AssessmentDescription;
+            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetPassFailSchema());
+            PassingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel;
+            FailingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetPassFailSchema().AssessmentDescription;
         }
 
         public class PassFailCollectionMethodViewDataForAngular

@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
-            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.GetHasBenchmarkAndThreshold()).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
             var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
@@ -63,7 +63,7 @@ namespace Neptune.Web.Models
 
         public bool HasSettableBenchmarkAndThresholdValues()
         {
-            return TreatmentBMPType.GetObservationTypes().Any(x => x.HasBenchmarkAndThreshold);
+            return TreatmentBMPType.GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
         }
 
         public string GetMostRecentScoreAsString()

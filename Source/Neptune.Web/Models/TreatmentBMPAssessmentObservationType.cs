@@ -42,18 +42,53 @@ namespace Neptune.Web.Models
         public string DisplayNameWithUnits()
         {
             return
-                $"{TreatmentBMPAssessmentObservationTypeName} {(MeasurementUnitType != null ? $"({MeasurementUnitType.MeasurementUnitTypeDisplayName})" : string.Empty)}";
+                $"{TreatmentBMPAssessmentObservationTypeName} {(GetMeasurementUnitType() != null ? $"({GetMeasurementUnitType().MeasurementUnitTypeDisplayName})" : string.Empty)}";
         }
 
-        public bool HasBenchmarkAndThreshold => ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
-        public bool ThresholdIsRelativePercentOfBenchmark => ObservationTypeSpecification.ObservationThresholdType == ObservationThresholdType.RelativeToBenchmark;
-        public bool TargetIsSweetSpot => ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
+        public bool GetHasBenchmarkAndThreshold()
+        {
+            return ObservationTypeSpecification.ObservationThresholdType != ObservationThresholdType.None;
+        }
 
-        public MeasurementUnitType MeasurementUnitType => BenchmarkMeasurementUnitType();        
-        public DiscreteObservationTypeSchema DiscreteObservationTypeSchema => JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
-        public RateObservationTypeSchema RateObservationTypeSchema => JsonConvert.DeserializeObject<RateObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
-        public PassFailObservationTypeSchema PassFailSchema => JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
-        public PercentageObservationTypeSchema PercentageSchema => JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(TreatmentBMPAssessmentObservationTypeSchema);
+        public bool GetThresholdIsRelativePercentOfBenchmark()
+        {
+            return ObservationTypeSpecification.ObservationThresholdType ==
+                   ObservationThresholdType.RelativeToBenchmark;
+        }
+
+        public bool GetTargetIsSweetSpot()
+        {
+            return ObservationTypeSpecification.ObservationTargetType == ObservationTargetType.SpecificValue;
+        }
+
+        public MeasurementUnitType GetMeasurementUnitType()
+        {
+            return BenchmarkMeasurementUnitType();
+        }
+
+        public DiscreteObservationTypeSchema GetDiscreteObservationTypeSchema()
+        {
+            return JsonConvert.DeserializeObject<DiscreteObservationTypeSchema>(
+                TreatmentBMPAssessmentObservationTypeSchema);
+        }
+
+        public RateObservationTypeSchema GetRateObservationTypeSchema()
+        {
+            return JsonConvert.DeserializeObject<RateObservationTypeSchema>(
+                TreatmentBMPAssessmentObservationTypeSchema);
+        }
+
+        public PassFailObservationTypeSchema GetPassFailSchema()
+        {
+            return JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(
+                TreatmentBMPAssessmentObservationTypeSchema);
+        }
+
+        public PercentageObservationTypeSchema GetPercentageSchema()
+        {
+            return JsonConvert.DeserializeObject<PercentageObservationTypeSchema>(
+                TreatmentBMPAssessmentObservationTypeSchema);
+        }
 
         public MeasurementUnitType BenchmarkMeasurementUnitType()
         {
@@ -62,10 +97,10 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == DiscreteObservationTypeSchema.MeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == GetDiscreteObservationTypeSchema().MeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.Rate:
                     return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == RateObservationTypeSchema.DiscreteRateMeasurementUnitTypeID);
+                        .SingleOrDefault(x => x.MeasurementUnitTypeID == GetRateObservationTypeSchema().DiscreteRateMeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -81,13 +116,13 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteObservationTypeSchema.MeasurementUnitLabel;
+                    return GetDiscreteObservationTypeSchema().MeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateObservationTypeSchema.DiscreteRateMeasurementUnitLabel;
+                    return GetRateObservationTypeSchema().DiscreteRateMeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
-                    return PercentageSchema.MeasurementUnitLabel;
+                    return GetPercentageSchema().MeasurementUnitLabel;
                 default:
                     return null;
             }
@@ -99,13 +134,13 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteObservationTypeSchema.BenchmarkDescription;
+                    return GetDiscreteObservationTypeSchema().BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateObservationTypeSchema.BenchmarkDescription;
+                    return GetRateObservationTypeSchema().BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
-                    return PercentageSchema.BenchmarkDescription;
+                    return GetPercentageSchema().BenchmarkDescription;
                 default:
                     return null;
             }
@@ -149,13 +184,13 @@ namespace Neptune.Web.Models
             switch (observationTypeCollectionMethod.ToEnum)
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
-                    return DiscreteObservationTypeSchema.ThresholdDescription;
+                    return GetDiscreteObservationTypeSchema().ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.Rate:
-                    return RateObservationTypeSchema.ThresholdDescription;
+                    return GetRateObservationTypeSchema().ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
-                    return PercentageSchema.ThresholdDescription;
+                    return GetPercentageSchema().ThresholdDescription;
                 default:
                     return null;
             }
@@ -186,7 +221,7 @@ namespace Neptune.Web.Models
                 return false;
             }
             return ThresholdMeasurementUnitType() == MeasurementUnitType.PercentIncrease ||
-                   TargetIsSweetSpot && observationValue > benchmarkValue;
+                   GetTargetIsSweetSpot() && observationValue > benchmarkValue;
         }
 
         public double? GetThresholdValueInBenchmarkUnits(double? benchmarkValue, double? thresholdValue, bool useUpperValue)
@@ -211,7 +246,7 @@ namespace Neptune.Web.Models
                 case MeasurementUnitTypeEnum.Inches:
                 case MeasurementUnitTypeEnum.InchesPerHour:
                 case MeasurementUnitTypeEnum.Seconds:
-                    if (!TargetIsSweetSpot)
+                    if (!GetTargetIsSweetSpot())
                     {
                         return thresholdValue;
                     }
@@ -254,7 +289,7 @@ namespace Neptune.Web.Models
 
         public string GetFormattedBenchmarkValue(double? benchmarkValue)
         {
-            if (!HasBenchmarkAndThreshold)
+            if (!GetHasBenchmarkAndThreshold())
             {
                 return ViewUtilities.NaString;
             }
@@ -264,14 +299,14 @@ namespace Neptune.Web.Models
                 return "-";
             }
 
-            var optionalSpace = MeasurementUnitType.IncludeSpaceBeforeLegendLabel ? " " : "";
-            return $"{benchmarkValue}{optionalSpace}{MeasurementUnitType.LegendDisplayName}";
+            var optionalSpace = GetMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
+            return $"{benchmarkValue}{optionalSpace}{GetMeasurementUnitType().LegendDisplayName}";
         }
 
         public string GetFormattedThresholdValue(double? thresholdValue, double? benchmarkValue)
         {
             // observation type has no benchmark and thresholds, return "not applicable"
-            if (!HasBenchmarkAndThreshold)
+            if (!GetHasBenchmarkAndThreshold())
             {
                 return ViewUtilities.NaString;
             }
@@ -286,13 +321,13 @@ namespace Neptune.Web.Models
             var benchmarkOptionalSpace = BenchmarkMeasurementUnitType().IncludeSpaceBeforeLegendLabel ? " " : "";
             var formattedThresholdValue = $"{thresholdValue}{optionalSpace}{ThresholdMeasurementUnitType().LegendDisplayName}";
 
-            if (!TargetIsSweetSpot || benchmarkValue == null)
+            if (!GetTargetIsSweetSpot() || benchmarkValue == null)
             {                
                 return formattedThresholdValue;
             }
 
             // If target is sweet spot or high or low
-            if (TargetIsSweetSpot)
+            if (GetTargetIsSweetSpot())
             {
                 var upperValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, true);
                 var lowerValueInBenchmarkUnits = GetThresholdValueInBenchmarkUnits(benchmarkValue, thresholdValue, false);                
@@ -304,7 +339,10 @@ namespace Neptune.Web.Models
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
-        public string GetAuditDescriptionString() => $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
+        public string GetAuditDescriptionString()
+        {
+            return $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
+        }
     }
 
 

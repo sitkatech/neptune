@@ -101,7 +101,7 @@ namespace Neptune.Web.Controllers
         private RedirectResult GetNextObservationTypeViewResult(TreatmentBMP treatmentBMP, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             var orderedObservationTypes = treatmentBMP.TreatmentBMPType.GetObservationTypes()
-                .Where(x => x.HasBenchmarkAndThreshold).ToList();
+                .Where(x => x.GetHasBenchmarkAndThreshold()).ToList();
 
             var nextObservationType = treatmentBMPAssessmentObservationType == null
                 ? orderedObservationTypes.First()

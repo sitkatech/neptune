@@ -362,7 +362,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.HasBenchmarkAndThreshold))
+                                    @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.TreatmentBMP.TreatmentBMPType.GetObservationTypesForAssessment().Select(x => x.TreatmentBMPAssessmentObservationType).Where(x => x.GetHasBenchmarkAndThreshold()))
                                     {
                                         <tr>
                                             <td>@treatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>

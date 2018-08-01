@@ -61,7 +61,7 @@ namespace Neptune.Web.Models
                 return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
             }
 
-            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName}";
+            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName}";
         }
 
         public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
