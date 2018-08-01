@@ -87,7 +87,7 @@ namespace Neptune.Web.Views.Shared
             supportRequestLog.SupportRequestTypeID = (int) SupportRequestTypeEnum.Value;
             supportRequestLog.RequestDescription = RequestDescription;
             supportRequestLog.RequestDate = DateTime.Now;
-            if (updatePerson != null && !updatePerson.IsAnonymousUser)
+            if (updatePerson != null && !updatePerson.IsAnonymousUser())
             {
                 supportRequestLog.RequestPersonID = updatePerson.PersonID;
             }

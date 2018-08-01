@@ -55,7 +55,7 @@ namespace Neptune.Web.Views.User
             : base(currentPerson)
         {
             Person = personToView;
-            PageTitle = personToView.FullNameFirstLast + (!personToView.IsActive ? " (inactive)" : string.Empty);
+            PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);
             EntityName = "Users";
             //TODO: This gets pulled up to root
             EditPersonOrganizationPrimaryContactUrl = SitkaRoute<PersonOrganizationController>.BuildUrlFromExpression(c => c.EditPersonOrganizationPrimaryContacts(personToView));
@@ -75,13 +75,13 @@ namespace Neptune.Web.Views.User
             IsViewingSelf = currentPerson != null && currentPerson.PersonID == personToView.PersonID;
             EditRolesLink = UserCanManageThisPersonPermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditRoles(personToView)),
-                    $"Edit Roles for User - {personToView.FullNameFirstLast}",
+                    $"Edit Roles for User - {personToView.GetFullNameFirstLast()}",
                     true)
                 : new HtmlString(string.Empty);
 
             EditJurisdictionsLink = UserCanManageThisPersonPermissions
                 ? ModalDialogFormHelper.MakeEditIconLink(SitkaRoute<UserController>.BuildUrlFromExpression(c => c.EditJurisdiction(personToView)),
-                    $"Edit Assigned Jurisdictions for User - {personToView.FullNameFirstLast}",
+                    $"Edit Assigned Jurisdictions for User - {personToView.GetFullNameFirstLast()}",
                     true)
                 : new HtmlString(string.Empty);
 

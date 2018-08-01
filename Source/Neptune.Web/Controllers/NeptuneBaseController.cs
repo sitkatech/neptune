@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
 
         protected override bool IsCurrentUserAnonymous()
         {
-            return CurrentPerson == null || CurrentPerson.IsAnonymousUser;
+            return CurrentPerson == null || CurrentPerson.IsAnonymousUser();
         }
 
         protected override string LoginUrl => NeptuneHelpers.GenerateLogInUrlWithReturnUrl();

@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
                 var defaultSupportPerson = HttpRequestStorage.DatabaseEntities.People.GetPerson(NeptuneWebConfiguration.DefaultSupportPersonID);
                 supportPersons.Add(defaultSupportPerson);
                 mailMessage.Body = string.Format("<p style=\"font-weight:bold\">Note: No users are currently configured to receive support emails. Defaulting to User: {0}</p>{1}",
-                    defaultSupportPerson.FullNameFirstLast,
+                    defaultSupportPerson.GetFullNameFirstLast(),
                     mailMessage.Body);
             }
             foreach (var supportPerson in supportPersons)

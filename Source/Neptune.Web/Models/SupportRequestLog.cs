@@ -33,11 +33,11 @@ namespace Neptune.Web.Models
         public static SupportRequestLog Create(Person person)
         {
             var supportRequest = CreateNewBlank(SupportRequestType.Other);
-            if (person != null && !person.IsAnonymousUser)
+            if (person != null && !person.IsAnonymousUser())
             {
                 supportRequest.RequestPerson = person;
                 supportRequest.RequestPersonID = person.PersonID;
-                supportRequest.RequestPersonName = person.FullNameFirstLast;
+                supportRequest.RequestPersonName = person.GetFullNameFirstLast();
                 supportRequest.RequestPersonEmail = person.Email;
                 if (person.Organization != null)
                 {
@@ -84,7 +84,7 @@ namespace Neptune.Web.Models
                 RequestPersonPhone ?? "(not provided)",
                 supportRequestType.SupportRequestTypeDisplayName,
                 RequestDescription.HtmlEncodeWithBreaks(),
-                RequestPerson != null ? $"{RequestPerson.FullNameFirstLast} (UserID {RequestPerson.PersonID})" : "(anonymous user)",
+                RequestPerson != null ? $"{RequestPerson.GetFullNameFirstLast()} (UserID {RequestPerson.PersonID})" : "(anonymous user)",
                 ipAddress,
                 userAgent,
                 currentUrl,

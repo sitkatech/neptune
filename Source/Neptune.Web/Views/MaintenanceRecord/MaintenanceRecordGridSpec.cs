@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
             Add("Date", x => x.GetMaintenanceRecordDate.ToStringDate(), 150);
             Add("Performed By", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
-            Add("Entered By", x => x.GetMaintenanceRecordPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Entered By", x => x.GetMaintenanceRecordPerson.GetFullNameLastFirst(), 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);

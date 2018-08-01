@@ -93,7 +93,7 @@ namespace Neptune.Web.Models
             : new HtmlString(ViewUtilities.NoneString);
 
         public static string GetPrimaryContactPersonAsString(this Organization organization) => organization.PrimaryContactPerson != null
-            ? organization.PrimaryContactPerson.FullNameFirstLast
+            ? organization.PrimaryContactPerson.GetFullNameFirstLast()
             : ViewUtilities.NoneString;
     }
 }

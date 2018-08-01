@@ -50,13 +50,25 @@ namespace Neptune.Web.Models
             return existingOrganization == null;
         }
 
-        public string GetAuditDescriptionString() => OrganizationName;
+        public string GetAuditDescriptionString()
+        {
+            return OrganizationName;
+        }
 
-        public bool IsInKeystone() => OrganizationGuid.HasValue;
+        public bool IsInKeystone()
+        {
+            return OrganizationGuid.HasValue;
+        }
 
-        public bool IsUnknown() => !String.IsNullOrWhiteSpace(OrganizationName) &&
-                                   OrganizationName.Equals(OrganizationUnknown, StringComparison.InvariantCultureIgnoreCase);
+        public bool IsUnknown()
+        {
+            return !String.IsNullOrWhiteSpace(OrganizationName) &&
+                   OrganizationName.Equals(OrganizationUnknown, StringComparison.InvariantCultureIgnoreCase);
+        }
 
-        public string GetAbbreviationIfAvailable() => OrganizationShortName ?? OrganizationName;
+        public string GetAbbreviationIfAvailable()
+        {
+            return OrganizationShortName ?? OrganizationName;
+        }
     }
 }

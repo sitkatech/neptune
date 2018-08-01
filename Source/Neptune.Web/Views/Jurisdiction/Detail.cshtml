@@ -43,7 +43,7 @@
                         {
                             <p>The following people can edit, and assess BMPs for @ViewDataTyped.StormwaterJurisdiction.OrganizationDisplayName.</p>
                             <ul>
-                                @foreach (var person in ViewDataTyped.UsersAssignedToJurisdiction.OrderBy(x => x.FullNameLastFirst))
+                                @foreach (var person in ViewDataTyped.UsersAssignedToJurisdiction.OrderBy(x => x.GetFullNameLastFirst()))
                                 {
                                     <li>
                                         @(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission ? person.GetFullNameFirstLastAndOrgAsUrl() : person.GetFullNameFirstLastAsStringAndOrgAsUrl())

@@ -125,7 +125,7 @@
                 @if (ViewDataTyped.Organization.People.Any())
                 {
                     <ul>
-                        @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.FullNameLastFirst))
+                        @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.GetFullNameLastFirst()))
                         {
                             if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
                             {
@@ -136,7 +136,7 @@
                             else
                             {
                                 <li>
-                                    @person.FullNameFirstLast
+                                    @person.GetFullNameFirstLast()
                                 </li>
                             }
                         }
