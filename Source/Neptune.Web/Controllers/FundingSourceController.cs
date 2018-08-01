@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fundingSource, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllFundingSources.Add(fundingSource);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.DisplayNameAsUrl} succesfully created.");
+            SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.GetDisplayNameAsUrl()} succesfully created.");
 
             return new ModalDialogFormJsonResult();
         }

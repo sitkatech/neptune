@@ -284,7 +284,7 @@
                             {
                                 <div class="row">
                                     <div class="col-sm-9">
-                                        <h4>@fundingEvent.DisplayName</h4>
+                                        <h4>@fundingEvent.GetDisplayName()</h4>
                                     </div>
                                     <div class="col-sm-3 text-right">
                                         @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), fundingEvent.GetEditUrl(), "Edit Funding Event", new List<string>(), ViewDataTyped.CurrentPersonCanManage)
@@ -302,11 +302,11 @@
                                                     <th>@Html.LabelWithSugarFor(FieldDefinition.FundingSource)</th>
                                                     <th style="text-align: right">Amount</th>
                                                 </tr>
-                                                @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.DisplayName))
+                                                @foreach (var fundingEventFundingSource in fundingEvent.FundingEventFundingSources.OrderBy(x => x.FundingSource.GetDisplayName()))
                                                 {
                                                     <tr>
-                                                        <td>@Html.Raw(fundingEventFundingSource.FundingSource.DisplayNameAsUrl)</td>
-                                                        <th class="text-right">@(fundingEventFundingSource.AmountIfSpecified)</th>
+                                                        <td>@Html.Raw(fundingEventFundingSource.FundingSource.GetDisplayNameAsUrl())</td>
+                                                        <th class="text-right">@fundingEventFundingSource.GetAmountIfSpecified()</th>
                                                     </tr>
                                                 }
                                                 <tr>

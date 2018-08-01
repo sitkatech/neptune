@@ -10,23 +10,30 @@ namespace Neptune.Web.Models
 {
     public partial class FundingSource : IAuditableEntity
     {
-        public string EditUrl
+        public string GetEditUrl()
         {
-            get { return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(t => t.Edit(FundingSourceID)); }
+            return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(t => t.Edit(FundingSourceID));
         }
 
-        public string DeleteUrl
+        public string GetDeleteUrl()
         {
-            get { return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.DeleteFundingSource(FundingSourceID)); }
+            return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.DeleteFundingSource(FundingSourceID));
         }
 
-        public HtmlString DisplayNameAsUrl => UrlTemplate.MakeHrefString(DetailUrl, DisplayName);
-
-        public string DisplayName => $"{FundingSourceName} ({Organization.GetOrganizationShortNameIfAvailable()}){(!IsActive ? " (Inactive)" : string.Empty)}";    
-
-        public string DetailUrl
+        public HtmlString GetDisplayNameAsUrl()
         {
-            get { return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(x => x.Detail(FundingSourceID)); }
+            return UrlTemplate.MakeHrefString(GetDetailUrl(), GetDisplayName());
+        }
+
+        public string GetDisplayName()
+        {
+            return
+                $"{FundingSourceName} ({Organization.GetOrganizationShortNameIfAvailable()}){(!IsActive ? " (Inactive)" : string.Empty)}";
+        }
+
+        public string GetDetailUrl()
+        {
+            return SitkaRoute<FundingSourceController>.BuildUrlFromExpression(x => x.Detail(FundingSourceID));
         }
 
         public static bool IsFundingSourceNameUnique(IEnumerable<FundingSource> fundingSources, string fundingSourceName, int currentFundingSourceID)
@@ -37,7 +44,10 @@ namespace Neptune.Web.Models
         }
 
 
-        public string GetAuditDescriptionString() => FundingSourceName;
+        public string GetAuditDescriptionString()
+        {
+            return FundingSourceName;
+        }
 
         public List<TreatmentBMP> GetAssociatedTreatmentBMPs(Person person)
         {

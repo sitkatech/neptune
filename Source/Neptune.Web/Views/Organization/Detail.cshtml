@@ -104,7 +104,7 @@
                         @foreach (var fundingSource in ViewDataTyped.Organization.FundingSources.OrderBy(x => x.FundingSourceName))
                         {
                             <li>
-                                @fundingSource.DisplayNameAsUrl
+                                @fundingSource.GetDisplayNameAsUrl()
                             </li>
                         }
                     </ul>
