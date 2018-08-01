@@ -42,7 +42,7 @@ namespace Neptune.Web.Models
         public static HtmlString GetDisplayNameAsDetailUrl(this StormwaterJurisdiction stormwaterJurisdiction)
         {
             return new HtmlString(
-                $"<a href=\"{stormwaterJurisdiction.GetDetailUrl()}\" alt=\"{stormwaterJurisdiction.OrganizationDisplayName}\" title=\"{stormwaterJurisdiction.OrganizationDisplayName}\" >{stormwaterJurisdiction.OrganizationDisplayName}</a>");
+                $"<a href=\"{stormwaterJurisdiction.GetDetailUrl()}\" alt=\"{stormwaterJurisdiction.GetOrganizationDisplayName()}\" title=\"{stormwaterJurisdiction.GetOrganizationDisplayName()}\" >{stormwaterJurisdiction.GetOrganizationDisplayName()}</a>");
         }
 
         public static List<Person> PeopleWhoCanManageStormwaterJurisdiction(this StormwaterJurisdiction stormwaterJurisdiction)

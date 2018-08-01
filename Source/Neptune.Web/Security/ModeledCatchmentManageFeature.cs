@@ -47,7 +47,7 @@ namespace Neptune.Web.Security
 
             if (!hasPrivs)
             {
-                return new PermissionCheckResult($"You aren't assigned to manage Modeled Catchments for Jurisdiction {contextModelObject.StormwaterJurisdiction.OrganizationDisplayName}");
+                return new PermissionCheckResult($"You aren't assigned to manage Modeled Catchments for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

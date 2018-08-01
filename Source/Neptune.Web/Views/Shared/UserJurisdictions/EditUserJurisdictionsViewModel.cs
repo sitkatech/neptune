@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         public EditUserJurisdictionsViewModel(Person person, Person currentPerson)
         {
             PersonID = person.PersonID;
-            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.OrganizationDisplayName).Select(x => new StormwaterJurisdictionPersonSimple(x, currentPerson)).ToList();
+            StormwaterJurisdictionPersonSimples = person.StormwaterJurisdictionPeople.OrderBy(x => x.StormwaterJurisdiction.GetOrganizationDisplayName()).Select(x => new StormwaterJurisdictionPersonSimple(x, currentPerson)).ToList();
         }
 
         public void UpdateModel(Person person, IList<StormwaterJurisdictionPerson> allStormwaterJurisdictionPeople)

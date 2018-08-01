@@ -12,7 +12,14 @@ namespace Neptune.Web.Models
             return !(string.IsNullOrWhiteSpace(ParcelAddress) || string.IsNullOrWhiteSpace(ParcelZipCode));
         }
 
-        public string GetParcelAddress() => $"{ParcelAddress}, {ParcelZipCode}";
-        public string GetAuditDescriptionString() => ParcelNumber;
+        public string GetParcelAddress()
+        {
+            return $"{ParcelAddress}, {ParcelZipCode}";
+        }
+
+        public string GetAuditDescriptionString()
+        {
+            return ParcelNumber;
+        }
     }
 }

@@ -40,7 +40,12 @@ namespace Neptune.Web.Models
             return "Organization: " + organizationName;
         }
 
-        public string OrganizationDisplayName => IsTransportationJurisdiction ? Organization.OrganizationShortName : Organization.OrganizationName;
+        public string GetOrganizationDisplayName()
+        {
+            return IsTransportationJurisdiction
+                ? Organization.OrganizationShortName
+                : Organization.OrganizationName;
+        }
 
         public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(List<StormwaterJurisdiction> stormwaterJurisdictions)
         {

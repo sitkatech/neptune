@@ -20,6 +20,9 @@ namespace Neptune.Web.Models
             return organizationType == null;
         }
 
-        public string GetAuditDescriptionString() => OrganizationTypeName;
+        public string GetAuditDescriptionString()
+        {
+            return OrganizationTypeName;
+        }
     }
 }

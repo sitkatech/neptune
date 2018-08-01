@@ -1072,7 +1072,6 @@
     <Compile Include="Controllers\NeptunePageController.cs" />
     <Compile Include="Controllers\FileResourceController.cs" />
     <Compile Include="Controllers\NeptuneBaseController.cs" />
-    <Compile Include="Models\ReportedValueForDisplay.cs" />
     <Compile Include="Common\FieldDefinitionDisplayAttribute.cs" />
     <Compile Include="Models\EntityNote.cs" />
     <Compile Include="Models\ExternalLink.cs" />

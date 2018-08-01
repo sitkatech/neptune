@@ -41,7 +41,7 @@
                 var jurisdiction = ViewDataTyped.Jurisdictions.Single();
                 <p>
                     Your assigned Jurisdiction:
-                    <a href="@jurisdiction.GetDetailUrl()">@jurisdiction.OrganizationDisplayName</a>
+                    <a href="@jurisdiction.GetDetailUrl()">@jurisdiction.GetOrganizationDisplayName()</a>
                 </p>
             }
             else if (ViewDataTyped.Jurisdictions.Any())
@@ -53,7 +53,7 @@
                     @foreach (var jurisdiction in ViewDataTyped.Jurisdictions)
                     {
                         <li>
-                            <a href="@jurisdiction.GetDetailUrl()">@jurisdiction.OrganizationDisplayName</a>
+                            <a href="@jurisdiction.GetDetailUrl()">@jurisdiction.GetOrganizationDisplayName()</a>
                         </li>
                     }
                 </ul>
