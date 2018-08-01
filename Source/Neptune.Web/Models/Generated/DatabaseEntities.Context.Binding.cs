@@ -19,6 +19,11 @@ namespace Neptune.Web.Models
 {
     public partial class DatabaseEntities : DbContext, LtInfo.Common.EntityModelBinding.ILtInfoEntityTypeLoader
     {
+        static DatabaseEntities()
+        {
+            System.Data.Entity.Database.SetInitializer<DatabaseEntities>(null);
+        }
+
         public DatabaseEntities()
             : base("name=DatabaseEntities")
         {
@@ -26,7 +31,51 @@ namespace Neptune.Web.Models
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            throw new UnintentionalCodeFirstException();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Configurations.Add(new AuditLogConfiguration());
+            modelBuilder.Configurations.Add(new CountyConfiguration());
+            modelBuilder.Configurations.Add(new CustomAttributeConfiguration());
+            modelBuilder.Configurations.Add(new CustomAttributeTypeConfiguration());
+            modelBuilder.Configurations.Add(new CustomAttributeValueConfiguration());
+            modelBuilder.Configurations.Add(new FieldDefinitionDataConfiguration());
+            modelBuilder.Configurations.Add(new FieldDefinitionDataImageConfiguration());
+            modelBuilder.Configurations.Add(new FieldVisitConfiguration());
+            modelBuilder.Configurations.Add(new FileResourceConfiguration());
+            modelBuilder.Configurations.Add(new FundingEventConfiguration());
+            modelBuilder.Configurations.Add(new FundingEventFundingSourceConfiguration());
+            modelBuilder.Configurations.Add(new FundingSourceConfiguration());
+            modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
+            modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
+            modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
+            modelBuilder.Configurations.Add(new ModeledCatchmentConfiguration());
+            modelBuilder.Configurations.Add(new ModeledCatchmentGeometryStagingConfiguration());
+            modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
+            modelBuilder.Configurations.Add(new NeptunePageConfiguration());
+            modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
+            modelBuilder.Configurations.Add(new NotificationConfiguration());
+            modelBuilder.Configurations.Add(new OrganizationConfiguration());
+            modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
+            modelBuilder.Configurations.Add(new ParcelConfiguration());
+            modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new StateProvinceConfiguration());
+            modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
+            modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
+            modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
+            modelBuilder.Configurations.Add(new TenantAttributeConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPAssessmentConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPAssessmentObservationTypeConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPAssessmentPhotoConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPBenchmarkAndThresholdConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPDocumentConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPImageConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPObservationConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPTypeConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPTypeAssessmentObservationTypeConfiguration());
+            modelBuilder.Configurations.Add(new TreatmentBMPTypeCustomAttributeTypeConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanDocumentConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanParcelConfiguration());
         }
         public virtual DbSet<AuditLog> AllAuditLogs { get; set; }
         public virtual IQueryable<AuditLog> AuditLogs { get { return AllAuditLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }

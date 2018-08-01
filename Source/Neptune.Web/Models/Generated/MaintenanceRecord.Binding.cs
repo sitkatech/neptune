@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
-        protected virtual ICollection<FieldVisit> FieldVisits { get; set; }
+        public virtual ICollection<FieldVisit> FieldVisits { get; set; }
         [NotMapped]
         public FieldVisit FieldVisit { get { return FieldVisits.SingleOrDefault(); } set { FieldVisits = new List<FieldVisit>{value};} }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }

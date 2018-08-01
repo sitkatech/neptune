@@ -28,7 +28,6 @@ namespace Neptune.Web.Models
 {
     public partial class Organization : IAuditableEntity
     {
-        public const string OrganizationSitka = "Sitka Technology Group";
         public const string OrganizationUnknown = "(Unknown or Unspecified Organization)";
         
         public string DisplayName => IsUnknown ? "Unknown or unspecified" : $"{OrganizationName}{(!IsActive ? " (Inactive)" : String.Empty)}";
@@ -66,8 +65,6 @@ namespace Neptune.Web.Models
         /// Use for security situations where the user summary is not displayable, but the Organization is.
         /// </summary>
         public HtmlString PrimaryContactPersonAsStringAndOrgAsUrl => PrimaryContactPerson != null ? PrimaryContactPerson.GetFullNameFirstLastAsStringAndOrgAsUrl() : new HtmlString(ViewUtilities.NoneString);
-
-        public string PrimaryContactPersonWithOrgAsString => PrimaryContactPerson != null ? PrimaryContactPerson.FullNameFirstLastAndOrg : ViewUtilities.NoneString;
 
         public string PrimaryContactPersonAsString => PrimaryContactPerson != null ? PrimaryContactPerson.FullNameFirstLast : ViewUtilities.NoneString;
 
