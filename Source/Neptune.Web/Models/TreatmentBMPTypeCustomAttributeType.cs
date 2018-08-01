@@ -2,10 +2,20 @@
 {
     public partial class TreatmentBMPTypeCustomAttributeType : IAuditableEntity, IHaveASortOrder
     {
-        public string GetAuditDescriptionString() =>
-            $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {CustomAttributeType?.CustomAttributeTypeName ?? "Unknown"}";
+        public string GetAuditDescriptionString()
+        {
+            return
+                $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {CustomAttributeType?.CustomAttributeTypeName ?? "Unknown"}";
+        }
 
-        public string GetDisplayName() => CustomAttributeType.CustomAttributeTypeName;
-        public int GetID() => TreatmentBMPTypeCustomAttributeTypeID;
+        public string GetDisplayName()
+        {
+            return CustomAttributeType.CustomAttributeTypeName;
+        }
+
+        public int GetID()
+        {
+            return TreatmentBMPTypeCustomAttributeTypeID;
+        }
     }
 }
