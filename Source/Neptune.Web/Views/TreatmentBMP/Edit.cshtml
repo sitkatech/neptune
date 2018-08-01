@@ -67,7 +67,7 @@
                         @Html.LabelWithSugarFor(m => m.TreatmentBMPName)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.TreatmentBMPName, new {style = "width: auto", @class = "form-control"})
+                        @Html.TextBoxFor(m => m.TreatmentBMPName, new { style = "width: auto", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.TreatmentBMPName)
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
@@ -110,19 +110,23 @@
                         @Html.ValidationMessageFor(m => m.OwnerOrganizationID)
                     </div>
                 </div>
+            </div>
+        </div><div class="row">
+            <div class="form-horizontal">
+                <hr />
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.YearBuilt)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.YearBuilt, new {style = "width: auto", @class = "form-control", type = "number"})
+                        @Html.TextBoxFor(m => m.YearBuilt, new { style = "width: auto", @class = "form-control", type = "number" })
                         @Html.ValidationMessageFor(m => m.YearBuilt)
                     </div>
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.SystemOfRecordID)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.TextBoxFor(m => m.SystemOfRecordID, new {style = "width: auto", @class = "form-control"})
+                        @Html.TextBoxFor(m => m.SystemOfRecordID, new { style = "width: auto", @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.SystemOfRecordID)
                     </div>
                 </div>
@@ -161,7 +165,7 @@
                 </div>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-horizontal">
@@ -171,7 +175,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-10">
                             @Html.ValidationMessageFor(x => x.Notes)
-                            @Html.TextAreaWithMaxLengthFor(x => x.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> {"form-control"})
+                            @Html.TextAreaWithMaxLengthFor(x => x.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> { "form-control" })
                         </div>
                     </div>
                 </div>
@@ -179,7 +183,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12" style="text-align: right">
-                <hr/>
+                <hr />
                 <button action="p" type="submit" class="btn btn-neptune">Save</button>
                 <a href="@ViewDataTyped.TreatmentBMPIndexUrl" class="btn btn-neptune">Cancel</a>
             </div>
