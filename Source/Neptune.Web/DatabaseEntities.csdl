@@ -805,6 +805,8 @@
     <Property Name="WaterQualityManagementPlanID" Type="Int32" />
     <Property Name="TreatmentBMPLifespanTypeID" Type="Int32" />
     <Property Name="TreatmentBMPLifespanEndDate" Type="DateTime" />
+    <Property Name="RequiredFieldVisitsPerYear" Type="Int32" />
+    <Property Name="RequiredPostStormFieldVisitsPerYear" Type="Int32" />
     <NavigationProperty Name="CustomAttributes" Relationship="Neptune.Web.Models.FK_CustomAttribute_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="CustomAttributes" />
     <NavigationProperty Name="FieldVisits" Relationship="Neptune.Web.Models.FK_FieldVisit_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FieldVisits" />
     <NavigationProperty Name="FundingEvents" Relationship="Neptune.Web.Models.FK_FundingEvent_TreatmentBMP_TreatmentBMPID" FromRole="TreatmentBMP" ToRole="FundingEvents" />

@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -52,6 +52,8 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.TreatmentBMPLifespanTypeID = treatmentBMPLifespanTypeID;
             this.TreatmentBMPLifespanEndDate = treatmentBMPLifespanEndDate;
+            this.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYear;
+            this.RequiredPostStormFieldVisitsPerYear = requiredPostStormFieldVisitsPerYear;
         }
 
         /// <summary>
@@ -173,6 +175,8 @@ namespace Neptune.Web.Models
         public int? WaterQualityManagementPlanID { get; set; }
         public int? TreatmentBMPLifespanTypeID { get; set; }
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
+        public int? RequiredFieldVisitsPerYear { get; set; }
+        public int? RequiredPostStormFieldVisitsPerYear { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 

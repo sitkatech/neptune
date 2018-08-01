@@ -802,6 +802,8 @@ warning 6035: The relationship 'FK_TreatmentBMPImage_TreatmentBMP_TreatmentBMPID
     <Property Name="WaterQualityManagementPlanID" Type="int" />
     <Property Name="TreatmentBMPLifespanTypeID" Type="int" />
     <Property Name="TreatmentBMPLifespanEndDate" Type="datetime" />
+    <Property Name="RequiredFieldVisitsPerYear" Type="int" />
+    <Property Name="RequiredPostStormFieldVisitsPerYear" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_FieldVisit_TreatmentBMPAssessment_InitialAssessmentID_TenantID_TreatmentBMPAssessmentID_TenantID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.

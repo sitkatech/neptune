@@ -405,6 +405,8 @@
           <ScalarProperty Name="WaterQualityManagementPlanID" ColumnName="WaterQualityManagementPlanID" />
           <ScalarProperty Name="TreatmentBMPLifespanTypeID" ColumnName="TreatmentBMPLifespanTypeID" />
           <ScalarProperty Name="TreatmentBMPLifespanEndDate" ColumnName="TreatmentBMPLifespanEndDate" />
+          <ScalarProperty Name="RequiredFieldVisitsPerYear" ColumnName="RequiredFieldVisitsPerYear" />
+          <ScalarProperty Name="RequiredPostStormFieldVisitsPerYear" ColumnName="RequiredPostStormFieldVisitsPerYear" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
