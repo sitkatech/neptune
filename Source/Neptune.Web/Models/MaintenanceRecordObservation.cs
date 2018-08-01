@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace Neptune.Web.Models
@@ -14,7 +15,7 @@ namespace Neptune.Web.Models
                 measurmentUnit = $" {customAttributeType.MeasurementUnitType.LegendDisplayName}";
             }
 
-            var value = string.Join(", ",
+            var value = String.Join(", ",
                 MaintenanceRecordObservationValues.OrderBy(x => x.ObservationValue).Select(x => x.ObservationValue));
 
             return $"{value}{measurmentUnit}";

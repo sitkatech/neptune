@@ -57,8 +57,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             DefaultBenchmarkText = TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue.HasValue ? $"The default value is {TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue} {TreatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
 
             DefaultThresholdPlaceholder = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? "default is " + TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.Value : string.Empty;
-            TargetIsSweetSpot = TreatmentBMPAssessmentObservationType.TargetIsSweetSpot;
-            var optionalPlusMinus = TreatmentBMPAssessmentObservationType.TargetIsSweetSpot ? "+/-" : "";
+            TargetIsSweetSpot = TreatmentBMPAssessmentObservationType.GetTargetIsSweetSpot();
+            var optionalPlusMinus = TreatmentBMPAssessmentObservationType.GetTargetIsSweetSpot() ? "+/-" : "";
             DefaultThresholdText = TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue.HasValue ? $"The default value is {optionalPlusMinus} {TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue} {TreatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType().MeasurementUnitTypeDisplayName}." : string.Empty;
         }
     }

@@ -58,11 +58,11 @@ Source code is available upon request via <support@sitkatech.com>.
                 @if (ViewDataTyped.KeyPhoto != null)
                 {
                     <div class="keyPhoto">
-                        <a id="keyPhoto" href="@ViewDataTyped.KeyPhoto.PhotoUrl" title="@ViewDataTyped.KeyPhoto.CaptionOnFullView" data-caption="@Html.Raw(@ViewDataTyped.KeyPhoto.CaptionOnFullView.HtmlEncode())">
-                            <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.CaptionOnFullView" />
+                        <a id="keyPhoto" href="@ViewDataTyped.KeyPhoto.GetPhotoUrl()" title="@ViewDataTyped.KeyPhoto.GetCaptionOnFullView()" data-caption="@Html.Raw(@ViewDataTyped.KeyPhoto.GetCaptionOnFullView().HtmlEncode())">
+                            <img class="img-responsive" src="@ViewDataTyped.KeyPhoto.PhotoUrlScaledThumbnail(200)" alt="@ViewDataTyped.KeyPhoto.GetCaptionOnFullView()" />
                         </a>
                         <div class="caption">
-                            @Html.Raw(ViewDataTyped.KeyPhoto.CaptionOnGallery.HtmlEncodeWithBreaks())
+                            @Html.Raw(ViewDataTyped.KeyPhoto.GetCaptionOnGallery().HtmlEncodeWithBreaks())
                         </div>
                     </div>
                 }

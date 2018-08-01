@@ -131,9 +131,9 @@ namespace Neptune.Web.Views.TreatmentBMPType
                 return validationResults;
             }
 
-            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => x.HasBenchmarkAndThreshold).ToList().Select(x => x.TreatmentBMPAssessmentObservationTypeID).Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
+            var hasBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => x.GetHasBenchmarkAndThreshold()).ToList().Select(x => x.TreatmentBMPAssessmentObservationTypeID).Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
-            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => !x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList().Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
+            var noBenchmarkAndThresholdsSimples = TreatmentBMPTypeObservationTypeSimples.Where(y => HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.ToList().Where(x => !x.GetHasBenchmarkAndThreshold()).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList().Contains(y.TreatmentBMPAssessmentObservationTypeID)).ToList();
 
             var requiresAssessmentWeightSimples = new List<TreatmentBMPTypeObservationTypeSimple>();
             requiresAssessmentWeightSimples.AddRange(hasBenchmarkAndThresholdsSimples);

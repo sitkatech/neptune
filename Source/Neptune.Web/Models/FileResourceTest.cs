@@ -55,7 +55,7 @@ namespace Neptune.Web.Models
             // Assert
             //Assert.That(fileResource.FileResourceData, Is.EqualTo(testImageFile.InputStream));
             Assert.That(fileResource.FileResourceMimeType, Is.EqualTo(testImageFile.FileResourceMimeType));
-            Assert.That(fileResource.OriginalCompleteFileName, Is.EqualTo(testImageFile.FileName));
+            Assert.That(fileResource.GetOriginalCompleteFileName(), Is.EqualTo(testImageFile.FileName));
             Assert.That(fileResource.CreatePersonID, Is.EqualTo(person.PersonID));
         }
 
@@ -63,7 +63,7 @@ namespace Neptune.Web.Models
         public void GuidRegexWorksTest()
         {
             var a = TestFramework.TestFileResource.Create();
-            var results = FileResource.FindAllFileResourceGuidsFromStringContainingFileResourceUrls(a.FileResourceUrl);
+            var results = FileResource.FindAllFileResourceGuidsFromStringContainingFileResourceUrls(a.GetFileResourceUrl());
 
             Assert.That(results, Is.EquivalentTo(new[] {a.FileResourceGUID}));
         }

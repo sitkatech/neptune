@@ -103,7 +103,7 @@ namespace Neptune.Web.Controllers
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var viewModel = new NewFieldVisitViewModel(treatmentBMP.InProgressFieldVisit);
+            var viewModel = new NewFieldVisitViewModel(treatmentBMP.GetInProgressFieldVisit());
             return ViewNew(treatmentBMP, viewModel);
         }
 
@@ -133,13 +133,13 @@ namespace Neptune.Web.Controllers
             }
             else if (viewModel.Continue == false)
             {
-                var oldFieldVisit = treatmentBMP.InProgressFieldVisit;
+                var oldFieldVisit = treatmentBMP.GetInProgressFieldVisit();
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
                 fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType);
             }
             else // if Continue == true
             {
-                fieldVisit = treatmentBMP.InProgressFieldVisit;
+                fieldVisit = treatmentBMP.GetInProgressFieldVisit();
             }
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
@@ -378,7 +378,7 @@ namespace Neptune.Web.Controllers
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes;
+            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes();
             var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,
                 fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
                 missingRequiredAttributes);

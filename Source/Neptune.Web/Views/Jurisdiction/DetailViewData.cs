@@ -51,14 +51,14 @@ namespace Neptune.Web.Views.Jurisdiction
         public DetailViewData(Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(currentPerson, StormwaterBreadCrumbEntity.Jurisdiction) 
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
-            PageTitle = stormwaterJurisdiction.OrganizationDisplayName;
+            PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<JurisdictionController>.BuildUrlFromExpression(x => x.Index());
             
             JurisdictionModeledCatchmentsGridSpec = new JurisdictionModeledCatchmentsGridSpec(currentPerson)
             {
                 ObjectNameSingular = "Modeled Catchment",
-                ObjectNamePlural = $"Modeled Catchments associated with {stormwaterJurisdiction.OrganizationDisplayName}",
+                ObjectNamePlural = $"Modeled Catchments associated with {stormwaterJurisdiction.GetOrganizationDisplayName()}",
                 SaveFiltersInCookie = true
             };
             JurisdictionModeledCatchmentsGridName = "jurisdictionModeledCatchmentGrid";
@@ -67,7 +67,7 @@ namespace Neptune.Web.Views.Jurisdiction
             TreatmentBMPGridSpec = new TreatmentBMPGridSpec(currentPerson, false, false)
             {
                 ObjectNameSingular = "Treatment BMP",
-                ObjectNamePlural = $"Treatment BMPs for {stormwaterJurisdiction.OrganizationDisplayName}",
+                ObjectNamePlural = $"Treatment BMPs for {stormwaterJurisdiction.GetOrganizationDisplayName()}",
                 SaveFiltersInCookie = true
             };
             TreatmentBMPGridName = "jurisdictionTreatmentBMPGrid";

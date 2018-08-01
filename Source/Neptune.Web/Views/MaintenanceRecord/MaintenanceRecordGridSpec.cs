@@ -45,9 +45,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
 
-            Add("Date", x => x.GetMaintenanceRecordDate.ToStringDate(), 150);
-            Add("Performed By", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
-            Add("Entered By", x => x.GetMaintenanceRecordPerson.FullNameLastFirst, 100, DhtmlxGridColumnFilterType.Text);
+            Add("Date", x => x.GetMaintenanceRecordDate().ToStringDate(), 150);
+            Add("Performed By", x => x.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
+            Add("Entered By", x => x.GetMaintenanceRecordPerson().GetFullNameLastFirst(), 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType.MaintenanceRecordTypeDisplayName, 100,
                 DhtmlxGridColumnFilterType.Text);
@@ -73,9 +73,9 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 40, DhtmlxGridColumnFilterType.None);
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            Add("Date", x => x.GetMaintenanceRecordDate.ToStringDate(), 150);
-            Add("Organization", x => x.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Performed By", x => x.GetMaintenanceRecordPerson == null ? new HtmlString(string.Empty) : x.GetMaintenanceRecordPerson.GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Date", x => x.GetMaintenanceRecordDate().ToStringDate(), 150);
+            Add("Organization", x => x.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Performed By", x => x.GetMaintenanceRecordPerson() == null ? new HtmlString(string.Empty) : x.GetMaintenanceRecordPerson().GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
                 x => x.MaintenanceRecordType?.MaintenanceRecordTypeDisplayName ?? "Not set", 100,
                 DhtmlxGridColumnFilterType.Text);

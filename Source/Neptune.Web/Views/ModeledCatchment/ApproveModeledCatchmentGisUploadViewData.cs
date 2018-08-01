@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.ModeledCatchment
             MapInitJson = mapInitJson;
             LayerColors = layerColors;
             StormwaterJurisdictionSelectListItems =
-                stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
+                stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                     .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.Organization.OrganizationName);
             ModeledCatchmentGeomertyLayerSelectProperties = currentPerson.ModeledCatchmentGeometryStagings.ToDictionary(x => x.ModeledCatchmentGeometryStagingID,
                 x => x.ToGeoJsonFeatureCollection().GetFeaturePropertyNames().ToSelectListWithEmptyFirstRow(y => y, y => y));

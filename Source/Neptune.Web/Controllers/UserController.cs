@@ -53,7 +53,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Person> IndexGridJsonData()
         {
             var gridSpec = new IndexGridSpec(CurrentPerson);
-            var persons = HttpRequestStorage.DatabaseEntities.People.ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission).OrderBy(x => x.FullNameLastFirst).ToList();
+            var persons = HttpRequestStorage.DatabaseEntities.People.ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission).OrderBy(x => x.GetFullNameLastFirst()).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(persons, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -114,7 +114,7 @@ namespace Neptune.Web.Controllers
         {
             var canDelete = !person.HasDependentObjects() && person != CurrentPerson;
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete {person.FullNameFirstLastAndOrg}?"
+                ? $"Are you sure you want to delete {person.GetFullNameFirstLastAndOrg()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Person", SitkaRoute<UserController>.BuildLinkFromExpression(x => x.Detail(person), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
@@ -178,18 +178,18 @@ namespace Neptune.Web.Controllers
                 if (isPrimaryContactForAnyOrganization)
                 {
                     confirmMessage =
-                        $@"You cannot inactive user '{person.FullNameFirstLast}' because {person.FirstName} is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.PrimaryContactOrganizations.Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>";
+                        $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>";
                 }
                 else
                 {
-                    confirmMessage = $"Are you sure you want to inactivate user '{person.FullNameFirstLast}'?";
+                    confirmMessage = $"Are you sure you want to inactivate user '{person.GetFullNameFirstLast()}'?";
                 }
                 var viewData = new ConfirmDialogFormViewData(confirmMessage, !isPrimaryContactForAnyOrganization);
                 return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
             }
             else
             {
-                confirmMessage = $"Are you sure you want to activate user '{person.FullNameFirstLast}'?";
+                confirmMessage = $"Are you sure you want to activate user '{person.GetFullNameFirstLast()}'?";
                 var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
                 return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
             }
@@ -204,7 +204,7 @@ namespace Neptune.Web.Controllers
             if (person.IsActive)
             {
                 Check.Require(!person.OrganizationsWhereYouAreThePrimaryContactPerson.Any(),
-                    $@"You cannot inactive user '{person.FullNameFirstLast}' because {
+                    $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {
                             person.FirstName
                         } is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for one or more {FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}!");
             }

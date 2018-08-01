@@ -37,10 +37,10 @@ namespace Neptune.Web.Views.FieldVisit
         public RateCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
             : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.RateObservationTypeSchema);
+            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetRateObservationTypeSchema());
             MeasurementUnitLabelAndUnit =
                 $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = treatmentBMPAssessmentObservationType.RateObservationTypeSchema.AssessmentDescription;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetRateObservationTypeSchema().AssessmentDescription;
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
@@ -48,10 +48,10 @@ namespace Neptune.Web.Views.FieldVisit
 
         public RateCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
         {
-            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.RateObservationTypeSchema);
+            ViewDataForAngular = new RateCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetRateObservationTypeSchema());
             MeasurementUnitLabelAndUnit =
                 $"{treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitLabel()} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = treatmentBMPAssessmentObservationType.RateObservationTypeSchema.AssessmentDescription;
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetRateObservationTypeSchema().AssessmentDescription;
         }
 
         public class RateCollectionMethodViewDataForAngular

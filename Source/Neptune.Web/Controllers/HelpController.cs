@@ -56,7 +56,7 @@ namespace Neptune.Web.Controllers
             var viewModel = new SupportFormViewModel(currentPageUrl, supportRequestTypeEnum);
             if (!IsCurrentUserAnonymous())
             {
-                viewModel.RequestPersonName = CurrentPerson.FullNameFirstLast;
+                viewModel.RequestPersonName = CurrentPerson.GetFullNameFirstLast();
                 viewModel.RequestPersonEmail = CurrentPerson.Email;
                 if (CurrentPerson.Organization != null)
                 {

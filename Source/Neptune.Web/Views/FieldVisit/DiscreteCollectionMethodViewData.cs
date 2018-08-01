@@ -39,10 +39,10 @@ namespace Neptune.Web.Views.FieldVisit
             FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
         : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema);
+            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema());
             MeasurementUnitLabelAndUnit =
-                $"{treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.AssessmentDescription;
+                $"{treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().AssessmentDescription;
 
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
                 x.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
@@ -52,10 +52,10 @@ namespace Neptune.Web.Views.FieldVisit
             Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
         //: base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
         {
-            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema);
+            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema());
             MeasurementUnitLabelAndUnit =
-                $"{treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = treatmentBMPAssessmentObservationType.DiscreteObservationTypeSchema.AssessmentDescription;
+                $"{treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
+            AssessmentDescription = treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().AssessmentDescription;
         }
 
         public class DiscreteCollectionMethodViewDataForAngular

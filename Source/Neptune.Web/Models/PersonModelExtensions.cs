@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Common;
@@ -35,7 +36,7 @@ namespace Neptune.Web.Models
     {
         public static HtmlString GetFullNameFirstLastAsUrl(this Person person)
         {
-            return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.FullNameFirstLast);
+            return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.GetFullNameFirstLast());
         }
 
         public static HtmlString GetFullNameFirstLastAndOrgAsUrl(this Person person)
@@ -54,7 +55,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetFullNameFirstLastAsStringAndOrgAsUrl(this Person person)
         {
-            var userString = person.FullNameFirstLast;
+            var userString = person.GetFullNameFirstLast();
             var orgUrl = person.Organization.GetShortNameAsUrl();
             return new HtmlString($"{userString} - {orgUrl}");
         }
@@ -99,6 +100,15 @@ namespace Neptune.Web.Models
         public static bool IsAssignedToStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
         {
             return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
+        }
+
+        /// <summary>
+        /// List of Organizations for which this Person is the primary contact
+        /// </summary>
+        /// <param name="person"></param>
+        public static List<Organization> GetPrimaryContactOrganizations(this Person person)
+        {
+            return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
     }
 }

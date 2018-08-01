@@ -25,14 +25,12 @@ namespace Neptune.Web.Models
 {
     public partial class StormwaterJurisdictionPerson : IAuditableEntity
     {
-        public string AuditDescriptionString
+        public string GetAuditDescriptionString()
         {
-            get
-            {
-                var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID);
-                var person = HttpRequestStorage.DatabaseEntities.People.GetPerson(PersonID);
-                return $"{person} ({stormwaterJurisdiction}) ";   
-            }
+            var stormwaterJurisdiction =
+                HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID);
+            var person = HttpRequestStorage.DatabaseEntities.People.GetPerson(PersonID);
+            return $"{person} ({stormwaterJurisdiction}) ";
         }
     }
 }

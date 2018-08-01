@@ -3,26 +3,33 @@ using System.Linq;
 
 namespace Neptune.Web.Models
 {
-    public partial class MaintenanceRecord
+    public partial class MaintenanceRecord : IAuditableEntity
     {
-        public DateTime? GetMaintenanceRecordDate => FieldVisit?.VisitDate;
-        public Person GetMaintenanceRecordPerson => FieldVisit?.PerformedByPerson;
-        public Organization GetMaintenanceRecordOrganization => FieldVisit?.PerformedByPerson.Organization;
-
-        public bool IsMissingRequiredAttributes =>
-            MaintenanceRecordObservations.Any(x =>
-                x.CustomAttributeType.IsRequired && !IsObservationComplete(x));
-
-        private static bool IsObservationComplete(MaintenanceRecordObservation maintenanceRecordObservation)
+        public DateTime? GetMaintenanceRecordDate()
         {
-            return maintenanceRecordObservation.MaintenanceRecordObservationValues != null && !maintenanceRecordObservation.MaintenanceRecordObservationValues.All(y =>
-                       string.IsNullOrWhiteSpace(y.ObservationValue));
+            return FieldVisit?.VisitDate;
+        }
+
+        public Person GetMaintenanceRecordPerson()
+        {
+            return FieldVisit?.PerformedByPerson;
+        }
+
+        public Organization GetMaintenanceRecordOrganization()
+        {
+            return FieldVisit?.PerformedByPerson.Organization;
+        }
+
+        public bool IsMissingRequiredAttributes()
+        {
+            return MaintenanceRecordObservations.Any(x =>
+                x.CustomAttributeType.IsRequired && !x.IsObservationComplete());
         }
 
         public string MaintenanceRecordStatus()
         {
             var completedObservationCount =
-                MaintenanceRecordObservations.Count(IsObservationComplete);
+                MaintenanceRecordObservations.Count(MaintenanceRecordObservationModelExtensions.IsObservationComplete);
             var totalObservationCount =
                 MaintenanceRecordObservations.Count;
 
@@ -39,6 +46,11 @@ namespace Neptune.Web.Models
                            y.MaintenanceRecordObservationValues.Any(z =>
                                !string.IsNullOrWhiteSpace(z.ObservationValue)))?
                        .GetObservationValueWithUnits() ?? "Not Provided";
+        }
+
+        public string GetAuditDescriptionString()
+        {
+            return $"Maintenance Record dated {GetMaintenanceRecordDate().GetValueOrDefault().ToShortDateString()}";
         }
     }
 }

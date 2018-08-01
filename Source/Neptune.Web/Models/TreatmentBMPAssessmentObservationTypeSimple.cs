@@ -17,9 +17,9 @@ namespace Neptune.Web.Models
             TreatmentBMPAssessment treatmentBMPAssessment, bool overrideAssessmentScoreIfFailing)
         {
             TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
-            HasBenchmarkAndThresholds = treatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold;
+            HasBenchmarkAndThresholds = treatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold();
            
-            var unitDisplayName = treatmentBMPAssessmentObservationType.MeasurementUnitType != null ? $" ({treatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName})" : string.Empty;
+            var unitDisplayName = treatmentBMPAssessmentObservationType.GetMeasurementUnitType() != null ? $" ({treatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName})" : string.Empty;
             DisplayName = $"{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}{unitDisplayName}";
 
             var benchmarkValue = treatmentBMPAssessmentObservationType.GetBenchmarkValue(treatmentBMPAssessment.TreatmentBMP);

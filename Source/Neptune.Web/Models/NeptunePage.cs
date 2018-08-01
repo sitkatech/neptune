@@ -26,9 +26,9 @@ namespace Neptune.Web.Models
 {
     public partial class NeptunePage
     {
-        public bool HasNeptunePageContent
+        public bool HasNeptunePageContent()
         {
-            get { return !string.IsNullOrWhiteSpace(NeptunePageContent); }
+            return !string.IsNullOrWhiteSpace(NeptunePageContent);
         }
 
         public static NeptunePage GetNeptunePageByPageType(NeptunePageType neptunePageType)

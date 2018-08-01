@@ -26,7 +26,7 @@ namespace Neptune.Web.Security
 
             if (!canManageStormwaterJurisdiction)
             {
-                return new PermissionCheckResult($"You aren't assigned to manage Modeled Catchments for Jurisdiction {contextModelObject.StormwaterJurisdiction.OrganizationDisplayName}");
+                return new PermissionCheckResult($"You aren't assigned to manage Modeled Catchments for Jurisdiction {contextModelObject.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

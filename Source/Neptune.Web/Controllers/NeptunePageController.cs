@@ -88,7 +88,7 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             var neptunePageContentHtmlString = neptunePage.NeptunePageContentHtmlString;
-            if (!neptunePage.HasNeptunePageContent)
+            if (!neptunePage.HasNeptunePageContent())
             {
                 neptunePageContentHtmlString = new HtmlString(string.Format("No page content for Page \"{0}\".", neptunePage.NeptunePageType.NeptunePageTypeDisplayName));
             }

@@ -32,7 +32,7 @@ namespace Neptune.Web.Controllers
     {
         protected override bool IsCurrentUserAnonymous()
         {
-            return HttpRequestStorage.Person.IsAnonymousUser;
+            return HttpRequestStorage.Person.IsAnonymousUser();
         }
 
         protected override string LoginUrl
