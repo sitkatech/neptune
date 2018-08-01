@@ -1468,14 +1468,12 @@
     <Compile Include="Common\CkEditorExtensionTest.cs" />
     <Compile Include="Common\FileResourceResult.cs" />
     <Compile Include="Common\PdfResult.cs" />
-    <Compile Include="Models\CalendarYearMonetaryAmount.cs" />
     <Compile Include="Models\FancyTreeNode.cs" />
     <Compile Include="Models\FieldDefinitionData.cs" />
     <Compile Include="Models\OrganizationModelExtensions.cs" />
     <Compile Include="Models\ICalendarYearMonetaryAmount.cs" />
     <Compile Include="Models\AuditLog.cs" />
     <Compile Include="Models\AuditLogEventType.cs" />
-    <Compile Include="Models\CalendarYearReportedValue.cs" />
     <Compile Include="Models\NeptunePage.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\FieldDefinition.cs" />

@@ -4,6 +4,9 @@ namespace Neptune.Web.Models
 {
     public partial class CustomAttribute : IAuditableEntity
     {
-        public string GetAuditDescriptionString() => "Custom Attribute deleted";
+        public string GetAuditDescriptionString()
+        {
+            return "Custom Attribute deleted";
+        }
     }
 }

@@ -2,6 +2,9 @@
 {
     public partial class CustomAttributeValue : IAuditableEntity
     {
-        public string GetAuditDescriptionString() => "Custom Attribute Value deleted";
+        public string GetAuditDescriptionString()
+        {
+            return "Custom Attribute Value deleted";
+        }
     }
 }

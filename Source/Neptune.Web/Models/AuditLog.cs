@@ -54,16 +54,14 @@ namespace Neptune.Web.Models
             "FundingEventFundingSource"
         };
 
-        public string AuditDescriptionDisplay
+        public string GetAuditDescriptionDisplay()
         {
-            get
+            if (string.IsNullOrWhiteSpace(AuditDescription))
             {
-                if (string.IsNullOrWhiteSpace(AuditDescription))
-                {
-                    return AuditLogEventType.GetAuditStringForOperationType(ColumnName, OriginalValue, NewValue);
-                }
-                return AuditDescription;
+                return AuditLogEventType.GetAuditStringForOperationType(ColumnName, OriginalValue, NewValue);
             }
+
+            return AuditDescription;
         }
 
         public static List<AuditLog> GetAuditLogRecordsForModifiedOrDeleted(DbEntityEntry dbEntry, Person person, ObjectContext objectContext)
@@ -273,7 +271,7 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
-        /// Gets the <see cref="IAuditableEntity.AuditDescriptionString"/> for a given entityKey
+        /// Gets the <see cref="IAuditableEntity.GetAuditDescriptionString"/> for a given entityKey
         /// </summary>
         private static string GetAuditDescriptionStringForEntityKey(ObjectContext objectContext, EntityKey entityKey, string entityName)
         {
