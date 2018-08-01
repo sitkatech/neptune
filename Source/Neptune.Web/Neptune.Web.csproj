@@ -281,6 +281,7 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
     <Compile Include="Models\MaintenanceRecordObservationModelExtensions.cs" />
+    <Compile Include="Models\MapInitJsonHelpers.cs" />
     <Compile Include="Models\ParcelModelExtensions.cs" />
     <Compile Include="Models\ParcelSimple.cs" />
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />

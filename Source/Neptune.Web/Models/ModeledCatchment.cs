@@ -25,7 +25,10 @@ namespace Neptune.Web.Models
 {
     public partial class ModeledCatchment : IAuditableEntity
     {
-        public string GetAuditDescriptionString() => ModeledCatchmentName;
+        public string GetAuditDescriptionString()
+        {
+            return ModeledCatchmentName;
+        }
 
         public bool CanView(Person person)
         {

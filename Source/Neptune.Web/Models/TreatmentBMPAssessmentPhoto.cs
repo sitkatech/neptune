@@ -10,14 +10,17 @@ namespace Neptune.Web.Models
         public string GetAuditDescriptionString() =>
             $"Treatment BMP Assessment Photo {FileResource.GetOriginalCompleteFileName() ?? "<File Name Not Found>"}";
 
-        public DateTime CreateDate => FileResource.CreateDate;
-        public string DeleteUrl =>
-            SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c => c.DeletePhoto(TreatmentBMPAssessmentPhotoID));
-        public string CaptionOnFullView => Caption;
-        public string CaptionOnGallery => Caption;
-        public string PhotoUrl => FileResource.GetFileResourceUrl();
+        public DateTime GetCreateDate() => FileResource.CreateDate;
+
+        public string GetDeleteUrl() =>
+            SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c =>
+                c.DeletePhoto(TreatmentBMPAssessmentPhotoID));
+
+        public string GetCaptionOnFullView() => Caption;
+        public string GetCaptionOnGallery() => Caption;
+        public string GetPhotoUrl() => FileResource.GetFileResourceUrl();
         public string PhotoUrlScaledThumbnail(int maxHeight) => FileResource.FileResourceUrlScaledThumbnail(maxHeight);
-        public string EditUrl => "#";
+        public string GetEditUrl() => "#";
         public List<string> AdditionalCssClasses => new List<string>();
         public object OrderBy { get; set; }
     }
