@@ -51,11 +51,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Lifespan End Date")]
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
 
-        [DisplayName("Required Field Visits Per Year")]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredFieldVisitsPerYear)]
         [Range(0, Int32.MaxValue, ErrorMessage = "Required Field Visits Per Year cannot be negative")]
         public int? RequiredFieldVisitsPerYear { get; set; }
 
-        [DisplayName("Required Post Storm Field Visits Per Year")]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredPostStormFieldVisitsPerYear)]
         [Range(0, Int32.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
 

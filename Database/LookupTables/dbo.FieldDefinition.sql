@@ -52,4 +52,6 @@ VALUES
 (48, N'FieldVisitStatus', N'Field Visit Status', 'Completion status of the Field Visit. A Field Visit can be In Progress, Complete, or left Unresolved. A Treatment BMP may only have one In Progress Field Visit at any given time.', 1),
 (49, N'WaterQualityManagementPlan', N'Water Quality Management Plan', N'', 1),
 (50, N'Parcel', N'Parcel', N'', 1),
-(51, N'RequiredLifespanOfInstallation', N'Required Lifespan of Installation', N'Specifies when or whether a BMP can be removed', 1)
+(51, N'RequiredLifespanOfInstallation', N'Required Lifespan of Installation', N'Specifies when or whether a BMP can be removed', 1),
+(52, N'RequiredFieldVisitsPerYear', N'Required Field Visits Per Year', N'Number of Field Visists that must be conducted for a given BMP each year', 1),
+(53, N'RequiredPostStormFieldVisitsPerYear', N'Required Post-Storm Field Visits Per Year', N'Number of Post-Storm Field Visists that must be conducted for a given BMP each year', 1)
