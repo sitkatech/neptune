@@ -116,7 +116,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>Required Number of Field Visits Per Year</label>
+                        <label>@FieldDefinition.RequiredFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
                     </div>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString() : "Not Required")
@@ -124,7 +124,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>Required Number of Post-Storm Field Visits Per Year</label>
+                        <label>@FieldDefinition.RequiredPostStormFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
                     </div>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString() : "Not Required")
