@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
     public partial class TreatmentBMPImage : IFileResourcePhoto, IAuditableEntity
     {
         public string GetAuditDescriptionString() =>
-            $"Site {TreatmentBMPID} {FileResource?.OriginalCompleteFileName ?? "File Resouce Not Found"}";
+            $"Site {TreatmentBMPID} {FileResource.GetOriginalCompleteFileName() ?? "File Resouce Not Found"}";
 
         public int? EntityImageIDAsNullable => TreatmentBMPID;
         public DateTime CreateDate => FileResource.CreateDate;
@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
         public string CaptionOnFullView => $"{Caption}";
         public string CaptionOnGallery => Caption;
         public string GetCaptionOnGallery() => $"{Caption}";
-        public string PhotoUrl => FileResource.FileResourceUrl;
+        public string PhotoUrl => FileResource.GetFileResourceUrl();
         public string PhotoUrlScaledThumbnail(int maxHeight)
         {  
             return FileResource.FileResourceUrlScaledThumbnail(maxHeight);

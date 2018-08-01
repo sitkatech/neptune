@@ -27,7 +27,7 @@ namespace Neptune.Web.Models
 {
     public class ExternalLink : IEntityExternalLink
     {
-        public string ExternalLinkLabel { get; private set; }
+        public string ExternalLinkLabel { get; }
         public string ExternalLinkUrl { get; private set; }
         public HtmlString GetExternalLinkAsUrl()
         {

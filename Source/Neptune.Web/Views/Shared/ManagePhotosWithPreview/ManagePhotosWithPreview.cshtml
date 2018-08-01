@@ -157,7 +157,7 @@
             <div class="media">
                 <div class="media-left media-middle">
                     <div style="display: block; width: 200px; max-height: 200px;">
-                        <a href="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.FileResourceUrl : null)" class="gallery" rel="group1"
+                        <a href="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.GetFileResourceUrl() : null)" class="gallery" rel="group1"
                            data-caption="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)" title="@(fileResourcePhoto != null ? fileResourcePhoto.Caption : null)">
                             <img class="media-object" style="margin: auto;"
                                  src="@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.FileResourceUrlScaledThumbnail(200) : null)"
@@ -166,7 +166,7 @@
                     </div>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading text-right">@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.OriginalCompleteFileName : null)</h4>
+                    <h4 class="media-heading text-right">@(fileResourcePhoto != null ? fileResourcePhoto.FileResource.GetOriginalCompleteFileName() : null)</h4>
                     <div class="form-horizontal">
                         <div class="form-group">
                             <div class="col-xs-12 col-sm-4 col-md-2 control-label">

@@ -18,11 +18,11 @@ namespace Neptune.Web.Models
 
         public string CaptionOnFullView => $"{CaptionOnGallery}";
 
-        public string CaptionOnGallery => $"{Caption}\r\n{FileResource.FileResourceDataLengthString}";
+        public string CaptionOnGallery => $"{Caption}\r\n{FileResource.GetFileResourceDataLengthString()}";
 
-        public string PhotoUrl => FileResource.FileResourceUrl;
+        public string PhotoUrl => FileResource.GetFileResourceUrl();
 
-        public string PhotoUrlScaledForPrint => FileResource.FileResourceUrlScaledForPrint;
+        public string PhotoUrlScaledForPrint => FileResource.GetFileResourceUrlScaledForPrint();
 
         public string PhotoUrlScaledThumbnail(int maxHeight)
         {
