@@ -6,7 +6,7 @@ namespace Neptune.Web.Models
 {
     public partial class WaterQualityManagementPlanDocument : IAuditableEntity
     {
-        public string AuditDescriptionString =>
+        public string GetAuditDescriptionString() =>
             $"Water Quality Management Plan \"{WaterQualityManagementPlan?.WaterQualityManagementPlanName ?? "<Plan Not Found>"}\" Document \"{DisplayName}\"";
 
         private static UrlTemplate<int> EditUrlTemplate => new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanDocumentController>.BuildUrlFromExpression(c => c.Edit(UrlTemplate.Parameter1Int)));

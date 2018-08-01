@@ -22,7 +22,7 @@ namespace Neptune.Web.Models
 
         public HtmlString DisplayNameAsUrl => UrlTemplate.MakeHrefString(DetailUrl, DisplayName);
 
-        public string DisplayName => $"{FundingSourceName} ({Organization.OrganizationShortNameIfAvailable}){(!IsActive ? " (Inactive)" : string.Empty)}";    
+        public string DisplayName => $"{FundingSourceName} ({Organization.GetOrganizationShortNameIfAvailable()}){(!IsActive ? " (Inactive)" : string.Empty)}";    
 
         public string DetailUrl
         {
@@ -35,9 +35,9 @@ namespace Neptune.Web.Models
                 fundingSources.SingleOrDefault(x => x.FundingSourceID != currentFundingSourceID && String.Equals(x.FundingSourceName, fundingSourceName, StringComparison.InvariantCultureIgnoreCase));
             return fundingSource == null;
         }
-       
 
-        public string AuditDescriptionString => FundingSourceName;
+
+        public string GetAuditDescriptionString() => FundingSourceName;
 
         public List<TreatmentBMP> GetAssociatedTreatmentBMPs(Person person)
         {

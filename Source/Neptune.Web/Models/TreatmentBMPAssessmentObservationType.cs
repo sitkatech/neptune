@@ -304,7 +304,7 @@ namespace Neptune.Web.Models
             return $"{formattedThresholdValue} ({thresholdValueInBenchmarkUnits}{benchmarkOptionalSpace}{BenchmarkMeasurementUnitType().LegendDisplayName})";
         }
 
-        public string AuditDescriptionString => $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
+        public string GetAuditDescriptionString() => $"Observation Type {TreatmentBMPAssessmentObservationTypeName}";
     }
 
 

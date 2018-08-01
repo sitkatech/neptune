@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.Organization
         {
             Organization = organization;
             EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
-            PageTitle = organization.DisplayName;
+            PageTitle = organization.GetDisplayName();
             UserHasOrganizationManagePermissions = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
             UserHasCreateFundingSourcePermissions = new FundingSourceCreateFeature().HasPermissionByPerson(CurrentPerson);
             if (UserHasOrganizationManagePermissions)

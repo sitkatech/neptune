@@ -2,7 +2,7 @@
 {
     public partial class TreatmentBMPTypeAssessmentObservationType : IAuditableEntity, IHaveASortOrder
     {
-        public string AuditDescriptionString =>
+        public string GetAuditDescriptionString() =>
             $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; TreatmentBMPAssessmentObservationType: {TreatmentBMPAssessmentObservationType?.TreatmentBMPAssessmentObservationTypeName ?? "Unknown"}";
 
         public string DisplayName => TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;

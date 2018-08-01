@@ -30,7 +30,8 @@ namespace Neptune.Web.Models
             return geoJsons.Select(x => new ModeledCatchmentGeometryStaging(currentPerson, x.Key, x.Value, true)).ToList();
         }
 
-        public string AuditDescriptionString => $"Modeled catchment geometry staging {ModeledCatchmentGeometryStagingID}";
+        public string GetAuditDescriptionString() => $"Modeled catchment geometry staging {ModeledCatchmentGeometryStagingID}";
+
         public FeatureCollection ToGeoJsonFeatureCollection()
         {
             return JsonTools.DeserializeObject<FeatureCollection>(GeoJson);

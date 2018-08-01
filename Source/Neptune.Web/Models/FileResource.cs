@@ -183,9 +183,9 @@ namespace Neptune.Web.Models
             return theseGuids;
         }
 
-        public string AuditDescriptionString
+        public string GetAuditDescriptionString()
         {
-            get { return String.Format("{0}", OriginalCompleteFileName); }
+            return String.Format("{0}", OriginalCompleteFileName);
         }
 
         public string FileResourceGUIDAsString

@@ -243,7 +243,7 @@ namespace Neptune.Web
         private static void SendNewOrganizationCreatedMessage(Person person, string loginName)
         {
             var organization = person.Organization;
-            var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.DisplayName}";
+            var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.GetDisplayName()}";
 
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>

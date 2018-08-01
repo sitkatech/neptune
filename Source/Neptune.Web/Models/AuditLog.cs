@@ -134,7 +134,7 @@ namespace Neptune.Web.Models
             AuditLogEventType auditLogEventType)
         {
             var auditableEntityDeleted = GetIAuditableEntityFromEntity(dbEntry.Entity, tableName);
-            var optionalAuditDescriptionString = auditLogEventType.GetAuditStringForOperationType(tableName, null, auditableEntityDeleted.AuditDescriptionString);
+            var optionalAuditDescriptionString = auditLogEventType.GetAuditStringForOperationType(tableName, null, auditableEntityDeleted.GetAuditDescriptionString());
             var auditLogEntry = CreateAuditLogEntryImpl(dbEntry,
                 tableName,
                 person,
@@ -280,7 +280,7 @@ namespace Neptune.Web.Models
             if (entityKey != null)
             {
                 var auditableEntity = GetIAuditableEntityFromEntityKey(objectContext, entityKey, entityName);
-                return auditableEntity.AuditDescriptionString;
+                return auditableEntity.GetAuditDescriptionString();
             }
             return null;
         }

@@ -57,7 +57,7 @@ namespace Neptune.Web.Controllers
         {
             var hasDeleteOrganizationPermission = new OrganizationManageFeature().HasPermissionByPerson(CurrentPerson);
             var gridSpec = new IndexGridSpec(CurrentPerson, hasDeleteOrganizationPermission);
-            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList().OrderBy(x => x.DisplayName).ToList();
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations.ToList().OrderBy(x => x.GetDisplayName()).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Organization>(organizations, gridSpec);
             return gridJsonNetJObjectResult;
         }
@@ -83,7 +83,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(organization, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(organization);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            SetMessageForDisplay($"Organization {organization.DisplayName} succesfully created.");
+            SetMessageForDisplay($"Organization {organization.GetDisplayName()} succesfully created.");
 
             return new ModalDialogFormJsonResult();
         }
@@ -94,7 +94,7 @@ namespace Neptune.Web.Controllers
         {
             var organization = organizationPrimaryKey.EntityObject;
             var viewModel = new EditViewModel(organization);
-            return ViewEdit(viewModel, organization.IsInKeystone, organization.PrimaryContactPerson);
+            return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
         }
 
         [HttpPost]
@@ -105,7 +105,7 @@ namespace Neptune.Web.Controllers
             var organization = organizationPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEdit(viewModel, organization.IsInKeystone, organization.PrimaryContactPerson);
+                return ViewEdit(viewModel, organization.IsInKeystone(), organization.PrimaryContactPerson);
             }
             viewModel.UpdateModel(organization, CurrentPerson);
             return new ModalDialogFormJsonResult();
@@ -163,7 +163,7 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewDeleteOrganization(Organization organization, ConfirmDialogFormViewModel viewModel)
         {
-            var canDelete = !organization.HasDependentObjects() && !organization.IsUnknown;
+            var canDelete = !organization.HasDependentObjects() && !organization.IsUnknown();
             var confirmMessage = canDelete
                 ? $"Are you sure you want to delete this {FieldDefinition.Organization.GetFieldDefinitionLabel()} '{organization.OrganizationName}'?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage($"{FieldDefinition.Organization.GetFieldDefinitionLabel()}", SitkaRoute<OrganizationController>.BuildLinkFromExpression(x => x.Detail(organization), "here"));

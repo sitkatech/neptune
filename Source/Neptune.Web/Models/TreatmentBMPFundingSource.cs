@@ -2,14 +2,11 @@
 {
     public partial class FundingEventFundingSource : IAuditableEntity
     {
-        public string AuditDescriptionString
+        public string GetAuditDescriptionString()
         {
-            get
-            {
-                var treatmentBMP = FundingEvent.TreatmentBMP?.TreatmentBMPName ?? "Unknown";
-                var fundingSource = FundingSource?.FundingSourceName ?? "Unknown";
-                return $"TreatmentBMP: {treatmentBMP}, FundingSource: {fundingSource}";
-            }
+            var treatmentBMP = FundingEvent.TreatmentBMP?.TreatmentBMPName ?? "Unknown";
+            var fundingSource = FundingSource?.FundingSourceName ?? "Unknown";
+            return $"TreatmentBMP: {treatmentBMP}, FundingSource: {fundingSource}";
         }
     }
 }

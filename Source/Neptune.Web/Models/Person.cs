@@ -52,9 +52,9 @@ namespace Neptune.Web.Models
 
         public string FullNameFirstLast => $"{FirstName} {LastName}";
 
-        public string FullNameFirstLastAndOrg => $"{FirstName} {LastName} - {Organization.DisplayName}";
+        public string FullNameFirstLastAndOrg => $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
 
-        public string FullNameFirstLastAndOrgShortName => $"{FirstName} {LastName} ({Organization.OrganizationShortNameIfAvailable})";
+        public string FullNameFirstLastAndOrgShortName => $"{FirstName} {LastName} ({Organization.GetOrganizationShortNameIfAvailable()})";
 
         public string FullNameLastFirst => $"{LastName}, {FirstName}";
 
@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
             get { return OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList(); }
         }
 
-        public string AuditDescriptionString => FullNameFirstLast;
+        public string GetAuditDescriptionString() => FullNameFirstLast;
 
         /// <summary>
         /// All role names of BOTH types used by Keystone not for user display 
@@ -99,7 +99,7 @@ namespace Neptune.Web.Models
         {
             get
             {
-                string abbreviationIfAvailable = Organization.AbbreviationIfAvailable;
+                string abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
                 return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
             }
         }

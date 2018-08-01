@@ -25,7 +25,8 @@ namespace Neptune.Web.Models
 {
     public partial class ModeledCatchment : IAuditableEntity
     {
-        public string AuditDescriptionString => ModeledCatchmentName;
+        public string GetAuditDescriptionString() => ModeledCatchmentName;
+
         public bool CanView(Person person)
         {
             return new NeptuneAdminFeature().HasPermissionByPerson(person) || person.Organization.StormwaterJurisdiction.StormwaterJurisdictionID == StormwaterJurisdictionID;

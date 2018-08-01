@@ -8,7 +8,9 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPImage : IFileResourcePhoto, IAuditableEntity
     {
-        public string AuditDescriptionString => $"Site {TreatmentBMPID} {FileResource?.OriginalCompleteFileName ?? "File Resouce Not Found"}";
+        public string GetAuditDescriptionString() =>
+            $"Site {TreatmentBMPID} {FileResource?.OriginalCompleteFileName ?? "File Resouce Not Found"}";
+
         public int? EntityImageIDAsNullable => TreatmentBMPID;
         public DateTime CreateDate => FileResource.CreateDate;
         public string DeleteUrl => SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));

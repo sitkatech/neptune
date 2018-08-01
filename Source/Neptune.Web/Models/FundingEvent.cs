@@ -8,7 +8,7 @@ namespace Neptune.Web.Models
     {
         public string DisplayName => $"{Year} {FundingEventType.FundingEventTypeDisplayName}";
 
-        public string AuditDescriptionString => DisplayName;
+        public string GetAuditDescriptionString() => DisplayName;
     }
 
     public static class FundingEventModelExtensions

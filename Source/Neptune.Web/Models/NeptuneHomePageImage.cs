@@ -48,7 +48,7 @@ namespace Neptune.Web.Models
             return FileResource.CreatePerson != null && person != null && person.PersonID == FileResource.CreatePersonID;
         }
 
-        public string AuditDescriptionString => $"Image: {Caption}";
+        public string GetAuditDescriptionString() => $"Image: {Caption}";
 
         public int? EntityImageIDAsNullable => NeptuneHomePageImageID;
     }

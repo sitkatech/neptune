@@ -29,17 +29,15 @@ namespace Neptune.Web.Models
 {
     public partial class StormwaterJurisdiction : IAuditableEntity
     {
-        public string AuditDescriptionString
+        public string GetAuditDescriptionString()
         {
-            get
+            var organizationName = ViewUtilities.NotFoundString;
+            if (this.Organization != null)
             {
-                var organizationName = ViewUtilities.NotFoundString;
-                if (this.Organization != null)
-                {
-                    organizationName = Organization.OrganizationName;
-                }
-                return "Organization: " + organizationName;
+                organizationName = Organization.OrganizationName;
             }
+
+            return "Organization: " + organizationName;
         }
 
         public string OrganizationDisplayName => IsTransportationJurisdiction ? Organization.OrganizationShortName : Organization.OrganizationName;

@@ -39,7 +39,7 @@ namespace Neptune.Web.Models
             return canManageStormwaterJurisdiction;
         }
 
-        public string AuditDescriptionString => $"Assessment deleted.";
+        public string GetAuditDescriptionString() => $"Assessment deleted.";
 
         public int GetWaterYear()
         {

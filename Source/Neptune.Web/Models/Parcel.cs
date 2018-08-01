@@ -13,6 +13,6 @@ namespace Neptune.Web.Models
         }
 
         public string GetParcelAddress() => $"{ParcelAddress}, {ParcelZipCode}";
-        public string AuditDescriptionString => ParcelNumber;
+        public string GetAuditDescriptionString() => ParcelNumber;
     }
 }

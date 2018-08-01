@@ -74,7 +74,7 @@ namespace Neptune.Web.Models
             return Math.Abs(score.Value - 2) < 0.01;
         }
 
-        public string AuditDescriptionString => $"Observation Deleted";
+        public string GetAuditDescriptionString() => $"Observation Deleted";
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {

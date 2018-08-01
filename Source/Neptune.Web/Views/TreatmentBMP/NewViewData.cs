@@ -44,7 +44,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.OrganizationDisplayName);
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);
-            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.DisplayName, "Same as the BMP Jurisdiction");
+            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.GetDisplayName()).ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture), y => y.GetDisplayName(), "Same as the BMP Jurisdiction");
             TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
             WaterQualityManagementPlanSelectListItems = BuildWaterQualityPlanSelectList(waterQualityManagementPlans);
 

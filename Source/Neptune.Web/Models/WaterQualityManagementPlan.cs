@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
 {
     public partial class WaterQualityManagementPlan : IAuditableEntity
     {
-        public string AuditDescriptionString => $"Water Quality Management Plan \"{WaterQualityManagementPlanName}\"";
+        public string GetAuditDescriptionString() => $"Water Quality Management Plan \"{WaterQualityManagementPlanName}\"";
 
         private static UrlTemplate<int> DetailUrlTemplate => new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.Detail(UrlTemplate.Parameter1Int)));
         public string GetDetailUrl() => DetailUrlTemplate.ParameterReplace(WaterQualityManagementPlanID);

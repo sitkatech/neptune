@@ -41,8 +41,8 @@ namespace Neptune.Web.Models
         {
             return new TreatmentBMPDeleteFeature().HasPermission(person, this).HasPermission;
         }
-       
-        public string AuditDescriptionString => TreatmentBMPName;
+
+        public string GetAuditDescriptionString() => TreatmentBMPName;
         public FieldVisit InProgressFieldVisit => FieldVisits.SingleOrDefault(x => x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
 
         public bool IsBenchmarkAndThresholdsComplete()

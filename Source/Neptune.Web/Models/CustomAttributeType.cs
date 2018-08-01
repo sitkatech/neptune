@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
 {
     public partial class CustomAttributeType : IAuditableEntity
     {
-        public string AuditDescriptionString => $"BMP Attribute: {CustomAttributeTypeName}";
+        public string GetAuditDescriptionString() => $"BMP Attribute: {CustomAttributeTypeName}";
 
         public string GetMeasurementUnitDisplayName()
         {

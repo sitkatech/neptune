@@ -38,6 +38,6 @@ namespace Neptune.Web.Models
             return TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName().ToList();
         }
 
-        public string AuditDescriptionString => $"Treatment BMP Type: {TreatmentBMPTypeName}";
+        public string GetAuditDescriptionString() => $"Treatment BMP Type: {TreatmentBMPTypeName}";
     }
 }
