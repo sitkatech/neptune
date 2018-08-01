@@ -111,9 +111,10 @@
                     </div>
                 </div>
             </div>
-        </div><div class="row">
+        </div>
+        <hr />
+        <div class="row">
             <div class="form-horizontal">
-                <hr />
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
                         @Html.LabelWithSugarFor(m => m.YearBuilt)
@@ -166,6 +167,25 @@
             </div>
         </div>
         <hr />
+        <div class="row">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m=>m.RequiredFieldVisitsPerYear)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.TextBoxFor(m=>m.RequiredFieldVisitsPerYear, new{@class="form-control", type="number", style="width:auto;"} )
+                    </div>
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m=>m.RequiredPostStormFieldVisitsPerYear)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.TextBoxFor(m=>m.RequiredPostStormFieldVisitsPerYear, new{@class="form-control", type="number", style="width:auto;"} )
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
         <div class="row">
             <div class="col-xs-12">
                 <div class="form-horizontal">

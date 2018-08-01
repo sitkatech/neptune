@@ -52,6 +52,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Benchmark and Threshold Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 80, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Required Lifespan of Installation", x=>x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown", 170, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Lifespan End Date (if Fixed End Date)", x => x.TreatmentBMPLifespanEndDate, 130, DhtmlxGridColumnFormatType.Date);
+            Add("Required Field Visits Per Year", x => x.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
+            Add("Required Post-Storm Field Visits Per Year", x => x.RequiredPostStormFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
         }
     }
 }
