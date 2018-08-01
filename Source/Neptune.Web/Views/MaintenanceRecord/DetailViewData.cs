@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
 
             SortedMaintenanceRecordObservations = MaintenanceRecord.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
-                .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.DisplayName);
+                .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
         }
     }
 }

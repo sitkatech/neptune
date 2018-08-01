@@ -5,7 +5,7 @@
         public string GetAuditDescriptionString() =>
             $"Treatment BMP Type: {TreatmentBMPType?.TreatmentBMPTypeName ?? "Unknown"}; AttributeType: {CustomAttributeType?.CustomAttributeTypeName ?? "Unknown"}";
 
-        public string DisplayName => CustomAttributeType.CustomAttributeTypeName;
-        public int ID => TreatmentBMPTypeCustomAttributeTypeID;
+        public string GetDisplayName() => CustomAttributeType.CustomAttributeTypeName;
+        public int GetID() => TreatmentBMPTypeCustomAttributeTypeID;
     }
 }

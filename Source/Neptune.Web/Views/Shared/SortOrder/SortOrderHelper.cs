@@ -38,12 +38,12 @@ namespace Neptune.Web.Views.Shared.SortOrder
 
         public static IOrderedEnumerable<T> SortByOrderThenName<T>(this ICollection<T> sortableList) where T : IHaveASortOrder
         {
-            return sortableList.OrderBy(x => x.SortOrder).ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase);
+            return sortableList.OrderBy(x => x.SortOrder).ThenBy(x => x.GetDisplayName(), StringComparer.InvariantCultureIgnoreCase);
         }
 
         public static IOrderedEnumerable<T> ThenByOrderThenName<T>(this IOrderedEnumerable<T> presortedList) where T : IHaveASortOrder
         {
-            return presortedList.ThenBy(x => x.SortOrder).ThenBy(x => x.DisplayName, StringComparer.InvariantCultureIgnoreCase);
+            return presortedList.ThenBy(x => x.SortOrder).ThenBy(x => x.GetDisplayName(), StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }

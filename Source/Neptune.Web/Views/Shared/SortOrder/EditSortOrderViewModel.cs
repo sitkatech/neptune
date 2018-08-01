@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.Shared.SortOrder
             for (var i = 0; i < ReorderedSortableIDs.Count; i++)
             {
                 var theGuy = classificationSystemClassifications
-                    .SingleOrDefault(x => x.ID == ReorderedSortableIDs[i]);
+                    .SingleOrDefault(x => x.GetID() == ReorderedSortableIDs[i]);
 
                 if (theGuy != null)
                 {
