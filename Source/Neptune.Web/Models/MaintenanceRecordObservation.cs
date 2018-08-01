@@ -21,13 +21,4 @@ namespace Neptune.Web.Models
             return $"{value}{measurmentUnit}";
         }
     }
-
-    public static class MaintenanceRecordObservationModelExtensions
-    {
-        public static bool IsObservationComplete(this MaintenanceRecordObservation maintenanceRecordObservation)
-        {
-            return maintenanceRecordObservation.MaintenanceRecordObservationValues != null && !maintenanceRecordObservation.MaintenanceRecordObservationValues.All(y =>
-                       String.IsNullOrWhiteSpace(y.ObservationValue));
-        }
-    }
 }

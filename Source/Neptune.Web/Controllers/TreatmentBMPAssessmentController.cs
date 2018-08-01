@@ -70,6 +70,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMPAssessment.FieldVisitWhereYouAreThePostMaintenanceAssessment.PostMaintenanceAssessmentID = null;
             }
             treatmentBMPAssessment.DeleteTreatmentBMPAssessment();
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("BMP Assessment successfully deleted.");
 
@@ -80,7 +81,7 @@ namespace Neptune.Web.Controllers
         {
             var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate.ToShortDateString()}?"
+                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate().ToShortDateString()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPAssessmentController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPAssessment), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);
