@@ -378,7 +378,7 @@ namespace Neptune.Web.Controllers
         {
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations.OrderBy(x => x.OrganizationShortName)
                 .ToList();
-            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes;
+            var missingRequiredAttributes = maintenanceRecord.IsMissingRequiredAttributes();
             var editMaintenanceRecordObservationsViewData = new EditMaintenanceRecordObservationsViewData(CurrentPerson,
                 fieldVisit.TreatmentBMP, CustomAttributeTypePurpose.Maintenance, fieldVisit.MaintenanceRecord, true,
                 missingRequiredAttributes);
