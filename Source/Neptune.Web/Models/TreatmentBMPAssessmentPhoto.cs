@@ -7,21 +7,53 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPAssessmentPhoto : IAuditableEntity, IFileResourcePhoto
     {
-        public string GetAuditDescriptionString() =>
-            $"Treatment BMP Assessment Photo {FileResource.GetOriginalCompleteFileName() ?? "<File Name Not Found>"}";
+        public string GetAuditDescriptionString()
+        {
+            return
+                $"Treatment BMP Assessment Photo {FileResource.GetOriginalCompleteFileName() ?? "<File Name Not Found>"}";
+        }
 
-        public DateTime GetCreateDate() => FileResource.CreateDate;
+        public DateTime GetCreateDate()
+        {
+            return FileResource.CreateDate;
+        }
 
-        public string GetDeleteUrl() =>
-            SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c =>
+        public string GetDeleteUrl()
+        {
+            return SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(c =>
                 c.DeletePhoto(TreatmentBMPAssessmentPhotoID));
+        }
 
-        public string GetCaptionOnFullView() => Caption;
-        public string GetCaptionOnGallery() => Caption;
-        public string GetPhotoUrl() => FileResource.GetFileResourceUrl();
-        public string PhotoUrlScaledThumbnail(int maxHeight) => FileResource.FileResourceUrlScaledThumbnail(maxHeight);
-        public string GetEditUrl() => "#";
-        public List<string> AdditionalCssClasses => new List<string>();
+        public string GetCaptionOnFullView()
+        {
+            return Caption;
+        }
+
+        public string GetCaptionOnGallery()
+        {
+            return Caption;
+        }
+
+        public string GetPhotoUrl()
+        {
+            return FileResource.GetFileResourceUrl();
+        }
+
+        public string PhotoUrlScaledThumbnail(int maxHeight)
+        {
+            return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
+        }
+
+        public string GetEditUrl()
+        {
+            return "#";
+        }
+
+        public List<string> AdditionalCssClasses
+        {
+            get { return new List<string>(); }
+        }
+
         public object OrderBy { get; set; }
     }
 }

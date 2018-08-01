@@ -13,9 +13,9 @@ namespace Neptune.Web.Models
             return $"Site {TreatmentBMPID} {FileResource.GetOriginalCompleteFileName() ?? "File Resouce Not Found"}";
         }
 
-        public int? EntityImageIDAsNullable
+        public int? GetEntityImageIDAsNullable()
         {
-            get { return TreatmentBMPID; }
+            return TreatmentBMPID;
         }
 
         public DateTime GetCreateDate()
@@ -28,9 +28,9 @@ namespace Neptune.Web.Models
             return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
         }
 
-        public bool IsKeyPhoto
+        public bool IsKeyPhoto()
         {
-            get { return false; }
+            return false;
         }
 
         public string GetCaptionOnFullView()
@@ -60,6 +60,7 @@ namespace Neptune.Web.Models
 
         public List<string> AdditionalCssClasses { get; set; } = new List<string>();
         private object _orderBy;
+
         public object OrderBy
         {
             get { return _orderBy ?? GetCaptionOnFullView(); }
