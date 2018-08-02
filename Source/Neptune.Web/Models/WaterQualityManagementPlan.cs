@@ -54,5 +54,18 @@ namespace Neptune.Web.Models
                     MaintenanceContactZip
                 }.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
+
+        public bool HasAllRequiredDocuments()
+        {
+            foreach (var documentType in WaterQualityManagementPlanDocumentType.All.Where(x => x.IsRequired))
+            {
+                if (WaterQualityManagementPlanDocuments.All(x => x.WaterQualityManagementPlanDocumentType != documentType))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

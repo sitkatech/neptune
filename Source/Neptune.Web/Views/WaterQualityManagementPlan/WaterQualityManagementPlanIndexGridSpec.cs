@@ -1,4 +1,8 @@
-﻿using LtInfo.Common.DhtmlWrappers;
+﻿using System.Web;
+using LtInfo.Common;
+using LtInfo.Common.BootstrapWrappers;
+using LtInfo.Common.DhtmlWrappers;
+using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.ModalDialog;
 using LtInfo.Common.Views;
 using Neptune.Web.Models;
@@ -51,6 +55,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Maintenance Contact Phone", x => x.MaintenanceContactPhone, 70);
             Add("# of Treatment BMPs", x => x.TreatmentBMPs.Count, 50);
             Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 50);
+            Add(Models.FieldDefinition.HasAllRequiredDocuments.ToGridHeaderString(),
+                x => x.HasAllRequiredDocuments()
+                    ? BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle", "Yes")
+                    : new HtmlString("<span style='display:none;'>No</span>")
+                , 50, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
         }
     }
 }

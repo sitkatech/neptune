@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Globalization;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -38,7 +40,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewNew(NewViewModel viewModel)
         {
-            var viewData = new NewViewData();
+            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x=>x.WaterQualityManagementPlanDocumentTypeID.ToString(CultureInfo.InvariantCulture), x=>x.WaterQualityManagementPlanDocumentTypeDisplayName);
+            var viewData = new NewViewData(allDocumentTypes);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
