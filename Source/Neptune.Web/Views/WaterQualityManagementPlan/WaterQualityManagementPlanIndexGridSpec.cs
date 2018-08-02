@@ -53,13 +53,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
             Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
             Add("Maintenance Contact Phone", x => x.MaintenanceContactPhone, 70);
-            Add("# of Treatment BMPs", x => x.TreatmentBMPs.Count, 50);
-            Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 50);
+            Add("# of Treatment BMPs", x => x.TreatmentBMPs.Count, 100);
+            Add("# of Documents", x => x.WaterQualityManagementPlanDocuments.Count, 100);
             Add(Models.FieldDefinition.HasAllRequiredDocuments.ToGridHeaderString(),
                 x => x.HasAllRequiredDocuments()
                     ? BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle", "Yes")
                     : new HtmlString("<span style='display:none;'>No</span>")
-                , 50, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+                , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
         }
     }
 }
