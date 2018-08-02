@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanDocument](
 	[DisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[Description] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[UploadDate] [datetime] NOT NULL,
-	[WaterQualityManagementPlanDocumentTypeID] [int] NULL,
+	[WaterQualityManagementPlanDocumentTypeID] [int] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanDocumentID] ASC

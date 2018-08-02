@@ -22,7 +22,7 @@ namespace Neptune.Web.Models
             Property(x => x.DisplayName).HasColumnName(@"DisplayName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.Description).HasColumnName(@"Description").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
             Property(x => x.UploadDate).HasColumnName(@"UploadDate").HasColumnType("datetime").IsRequired();
-            Property(x => x.WaterQualityManagementPlanDocumentTypeID).HasColumnName(@"WaterQualityManagementPlanDocumentTypeID").HasColumnType("int").IsOptional();
+            Property(x => x.WaterQualityManagementPlanDocumentTypeID).HasColumnName(@"WaterQualityManagementPlanDocumentTypeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.WaterQualityManagementPlan).WithMany(b => b.WaterQualityManagementPlanDocuments).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID
