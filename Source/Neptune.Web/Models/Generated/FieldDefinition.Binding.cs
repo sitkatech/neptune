@@ -70,6 +70,8 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionRequiredLifespanOfInstallation RequiredLifespanOfInstallation = FieldDefinitionRequiredLifespanOfInstallation.Instance;
         public static readonly FieldDefinitionRequiredFieldVisitsPerYear RequiredFieldVisitsPerYear = FieldDefinitionRequiredFieldVisitsPerYear.Instance;
         public static readonly FieldDefinitionRequiredPostStormFieldVisitsPerYear RequiredPostStormFieldVisitsPerYear = FieldDefinitionRequiredPostStormFieldVisitsPerYear.Instance;
+        public static readonly FieldDefinitionWaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType = FieldDefinitionWaterQualityManagementPlanDocumentType.Instance;
+        public static readonly FieldDefinitionHasAllRequiredDocuments HasAllRequiredDocuments = FieldDefinitionHasAllRequiredDocuments.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -79,7 +81,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -191,6 +193,8 @@ namespace Neptune.Web.Models
                     return FundingEvent;
                 case FieldDefinitionEnum.FundingSource:
                     return FundingSource;
+                case FieldDefinitionEnum.HasAllRequiredDocuments:
+                    return HasAllRequiredDocuments;
                 case FieldDefinitionEnum.IsPostMaintenanceAssessment:
                     return IsPostMaintenanceAssessment;
                 case FieldDefinitionEnum.IsPrimaryContactOrganization:
@@ -263,6 +267,8 @@ namespace Neptune.Web.Models
                     return Username;
                 case FieldDefinitionEnum.WaterQualityManagementPlan:
                     return WaterQualityManagementPlan;
+                case FieldDefinitionEnum.WaterQualityManagementPlanDocumentType:
+                    return WaterQualityManagementPlanDocumentType;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -322,7 +328,9 @@ namespace Neptune.Web.Models
         Parcel = 50,
         RequiredLifespanOfInstallation = 51,
         RequiredFieldVisitsPerYear = 52,
-        RequiredPostStormFieldVisitsPerYear = 53
+        RequiredPostStormFieldVisitsPerYear = 53,
+        WaterQualityManagementPlanDocumentType = 54,
+        HasAllRequiredDocuments = 55
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -635,5 +643,17 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionRequiredPostStormFieldVisitsPerYear(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionRequiredPostStormFieldVisitsPerYear Instance = new FieldDefinitionRequiredPostStormFieldVisitsPerYear(53, @"RequiredPostStormFieldVisitsPerYear", @"Required Post-Storm Field Visits Per Year", @"Number of Post-Storm Field Visists that must be conducted for a given BMP each year", true);
+    }
+
+    public partial class FieldDefinitionWaterQualityManagementPlanDocumentType : FieldDefinition
+    {
+        private FieldDefinitionWaterQualityManagementPlanDocumentType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionWaterQualityManagementPlanDocumentType Instance = new FieldDefinitionWaterQualityManagementPlanDocumentType(54, @"WaterQualityManagementPlanDocumentType", @"WQMP Document Type", @"Specifies what type of supporting document this is. Some document types are required for a WQMP to be considered complete", true);
+    }
+
+    public partial class FieldDefinitionHasAllRequiredDocuments : FieldDefinition
+    {
+        private FieldDefinitionHasAllRequiredDocuments(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionHasAllRequiredDocuments Instance = new FieldDefinitionHasAllRequiredDocuments(55, @"HasAllRequiredDocuments", @"Has All Required Documents?", @"Indicates whether all required supporting documents are present for a WQMP", true);
     }
 }

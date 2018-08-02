@@ -14,17 +14,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
 {
     public class NewViewModel : FormViewModel, IValidatableObject
     {
-        /// <summary>
-        /// Needed by model binder
-        /// </summary>
-        public NewViewModel()
-        {
-        }
-
-        public NewViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
-        {
-            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
-        }
 
         [Required]
         [DisplayName("Water Quality Management Plan")]
@@ -44,13 +33,30 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         [MaxLength(Models.WaterQualityManagementPlanDocument.FieldLengths.Description)]
         public string Description { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.WaterQualityManagementPlanDocumentType)]
+        [Required]
+        public int? WaterQualityManagementPlanDocumentTypeID { get; set; }
+
+        /// <summary>
+        /// Needed by model binder
+        /// </summary>
+        public NewViewModel()
+        {
+        }
+
+        public NewViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        {
+            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
+        }
+
         public void UpdateModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, Person currentPerson)
         {
             var fileResource = FileResource.CreateNewFromHttpPostedFile(File, currentPerson);
             HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            var waterQualityManagementPlanDocumentType = WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID.GetValueOrDefault()]; // will never default due to RequiredAttribute
             var waterQualityManagementPlanDocument =
                 new Models.WaterQualityManagementPlanDocument(waterQualityManagementPlan, fileResource, DisplayName,
-                    DateTime.Now) {Description = Description};
+                    DateTime.Now, waterQualityManagementPlanDocumentType) {Description = Description};
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanDocuments.Add(waterQualityManagementPlanDocument);
         }
 

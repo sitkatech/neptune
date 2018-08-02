@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanDocument](
 	[DisplayName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[Description] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[UploadDate] [datetime] NOT NULL,
+	[WaterQualityManagementPlanDocumentTypeID] [int] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanDocumentID] ASC
@@ -51,3 +52,8 @@ ALTER TABLE [dbo].[WaterQualityManagementPlanDocument]  WITH CHECK ADD  CONSTRAI
 REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID], [TenantID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanDocument] CHECK CONSTRAINT [FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlan_WaterQualityManagementPlanID_TenantID]
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlanDocument]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentType_WaterQualityManagementPlanDocumentTypeID] FOREIGN KEY([WaterQualityManagementPlanDocumentTypeID])
+REFERENCES [dbo].[WaterQualityManagementPlanDocumentType] ([WaterQualityManagementPlanDocumentTypeID])
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlanDocument] CHECK CONSTRAINT [FK_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentType_WaterQualityManagementPlanDocumentTypeID]

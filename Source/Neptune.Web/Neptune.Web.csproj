@@ -268,6 +268,8 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanDocument.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentType.Binding.cs" />
+    <Compile Include="Models\Generated\WaterQualityManagementPlanDocumentTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUse.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanLandUsePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanParcel.Binding.cs" />
