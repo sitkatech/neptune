@@ -84,6 +84,7 @@
                     <label class="col-sm-5 control-label text-right">Owner</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.OwnerOrganization.GetDisplayNameAsUrl()</div>
                 </div>
+                <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Year Built</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.YearBuilt</div>
@@ -93,27 +94,47 @@
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.SystemOfRecordID</div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">Notes</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
-                </div>
-                <div class="row">
                     <label class="col-sm-5 control-label text-right">Water Quality<br>Management Plan</label>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan != null ? ViewDataTyped.TreatmentBMP.WaterQualityManagementPlan.GetNameAsUrl() : new HtmlString("<em class=\"text-muted\">Not Associated with a WQMP</em>"))
                     </div>
                 </div>
+                <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@FieldDefinition.RequiredLifespanOfInstallation.GetFieldDefinitionLabel()</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
                         {
                             @* Because of database constraints, TreatmentBMPLifespanEndDate will never be null if LifespanType = FixedEndDate *@
-                            @(string.Format("Maintain until at least {0}",ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanEndDate.GetValueOrDefault().ToShortDateString()))
-                        } else { 
-                            @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")}
+                            @(string.Format("Maintain until at least {0}", ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanEndDate.GetValueOrDefault().ToShortDateString()))
+                        }
+                        else
+                        {
+                            @(ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType != null ? ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType.TreatmentBMPLifespanTypeDisplayName : "Unknown")
+                        }
                     </div>
                 </div>
-                
+                <div class="row">
+                    <div class="col-sm-5 control-label text-right ">
+                        <label>@FieldDefinition.RequiredFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
+                    </div>
+                    <div class="col-sm-7">
+                        @(ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString() : "Not Required")
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 control-label text-right ">
+                        <label>@FieldDefinition.RequiredPostStormFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
+                    </div>
+                    <div class="col-sm-7">
+                        @(ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString() : "Not Required")
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Notes</label>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
+                </div>
             </div>
         </div>
         <div class="panel panelNeptune">

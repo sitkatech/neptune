@@ -17,6 +17,8 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[WaterQualityManagementPlanID] [int] NULL,
 	[TreatmentBMPLifespanTypeID] [int] NULL,
 	[TreatmentBMPLifespanEndDate] [datetime] NULL,
+	[RequiredFieldVisitsPerYear] [int] NULL,
+	[RequiredPostStormFieldVisitsPerYear] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC

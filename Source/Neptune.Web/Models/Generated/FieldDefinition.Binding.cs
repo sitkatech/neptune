@@ -68,6 +68,8 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionWaterQualityManagementPlan WaterQualityManagementPlan = FieldDefinitionWaterQualityManagementPlan.Instance;
         public static readonly FieldDefinitionParcel Parcel = FieldDefinitionParcel.Instance;
         public static readonly FieldDefinitionRequiredLifespanOfInstallation RequiredLifespanOfInstallation = FieldDefinitionRequiredLifespanOfInstallation.Instance;
+        public static readonly FieldDefinitionRequiredFieldVisitsPerYear RequiredFieldVisitsPerYear = FieldDefinitionRequiredFieldVisitsPerYear.Instance;
+        public static readonly FieldDefinitionRequiredPostStormFieldVisitsPerYear RequiredPostStormFieldVisitsPerYear = FieldDefinitionRequiredPostStormFieldVisitsPerYear.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -77,7 +79,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -241,8 +243,12 @@ namespace Neptune.Web.Models
                     return PropertiesToObserve;
                 case FieldDefinitionEnum.ReceivesSystemCommunications:
                     return ReceivesSystemCommunications;
+                case FieldDefinitionEnum.RequiredFieldVisitsPerYear:
+                    return RequiredFieldVisitsPerYear;
                 case FieldDefinitionEnum.RequiredLifespanOfInstallation:
                     return RequiredLifespanOfInstallation;
+                case FieldDefinitionEnum.RequiredPostStormFieldVisitsPerYear:
+                    return RequiredPostStormFieldVisitsPerYear;
                 case FieldDefinitionEnum.RoleName:
                     return RoleName;
                 case FieldDefinitionEnum.TreatmentBMP:
@@ -314,7 +320,9 @@ namespace Neptune.Web.Models
         FieldVisitStatus = 48,
         WaterQualityManagementPlan = 49,
         Parcel = 50,
-        RequiredLifespanOfInstallation = 51
+        RequiredLifespanOfInstallation = 51,
+        RequiredFieldVisitsPerYear = 52,
+        RequiredPostStormFieldVisitsPerYear = 53
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -615,5 +623,17 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionRequiredLifespanOfInstallation(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionRequiredLifespanOfInstallation Instance = new FieldDefinitionRequiredLifespanOfInstallation(51, @"RequiredLifespanOfInstallation", @"Required Lifespan of Installation", @"Specifies when or whether a BMP can be removed", true);
+    }
+
+    public partial class FieldDefinitionRequiredFieldVisitsPerYear : FieldDefinition
+    {
+        private FieldDefinitionRequiredFieldVisitsPerYear(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionRequiredFieldVisitsPerYear Instance = new FieldDefinitionRequiredFieldVisitsPerYear(52, @"RequiredFieldVisitsPerYear", @"Required Field Visits Per Year", @"Number of Field Visists that must be conducted for a given BMP each year", true);
+    }
+
+    public partial class FieldDefinitionRequiredPostStormFieldVisitsPerYear : FieldDefinition
+    {
+        private FieldDefinitionRequiredPostStormFieldVisitsPerYear(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionRequiredPostStormFieldVisitsPerYear Instance = new FieldDefinitionRequiredPostStormFieldVisitsPerYear(53, @"RequiredPostStormFieldVisitsPerYear", @"Required Post-Storm Field Visits Per Year", @"Number of Post-Storm Field Visists that must be conducted for a given BMP each year", true);
     }
 }

@@ -51,6 +51,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         [DisplayName("Lifespan End Date")]
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredFieldVisitsPerYear)]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Required Field Visits Per Year cannot be negative")]
+        public int? RequiredFieldVisitsPerYear { get; set; }
+
+        [FieldDefinitionDisplay(FieldDefinitionEnum.RequiredPostStormFieldVisitsPerYear)]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
+        public int? RequiredPostStormFieldVisitsPerYear { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -71,6 +79,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             WaterQualityManagementPlanID = treatmentBMP.WaterQualityManagementPlanID;
             TreatmentBMPLifespanTypeID = treatmentBMP.TreatmentBMPLifespanTypeID;
             TreatmentBMPLifespanEndDate = treatmentBMP.TreatmentBMPLifespanEndDate;
+            RequiredFieldVisitsPerYear = treatmentBMP.RequiredFieldVisitsPerYear;
+            RequiredPostStormFieldVisitsPerYear = treatmentBMP.RequiredPostStormFieldVisitsPerYear;
         }
 
         public override void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -79,6 +89,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             treatmentBMP.TreatmentBMPName = TreatmentBMPName;
             treatmentBMP.Notes = Notes;
+            treatmentBMP.RequiredFieldVisitsPerYear = RequiredFieldVisitsPerYear;
+            treatmentBMP.RequiredPostStormFieldVisitsPerYear = RequiredPostStormFieldVisitsPerYear;
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {
