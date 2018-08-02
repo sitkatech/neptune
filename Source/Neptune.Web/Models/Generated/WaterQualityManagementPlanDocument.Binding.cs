@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanDocument(int waterQualityManagementPlanDocumentID, int waterQualityManagementPlanID, int fileResourceID, string displayName, string description, DateTime uploadDate) : this()
+        public WaterQualityManagementPlanDocument(int waterQualityManagementPlanDocumentID, int waterQualityManagementPlanID, int fileResourceID, string displayName, string description, DateTime uploadDate, int? waterQualityManagementPlanDocumentTypeID) : this()
         {
             this.WaterQualityManagementPlanDocumentID = waterQualityManagementPlanDocumentID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -38,6 +38,7 @@ namespace Neptune.Web.Models
             this.DisplayName = displayName;
             this.Description = description;
             this.UploadDate = uploadDate;
+            this.WaterQualityManagementPlanDocumentTypeID = waterQualityManagementPlanDocumentTypeID;
         }
 
         /// <summary>
@@ -110,12 +111,14 @@ namespace Neptune.Web.Models
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public DateTime UploadDate { get; set; }
+        public int? WaterQualityManagementPlanDocumentTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanDocumentID; } set { WaterQualityManagementPlanDocumentID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual FileResource FileResource { get; set; }
+        public WaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType { get { return WaterQualityManagementPlanDocumentTypeID.HasValue ? WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID.Value] : null; } }
 
         public static class FieldLengths
         {
