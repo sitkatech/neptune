@@ -16,8 +16,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions)
         {
-            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
-                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(), x => x.OrganizationDisplayName);
+            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
+                .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(), x => x.GetOrganizationDisplayName());
             WaterQualityManagementPlanPriorities = WaterQualityManagementPlanPriority.All
                 .OrderBy(x => x.SortOrder)
                 .ToList();

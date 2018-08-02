@@ -227,8 +227,7 @@
     </providers>
   </entityFramework>
   <connectionStrings>
-    <add name="DatabaseEntities" connectionString="metadata=res://Neptune.Web/Neptune.Web.DatabaseEntities.csdl|res://Neptune.Web/Neptune.Web.DatabaseEntities.ssdl|res://Neptune.Web/Neptune.Web.DatabaseEntities.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};MultipleActiveResultSets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient"/>
-    <add name="NeptuneDbContext" connectionString="data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};multipleactiveresultsets=True;application name=EntityFramework" providerName="System.Data.SqlClient"/>
+    <add name="DatabaseEntities" connectionString="data source=${db-data-source};initial catalog=${db-name};${db-auth-settings};multipleactiveresultsets=True;application name=EntityFramework" providerName="System.Data.SqlClient"/>
   </connectionStrings>
   <system.serviceModel>
     <!-- Services being PUBLISHED -->

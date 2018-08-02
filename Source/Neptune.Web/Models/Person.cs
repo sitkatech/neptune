@@ -48,25 +48,35 @@ namespace Neptune.Web.Models
             return anonymousSitkaUser;
         }
 
-        public bool IsAnonymousUser => PersonID == AnonymousPersonID;
-
-        public string FullNameFirstLast => $"{FirstName} {LastName}";
-
-        public string FullNameFirstLastAndOrg => $"{FirstName} {LastName} - {Organization.DisplayName}";
-
-        public string FullNameFirstLastAndOrgShortName => $"{FirstName} {LastName} ({Organization.OrganizationShortNameIfAvailable})";
-
-        public string FullNameLastFirst => $"{LastName}, {FirstName}";
-
-        /// <summary>
-        /// List of Organizations for which this Person is the primary contact
-        /// </summary>
-        public List<Organization> PrimaryContactOrganizations
+        public bool IsAnonymousUser()
         {
-            get { return OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList(); }
+            return PersonID == AnonymousPersonID;
         }
 
-        public string AuditDescriptionString => FullNameFirstLast;
+        public string GetFullNameFirstLast()
+        {
+            return $"{FirstName} {LastName}";
+        }
+
+        public string GetFullNameFirstLastAndOrg()
+        {
+            return $"{FirstName} {LastName} - {Organization.GetDisplayName()}";
+        }
+
+        public string GetFullNameFirstLastAndOrgShortName()
+        {
+            return $"{FirstName} {LastName} ({Organization.GetOrganizationShortNameIfAvailable()})";
+        }
+
+        public string GetFullNameLastFirst()
+        {
+            return $"{LastName}, {FirstName}";
+        }
+
+        public string GetAuditDescriptionString()
+        {
+            return GetFullNameFirstLast();
+        }
 
         /// <summary>
         /// All role names of BOTH types used by Keystone not for user display 
@@ -75,7 +85,7 @@ namespace Neptune.Web.Models
         {
             get
             {
-                if (IsAnonymousUser)
+                if (IsAnonymousUser())
                 {
                     // the presence of roles switches you from being IsAuthenticated or not
                     return new List<string>();
@@ -92,17 +102,16 @@ namespace Neptune.Web.Models
             Email = keystoneUserClaims.Email;
         }
 
-        public bool IsAnonymousOrUnassigned => IsAnonymousUser || Role == Role.Unassigned;
-
-
-        public string FullNameFirstLastAndOrgAbbreviation
+        public bool IsAnonymousOrUnassigned()
         {
-            get
-            {
-                string abbreviationIfAvailable = Organization.AbbreviationIfAvailable;
-                return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
-            }
+            return IsAnonymousUser() || Role == Role.Unassigned;
         }
 
+
+        public string GetFullNameFirstLastAndOrgAbbreviation()
+        {
+            var abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
+            return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
+        }
     }
 }

@@ -140,7 +140,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<FundingSource> FundingSources { get; set; }
         public virtual ICollection<Person> People { get; set; }
-        protected virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
+        public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         [NotMapped]
         public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheOwnerOrganization { get; set; }

@@ -28,48 +28,7 @@ namespace Neptune.Web.Models
 {
     public partial class Organization : IAuditableEntity
     {
-        public const string OrganizationSitka = "Sitka Technology Group";
         public const string OrganizationUnknown = "(Unknown or Unspecified Organization)";
-        
-        public string DisplayName => IsUnknown ? "Unknown or unspecified" : $"{OrganizationName}{(!IsActive ? " (Inactive)" : String.Empty)}";
-
-        public string OrganizationNamePossessive
-        {
-            get
-            {
-                if (IsUnknown)
-                {
-                    return OrganizationName;
-                }
-                var postFix = OrganizationName.EndsWith("s") ? "'" : "'s";
-                return $"{OrganizationName}{postFix}";
-            }
-        }
-
-        public string OrganizationShortNameIfAvailable
-        {
-            get
-            {
-                if (IsUnknown)
-                {
-                    return "Unknown or Unassigned";
-                }
-                return OrganizationShortName ?? OrganizationName;
-            }
-        }
-
-        public HtmlString PrimaryContactPersonAsUrl => PrimaryContactPerson != null ? PrimaryContactPerson.GetFullNameFirstLastAsUrl() : new HtmlString(ViewUtilities.NoneString);
-
-        public HtmlString PrimaryContactPersonWithOrgAsUrl => PrimaryContactPerson != null ? PrimaryContactPerson.GetFullNameFirstLastAndOrgAsUrl() : new HtmlString(ViewUtilities.NoneString);
-
-        /// <summary>
-        /// Use for security situations where the user summary is not displayable, but the Organization is.
-        /// </summary>
-        public HtmlString PrimaryContactPersonAsStringAndOrgAsUrl => PrimaryContactPerson != null ? PrimaryContactPerson.GetFullNameFirstLastAsStringAndOrgAsUrl() : new HtmlString(ViewUtilities.NoneString);
-
-        public string PrimaryContactPersonWithOrgAsString => PrimaryContactPerson != null ? PrimaryContactPerson.FullNameFirstLastAndOrg : ViewUtilities.NoneString;
-
-        public string PrimaryContactPersonAsString => PrimaryContactPerson != null ? PrimaryContactPerson.FullNameFirstLast : ViewUtilities.NoneString;
 
         public static bool IsOrganizationNameUnique(IEnumerable<Organization> organizations, string organizationName, int currentOrganizationID)
         {
@@ -91,12 +50,25 @@ namespace Neptune.Web.Models
             return existingOrganization == null;
         }
 
-        public string AuditDescriptionString => OrganizationName;
+        public string GetAuditDescriptionString()
+        {
+            return OrganizationName;
+        }
 
-        public bool IsInKeystone => OrganizationGuid.HasValue;
+        public bool IsInKeystone()
+        {
+            return OrganizationGuid.HasValue;
+        }
 
-        public bool IsUnknown => !String.IsNullOrWhiteSpace(OrganizationName) && OrganizationName.Equals(OrganizationUnknown, StringComparison.InvariantCultureIgnoreCase);
+        public bool IsUnknown()
+        {
+            return !String.IsNullOrWhiteSpace(OrganizationName) &&
+                   OrganizationName.Equals(OrganizationUnknown, StringComparison.InvariantCultureIgnoreCase);
+        }
 
-        public string AbbreviationIfAvailable => OrganizationShortName ?? OrganizationName;
+        public string GetAbbreviationIfAvailable()
+        {
+            return OrganizationShortName ?? OrganizationName;
+        }
     }
 }

@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="col-xs-6 control-label text-right">@Html.Label("Maintenance Record Date")</div>
                     <div class="col-xs-6">
-                        <span>@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordDate</span>
+                        <span>@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordDate()</span>
                     </div>
                 </div>
                 <div class="row">
@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col-xs-6 control-label text-right">@Html.Label("Performed By")</div>
                     <div class="col-xs-6">
-                        <span>@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordOrganization.GetDisplayNameAsUrl()</span>
+                        <span>@ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl()</span>
                     </div>
                 </div>
                 <div class="row">

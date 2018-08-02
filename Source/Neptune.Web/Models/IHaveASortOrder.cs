@@ -23,10 +23,10 @@ namespace Neptune.Web.Models
 {
     public interface IHaveASortOrder
     {
-        string DisplayName { get; }
+        string GetDisplayName();
 
         int? SortOrder { get; set; }
 
-        int ID { get; }
+        int GetID();
     }
 }

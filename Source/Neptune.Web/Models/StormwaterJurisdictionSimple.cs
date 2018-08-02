@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         public StormwaterJurisdictionSimple(StormwaterJurisdiction stormwaterJurisdiction)
         {
             StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
-            StormwaterJurisdictionDisplayName = stormwaterJurisdiction.OrganizationDisplayName;
+            StormwaterJurisdictionDisplayName = stormwaterJurisdiction.GetOrganizationDisplayName();
         }
     }
 }

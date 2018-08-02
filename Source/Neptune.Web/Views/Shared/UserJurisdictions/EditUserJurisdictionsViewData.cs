@@ -48,8 +48,8 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
 
             public EditViewDataForAngular(List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictions)
             {
-                AllStormwaterJurisdictions = allStormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
-                StormwaterJurisdictionsCurrentPersonCanManage = stormwaterJurisdictions.OrderBy(x => x.Organization.DisplayName).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+                AllStormwaterJurisdictions = allStormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
+                StormwaterJurisdictionsCurrentPersonCanManage = stormwaterJurisdictions.OrderBy(x => x.Organization.GetDisplayName()).Select(x => new StormwaterJurisdictionSimple(x)).ToList();
             }
         }
     }

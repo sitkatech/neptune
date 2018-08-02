@@ -59,7 +59,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-4 fieldLabel text-right">Name</div>
-                    <div class="col-xs-8">@ViewDataTyped.Person.FullNameFirstLast</div>
+                    <div class="col-xs-8">@ViewDataTyped.Person.GetFullNameFirstLast()</div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4 fieldLabel text-right">Email</div>
@@ -161,7 +161,7 @@
                 {
                     <p class="systemText">
                         <span>
-                            @ViewDataTyped.Person.FullNameFirstLast is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
+                            @ViewDataTyped.Person.GetFullNameFirstLast() is not assigned to any @FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()
                         </span>
                         @if (!ViewDataTyped.UserCanManageThisPersonPermissions)
                         {
@@ -181,19 +181,19 @@
     <div class="col-md-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel())
+                @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinition.PrimaryContact.GetFieldDefinitionLabel())
                 @if (ViewDataTyped.CurrentPerson.IsAdministrator())
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.FullNameFirstLast, FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
+                        @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)
                     </span>
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.Person.PrimaryContactOrganizations.Any())
+                @if (ViewDataTyped.Person.GetPrimaryContactOrganizations().Any())
                 {
                     <ul style="margin: 5px 0">
-                        @foreach (var organization in ViewDataTyped.Person.PrimaryContactOrganizations)
+                        @foreach (var organization in ViewDataTyped.Person.GetPrimaryContactOrganizations())
                         {
                             <li>@organization.GetDisplayNameAsUrl()</li>
                         }
@@ -201,7 +201,7 @@
                 }
                 else
                 {
-                    <p class="systemText">@ViewDataTyped.Person.FullNameFirstLast is not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
+                    <p class="systemText">@ViewDataTyped.Person.GetFullNameFirstLast() is not a @FieldDefinition.PrimaryContact.GetFieldDefinitionLabel() for any @FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()</p>
                 }
             </div>
         </div>

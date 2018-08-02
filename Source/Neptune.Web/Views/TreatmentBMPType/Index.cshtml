@@ -66,7 +66,7 @@
                                 <tr>
                                     <td>@TreatmentBMPAssessmentObservationType.GetDisplayNameAsUrl()</td>
                                     <td>@(TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.HasValue ? TreatmentBMPTypeAssessmentObservationType.AssessmentScoreWeight.ToStringShortPercent() : "pass/fail")</td>
-                                    @if (TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold)
+                                    @if (TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold())
                                     {
                                         <td>@TreatmentBMPAssessmentObservationType.GetFormattedBenchmarkValue(TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>
                                         <td>@TreatmentBMPAssessmentObservationType.GetFormattedThresholdValue(TreatmentBMPTypeAssessmentObservationType.DefaultThresholdValue, TreatmentBMPTypeAssessmentObservationType.DefaultBenchmarkValue)</td>

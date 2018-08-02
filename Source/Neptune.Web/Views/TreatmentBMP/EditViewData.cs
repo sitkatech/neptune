@@ -58,15 +58,15 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 
-            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.OrganizationDisplayName)
+            StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                 .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
-                    y => y.OrganizationDisplayName);
+                    y => y.GetOrganizationDisplayName());
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName)
                 .ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
                     y => y.TreatmentBMPTypeName);
-            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.DisplayName)
+            OwnerOrganizationSelectListItems = organizations.OrderBy(x => x.GetDisplayName())
                 .ToSelectListWithEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
-                    y => y.DisplayName, "Same as the BMP Jurisdiction");
+                    y => y.GetDisplayName(), "Same as the BMP Jurisdiction");
             TreatmentBMPIndexUrl = treatmentBMPIndexUrl;
             WaterQualityManagementPlanSelectListItems = BuildWaterQualityPlanSelectList(waterQualityManagementPlans);
 

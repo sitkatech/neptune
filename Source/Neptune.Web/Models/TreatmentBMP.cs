@@ -41,13 +41,21 @@ namespace Neptune.Web.Models
         {
             return new TreatmentBMPDeleteFeature().HasPermission(person, this).HasPermission;
         }
-       
-        public string AuditDescriptionString => TreatmentBMPName;
-        public FieldVisit InProgressFieldVisit => FieldVisits.SingleOrDefault(x => x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
+
+        public string GetAuditDescriptionString()
+        {
+            return TreatmentBMPName;
+        }
+
+        public FieldVisit GetInProgressFieldVisit()
+        {
+            return FieldVisits.SingleOrDefault(x =>
+                x.FieldVisitStatusID == FieldVisitStatus.InProgress.FieldVisitStatusID);
+        }
 
         public bool IsBenchmarkAndThresholdsComplete()
         {
-            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.HasBenchmarkAndThreshold).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+            var observationTypesIDs = TreatmentBMPType.GetObservationTypes().Where(x => x.GetHasBenchmarkAndThreshold()).Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
             var benchmarkAndThresholdObservationTypeIDs = TreatmentBMPBenchmarkAndThresholds.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
 
             return !observationTypesIDs.Except(benchmarkAndThresholdObservationTypeIDs).Any();
@@ -55,7 +63,7 @@ namespace Neptune.Web.Models
 
         public bool HasSettableBenchmarkAndThresholdValues()
         {
-            return TreatmentBMPType.GetObservationTypes().Any(x => x.HasBenchmarkAndThreshold);
+            return TreatmentBMPType.GetObservationTypes().Any(x => x.GetHasBenchmarkAndThreshold());
         }
 
         public string GetMostRecentScoreAsString()
@@ -70,7 +78,7 @@ namespace Neptune.Web.Models
 
         public TreatmentBMPAssessment GetMostRecentAssessment()
         {
-            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
+            var latestAssessment = TreatmentBMPAssessments.OrderByDescending(x => x.GetAssessmentDate()).FirstOrDefault(x => x.HasCalculatedOrAlternateScore());
             return latestAssessment;
         }
 
@@ -106,7 +114,7 @@ namespace Neptune.Web.Models
         {
             return !MaintenanceRecords.Any()
                 ? null
-                : (DateTime?) MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate);
+                : (DateTime?) MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public string CustomAttributeStatus()

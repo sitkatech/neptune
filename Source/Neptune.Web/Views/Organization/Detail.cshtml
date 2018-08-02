@@ -37,7 +37,7 @@
 {
     <div class="row">
         <div class="col-xs-12">
-            <div class="alert alert-info">@ViewDataTyped.Organization.DisplayName is a @Html.LabelWithSugarFor(FieldDefinition.Jurisdiction). <a href="@ViewDataTyped.Organization.StormwaterJurisdiction.GetDetailUrl()">View the Stormwater Jurisdiction Page</a> to see stormwater assets and assessments.</div>
+            <div class="alert alert-info">@ViewDataTyped.Organization.GetDisplayName() is a @Html.LabelWithSugarFor(FieldDefinition.Jurisdiction). <a href="@ViewDataTyped.Organization.StormwaterJurisdiction.GetDetailUrl()">View the Stormwater Jurisdiction Page</a> to see stormwater assets and assessments.</div>
         </div>                               
     </div>
 }
@@ -46,7 +46,7 @@
     <div class="col-sm-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditOrganizationUrl, string.Format("Edit {0} - {1}", FieldDefinition.Organization.GetFieldDefinitionLabel(), ViewDataTyped.Organization.DisplayName), ViewDataTyped.UserHasOrganizationManagePermissions) Basics
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditOrganizationUrl, string.Format("Edit {0} - {1}", FieldDefinition.Organization.GetFieldDefinitionLabel(), ViewDataTyped.Organization.GetDisplayName()), ViewDataTyped.UserHasOrganizationManagePermissions) Basics
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -54,7 +54,7 @@
                     {
                         <div class="col-xs-1">
                             <div style="text-align: center;">
-                                <img src="@ViewDataTyped.Organization.LogoFileResource.FileResourceUrl" style="max-width: 100px; max-height: 200px; margin-left: auto; margin-right: auto;" />
+                                <img src="@ViewDataTyped.Organization.LogoFileResource.GetFileResourceUrl()" style="max-width: 100px; max-height: 200px; margin-left: auto; margin-right: auto;" />
                             </div>
                         </div>
                     }
@@ -74,7 +74,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.LabelWithSugarFor(FieldDefinition.PrimaryContact)</div>
-                            <div class="col-xs-6">@(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, ViewDataTyped.Organization.PrimaryContactPerson).HasPermission ? ViewDataTyped.Organization.PrimaryContactPersonWithOrgAsUrl : ViewDataTyped.Organization.PrimaryContactPersonAsStringAndOrgAsUrl)</div>
+                            <div class="col-xs-6">@(new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, ViewDataTyped.Organization.PrimaryContactPerson).HasPermission ? ViewDataTyped.Organization.GetPrimaryContactPersonWithOrgAsUrl() : ViewDataTyped.Organization.GetPrimaryContactPersonAsStringAndOrgAsUrl())</div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6 fieldLabel text-right">@Html.Label("Home Page")</div>
@@ -104,7 +104,7 @@
                         @foreach (var fundingSource in ViewDataTyped.Organization.FundingSources.OrderBy(x => x.FundingSourceName))
                         {
                             <li>
-                                @fundingSource.DisplayNameAsUrl
+                                @fundingSource.GetDisplayNameAsUrl()
                             </li>
                         }
                     </ul>
@@ -125,7 +125,7 @@
                 @if (ViewDataTyped.Organization.People.Any())
                 {
                     <ul>
-                        @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.FullNameLastFirst))
+                        @foreach (var person in ViewDataTyped.Organization.People.Where(x => x.IsActive).OrderBy(x => x.GetFullNameLastFirst()))
                         {
                             if (new UserViewFeature().HasPermission(ViewDataTyped.CurrentPerson, person).HasPermission)
                             {
@@ -136,7 +136,7 @@
                             else
                             {
                                 <li>
-                                    @person.FullNameFirstLast
+                                    @person.GetFullNameFirstLast()
                                 </li>
                             }
                         }

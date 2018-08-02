@@ -41,10 +41,10 @@ namespace Neptune.Web.Views.TreatmentBMP
             }
 
             Add(Models.FieldDefinition.TreatmentBMP.ToGridHeaderString("Name"), x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), x.TreatmentBMPName), 170, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.OrganizationDisplayName), 170);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => UrlTemplate.MakeHrefString(x.GetJurisdictionSummaryUrl(), x.StormwaterJurisdiction.GetOrganizationDisplayName()), 170);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPType.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Notes", x => x.Notes, 195);
-            Add("Last Assessment Date", x => x.GetMostRecentAssessment()?.GetAssessmentDate, 130);
+            Add("Last Assessment Date", x => x.GetMostRecentAssessment()?.GetAssessmentDate(), 130);
             Add("Last Assessed Score", x => x.GetMostRecentScoreAsString(), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
             Add("# of Assessments", x => x.TreatmentBMPAssessments.Count, 100, DhtmlxGridColumnFormatType.Integer, DhtmlxGridColumnAggregationType.Total);
             Add("Last Maintenance Date", x => x.LastMaintainedDateTime(), 130, DhtmlxGridColumnFormatType.Date);

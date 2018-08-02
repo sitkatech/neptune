@@ -54,16 +54,14 @@ namespace Neptune.Web.Models
             "FundingEventFundingSource"
         };
 
-        public string AuditDescriptionDisplay
+        public string GetAuditDescriptionDisplay()
         {
-            get
+            if (string.IsNullOrWhiteSpace(AuditDescription))
             {
-                if (string.IsNullOrWhiteSpace(AuditDescription))
-                {
-                    return AuditLogEventType.GetAuditStringForOperationType(ColumnName, OriginalValue, NewValue);
-                }
-                return AuditDescription;
+                return AuditLogEventType.GetAuditStringForOperationType(ColumnName, OriginalValue, NewValue);
             }
+
+            return AuditDescription;
         }
 
         public static List<AuditLog> GetAuditLogRecordsForModifiedOrDeleted(DbEntityEntry dbEntry, Person person, ObjectContext objectContext)
@@ -134,7 +132,7 @@ namespace Neptune.Web.Models
             AuditLogEventType auditLogEventType)
         {
             var auditableEntityDeleted = GetIAuditableEntityFromEntity(dbEntry.Entity, tableName);
-            var optionalAuditDescriptionString = auditLogEventType.GetAuditStringForOperationType(tableName, null, auditableEntityDeleted.AuditDescriptionString);
+            var optionalAuditDescriptionString = auditLogEventType.GetAuditStringForOperationType(tableName, null, auditableEntityDeleted.GetAuditDescriptionString());
             var auditLogEntry = CreateAuditLogEntryImpl(dbEntry,
                 tableName,
                 person,
@@ -273,14 +271,14 @@ namespace Neptune.Web.Models
         }
 
         /// <summary>
-        /// Gets the <see cref="IAuditableEntity.AuditDescriptionString"/> for a given entityKey
+        /// Gets the <see cref="IAuditableEntity.GetAuditDescriptionString"/> for a given entityKey
         /// </summary>
         private static string GetAuditDescriptionStringForEntityKey(ObjectContext objectContext, EntityKey entityKey, string entityName)
         {
             if (entityKey != null)
             {
                 var auditableEntity = GetIAuditableEntityFromEntityKey(objectContext, entityKey, entityName);
-                return auditableEntity.AuditDescriptionString;
+                return auditableEntity.GetAuditDescriptionString();
             }
             return null;
         }

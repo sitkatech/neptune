@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
                 case FileResourceMimeTypeEnum.ExcelXLS:
                 case FileResourceMimeTypeEnum.ExcelXLSX:
                 case FileResourceMimeTypeEnum.xExcelXLSX:
-                    return new ExcelResult(new MemoryStream(fileResource.FileResourceData), fileResource.OriginalCompleteFileName);
+                    return new ExcelResult(new MemoryStream(fileResource.FileResourceData), fileResource.GetOriginalCompleteFileName());
                 case FileResourceMimeTypeEnum.PDF:
                     return new PdfResult(fileResource);
                 case FileResourceMimeTypeEnum.WordDOCX:
@@ -73,7 +73,7 @@ namespace Neptune.Web.Controllers
                 case FileResourceMimeTypeEnum.PowerpointPPTX:
                 case FileResourceMimeTypeEnum.PowerpointPPT:
                 case FileResourceMimeTypeEnum.CSS:
-                    return new FileResourceResult(fileResource.OriginalCompleteFileName, fileResource.FileResourceData, fileResource.FileResourceMimeType);
+                    return new FileResourceResult(fileResource.GetOriginalCompleteFileName(), fileResource.FileResourceData, fileResource.FileResourceMimeType);
                 case FileResourceMimeTypeEnum.XPNG:
                 case FileResourceMimeTypeEnum.PNG:
                 case FileResourceMimeTypeEnum.TIFF:
@@ -234,7 +234,7 @@ namespace Neptune.Web.Controllers
                 var ckEditorJavascriptContentToReturn = $@"
 <script language=""javascript"" type=""text/javascript"">
     // <![CDATA[
-    window.parent.CKEDITOR.tools.callFunction({CKEditorFuncNum}, {fileResource.FileResourceUrl.ToJS()});
+    window.parent.CKEDITOR.tools.callFunction({CKEditorFuncNum}, {fileResource.GetFileResourceUrl().ToJS()});
     // ]]>
 </script>";
                 return ckEditorJavascriptContentToReturn;

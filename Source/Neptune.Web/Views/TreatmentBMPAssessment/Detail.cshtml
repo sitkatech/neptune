@@ -45,11 +45,11 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="panel-body">
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Conducted By</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetFieldVisitPerson.FullNameFirstLast</div>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetFieldVisitPerson().GetFullNameFirstLast()</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Assessment Date</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetAssessmentDate.Date.ToShortDateString()</div>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetAssessmentDate().Date.ToShortDateString()</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Field Notes</label>
@@ -136,7 +136,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var observation in treatmentBMPObservation.DiscreteObservationData.SingleValueObservations)
+                                        @foreach (var observation in treatmentBMPObservation.GetDiscreteObservationData().SingleValueObservations)
                                         {
                                             <tr>
                                                 <td>@observation.PropertyObserved</td>
@@ -158,7 +158,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var observation in treatmentBMPObservation.DiscreteObservationData.SingleValueObservations)
+                                        @foreach (var observation in treatmentBMPObservation.GetDiscreteObservationData().SingleValueObservations)
                                         {
                                             <tr>
                                                 <td>@observation.PropertyObserved</td>
@@ -180,11 +180,11 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var observation in treatmentBMPObservation.PassFailObservationData.PassFailObservations)
+                                @foreach (var observation in treatmentBMPObservation.GetPassFailObservationData().PassFailObservations)
                                 {
                                     <tr>
                                         <td>@observation.PropertyObserved</td>
-                                        <td>@(observation.ObservationValue ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.PassFailSchema.PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.PassFailSchema.FailingScoreLabel )</td>
+                                        <td>@(observation.ObservationValue ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel)</td>
                                         <td>@observation.Notes</td>
                                     </tr>
                                 }

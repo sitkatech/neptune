@@ -41,47 +41,49 @@ namespace Neptune.Web.Models
             new UrlTemplate<int>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(t => t.DisplayResourceByID(UrlTemplate.Parameter1Int)));
         public static readonly UrlTemplate<string> FileResourceByGuidUrlTemplate =
             new UrlTemplate<string>(SitkaRoute<FileResourceController>.BuildUrlFromExpression(t => t.DisplayResource(UrlTemplate.Parameter1String)));
-        public string FileResourceUrl
+
+        public string GetFileResourceUrl()
         {
-            get { return FileResourceByGuidUrlTemplate.ParameterReplace(FileResourceGUIDAsString); }
+            return FileResourceByGuidUrlTemplate.ParameterReplace(GetFileResourceGUIDAsString());
         }
 
         public string FileResourceUrlScaledThumbnail(int maxHeight)
         {
-            return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.GetFileResourceResized(FileResourceGUIDAsString, maxHeight, maxHeight));
+            return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.GetFileResourceResized(GetFileResourceGUIDAsString(), maxHeight, maxHeight));
         }
 
-        public string FileResourceUrlScaledForPrint
+        public string GetFileResourceUrlScaledForPrint()
         {
-            get { return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x => x.GetFileResourceResized(FileResourceGUIDAsString, 500, 500)); }
+            return SitkaRoute<FileResourceController>.BuildUrlFromExpression(x =>
+                x.GetFileResourceResized(GetFileResourceGUIDAsString(), 500, 500));
         }
 
-        public string FileResourceDataLengthString
+        public string GetFileResourceDataLengthString()
         {
-            get { return String.Format("(~{0} KB)", (FileResourceData.Length/1000).ToGroupedNumeric()); }
-        }
-        public string OriginalCompleteFileName
-        {
-            get { return String.Format("{0}{1}", OriginalBaseFilename, OriginalFileExtension); }
+            return $"(~{(FileResourceData.Length / 1000).ToGroupedNumeric()} KB)";
         }
 
-        public static string MaxFileSizeHumanReadable()
+        public string GetOriginalCompleteFileName()
         {
-            return String.Format("{0:0.0} KB", MaxUploadFileSizeInBytes/(1024 ^ 2));
+            return $"{OriginalBaseFilename}{OriginalFileExtension}";
+        }
+
+        public static string MaxFileSizeHumanReadable
+        {
+            get { return $"{MaxUploadFileSizeInBytes / (1024 ^ 2):0.0} KB"; }
         }
 
         private Jpeg _photo;
         private bool _hasCheckedPhoto;
-        public int ImageWidth
+
+        public int GetImageWidth()
         {
-            get
+            if (!_hasCheckedPhoto)
             {
-                if (!_hasCheckedPhoto)
-                {
-                    PopulateFileResourceDataAsImage();
-                }
-                return _photo.Width;
+                PopulateFileResourceDataAsImage();
             }
+
+            return _photo.Width;
         }
 
         private void PopulateFileResourceDataAsImage()
@@ -91,26 +93,24 @@ namespace Neptune.Web.Models
             _hasCheckedPhoto = true;
         }
 
-        public int ImageHeight
+        public int GetImageHeight()
         {
-            get
+            if (!_hasCheckedPhoto)
             {
-                if (!_hasCheckedPhoto)
-                {
-                    PopulateFileResourceDataAsImage();
-                }
-                return _photo.Height;
+                PopulateFileResourceDataAsImage();
             }
+
+            return _photo.Height;
         }
 
-        public FileResourceOrientation Orientation
+        public FileResourceOrientation GetOrientation()
         {
-            get { return ImageHeight >= ImageWidth ? FileResourceOrientation.Portrait : FileResourceOrientation.Landscape; }
+            return GetImageHeight() >= GetImageWidth() ? FileResourceOrientation.Portrait : FileResourceOrientation.Landscape;
         }
 
-        public string FullGuidBasedFilename
+        public string GetFullGuidBasedFilename()
         {
-            get { return String.Format("{0}{1}", FileResourceGUID, OriginalFileExtension); }
+            return $"{FileResourceGUID}{OriginalFileExtension}";
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Neptune.Web.Models
         public static FileResourceMimeType GetFileResourceMimeTypeForFile(HttpPostedFileBase file)
         {
             var fileResourceMimeTypeForFile = FileResourceMimeType.All.SingleOrDefault(mt => mt.FileResourceMimeTypeContentTypeName == file.ContentType);
-            Check.RequireNotNull(fileResourceMimeTypeForFile, String.Format("Unhandled MIME type: {0}", file.ContentType));
+            Check.RequireNotNull(fileResourceMimeTypeForFile, $"Unhandled MIME type: {file.ContentType}");
             return fileResourceMimeTypeForFile;
         }
 
@@ -159,8 +159,9 @@ namespace Neptune.Web.Models
         {
             if (httpPostedFileBase.ContentLength > MaxUploadFileSizeInBytes)
             {
-                var formattedUploadSize = String.Format("~{0} KB", (httpPostedFileBase.ContentLength / 1000).ToGroupedNumeric());
-                errors.Add(new ValidationResult(String.Format("File is too large - must be less than {0} [Provided file was {1}]", MaxFileSizeHumanReadable(), formattedUploadSize), new[] { propertyName }));
+                var formattedUploadSize = $"~{(httpPostedFileBase.ContentLength / 1000).ToGroupedNumeric()} KB";
+                errors.Add(new ValidationResult(
+                    $"File is too large - must be less than {MaxFileSizeHumanReadable} [Provided file was {formattedUploadSize}]", new[] { propertyName }));
             }
         }
 
@@ -183,14 +184,14 @@ namespace Neptune.Web.Models
             return theseGuids;
         }
 
-        public string AuditDescriptionString
+        public string GetAuditDescriptionString()
         {
-            get { return String.Format("{0}", OriginalCompleteFileName); }
+            return $"{GetOriginalCompleteFileName()}";
         }
 
-        public string FileResourceGUIDAsString
+        public string GetFileResourceGUIDAsString()
         {
-            get { return FileResourceGUID.ToString(); }
+            return FileResourceGUID.ToString();
         }
     }
 }

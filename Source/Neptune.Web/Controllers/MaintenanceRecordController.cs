@@ -20,7 +20,7 @@ namespace Neptune.Web.Controllers
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, treatmentBmp);
             var bmpMaintenanceRecords = treatmentBmp.MaintenanceRecords.ToList()
-                .OrderByDescending(x => x.GetMaintenanceRecordDate).ToList();
+                .OrderByDescending(x => x.GetMaintenanceRecordDate()).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
             return gridJsonNetJObjectResult;

@@ -14,8 +14,8 @@
         public TreatmentBMPTypeAssessmentObservationTypeSimple(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
-            HasBenchmarkAndThresholds = treatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold;
-            TargetIsSweetSpot = treatmentBMPAssessmentObservationType.TargetIsSweetSpot;
+            HasBenchmarkAndThresholds = treatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold();
+            TargetIsSweetSpot = treatmentBMPAssessmentObservationType.GetTargetIsSweetSpot();
             TreatmentBMPAssessmentObservationTypeName = $"{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}";
             BenchmarkUnitLegendDisplayName = treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType()?.LegendDisplayName ?? string.Empty;
             ThresholdUnitLegendDisplayName = treatmentBMPAssessmentObservationType.ThresholdMeasurementUnitType()?.LegendDisplayName ?? string.Empty;

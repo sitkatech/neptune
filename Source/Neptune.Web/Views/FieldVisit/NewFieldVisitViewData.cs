@@ -39,7 +39,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public NewFieldVisitViewData(Models.TreatmentBMP treatmentBMP)
         {
-            FieldVisit = treatmentBMP.InProgressFieldVisit;
+            FieldVisit = treatmentBMP.GetInProgressFieldVisit();
 
             InProgressFieldVisitExists = FieldVisit != null;
 

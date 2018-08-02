@@ -39,11 +39,14 @@ namespace Neptune.Web.Models
             return canManageStormwaterJurisdiction;
         }
 
-        public string AuditDescriptionString => $"Assessment deleted.";
+        public string GetAuditDescriptionString()
+        {
+            return $"Assessment deleted.";
+        }
 
         public int GetWaterYear()
         {
-            return GetAssessmentDate.GetFiscalYear();
+            return GetAssessmentDate().GetFiscalYear();
         }
 
         public bool IsAssessmentComplete()
@@ -137,10 +140,16 @@ namespace Neptune.Web.Models
                    FieldVisitWhereYouAreThePostMaintenanceAssessment;
         }
 
-        public Person GetFieldVisitPerson => GetFieldVisit().PerformedByPerson;
+        public Person GetFieldVisitPerson()
+        {
+            return GetFieldVisit().PerformedByPerson;
+        }
 
 
-        public DateTime GetAssessmentDate => GetFieldVisit().VisitDate;
+        public DateTime GetAssessmentDate()
+        {
+            return GetFieldVisit().VisitDate;
+        }
 
         public bool IsInitialAssessment()
         {
@@ -158,9 +167,8 @@ namespace Neptune.Web.Models
                 .Select(x => x.TreatmentBMPAssessmentObservationType).Contains(observationType))
                 return "N/A";
             return TreatmentBMPObservations?.SingleOrDefault(y =>
-                           y.TreatmentBMPAssessmentObservationTypeID ==
-                           observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue()
-                       ?.ToString() ?? "Not Provided";
+                       y.TreatmentBMPAssessmentObservationTypeID ==
+                       observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue() ?? "Not Provided";
         }
     }
 }

@@ -28,8 +28,15 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPObservation : IAuditableEntity
     {
-        public DiscreteObservationSchema DiscreteObservationData => JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
-        public PassFailObservationSchema PassFailObservationData => JsonConvert.DeserializeObject<PassFailObservationSchema>(ObservationData);
+        public DiscreteObservationSchema GetDiscreteObservationData()
+        {
+            return JsonConvert.DeserializeObject<DiscreteObservationSchema>(ObservationData);
+        }
+
+        public PassFailObservationSchema GetPassFailObservationData()
+        {
+            return JsonConvert.DeserializeObject<PassFailObservationSchema>(ObservationData);
+        }
 
         public bool IsComplete()
         {
@@ -61,7 +68,7 @@ namespace Neptune.Web.Models
                 return Math.Abs(observationValue - 5) < 0.0001 ? "Pass" : "Fail";
             }
 
-            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.MeasurementUnitType.LegendDisplayName}";
+            return $"{observationValue.ToString(CultureInfo.InvariantCulture)} {TreatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName}";
         }
 
         public bool OverrideScoreForFailingObservation(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
@@ -74,7 +81,10 @@ namespace Neptune.Web.Models
             return Math.Abs(score.Value - 2) < 0.01;
         }
 
-        public string AuditDescriptionString => $"Observation Deleted";
+        public string GetAuditDescriptionString()
+        {
+            return $"Observation Deleted";
+        }
 
         public string CalculateOverrideScoreText(bool overrideAssessmentScoreIfFailing)
         {

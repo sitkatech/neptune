@@ -107,7 +107,7 @@ namespace Neptune.Web.Views.TreatmentBMP
                 var treatmentBMPTypeAssessmentObservationTypes =
                     HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Single(x =>
                         x.TreatmentBMPTypeID == TreatmentBMPTypeID).TreatmentBMPTypeAssessmentObservationTypes.Where(x =>
-                        x.TreatmentBMPAssessmentObservationType.HasBenchmarkAndThreshold &&
+                        x.TreatmentBMPAssessmentObservationType.GetHasBenchmarkAndThreshold() &&
                         x.DefaultThresholdValue.HasValue && x.DefaultBenchmarkValue.HasValue);
                 foreach (var a in treatmentBMPTypeAssessmentObservationTypes)
                 {

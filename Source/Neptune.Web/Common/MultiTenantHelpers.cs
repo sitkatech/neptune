@@ -50,14 +50,14 @@ namespace Neptune.Web.Common
         public static string GetTenantSquareLogoUrl()
         {
             return HttpRequestStorage.Tenant.GetTenantAttribute().TenantSquareLogoFileResource != null
-                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantSquareLogoFileResource.FileResourceUrl
+                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantSquareLogoFileResource.GetFileResourceUrl()
                 : "/Content/img/Neptune_Logo_Square.png";
         }
 
         public static string GetTenantBannerLogoUrl()
         {
             return HttpRequestStorage.Tenant.GetTenantAttribute().TenantBannerLogoFileResource != null
-                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantBannerLogoFileResource.FileResourceUrl
+                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantBannerLogoFileResource.GetFileResourceUrl()
                 : "/Content/img/Neptune_Logo_2016_FNL.width-600.png";
         }
 

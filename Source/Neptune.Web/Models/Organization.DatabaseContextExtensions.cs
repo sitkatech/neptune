@@ -28,7 +28,7 @@ namespace Neptune.Web.Models
     {
         public static List<Organization> GetActiveOrganizations(this IQueryable<Organization> organizations)
         {
-            return organizations.Where(x => x.IsActive).ToList().OrderBy(x => x.DisplayName).ToList();
+            return organizations.Where(x => x.IsActive).ToList().OrderBy(x => x.GetDisplayName()).ToList();
         }
 
         public static Organization GetOrganizationByOrganizationGuid(this IQueryable<Organization> organizations, Guid organizationGuid)

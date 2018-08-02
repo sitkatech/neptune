@@ -8,26 +8,63 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPImage : IFileResourcePhoto, IAuditableEntity
     {
-        public string AuditDescriptionString => $"Site {TreatmentBMPID} {FileResource?.OriginalCompleteFileName ?? "File Resouce Not Found"}";
-        public int? EntityImageIDAsNullable => TreatmentBMPID;
-        public DateTime CreateDate => FileResource.CreateDate;
-        public string DeleteUrl => SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
-        public bool IsKeyPhoto => false;
-        public string CaptionOnFullView => $"{Caption}";
-        public string CaptionOnGallery => Caption;
-        public string GetCaptionOnGallery() => $"{Caption}";
-        public string PhotoUrl => FileResource.FileResourceUrl;
+        public string GetAuditDescriptionString()
+        {
+            return $"Site {TreatmentBMPID} {FileResource.GetOriginalCompleteFileName() ?? "File Resouce Not Found"}";
+        }
+
+        public int? GetEntityImageIDAsNullable()
+        {
+            return TreatmentBMPID;
+        }
+
+        public DateTime GetCreateDate()
+        {
+            return FileResource.CreateDate;
+        }
+
+        public string GetDeleteUrl()
+        {
+            return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
+        }
+
+        public bool IsKeyPhoto()
+        {
+            return false;
+        }
+
+        public string GetCaptionOnFullView()
+        {
+            return $"{Caption}";
+        }
+
+        public string GetCaptionOnGallery()
+        {
+            return Caption;
+        }
+
+        public string GetPhotoUrl()
+        {
+            return FileResource.GetFileResourceUrl();
+        }
+
         public string PhotoUrlScaledThumbnail(int maxHeight)
         {  
             return FileResource.FileResourceUrlScaledThumbnail(maxHeight);
-        } 
-        public string EditUrl => SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
+        }
+
+        public string GetEditUrl()
+        {
+            return SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Edit(TreatmentBMPID));
+        }
+
         public List<string> AdditionalCssClasses { get; set; } = new List<string>();
         private object _orderBy;
+
         public object OrderBy
         {
-            get => _orderBy ?? CaptionOnFullView;
-            set => _orderBy = value;
+            get { return _orderBy ?? GetCaptionOnFullView(); }
+            set { _orderBy = value; }
         }
     }
 }

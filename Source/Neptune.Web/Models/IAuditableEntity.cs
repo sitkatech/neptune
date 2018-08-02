@@ -22,6 +22,6 @@ namespace Neptune.Web.Models
 {
     public interface IAuditableEntity
     {
-        string AuditDescriptionString { get; }
+        string GetAuditDescriptionString();
     }
 }

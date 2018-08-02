@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Home
         public LaunchPadViewData(Person currentPerson, Models.NeptunePage launchPadNeptunePage, int numberOfBmpTypes)
         {
             CurrentPerson = currentPerson;
-            IsLoggedIn = !CurrentPerson.IsAnonymousUser;
+            IsLoggedIn = !CurrentPerson.IsAnonymousUser();
             IsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(CurrentPerson);
             IsUnassigned = CurrentPerson.Role == Models.Role.Unassigned;
             IsJurisdictionManager = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);

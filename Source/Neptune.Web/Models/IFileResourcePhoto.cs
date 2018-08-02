@@ -25,16 +25,16 @@ namespace Neptune.Web.Models
 {
     public interface IFileResourcePhoto
     {
-        DateTime CreateDate { get; }
+        DateTime GetCreateDate();
         int PrimaryKey { get; }
         FileResource FileResource { get; set; }
-        string DeleteUrl { get; }
-        string CaptionOnFullView { get; }
-        string CaptionOnGallery { get; }
+        string GetDeleteUrl();
+        string GetCaptionOnFullView();
+        string GetCaptionOnGallery();
         string Caption { get; set; }
-        string PhotoUrl { get; }
+        string GetPhotoUrl();
         string PhotoUrlScaledThumbnail(int maxHeight);
-        string EditUrl { get; }
+        string GetEditUrl();
         List<string> AdditionalCssClasses { get; }
         object OrderBy { get; set; }
     }

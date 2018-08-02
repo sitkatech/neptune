@@ -211,10 +211,10 @@ namespace Neptune.Web
 
         private static void SendNewUserCreatedMessage(Person person, string loginName)
         {
-            var subject = $"User added: {person.FullNameFirstLastAndOrg}";
+            var subject = $"User added: {person.GetFullNameFirstLastAndOrg()}";
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
-    <strong>OC Stormwater Tools User added:</strong> {person.FullNameFirstLast}<br />
+    <strong>OC Stormwater Tools User added:</strong> {person.GetFullNameFirstLast()}<br />
     <strong>Added on:</strong> {DateTime.Now}<br />
     <strong>Email:</strong> {person.Email}<br />
     <strong>Phone:</strong> {person.Phone.ToPhoneNumberString()}<br />
@@ -243,14 +243,14 @@ namespace Neptune.Web
         private static void SendNewOrganizationCreatedMessage(Person person, string loginName)
         {
             var organization = person.Organization;
-            var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.DisplayName}";
+            var subject = $"{FieldDefinition.Organization.GetFieldDefinitionLabel()} added: {person.Organization.GetDisplayName()}";
 
             var message = $@"
 <div style='font-size: 12px; font-family: Arial'>
     <strong>{FieldDefinition.Organization.GetFieldDefinitionLabel()} created:</strong> {organization.GetDisplayNameAsUrl()}<br />
     <strong>Created on:</strong> {DateTime.Now}<br />
     <strong>Created because:</strong> New user logged in<br />
-    <strong>New user:</strong> {person.FullNameFirstLast} ({person.Email})<br />
+    <strong>New user:</strong> {person.GetFullNameFirstLast()} ({person.Email})<br />
     <br />
     <p>
         You may want to <a href=""{

@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.FundingSource
         public DetailViewData(Person currentPerson, Models.FundingSource fundingSource) : base(currentPerson)
         {
             FundingSource = fundingSource;
-            PageTitle = fundingSource.DisplayName;
+            PageTitle = fundingSource.GetDisplayName();
             EntityName = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabel()}";
             EntityUrl = SitkaRoute<FundingSourceController>.BuildUrlFromExpression(c => c.Index());
 

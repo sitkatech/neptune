@@ -6,6 +6,15 @@ namespace Neptune.Web.Models
 {
     public partial class FundingEventFundingSource
     {
-        public HtmlString AmountIfSpecified => Amount != null ? new HtmlString(Amount.ToStringCurrency()) : new HtmlString(new TagBuilder("span"){Attributes = {{"style","font-style:italic; font-weight:normal;"}},InnerHtml = "Not specified"}.ToString());
+        public HtmlString GetAmountIfSpecified()
+        {
+            return Amount != null
+                ? new HtmlString(Amount.ToStringCurrency())
+                : new HtmlString(new TagBuilder("span")
+                {
+                    Attributes = {{"style", "font-style:italic; font-weight:normal;"}},
+                    InnerHtml = "Not specified"
+                }.ToString());
+        }
     }
 }

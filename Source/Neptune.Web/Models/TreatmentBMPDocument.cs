@@ -16,8 +16,21 @@ namespace Neptune.Web.Models
 
         }
 
-        public string AuditDescriptionString => null;
-        public string GetDeleteTreatmentBMPDocumentUrl() => SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.Delete(TreatmentBMPDocumentID));
-        public string GetEditTreatmentBMPDocumentUrl() => SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t => t.Edit(TreatmentBMPDocumentID));
+        public string GetAuditDescriptionString()
+        {
+            return null;
+        }
+
+        public string GetDeleteTreatmentBMPDocumentUrl()
+        {
+            return SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(t =>
+                t.Delete(TreatmentBMPDocumentID));
+        }
+
+        public string GetEditTreatmentBMPDocumentUrl()
+        {
+            return SitkaRoute<TreatmentBMPDocumentController>.BuildUrlFromExpression(
+                t => t.Edit(TreatmentBMPDocumentID));
+        }
     }
 }

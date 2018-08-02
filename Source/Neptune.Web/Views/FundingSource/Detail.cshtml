@@ -37,7 +37,7 @@
     <div class="col-sm-12 col-md-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinition.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.DisplayName), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
+                @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditFundingSourceUrl, string.Format("Edit {0} - {1}", FieldDefinition.FundingSource.GetFieldDefinitionLabel(), ViewDataTyped.FundingSource.GetDisplayName()), ViewDataTyped.UserHasFundingSourceManagePermissions) Basics
             </div>
             <div class="panel-body">
                 <div class="row">

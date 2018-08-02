@@ -26,10 +26,10 @@ namespace Neptune.Web.Models
 {
     public class EntityNote : IEntityNote
     {
-        public DateTime LastUpdated { get; private set; }
-        public string LastUpdatedBy { get; private set; }
-        public string DeleteUrl { get; private set; }
-        public string EditUrl { get; private set; }
+        public DateTime LastUpdated { get; }
+        public string LastUpdatedBy { get; }
+        public string DeleteUrl { get; }
+        public string EditUrl { get; }
         public string Note { get; set; }
         public string DisplayCssClass { get; set; }
 
