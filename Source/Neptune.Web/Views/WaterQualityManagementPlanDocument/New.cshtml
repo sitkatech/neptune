@@ -33,7 +33,7 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDocumentTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanDocumentTypeID, ViewDataTyped.AllDocumentTypes, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanDocumentTypeID, ViewDataTyped.AllDocumentTypes, new { @class = "form-control", style="width:auto;" })
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanDocumentTypeID)
                     </div>
                 </div>

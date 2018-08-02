@@ -36,6 +36,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         [FieldDefinitionDisplay(FieldDefinitionEnum.WaterQualityManagementPlanDocumentType)]
         [Required]
         public int? WaterQualityManagementPlanDocumentTypeID { get; set; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>

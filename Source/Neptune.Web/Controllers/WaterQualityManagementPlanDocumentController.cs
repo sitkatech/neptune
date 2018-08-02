@@ -73,7 +73,8 @@ namespace Neptune.Web.Controllers
 
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
-            var viewData = new EditViewData();
+            var allDocumentTypes = WaterQualityManagementPlanDocumentType.All.ToSelectListWithDisabledEmptyFirstRow(x => x.WaterQualityManagementPlanDocumentTypeID.ToString(CultureInfo.InvariantCulture), x => x.WaterQualityManagementPlanDocumentTypeDisplayName);
+            var viewData = new EditViewData(allDocumentTypes);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

@@ -5,22 +5,12 @@ using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
 {
     public class EditViewModel : FormViewModel, IValidatableObject
     {
-        public EditViewModel()
-        {
-        }
-
-        public EditViewModel(Models.WaterQualityManagementPlanDocument waterQualityManagementPlanDocument)
-        {
-            WaterQualityManagementPlanDocumentID =
-                waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentID;
-            DisplayName = waterQualityManagementPlanDocument.DisplayName;
-            Description = waterQualityManagementPlanDocument.Description;
-        }
 
         [Required]
         [DisplayName("Document")]
@@ -35,10 +25,30 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         [MaxLength(Models.WaterQualityManagementPlanDocument.FieldLengths.Description)]
         public string Description { get; set; }
 
+        [FieldDefinitionDisplay(FieldDefinitionEnum.WaterQualityManagementPlanDocumentType)]
+        [Required]
+        public int? WaterQualityManagementPlanDocumentTypeID { get; set; }
+
+        public EditViewModel()
+        {
+        }
+
+        public EditViewModel(Models.WaterQualityManagementPlanDocument waterQualityManagementPlanDocument)
+        {
+            WaterQualityManagementPlanDocumentID =
+                waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentID;
+            DisplayName = waterQualityManagementPlanDocument.DisplayName;
+            Description = waterQualityManagementPlanDocument.Description;
+            WaterQualityManagementPlanDocumentTypeID =
+                waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentTypeID;
+        }
+
         public void UpdateModel(Models.WaterQualityManagementPlanDocument waterQualityManagementPlanDocument)
         {
             waterQualityManagementPlanDocument.DisplayName = DisplayName;
             waterQualityManagementPlanDocument.Description = Description;
+            waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentTypeID =
+                WaterQualityManagementPlanDocumentTypeID.GetValueOrDefault(); // will never default due to RequiredAttribute
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -27,6 +27,15 @@
         #@ViewDataTyped.MapInitJson.MapDivID {
             height: 300px;
         }
+
+        @@media (min-width: 768px){
+        .dl-horizontal dt {
+            width: 200px;
+        }
+            .dl-horizontal dd {
+                margin-left: 220px;
+            }
+        }
     </style>
 }
 
@@ -166,7 +175,7 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", new List<string>(), true)
+                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus").ToString(), ViewDataTyped.NewWaterQualityManagementPlanDocumentUrl, "Upload New Document", 850, "Upload", "Cancel", new List<string>(), null, null)
                     </span>
                 }
             </div>
@@ -179,7 +188,7 @@
                         if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                         {
                             <span>
-                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
+                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), 850, "Save", "Cancel", new List<string>(), null, null)
                                 @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteUrl(), new List<string>(), true)
                             </span>
                         }
@@ -193,6 +202,8 @@
                             <dd>@waterQualityManagementPlanDocument.UploadDate.ToShortDateString()</dd>
                             <dt>@Html.Label("File Type")</dt>
                             <dd>@waterQualityManagementPlanDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                            <dt>@Html.LabelWithSugarFor(FieldDefinition.WaterQualityManagementPlanDocumentType)</dt>
+                            <dd>@waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</dd>
                             <dt>@Html.Label("Description")</dt>
                             <dd>@waterQualityManagementPlanDocument.Description</dd>
                         </dl>
