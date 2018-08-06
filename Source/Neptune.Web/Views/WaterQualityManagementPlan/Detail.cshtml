@@ -180,42 +180,49 @@
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.Any())
+
+                @foreach (var waterQualityManagementPlanDocumentType in WaterQualityManagementPlanDocumentType.All)
                 {
-                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.OrderBy(x => x.DisplayName).ToList();
-                    foreach (var waterQualityManagementPlanDocument in waterQualityManagementPlanDocuments)
+                    var waterQualityManagementPlanDocuments = ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDocuments.ToList().Where(x => x.WaterQualityManagementPlanDocumentType == waterQualityManagementPlanDocumentType).OrderBy(x => x.DisplayName).ToList();
+
+                    <h4>@waterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</h4>
+
+                    if (waterQualityManagementPlanDocuments.Any())
                     {
-                        if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
-                        {
-                            <span>
-                                @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), 850, "Save", "Cancel", new List<string>(), null, null)
-                                @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteUrl(), new List<string>(), true)
-                            </span>
-                        }
 
-                        <a href="@waterQualityManagementPlanDocument.FileResource.GetFileResourceUrl()">
-                            @waterQualityManagementPlanDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
-                        </a>
-
-                        <dl class="dl-horizontal">
-                            <dt>@Html.Label("Uploaded On")</dt>
-                            <dd>@waterQualityManagementPlanDocument.UploadDate.ToShortDateString()</dd>
-                            <dt>@Html.Label("File Type")</dt>
-                            <dd>@waterQualityManagementPlanDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
-                            <dt>@Html.LabelWithSugarFor(FieldDefinition.WaterQualityManagementPlanDocumentType)</dt>
-                            <dd>@waterQualityManagementPlanDocument.WaterQualityManagementPlanDocumentType.WaterQualityManagementPlanDocumentTypeDisplayName</dd>
-                            <dt>@Html.Label("Description")</dt>
-                            <dd>@waterQualityManagementPlanDocument.Description</dd>
-                        </dl>
-                        if (waterQualityManagementPlanDocument != waterQualityManagementPlanDocuments.Last())
+                        foreach (var waterQualityManagementPlanDocument in waterQualityManagementPlanDocuments)
                         {
-                            <hr />
+                            if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                            {
+                                <span>
+                                    @ModalDialogFormHelper.ModalDialogFormLink("<i class='glyphicon glyphicon-edit' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetEditUrl(), string.Format("Edit {0} Document", FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), 850, "Save", "Cancel", new List<string>(), null, null)
+                                    @ModalDialogFormHelper.MakeDeleteLink("<i class='glyphicon glyphicon-trash' style='margin-right: 3px'></i>", waterQualityManagementPlanDocument.GetDeleteUrl(), new List<string>(), true)
+                                </span>
+                            }
+
+                            <a href="@waterQualityManagementPlanDocument.FileResource.GetFileResourceUrl()">
+                                @waterQualityManagementPlanDocument.DisplayName <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                            </a>
+
+                            <dl class="dl-horizontal">
+                                <dt>@Html.Label("Uploaded On")</dt>
+                                <dd>@waterQualityManagementPlanDocument.UploadDate.ToShortDateString()</dd>
+                                <dt>@Html.Label("File Type")</dt>
+                                <dd>@waterQualityManagementPlanDocument.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</dd>
+                                <dt>@Html.Label("Description")</dt>
+                                <dd>@waterQualityManagementPlanDocument.Description</dd>
+                            </dl>
+                            if (waterQualityManagementPlanDocument != waterQualityManagementPlanDocuments.Last())
+                            {
+                                <hr />
+                            }
                         }
                     }
-                }
-                else
-                {
-                    <p class="systemText">No documents have been uploaded for this @FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()</p>
+                    else
+                    {
+                        <p class="systemText">No documents provided</p>
+                    }
+
                 }
             </div>
         </div>
