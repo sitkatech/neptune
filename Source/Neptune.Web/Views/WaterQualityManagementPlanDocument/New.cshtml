@@ -24,7 +24,7 @@
                         @Html.LabelWithSugarFor(m => m.DisplayName)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.TextBoxFor(m => m.DisplayName, new {@class = "form-control"})
+                        @Html.TextBoxFor(m => m.DisplayName, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.DisplayName)
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanDocumentTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanDocumentTypeID, ViewDataTyped.AllDocumentTypes, new { @class = "form-control", style="width:auto;" })
+                        @Html.DropDownListFor(m => m.WaterQualityManagementPlanDocumentTypeID, ViewDataTyped.AllDocumentTypes, new { @class = "form-control", style = "width:auto;" })
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanDocumentTypeID)
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         @Html.LabelWithSugarFor(m => m.Description)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.TextAreaWithMaxLengthFor(m => m.Description, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> {"form-control"})
+                        @Html.TextAreaWithMaxLengthFor(m => m.Description, new TextAreaForExtensions.TextAreaDimensions(null, 4), null, new List<string> { "form-control" })
                         @Html.ValidationMessageFor(m => m.Description)
                     </div>
                 </div>
@@ -50,3 +50,12 @@
         </div>
     </div>
 }
+
+<script>
+    jQuery(document).ready(function () {
+        jQuery("input[type='file']").on('change',
+            function(evt) {
+                jQuery("input[name='@Html.IdFor(m=>m.DisplayName)']").val(evt.target.files[0].name);
+            });
+    })
+</script>

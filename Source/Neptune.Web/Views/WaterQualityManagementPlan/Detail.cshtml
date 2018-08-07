@@ -118,7 +118,7 @@
                                 @Html.Raw("Phone: ")
                                 @ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactPhone<br />
                             }
-                            </address>
+                        </address>
                     </div>
                 </div>
             </div>
@@ -212,10 +212,6 @@
                                 <dt>@Html.Label("Description")</dt>
                                 <dd>@waterQualityManagementPlanDocument.Description</dd>
                             </dl>
-                            if (waterQualityManagementPlanDocument != waterQualityManagementPlanDocuments.Last())
-                            {
-                                <hr />
-                            }
                         }
                     }
                     else
