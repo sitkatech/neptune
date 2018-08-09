@@ -293,6 +293,7 @@
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
+    <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
@@ -1262,6 +1263,7 @@
     <Content Include="Views\Parcel\SummaryForMap.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cshtml" />
     <Content Include="Views\Home\Training.cshtml" />
+    <Content Include="Views\Help\RequestOrganizationNameChange.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -2811,7 +2813,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\base\minified\images\" />
-    <Folder Include="Views\Help\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

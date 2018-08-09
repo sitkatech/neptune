@@ -18,9 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Web.Mvc;
+using LtInfo.Common.HtmlHelperExtensions;
+
 namespace Neptune.Web.Views.Shared
 {
     public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebPartialViewPage<SupportFormViewData, SupportFormViewModel>
     {
+        public static void RenderPartialView(HtmlHelper html, SupportFormViewData viewData, SupportFormViewModel viewModel)
+        {
+            html.RenderRazorSitkaPartial<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData,viewModel);
+        }
     }
 }

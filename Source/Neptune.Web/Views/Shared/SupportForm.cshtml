@@ -106,15 +106,18 @@
         }
     </div>
 
-   @* <hr>
-    <div class="row">
-        <div class="col-xs-12" style="text-align: right">
-            <button class="btn btn-neptune" style="display: inline-block;" type="submit">
-                Submit Request
-            </button>
-            <a href="@ViewDataTyped.CancelUrl" class="btn btn-neptune" style="display: inline-block;">Cancel</a>
+    if(ViewDataTyped.IsStandalonePage)
+    {
+        <hr>
+        <div class="row">
+            <div class="col-xs-12" style="text-align: right">
+                <button class="btn btn-neptune" style="display: inline-block;" type="submit">
+                    Submit Request
+                </button>
+                <a href="@ViewDataTyped.CancelUrl" class="btn btn-neptune" style="display: inline-block;">Cancel</a>
+            </div>
         </div>
-    </div>*@
+    }
 
     @Html.HiddenFor(x => x.ReturnUrl)
 }

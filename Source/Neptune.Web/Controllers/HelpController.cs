@@ -79,7 +79,9 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
+            var isStandalonePage = false;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
             return RazorPartialView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
@@ -102,9 +104,42 @@ namespace Neptune.Web.Controllers
 
         [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public PartialViewResult RequestOrganizationNameChange()
+        public ViewResult RequestOrganizationNameChange()
         {
-            return ViewSupport(SupportRequestTypeEnum.RequestOrganizationNameChange, string.Empty);
+            var currentPageUrl = string.Empty;
+            if (Request.UrlReferrer != null)
+            {
+                currentPageUrl = Request.UrlReferrer.ToString();
+            }
+            else if (Request.Url != null)
+            {
+                currentPageUrl = Request.Url.ToString();
+            }
+
+            var viewModel = new SupportFormViewModel(currentPageUrl, SupportRequestTypeEnum.RequestOrganizationNameChange);
+            if (!IsCurrentUserAnonymous())
+            {
+                viewModel.RequestPersonName = CurrentPerson.GetFullNameFirstLast();
+                viewModel.RequestPersonEmail = CurrentPerson.Email;
+                if (CurrentPerson.Organization != null)
+                {
+                    viewModel.RequestPersonOrganization = CurrentPerson.Organization.OrganizationName;
+                }
+                viewModel.RequestPersonPhone = CurrentPerson.Phone;
+            }
+            viewModel.RequestDescription = string.Empty;
+            var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder).ToList();
+
+            var supportRequestTypes =
+                allSupportRequestTypes.OrderBy(x => x.SupportRequestTypeSortOrder)
+                    .ToSelectListWithEmptyFirstRow(x => x.SupportRequestTypeID.ToString(CultureInfo.InvariantCulture), x => x.SupportRequestTypeDisplayName);
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
+            var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
+            viewModel.ReturnUrl = cancelUrl;
+            var isStandalonePage = true;
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
+            return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [AnonymousUnclassifiedFeature]
@@ -112,7 +147,16 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RequestOrganizationNameChange(SupportFormViewModel viewModel)
         {
-            return Support(viewModel);
+            if (!ModelState.IsValid)
+            {
+                return ViewSupportImpl(viewModel, string.Empty);
+            }
+            var supportRequestLog = SupportRequestLog.Create(CurrentPerson);
+            viewModel.UpdateModel(supportRequestLog, CurrentPerson);
+            HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
+            supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
+            SetMessageForDisplay("Support request sent.");
+            return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x=>x.Index()));
         }
 
         [LoggedInUnclassifiedFeature]

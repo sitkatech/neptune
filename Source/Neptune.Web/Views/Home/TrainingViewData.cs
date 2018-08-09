@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Home
         public TrainingViewData(Person currentPerson, Models.NeptunePage neptunePage,
             List<TrainingVideo> trainingVideos) : base(currentPerson, neptunePage)
         {
-            PageTitle = "Training Videos";
+            PageTitle = "Training";
             EntityName = "Stormwater Tools";
 
             TrainingVideos = trainingVideos;
