@@ -149,8 +149,12 @@ namespace Neptune.Web.Controllers
         [AnonymousUnclassifiedFeature]
         public ViewResult Training()
         {
-            var con = new HomeController { ControllerContext = ControllerContext };
-            return con.ViewPageContent(NeptunePageTypeEnum.Training);
+            var neptunePageTypeTraining = NeptunePageType.Training;
+            var neptunePageByPageTypeHomePage = NeptunePage.GetNeptunePageByPageType(neptunePageTypeTraining);
+            var trainingVideos = HttpRequestStorage.DatabaseEntities.TrainingVideos.ToList();
+
+            var viewData = new TrainingViewData(CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
+            return RazorView<Training, TrainingViewData>(viewData);
         }
     }
 }

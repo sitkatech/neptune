@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -293,6 +293,8 @@
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
+    <Compile Include="Views\Home\Training.cs" />
+    <Compile Include="Views\Home\TrainingViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
     <Compile Include="Models\Parcel.cs" />
@@ -1259,6 +1261,7 @@
     <Content Include="Views\Parcel\Index.cshtml" />
     <Content Include="Views\Parcel\SummaryForMap.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cshtml" />
+    <Content Include="Views\Home\Training.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
