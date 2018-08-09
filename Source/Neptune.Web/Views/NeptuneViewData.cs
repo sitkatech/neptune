@@ -20,11 +20,13 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Linq;
+using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+
 
 namespace Neptune.Web.Views
 {
@@ -47,6 +49,7 @@ namespace Neptune.Web.Views
         public readonly string RequestSupportUrl;
         public readonly string LegalUrl;
         public readonly ViewPageContentViewData ViewPageContentViewData;
+        public LtInfoMenuItem HelpMenu { get; private set; }
 
         /// <summary>
         /// Call for page without associated NeptunePage
@@ -88,11 +91,9 @@ namespace Neptune.Web.Views
 
         private void MakeNeptuneMenu(Person currentPerson)
         {
-            var homeMenuItem = LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Index()), currentPerson, "Home");
 
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
-                homeMenuItem,
                 BuildExploreMenu(currentPerson),
                 BuildAboutMenu(currentPerson),
                 BuildManageMenu(currentPerson)
@@ -100,6 +101,12 @@ namespace Neptune.Web.Views
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
             TopLevelLtInfoMenuItems.SelectMany(x => x.ChildMenus).ToList().ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-dropdown-item" });
+
+            HelpMenu = new LtInfoMenuItem("Help");
+            HelpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
+                ModalDialogFormHelper.ModalDialogFormLink("Request Support", RequestSupportUrl, "Request Support", 800,
+                    "Submit Request", "Cancel", new List<string>(), null, null).ToString(), "ToolHelp"));
+            HelpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
         }
 
         private static LtInfoMenuItem BuildExploreMenu(Person currentPerson)

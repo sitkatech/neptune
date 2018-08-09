@@ -28,12 +28,14 @@ using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 
+
 namespace Neptune.Web.Views
 {
     public class LtInfoMenuItem
     {
         private const string Indent = "    ";
         public List<string> ExtraTopLevelMenuCssClasses = new List<string>();
+        public readonly string RawString;
 
         /// <summary>
         /// Make a NeptuneMenuItem from a route. A feature is required on the Route and will be used to check access for the menu item.
@@ -54,6 +56,12 @@ namespace Neptune.Web.Views
             var shouldShow = NeptuneBaseFeature.IsAllowed(route, currentPerson);
             return new LtInfoMenuItem(urlString, menuItemName, shouldShow, false, menuGroupName);
         }
+
+        public static LtInfoMenuItem MakeItem(string menuItemName, string rawstring, string menuGroupName)
+        {
+            return new LtInfoMenuItem(menuItemName, rawstring, menuGroupName);
+        }
+
 
         /// <summary>
         /// Manual consruction of a LtInfoMenuItem with no children
@@ -88,7 +96,7 @@ namespace Neptune.Web.Views
             get { return !string.IsNullOrWhiteSpace(UrlString); }
         }
 
-        private IEnumerable<LtInfoMenuItem> ChildenMenuItemsSecurityFiltered
+        private IEnumerable<LtInfoMenuItem> ChildrenMenuItemsSecurityFiltered
         {
             get { return ChildMenus.Where(mi => mi.HasUrl && mi.ShouldShow).ToList(); }
         }
@@ -115,11 +123,15 @@ namespace Neptune.Web.Views
             //            <li><a href="@ViewDataTyped.FaqUrl">FAQ</a></li>
             //        </ul>
             //    </li>  
-            if (!ShouldShow || (IsTopLevelMenuItem && !HasUrl && !ChildenMenuItemsSecurityFiltered.Any()))
+            if (RawString != null)
+            {
+                return $"<li>{RawString}</li>";
+            }
+            if (!ShouldShow || (IsTopLevelMenuItem && !HasUrl && !ChildrenMenuItemsSecurityFiltered.Any()))
             {
                 return string.Empty;
             }
-            if (ChildenMenuItemsSecurityFiltered.Any())
+            if (ChildrenMenuItemsSecurityFiltered.Any())
             {
                 return RenderMenuWithChildren(indent);
             }
@@ -163,6 +175,14 @@ namespace Neptune.Web.Views
         private static string CreateDivider(string indent)
         {
             return string.Format("{0}<li class=\"divider\"></li>", indent);
+        }
+
+        private LtInfoMenuItem(string menuItemName, string rawstring, string menuGroupName)
+        {
+            MenuItemName = menuItemName;
+            RawString = rawstring;
+            ShouldShow = true;
+            MenuGroupName = menuGroupName;
         }
 
         public readonly string MenuGroupName;

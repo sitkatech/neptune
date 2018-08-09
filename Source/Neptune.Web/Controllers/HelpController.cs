@@ -28,6 +28,7 @@ using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Shared;
 using LtInfo.Common;
 using LtInfo.Common.Mvc;
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Controllers
@@ -36,12 +37,12 @@ namespace Neptune.Web.Controllers
     {
         [AnonymousUnclassifiedFeature]
         [HttpGet]
-        public ViewResult Support()
+        public PartialViewResult Support()
         {
             return ViewSupport(null, "");
         }
         
-        private ViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
+        private PartialViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
         {
             var currentPageUrl = string.Empty;
             if (Request.UrlReferrer != null)
@@ -68,7 +69,7 @@ namespace Neptune.Web.Controllers
             return ViewSupportImpl(viewModel, string.Empty);
         }
 
-        private ViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
+        private PartialViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
         {
             var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder).ToList();
 
@@ -79,7 +80,7 @@ namespace Neptune.Web.Controllers
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
             var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
-            return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
+            return RazorPartialView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [AnonymousUnclassifiedFeature]
@@ -96,13 +97,12 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            var returnUrl = viewModel.ReturnUrl ?? SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
-            return Redirect(returnUrl);
+            return new ModalDialogFormJsonResult();
         }
 
         [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public ViewResult RequestOrganizationNameChange()
+        public PartialViewResult RequestOrganizationNameChange()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestOrganizationNameChange, string.Empty);
         }
@@ -117,7 +117,7 @@ namespace Neptune.Web.Controllers
 
         [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public ViewResult RequestToChangePrivileges()
+        public PartialViewResult RequestToChangePrivileges()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);
         }

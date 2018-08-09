@@ -62,6 +62,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
             modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
             modelBuilder.Configurations.Add(new TenantAttributeConfiguration());
+            modelBuilder.Configurations.Add(new TrainingVideoConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPAssessmentConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPAssessmentObservationTypeConfiguration());
@@ -137,6 +138,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<SupportRequestLog> SupportRequestLogs { get { return AllSupportRequestLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TenantAttribute> AllTenantAttributes { get; set; }
         public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<TrainingVideo> AllTrainingVideos { get; set; }
+        public virtual IQueryable<TrainingVideo> TrainingVideos { get { return AllTrainingVideos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessmentObservationType> AllTreatmentBMPAssessmentObservationTypes { get; set; }
         public virtual IQueryable<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get { return AllTreatmentBMPAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<TreatmentBMPAssessmentPhoto> AllTreatmentBMPAssessmentPhotos { get; set; }
@@ -374,6 +377,9 @@ namespace Neptune.Web.Models
                     var tenant = Tenant.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(tenant, "Tenant", primaryKey);
                     return tenant;
+
+                case "TrainingVideo":
+                    return TrainingVideos.GetTrainingVideo(primaryKey);
 
                 case "TreatmentBMPAssessmentObservationType":
                     return TreatmentBMPAssessmentObservationTypes.GetTreatmentBMPAssessmentObservationType(primaryKey);

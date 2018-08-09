@@ -20,7 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 namespace Neptune.Web.Views.Shared
 {
-    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebViewPage<SupportFormViewData, SupportFormViewModel>
+    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebPartialViewPage<SupportFormViewData, SupportFormViewModel>
     {
     }
 }

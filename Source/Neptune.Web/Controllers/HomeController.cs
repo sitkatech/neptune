@@ -144,5 +144,13 @@ namespace Neptune.Web.Controllers
                 "Photo");
             return imageGalleryViewData;
         }
+
+        [HttpGet]
+        [AnonymousUnclassifiedFeature]
+        public ViewResult Training()
+        {
+            var con = new HomeController { ControllerContext = ControllerContext };
+            return con.ViewPageContent(NeptunePageTypeEnum.Training);
+        }
     }
 }
