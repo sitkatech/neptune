@@ -144,5 +144,17 @@ namespace Neptune.Web.Controllers
                 "Photo");
             return imageGalleryViewData;
         }
+
+        [HttpGet]
+        [AnonymousUnclassifiedFeature]
+        public ViewResult Training()
+        {
+            var neptunePageTypeTraining = NeptunePageType.Training;
+            var neptunePageByPageTypeHomePage = NeptunePage.GetNeptunePageByPageType(neptunePageTypeTraining);
+            var trainingVideos = HttpRequestStorage.DatabaseEntities.TrainingVideos.ToList();
+
+            var viewData = new TrainingViewData(CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
+            return RazorView<Training, TrainingViewData>(viewData);
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SupportForm.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="TrainingViewData.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,16 +19,24 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
+using System.Collections.Generic;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
 
-namespace Neptune.Web.Views.Shared
+namespace Neptune.Web.Views.Home
 {
-    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebPartialViewPage<SupportFormViewData, SupportFormViewModel>
+    public class TrainingViewData : NeptuneViewData
     {
-        public static void RenderPartialView(HtmlHelper html, SupportFormViewData viewData, SupportFormViewModel viewModel)
+        public List<TrainingVideo> TrainingVideos { get; }
+
+        public TrainingViewData(Person currentPerson, Models.NeptunePage neptunePage,
+            List<TrainingVideo> trainingVideos) : base(currentPerson, neptunePage)
         {
-            html.RenderRazorSitkaPartial<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData,viewModel);
+            PageTitle = "Training";
+            EntityName = "Stormwater Tools";
+
+            TrainingVideos = trainingVideos;
         }
     }
 }

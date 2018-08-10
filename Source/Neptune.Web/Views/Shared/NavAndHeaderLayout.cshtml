@@ -110,7 +110,6 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenuUser">
                                         <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">View Account</a></li>
-                                        <li><a href="@ViewDataTyped.RequestSupportUrl" title="Log In">Request Support</a></li>
                                         <li class="divider"></li>
                                         <li><a href="@ViewDataTyped.LogOutUrl">Log Out</a></li>
                                     </ul>
@@ -119,12 +118,10 @@
                             else
                             {
                                 <li>
-                                    <a href="@ViewDataTyped.RequestSupportUrl" title="Log In">Request Support</a>
-                                </li>
-                                <li>
                                     <a href="@ViewDataTyped.LogInUrl" title="Log In">Log In</a>
                                 </li>
                             }
+                            @ViewDataTyped.HelpMenu.RenderMenu()
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
