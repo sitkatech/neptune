@@ -101,7 +101,7 @@
                 </div>
                 <hr />
                 <div class="row">
-                    <label class="col-sm-5 control-label text-right">@FieldDefinition.RequiredLifespanOfInstallation.GetFieldDefinitionLabel()</label>
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.RequiredLifespanOfInstallation)</label>
                     <div class="col-sm-7">
                         @if (ViewDataTyped.TreatmentBMP.TreatmentBMPLifespanType == TreatmentBMPLifespanType.FixedEndDate)
                         {
@@ -116,7 +116,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>@FieldDefinition.RequiredFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
+                        <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString() : "Not Required")
@@ -124,7 +124,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-5 control-label text-right ">
-                        <label>@FieldDefinition.RequiredPostStormFieldVisitsPerYear.GetFieldDefinitionLabel()</label>
+                        <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredPostStormFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
                         @(ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString() : "Not Required")
