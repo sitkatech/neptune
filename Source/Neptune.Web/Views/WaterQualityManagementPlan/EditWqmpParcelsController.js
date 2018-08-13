@@ -6,6 +6,12 @@
         return $scope.AngularViewData.ParcelNumberByID[parcelId];
     };
 
+    $scope.getParcelAddress = function (parcelId) {
+        var parcelAddress = $scope.AngularViewData.ParcelAddressByID[parcelId];
+        parcelAddress = parcelAddress == null ? "Address is unavailable" : parcelAddress;
+        return parcelAddress ;
+    };
+
     var typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, findParcelByAddressUrl, findParcelByApnUrl) {
         var finder = jQuery(typeaheadSelector);
         finder.typeahead({
@@ -18,7 +24,7 @@
 
         finder.bind("typeahead:select",
             function (event, suggestion) {
-                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, function () {
+                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () {
                     $scope.$apply();
                 });
             });
@@ -89,7 +95,7 @@
 
                 var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
 
-                $scope.toggleParcel(mergedProperties.ParcelID, mergedProperties.ParcelNumber, function () {
+                $scope.toggleParcel(mergedProperties.ParcelID, mergedProperties.ParcelNumber, mergedProperties.ParcelAddress, function () {
                     $scope.$apply();
                 });
 
@@ -99,9 +105,13 @@
             });
     }
 
-    $scope.toggleParcel = function (parcelId, parcelNumber, callback) {
+    $scope.toggleParcel = function (parcelId, parcelNumber, parcelAddress, callback) {
         if (parcelNumber && typeof $scope.AngularViewData.ParcelNumberByID[parcelId] === "undefined") {
             $scope.AngularViewData.ParcelNumberByID[parcelId] = parcelNumber;
+        }
+
+        if (parcelNumber && typeof $scope.AngularViewData.ParcelAddressByID[parcelId] === "undefined") {
+            $scope.AngularViewData.ParcelAddressByID[parcelId] = parcelAddress;
         }
 
         if (_.includes($scope.AngularModel.ParcelIDs, parcelId)) {
