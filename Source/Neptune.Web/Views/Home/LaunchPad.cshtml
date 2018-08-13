@@ -28,7 +28,13 @@
             <h4>Welcome @ViewDataTyped.CurrentPerson.FirstName,</h4>
             @if (ViewDataTyped.IsUnassigned)
             {
-                <p>You do not have a role assigned. <a href="@ViewDataTyped.RequestSupportUrl">Request Support</a> or contact your jurisdiction manager to request a role.</p>
+            <p>
+                You do not have a role assigned.
+                @ModalDialogFormHelper.ModalDialogFormLink("Request Support", ViewDataTyped.RequestSupportUrl, "Request Support", 800,
+                "Submit Request", "Cancel", new List<string>
+                    (), null, null)
+                    or contact your jurisdiction manager to request a role.
+            </p>
             }
             else if (ViewDataTyped.IsAdmin)
             {

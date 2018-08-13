@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="SupportForm.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="Training.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,17 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
-
-namespace Neptune.Web.Views.Shared
+namespace Neptune.Web.Views.Home
 {
-    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebPartialViewPage<SupportFormViewData, SupportFormViewModel>
+    public abstract class Training : LtInfo.Common.Mvc.TypedWebViewPage<TrainingViewData>
     {
-        public static void RenderPartialView(HtmlHelper html, SupportFormViewData viewData, SupportFormViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData,viewModel);
-        }
     }
 }

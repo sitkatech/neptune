@@ -598,8 +598,8 @@ TreatmentBMPTypeID	TreatmentBMPTypeCustomAttributeTypeID	CustomAttributeTypeID	C
 35							1589									1117			Priority Land Use										5
 */
 
-insert into dbo.TreatmentBMP(TenantID, StormwaterJurisdictionID,TreatmentBMPTypeID, OwnerOrganizationID, TreatmentBMPName, LocationPoint, YearBuilt)
-select 2 as TenantID, 2 as StormwaterJurisdictionID, 35 as TreatmentBMPTypeID, 9 as OwnerOrganizationID, b.TreatmentBMPName, b.LocationPoint, b.YearBuilt
+insert into dbo.TreatmentBMP(TenantID, StormwaterJurisdictionID,TreatmentBMPTypeID, OwnerOrganizationID, TreatmentBMPName, LocationPoint, YearBuilt, Notes)
+select 2 as TenantID, 2 as StormwaterJurisdictionID, 35 as TreatmentBMPTypeID, 9 as OwnerOrganizationID, b.TreatmentBMPName, b.LocationPoint, b.YearBuilt, b.Notes
 from #TreatmentBMP b
 left join dbo.TreatmentBMP tb on b.TreatmentBMPName = tb.TreatmentBMPName
 where tb.TreatmentBMPID is null
