@@ -119,7 +119,7 @@
                         <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
-                        @(ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString() : "Not Required")
+                        @ViewDataTyped.TreatmentBMP.RequiredFieldVisitsPerYear.ToString()
                     </div>
                 </div>
                 <div class="row">
@@ -127,7 +127,7 @@
                         <label>@Html.LabelWithSugarFor(FieldDefinition.RequiredPostStormFieldVisitsPerYear)</label>
                     </div>
                     <div class="col-sm-7">
-                        @(ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear != null? ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString() : "Not Required")
+                        @ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString()
                     </div>
                 </div>
                 <hr/>
