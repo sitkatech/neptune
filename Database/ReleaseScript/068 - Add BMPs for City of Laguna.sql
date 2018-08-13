@@ -379,6 +379,7 @@ where tb.TreatmentBMPID is null
 
 declare @customAttributeTypeID int, @treatmentBMPTypeCustomAttributeTypeID int
 
+-- DesignedForFullCapture
 select @customAttributeTypeID = 26, @treatmentBMPTypeCustomAttributeTypeID = 296
 
 insert into dbo.CustomAttribute(TenantID, TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, TreatmentBMPTypeID, CustomAttributeTypeID)
@@ -395,7 +396,7 @@ join dbo.TreatmentBMP b on tb.TreatmentBMPName = b.TreatmentBMPName
 join dbo.CustomAttribute ca on b.TreatmentBMPID = ca.TreatmentBMPID and ca.CustomAttributeTypeID = @customAttributeTypeID
 where tb.DesignedForFullCapture is not null
 
-
+-- ConnectorPipeScreenName
 select @customAttributeTypeID = 75, @treatmentBMPTypeCustomAttributeTypeID = 297
 
 insert into dbo.CustomAttribute(TenantID, TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, TreatmentBMPTypeID, CustomAttributeTypeID)
@@ -412,7 +413,7 @@ join dbo.TreatmentBMP b on tb.TreatmentBMPName = b.TreatmentBMPName
 join dbo.CustomAttribute ca on b.TreatmentBMPID = ca.TreatmentBMPID and ca.CustomAttributeTypeID = @customAttributeTypeID
 where tb.ConnectorPipeScreenName is not null
 
-
+-- CatchBasinLength
 select @customAttributeTypeID = 100, @treatmentBMPTypeCustomAttributeTypeID = 515
 
 insert into dbo.CustomAttribute(TenantID, TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, TreatmentBMPTypeID, CustomAttributeTypeID)
@@ -420,16 +421,16 @@ select b.TenantID, b.TreatmentBMPID, @treatmentBMPTypeCustomAttributeTypeID as T
 from #TreatmentBMP tb
 join dbo.TreatmentBMP b on tb.TreatmentBMPName = b.TreatmentBMPName
 left join dbo.CustomAttribute ca on b.TreatmentBMPID = ca.TreatmentBMPID and ca.CustomAttributeTypeID = @customAttributeTypeID
-where tb.ConnectorPipeScreenName is not null and ca.CustomAttributeID is null
+where tb.CatchBasinLength is not null and ca.CustomAttributeID is null
 
 insert into dbo.CustomAttributeValue(TenantID, CustomAttributeID, AttributeValue)
-select b.TenantID, ca.CustomAttributeID, tb.ConnectorPipeScreenName
+select b.TenantID, ca.CustomAttributeID, tb.CatchBasinLength
 from #TreatmentBMP tb
 join dbo.TreatmentBMP b on tb.TreatmentBMPName = b.TreatmentBMPName
 join dbo.CustomAttribute ca on b.TreatmentBMPID = ca.TreatmentBMPID and ca.CustomAttributeTypeID = @customAttributeTypeID
-where tb.ConnectorPipeScreenName is not null
+where tb.CatchBasinLength is not null
 
-
+-- Trash Screen Design Variation
 select @customAttributeTypeID = 110, @treatmentBMPTypeCustomAttributeTypeID = 583
 
 insert into dbo.CustomAttribute(TenantID, TreatmentBMPID, TreatmentBMPTypeCustomAttributeTypeID, TreatmentBMPTypeID, CustomAttributeTypeID)
