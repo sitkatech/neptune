@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
             public readonly MapInitJson MapInitJson;
             public readonly string FindParcelByNameUrl;
+            public readonly string FindParcelByAddress;
             public readonly string TypeAheadInputId;
             public IDictionary<int, string> ParcelNumberByID;
             public readonly string ParcelMapServiceLayerName;
@@ -42,6 +43,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             {
                 MapInitJson = mapInitJson;
                 FindParcelByNameUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(c => c.FindSimpleByAPN(null));
+                FindParcelByAddress = SitkaRoute<ParcelController>.BuildUrlFromExpression(c => c.FindSimpleByAddress(null));
                 TypeAheadInputId = "parcelSearch";
                 ParcelNumberByID = parcelsInViewModel.ToDictionary(x => x.ParcelID, x => x.ParcelNumber);
                 ParcelMapServiceLayerName = tenantAttribute.ParcelLayerName;

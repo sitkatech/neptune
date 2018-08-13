@@ -52,11 +52,26 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.Parcels.Where(
                     x => x.ParcelGeometry != null && (x.ParcelAddress + ", "+ x.ParcelZipCode).Contains(searchString)).ToList();
 
-            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(20).Select(pfr =>
+            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(10).Select(pfr =>
             {
                 var listItem = new ListItem(pfr.GetParcelAddress(), pfr.ParcelNumber);
                 return listItem;
             }).ToList();
+            return Json(listItems, JsonRequestBehavior.AllowGet);
+        }
+
+        [JurisdictionManageFeature]
+        public JsonResult FindSimpleByAddress(string term)
+        {
+            var searchString = term.Trim();
+            var listItems = HttpRequestStorage.DatabaseEntities.Parcels
+                .Where(x => x.ParcelGeometry != null && x.ParcelAddress.Contains(searchString))
+                .ToList()
+                .OrderBy(x => x.GetParcelAddress())
+                .ThenBy(x => x.ParcelNumber)
+                .Take(10)
+                .Select(x => new ParcelSimple(x))
+                .ToList();
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
 
@@ -68,7 +83,7 @@ namespace Neptune.Web.Controllers
             var allParcelsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString)).ToList();
 
-            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(20).Select(pfr =>
+            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(10).Select(pfr =>
             {
                 var listItem = new ListItem(pfr.ParcelNumber, pfr.ParcelNumber);
                 return listItem;
@@ -86,7 +101,7 @@ namespace Neptune.Web.Controllers
                 .ToList()
                 .OrderBy(x => x.GetParcelAddress())
                 .ThenBy(x => x.ParcelNumber)
-                .Take(20)
+                .Take(10)
                 .Select(x => new ParcelSimple(x))
                 .ToList();
             return Json(listItems, JsonRequestBehavior.AllowGet);
