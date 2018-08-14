@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -54,12 +54,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPLifespanEndDate = treatmentBMPLifespanEndDate;
             this.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYear;
             this.RequiredPostStormFieldVisitsPerYear = requiredPostStormFieldVisitsPerYear;
+            this.InventoryIsVerified = inventoryIsVerified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID) : this()
+        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID, bool inventoryIsVerified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -68,12 +69,13 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OwnerOrganizationID = ownerOrganizationID;
+            this.InventoryIsVerified = inventoryIsVerified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization) : this()
+        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, bool inventoryIsVerified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -87,6 +89,7 @@ namespace Neptune.Web.Models
             this.OwnerOrganizationID = ownerOrganization.OrganizationID;
             this.OwnerOrganization = ownerOrganization;
             ownerOrganization.TreatmentBMPsWhereYouAreTheOwnerOrganization.Add(this);
+            this.InventoryIsVerified = inventoryIsVerified;
         }
 
         /// <summary>
@@ -94,7 +97,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization)
         {
-            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization);
+            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization, default(bool));
         }
 
         /// <summary>
@@ -177,6 +180,7 @@ namespace Neptune.Web.Models
         public DateTime? TreatmentBMPLifespanEndDate { get; set; }
         public int? RequiredFieldVisitsPerYear { get; set; }
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
+        public bool InventoryIsVerified { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 

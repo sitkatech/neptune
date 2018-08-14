@@ -53,8 +53,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string NewFieldVisitUrl { get; }
         public string LocationEditUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
+        public readonly string VerifiedUnverifiedUrl;
 
-        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData)
+        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, null)
         {
             TreatmentBMP = treatmentBMP;
@@ -83,6 +84,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             LocationEditUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.EditLocation(treatmentBMP));
             ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.ManageTreatmentBMPImages(TreatmentBMP));
+
+            VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
         }
     }
 }

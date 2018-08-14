@@ -30,7 +30,8 @@ namespace Neptune.Web.UnitTestCommon
         {
             public static TreatmentBMP Create(TreatmentBMPType treatmentBMPType)
             { 
-                var treatmentBMP = new TreatmentBMP(string.Empty, treatmentBMPType.TreatmentBMPTypeID, ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID);
+                var inventoryIsVerified = false;
+                var treatmentBMP = new TreatmentBMP(string.Empty, treatmentBMPType.TreatmentBMPTypeID, ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, inventoryIsVerified);
                 return treatmentBMP;
             }
         }

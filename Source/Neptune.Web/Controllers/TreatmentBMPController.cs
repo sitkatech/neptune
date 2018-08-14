@@ -85,8 +85,9 @@ namespace Neptune.Web.Controllers
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
+            var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
-            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData);
+            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -107,8 +108,9 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel);
             }
 
+            var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
-                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID);
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
@@ -213,6 +215,37 @@ namespace Neptune.Web.Controllers
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
                 organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [TreatmentBMPManageFeature]
+        public PartialViewResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(treatmentBMP.TreatmentBMPID);
+            return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+            }
+
+            treatmentBMP.InventoryIsVerified = true;
+            
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewVerifyInventoryTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to verify the inventory for the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
         [HttpGet]

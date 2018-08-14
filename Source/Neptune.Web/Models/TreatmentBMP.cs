@@ -142,5 +142,14 @@ namespace Neptune.Web.Models
                 !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
             );
         }
+
+        public void MarkInventoryAsProvisionalIfNonManager(Person person)
+        {
+            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(StormwaterJurisdiction);
+            if (!isAssignedToStormwaterJurisdiction)
+            {
+                InventoryIsVerified = false;
+            }
+        }
     }
 }
