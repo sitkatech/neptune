@@ -333,6 +333,7 @@ namespace Neptune.Web.Controllers
 
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -404,6 +405,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditLocation(treatmentBMP, viewModel);
             }
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
 

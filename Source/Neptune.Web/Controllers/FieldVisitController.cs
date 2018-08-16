@@ -197,6 +197,7 @@ namespace Neptune.Web.Controllers
                 return ViewLocation(fieldVisit, viewModel);
             }
 
+            fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
 
@@ -231,6 +232,7 @@ namespace Neptune.Web.Controllers
                 ViewPhotos(fieldVisit, viewModel);
             }
 
+            fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 
@@ -279,6 +281,7 @@ namespace Neptune.Web.Controllers
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
+            fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
 

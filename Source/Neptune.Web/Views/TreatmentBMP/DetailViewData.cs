@@ -37,6 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
+        public bool CanManageStormwaterJurisdiction { get; }
 
         public bool CanEditBenchmarkAndThresholds { get; }
 
@@ -67,6 +68,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             AddBenchmarkAndThresholdUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(t => t.Instructions(treatmentBMP.TreatmentBMPID));
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
             UserHasCustomAttributeTypeManagePermissions =
                 new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
