@@ -51,7 +51,7 @@
                 <input type="text"
                        id="@ViewDataTyped.ViewDataForAngular.TypeAheadInputId"
                        class="typeahead form-control"
-                       placeholder="Search by @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number"
+                       placeholder="Search by Address or @FieldDefinition.Parcel.GetFieldDefinitionLabel() Number"
                        autocomplete="off"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" id="@string.Format("{0}Button", ViewDataTyped.ViewDataForAngular.TypeAheadInputId)" ng-click="selectFirstSuggestionFunction()">
@@ -79,7 +79,10 @@
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </td>
-                        <td ng-bind="getParcelNumber(parcelId)"></td>
+                        <td>
+                            <div ng-bind="getParcelNumber(parcelId)"></div>
+                            <div class="help-block" ng-bind="getParcelAddress(parcelId)"></div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
