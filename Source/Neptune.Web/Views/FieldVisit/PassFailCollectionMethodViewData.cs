@@ -27,7 +27,7 @@ using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
+    public class PassFailCollectionMethodViewData : CollectionMethodSectionViewData
     {
         
 

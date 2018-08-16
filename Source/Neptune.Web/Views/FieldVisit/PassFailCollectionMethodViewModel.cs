@@ -23,7 +23,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class PassFailCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public class PassFailCollectionMethodViewModel : CollectionMethodSectionViewModel
     {
         /// <summary>
         /// Needed by the ModelBinder

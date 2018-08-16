@@ -23,7 +23,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class PercentageCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public class PercentageCollectionMethodViewModel : CollectionMethodSectionViewModel
     {
         /// <summary>
         /// Needed by the ModelBinder

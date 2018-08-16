@@ -30,7 +30,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AssessmentInformationViewModel : FieldVisitSectionViewModel
+    public class AssessmentInformationViewModel : FormViewModel
     {
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPAssessmentID { get; set; }

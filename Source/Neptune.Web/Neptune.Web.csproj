@@ -293,6 +293,8 @@
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
+    <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
+    <Compile Include="Views\FieldVisit\PostMaintenanceAssessmentViewModel.cs" />
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
@@ -385,7 +387,6 @@
     <Compile Include="Views\FieldVisit\AttributesViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSection.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitSectionViewData.cs" />
-    <Compile Include="Views\FieldVisit\FieldVisitSectionViewModel.cs" />
     <Compile Include="Views\FieldVisit\Assessment.cs" />
     <Compile Include="Views\FieldVisit\InventoryViewData.cs" />
     <Compile Include="Views\FieldVisit\LocationViewData.cs" />
@@ -563,9 +564,7 @@
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSection.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewModel.cs" />
-    <Compile Include="Views\FieldVisit\BaseCollectionMethodForm.cs" />
-    <Compile Include="Views\FieldVisit\BaseCollectionMethodFormViewData.cs" />
-    <Compile Include="Views\FieldVisit\BaseCollectionMethodFormViewModel.cs" />
+    <Compile Include="Views\FieldVisit\CollectionMethodSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\CollectionMethodSectionViewModel.cs" />
     <Compile Include="Views\CustomAttributeType\Detail.cs" />
     <Compile Include="Views\CustomAttributeType\DetailViewData.cs" />

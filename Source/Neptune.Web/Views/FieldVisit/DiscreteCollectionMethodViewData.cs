@@ -27,7 +27,7 @@ using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class DiscreteCollectionMethodViewData : BaseCollectionMethodFormViewData
+    public class DiscreteCollectionMethodViewData : CollectionMethodSectionViewData
     {
         public DiscreteCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }

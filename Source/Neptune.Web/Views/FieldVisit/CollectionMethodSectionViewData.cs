@@ -2,7 +2,7 @@
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class BaseCollectionMethodFormViewData : FieldVisitSectionViewData
+    public class CollectionMethodSectionViewData : FieldVisitSectionViewData
     {
         public bool ForObservationTypePreview { get; }
 
@@ -10,12 +10,12 @@ namespace Neptune.Web.Views.FieldVisit
         /// Only called when we're invoking a derived type from the PreviewObservationType route
         /// </summary>
         /// <param name="currentPerson"></param>
-        public BaseCollectionMethodFormViewData(Person currentPerson) : base(currentPerson)
+        public CollectionMethodSectionViewData(Person currentPerson) : base(currentPerson)
         {
             ForObservationTypePreview = true;
         }
 
-        public BaseCollectionMethodFormViewData(Person currentPerson, Models.FieldVisit fieldVisit,
+        public CollectionMethodSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit,
             Models.FieldVisitSection fieldVisitSection, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson, fieldVisit, fieldVisitSection)
         {
             SubsectionName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;

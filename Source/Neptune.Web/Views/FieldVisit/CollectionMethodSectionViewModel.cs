@@ -7,7 +7,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class CollectionMethodSectionViewModel : FieldVisitSectionViewModel, IValidatableObject
+    public class CollectionMethodSectionViewModel : FormViewModel, IValidatableObject
     {
         public int? TreatmentBMPAssessmentID { get; set; }
         public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
