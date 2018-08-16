@@ -237,14 +237,15 @@ namespace Neptune.Web.Controllers
                 return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
             }
 
-            treatmentBMP.InventoryIsVerified = true;
+            treatmentBMP.InventoryIsVerified = !treatmentBMP.InventoryIsVerified;
             
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewVerifyInventoryTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
-            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to verify the inventory for the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
+            var action = treatmentBMP.InventoryIsVerified ? "unverify" : "verify";
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the inventory for the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 

@@ -50,9 +50,22 @@
     @if (ViewDataTyped.CurrentPersonCanManage)
     {
         <div class="pull-right">
+            @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
+            {
+                <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span> 
+                <span style="margin-right: 5px">Inventory has been verified</span>
+            }
+            else
+            {
+                <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span> 
+                <span style="margin-right: 5px">Inventory has not been verified</span>
+            }
+
+
+
             @if (ViewDataTyped.CanManageStormwaterJurisdiction)
             {
-                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Inventory", "<span></span>", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedUrl, string.Format("{0} this user?", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Inactivate" : "Activate"), 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune", "headerButtonText", "inactivateUserButton"}, null, null)
+                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Inventory", "<span></span>", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedUrl, string.Format("{0} this inventory?", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune", "headerButtonText", "inactivateUserButton"}, null, null)
             }
 
 
