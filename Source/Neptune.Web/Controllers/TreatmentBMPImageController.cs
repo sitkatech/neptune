@@ -29,6 +29,7 @@ namespace Neptune.Web.Controllers
                 return ViewManageTreatmentBMPImages(viewModel, treatmentBMP);
             }
 
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, treatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 

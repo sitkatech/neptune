@@ -85,8 +85,9 @@ namespace Neptune.Web.Controllers
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
+            var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
-            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData);
+            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -107,8 +108,9 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel);
             }
 
+            var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
-                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID);
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
@@ -216,6 +218,38 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [TreatmentBMPManageFeature]
+        public PartialViewResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(treatmentBMP.TreatmentBMPID);
+            return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+            }
+
+            treatmentBMP.InventoryIsVerified = !treatmentBMP.InventoryIsVerified;
+            
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewVerifyInventoryTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
+        {
+            var action = treatmentBMP.InventoryIsVerified ? "unverify" : "verify";
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the inventory for the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
         [TreatmentBMPDeleteFeature]
         public PartialViewResult Delete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -300,6 +334,7 @@ namespace Neptune.Web.Controllers
 
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -371,6 +406,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditLocation(treatmentBMP, viewModel);
             }
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
 
