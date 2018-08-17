@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.FieldVisit.FieldVisitSection
 @{
@@ -99,6 +100,24 @@
         }
     </style>
 }
+<div class="pull-right">
+    @if (ViewDataTyped.FieldVisit.IsFieldVisitVerified)
+    {
+        <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
+        <span style="margin-right: 5px">Field Visit has been verified</span>
+    }
+    else
+    {
+        <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
+        <span style="margin-right: 5px">Field Visit has not been verified</span>
+    }
+
+    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Inventory", "<span></span>", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, string.Format("{0} this inventory?", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+    }
+</div>
+
 @Html.ValidationSummary()
 <div>
     <div class="row wizard">
@@ -113,7 +132,7 @@
                             <a class="@(topLevelIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSection.GetSectionUrl(ViewDataTyped.FieldVisit)">
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
-                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)) )
+                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)))
                             {
                                 <ul class="nav nav-stacked fieldVisitTierTwoMenu">
                                     @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))

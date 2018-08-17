@@ -63,6 +63,8 @@ namespace Neptune.Web.Views.FieldVisit
 
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Field Visit Verified", x => x.IsFieldVisitVerified.ToYesNo(), 105,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.GetStatusAsWorkflowUrl(), 85,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
