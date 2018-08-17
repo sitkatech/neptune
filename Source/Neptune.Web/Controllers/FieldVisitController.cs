@@ -471,7 +471,39 @@ namespace Neptune.Web.Controllers
 
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.FindABMP()));
         }
+         
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public PartialViewResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewVerifyFieldVisit(fieldVisit, viewModel);
+        }
 
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewVerifyFieldVisit(fieldVisit, viewModel);
+            }
+
+            fieldVisit.IsFieldVisitVerified = !fieldVisit.IsFieldVisitVerified;
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var action = fieldVisit.IsFieldVisitVerified ? "unverify" : "verify";
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the Field Visit for the '{fieldVisit.TreatmentBMP.TreatmentBMPName}' treatment BMP?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+ 
         #region Assessment-Related Actions
 
         #region Observation Types

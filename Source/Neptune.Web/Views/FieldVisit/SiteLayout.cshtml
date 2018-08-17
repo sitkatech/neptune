@@ -114,7 +114,7 @@
 
     @if (ViewDataTyped.CanManageStormwaterJurisdiction)
     {
-        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Inventory", "<span></span>", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, string.Format("{0} this inventory?", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Field Visit", "<span></span>", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, string.Format("{0} this Field Visit?", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
     }
 </div>
 
