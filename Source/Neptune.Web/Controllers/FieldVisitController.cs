@@ -403,6 +403,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
@@ -500,7 +501,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
         {
             var action = fieldVisit.IsFieldVisitVerified ? "unverify" : "verify";
-            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the Field Visit for the '{fieldVisit.TreatmentBMP.TreatmentBMPName}' treatment BMP?");
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the field visit from '{fieldVisit.VisitDate}'");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
  
@@ -550,6 +551,7 @@ namespace Neptune.Web.Controllers
                     DiscreteCollectionMethodViewModel>(viewData, viewModel);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             var treatmentBMPObservation =
                 GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
                     treatmentBMPAssessmentObservationType);
@@ -691,6 +693,7 @@ namespace Neptune.Web.Controllers
                         viewData, viewModel);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             var treatmentBMPObservation =
                 GetExistingTreatmentBMPObservationOrCreateNew(treatmentBMPAssessment,
                     treatmentBMPAssessmentObservationType);
@@ -845,6 +848,7 @@ namespace Neptune.Web.Controllers
                 return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             

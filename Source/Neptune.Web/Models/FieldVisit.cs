@@ -49,5 +49,14 @@ namespace Neptune.Web.Models
         {
             InitialAssessmentID = null;
         }
+
+        public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
+        {
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            if (!isAssignedToStormwaterJurisdiction)
+            {
+                IsFieldVisitVerified = false;
+            }
+        }
     }
 }
