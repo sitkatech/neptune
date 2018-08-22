@@ -20,6 +20,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[RequiredFieldVisitsPerYear] [int] NULL,
 	[RequiredPostStormFieldVisitsPerYear] [int] NULL,
 	[InventoryIsVerified] [bit] NOT NULL,
+	[InventoryIsVerifiedDate] [datetime] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
