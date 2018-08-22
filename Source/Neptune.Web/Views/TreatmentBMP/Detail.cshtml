@@ -43,38 +43,56 @@
             font-size: 75%;
             margin-bottom: 0;
         }
+        .unverify-inventory-btn {
+            font-size: 11px;
+            margin: 0 5px 0 0;
+            text-align: right;
+        }
     </style>
 }
 
 @section RightOfPageTitle{
     @if (ViewDataTyped.CurrentPersonCanManage)
     {
-        <div class="pull-right">
-            @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
-            {
-                <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span> 
+    <div class="pull-right">
+        @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
+        {
+            <div style="display:inline-block">
+                <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
                 <span style="margin-right: 5px">Inventory has been verified</span>
-            }
-            else
-            {
-                <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span> 
+                
+                @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                {
+                    @ModalDialogFormHelper.ModalDialogFormLink("Mark BMP Record as Provisional", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Provisional?", 400, "Continue", "Cancel", new List<string> { "help-block", "unverify-inventory-btn" }, null, null)
+                }
+            </div>
+        }
+        else
+        {
+            <div style="display:inline-block">
+                <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
                 <span style="margin-right: 5px">Inventory has not been verified</span>
-            }
+
+                @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                {
+                    @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+                }
+            </div>
+        }
 
 
 
-            @if (ViewDataTyped.CanManageStormwaterJurisdiction)
-            {
-                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Inventory", "<span></span>", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedUrl, string.Format("{0} this inventory?", ViewDataTyped.TreatmentBMP.InventoryIsVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune", "headerButtonText", "inactivateUserButton"}, null, null)
-            }
+        
+        
+        <div style="display: inline-block; vertical-align: top;">
 
-
-            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune"}, null, null)
+            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
         </div>
+    </div>
     }
 }
 
-<div class="row">
+                    <div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
