@@ -31,10 +31,13 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
 
         // depends on the type of observation
         if (currentObservationTypeSchema.ObservationTypeCollectionMethod === 1) {
+            var defaultPropertyObserved = currentObservationTypeSchema.PropertiesToObserve.length === 1
+                ? currentObservationTypeSchema.PropertiesToObserve[0].DisplayName
+                : null;
             while (newObservationData.SingleValueObservations.length <
                 currentObservationTypeSchema.MinimumNumberOfObservations) {
                 newObservationData.SingleValueObservations.push({
-                    PropertyObserved: null,
+                    PropertyObserved: defaultPropertyObserved,
                     ObservationValue: null,
                     Notes: null
                 });
@@ -75,12 +78,10 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
     };
 
     $scope.getObservationData = function(observationTypeSchema) {
-        var find = _.find($scope.ObservationData,
+        return _.find($scope.ObservationData,
             function(f) {
                 return f.TreatmentBMPAssessmentObservationTypeID == observationTypeSchema.TreatmentBMPAssessmentObservationTypeID;
             });
-        console.log(find);
-        return find;
     };
 
     $scope.jsonify = function(observation) {

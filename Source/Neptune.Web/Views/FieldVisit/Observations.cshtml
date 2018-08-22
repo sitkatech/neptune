@@ -70,7 +70,7 @@
             <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
         
-        <div ng-repeat="obs in ObservationData">
+        <div ng-repeat="obs in ObservationData | orderBy: TreatmentBMPAssessmentObservationTypeID">
             <input type="hidden" name="@Html.NameFor(m => m.Observations[0].TreatmentBMPAssessmentObservationTypeID).ToString().Replace("0", "{{$index}}")" ng-value="obs.TreatmentBMPAssessmentObservationTypeID"/>
             <input type="hidden" name="@Html.NameFor(m => m.Observations[0].ObservationData).ToString().Replace("0", "{{$index}}")" ng-value="jsonify(obs)"/>
         </div>
