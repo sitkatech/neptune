@@ -493,15 +493,23 @@ namespace Neptune.Web.Controllers
                 return ViewVerifyFieldVisit(fieldVisit, viewModel);
             }
 
-            fieldVisit.IsFieldVisitVerified = !fieldVisit.IsFieldVisitVerified;
+            fieldVisit.IsFieldVisitVerified = true;
+
+            if (fieldVisit.IsFieldVisitVerified)
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
+            else
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.InProgress.FieldVisitStatusID;
+            }
 
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
         {
-            var action = fieldVisit.IsFieldVisitVerified ? "unverify" : "verify";
-            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the field visit from '{fieldVisit.VisitDate}'");
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to verify the Assessment and Maintenance Records from '{fieldVisit.VisitDate}'");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
  

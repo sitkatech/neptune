@@ -104,19 +104,20 @@
     @if (ViewDataTyped.FieldVisit.IsFieldVisitVerified)
     {
         <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
-        <span style="margin-right: 5px">Field Visit has been verified</span>
+        <span style="margin-right: 5px">Assessment and Maintenance Records have been verified</span>
     }
     else
     {
         <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-        <span style="margin-right: 5px">Field Visit has not been verified</span>
+        <span style="margin-right: 5px">Assessment and Maintenance Records have not been verified</span>
     }
 
-    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+    @if (ViewDataTyped.CanManageStormwaterJurisdiction && ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
     {
-        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} {1} Field Visit", "<span></span>", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, string.Format("{0} this Field Visit?", ViewDataTyped.FieldVisit.IsFieldVisitVerified ? "Unverify" : "Verify"), 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+        @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
     }
 </div>
+<div style="clear:both"></div>
 
 @Html.ValidationSummary()
 <div>
