@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -238,14 +239,19 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.InventoryIsVerified = !treatmentBMP.InventoryIsVerified;
+
+            if (treatmentBMP.InventoryIsVerified)
+            {
+                treatmentBMP.DateOfLastInventoryVerification = DateTime.Now;
+            }
             
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewVerifyInventoryTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
         {
-            var action = treatmentBMP.InventoryIsVerified ? "unverify" : "verify";
-            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to '{action}' the inventory for the '{treatmentBMP.TreatmentBMPName}' treatment BMP?");
+            var action = treatmentBMP.InventoryIsVerified ? "provisional" : "verified";
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to mark BMP record, '{treatmentBMP.TreatmentBMPName}', as '{action}'?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
