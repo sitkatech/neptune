@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
         public NewFieldVisitViewModel(Models.FieldVisit inProgressFieldVisit)
         {
             InProgressFieldVisitExists = inProgressFieldVisit != null;
-            FieldVisitTypeID = inProgressFieldVisit?.FieldVisitTypeID;
+            FieldVisitTypeID = inProgressFieldVisit?.FieldVisitTypeID ?? FieldVisitType.DryWeather.FieldVisitTypeID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -170,9 +170,8 @@ namespace Neptune.Web.Models
                     SectionCompletionStatusIndicator =
                         treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.All(x =>
                             treatmentBMPAssessment.IsObservationComplete(x.TreatmentBMPAssessmentObservationType))
-                            ? new HtmlString(
-                                "<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
-                            : new HtmlString("<span style=\"width: 19px; display: inline-block;\"></span>")
+                            ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
+                            : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
                 },
                 new FieldVisitSubsectionData
                 {
