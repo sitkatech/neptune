@@ -32,6 +32,7 @@ namespace Neptune.Web.Models
             Property(x => x.RequiredFieldVisitsPerYear).HasColumnName(@"RequiredFieldVisitsPerYear").HasColumnType("int").IsOptional();
             Property(x => x.RequiredPostStormFieldVisitsPerYear).HasColumnName(@"RequiredPostStormFieldVisitsPerYear").HasColumnType("int").IsOptional();
             Property(x => x.InventoryIsVerified).HasColumnName(@"InventoryIsVerified").HasColumnType("bit").IsRequired();
+            Property(x => x.DateOfLastInventoryVerification).HasColumnName(@"DateOfLastInventoryVerification").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID
