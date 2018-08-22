@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationAddRowSingleValueController.js" company="Tahoe Regional Planning Agency">
+<copyright file="PassFailCollectionMethodController.js" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,12 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-angular.module("NeptuneApp").controller("PercentageCollectionMethodController", function ($scope, $timeout, angularModelAndViewData)
+angular.module("NeptuneApp").controller("PassFailCollectionMethodController", function ($scope, $timeout, angularModelAndViewData)
 {
-    $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    $scope.initializeWithEmptyRows = function () {
+    $scope.initializeWithEmptyRows = function() {
         var newObservationData = {
             SingleValueObservations: []
         }
@@ -37,28 +36,7 @@ angular.module("NeptuneApp").controller("PercentageCollectionMethodController", 
         $scope.ObservationData = newObservationData;
     };
 
-    $scope.initializeData = function () {
-        if (JSON.parse($scope.AngularModel.ObservationData) == null) {
-            $scope.initializeWithEmptyRows();
-        } else {
-            $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData);
-            if ($scope.ObservationData.SingleValueObservations == null) {
-                $scope.initializeWithEmptyRows();
-            }
-        }
-    };
-
-    $scope.calculateRemainingPercent = function () {
-        var sum = _.reduce($scope.ObservationData.SingleValueObservations, function (sum, n) {
-            var toAdd = n.ObservationValue == null ? 0 : n.ObservationValue;
-            return sum + toAdd;
-        }, 0);
-        return Math.round((100 - sum) * 100) / 100;
-    }
-
-    $scope.percentIsNegative = function () { return $scope.calculateRemainingPercent() < 0 ? true : false; }
-
-    $scope.submit = function () {
-        $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
+    $scope.initializeData = function() {
+        $scope.initializeWithEmptyRows();
     };
 });

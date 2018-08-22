@@ -20,36 +20,17 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
-    public class PassFailCollectionMethodViewData : BaseCollectionMethodFormViewData
-    {
-        
-
+    public class PassFailCollectionMethodViewData
+    {       
         public PassFailCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string PassingScoreLabel { get; }
         public string FailingScoreLabel { get; }
         public string AssessmentDescription { get; }
-        public string SubmitUrl { get; }        
 
-        public PassFailCollectionMethodViewData(Models.FieldVisit fieldVisit, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
-        {
-            ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetPassFailSchema());
-            PassingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel;
-            FailingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel;
-            AssessmentDescription = treatmentBMPAssessmentObservationType.GetPassFailSchema().AssessmentDescription;
-
-            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                x.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-        }
-
-        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBmpAssessment, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson): base(currentPerson)
+        public PassFailCollectionMethodViewData(Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             ViewDataForAngular = new PassFailCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetPassFailSchema());
             PassingScoreLabel = treatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel;
@@ -70,7 +51,6 @@ namespace Neptune.Web.Views.FieldVisit
                     PropertiesToObserve.Add(new SelectItemSimple(count, x));
                     count++;
                 });
-
             }
         }
     }

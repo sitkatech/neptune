@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulationViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DiscreteCollectionMethodViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -20,37 +20,16 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
-    public class DiscreteCollectionMethodViewData : BaseCollectionMethodFormViewData
+    public class DiscreteCollectionMethodViewData
     {
         public DiscreteCollectionMethodViewDataForAngular ViewDataForAngular { get; }
         public string MeasurementUnitLabelAndUnit { get; }
         public string AssessmentDescription { get; }
-        public string SubmitUrl { get; }        
 
-        public DiscreteCollectionMethodViewData(Models.FieldVisit fieldVisit,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType,
-            FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-        : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
-        {
-            ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema());
-            MeasurementUnitLabelAndUnit =
-                $"{treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().MeasurementUnitLabel} ({treatmentBMPAssessmentObservationType.BenchmarkMeasurementUnitType().LegendDisplayName})";
-            AssessmentDescription = treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema().AssessmentDescription;
-
-            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                x.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-        }        
-
-        public DiscreteCollectionMethodViewData(Models.TreatmentBMPAssessment treatmentBMPAssessment,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, Person currentPerson) : base(currentPerson)
-        //: base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment, treatmentBMPAssessmentObservationType)
+        public DiscreteCollectionMethodViewData(Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             ViewDataForAngular = new DiscreteCollectionMethodViewDataForAngular(treatmentBMPAssessmentObservationType.GetDiscreteObservationTypeSchema());
             MeasurementUnitLabelAndUnit =

@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Linq;
 using LtInfo.Common.Views;
-using Neptune.Web.Controllers;
 using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Newtonsoft.Json;
 
@@ -29,11 +28,6 @@ namespace Neptune.Web.Models
 {
     public partial class TreatmentBMPAssessmentObservationType : IAuditableEntity
     {
-        public string AssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
-        {
-            return ObservationTypeSpecification.ObservationTypeCollectionMethod.GetAssessmentUrl(fieldVisit, fieldVisitAssessmentType, this);
-        }
-
         public string BenchmarkAndThresholdUrl(TreatmentBMP treatmentBMP)
         {
             return ObservationTypeSpecification.ObservationThresholdType.GetBenchmarkAndThresholdUrl(treatmentBMP, this);
@@ -98,9 +92,6 @@ namespace Neptune.Web.Models
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return MeasurementUnitType.All
                         .SingleOrDefault(x => x.MeasurementUnitTypeID == GetDiscreteObservationTypeSchema().MeasurementUnitTypeID);
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return MeasurementUnitType.All
-                        .SingleOrDefault(x => x.MeasurementUnitTypeID == GetRateObservationTypeSchema().DiscreteRateMeasurementUnitTypeID);
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -117,8 +108,6 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return GetDiscreteObservationTypeSchema().MeasurementUnitLabel;
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return GetRateObservationTypeSchema().DiscreteRateMeasurementUnitLabel;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -135,8 +124,6 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return GetDiscreteObservationTypeSchema().BenchmarkDescription;
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return GetRateObservationTypeSchema().BenchmarkDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:
@@ -185,8 +172,6 @@ namespace Neptune.Web.Models
             {
                 case ObservationTypeCollectionMethodEnum.DiscreteValue:
                     return GetDiscreteObservationTypeSchema().ThresholdDescription;
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return GetRateObservationTypeSchema().ThresholdDescription;
                 case ObservationTypeCollectionMethodEnum.PassFail:
                     return null;
                 case ObservationTypeCollectionMethodEnum.Percentage:

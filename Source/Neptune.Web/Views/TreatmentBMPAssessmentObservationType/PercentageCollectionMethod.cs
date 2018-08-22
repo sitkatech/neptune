@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PassFailCollectionMethodViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="PercentageCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
-    public class PassFailCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public abstract class PercentageCollectionMethod : TypedWebPartialViewPage<PercentageCollectionMethodViewData>
     {
-        /// <summary>
-        /// Needed by the ModelBinder
-        /// </summary>
-        public PassFailCollectionMethodViewModel()
-        {
-        }
-
-        public PassFailCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
-        {
-        }
     }
+
 }

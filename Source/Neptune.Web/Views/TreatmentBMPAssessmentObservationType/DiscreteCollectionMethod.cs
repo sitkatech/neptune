@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PassFailCollectionMethod.cs" company="Tahoe Regional Planning Agency">
+<copyright file="DiscreteCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,16 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
-    public abstract class PassFailCollectionMethod : TypedWebViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
-    {
-    }
-    public abstract class PassFailCollectionMethodPartial : TypedWebPartialViewPage<PassFailCollectionMethodViewData, PassFailCollectionMethodViewModel>
+    public abstract class DiscreteCollectionMethod : TypedWebPartialViewPage<DiscreteCollectionMethodViewData>
     {
     }
 }

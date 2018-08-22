@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationAddRowSingleValueController.js" company="Tahoe Regional Planning Agency">
+<copyright file="DiscreteCollectionMethodController.js" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -20,46 +20,16 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 angular.module("NeptuneApp").controller("DiscreteCollectionMethodController", function ($scope, $timeout, angularModelAndViewData)
 {
-    $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    var newSingleValueObservation = {
-        PropertyObserved: null,
-        ObservationValue: null,
-        Notes: null
-    }
-
-    var newObservationData = {
-        SingleValueObservations: []
-    }
-
-
     $scope.initializeWithEmptyRows = function () {
-        $scope.ObservationData = JSON.parse($scope.AngularModel.ObservationData) == null ? newObservationData : JSON.parse($scope.AngularModel.ObservationData);
+        $scope.ObservationData = { SingleValueObservations: [] };
         while ($scope.ObservationData.SingleValueObservations.length < $scope.AngularViewData.MinimumNumberOfObservations) {
-            $scope.addObservation();
+            $scope.ObservationData.SingleValueObservations.push({
+                PropertyObserved: null,
+                ObservationValue: null,
+                Notes: null
+            });
         }
     }
-
-    $scope.addObservation = function () {
-        $scope.ObservationData.SingleValueObservations.push({
-            PropertyObserved: null,
-            ObservationValue: null,
-            Notes: null
-        });        
-    };
-
-    $scope.deleteObservation = function (observation) {
-        Sitka.Methods.removeFromJsonArray($scope.ObservationData.SingleValueObservations, observation);
-    };
-
-    $scope.disableAddObservation = function() {
-        return $scope.ObservationData.SingleValueObservations.length >= $scope.AngularViewData.MaximumNumberOfObservations;
-    }
-
-    $scope.submit = function () {
-        $scope.AngularModel.ObservationData = JSON.stringify($scope.ObservationData);
-    }
-
-    
 });

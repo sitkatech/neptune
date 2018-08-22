@@ -47,23 +47,23 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
-            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType) : base(currentPerson)
+            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
         {
             EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());
-            PageTitle = $"{(TreatmentBMPAssessmentObservationType != null ? "Edit" : "New")} Observation Type";
+            PageTitle = $"{(treatmentBMPAssessmentObservationType != null ? "Edit" : "New")} Observation Type";
 
-            if (TreatmentBMPAssessmentObservationType != null)
+            if (treatmentBMPAssessmentObservationType != null)
             {
-                SubEntityName = TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
-                SubEntityUrl = TreatmentBMPAssessmentObservationType.GetDetailUrl();
+                SubEntityName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
+                SubEntityUrl = treatmentBMPAssessmentObservationType.GetDetailUrl();
             }
 
             ViewDataForAngular = new ViewDataForAngular(observationTypeSpecifications, observationTypeCollectionMethods, observationThresholdTypes, observationTargetTypes, measurementUnitTypes);
-            ObservationTypeCancelUrl = TreatmentBMPAssessmentObservationType == null
+            ObservationTypeCancelUrl = treatmentBMPAssessmentObservationType == null
                 ? SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index())
                 : SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x =>
-                    x.Detail(TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID));
+                    x.Detail(treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID));
             SubmitUrl = submitUrl;
 
             PassFailObservationThresholdTypeID = ObservationThresholdType.None.ObservationThresholdTypeID;
@@ -83,7 +83,6 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public List<SelectItemSimple> ObservationTargetTypes { get; }
         public List<SelectItemSimple> MeasurementUnitTypes { get; }
         public int DiscreteObservationTypeCollectionMethodID { get; }
-        public int RateObservationTypeCollectionMethodID { get; }
         public int PassFailObservationTypeCollectionMethodID { get; }
         public int PercentageObservationTypeCollectionMethodID { get; }
         public string PreviewUrl { get; set; }
@@ -101,10 +100,9 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             MeasurementUnitTypes = measurementUnitTypes.Select(x => new SelectItemSimple(x.MeasurementUnitTypeID, x.MeasurementUnitTypeDisplayName)).ToList();
 
             DiscreteObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.DiscreteValue.ObservationTypeCollectionMethodID;
-            RateObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Rate.ObservationTypeCollectionMethodID;
             PassFailObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.PassFail.ObservationTypeCollectionMethodID;
             PercentageObservationTypeCollectionMethodID = ObservationTypeCollectionMethod.Percentage.ObservationTypeCollectionMethodID;
-            PreviewUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PreviewObservationType());
+            PreviewUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PreviewObservationType());
         }
     }
 

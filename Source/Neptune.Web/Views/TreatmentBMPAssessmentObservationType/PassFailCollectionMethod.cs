@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="MaterialAccumulationViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="PassFailCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using Neptune.Web.Models;
+using LtInfo.Common.Mvc;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 {
-    public class RateCollectionMethodViewModel : BaseCollectionMethodFormViewModel
+    public abstract class PassFailCollectionMethod : TypedWebPartialViewPage<PassFailCollectionMethodViewData>
     {
-        /// <summary>
-        /// Needed by the ModelBinder
-        /// </summary>
-        public RateCollectionMethodViewModel()
-        {
-        }
-
-        public RateCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
-        {
-        }
     }
 }

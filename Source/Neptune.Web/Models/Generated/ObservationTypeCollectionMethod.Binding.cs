@@ -19,7 +19,6 @@ namespace Neptune.Web.Models
     public abstract partial class ObservationTypeCollectionMethod : IHavePrimaryKey
     {
         public static readonly ObservationTypeCollectionMethodDiscreteValue DiscreteValue = ObservationTypeCollectionMethodDiscreteValue.Instance;
-        public static readonly ObservationTypeCollectionMethodRate Rate = ObservationTypeCollectionMethodRate.Instance;
         public static readonly ObservationTypeCollectionMethodPassFail PassFail = ObservationTypeCollectionMethodPassFail.Instance;
         public static readonly ObservationTypeCollectionMethodPercentage Percentage = ObservationTypeCollectionMethodPercentage.Instance;
 
@@ -31,7 +30,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationTypeCollectionMethod()
         {
-            All = new List<ObservationTypeCollectionMethod> { DiscreteValue, Rate, PassFail, Percentage };
+            All = new List<ObservationTypeCollectionMethod> { DiscreteValue, PassFail, Percentage };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeCollectionMethod>(All.ToDictionary(x => x.ObservationTypeCollectionMethodID));
         }
 
@@ -111,8 +110,6 @@ namespace Neptune.Web.Models
                     return PassFail;
                 case ObservationTypeCollectionMethodEnum.Percentage:
                     return Percentage;
-                case ObservationTypeCollectionMethodEnum.Rate:
-                    return Rate;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -122,7 +119,6 @@ namespace Neptune.Web.Models
     public enum ObservationTypeCollectionMethodEnum
     {
         DiscreteValue = 1,
-        Rate = 2,
         PassFail = 3,
         Percentage = 4
     }
@@ -131,12 +127,6 @@ namespace Neptune.Web.Models
     {
         private ObservationTypeCollectionMethodDiscreteValue(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder, observationTypeCollectionMethodDescription) {}
         public static readonly ObservationTypeCollectionMethodDiscreteValue Instance = new ObservationTypeCollectionMethodDiscreteValue(1, @"DiscreteValue", @"Discrete Value Observation", 10, @"Observation is measured as one or many discrete values (e.g. time, height).");
-    }
-
-    public partial class ObservationTypeCollectionMethodRate : ObservationTypeCollectionMethod
-    {
-        private ObservationTypeCollectionMethodRate(int observationTypeCollectionMethodID, string observationTypeCollectionMethodName, string observationTypeCollectionMethodDisplayName, int sortOrder, string observationTypeCollectionMethodDescription) : base(observationTypeCollectionMethodID, observationTypeCollectionMethodName, observationTypeCollectionMethodDisplayName, sortOrder, observationTypeCollectionMethodDescription) {}
-        public static readonly ObservationTypeCollectionMethodRate Instance = new ObservationTypeCollectionMethodRate(2, @"Rate", @"Rate-based Observation", 20, @"Observation is measured as one or many rates values or as time/value pairs (e.g. infiltration rate or infiltrometer readings at elapsed time intervals).");
     }
 
     public partial class ObservationTypeCollectionMethodPassFail : ObservationTypeCollectionMethod

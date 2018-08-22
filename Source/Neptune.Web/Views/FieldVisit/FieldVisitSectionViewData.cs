@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using LtInfo.Common;
-using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
