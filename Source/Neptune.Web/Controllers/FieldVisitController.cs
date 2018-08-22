@@ -124,14 +124,14 @@ namespace Neptune.Web.Controllers
             var fieldVisitType = FieldVisitType.AllLookupDictionary[viewModel.FieldVisitTypeID.GetValueOrDefault()];
             if (viewModel.Continue == null)
             {
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType, false);
                 HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
             }
             else if (viewModel.Continue == false)
             {
                 var oldFieldVisit = treatmentBMP.GetInProgressFieldVisit();
                 oldFieldVisit.FieldVisitStatusID = FieldVisitStatus.Unresolved.FieldVisitStatusID;
-                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType);
+                fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType, false);
             }
             else // if Continue == true
             {
@@ -394,6 +394,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
@@ -458,6 +459,39 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(x => x.FindABMP()));
         }
 
+        [HttpGet]
+        [FieldVisitEditFeature]
+        public PartialViewResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewVerifyFieldVisit(fieldVisit, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewVerifyFieldVisit(fieldVisit, viewModel);
+            }
+
+            fieldVisit.IsFieldVisitVerified = true;
+            fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to verify the Assessment and Maintenance Records from '{fieldVisit.VisitDate}'");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+
         #region Assessment-Related Actions
 
         #region Observation Types
@@ -491,6 +525,7 @@ namespace Neptune.Web.Controllers
                 return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
                 var treatmentBMPAssessmentObservationType =
@@ -588,6 +623,7 @@ namespace Neptune.Web.Controllers
                 return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
             }
 
+            fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             
