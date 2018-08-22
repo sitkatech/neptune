@@ -20,13 +20,11 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Web.Mvc;
-using System.Web.WebPages;
 using LtInfo.Common.HtmlHelperExtensions;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public abstract class
-        EditAttributes : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditAttributesViewData, EditAttributesViewModel>
+    public abstract class EditAttributes : LtInfo.Common.Mvc.TypedWebPartialViewPage<EditAttributesViewData, EditAttributesViewModel>
     {
         public static void RenderPartialView(HtmlHelper html, EditAttributesViewData viewData, EditAttributesViewModel viewModel)
         {

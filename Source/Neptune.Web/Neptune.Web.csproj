@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\CustomAttribute.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
+    <Compile Include="Views\FieldVisit\FieldVisitViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodViewData.cs" />
     <Compile Include="Views\FieldVisit\Observations.cs" />
@@ -569,7 +571,6 @@
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSection.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\AssessmentSectionViewModel.cs" />
-    <Compile Include="Views\FieldVisit\CollectionMethodSectionViewData.cs" />
     <Compile Include="Views\FieldVisit\CollectionMethodSectionViewModel.cs" />
     <Compile Include="Views\CustomAttributeType\Detail.cs" />
     <Compile Include="Views\CustomAttributeType\DetailViewData.cs" />
@@ -2810,7 +2811,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\base\minified\images\" />
-    <Folder Include="Views\FieldVisit\ObservationTypePreview\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

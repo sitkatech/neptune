@@ -18,12 +18,10 @@
         Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-
-@using LtInfo.Common
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Common
-@inherits Neptune.Web.Views.FieldVisit.EditMaintenanceRecord
+@using Neptune.Web.Views.FieldVisit
+@inherits EditMaintenanceRecord
 
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
@@ -56,8 +54,9 @@
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.StayOnPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.NextPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.WrapUpPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save &amp; Wrap Up <i class="glyphicon glyphicon-forward" style="margin-left: 10px;"></i></button>
         </div>
     </div>
 

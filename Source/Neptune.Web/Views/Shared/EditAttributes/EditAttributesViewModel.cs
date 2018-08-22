@@ -19,20 +19,18 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
-using LtInfo.Common.Models;
-using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.EditAttributes
 {
-    public class EditAttributesViewModel : FormViewModel, IValidatableObject
+    public class EditAttributesViewModel : FieldVisitViewModel, IValidatableObject
     {
         [DisplayName("Metadata")]
         public List<CustomAttributeSimple> CustomAttributes { get; set; }
@@ -91,61 +89,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var errors = new List<ValidationResult>();
-
-            var customAttributeTypes = GetCustomAttributeTypes();
-
-
-            var requiredAttributeDoesNotHaveValue = customAttributeTypes.Any(x =>
-            {
-
-                var customAttributeSimple = CustomAttributes.SingleOrDefault(y =>
-                    y.CustomAttributeTypeID == x.CustomAttributeTypeID 
-                    && x.IsRequired 
-                    && (y.CustomAttributeValues == null || y.CustomAttributeValues.All(string.IsNullOrEmpty)));
-
-                return customAttributeSimple != null;
-            });
-
-            //if (requiredAttributeDoesNotHaveValue)
-            //{
-            //    errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>("Must enter all required fields.", m => m.CustomAttributes));
-            //    return errors;
-            //}
-
-            CheckTypeExpectations(customAttributeTypes, errors);
-
-            return errors;
-        }
-
-        protected List<Models.CustomAttributeType> GetCustomAttributeTypes()
-        {
-            var customAttributeTypeIDs = CustomAttributes.Select(x => x.CustomAttributeTypeID).ToList();
-            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes
-                .Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
-            return customAttributeTypes;
-        }
-
-        protected void CheckTypeExpectations(List<Models.CustomAttributeType> customAttributeTypes, List<ValidationResult> errors)
-        {
-            foreach (var customAttributeSimple in CustomAttributes.Where(x =>
-                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
-            {
-                var customAttributeType = customAttributeTypes.Single(x =>
-                    x.CustomAttributeTypeID == customAttributeSimple.CustomAttributeTypeID);
-
-                var customAttributeDataType = customAttributeType.CustomAttributeDataType;
-
-                foreach (var value in customAttributeSimple.CustomAttributeValues)
-                {
-                    if (!string.IsNullOrWhiteSpace(value) && !customAttributeDataType.ValueIsCorrectDataType(value))
-                    {
-                        errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>(
-                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).",
-                            m => m.CustomAttributes));
-                    }
-                }
-            }
+            return CustomAttributeTypeModelExtensions.CheckCustomAttributeTypeExpectations(CustomAttributes);
         }
     }
 }

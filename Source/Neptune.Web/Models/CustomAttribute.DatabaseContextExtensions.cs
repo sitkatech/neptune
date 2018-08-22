@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="ObservationsViewModel.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<copyright file="FieldDefinitionData.DatabaseContextExtensions.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -21,25 +21,15 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Linq;
-using LtInfo.Common.Models;
-using Neptune.Web.Models;
 
-namespace Neptune.Web.Views.FieldVisit
+namespace Neptune.Web.Models
 {
-    public class ObservationsViewModel : FieldVisitViewModel
+    public static partial class DatabaseContextExtensions
     {
-        public List<CollectionMethodSectionViewModel> Observations { get; set; }
-
-        /// <summary>
-        /// Needed by the ModelBinder
-        /// </summary>
-        public ObservationsViewModel()
+        public static List<CustomAttributeType> GetCustomAttributeTypes(this IQueryable<CustomAttributeType> customAttributeTypes, List<CustomAttributeSimple> customAttributes)
         {
-        }
-
-        public ObservationsViewModel(List<TreatmentBMPObservation> treatmentBMPObservations)
-        {
-            Observations = treatmentBMPObservations.Select(x => new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
+            var customAttributeTypeIDs = customAttributes.Select(x => x.CustomAttributeTypeID).ToList();
+            return customAttributeTypes.Where(x => customAttributeTypeIDs.Contains(x.CustomAttributeTypeID)).ToList();
         }
     }
 }

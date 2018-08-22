@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Web;
-using LtInfo.Common;
-using LtInfo.Common.Models;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.ManagePhotosWithPreview
 {
-    public abstract class ManagePhotosWithPreviewViewModel : FormViewModel
+    public abstract class ManagePhotosWithPreviewViewModel : FieldVisitViewModel
     {
         public virtual IList<ManagePhotoWithPreviewPhotoSimple> PhotoSimples { get; set; }
 

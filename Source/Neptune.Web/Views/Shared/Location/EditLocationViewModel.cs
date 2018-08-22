@@ -24,10 +24,11 @@ using System.ComponentModel.DataAnnotations;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.Models;
 using Neptune.Web.Models;
+using Neptune.Web.Views.FieldVisit;
 
 namespace Neptune.Web.Views.Shared.Location
 {
-    public class EditLocationViewModel : FormViewModel
+    public class EditLocationViewModel : FieldVisitViewModel
     {
         [Required(ErrorMessage =  "Must specify a BMP Longitude")]
         [DisplayName("Longitude")]

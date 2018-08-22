@@ -199,13 +199,9 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay("Successfully updated Treatment BMP Location.");
 
-            return viewModel.AutoAdvance
-                ? new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Photos(fieldVisitPrimaryKey)))
-                : new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Location(fieldVisitPrimaryKey)));
+            return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
+                c.Location(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
+                c.Photos(fieldVisit)), fieldVisit);
         }
 
         [HttpGet]
@@ -232,13 +228,9 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 
-            return viewModel.AutoAdvance
-                ? new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Attributes(fieldVisitPrimaryKey)))
-                : new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Photos(fieldVisitPrimaryKey)));
+            return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
+                c.Photos(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
+                c.Attributes(fieldVisit)), fieldVisit);
         }
 
         private ViewResult ViewPhotos(FieldVisit fieldVisit, PhotosViewModel viewModel)
@@ -283,13 +275,9 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
 
-            return viewModel.AutoAdvance
-                ? new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Assessment(fieldVisitPrimaryKey)))
-                : new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.Attributes(fieldVisitPrimaryKey)));
+            return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
+                c.Attributes(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
+                c.Assessment(fieldVisit)), fieldVisit);
         }
 
         [HttpGet]
@@ -388,7 +376,6 @@ namespace Neptune.Web.Controllers
             EditMaintenanceRecordViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-
             if (!ModelState.IsValid)
             {
                 return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
@@ -399,13 +386,9 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 
-            return viewModel.AutoAdvance
-                ? new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.PostMaintenanceAssessment(fieldVisitPrimaryKey)))
-                : new RedirectResult(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
-                        x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
+            return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
+                c.EditMaintenanceRecord(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
+                c.PostMaintenanceAssessment(fieldVisit)), fieldVisit);
         }
 
         [HttpGet]
@@ -492,10 +475,6 @@ namespace Neptune.Web.Controllers
         }
 
 
-        #region Assessment-Related Actions
-
-        #region Observation Types
-
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID)
@@ -537,9 +516,31 @@ namespace Neptune.Web.Controllers
             }
             SetMessageForDisplay("Assessment Information successfully saved.");
 
-            return viewModel.AutoAdvance
-                ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)))
-                : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, fieldVisitAssessmentTypeID)));
+            return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
+                c.Observations(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(c =>
+                c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), fieldVisit);
+        }
+
+        private ActionResult RedirectToNextStep(FieldVisitViewModel viewModel, SitkaRoute<FieldVisitController> stayOnPageRoute,
+            SitkaRoute<FieldVisitController> nextPageRoute, FieldVisit fieldVisit)
+        {
+            if (viewModel.StepToAdvanceTo.HasValue)
+            {
+                switch (viewModel.StepToAdvanceTo)
+                {
+                    case StepToAdvanceToEnum.StayOnPage:
+                        return RedirectToAction(stayOnPageRoute);
+                    case StepToAdvanceToEnum.NextPage:
+                        return RedirectToAction(nextPageRoute);
+                    case StepToAdvanceToEnum.WrapUpPage:
+                        return RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
+                            c.WrapUpVisit(fieldVisit)));
+                    default:
+                        throw new ArgumentOutOfRangeException($"Invalid StepToAdvanceTo {viewModel.StepToAdvanceTo}");
+                }
+            }
+
+            return RedirectToAction(stayOnPageRoute);
         }
 
 
@@ -566,8 +567,6 @@ namespace Neptune.Web.Controllers
 
             return treatmentBMPObservation;
         }
-
-        #endregion
 
         #region Helper methods for Assessment
 
@@ -645,8 +644,6 @@ namespace Neptune.Web.Controllers
             var viewData = new AssessmentPhotosViewData(CurrentPerson, treatmentBMPAssessment, fieldVisitSection, managePhotosWithPreviewViewData);
             return RazorView<AssessmentPhotos, AssessmentPhotosViewData, AssessmentPhotosViewModel>(viewData, viewModel);
         }
-
-        #endregion
 
         #endregion
 

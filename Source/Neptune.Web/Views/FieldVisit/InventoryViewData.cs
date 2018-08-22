@@ -8,7 +8,6 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public string AssessUrl { get; }
         public string LocationUrl { get; }
-        public string FlagForDeletionUrl { get; }
 
         public InventoryViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit, Models.FieldVisitSection.Inventory)
         {

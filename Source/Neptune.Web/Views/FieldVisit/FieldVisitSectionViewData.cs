@@ -16,6 +16,8 @@ namespace Neptune.Web.Views.FieldVisit
         public string SectionHeader { get; set; }
         public List<string> ValidationWarnings { get; set; }
 
+        public string WrapupUrl { get; }
+
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldVisits)
@@ -34,11 +36,8 @@ namespace Neptune.Web.Views.FieldVisit
 
             SectionHeader = fieldVisitSection.SectionHeader;
             ValidationWarnings = new List<string>();
-        }
 
-        protected FieldVisitSectionViewData(Person currentPerson) : base(currentPerson)
-        {
-            ValidationWarnings = new List<string>();
+            WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
         }
     }
 }

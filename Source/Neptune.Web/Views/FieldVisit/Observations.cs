@@ -19,8 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Web.Mvc;
-using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
