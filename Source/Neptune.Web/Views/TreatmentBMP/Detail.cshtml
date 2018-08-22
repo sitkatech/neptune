@@ -59,7 +59,7 @@
         {
             <div style="display:inline-block">
                 <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
-                <span style="margin-right: 5px">BMP has been marked as verified</span>
+                <span style="margin-right: 5px">Inventory has been verified</span>
                 
                 @if (ViewDataTyped.CanManageStormwaterJurisdiction)
                 {
@@ -71,11 +71,11 @@
         {
             <div style="display:inline-block">
                 <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-                <span style="margin-right: 5px">BMP has been marked as provisional</span>
+                <span style="margin-right: 5px">Inventory has not been verified</span>
 
                 @if (ViewDataTyped.CanManageStormwaterJurisdiction)
                 {
-                    @ModalDialogFormHelper.ModalDialogFormLink("Mark BMP Record as Verified", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Verified?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+                    @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
                 }
             </div>
         }
