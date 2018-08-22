@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
         public abstract List<ValidationResult> ValidateObservationDataJson(string json);
 
         public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
-        public abstract string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
 
         public abstract double? GetObservationValueFromObservationData(string observationData);
 
@@ -72,7 +71,7 @@ namespace Neptune.Web.Models
                     validationResults.Add(new ValidationResult("You must enter at least one observation."));
                 }
 
-                if (schema.SingleValueObservations.Any(x=>x.ObservationValue == null))
+                if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
                 {
                     validationResults.Add(new ValidationResult("Observation values cannot be blank."));
                 }
@@ -85,21 +84,15 @@ namespace Neptune.Web.Models
             return validationResults;
         }
 
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
+        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
-            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(TreatmentBMPAssessmentObservationType));
-        }
-
-        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.DiscreteCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
+            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.DiscreteDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = JsonConvert.DeserializeObject<DiscreteObservationSchema>(observationData);
-            return observation.SingleValueObservations.Average(x => x.ObservationValue);
+            return observation.SingleValueObservations.Average(x => Convert.ToDouble(x.ObservationValue));
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
@@ -117,92 +110,6 @@ namespace Neptune.Web.Models
             }
 
             return TreatmentBMPAssessmentObservationTypeHelper.LinearInterpolation(observationValue.Value, benchmarkValue.Value, thresholdValueInBenchmarkUnits.Value);
-        }
-    }
-
-    public partial class ObservationTypeCollectionMethodRate
-    {
-        public override bool ValidateObservationTypeJson(string json)
-        {
-            try
-            {
-                var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public override List<ValidationResult> ValidateObservationType(string json)
-        {
-            var validationErrors = new List<ValidationResult>();
-            var schema = JsonConvert.DeserializeObject<RateObservationTypeSchema>(json);
-
-            var propertiesToObserve = schema.PropertiesToObserve;
-            TreatmentBMPAssessmentObservationTypeHelper.ValidatePropertiesToObserve(propertiesToObserve, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateNumberOfObservations(schema.DiscreteRateMinimumNumberOfObservations, schema.DiscreteRateMaximumNumberOfObservations, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateNumberOfObservations(schema.TimeReadingMinimumNumberOfObservations, schema.TimeReadingMaximumNumberOfObservations, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateValueOfObservations(schema.DiscreteRateMinimumValueOfObservations, schema.DiscreteRateMaximumValueOfObservations, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateValueOfObservations(schema.TimeReadingMinimumValueOfObservations, schema.TimeReadingMaximumValueOfObservations, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.DiscreteRateMeasurementUnitLabel, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.ReadingMeasurementUnitLabel, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitLabel(schema.TimeMeasurementUnitLabel, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.DiscreteRateMeasurementUnitTypeID, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.TimeMeasurementUnitTypeID, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateMeasurementUnitTypeID(schema.ReadingMeasurementUnitTypeID, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateAssessmentInstructions(schema.AssessmentDescription, validationErrors);
-            TreatmentBMPAssessmentObservationTypeHelper.ValidateBenchmarkAndThresholdDescription(schema.BenchmarkDescription, schema.ThresholdDescription, validationErrors);
-
-            return validationErrors;
-        }
-
-        public override List<ValidationResult> ValidateObservationDataJson(string json)
-        {
-            var validationResults = new List<ValidationResult>();
-            try
-            {
-                var schema = JsonConvert.DeserializeObject<RateObservationSchema>(json);
-                if (!(schema.SingleValueObservations.Count > 0))
-                {
-                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
-                }
-
-                if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
-                {
-                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
-                }
-            }
-            catch (Exception)
-            {
-                validationResults.Add(new ValidationResult("Schema invalid"));
-            }
-
-            return validationResults;
-        }
-
-        public override string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.RateDetailSchema(treatmentBMPAssessmentObservationType));
-        }
-
-        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.RateCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-        }
-
-        public override double? GetObservationValueFromObservationData(string observationData)
-        {
-            var observation = JsonConvert.DeserializeObject<RateObservationSchema>(observationData);
-            return 0; //todo
-        }
-
-        public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -256,16 +163,10 @@ namespace Neptune.Web.Models
             return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PassFailDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PassFailCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-        }
-
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
-            var conveyanceFails = observation.PassFailObservations.Any(x => !x.ObservationValue);
+            var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
             return conveyanceFails ? 0 : 5;
         }
 
@@ -280,7 +181,7 @@ namespace Neptune.Web.Models
             bool overrideAssessmentScoreIfFailing)
         {
             var observation = JsonConvert.DeserializeObject<PassFailObservationSchema>(observationData);
-            var conveyanceFails = observation.PassFailObservations.Any(x => !x.ObservationValue);
+            var conveyanceFails = observation.SingleValueObservations.Any(x => Convert.ToBoolean(x.ObservationValue) == false);
             var schema = JsonConvert.DeserializeObject<PassFailObservationTypeSchema>(observationTypeSchema);
             return conveyanceFails ? schema.FailingScoreLabel : schema.PassingScoreLabel;
         }
@@ -344,16 +245,10 @@ namespace Neptune.Web.Models
             return SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(c => c.PercentageDetailSchema(treatmentBMPAssessmentObservationType));
         }
 
-        public override string GetAssessmentUrl(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType,
-            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
-        {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.PercentageCollectionMethod(fieldVisit, treatmentBMPAssessmentObservationType, (int)fieldVisitAssessmentType));
-        }
-
         public override double? GetObservationValueFromObservationData(string observationData)
         {
             var observation = JsonConvert.DeserializeObject<PercentageObservationSchema>(observationData);
-            return observation.SingleValueObservations.Sum(x => x.ObservationValue);
+            return observation.SingleValueObservations.Sum(x => Convert.ToDouble(x.ObservationValue));
         }
 
         public override double? CalculateScore(TreatmentBMPObservation treatmentBMPObservation)

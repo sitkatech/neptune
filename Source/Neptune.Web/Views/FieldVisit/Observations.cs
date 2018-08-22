@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PercentageCollectionMethod.cs" company="Tahoe Regional Planning Agency">
+<copyright file="PassFailCollectionMethod.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -25,11 +25,7 @@ using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class PercentageCollectionMethod : TypedWebViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
+    public abstract class Observations : TypedWebViewPage<ObservationsViewData, ObservationsViewModel>
     {
     }
-    public abstract class PercentageCollectionMethodPartial : TypedWebPartialViewPage<PercentageCollectionMethodViewData, PercentageCollectionMethodViewModel>
-    {
-    }
-
 }

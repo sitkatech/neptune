@@ -13,11 +13,11 @@ namespace Neptune.Web.Views.FieldVisit
         public int? TreatmentBMPAssessmentObservationTypeID { get; set; }
         public string ObservationData { get; set; }
 
-        protected CollectionMethodSectionViewModel()
+        public CollectionMethodSectionViewModel()
         {
         }
 
-        protected CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+        public CollectionMethodSectionViewModel(TreatmentBMPObservation treatmentBMPObservation, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
         {
             TreatmentBMPAssessmentID = treatmentBMPObservation?.TreatmentBMPAssessmentID;
             TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;

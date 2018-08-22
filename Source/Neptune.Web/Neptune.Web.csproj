@@ -294,6 +294,11 @@
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodViewData.cs" />
+    <Compile Include="Views\FieldVisit\Observations.cs" />
+    <Compile Include="Views\FieldVisit\ObservationsViewData.cs" />
+    <Compile Include="Views\FieldVisit\ObservationsViewModel.cs" />
     <Compile Include="Views\FieldVisit\PostMaintenanceAssessmentViewModel.cs" />
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
@@ -631,6 +636,12 @@
     <Compile Include="Controllers\TenantController.cs" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.js" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.min.js" />
+    <Content Include="Content\angular\directives\discreteValueCollectionMethod.html" />
+    <Content Include="Content\angular\directives\discreteValueCollectionMethod.js" />
+    <Content Include="Content\angular\directives\percentageCollectionMethod.html" />
+    <Content Include="Content\angular\directives\percentageCollectionMethod.js" />
+    <Content Include="Content\angular\directives\passFailCollectionMethod.html" />
+    <Content Include="Content\angular\directives\passFailCollectionMethod.js" />
     <Content Include="Content\autonumeric.min.js" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker.min.css" />
@@ -890,7 +901,6 @@
     <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
     <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
     <Content Include="Content\img\OCStormwater\manifest.json" />
-    <Content Include="DiscreteCollectionMethodPartial.cshtml" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
@@ -948,6 +958,8 @@
     <None Include="Service References\KeystoneDataService\KeystoneData2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodController.js" />
+    <Content Include="Views\FieldVisit\ObservationsController.js" />
     <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateTagUrlHtmlTest.approved.txt" />
     <Content Include="Views\TreatmentBMPAssessmentObservationType\EditTreatmentBMPAssessmentObservationTypeController.js" />
     <Content Include="Views\Organization\PullOrganizationFromKeystone.cshtml" />
@@ -982,18 +994,10 @@
     <Compile Include="Views\Shared\ViewPageContentViewData.cs" />
     <Compile Include="Views\Shared\WktAndAnnotation.cs" />
     <Compile Include="Models\TreatmentBMPTypeAssessmentObservationTypeSimple.cs" />
-    <Compile Include="Views\FieldVisit\PercentageCollectionMethod.cs" />
-    <Compile Include="Views\FieldVisit\PassFailCollectionMethod.cs" />
-    <Compile Include="Views\FieldVisit\PercentageCollectionMethodViewData.cs" />
-    <Compile Include="Views\FieldVisit\PercentageCollectionMethodViewModel.cs" />
-    <Compile Include="Views\FieldVisit\RateCollectionMethod.cs" />
-    <Compile Include="Views\FieldVisit\DiscreteCollectionMethod.cs" />
-    <Compile Include="Views\FieldVisit\PassFailCollectionMethodViewData.cs" />
-    <Compile Include="Views\FieldVisit\RateCollectionMethodViewData.cs" />
-    <Compile Include="Views\FieldVisit\DiscreteCollectionMethodViewData.cs" />
-    <Compile Include="Views\FieldVisit\PassFailCollectionMethodViewModel.cs" />
-    <Compile Include="Views\FieldVisit\RateCollectionMethodViewModel.cs" />
-    <Compile Include="Views\FieldVisit\DiscreteCollectionMethodViewModel.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\PercentageCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\PassFailCollectionMethod.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\PercentageCollectionMethodViewData.cs" />
+    <Compile Include="Views\TreatmentBMPAssessmentObservationType\PassFailCollectionMethodViewData.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThresholdViewData.cs" />
     <Compile Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThresholdViewModel.cs" />
@@ -1151,10 +1155,8 @@
     <Compile Include="Views\Shared\SiteLayout.cs" />
     <Compile Include="Views\Shared\Error.cs" />
     <Compile Include="Views\Shared\ErrorViewData.cs" />
-    <Content Include="Views\FieldVisit\PercentageCollectionMethodController.js" />
-    <Content Include="Views\FieldVisit\PassFailCollectionMethodController.js" />
-    <Content Include="Views\FieldVisit\RateCollectionMethodController.js" />
-    <Content Include="Views\FieldVisit\DiscreteCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\PercentageCollectionMethodController.js" />
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\PassFailCollectionMethodController.js" />
     <Content Include="Views\CustomAttributeType\EditCustomAttributeTypeController.js" />
     <Content Include="Views\FundingEvent\EditFundingEventFundingSourceController.js" />
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
@@ -1202,10 +1204,8 @@
     <Content Include="Views\TreatmentBMPType\Manage.cshtml" />
     <Content Include="Views\TreatmentBMPType\Index.cshtml" />
     <Content Include="Views\TreatmentBMPBenchmarkAndThreshold\EditBenchmarkAndThreshold.cshtml" />
-    <Content Include="Views\FieldVisit\DiscreteCollectionMethod.cshtml" />
-    <Content Include="Views\FieldVisit\RateCollectionMethod.cshtml" />
-    <Content Include="Views\FieldVisit\PassFailCollectionMethod.cshtml" />
-    <Content Include="Views\FieldVisit\PercentageCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\PassFailCollectionMethod.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\PercentageCollectionMethod.cshtml" />
     <Content Include="Views\Shared\JurisdictionControls\JurisdictionsMap.cshtml" />
     <Content Include="Views\TreatmentBMPDocument\New.cshtml" />
     <Content Include="Views\TreatmentBMPDocument\Edit.cshtml" />
@@ -1243,10 +1243,6 @@
     <Content Include="Views\FieldVisit\AssessmentPhotos.cshtml" />
     <Content Include="Views\TreatmentBMPImage\ManageTreatmentBMPImages.cshtml" />
     <Content Include="Views\Shared\ManagePhotosWithPreview\ManagePhotosWithPreview.cshtml" />
-    <Content Include="Views\FieldVisit\ObservationTypePreview\DiscreteCollectionMethodPartial.cshtml" />
-    <Content Include="Views\FieldVisit\ObservationTypePreview\RateCollectionMethodPartial.cshtml" />
-    <Content Include="Views\FieldVisit\ObservationTypePreview\PercentageCollectionMethodPartial.cshtml" />
-    <Content Include="Views\FieldVisit\ObservationTypePreview\PassFailCollectionMethodPartial.cshtml" />
     <Content Include="Views\User\Invite.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\Detail.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcelsController.js" />
@@ -1263,6 +1259,8 @@
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cshtml" />
     <Content Include="Views\Home\Training.cshtml" />
     <Content Include="Views\Help\RequestOrganizationNameChange.cshtml" />
+    <Content Include="Views\FieldVisit\Observations.cshtml" />
+    <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -2812,6 +2810,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\themes\base\minified\images\" />
+    <Folder Include="Views\FieldVisit\ObservationTypePreview\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

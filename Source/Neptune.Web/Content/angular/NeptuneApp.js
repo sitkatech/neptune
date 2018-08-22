@@ -5,7 +5,10 @@
         "ng-currency",
         "server-validate",
         "ui.bootstrap",
-        "ng-bootstrap-select"
+        "ng-bootstrap-select",
+        "discreteValueCollectionMethodDirective",
+        "passFailCollectionMethodDirective",
+        "percentageCollectionMethodDirective"
     ]);
 
     angular.module("NeptuneApp").filter("nfcurrency", ["$filter", "$locale", function ($filter, $locale) {

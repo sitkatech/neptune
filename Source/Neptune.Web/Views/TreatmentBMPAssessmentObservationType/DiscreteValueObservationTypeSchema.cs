@@ -72,15 +72,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public List<SingleValueObservation> SingleValueObservations { get; set; }
     }
 
-    public class RateObservationSchema
-    {
-        public List<SingleValueObservation> SingleValueObservations { get; set; }
-        public List<TimeValuePairObservation> TimeValuePairObservations { get; set; }
-    }
+    //public class RateObservationSchema
+    //{
+    //    public List<SingleValueObservation> SingleValueObservations { get; set; }
+    //    public List<TimeValuePairObservation> TimeValuePairObservations { get; set; }
+    //}
 
     public class PassFailObservationSchema
     {
-        public List<PassFailObservation> PassFailObservations { get; set; }
+        public List<SingleValueObservation> SingleValueObservations { get; set; }
     }
 
 
@@ -92,23 +92,15 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
     public class SingleValueObservation
     {
         public string PropertyObserved { get; set; }
-        public double? ObservationValue { get; set; }
+        public object ObservationValue { get; set; }
         public string Notes { get; set; }
     }
 
-    public class TimeValuePairObservation
-    {
-        public string PropertyObserved { get; set; }
-        public double? ObservationValue { get; set; }
-        public double ObservationTime { get; set; }
-        public string Notes { get; set; }
-    }
-
-    public class PassFailObservation
-    {
-        public string PropertyObserved { get; set; }
-        public bool ObservationValue { get; set; }
-        public string Notes { get; set; }
-    }
-
+    //public class TimeValuePairObservation
+    //{
+    //    public string PropertyObserved { get; set; }
+    //    public double? ObservationValue { get; set; }
+    //    public double ObservationTime { get; set; }
+    //    public string Notes { get; set; }
+    //}
 }

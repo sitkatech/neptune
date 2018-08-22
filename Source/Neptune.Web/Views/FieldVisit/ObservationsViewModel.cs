@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="PercentageCollectionMethodViewModel.cs" company="Tahoe Regional Planning Agency">
+<copyright file="ObservationsViewModel.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -19,22 +19,27 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Collections.Generic;
+using System.Linq;
+using LtInfo.Common.Models;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class PercentageCollectionMethodViewModel : CollectionMethodSectionViewModel
+    public class ObservationsViewModel : FormViewModel
     {
+        public List<CollectionMethodSectionViewModel> Observations { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
-        public PercentageCollectionMethodViewModel()
+        public ObservationsViewModel()
         {
         }
 
-        public PercentageCollectionMethodViewModel(TreatmentBMPObservation treatmentBMPObservation,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(treatmentBMPObservation, treatmentBMPAssessmentObservationType)
+        public ObservationsViewModel(List<TreatmentBMPObservation> treatmentBMPObservations)
         {
+            Observations = treatmentBMPObservations.Select(x => new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
         }
     }
 }
