@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[FieldVisit](
 	[VisitDate] [datetime] NOT NULL,
 	[InventoryUpdated] [bit] NOT NULL,
 	[FieldVisitTypeID] [int] NOT NULL,
+	[IsFieldVisitVerified] [bit] NOT NULL,
  CONSTRAINT [PK_FieldVisit_FieldVisitID] PRIMARY KEY CLUSTERED 
 (
 	[FieldVisitID] ASC
