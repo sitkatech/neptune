@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="TreatmentBMPAssessmentGridSpec.cs" company="Tahoe Regional Planning Agency">
+<copyright file="ProvisionalTreatmentBMPGridSpec.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -33,8 +33,7 @@ namespace Neptune.Web.Views.ManagerDashboard
 {
     public class ProvisionalTreatmentBMPGridSpec : GridSpec<Models.TreatmentBMPAssessment>
     {
-        public ProvisionalTreatmentBMPGridSpec(Person currentPerson,
-            IEnumerable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
+        public ProvisionalTreatmentBMPGridSpec(Person currentPerson)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x.GetFieldVisit().PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
@@ -42,8 +41,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 180, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Date of last Verification", x => x.TreatmentBMP.DateOfLastInventoryVerification.ToStringDate(), 125, DhtmlxGridColumnFilterType.Html);
-            Add("Date of last Field Visit that included an Update to BMP Record", x => x.TreatmentBMP.FieldVisits.Select(y => y.VisitDate).FirstOrDefault().ToStringDate(), 120, DhtmlxGridColumnFilterType.Html);
+            Add("Date of Last Verification", x => x.TreatmentBMP.DateOfLastInventoryVerification, 125);
+            Add("Date of Last Field Visit", x => x.TreatmentBMP.GetLastFieldVisitWithAnInventoryUpdate()?.VisitDate, 120);
 
             Add("Has Photos?", x => x.TreatmentBMP.TreatmentBMPImages.Any().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Benchmark and Thresholds Set?", x => x.TreatmentBMP.IsBenchmarkAndThresholdsComplete().ToString(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);

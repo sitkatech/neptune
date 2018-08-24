@@ -59,11 +59,9 @@ namespace Neptune.Web.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> ProvisionalTreatmentBMPGridJsonData()
         {
-            var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
-            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessment(CurrentPerson);
-            var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
-            return gridJsonNetJObjectResult;
+            var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson);
+            var treatmentBMPAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson);
+            return new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPAssessments, gridSpec);
         }
     }
 }

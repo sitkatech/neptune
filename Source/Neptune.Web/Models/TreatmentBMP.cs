@@ -151,5 +151,10 @@ namespace Neptune.Web.Models
                 InventoryIsVerified = false;
             }
         }
+
+        public FieldVisit GetLastFieldVisitWithAnInventoryUpdate()
+        {
+            return FieldVisits.Where(y => y.InventoryUpdated).OrderByDescending(y => y.VisitDate).FirstOrDefault();
+        }
     }
 }

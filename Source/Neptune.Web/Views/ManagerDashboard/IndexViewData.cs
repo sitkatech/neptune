@@ -34,7 +34,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             GridName = "ProvisionalFieldVisitGrid";
             GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData());
 
-            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson, allObservationTypes)
+            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",

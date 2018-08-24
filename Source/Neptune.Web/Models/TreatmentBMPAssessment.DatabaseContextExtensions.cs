@@ -26,7 +26,7 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<TreatmentBMPAssessment> GetProvisionalTreatmentBMPAssessment(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessment, Person currentPerson)
+        public static List<TreatmentBMPAssessment> GetProvisionalTreatmentBMPAssessments(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessment, Person currentPerson)
         {
             return treatmentBMPAssessment.Where(x => x.TreatmentBMP.InventoryIsVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).OrderByDescending(x => x.GetAssessmentDate()).ToList();
         }
