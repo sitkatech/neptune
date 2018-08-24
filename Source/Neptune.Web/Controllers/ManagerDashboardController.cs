@@ -19,25 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
-using Microsoft.Ajax.Utilities;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.ManagerDashboard;
-using Neptune.Web.Views.Shared;
-using Neptune.Web.Views.Shared.EditAttributes;
-using Neptune.Web.Views.Shared.Location;
-using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
-using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 
 namespace Neptune.Web.Controllers
@@ -45,7 +33,7 @@ namespace Neptune.Web.Controllers
     public class ManagerDashboardController : NeptuneBaseController
     {
         [HttpGet]
-        [FieldVisitViewFeature]
+        [JurisdictionManageFeature]
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
@@ -62,39 +50,17 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var fieldVisits = GetFieldVisitsAndGridSpec(out var gridSpec, CurrentPerson, null, false);
+            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, false);
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
-
             return gridJsonNetJObjectResult;
         }
-
-        /// <summary>
-        /// Gets the Field Visits for a given Treatment BMP and out-returns the appropriate grid spec.
-        /// If treatmentBMP is null, returns all Field Visits 
-        /// </summary>
-        /// <param name="gridSpec"></param>
-        /// <param name="currentPerson"></param>
-        /// <param name="treatmentBMP"></param>
-        /// <param name="detailPage"></param>
-        /// <returns></returns>
-        private static List<FieldVisit> GetFieldVisitsAndGridSpec(out ProvisionalFieldVisitGridSpec gridSpec, Person currentPerson,
-            TreatmentBMP treatmentBMP, bool detailPage)
-        {
-            gridSpec = new ProvisionalFieldVisitGridSpec(currentPerson, detailPage);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.ToList().Where(x => x.TreatmentBMP.CanView(currentPerson));
-            var fieldVisitsAndGridSpec = (treatmentBMP != null
-                ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
-                : fieldVisits).ToList().Where(x => x.IsFieldVisitVerified == false).ToList();
-            return fieldVisitsAndGridSpec;
-        }
-
 
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> ProvisionalTreatmentBMPGridJsonData()
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
-            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList().Where(x => x.TreatmentBMP.CanView(CurrentPerson) && x.TreatmentBMP.InventoryIsVerified == false)
-                .OrderByDescending(x => x.GetAssessmentDate()).ToList();
+            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessment(CurrentPerson);
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
             return gridJsonNetJObjectResult;

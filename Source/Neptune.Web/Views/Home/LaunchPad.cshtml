@@ -68,6 +68,17 @@
                 <p>You are not assigned to a Jurisdiction</p>
             }
         </div>
+        @if (ViewDataTyped.IsJurisdictionManager)
+        {
+            <div class="col-xs-12">
+                @if (ViewDataTyped.ManagerDashboardDescription != null)
+                {
+                    <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue"></span>
+                    <span>@ViewDataTyped.ManagerDashboardDescription
+                        <a href="@ViewDataTyped.ManagerDashboardUrl" >Go to the Manager Dashboard</a>.</span>
+                }
+            </div>
+        }
         <div class="col-xs-12">
             <h4>Common Tasks</h4>
         </div>
