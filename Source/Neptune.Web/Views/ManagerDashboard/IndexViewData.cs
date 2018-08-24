@@ -28,7 +28,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             {
                 ObjectNameSingular = "Field Visit",
                 ObjectNamePlural = "Field Visits",
-                SaveFiltersInCookie = true
+                SaveFiltersInCookie = true,
+                GridInstructionsWhenEmpty = "All Assessment and Maintenance Records Added during a Field Visit have been reviewed and verified"
             };
             GridName = "ProvisionalFieldVisitGrid";
             GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData());
@@ -37,13 +38,12 @@ namespace Neptune.Web.Views.ManagerDashboard
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",
-                SaveFiltersInCookie = true
+                SaveFiltersInCookie = true,
+                GridInstructionsWhenEmpty = "All provisional BMP Records have been reviewed and verified"
             };
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridDataUrl =
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x => x.ProvisionalTreatmentBMPGridJsonData());
-
-            //HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
         }
     }
 }
