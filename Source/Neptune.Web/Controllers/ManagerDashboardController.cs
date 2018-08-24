@@ -50,7 +50,7 @@ namespace Neptune.Web.Controllers
         [FieldVisitViewFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
-            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, false);
+            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson);
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;

@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.ManagerDashboard
 {
     public class ProvisionalFieldVisitGridSpec : GridSpec<Models.FieldVisit>
     {
-        public ProvisionalFieldVisitGridSpec(Person currentPerson, bool detailPage)
+        public ProvisionalFieldVisitGridSpec(Person currentPerson)
         {
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
@@ -43,19 +43,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty,
-                x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x)),new FieldVisitEditFeature().HasPermission(currentPerson, x).HasPermission), 30,
-                DhtmlxGridColumnFilterType.None);
-
-
-            Add(string.Empty, x => UrlTemplate.MakeHrefString(x.GetDetailUrl(), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-
-
-            if (!detailPage)
-            {
-                Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            }
+            Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
+            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
@@ -81,12 +70,9 @@ namespace Neptune.Web.Views.ManagerDashboard
                     : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Post-Maintenance Assessment Score", x => x.PostMaintenanceAssessment?.FormattedScore() ?? "N/A", 95,
                 DhtmlxGridColumnFilterType.Numeric);
-            if (!detailPage)
-            {
-                Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
-                    x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
-                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            }
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
+                x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }
 }

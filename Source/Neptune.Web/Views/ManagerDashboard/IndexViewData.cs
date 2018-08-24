@@ -24,7 +24,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";
-            GridSpec = new ProvisionalFieldVisitGridSpec(currentPerson, false)
+            GridSpec = new ProvisionalFieldVisitGridSpec(currentPerson)
             {
                 ObjectNameSingular = "Field Visit",
                 ObjectNamePlural = "Field Visits",

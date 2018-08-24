@@ -18,12 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Linq;
-using LtInfo.Common;
 using Neptune.Web.Controllers;
-using Neptune.Web.Common;
-
 
 namespace Neptune.Web.Models
 {
@@ -36,21 +31,11 @@ namespace Neptune.Web.Models
                 : PostMaintenanceAssessment;
         }
 
-        public string GetAuditDescriptionString() => $"Field Visit deleted";
+        public string GetAuditDescriptionString() => "Field Visit deleted";
 
         public void DetachMaintenanceRecord()
         {
             MaintenanceRecordID = null;
-        }
-
-        public void DetachPostMaintenanceAssessment()
-        {
-            PostMaintenanceAssessmentID = null;
-        }
-
-        public void DetachInitialAssessment()
-        {
-            InitialAssessmentID = null;
         }
 
         public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
@@ -61,17 +46,5 @@ namespace Neptune.Web.Models
                 IsFieldVisitVerified = false;
             }
         }
-
-        public readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
-        public string GetDetailUrl()
-        {
-            //this TreatmentBMPAssessment treatmentBMPAssessment
-            var treatmentBMPAssessment = TreatmentBMP.TreatmentBMPAssessments;
-            if (treatmentBMPAssessment == null) { return ""; }
-            return DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.Select(x => x.TreatmentBMPAssessmentID).FirstOrDefault());
-        }
-
-        
-        
     }
 }
