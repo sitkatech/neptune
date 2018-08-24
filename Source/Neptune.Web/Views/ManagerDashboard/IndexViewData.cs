@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
-using Neptune.Web.Views.Assessment;
-using Neptune.Web.Views.MaintenanceRecord;
-using Neptune.Web.Views.Shared;
+
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
