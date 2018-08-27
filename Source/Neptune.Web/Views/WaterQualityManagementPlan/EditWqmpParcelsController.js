@@ -24,9 +24,10 @@
 
         finder.bind("typeahead:select",
             function (event, suggestion) {
-                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () {
+                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () { 
                     $scope.$apply();
                 });
+                $('.typeahead').typeahead('val', '');
             });
 
         jQuery(typeaheadSelectorButton).click(function () { $scope.selectFirstSuggestionFunction(finder); });
