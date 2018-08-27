@@ -19,7 +19,7 @@
                 minLength: 3
             },
             $scope.makeTypeaheadObject('Parcels', findParcelByApnUrl, 'Parcels'),
-            $scope.makeTypeaheadObject('Parcels', findParcelByAddressUrl, 'Addresses')
+            $scope.makeTypeaheadObject('Addresses', findParcelByAddressUrl, 'Addresses')
         );
 
         finder.bind("typeahead:select",
@@ -51,6 +51,7 @@
         });
 
         var displayText = displayName === 'Parcels' ? 'ParcelNumber' : 'ParcelAddress';
+        displayName = displayName === 'Parcels' ? 'Parcel Numbers' : 'Addresses';
 
         return {
             name: name,
@@ -58,7 +59,10 @@
             display: displayText,
             limit: Number.MAX_VALUE,
             templates: {
-                header: '<p class="findResultsHeader">' + displayName + '</p>'
+                header: '<p class="findResultsHeader">' + displayName + '</p>',
+                empty: function (context) {
+                    return '<p class="findResultsHeader">' + displayName + '</p>' + '<div class="tt-dataset" style="padding: 3px 40px;">No parcels matching search criteria</div>';
+                }
             }
         }
     }
