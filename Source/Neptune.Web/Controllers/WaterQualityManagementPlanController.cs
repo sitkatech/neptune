@@ -91,7 +91,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Parcel> ParcelsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPlanPrimaryKey.EntityObject;
-            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList();
+            var parcels = waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).OrderBy(x => x.ParcelNumber).ToList();
             var gridSpec = new ParcelGridSpec();
             return new GridJsonNetJObjectResult<Parcel>(parcels, gridSpec);
         }

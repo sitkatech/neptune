@@ -50,9 +50,9 @@ namespace Neptune.Web.Controllers
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.Parcels.Where(
-                    x => x.ParcelGeometry != null && (x.ParcelAddress + ", "+ x.ParcelZipCode).Contains(searchString)).ToList();
+                    x => x.ParcelGeometry != null && (x.ParcelAddress + ", "+ x.ParcelZipCode).Contains(searchString)).OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode).ThenBy(x => x.ParcelNumber).Take(10).ToList();
 
-            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(10).Select(pfr =>
+            var listItems = allParcelsMatchingSearchString.Select(pfr =>
             {
                 var listItem = new ListItem(pfr.GetParcelAddress(), pfr.ParcelNumber);
                 return listItem;
@@ -66,10 +66,10 @@ namespace Neptune.Web.Controllers
             var searchString = term.Trim();
             var listItems = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => x.ParcelGeometry != null && x.ParcelAddress.Contains(searchString))
-                .ToList()
-                .OrderBy(x => x.GetParcelAddress())
+                .OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode)
                 .ThenBy(x => x.ParcelNumber)
                 .Take(10)
+                .ToList()
                 .Select(x => new ParcelSimple(x))
                 .ToList();
             return Json(listItems, JsonRequestBehavior.AllowGet);
@@ -81,9 +81,9 @@ namespace Neptune.Web.Controllers
         {
             var searchString = term.Trim();
             var allParcelsMatchingSearchString =
-                HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString)).ToList();
+                HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString)).OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode).ThenBy(x => x.ParcelNumber).Take(10).ToList();
 
-            var listItems = allParcelsMatchingSearchString.OrderBy(x => x.GetParcelAddress()).ThenBy(x => x.ParcelNumber).Take(10).Select(pfr =>
+            var listItems = allParcelsMatchingSearchString.Select(pfr =>
             {
                 var listItem = new ListItem(pfr.ParcelNumber, pfr.ParcelNumber);
                 return listItem;
@@ -98,10 +98,10 @@ namespace Neptune.Web.Controllers
             var searchString = term.Trim();
             var listItems = HttpRequestStorage.DatabaseEntities.Parcels
                 .Where(x => x.ParcelGeometry != null && x.ParcelNumber.Contains(searchString))
-                .ToList()
-                .OrderBy(x => x.GetParcelAddress())
+                .OrderBy(x => x.ParcelAddress + ", " + x.ParcelZipCode)
                 .ThenBy(x => x.ParcelNumber)
                 .Take(10)
+                .ToList()
                 .Select(x => new ParcelSimple(x))
                 .ToList();
             return Json(listItems, JsonRequestBehavior.AllowGet);
