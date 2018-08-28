@@ -47,7 +47,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [FieldVisitViewFeature]
+        [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
             var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson);
@@ -56,7 +56,7 @@ namespace Neptune.Web.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        [NeptuneViewFeature]
+        [JurisdictionManageFeature]
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> ProvisionalTreatmentBMPGridJsonData()
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson);
