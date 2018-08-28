@@ -70,7 +70,8 @@ namespace Neptune.Web.Controllers
 
             var launchPadNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.LaunchPad);
             var numberOfBmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Count();
-            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes);
+            var managerDashboardDescription = GetManagerDashboardDescription();
+            var launchPadViewData = new LaunchPadViewData(CurrentPerson, launchPadNeptunePage, numberOfBmpTypes, managerDashboardDescription);
 
             var viewData = new IndexViewData(CurrentPerson, neptunePageByPageTypeHomePage,
                 neptunePageByPageTypeHomePageAdditionalInfo, neptunePageByPageTypeHomePageMapInfo,
@@ -155,6 +156,33 @@ namespace Neptune.Web.Controllers
 
             var viewData = new TrainingViewData(CurrentPerson, neptunePageByPageTypeHomePage, trainingVideos);
             return RazorView<Training, TrainingViewData>(viewData);
+        }
+
+
+
+        private string GetManagerDashboardDescription()
+        {
+            var provisionalBMPRecordCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson).Count();
+            var provisionalFieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count();
+            string managerDashboardDescription = null;
+            if (provisionalBMPRecordCount > 0)
+            {
+                managerDashboardDescription = $"There are {provisionalBMPRecordCount} provisional BMP records";
+                if (provisionalFieldVisitCount > 0)
+                {
+                    managerDashboardDescription +=
+                        "and " + provisionalFieldVisitCount + " Assessment and Maintenance Records Added during a Field Visit";
+                }
+
+                managerDashboardDescription += " waiting for your verification.";
+            }
+            else if (provisionalFieldVisitCount > 0)
+            {
+                managerDashboardDescription = $"There are {provisionalFieldVisitCount} Assessment and Maintenance Records Added during a Field Visit waiting for your verification.";
+
+            }
+
+            return managerDashboardDescription;
         }
     }
 }

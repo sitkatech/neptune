@@ -96,7 +96,8 @@ namespace Neptune.Web.Views
             {
                 BuildExploreMenu(currentPerson),
                 BuildAboutMenu(currentPerson),
-                BuildManageMenu(currentPerson)
+                BuildManageMenu(currentPerson),
+                BuildDashboardMenu(currentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
@@ -163,6 +164,14 @@ namespace Neptune.Web.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TenantController>(c => c.Detail()), currentPerson, "Tenant Configuration", "Group5"));
 
             return manageMenu;
+        }
+
+
+        private static LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
+        {
+            var dashboardMenu = new LtInfoMenuItem("Dashboard");
+            dashboardMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ManagerDashboardController>(c => c.Index()), currentPerson, "Dashboard"));
+            return dashboardMenu;
         }
 
         public string IsActiveUrl(string currentUrlPathAndQuery, string urlToCompare)

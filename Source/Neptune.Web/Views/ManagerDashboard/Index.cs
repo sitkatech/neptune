@@ -1,5 +1,5 @@
-﻿@*-----------------------------------------------------------------------
-<copyright file="Index.cshtml" company="Tahoe Regional Planning Agency">
+﻿/*-----------------------------------------------------------------------
+<copyright file="Index.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -17,18 +17,10 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 
 Source code is available upon request via <support@sitkatech.com>.
 </license>
------------------------------------------------------------------------*@
-@using Neptune.Web.Views
-@using Neptune.Web.Views.Shared
-@using LtInfo.Common.DhtmlWrappers
-@inherits Neptune.Web.Views.Jurisdiction.Index
-@section JavascriptAndStylesContent
+-----------------------------------------------------------------------*/
+namespace Neptune.Web.Views.ManagerDashboard
 {
-    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+    public abstract class Index : LtInfo.Common.Mvc.TypedWebViewPage<IndexViewData>
+    {
+    }
 }
-
-@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
-
-<div style="margin-top: 10px">
-    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, null, DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-</div>

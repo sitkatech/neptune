@@ -27,9 +27,7 @@ Source code is available upon request via <support@sitkatech.com>.
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 }
 
-<div class="pageIntroText">
-    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
-</div>
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
 <div style="margin-top: 10px">
     @Html.DhtmlxGrid(ViewDataTyped.BMPAssessmentGridSpec, ViewDataTyped.BMPAssessmentGridName, ViewDataTyped.BMPAssessmentGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
