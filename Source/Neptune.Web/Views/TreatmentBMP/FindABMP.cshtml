@@ -108,18 +108,7 @@
         <div class="col-sm-4 col-md-6">
             <span style="font-weight: bold">Filter Projects by:</span>
             <select id="filterPropertyNameSelected" name="filterPropertyNameSelected" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByBmpType()" ng-Model="selectedTreatmentBMPTypeIDs"
-                    data-selected-text-format = "count>1"
-                    data-count-selected-text="{0} of {1} selected"
-                    data-actions-box="true"
-                    >
-                @*@foreach (var treatmentBMPType in ViewDataTyped.TreatmentBMPTypeFilterTypesAndValues)
-                    {
-                        <option value="@treatmentBMPType.Text" data-filter="@treatmentBMPType.Value">
-                            @treatmentBMPType.Text
-                        </option>
-                    }*@
-
-
+                    data-selected-text-format = "count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
                 @foreach (var keyValuePair in ViewDataTyped.TreatmentBMPTypeFilterTypesAndValues)
                 {
                     <option value="@keyValuePair.Value" data-filter="@keyValuePair.Value">
