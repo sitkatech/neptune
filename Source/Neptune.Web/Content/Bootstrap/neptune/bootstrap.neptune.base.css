@@ -172,7 +172,7 @@ fieldset[disabled] .twitter-typeahead .tt-input {
 .tt-dropdown-menu .tt-suggestion,
 .tt-menu .tt-suggestion {
   display: block;
-  padding: 3px 20px;
+  padding: 3px 40px;
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
