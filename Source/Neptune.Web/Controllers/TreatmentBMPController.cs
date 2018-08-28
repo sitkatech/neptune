@@ -180,6 +180,7 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
