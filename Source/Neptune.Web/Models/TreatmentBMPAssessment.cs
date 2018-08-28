@@ -61,7 +61,7 @@ namespace Neptune.Web.Models
             var totalObservationCount = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count;
             return IsAssessmentComplete()
                 ? "Complete"
-                : $"In Progress ({completedObservationCount} of {totalObservationCount} observations complete)";
+                : $"Incomplete ({completedObservationCount} of {totalObservationCount} observations complete)";
         }
 
         public bool HasCalculatedOrAlternateScore()
