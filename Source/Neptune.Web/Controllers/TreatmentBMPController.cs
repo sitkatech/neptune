@@ -25,6 +25,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using LtInfo.Common.Models;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -47,10 +48,11 @@ namespace Neptune.Web.Controllers
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
+            var treatmentBMPTypeFilterTypesAndValues = treatmentBmps.GroupBy(x => x.TreatmentBMPType).ToSelectList(x => x.Key.TreatmentBMPTypeID.ToString(), x => x.Key.TreatmentBMPTypeName);
 
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
-            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps);
+            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps, treatmentBMPTypeFilterTypesAndValues);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
         [NeptuneViewFeature]

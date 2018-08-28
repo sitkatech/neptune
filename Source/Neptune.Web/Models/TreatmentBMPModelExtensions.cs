@@ -86,6 +86,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("MapSummaryUrl", x.GetMapSummaryUrl() );
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
+                feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
                 return feature;
             }));
             return featureCollection;
@@ -101,6 +102,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
                 feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
+                feature.Properties.Add("TreatmentBMPTypeID", x.TreatmentBMPTypeID);
                 return feature;
             }));
             return featureCollection;

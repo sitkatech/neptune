@@ -24,6 +24,7 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using System.Web.Mvc;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 
@@ -43,9 +44,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasManagePermissions { get; }
         public ViewDataForAngular ViewDataForAngular { get; set; }
         public string AllBMPsUrl { get; }
+        public readonly IEnumerable<SelectListItem> TreatmentBMPTypeFilterTypesAndValues;
+
 
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
-            List<Models.TreatmentBMP> treatmentBMPs)
+            List<Models.TreatmentBMP> treatmentBMPs, IEnumerable<SelectListItem> treatmentBMPTypeFilterTypesAndValues)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "Find a BMP";
@@ -68,6 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl);
+            TreatmentBMPTypeFilterTypesAndValues = treatmentBMPTypeFilterTypesAndValues;
         }
     }
 

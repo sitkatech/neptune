@@ -4,6 +4,7 @@
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.neptuneMap = new NeptuneMaps.StormwaterSearch($scope.AngularViewData.MapInitJson);
 
+        $scope.selectedTreatmentBMPTypeIDs = [];
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 
@@ -73,7 +74,51 @@
             return orderedBMPs;
         };
 
+        $scope.filterMapByBmpType = function () {
+            $scope.neptuneMap.searchableLayerGeoJson = L.geoJson($scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedTreatmentBMPTypeIDs, feature.properties.TreatmentBMPTypeID.toString());
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        var icon = L.MakiMarkers.icon({
+                            icon: feature.properties.FeatureGlyph,
+                            color: feature.properties.FeatureColor,
+                            size: "m"
+                        });
 
+                        return L.marker(latlng,
+                            {
+                                icon: icon,
+                                title: feature.properties.Name,
+                                alt: feature.properties.Name
+                            });
+                    },
+                    style: function (feature) {
+                        return {
+                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
+                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
+                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
+                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
+                        };
+                    }
+                });
+            $scope.neptuneMap.map.removeLayer($scope.neptuneMap.markerClusterGroup);
+            $scope.neptuneMap.markerClusterGroup = L.markerClusterGroup({
+                maxClusterRadius: 40,
+                showCoverageOnHover: false,
+                iconCreateFunction: function (cluster) {
+                    return new L.DivIcon({
+                        html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+                        className: 'treatmentBMPCluster',
+                        iconSize: new L.Point(40, 40),
+                    });
+                }
+            });
+            $scope.neptuneMap.searchableLayerGeoJson.addTo($scope.neptuneMap.markerClusterGroup);
+            $scope.neptuneMap.markerClusterGroup.addTo($scope.neptuneMap.map);
+            $scope.reinitializeMap();
+        }
 
         // only used when selecting from the list 
         $scope.setActive = function(treatmentBMP) {
@@ -109,10 +154,13 @@
                 $scope.activeTreatmentBMP.TreatmentBMPID === treatmentBMP.TreatmentBMPID;
         };
 
-        $scope.neptuneMap.searchableLayerGeoJson.on('click', function (e) {
-            $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
-            $scope.$apply();
-        });
+        $scope.reinitializeMap = function() {
+            $scope.neptuneMap.searchableLayerGeoJson.on('click',
+                function(e) {
+                    $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
+                    $scope.$apply();
+                });
+        };
 
         $scope.visibleBMPCount = function() {
             return $scope.visibleBMPIDs.length;
@@ -121,4 +169,6 @@
         $scope.zoomMapToCurrentLocation = function() {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
+
+        $scope.reinitializeMap();
     });

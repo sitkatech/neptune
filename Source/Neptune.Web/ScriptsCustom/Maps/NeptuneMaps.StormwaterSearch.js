@@ -53,7 +53,7 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
         }
     });
 
-    var markerClusterGroup = L.markerClusterGroup({
+    self.markerClusterGroup = L.markerClusterGroup({
         maxClusterRadius: 40,
         showCoverageOnHover: false,
         iconCreateFunction: function(cluster)
@@ -65,9 +65,9 @@ NeptuneMaps.StormwaterSearch = function (stormwaterMapInitJson)
             });
         }
     });
-    self.searchableLayerGeoJson.addTo(markerClusterGroup);
+    self.searchableLayerGeoJson.addTo(self.markerClusterGroup);
 
-    markerClusterGroup.addTo(this.map);
+    self.markerClusterGroup.addTo(this.map);
     
     self.searchableLayerGeoJson.on('click', function (e) { self.markerClicked(self, e); });
 };
