@@ -169,9 +169,7 @@ namespace Neptune.Web.Views
 
         private static LtInfoMenuItem BuildDashboardMenu(Person currentPerson)
         {
-            var dashboardMenu = new LtInfoMenuItem("Dashboard");
-            dashboardMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ManagerDashboardController>(c => c.Index()), currentPerson, "Dashboard"));
-            return dashboardMenu;
+            return new LtInfoMenuItem(SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
         public string IsActiveUrl(string currentUrlPathAndQuery, string urlToCompare)

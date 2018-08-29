@@ -102,6 +102,11 @@ namespace Neptune.Web.Models
             return person.IsAdministrator() || person.StormwaterJurisdictionPeople.Any(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID);
         }
 
+        public static bool IsManagerOrAdmin(this Person person)
+        {
+            return person.Role == Role.Admin || person.Role == Role.JurisdictionManager || person.Role == Role.SitkaAdmin;
+        }
+
         public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)
         {
             var isAdministrator = person.IsAdministrator();
