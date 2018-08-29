@@ -37,12 +37,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
-            var maintenanceAttributeTypes =
-                HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x =>
-                    x.CustomAttributeTypePurposeID ==
-                    CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage,
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
+            var fieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count;
+            var treatmentBMPAssessmentsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson).Count;
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPAssessmentsCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
 

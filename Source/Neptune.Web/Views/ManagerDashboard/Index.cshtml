@@ -37,7 +37,14 @@
                 Assessment and Maintenance Records Added during a Field Visit
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                @if (ViewDataTyped.FieldVisitCount > 0)
+                {
+                    @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                }
+                else
+                {
+                    <p> All Assessment and Maintenance Records Added during a Field Visit have been reviewed and verified. <a href="@ViewDataTyped.FieldVisitsIndexUrl">See all Field Records</a></p>
+                }
             </div>
         </div>
     </div>
@@ -53,7 +60,13 @@
                 Provisional BMP Records
             </div>
             <div class="panel-body">
-                @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                @if(ViewDataTyped.TreatmentBMPAssessmentsCount > 0){
+                    @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                }
+                else
+                {
+                    <p> All provisional BMP Records have been reviewed and verified. <a href="@ViewDataTyped.TreatmentBMPIndexUrl">View all BMP Records</a></p>
+                }
             </div>
         </div>
     </div>
