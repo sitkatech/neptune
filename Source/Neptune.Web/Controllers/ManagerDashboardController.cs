@@ -38,8 +38,8 @@ namespace Neptune.Web.Controllers
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
             var fieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count;
-            var treatmentBMPAssessmentsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson).Count;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPAssessmentsCount);
+            var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -54,11 +54,11 @@ namespace Neptune.Web.Controllers
         }
 
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPAssessment> ProvisionalTreatmentBMPGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData()
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson);
-            var treatmentBMPAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson);
-            return new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPAssessments, gridSpec);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson);
+            return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
     }
 }

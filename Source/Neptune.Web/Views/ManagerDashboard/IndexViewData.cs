@@ -16,10 +16,10 @@ namespace Neptune.Web.Views.ManagerDashboard
         public ProvisionalTreatmentBMPGridSpec ProvisionalTreatmentBMPGridSpec { get; }
         public string ProvisionalTreatmentBMPGridName { get; }
         public string ProvisionalTreatmentBMPGridDataUrl { get; }
-        public int TreatmentBMPAssessmentsCount { get; }
+        public int TreatmentBMPsCount { get; }
         public string TreatmentBMPIndexUrl { get; }
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPAssessmentsCount)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount)
             : base(currentPerson, StormwaterBreadCrumbEntity.FieldRecords, neptunePage)
         {
             PageTitle = "Manager Dashboard";
@@ -44,7 +44,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridDataUrl =
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x => x.ProvisionalTreatmentBMPGridJsonData());
-            TreatmentBMPAssessmentsCount = treatmentBMPAssessmentsCount;
+            TreatmentBMPsCount = treatmentBMPsCount;
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Index());
         }
     }
