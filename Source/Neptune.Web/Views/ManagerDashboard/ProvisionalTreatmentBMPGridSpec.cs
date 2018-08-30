@@ -31,21 +31,19 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalTreatmentBMPGridSpec : GridSpec<Models.TreatmentBMPAssessment>
+    public class ProvisionalTreatmentBMPGridSpec : GridSpec<Models.TreatmentBMP>
     {
         public ProvisionalTreatmentBMPGridSpec(Person currentPerson)
         {
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
-            Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x.GetFieldVisit().PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
-            Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-
-            Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 180, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Date of Last Verification", x => x.TreatmentBMP.DateOfLastInventoryVerification, 125);
-            Add("Date of Last Field Visit", x => x.TreatmentBMP.GetLastFieldVisitWithAnInventoryUpdate()?.VisitDate, 120);
-
-            Add("Has Photos?", x => x.TreatmentBMP.TreatmentBMPImages.Any().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Benchmark and Thresholds Set?", x => x.TreatmentBMP.IsBenchmarkAndThresholdsComplete().ToString(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(y => y.Detail(x.PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
+            Add("BMP Name", x => x.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
+            Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMPType.TreatmentBMPTypeName, 180, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Date of Last Verification", x => x.DateOfLastInventoryVerification, 125, DhtmlxGridColumnFormatType.Date);
+            Add(Models.FieldDefinition.DateOfLastInventoryChangeDuringFieldVisit.ToGridHeaderString(), x => x.GetLastFieldVisitWithAnInventoryUpdate()?.VisitDate, 120, DhtmlxGridColumnFormatType.Date);
+            Add("Has Photos?", x => x.TreatmentBMPImages.Any().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Benchmark and Thresholds Set?", x => x.IsBenchmarkAndThresholdsComplete().ToString(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }
 }

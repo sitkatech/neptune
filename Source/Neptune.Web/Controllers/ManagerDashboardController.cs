@@ -37,12 +37,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
-            var maintenanceAttributeTypes =
-                HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x =>
-                    x.CustomAttributeTypePurposeID ==
-                    CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage,
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
+            var fieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count;
+            var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -51,17 +48,17 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
         {
             var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson);
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TreatmentBMPAssessment> ProvisionalTreatmentBMPGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData()
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson);
-            var treatmentBMPAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.GetProvisionalTreatmentBMPAssessments(CurrentPerson);
-            return new GridJsonNetJObjectResult<TreatmentBMPAssessment>(treatmentBMPAssessments, gridSpec);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson);
+            return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
     }
 }
