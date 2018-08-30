@@ -55,14 +55,14 @@
                         {
                             var currentMetadata = Model.CustomAttributes.SingleOrDefault(x => x.CustomAttributeTypeID == attribute.CustomAttributeTypeID);
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">
+                                <label class="col-sm-4 control-label">
                                     @attribute.CustomAttributeType.CustomAttributeTypeName
                                     @if (attribute.CustomAttributeType.IsRequired)
                                     {
                                         <span><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup></span>
                                     }
                                 </label>
-                                <div class="col-sm-5">
+                                <div class="col-sm-8">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <input type="hidden" name="@(Html.NameFor(m => m.CustomAttributes))[@i].TreatmentBMPTypeCustomAttributeTypeID" value="@attribute.TreatmentBMPTypeCustomAttributeTypeID" />
