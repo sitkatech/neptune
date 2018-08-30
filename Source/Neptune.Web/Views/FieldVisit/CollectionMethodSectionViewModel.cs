@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.FieldVisit
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
                     x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
-            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(ObservationData));
+            validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(treatmentBMPAssessmentObservationType, ObservationData));
 
             return validationResults;
         }
