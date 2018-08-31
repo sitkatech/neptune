@@ -44,8 +44,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public ViewDataForAngular ViewDataForAngular { get; set; }
         public string AllBMPsUrl { get; }
 
+
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
-            List<Models.TreatmentBMP> treatmentBMPs)
+            List<Models.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "Find a BMP";
@@ -67,7 +68,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl);
+            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples);
         }
     }
 
@@ -75,15 +76,16 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public MapInitJson MapInitJson { get; }
         public List<TreatmentBMPSimple> TreatmentBMPs { get; }
+        public string FindTreatmentBMPByNameUrl { get; }
+        public List<TreatmentBMPTypeSimple> TreatmentBMPTypes { get; }
 
         public ViewDataForAngular(MapInitJson mapInitJson, List<Models.TreatmentBMP> treatmentBMPs,
-            string findTreatmentBMPByNameUrl)
+            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
         {
             MapInitJson = mapInitJson;
             TreatmentBMPs = treatmentBMPs.Select(x=>new TreatmentBMPSimple(x)).ToList();
             FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
+            TreatmentBMPTypes = treatmentBMPTypeSimples;
         }
-
-        public string FindTreatmentBMPByNameUrl { get; }
     }
 }

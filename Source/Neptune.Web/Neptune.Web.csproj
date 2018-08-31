@@ -293,6 +293,7 @@
     <Compile Include="Models\MapInitJsonHelpers.cs" />
     <Compile Include="Models\ParcelModelExtensions.cs" />
     <Compile Include="Models\ParcelSimple.cs" />
+    <Compile Include="Models\TreatmentBMPTypeSimple.cs" />
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
