@@ -44,8 +44,16 @@
     // ]]>
 </script>
 
+<style>
+    .observation-panel {
+        background: white;
+        margin-bottom: 30px;
+        padding-bottom: 12px;
+    }
+</style>
+
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData()" name="observationForm">
-    <div class="row" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
+    <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
         <div class="col-xs-12">
             <h4 ng-bind="observationTypeSchema.TreatmentBMPAssessmentObservationTypeName"></h4>
         </div>

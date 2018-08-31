@@ -13,7 +13,8 @@ namespace Neptune.Web.Models
     {
         public abstract bool ValidateObservationTypeJson(string json);
         public abstract List<ValidationResult> ValidateObservationType(string json);
-        public abstract List<ValidationResult> ValidateObservationDataJson(string json);
+        public abstract List<ValidationResult> ValidateObservationDataJson(
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, string json);
 
         public abstract string ViewSchemaDetailUrl(TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType);
 
@@ -60,20 +61,22 @@ namespace Neptune.Web.Models
             return validationErrors;
         }
 
-        public override List<ValidationResult> ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, string json)
         {
             var validationResults = new List<ValidationResult>();
             try
             {
                 var schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
+                var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 if (!(schema.SingleValueObservations.Count > 0))
                 {
-                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
+                    validationResults.Add(new ValidationResult($"You must enter at least one observation for '{treatmentBMPAssessmentObservationTypeName}'."));
                 }
 
                 if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
                 {
-                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
+                    validationResults.Add(new ValidationResult($"Values for the observation '{treatmentBMPAssessmentObservationTypeName}' cannot be blank."));
                 }
             }
             catch (Exception)
@@ -143,7 +146,8 @@ namespace Neptune.Web.Models
             return validationErrors;
         }
 
-        public override List<ValidationResult> ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, string json)
         {
             var validationResults = new List<ValidationResult>();
             try
@@ -216,7 +220,8 @@ namespace Neptune.Web.Models
 
             return validationErrors;
         }
-        public override List<ValidationResult> ValidateObservationDataJson(string json)
+        public override List<ValidationResult> ValidateObservationDataJson(
+            TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, string json)
         {
             var validationResults = new List<ValidationResult>();
             try

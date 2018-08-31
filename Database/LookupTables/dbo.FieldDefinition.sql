@@ -56,4 +56,5 @@ VALUES
 (52, N'RequiredFieldVisitsPerYear', N'Required Field Visits Per Year', N'Number of Field Visists that must be conducted for a given BMP each year', 1),
 (53, N'RequiredPostStormFieldVisitsPerYear', N'Required Post-Storm Field Visits Per Year', N'Number of Post-Storm Field Visists that must be conducted for a given BMP each year', 1),
 (54, N'WaterQualityManagementPlanDocumentType', N'WQMP Document Type', N'Specifies what type of supporting document this is. Some document types are required for a WQMP to be considered complete', 1),
-(55, N'HasAllRequiredDocuments', N'Has All Required Documents?', N'Indicates whether all required supporting documents are present for a WQMP', 1)
+(55, N'HasAllRequiredDocuments', N'Has All Required Documents?', N'Indicates whether all required supporting documents are present for a WQMP', 1),
+(56, N'DateOfLastInventoryChangeDuringFieldVisit', N'Date of Last Inventory Change during Field Visit', '', 1)

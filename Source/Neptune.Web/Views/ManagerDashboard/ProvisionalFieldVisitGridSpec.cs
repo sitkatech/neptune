@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.GetStatusAsWorkflowUrl(), 85,
+            Add(Models.FieldDefinition.FieldVisitStatus.ToGridHeaderString(), x => x.FieldVisitStatus.FieldVisitStatusDisplayName, 85,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Initial Assessment?",

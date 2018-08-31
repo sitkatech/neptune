@@ -285,7 +285,6 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
-    <Compile Include="Models\TreatmentBMPAssessment.DatabaseContextExtensions.cs" />
     <Compile Include="Models\FieldVisit.DatabaseContextExtensions.cs" />
     <Compile Include="Controllers\ManagerDashboardController.cs" />
     <Compile Include="Models\CustomAttribute.DatabaseContextExtensions.cs" />
