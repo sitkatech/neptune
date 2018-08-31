@@ -22,10 +22,11 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using LtInfo.Common.Models;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -33,7 +34,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
-using FindABMP = Neptune.Web.Views.TreatmentBMP.FindABMP;
 
 namespace Neptune.Web.Controllers
 {
@@ -48,11 +48,9 @@ namespace Neptune.Web.Controllers
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
-            var treatmentBMPTypeFilterTypesAndValues = treatmentBmps.GroupBy(x => x.TreatmentBMPType).ToSelectList(x => x.Key.TreatmentBMPTypeID.ToString(), x => x.Key.TreatmentBMPTypeName);
-
-
+            var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType).Select(x => new TreatmentBMPTypeSimple(x.Key)).ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
-            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps, treatmentBMPTypeFilterTypesAndValues);
+            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps, treatmentBMPTypeSimples);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
         [NeptuneViewFeature]
@@ -301,13 +299,23 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public JsonResult FindByName(string term)
+        [HttpGet]
+        public ContentResult FindByName()
         {
-            var searchString = term.Trim();
+            return new ContentResult();
+        }
+
+        [NeptuneViewFeature]
+        [HttpPost]
+        public JsonResult FindByName(FindABMPViewModel viewModel)
+        {
+            var searchString = viewModel.SearchTerm.Trim();
+            var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
             var allTreatmentBMPsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
-                    x => x.TreatmentBMPName.Contains(searchString)).ToList();
+                    x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
+                         x.TreatmentBMPName.Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
@@ -446,5 +454,11 @@ namespace Neptune.Web.Controllers
             };
             return Content(dl.ToString());
         }
+    }
+
+    public class FindABMPViewModel
+    {
+        public string SearchTerm { get; set; }
+        public List<int> TreatmentBMPTypeIDs { get; set; }
     }
 }

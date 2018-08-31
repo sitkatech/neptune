@@ -24,7 +24,6 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using System.Web.Mvc;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 
@@ -44,11 +43,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasManagePermissions { get; }
         public ViewDataForAngular ViewDataForAngular { get; set; }
         public string AllBMPsUrl { get; }
-        public readonly IEnumerable<SelectListItem> TreatmentBMPTypeFilterTypesAndValues;
 
 
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
-            List<Models.TreatmentBMP> treatmentBMPs, IEnumerable<SelectListItem> treatmentBMPTypeFilterTypesAndValues)
+            List<Models.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
             PageTitle = "Find a BMP";
@@ -70,8 +68,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl);
-            TreatmentBMPTypeFilterTypesAndValues = treatmentBMPTypeFilterTypesAndValues;
+            ViewDataForAngular = new ViewDataForAngular(mapInitJson, treatmentBMPs, FindTreatmentBMPByNameUrl, treatmentBMPTypeSimples);
         }
     }
 
@@ -79,15 +76,16 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public MapInitJson MapInitJson { get; }
         public List<TreatmentBMPSimple> TreatmentBMPs { get; }
+        public string FindTreatmentBMPByNameUrl { get; }
+        public List<TreatmentBMPTypeSimple> TreatmentBMPTypes { get; }
 
         public ViewDataForAngular(MapInitJson mapInitJson, List<Models.TreatmentBMP> treatmentBMPs,
-            string findTreatmentBMPByNameUrl)
+            string findTreatmentBMPByNameUrl, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
         {
             MapInitJson = mapInitJson;
             TreatmentBMPs = treatmentBMPs.Select(x=>new TreatmentBMPSimple(x)).ToList();
             FindTreatmentBMPByNameUrl = findTreatmentBMPByNameUrl;
+            TreatmentBMPTypes = treatmentBMPTypeSimples;
         }
-
-        public string FindTreatmentBMPByNameUrl { get; }
     }
 }

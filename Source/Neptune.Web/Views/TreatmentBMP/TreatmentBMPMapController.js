@@ -3,7 +3,10 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-        $scope.selectedTreatmentBMPTypeIDs = [];
+        $scope.selectedTreatmentBMPTypeIDs = _.map($scope.AngularViewData.TreatmentBMPTypes, function (m) {
+            return m.TreatmentBMPTypeID;
+        });
+
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 
@@ -17,17 +20,32 @@
             $scope.typeaheadSelector = typeaheadSelector;
             var finder = jQuery(typeaheadSelector);
             finder.typeahead({
-                    highlight: true,
-                    minLength: 1
-                },
+                highlight: true,
+                minLength: 3
+            },
                 {
                     source: new Bloodhound({
                         datumTokenizer: Bloodhound.tokenizers.whitespace,
                         queryTokenizer: Bloodhound.tokenizers.whitespace,
                         remote: {
-                            url: summaryUrl +
-                                '?term=%QUERY',
-                            wildcard: '%QUERY'
+                            cache: false,
+                            url: '/TreatmentBMP/FindByName#%QUERY',
+                            wildcard: '%QUERY',
+                            transport: function (opts, onSuccess, onError) {
+                                console.log($scope.selectedTreatmentBMPTypeIDs);
+                                var url = opts.url.split("#")[0];
+                                var query = opts.url.split("#")[1];
+                                $.ajax({
+                                    url: url,
+                                    data: {
+                                        SearchTerm: query,
+                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs
+                                    },
+                                    type: "POST",
+                                    success: onSuccess,
+                                    error: onError
+                                });
+                            }
                         }
                     }),
                     display: 'Text',
