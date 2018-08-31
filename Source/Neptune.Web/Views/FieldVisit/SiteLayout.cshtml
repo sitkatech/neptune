@@ -174,3 +174,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    function launchConfirm() {
+        var dialogTitle = "Save &amp; Wrap Up";
+        var dialogContent = "Are you sure you want to wrap up the field visit? Wrapping up will mark the field visit as complete and ready for review by the Jurisdiction Manager.";
+        var modalHtml =
+            "<div class='modal neptune-modal' id='saveAndWrapupModal' tabindex='-1'>" +
+            "<div class='modal-dialog neptune-modal-dialog' style = 'width:90%; max-width: 500px'>" +
+            "<div class='modal-content'>" +
+            "<div class='modal-header'>" +
+            "<button type='button' class='modal-close-button btn btn-xs btn-neptune' data-dismiss='modal'><span>&times;</span></button>" +
+            "<span class='modal-title'>" + dialogTitle + "</span>" +
+            "</div>" +
+            "<div class='modal-body'>" + dialogContent + "</div>" +
+            "<div class='modal-footer'>" +
+            "<div class='modal-footer-buttons'>" +
+            "<button type='button' onclick='saveAndWrapUp()' class='btn btn-xs btn-neptune'>Continue</button>" +
+            "<button type='button' class='btn btn-xs btn-neptune' data-dismiss='modal'>Cancel</button>" +
+            "</div>" +
+            "</div>" +
+            "<div class='progress' style='display:none'>" +
+            "<div class='progress-bar progress-bar-info progress-bar-striped active' role='progressbar' style='width:100%'>Saving</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+
+        var dialogDiv = jQuery(modalHtml);
+        dialogDiv.modal({ backdrop: "static" });
+        dialogDiv.draggable({ handle: ".modal-header" });
+        $("body").append(dialogDiv);
+    }
+
+    function saveAndWrapUp() {
+        var theForm = jQuery('#ObservationsControllerApp');
+        theForm.submit();
+    }
+</script>
