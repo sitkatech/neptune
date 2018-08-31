@@ -112,7 +112,7 @@
         <span style="margin-right: 5px">Assessment and Maintenance Records have not been verified</span>
     }
 
-    @if (ViewDataTyped.CanManageStormwaterJurisdiction && ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
+    @if (ViewDataTyped.CanManageStormwaterJurisdiction && ViewDataTyped.FieldVisit.IsFieldVisitVerified == false && ViewDataTyped.FieldVisit.FieldVisitStatus == FieldVisitStatus.Complete)
     {
         @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
     }
