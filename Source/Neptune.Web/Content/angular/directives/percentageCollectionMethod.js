@@ -4,6 +4,7 @@
             var object = {
                 restrict: 'EA',                
                 scope: {
+                    observationTypeId: '@',
                     measurementUnitLabelAndUnit: '@',
                     datasource: '=' //Two-way data binding
                 },

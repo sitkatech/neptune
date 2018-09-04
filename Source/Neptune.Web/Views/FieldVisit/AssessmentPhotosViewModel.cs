@@ -19,13 +19,16 @@ namespace Neptune.Web.Views.FieldVisit
 
         public AssessmentPhotosViewModel(Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            PhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
-                new ManagePhotoWithPreviewPhotoSimple
-                {
-                    PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
-                    Caption = x.Caption,
-                    FlagForDeletion = false
-                }).ToList();
+            if (treatmentBMPAssessment != null)
+            {
+                PhotoSimples = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Select(x =>
+                    new ManagePhotoWithPreviewPhotoSimple
+                    {
+                        PrimaryKey = x.TreatmentBMPAssessmentPhotoID,
+                        Caption = x.Caption,
+                        FlagForDeletion = false
+                    }).ToList();
+            }
         }
 
         public void UpdateModels(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)

@@ -13,10 +13,10 @@
             </td>
             <td class="col-xs-3">
                 <label class="form-check-inline" style="margin-right: 10px">
-                    <input name="treatmentBMPAssessmentObservationType{{observationTypeId}}Observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="true" /> <span ng-bind="passingScoreLabel"></span>
+                    <input name="treatmentBMPAssessmentObservationType{{observationTypeId}}Observation{{$index}}" class="form-check-input ignoreSerialization" type="radio" ng-model="observation.ObservationValue" value="true" /> <span ng-bind="passingScoreLabel"></span>
                 </label>
                 <label class="form-check-inline">
-                    <input name="treatmentBMPAssessmentObservationType{{observationTypeId}}Observation{{$index}}" class="form-check-input" type="radio" ng-model="observation.ObservationValue" value="false" /> <span ng-bind="failingScoreLabel"></span>
+                    <input name="treatmentBMPAssessmentObservationType{{observationTypeId}}Observation{{$index}}" class="form-check-input ignoreSerialization" type="radio" ng-model="observation.ObservationValue" value="false" /> <span ng-bind="failingScoreLabel"></span>
                 </label>
             </td>
             <td class="col-xs-6">

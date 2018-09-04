@@ -23,10 +23,13 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    $scope.initializeObservationTypeWithEmptyRows = function (currentObservationTypeSchema) {
+    $scope.initializeObservationTypeWithEmptyRows = function(currentObservationTypeSchema) {
         var newObservationData = {
-            TreatmentBMPAssessmentObservationTypeID: currentObservationTypeSchema.TreatmentBMPAssessmentObservationTypeID,
-            SingleValueObservations: []
+            TreatmentBMPAssessmentObservationTypeID: currentObservationTypeSchema
+                .TreatmentBMPAssessmentObservationTypeID,
+            ObservationData: {
+                SingleValueObservations: []
+            }
         };
 
         // depends on the type of observation
@@ -34,9 +37,9 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
             var defaultPropertyObserved = currentObservationTypeSchema.PropertiesToObserve.length === 1
                 ? currentObservationTypeSchema.PropertiesToObserve[0].DisplayName
                 : null;
-            while (newObservationData.SingleValueObservations.length <
+            while (newObservationData.ObservationData.SingleValueObservations.length <
                 currentObservationTypeSchema.MinimumNumberOfObservations) {
-                newObservationData.SingleValueObservations.push({
+                newObservationData.ObservationData.SingleValueObservations.push({
                     PropertyObserved: defaultPropertyObserved,
                     ObservationValue: null,
                     Notes: null
@@ -44,7 +47,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
             }
         } else {
             for (var i = 0; i < currentObservationTypeSchema.PropertiesToObserve.length; i++) {
-                newObservationData.SingleValueObservations.push({
+                newObservationData.ObservationData.SingleValueObservations.push({
                     PropertyObserved: currentObservationTypeSchema.PropertiesToObserve[i].DisplayName,
                     ObservationValue: null,
                     Notes: null
@@ -52,7 +55,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
             }
         }
         return newObservationData;
-    }
+    };
 
     $scope.initializeData = function () {
         var existingObservationData = [];
@@ -66,7 +69,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
                 return f.TreatmentBMPAssessmentObservationTypeID === currentObservationTypeSchema.TreatmentBMPAssessmentObservationTypeID;
             });
             if (currentObservation != null) {
-                currentObservation = JSON.parse(currentObservation.ObservationData);
+                currentObservation.ObservationData = JSON.parse(currentObservation.ObservationData);
             }
             else
             {
@@ -77,14 +80,15 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
         $scope.ObservationData = observationData;
     };
 
-    $scope.getObservationData = function(observationTypeSchema) {
-        return _.find($scope.ObservationData,
+    $scope.getObservationData = function (observationTypeSchema) {
+        var find = _.find($scope.ObservationData,
             function(f) {
                 return f.TreatmentBMPAssessmentObservationTypeID == observationTypeSchema.TreatmentBMPAssessmentObservationTypeID;
             });
+        return find.ObservationData;
     };
 
     $scope.jsonify = function(observation) {
-        return angular.toJson(observation);
+        return angular.toJson(observation.ObservationData);
     };
 });
