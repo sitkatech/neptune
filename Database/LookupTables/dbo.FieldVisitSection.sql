@@ -6,4 +6,4 @@ values
 (2, 'Assessment', 'Assessment', 'Assessment', 20),
 (3, 'Maintenance', 'Maintenance', 'Maintenance', 30),
 (4, 'PostMaintenanceAssessment', 'Post-Maintenance Assessment', 'Post-Maintenance Assessment', 40),
-(5, 'WrapUpVisit', 'Wrap-up Visit', 'Wrap-up Visit', 50)
+(5, 'VisitSummary', 'Visit Summary', 'Visit Summary', 50)

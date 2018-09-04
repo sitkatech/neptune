@@ -193,6 +193,10 @@ namespace Neptune.Web.Controllers
                 return ViewLocation(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -224,6 +228,10 @@ namespace Neptune.Web.Controllers
                 ViewPhotos(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
@@ -269,6 +277,10 @@ namespace Neptune.Web.Controllers
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -381,6 +393,10 @@ namespace Neptune.Web.Controllers
                 return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
@@ -416,23 +432,23 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        public ViewResult VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
-            return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, new WrapUpVisitViewModel());
+            var viewData = new VisitSummaryViewData(CurrentPerson, fieldVisit);
+            return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, new VisitSummaryViewModel());
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, WrapUpVisitViewModel viewModel)
+        public ActionResult VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey, VisitSummaryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
+            var viewData = new VisitSummaryViewData(CurrentPerson, fieldVisit);
             if (!ModelState.IsValid)
             {
-                return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, viewModel);
+                return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, viewModel);
             }
 
             fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
@@ -504,6 +520,10 @@ namespace Neptune.Web.Controllers
                 return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
 
             // we may not have an assessment yet if we went directly to the url instead of using the wizard
@@ -542,7 +562,7 @@ namespace Neptune.Web.Controllers
                         return RedirectToAction(nextPageRoute);
                     case StepToAdvanceToEnum.WrapUpPage:
                         return RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                            c.WrapUpVisit(fieldVisit)));
+                            c.VisitSummary(fieldVisit)));
                     default:
                         throw new ArgumentOutOfRangeException($"Invalid StepToAdvanceTo {viewModel.StepToAdvanceTo}");
                 }
@@ -630,6 +650,10 @@ namespace Neptune.Web.Controllers
                 return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
 
             if (treatmentBMPAssessment == null)
@@ -643,7 +667,7 @@ namespace Neptune.Web.Controllers
             
             return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
                     ?  RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)), fieldVisit)
-                    : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit)), fieldVisit);
+                    : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.VisitSummary(fieldVisit)), fieldVisit);
         }
 
         private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType, AssessmentPhotosViewModel viewModel)

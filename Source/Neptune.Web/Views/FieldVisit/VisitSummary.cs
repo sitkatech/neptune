@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="WrapUpVisit.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+<copyright file="VisitSummary.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -23,11 +23,11 @@ using LtInfo.Common.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public abstract class WrapUpVisit : LtInfo.Common.Mvc.TypedWebViewPage<WrapUpVisitViewData, WrapUpVisitViewModel>
+    public abstract class VisitSummary : LtInfo.Common.Mvc.TypedWebViewPage<VisitSummaryViewData, VisitSummaryViewModel>
     {
     }
 
-    public class WrapUpVisitViewModel : FormViewModel
+    public class VisitSummaryViewModel : FormViewModel
     {
     }
 }
