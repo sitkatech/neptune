@@ -4,6 +4,7 @@
             var object = {
                 restrict: 'EA',                
                 scope: {
+                    observationTypeId: '@',
                     propertiesToObserve: '=',
                     maximumValueOfObservations: '@',
                     minimumValueOfObservations: '@',
@@ -24,8 +25,9 @@
                         Sitka.Methods.removeFromJsonArray(scope.datasource.SingleValueObservations, observation);
                     };
 
-                    scope.disableAddObservation = function() {
-                        return scope.datasource.SingleValueObservations.length >= scope.maximumNumberOfObservations;
+                    scope.disableAddObservation = function () {
+                        console.log(scope.datasource);
+                        return !Sitka.Methods.isUndefinedNullOrEmpty(scope.datasource.SingleValueObservations) && scope.datasource.SingleValueObservations.length >= scope.maximumNumberOfObservations;
                     };
                 }
             };

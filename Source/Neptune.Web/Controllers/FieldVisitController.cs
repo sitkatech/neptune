@@ -483,7 +483,7 @@ namespace Neptune.Web.Controllers
             var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
-            var existingObservations = treatmentBMPAssessment.TreatmentBMPObservations.ToList();
+            var existingObservations = treatmentBMPAssessment != null ? treatmentBMPAssessment.TreatmentBMPObservations.ToList() : new List<TreatmentBMPObservation>();
             var viewModel = new ObservationsViewModel(existingObservations);
             var viewData = new ObservationsViewData(fieldVisit, fieldVisitAssessmentType, CurrentPerson);
             return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
@@ -505,6 +505,14 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
+
+            // we may not have an assessment yet if we went directly to the url instead of using the wizard
+            if (treatmentBMPAssessment == null)
+            {
+                treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.Initial);
+            }
+
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
                 var treatmentBMPAssessmentObservationType =
@@ -623,6 +631,13 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
+
+            if (treatmentBMPAssessment == null)
+            {
+                treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.Initial);
+            }
+
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             
