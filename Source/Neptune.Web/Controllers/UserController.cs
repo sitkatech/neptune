@@ -320,6 +320,7 @@ namespace Neptune.Web.Controllers
             var existingUser = HttpRequestStorage.DatabaseEntities.People.GetPersonByPersonGuid(keystoneUser.UserGuid);
             if (existingUser != null)
             {
+                SetMessageForDisplay($"{existingUser.GetFullNameFirstLastAndOrgAsUrl()} already has an account.</a>.");
                 return RedirectToAction(new SitkaRoute<UserController>(x => x.Detail(existingUser)));
             }
 
