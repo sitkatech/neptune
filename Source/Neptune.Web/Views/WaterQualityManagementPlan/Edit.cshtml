@@ -102,6 +102,15 @@
                             @Html.ValidationMessageFor(m => m.ApprovalDate)
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.DateOfContruction)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.EditorFor(m => m.DateOfContruction, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DateOfContruction)
+                        </div>
+                    </div>
                 </fieldset>
                 <fielset>
                     <legend>Maintenance Contact</legend>

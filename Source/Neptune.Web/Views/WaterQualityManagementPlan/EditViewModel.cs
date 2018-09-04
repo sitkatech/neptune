@@ -63,6 +63,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Phone")]
         public string MaintenanceContactPhone { get; set; }
 
+        [DisplayName("Date of Contruction")]
+        public DateTime? DateOfContruction { get; set; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -87,6 +90,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             MaintenanceContactState = waterQualityManagementPlan.MaintenanceContactState;
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
+            DateOfContruction = waterQualityManagementPlan.DateOfContruction;
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -109,6 +113,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactState = MaintenanceContactState;
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
+            waterQualityManagementPlan.DateOfContruction = DateOfContruction;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
