@@ -10,7 +10,7 @@ namespace Neptune.Web.Models
         public string GetAuditDescriptionString()
         {
             return
-                $"Treatment BMP Assessment Photo {FileResource.GetOriginalCompleteFileName() ?? "<File Name Not Found>"}";
+                $"Treatment BMP Assessment Photo {FileResource?.GetOriginalCompleteFileName() ?? "File Resource Not Found"}";
         }
 
         public DateTime GetCreateDate()
