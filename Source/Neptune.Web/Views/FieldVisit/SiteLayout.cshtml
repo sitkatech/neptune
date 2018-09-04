@@ -208,8 +208,9 @@
     }
 
     function saveAndWrapUp() {
-        console.log("saveAndWrapUp");
+        $("#hiddenIsFinalizeVisitInput").val("true");
         var theForm = jQuery('form.field-visit-form');
+        theForm.append('<input type="hidden" name="FinalizeVisit" id="hiddenIsFinalizeVisitInput" value="true">');
         theForm.submit();
     }
 </script>

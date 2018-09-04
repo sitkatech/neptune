@@ -193,6 +193,8 @@ namespace Neptune.Web.Controllers
                 return ViewLocation(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -224,6 +226,8 @@ namespace Neptune.Web.Controllers
                 ViewPhotos(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
@@ -269,6 +273,8 @@ namespace Neptune.Web.Controllers
                 return ViewAttributes(fieldVisit, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -381,6 +387,8 @@ namespace Neptune.Web.Controllers
                 return ViewEditMaintenanceRecord(viewModel, fieldVisit.TreatmentBMP, false, fieldVisit, fieldVisit.MaintenanceRecord);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
@@ -504,6 +512,8 @@ namespace Neptune.Web.Controllers
                 return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
@@ -622,6 +632,8 @@ namespace Neptune.Web.Controllers
                 return ViewAssessmentPhotos(treatmentBMPAssessment, fieldVisitAssessmentType, viewModel);
             }
 
+            if (viewModel.FinalizeVisit == "true")
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
