@@ -194,7 +194,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -227,7 +229,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
@@ -274,7 +278,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
@@ -388,7 +394,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit, HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList());
 
@@ -513,7 +521,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
 
             // we may not have an assessment yet if we went directly to the url instead of using the wizard
@@ -641,7 +651,9 @@ namespace Neptune.Web.Controllers
             }
 
             if (viewModel.FinalizeVisit == "true")
+            {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
 
             if (treatmentBMPAssessment == null)
