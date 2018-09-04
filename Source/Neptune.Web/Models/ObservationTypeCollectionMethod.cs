@@ -153,6 +153,11 @@ namespace Neptune.Web.Models
             try
             {
                 var schema = JsonConvert.DeserializeObject<PassFailObservationSchema>(json);
+                var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
+                if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
+                {
+                    validationResults.Add(new ValidationResult($"Values for the observation '{treatmentBMPAssessmentObservationTypeName}' cannot be blank."));
+                }
             }
             catch (Exception)
             {
@@ -227,14 +232,15 @@ namespace Neptune.Web.Models
             try
             {
                 var schema = JsonConvert.DeserializeObject<DiscreteObservationSchema>(json);
+                var treatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 if (!(schema.SingleValueObservations.Count > 0))
                 {
-                    validationResults.Add(new ValidationResult("You must enter at least one observation."));
+                    validationResults.Add(new ValidationResult($"You must enter at least one observation for '{treatmentBMPAssessmentObservationTypeName}'."));
                 }
 
                 if (schema.SingleValueObservations.Any(x => x.ObservationValue == null))
                 {
-                    validationResults.Add(new ValidationResult("Observation values cannot be blank."));
+                    validationResults.Add(new ValidationResult($"Values for the observation '{treatmentBMPAssessmentObservationTypeName}' cannot be blank."));
                 }
             }
             catch (Exception)
