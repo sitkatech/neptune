@@ -176,7 +176,7 @@
 </div>
 
 <script>
-    function launchConfirm() {
+    function launchSaveAndWrapUpConfirmModal() {
         var dialogTitle = "Save &amp; Wrap Up";
         var dialogContent = "Are you sure you want to wrap up the field visit? Wrapping up will mark the field visit as complete and ready for review by the Jurisdiction Manager.";
         var modalHtml =
@@ -208,7 +208,8 @@
     }
 
     function saveAndWrapUp() {
-        var theForm = jQuery('#ObservationsControllerApp');
+        console.log("saveAndWrapUp");
+        var theForm = jQuery('form.field-visit-form');
         theForm.submit();
     }
 </script>
