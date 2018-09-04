@@ -424,23 +424,23 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        public ViewResult VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
-            return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, new WrapUpVisitViewModel());
+            var viewData = new VisitSummaryViewData(CurrentPerson, fieldVisit);
+            return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, new VisitSummaryViewModel());
         }
 
         [HttpPost]
         [FieldVisitEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult WrapUpVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, WrapUpVisitViewModel viewModel)
+        public ActionResult VisitSummary(FieldVisitPrimaryKey fieldVisitPrimaryKey, VisitSummaryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new WrapUpVisitViewData(CurrentPerson, fieldVisit);
+            var viewData = new VisitSummaryViewData(CurrentPerson, fieldVisit);
             if (!ModelState.IsValid)
             {
-                return RazorView<WrapUpVisit, WrapUpVisitViewData, WrapUpVisitViewModel>(viewData, viewModel);
+                return RazorView<VisitSummary, VisitSummaryViewData, VisitSummaryViewModel>(viewData, viewModel);
             }
 
             fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
@@ -544,7 +544,7 @@ namespace Neptune.Web.Controllers
                         return RedirectToAction(nextPageRoute);
                     case StepToAdvanceToEnum.WrapUpPage:
                         return RedirectToAction(new SitkaRoute<FieldVisitController>(c =>
-                            c.WrapUpVisit(fieldVisit)));
+                            c.VisitSummary(fieldVisit)));
                     default:
                         throw new ArgumentOutOfRangeException($"Invalid StepToAdvanceTo {viewModel.StepToAdvanceTo}");
                 }
@@ -640,7 +640,7 @@ namespace Neptune.Web.Controllers
             
             return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
                     ?  RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.Maintain(fieldVisit)), fieldVisit)
-                    : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.WrapUpVisit(fieldVisit)), fieldVisit);
+                    : RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.AssessmentPhotos(fieldVisit, fieldVisitAssessmentTypeID)), new SitkaRoute<FieldVisitController>(x => x.VisitSummary(fieldVisit)), fieldVisit);
         }
 
         private ViewResult ViewAssessmentPhotos(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType, AssessmentPhotosViewModel viewModel)
