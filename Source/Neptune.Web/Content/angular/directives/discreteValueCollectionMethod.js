@@ -26,7 +26,6 @@
                     };
 
                     scope.disableAddObservation = function () {
-                        console.log(scope.datasource);
                         return !Sitka.Methods.isUndefinedNullOrEmpty(scope.datasource.SingleValueObservations) && scope.datasource.SingleValueObservations.length >= scope.maximumNumberOfObservations;
                     };
                 }
