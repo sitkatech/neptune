@@ -29,11 +29,13 @@
 <hr/>
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-        
-        <a href="@ViewDataTyped.LocationUrl" class="btn btn-neptune" style="display: inline-block;">
-            <span>Review Inventory</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
-        </a>
-        <a href="@ViewDataTyped.AssessUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
-        <a href="@ViewDataTyped.WrapupUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Wrap-up <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+        @using (Html.BeginForm("Inventory", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+        {
+            <a href="@ViewDataTyped.LocationUrl" class="btn btn-neptune" style="display: inline-block;">
+                <span>Review Inventory</span><span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
+            </a>
+            <a href="@ViewDataTyped.AssessUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Assessment <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+            <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Save &amp; Wrap Up <i class="glyphicon glyphicon-forward" style="margin-left: 10px;"></i></a>
+        }
     </div>
 </div>

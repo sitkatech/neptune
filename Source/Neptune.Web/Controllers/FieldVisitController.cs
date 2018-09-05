@@ -153,6 +153,19 @@ namespace Neptune.Web.Controllers
             return RazorView<Inventory, InventoryViewData>(viewData);
         }
 
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
+        }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
