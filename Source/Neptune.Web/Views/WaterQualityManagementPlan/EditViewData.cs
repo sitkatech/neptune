@@ -31,13 +31,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .ToList();
             WaterQualityManagementPlanLandUses = WaterQualityManagementPlanLandUse.All
                 .OrderBy(x => x.WaterQualityManagementPlanLandUseDisplayName)
-                .ToSelectList(x => x.WaterQualityManagementPlanLandUseDisplayName);
+                .ToSelectList(x => x.WaterQualityManagementPlanLandUseID.ToString(), x => x.WaterQualityManagementPlanLandUseDisplayName);
             WaterQualityManagementPlanPermitTerms = WaterQualityManagementPlanPermitTerm.All
                 .OrderBy(x => x.WaterQualityManagementPlanPermitTermDisplayName)
-                .ToSelectList(x => x.WaterQualityManagementPlanPermitTermDisplayName);
+                .ToSelectList(x => x.WaterQualityManagementPlanPermitTermID.ToString(), x => x.WaterQualityManagementPlanPermitTermDisplayName);
             HydrologicSubareas = HydrologicSubarea.All
                 .OrderBy(x => x.SortOrder)
-                .ToSelectList(x => x.HydrologicSubareaDisplayName);
+                .ToSelectList(x => x.HydrologicSubareaID.ToString(), x => x.HydrologicSubareaDisplayName);
         }
     }
 }
