@@ -72,6 +72,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Permit Term")]
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
 
+        [DisplayName("Hydrologic Subarea")]
+        public int? HydrologicSubareaID { get; set; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -99,6 +102,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             DateOfContruction = waterQualityManagementPlan.DateOfContruction;
             HydromodificationApplies = waterQualityManagementPlan.HydromodificationApplies;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
+            HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -124,6 +128,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.DateOfContruction = DateOfContruction;
             waterQualityManagementPlan.HydromodificationApplies = HydromodificationApplies;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
+            waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

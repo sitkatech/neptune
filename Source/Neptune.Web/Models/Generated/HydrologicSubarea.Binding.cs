@@ -18,11 +18,11 @@ namespace Neptune.Web.Models
 {
     public abstract partial class HydrologicSubarea : IHavePrimaryKey
     {
-        public static readonly HydrologicSubareaLagunaCoastal LagunaCoastal = HydrologicSubareaLagunaCoastal.Instance;
         public static readonly HydrologicSubareaAlisoCreek AlisoCreek = HydrologicSubareaAlisoCreek.Instance;
         public static readonly HydrologicSubareaDanaPointCoastal DanaPointCoastal = HydrologicSubareaDanaPointCoastal.Instance;
-        public static readonly HydrologicSubareaSanJuanCreek SanJuanCreek = HydrologicSubareaSanJuanCreek.Instance;
+        public static readonly HydrologicSubareaLagunaCoastal LagunaCoastal = HydrologicSubareaLagunaCoastal.Instance;
         public static readonly HydrologicSubareaSanClementeCoastal SanClementeCoastal = HydrologicSubareaSanClementeCoastal.Instance;
+        public static readonly HydrologicSubareaSanJuanCreek SanJuanCreek = HydrologicSubareaSanJuanCreek.Instance;
 
         public static readonly List<HydrologicSubarea> All;
         public static readonly ReadOnlyDictionary<int, HydrologicSubarea> AllLookupDictionary;
@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static HydrologicSubarea()
         {
-            All = new List<HydrologicSubarea> { LagunaCoastal, AlisoCreek, DanaPointCoastal, SanJuanCreek, SanClementeCoastal };
+            All = new List<HydrologicSubarea> { AlisoCreek, DanaPointCoastal, LagunaCoastal, SanClementeCoastal, SanJuanCreek };
             AllLookupDictionary = new ReadOnlyDictionary<int, HydrologicSubarea>(All.ToDictionary(x => x.HydrologicSubareaID));
         }
 
@@ -122,40 +122,40 @@ namespace Neptune.Web.Models
 
     public enum HydrologicSubareaEnum
     {
-        LagunaCoastal = 1,
-        AlisoCreek = 2,
-        DanaPointCoastal = 3,
-        SanJuanCreek = 4,
-        SanClementeCoastal = 5
-    }
-
-    public partial class HydrologicSubareaLagunaCoastal : HydrologicSubarea
-    {
-        private HydrologicSubareaLagunaCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaLagunaCoastal Instance = new HydrologicSubareaLagunaCoastal(1, @"LagunaCoastal", @"Laguna Coastal", 10);
+        AlisoCreek = 1,
+        DanaPointCoastal = 2,
+        LagunaCoastal = 3,
+        SanClementeCoastal = 4,
+        SanJuanCreek = 5
     }
 
     public partial class HydrologicSubareaAlisoCreek : HydrologicSubarea
     {
         private HydrologicSubareaAlisoCreek(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaAlisoCreek Instance = new HydrologicSubareaAlisoCreek(2, @"AlisoCreek", @"Aliso Creek", 20);
+        public static readonly HydrologicSubareaAlisoCreek Instance = new HydrologicSubareaAlisoCreek(1, @"AlisoCreek", @"Aliso Creek", 10);
     }
 
     public partial class HydrologicSubareaDanaPointCoastal : HydrologicSubarea
     {
         private HydrologicSubareaDanaPointCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaDanaPointCoastal Instance = new HydrologicSubareaDanaPointCoastal(3, @"DanaPointCoastal", @"Dana Point Coastal", 30);
+        public static readonly HydrologicSubareaDanaPointCoastal Instance = new HydrologicSubareaDanaPointCoastal(2, @"DanaPointCoastal", @"Dana Point Coastal", 20);
     }
 
-    public partial class HydrologicSubareaSanJuanCreek : HydrologicSubarea
+    public partial class HydrologicSubareaLagunaCoastal : HydrologicSubarea
     {
-        private HydrologicSubareaSanJuanCreek(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaSanJuanCreek Instance = new HydrologicSubareaSanJuanCreek(4, @"SanJuanCreek", @"San Juan Creek", 40);
+        private HydrologicSubareaLagunaCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
+        public static readonly HydrologicSubareaLagunaCoastal Instance = new HydrologicSubareaLagunaCoastal(3, @"LagunaCoastal", @"Laguna Coastal", 30);
     }
 
     public partial class HydrologicSubareaSanClementeCoastal : HydrologicSubarea
     {
         private HydrologicSubareaSanClementeCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaSanClementeCoastal Instance = new HydrologicSubareaSanClementeCoastal(5, @"SanClementeCoastal", @"San Clemente Coastal", 50);
+        public static readonly HydrologicSubareaSanClementeCoastal Instance = new HydrologicSubareaSanClementeCoastal(4, @"SanClementeCoastal", @"San Clemente Coastal", 40);
+    }
+
+    public partial class HydrologicSubareaSanJuanCreek : HydrologicSubarea
+    {
+        private HydrologicSubareaSanJuanCreek(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
+        public static readonly HydrologicSubareaSanJuanCreek Instance = new HydrologicSubareaSanJuanCreek(5, @"SanJuanCreek", @"San Juan Creek", 50);
     }
 }

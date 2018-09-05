@@ -125,11 +125,20 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.HydrologicSubareaID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.HydrologicSubareaID, ViewDataTyped.HydrologicSubareas)
+                            @Html.ValidationMessageFor(m => m.HydrologicSubareaID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
                             @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPermitTermID)
                         </div>
                         <div class="col-xs-12 col-sm-9">
                             @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanPermitTermID, ViewDataTyped.WaterQualityManagementPlanPermitTerms)
-                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPermitTermID)
                         </div>
                     </div>
                 </fieldset>
