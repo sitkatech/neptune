@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.ModalDialog
+﻿@using LtInfo.Common
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
@@ -75,7 +76,7 @@
                 {
                     <div class="alert alert-info" role="alert">
                         <span class="glyphicon glyphicon-info-sign"></span>
-                        <span>@ViewDataTyped.ManagerDashboardDescription
+                        <span>@ViewDataTyped.ManagerDashboardDescription.ToHTMLFormattedString()
                             <a href="@ViewDataTyped.ManagerDashboardUrl" class="alert-link">Go to the Manager Dashboard</a>.</span>
                     </div>
                 }

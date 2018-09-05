@@ -167,11 +167,11 @@ namespace Neptune.Web.Controllers
             string managerDashboardDescription = null;
             if (provisionalBMPRecordCount > 0)
             {
-                managerDashboardDescription = $"There are {provisionalBMPRecordCount} provisional BMP records";
+                managerDashboardDescription = $"There are <strong>{provisionalBMPRecordCount} provisional BMP records</strong>";
                 if (provisionalFieldVisitCount > 0)
                 {
                     managerDashboardDescription +=
-                        "and " + provisionalFieldVisitCount + " Assessment and Maintenance Records Added during a Field Visit";
+                        $" and <strong>{provisionalFieldVisitCount} Provisional Assessment and Maintenance Records</strong>";
                 }
 
                 managerDashboardDescription += " waiting for your verification.";
