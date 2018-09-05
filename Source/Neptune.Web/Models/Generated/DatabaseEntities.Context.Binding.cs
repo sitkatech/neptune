@@ -259,6 +259,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
 
+                case "HydrologicSubarea":
+                    var hydrologicSubarea = HydrologicSubarea.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(hydrologicSubarea, "HydrologicSubarea", primaryKey);
+                    return hydrologicSubarea;
+
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
@@ -439,6 +444,11 @@ namespace Neptune.Web.Models
 
                 case "WaterQualityManagementPlanParcel":
                     return WaterQualityManagementPlanParcels.GetWaterQualityManagementPlanParcel(primaryKey);
+
+                case "WaterQualityManagementPlanPermitTerm":
+                    var waterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanPermitTerm, "WaterQualityManagementPlanPermitTerm", primaryKey);
+                    return waterQualityManagementPlanPermitTerm;
 
                 case "WaterQualityManagementPlanPriority":
                     var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
