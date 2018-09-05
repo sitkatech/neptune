@@ -47,7 +47,7 @@
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
 
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("PostMaintenanceAssessment", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
         {
             <button class="btn btn-neptune" style="display: inline-block;">
                 <span>
@@ -56,7 +56,7 @@
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
 
-            <a href="@ViewDataTyped.WrapupUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Wrap-up <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+            <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Save &amp; Wrap Up <i class="glyphicon glyphicon-forward" style="margin-left: 10px;"></i></a>
         }
     </div>
 </div>

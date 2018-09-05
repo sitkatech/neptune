@@ -2,7 +2,7 @@
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class MaintainViewModel : FormViewModel
+    public class MaintainViewModel : FieldVisitViewModel
     {
     }
 }
