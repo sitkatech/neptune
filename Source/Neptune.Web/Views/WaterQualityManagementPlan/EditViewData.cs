@@ -12,7 +12,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<WaterQualityManagementPlanPriority> WaterQualityManagementPlanPriorities { get; }
         public IEnumerable<WaterQualityManagementPlanStatus> WaterQualityManagementPlanStatuses { get; }
         public IEnumerable<WaterQualityManagementPlanDevelopmentType> WaterQualityManagementPlanDevelopmentTypes { get; }
-        public IEnumerable<WaterQualityManagementPlanLandUse> WaterQualityManagementPlanLandUses { get; }
+        public IEnumerable<SelectListItem> WaterQualityManagementPlanLandUses { get; }
+        public IEnumerable<SelectListItem> WaterQualityManagementPlanPermitTerms { get; }
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions)
         {
@@ -29,7 +30,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .ToList();
             WaterQualityManagementPlanLandUses = WaterQualityManagementPlanLandUse.All
                 .OrderBy(x => x.SortOrder)
-                .ToList();
+                .ToSelectList(x => x.WaterQualityManagementPlanLandUseDisplayName);
+            WaterQualityManagementPlanPermitTerms = WaterQualityManagementPlanPermitTerm.All
+                .OrderBy(x => x.WaterQualityManagementPlanPermitTermDisplayName)
+                .ToSelectList(x => x.WaterQualityManagementPlanPermitTermDisplayName);
         }
     }
 }

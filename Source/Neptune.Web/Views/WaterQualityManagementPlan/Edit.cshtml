@@ -81,15 +81,7 @@
                             @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanLandUseID)
                         </div>
                         <div class="col-xs-12 col-sm-9">
-                            @foreach (var landUse in ViewDataTyped.WaterQualityManagementPlanLandUses)
-                            {
-                                <div class="radio-inline">
-                                    <label>
-                                        @Html.RadioButtonFor(m => m.WaterQualityManagementPlanLandUseID, landUse.WaterQualityManagementPlanLandUseID)
-                                        @landUse.WaterQualityManagementPlanLandUseDisplayName
-                                    </label>
-                                </div>
-                            }
+                            @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanLandUseID, ViewDataTyped.WaterQualityManagementPlanLandUses)
                             @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
                         </div>
                     </div>
@@ -129,6 +121,15 @@
                                 </label>
                             </div>
                             @Html.ValidationMessageFor(m => m.HydromodificationApplies)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.WaterQualityManagementPlanPermitTermID)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanPermitTermID, ViewDataTyped.WaterQualityManagementPlanPermitTerms)
+                            @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanLandUseID)
                         </div>
                     </div>
                 </fieldset>
