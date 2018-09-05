@@ -66,6 +66,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Date of Contruction")]
         public DateTime? DateOfContruction { get; set; }
 
+        [DisplayName("Hydromodification Applies")]
+        public bool? HydromodificationApplies { get; set; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -91,6 +94,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
             DateOfContruction = waterQualityManagementPlan.DateOfContruction;
+            HydromodificationApplies = waterQualityManagementPlan.HydromodificationApplies;
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -114,6 +118,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
             waterQualityManagementPlan.DateOfContruction = DateOfContruction;
+            waterQualityManagementPlan.HydromodificationApplies = HydromodificationApplies;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
