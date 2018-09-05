@@ -240,7 +240,7 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMP.DeleteFull();
-            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.FindABMP()));
+            return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewDeleteTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
