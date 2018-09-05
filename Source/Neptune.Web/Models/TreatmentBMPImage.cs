@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 
@@ -10,7 +9,7 @@ namespace Neptune.Web.Models
     {
         public string GetAuditDescriptionString()
         {
-            return $"Site {TreatmentBMPID} {FileResource.GetOriginalCompleteFileName() ?? "File Resouce Not Found"}";
+            return $"Site {TreatmentBMPID} {FileResource?.GetOriginalCompleteFileName() ?? "File Resource Not Found"}";
         }
 
         public int? GetEntityImageIDAsNullable()

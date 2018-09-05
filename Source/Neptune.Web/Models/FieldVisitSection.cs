@@ -134,11 +134,11 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class FieldVisitSectionWrapUpVisit
+    public partial class FieldVisitSectionVisitSummary
     {
         public override string GetSectionUrl(FieldVisit fieldVisit)
         {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
         }
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)

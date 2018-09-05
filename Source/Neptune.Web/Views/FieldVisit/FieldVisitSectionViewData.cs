@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.FieldVisit
             SectionHeader = fieldVisitSection.SectionHeader;
             ValidationWarnings = new List<string>();
 
-            WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
+            WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Neptune.Web.Models
         public static readonly FieldVisitSectionAssessment Assessment = FieldVisitSectionAssessment.Instance;
         public static readonly FieldVisitSectionMaintenance Maintenance = FieldVisitSectionMaintenance.Instance;
         public static readonly FieldVisitSectionPostMaintenanceAssessment PostMaintenanceAssessment = FieldVisitSectionPostMaintenanceAssessment.Instance;
-        public static readonly FieldVisitSectionWrapUpVisit WrapUpVisit = FieldVisitSectionWrapUpVisit.Instance;
+        public static readonly FieldVisitSectionVisitSummary VisitSummary = FieldVisitSectionVisitSummary.Instance;
 
         public static readonly List<FieldVisitSection> All;
         public static readonly ReadOnlyDictionary<int, FieldVisitSection> AllLookupDictionary;
@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldVisitSection()
         {
-            All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, WrapUpVisit };
+            All = new List<FieldVisitSection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, VisitSummary };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitSection>(All.ToDictionary(x => x.FieldVisitSectionID));
         }
 
@@ -114,8 +114,8 @@ namespace Neptune.Web.Models
                     return Maintenance;
                 case FieldVisitSectionEnum.PostMaintenanceAssessment:
                     return PostMaintenanceAssessment;
-                case FieldVisitSectionEnum.WrapUpVisit:
-                    return WrapUpVisit;
+                case FieldVisitSectionEnum.VisitSummary:
+                    return VisitSummary;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -128,7 +128,7 @@ namespace Neptune.Web.Models
         Assessment = 2,
         Maintenance = 3,
         PostMaintenanceAssessment = 4,
-        WrapUpVisit = 5
+        VisitSummary = 5
     }
 
     public partial class FieldVisitSectionInventory : FieldVisitSection
@@ -155,9 +155,9 @@ namespace Neptune.Web.Models
         public static readonly FieldVisitSectionPostMaintenanceAssessment Instance = new FieldVisitSectionPostMaintenanceAssessment(4, @"PostMaintenanceAssessment", @"Post-Maintenance Assessment", @"Post-Maintenance Assessment", 40);
     }
 
-    public partial class FieldVisitSectionWrapUpVisit : FieldVisitSection
+    public partial class FieldVisitSectionVisitSummary : FieldVisitSection
     {
-        private FieldVisitSectionWrapUpVisit(int fieldVisitSectionID, string fieldVisitSectionName, string fieldVisitSectionDisplayName, string sectionHeader, int sortOrder) : base(fieldVisitSectionID, fieldVisitSectionName, fieldVisitSectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly FieldVisitSectionWrapUpVisit Instance = new FieldVisitSectionWrapUpVisit(5, @"WrapUpVisit", @"Wrap-up Visit", @"Wrap-up Visit", 50);
+        private FieldVisitSectionVisitSummary(int fieldVisitSectionID, string fieldVisitSectionName, string fieldVisitSectionDisplayName, string sectionHeader, int sortOrder) : base(fieldVisitSectionID, fieldVisitSectionName, fieldVisitSectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly FieldVisitSectionVisitSummary Instance = new FieldVisitSectionVisitSummary(5, @"VisitSummary", @"Visit Summary", @"Visit Summary", 50);
     }
 }

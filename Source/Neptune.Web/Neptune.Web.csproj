@@ -303,6 +303,7 @@
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitViewModel.cs" />
+    <Compile Include="Views\FieldVisit\VisitSummary.cs" />
     <Compile Include="Views\ManagerDashboard\ProvisionalFieldVisitGridSpec.cs" />
     <Compile Include="Views\ManagerDashboard\Index.cs" />
     <Compile Include="Views\ManagerDashboard\IndexViewData.cs" />
@@ -418,14 +419,13 @@
     <Compile Include="Views\FieldVisit\Location.cs" />
     <Compile Include="Views\FieldVisit\Photos.cs" />
     <Compile Include="Views\FieldVisit\Attributes.cs" />
-    <Compile Include="Views\FieldVisit\WrapUpVisit.cs" />
     <Compile Include="Views\FieldVisit\Inventory.cs" />
     <Compile Include="Views\FieldVisit\MaintainViewData.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisit.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewData.cs" />
     <Compile Include="Views\FieldVisit\NewFieldVisitViewModel.cs" />
     <Compile Include="Views\FieldVisit\PostMaintenanceAssessmentViewData.cs" />
-    <Compile Include="Views\FieldVisit\WrapUpVisitViewData.cs" />
+    <Compile Include="Views\FieldVisit\VisitSummaryViewData.cs" />
     <Compile Include="Views\FundingSource\Detail.cs" />
     <Compile Include="Views\FundingSource\DetailViewData.cs" />
     <Compile Include="Views\FundingSource\Edit.cs" />
@@ -1243,7 +1243,7 @@
     <Content Include="Views\FieldVisit\Assessment.cshtml" />
     <Content Include="Views\FieldVisit\Maintain.cshtml" />
     <Content Include="Views\FieldVisit\PostMaintenanceAssessment.cshtml" />
-    <Content Include="Views\FieldVisit\WrapUpVisit.cshtml" />
+    <Content Include="Views\FieldVisit\VisitSummary.cshtml" />
     <Content Include="Views\FieldVisit\Photos.cshtml" />
     <Content Include="Views\FieldVisit\Location.cshtml" />
     <Content Include="Views\FieldVisit\Attributes.cshtml" />
