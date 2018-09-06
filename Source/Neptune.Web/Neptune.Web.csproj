@@ -301,6 +301,7 @@
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
+    <Compile Include="Views\FieldVisit\InventoryViewModel.cs" />
     <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitViewModel.cs" />
     <Compile Include="Views\FieldVisit\VisitSummary.cs" />

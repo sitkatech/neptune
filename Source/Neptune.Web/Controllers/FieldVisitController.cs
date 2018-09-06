@@ -153,6 +153,19 @@ namespace Neptune.Web.Controllers
             return RazorView<Inventory, InventoryViewData>(viewData);
         }
 
+        [HttpPost]
+        [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+            }
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
+        }
+
         [HttpGet]
         [FieldVisitEditFeature]
         public ViewResult Location(FieldVisitPrimaryKey fieldVisitPrimaryKey)
@@ -303,6 +316,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Assessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, AssessmentViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -311,6 +325,11 @@ namespace Neptune.Web.Controllers
             {
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
                 SaveNewAssessmentToFieldVisit(treatmentBMPAssessment,fieldVisit,FieldVisitAssessmentType.Initial);
+            }
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, (int) FieldVisitAssessmentType.Initial)));
         }
@@ -352,6 +371,11 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.Add(maintenanceRecord);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 fieldVisit.MaintenanceRecordID = maintenanceRecord.MaintenanceRecordID;
+            }
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
@@ -418,6 +442,7 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [FieldVisitEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult PostMaintenanceAssessment(FieldVisitPrimaryKey fieldVisitPrimaryKey, PostMaintenanceAssessmentViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -426,6 +451,11 @@ namespace Neptune.Web.Controllers
             {
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
                 SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.PostMaintenance);
+            }
+            if (viewModel.FinalizeVisit == "true")
+            {
+                fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, (int) FieldVisitAssessmentType.PostMaintenance)));
         }
