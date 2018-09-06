@@ -54,12 +54,11 @@
 
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">  
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
-        <button ng-show="$first" type="button" class="btn btn-neptune" ng-click="preloadWithInitialAssessmentData(observationTypeSchema.InitialAssessmentObservations)" ng-if="observationTypeSchema.InitialAssessmentObservations != null"
-                ng-attr-title="{{true || undefined}}">
+        <button ng-show="$first" type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations != null" ng-click="preloadWithInitialAssessmentData(observationTypeSchema.InitialAssessmentObservations)">
             Copy Data from Initial Assessment
         </button>
-        <button ng-show="$first" type="button" class="btn btn-neptune" ng-click="preloadWithInitialAssessmentData(observationTypeSchema.InitialAssessmentObservations)" ng-if="observationTypeSchema.InitialAssessmentObservations == null"
-                title="This is disabled because there is nothing to copy over" disabled="disabled">
+        <button ng-show="$first" type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations == null"
+                title="No Pre-Maintenance Assessment data entered" disabled="disabled">
             Copy Data from Initial Assessment
         </button>
         <div class="col-xs-12">
