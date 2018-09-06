@@ -57,10 +57,10 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
         return newObservationData;
     };
 
-    $scope.initializeData = function () {
+    $scope.initializeData = function (existingObservations) {
         var existingObservationData = [];
-        if ($scope.AngularModel.Observations.length > 0) {
-            existingObservationData = $scope.AngularModel.Observations;
+        if (existingObservations.length > 0) {
+            existingObservationData = existingObservations;
         }
         var observationData = [];
         for (var j = 0; j < $scope.AngularViewData.ObservationTypeSchemas.length; j++) {
@@ -91,4 +91,10 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
     $scope.jsonify = function(observation) {
         return angular.toJson(observation.ObservationData);
     };
+
+
+    $scope.preloadWithInitialAssessmentData = function(initialAssessmentObservations)
+    {
+        $scope.initializeData(initialAssessmentObservations);
+    }
 });

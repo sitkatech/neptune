@@ -38,7 +38,9 @@ namespace Neptune.Web.Views.FieldVisit
         public ObservationsViewData(Models.FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
             : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection) Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
-            ViewDataForAngular = new ObservationsViewDataForAngular(fieldVisit.TreatmentBMP.TreatmentBMPType);
+            var initialAssessmentObservations = fieldVisit.InitialAssessment.TreatmentBMPObservations.Select(x =>
+                new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
+            ViewDataForAngular = new ObservationsViewDataForAngular(fieldVisit.TreatmentBMP.TreatmentBMPType, initialAssessmentObservations);
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Observations(fieldVisit, (int)fieldVisitAssessmentType));
         }
 
@@ -48,10 +50,10 @@ namespace Neptune.Web.Views.FieldVisit
             {
             }
 
-            public ObservationsViewDataForAngular(Models.TreatmentBMPType treatmentBMPType)
+            public ObservationsViewDataForAngular(Models.TreatmentBMPType treatmentBMPType, List<CollectionMethodSectionViewModel> initialAssessmentObservations)
             {
                 ObservationTypeSchemas = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.SortByOrderThenName()
-                    .Select(x => new ObservationTypeSchema(x.TreatmentBMPAssessmentObservationType)).ToList();
+                    .Select(x => new ObservationTypeSchema(x.TreatmentBMPAssessmentObservationType, initialAssessmentObservations)).ToList();
             }
 
             public List<ObservationTypeSchema> ObservationTypeSchemas { get; }
@@ -73,8 +75,11 @@ namespace Neptune.Web.Views.FieldVisit
             public double MinimumValueOfObservations { get; }
             public double MaximumValueOfObservations { get; }
 
-            public ObservationTypeSchema(Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+            public List<CollectionMethodSectionViewModel> InitialAssessmentObservations { get; set; }
+
+            public ObservationTypeSchema(Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType, List<CollectionMethodSectionViewModel> initialAssessmentObservations)
             {
+                InitialAssessmentObservations = initialAssessmentObservations;
                 TreatmentBMPAssessmentObservationTypeID = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID;
                 TreatmentBMPAssessmentObservationTypeName = treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName;
                 ObservationTypeCollectionMethod = treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethod.ToEnum;
