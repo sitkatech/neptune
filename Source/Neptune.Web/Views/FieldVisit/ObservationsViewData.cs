@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.FieldVisit
         public ObservationsViewData(Models.FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
             : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection) Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
-            var initialAssessmentObservations = fieldVisit.InitialAssessment.TreatmentBMPObservations.Select(x =>
+            var initialAssessmentObservations = fieldVisit.InitialAssessment?.TreatmentBMPObservations.Select(x =>
                 new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
             ViewDataForAngular = new ObservationsViewDataForAngular(fieldVisit.TreatmentBMP.TreatmentBMPType, initialAssessmentObservations);
             SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Observations(fieldVisit, (int)fieldVisitAssessmentType));
