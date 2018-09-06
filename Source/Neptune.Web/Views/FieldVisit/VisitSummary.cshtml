@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
 @inherits VisitSummary
@@ -105,16 +106,20 @@
 }
 <hr />
 
-@using (Html.BeginForm())
+
+@if (ViewDataTyped.FieldVisit.FieldVisitStatus != FieldVisitStatus.Complete)
 {
-    <div class="row">
-        <div class="col-sm-12">
-            <button class="btn btn-neptune pull-right" style="display: inline-block;">
-                <span>
-                    Finalize Visit
-                </span>
-                <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px;"></span>
-            </button>
+    using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-neptune pull-right" style="display: inline-block;">
+                    <span>
+                        Finalize Visit
+                    </span>
+                    <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px;"></span>
+                </button>
+            </div>
         </div>
-    </div>
+    }
 }
