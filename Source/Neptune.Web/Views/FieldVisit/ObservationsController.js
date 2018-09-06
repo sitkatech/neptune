@@ -93,8 +93,41 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
     };
 
 
-    $scope.preloadWithInitialAssessmentData = function(initialAssessmentObservations)
-    {
-        $scope.initializeData(initialAssessmentObservations);
+    $scope.preloadWithInitialAssessmentData = function () {
+        $scope.initializeData($scope.InitialAssessmentObservations);
+        $scope.showModal = {
+            "display": "none"
+        };
+        $scope.showModalBackdrop = {
+            "display": "none"
+        };
     }
+
+
+
+
+    $scope.openCopyDataFromInitialAssessmentModal = function (initialAssessmentObservations) {
+        if ($scope.InitialAssessmentObservations == undefined) {
+            $scope.InitialAssessmentObservations = initialAssessmentObservations;
+        }
+        $scope.showModal = {
+            "display": "block"
+        };
+        $scope.showModalBackdrop = {
+            "display": "block"
+        };
+    }
+    
+
+    $scope.closeCopyDataFromInitialAssessmentModal = function () {
+        $scope.showModal = {
+            "display": "none"
+        };
+        $scope.showModalBackdrop = {
+            "display": "none"
+        };
+    }
+
 });
+
+
