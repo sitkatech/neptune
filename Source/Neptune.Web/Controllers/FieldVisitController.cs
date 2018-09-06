@@ -329,6 +329,7 @@ namespace Neptune.Web.Controllers
             if (viewModel.FinalizeVisit == "true")
             {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, (int) FieldVisitAssessmentType.Initial)));
         }
@@ -374,6 +375,7 @@ namespace Neptune.Web.Controllers
             if (viewModel.FinalizeVisit == "true")
             {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
@@ -453,6 +455,7 @@ namespace Neptune.Web.Controllers
             if (viewModel.FinalizeVisit == "true")
             {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
             }
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, (int) FieldVisitAssessmentType.PostMaintenance)));
         }
