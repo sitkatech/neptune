@@ -94,7 +94,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
 
 
     $scope.preloadWithInitialAssessmentData = function () {
-        $scope.initializeData($scope.InitialAssessmentObservations);
+        $scope.initializeData(_.cloneDeep($scope.InitialAssessmentObservations));
         $scope.showModal = {
             "display": "none"
         };
@@ -107,9 +107,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
 
 
     $scope.openCopyDataFromInitialAssessmentModal = function (initialAssessmentObservations) {
-        if ($scope.InitialAssessmentObservations == undefined) {
-            $scope.InitialAssessmentObservations = initialAssessmentObservations;
-        }
+        $scope.InitialAssessmentObservations = initialAssessmentObservations;
         $scope.modalContent = "This will overwrite any existing data on the Post-Maintenance Assessment for " + initialAssessmentObservations.length + " observations.";
         $scope.showModal = {
             "display": "block"
