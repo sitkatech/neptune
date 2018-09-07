@@ -37,7 +37,6 @@ namespace Neptune.Web.Views.Shared.ProjectControls
         {
             ProjectDisplayNames = projectDisplayNames;
             AddTagsPostUrl = addTagsPostUrl;
-            FindTagUrl = SitkaRoute<TagController>.BuildUrlFromExpression(c => c.Find(null));
 
             ProjectLabel = "Project" + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
         }

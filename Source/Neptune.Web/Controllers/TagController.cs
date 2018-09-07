@@ -37,37 +37,13 @@ namespace Neptune.Web.Controllers
     public class TagController : NeptuneBaseController
     {
 
-        //[JurisdictionManageFeature]
-        //public ViewResult Index()
-        //{
-        //    var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
-        //    var viewData = new IndexViewData(CurrentPerson, neptunePage);
-        //    return RazorView<Index, IndexViewData>(viewData);
-        //}
+        
 
-
-        [AnonymousUnclassifiedFeature]
-        public JsonResult Find(string term)
-        {
-            //var projectFindResults = GetViewableEIPProjectsFromSearchCriteria(term.Trim());
-            //var results = projectFindResults.Take(ProjectsCountLimit).Select(pfr => new ListItem(pfr.Project.GetDisplayName().ToEllipsifiedString(100), pfr.GetFactSheetUrl())).ToList();
-            //if (projectFindResults.Count > ProjectsCountLimit)
-            //{
-            //    results.Add(
-            //        new ListItem($"<span style='font-weight:bold'>Displaying {ProjectsCountLimit} of {projectFindResults.Count}</span><span style='color:blue; margin-left:8px'>See All Results</span>",
-            //            SitkaRoute<ProjectController>.BuildUrlFromExpression(x => x.Search(term))));
-            //}
-            return new JsonResult();
-        }
-
-
-        /// <summary>
-        /// Dummy get signature so that it can find the post action
-        /// </summary>
+        
         [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
-        public ContentResult AddTagsToProjectModal()
+        public ContentResult MarkTreatmentBMPAsVerifiedModal()
         {
             return new ContentResult();
         }
@@ -76,15 +52,19 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult AddTagsToProjectModal(BulkRowProjectsViewModel viewModel)
+        public ActionResult MarkTreatmentBMPAsVerifiedModal(BulkRowProjectsViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return new ModalDialogFormJsonResult();
             }
+
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.ProjectIDList.Contains(x.TreatmentBMPID)).ToList();
+            treatmentBMPs = treatmentBMPs.Select(x => { x.InventoryIsVerified = true; return x; }).ToList();
             return new ModalDialogFormJsonResult();
         }
 
+       
 
 
         [CrossAreaRoute]
@@ -109,7 +89,7 @@ namespace Neptune.Web.Controllers
                 projectDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<TagController>.BuildUrlFromExpression(x => x.AddTagsToProjectModal(null)));
+            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<TagController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)));
             return RazorPartialView<BulkRowProjects, BulkRowProjectsViewData, BulkRowProjectsViewModel>(viewData, viewModel);
         }
     }
