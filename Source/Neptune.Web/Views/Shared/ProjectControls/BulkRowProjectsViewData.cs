@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.Shared.ProjectControls
     {
         public readonly string FindTagUrl;
         public readonly List<string> ProjectDisplayNames;
-        public readonly string ProjectLabel;
+        public readonly string TreatmentBMPLabel;
         public readonly string AddTagsPostUrl;
 
         public BulkRowProjectsViewData(List<string> projectDisplayNames, string addTagsPostUrl)
@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.Shared.ProjectControls
             ProjectDisplayNames = projectDisplayNames;
             AddTagsPostUrl = addTagsPostUrl;
 
-            ProjectLabel = "Project" + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
+            TreatmentBMPLabel = "Treatment BMP" + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
         }
     }
 }

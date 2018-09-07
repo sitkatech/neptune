@@ -49,10 +49,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
@@ -60,11 +56,10 @@
                 Provisional BMP Records
             </div>
             <div class="panel-body">
-                <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" class="btn btn-neptune">Check All</span>
-                <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" class="btn btn-neptune">Uncheck All</span>
-
                 @if (ViewDataTyped.TreatmentBMPsCount > 0)
                 {
+                    <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" class="btn btn-neptune">Check All</span>
+                    <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" class="btn btn-neptune">Uncheck All</span>
                     @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                 }
                 else
