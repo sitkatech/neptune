@@ -16,6 +16,8 @@ namespace Neptune.Web.Views.ManagerDashboard
         public ProvisionalTreatmentBMPGridSpec ProvisionalTreatmentBMPGridSpec { get; }
         public string ProvisionalTreatmentBMPGridName { get; }
         public string ProvisionalTreatmentBMPGridDataUrl { get; }
+        public string ProvisionalTreatmentBMPGridCheckAllUrl { get; }
+        public string ProvisionalTreatmentBMPGridUncheckAllUrl { get; }
         public int TreatmentBMPsCount { get; }
         public string TreatmentBMPIndexUrl { get; }
 
@@ -44,6 +46,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridDataUrl =
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x => x.ProvisionalTreatmentBMPGridJsonData());
+            ProvisionalTreatmentBMPGridCheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.checkAll()";
+            ProvisionalTreatmentBMPGridUncheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.uncheckAll()";
             TreatmentBMPsCount = treatmentBMPsCount;
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Index());
         }

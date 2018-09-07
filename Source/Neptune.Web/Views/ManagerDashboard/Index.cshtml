@@ -60,7 +60,11 @@
                 Provisional BMP Records
             </div>
             <div class="panel-body">
-                @if(ViewDataTyped.TreatmentBMPsCount > 0){
+                <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" class="btn btn-neptune">Check All</span>
+                <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" class="btn btn-neptune">Uncheck All</span>
+
+                @if (ViewDataTyped.TreatmentBMPsCount > 0)
+                {
                     @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                 }
                 else
