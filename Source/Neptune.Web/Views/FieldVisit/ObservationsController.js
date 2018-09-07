@@ -110,7 +110,7 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
         if ($scope.InitialAssessmentObservations == undefined) {
             $scope.InitialAssessmentObservations = initialAssessmentObservations;
         }
-        $scope.modalContent = "This will overwrite any existing data on the Post-Maintenance Assessment for " + initialAssessmentObservations.length + " observations";
+        $scope.modalContent = "This will overwrite any existing data on the Post-Maintenance Assessment for " + initialAssessmentObservations.length + " observations.";
         $scope.showModal = {
             "display": "block"
         };
