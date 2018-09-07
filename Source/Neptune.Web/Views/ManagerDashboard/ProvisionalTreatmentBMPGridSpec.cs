@@ -35,6 +35,10 @@ namespace Neptune.Web.Views.ManagerDashboard
     {
         public ProvisionalTreatmentBMPGridSpec(Person currentPerson)
         {
+
+            BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<TagController>.BuildUrlFromExpression(x => x.BulkRowProjects(null)), "Verify all Selected BMPs", "Verify all Selected BMPs");
+            AddCheckBoxColumn();
+            Add("ProjectID", x => x.TreatmentBMPID, 0);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(y => y.Detail(x.PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
