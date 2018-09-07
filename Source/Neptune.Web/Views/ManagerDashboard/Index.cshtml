@@ -58,9 +58,11 @@
             <div class="panel-body">
                 @if (ViewDataTyped.TreatmentBMPsCount > 0)
                 {
-                    <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" class="btn btn-neptune">Check All</span>
-                    <span onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" class="btn btn-neptune">Uncheck All</span>
                     @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                    <div>
+                        <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" style="cursor: pointer; margin-right: 8px"><span class="glyphicon glyphicon-check"></span> Check All</a>
+                        <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" style="cursor: pointer"><span class="glyphicon glyphicon-unchecked"></span> Uncheck All</a>
+                    </div>
                 }
                 else
                 {

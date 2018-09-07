@@ -34,7 +34,7 @@ using Neptune.Web.Views.Shared.ProjectControls;
 
 namespace Neptune.Web.Controllers
 {
-    public class TagController : NeptuneBaseController
+    public class BulkRowController : NeptuneBaseController
     {
 
         
@@ -89,7 +89,7 @@ namespace Neptune.Web.Controllers
                 projectDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<TagController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)));
+            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)));
             return RazorPartialView<BulkRowProjects, BulkRowProjectsViewData, BulkRowProjectsViewModel>(viewData, viewModel);
         }
     }
