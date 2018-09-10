@@ -148,13 +148,13 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanLandUseResidential : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseResidential(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseResidential Instance = new WaterQualityManagementPlanLandUseResidential(1, @"Residential", @"Residential", 10);
+        public static readonly WaterQualityManagementPlanLandUseResidential Instance = new WaterQualityManagementPlanLandUseResidential(1, @"Residential", @"Residential", 70);
     }
 
     public partial class WaterQualityManagementPlanLandUseCommercial : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseCommercial(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseCommercial Instance = new WaterQualityManagementPlanLandUseCommercial(2, @"Commercial", @"Commercial", 20);
+        public static readonly WaterQualityManagementPlanLandUseCommercial Instance = new WaterQualityManagementPlanLandUseCommercial(2, @"Commercial", @"Commercial", 10);
     }
 
     public partial class WaterQualityManagementPlanLandUseIndustrial : WaterQualityManagementPlanLandUse
@@ -166,36 +166,36 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanLandUseOther : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseOther(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseOther Instance = new WaterQualityManagementPlanLandUseOther(4, @"Other", @"Other", 40);
+        public static readonly WaterQualityManagementPlanLandUseOther Instance = new WaterQualityManagementPlanLandUseOther(4, @"Other", @"Other", 90);
     }
 
     public partial class WaterQualityManagementPlanLandUseRoad : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseRoad(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseRoad Instance = new WaterQualityManagementPlanLandUseRoad(5, @"Road", @"Road", 50);
+        public static readonly WaterQualityManagementPlanLandUseRoad Instance = new WaterQualityManagementPlanLandUseRoad(5, @"Road", @"Road", 80);
     }
 
     public partial class WaterQualityManagementPlanLandUseFlood : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseFlood(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseFlood Instance = new WaterQualityManagementPlanLandUseFlood(6, @"Flood", @"Flood", 60);
+        public static readonly WaterQualityManagementPlanLandUseFlood Instance = new WaterQualityManagementPlanLandUseFlood(6, @"Flood", @"Flood", 20);
     }
 
     public partial class WaterQualityManagementPlanLandUseMunicipal : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseMunicipal(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseMunicipal Instance = new WaterQualityManagementPlanLandUseMunicipal(7, @"Municipal", @"Municipal", 70);
+        public static readonly WaterQualityManagementPlanLandUseMunicipal Instance = new WaterQualityManagementPlanLandUseMunicipal(7, @"Municipal", @"Municipal", 50);
     }
 
     public partial class WaterQualityManagementPlanLandUsePark : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUsePark(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUsePark Instance = new WaterQualityManagementPlanLandUsePark(8, @"Park", @"Park", 80);
+        public static readonly WaterQualityManagementPlanLandUsePark Instance = new WaterQualityManagementPlanLandUsePark(8, @"Park", @"Park", 60);
     }
 
     public partial class WaterQualityManagementPlanLandUseMixed : WaterQualityManagementPlanLandUse
     {
         private WaterQualityManagementPlanLandUseMixed(int waterQualityManagementPlanLandUseID, string waterQualityManagementPlanLandUseName, string waterQualityManagementPlanLandUseDisplayName, int sortOrder) : base(waterQualityManagementPlanLandUseID, waterQualityManagementPlanLandUseName, waterQualityManagementPlanLandUseDisplayName, sortOrder) {}
-        public static readonly WaterQualityManagementPlanLandUseMixed Instance = new WaterQualityManagementPlanLandUseMixed(9, @"Mixed", @"Mixed", 90);
+        public static readonly WaterQualityManagementPlanLandUseMixed Instance = new WaterQualityManagementPlanLandUseMixed(9, @"Mixed", @"Mixed", 40);
     }
 }
