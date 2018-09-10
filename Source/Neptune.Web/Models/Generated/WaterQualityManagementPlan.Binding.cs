@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydrologicSubareaID, bool? hydromodificationApplies, DateTime? dateOfContruction) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydrologicSubareaID, int? hydromodificationAppliesID, DateTime? dateOfContruction) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -52,7 +52,7 @@ namespace Neptune.Web.Models
             this.MaintenanceContactZip = maintenanceContactZip;
             this.WaterQualityManagementPlanPermitTermID = waterQualityManagementPlanPermitTermID;
             this.HydrologicSubareaID = hydrologicSubareaID;
-            this.HydromodificationApplies = hydromodificationApplies;
+            this.HydromodificationAppliesID = hydromodificationAppliesID;
             this.DateOfContruction = dateOfContruction;
         }
 
@@ -155,7 +155,7 @@ namespace Neptune.Web.Models
         public string MaintenanceContactZip { get; set; }
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
         public int? HydrologicSubareaID { get; set; }
-        public bool? HydromodificationApplies { get; set; }
+        public int? HydromodificationAppliesID { get; set; }
         public DateTime? DateOfContruction { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
@@ -171,6 +171,7 @@ namespace Neptune.Web.Models
         public WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get { return WaterQualityManagementPlanDevelopmentType.AllLookupDictionary[WaterQualityManagementPlanDevelopmentTypeID]; } }
         public WaterQualityManagementPlanPermitTerm WaterQualityManagementPlanPermitTerm { get { return WaterQualityManagementPlanPermitTermID.HasValue ? WaterQualityManagementPlanPermitTerm.AllLookupDictionary[WaterQualityManagementPlanPermitTermID.Value] : null; } }
         public HydrologicSubarea HydrologicSubarea { get { return HydrologicSubareaID.HasValue ? HydrologicSubarea.AllLookupDictionary[HydrologicSubareaID.Value] : null; } }
+        public HydromodificationApplies HydromodificationApplies { get { return HydromodificationAppliesID.HasValue ? HydromodificationApplies.AllLookupDictionary[HydromodificationAppliesID.Value] : null; } }
 
         public static class FieldLengths
         {

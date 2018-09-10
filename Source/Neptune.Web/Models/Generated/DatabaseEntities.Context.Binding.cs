@@ -264,6 +264,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(hydrologicSubarea, "HydrologicSubarea", primaryKey);
                     return hydrologicSubarea;
 
+                case "HydromodificationApplies":
+                    var hydromodificationApplies = HydromodificationApplies.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
+                    return hydromodificationApplies;
+
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
