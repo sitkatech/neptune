@@ -25,10 +25,10 @@ using LtInfo.Common.Models;
 
 namespace Neptune.Web.Views.Shared.ProjectControls
 {
-    public class BulkRowProjectsViewModel : FormViewModel
+    public class BulkRowEntityViewModel : FormViewModel
     {
         [Required]
-        public List<int> ProjectIDList { get; set; }
+        public List<int> EntityIDList { get; set; }
 
     }
 }

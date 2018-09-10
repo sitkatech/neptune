@@ -36,8 +36,8 @@ namespace LtInfo.Common.DhtmlWrappers
             DialogLinkText = dialogLinkText;
             DialogTitle = dialogTitle;
             CheckboxColumnIndex = 0;
-            ValueColumnName = "ProjectID";
-            ReturnListName = "ProjectIDList";
+            ValueColumnName = "EntityID";
+            ReturnListName = "EntityIDList";
 
         }
     }

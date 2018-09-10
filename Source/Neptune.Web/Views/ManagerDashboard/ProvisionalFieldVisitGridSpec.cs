@@ -41,7 +41,7 @@ namespace Neptune.Web.Views.ManagerDashboard
 
             BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits");
             AddCheckBoxColumn();
-            Add("ProjectID", x => x.FieldVisitID, 0);
+            Add("EntityID", x => x.FieldVisitID, 0);
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
