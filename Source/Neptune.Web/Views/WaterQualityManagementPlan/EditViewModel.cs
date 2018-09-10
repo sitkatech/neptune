@@ -67,7 +67,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public DateTime? DateOfContruction { get; set; }
 
         [DisplayName("Hydromodification Applies")]
-        public bool? HydromodificationApplies { get; set; }
+        public int? HydromodificationAppliesID { get; set; }
 
         [DisplayName("Permit Term")]
         public int? WaterQualityManagementPlanPermitTermID { get; set; }
@@ -100,12 +100,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
             DateOfContruction = waterQualityManagementPlan.DateOfContruction;
-            HydromodificationApplies = waterQualityManagementPlan.HydromodificationApplies;
+            HydromodificationAppliesID = waterQualityManagementPlan.HydromodificationAppliesID;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
         }
 
-        public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
@@ -126,7 +126,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
             waterQualityManagementPlan.DateOfContruction = DateOfContruction;
-            waterQualityManagementPlan.HydromodificationApplies = HydromodificationApplies;
+            waterQualityManagementPlan.HydromodificationAppliesID = HydromodificationAppliesID;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
         }

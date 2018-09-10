@@ -15,6 +15,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<SelectListItem> WaterQualityManagementPlanLandUses { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanPermitTerms { get; }
         public IEnumerable<SelectListItem> HydrologicSubareas { get; }
+        public IEnumerable<HydromodificationApplies> HydromodificationAppliesType { get; }
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions)
         {
@@ -30,14 +31,17 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .OrderBy(x => x.SortOrder)
                 .ToList();
             WaterQualityManagementPlanLandUses = WaterQualityManagementPlanLandUse.All
-                .OrderBy(x => x.WaterQualityManagementPlanLandUseDisplayName)
-                .ToSelectList(x => x.WaterQualityManagementPlanLandUseID.ToString(), x => x.WaterQualityManagementPlanLandUseDisplayName);
+                .OrderBy(x => x.SortOrder)
+                .ToSelectListWithEmptyFirstRow(x => x.WaterQualityManagementPlanLandUseID.ToString(), x => x.WaterQualityManagementPlanLandUseDisplayName);
             WaterQualityManagementPlanPermitTerms = WaterQualityManagementPlanPermitTerm.All
                 .OrderBy(x => x.WaterQualityManagementPlanPermitTermDisplayName)
-                .ToSelectList(x => x.WaterQualityManagementPlanPermitTermID.ToString(), x => x.WaterQualityManagementPlanPermitTermDisplayName);
+                .ToSelectListWithEmptyFirstRow(x => x.WaterQualityManagementPlanPermitTermID.ToString(), x => x.WaterQualityManagementPlanPermitTermDisplayName);
             HydrologicSubareas = HydrologicSubarea.All
                 .OrderBy(x => x.SortOrder)
-                .ToSelectList(x => x.HydrologicSubareaID.ToString(), x => x.HydrologicSubareaDisplayName);
+                .ToSelectListWithEmptyFirstRow(x => x.HydrologicSubareaID.ToString(), x => x.HydrologicSubareaDisplayName);
+            HydromodificationAppliesType = HydromodificationApplies.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
         }
     }
 }
