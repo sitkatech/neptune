@@ -15,6 +15,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<SelectListItem> WaterQualityManagementPlanLandUses { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanPermitTerms { get; }
         public IEnumerable<SelectListItem> HydrologicSubareas { get; }
+        public IEnumerable<HydromodificationApplies> HydromodificationAppliesType { get; }
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions)
         {
@@ -38,6 +39,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HydrologicSubareas = HydrologicSubarea.All
                 .OrderBy(x => x.SortOrder)
                 .ToSelectListWithEmptyFirstRow(x => x.HydrologicSubareaID.ToString(), x => x.HydrologicSubareaDisplayName);
+            HydromodificationAppliesType = HydromodificationApplies.All
+                .OrderBy(x => x.SortOrder)
+                .ToList();
         }
     }
 }

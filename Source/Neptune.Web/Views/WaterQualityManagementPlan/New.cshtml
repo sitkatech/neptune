@@ -113,22 +113,19 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.HydromodificationApplies)
+                        @Html.LabelWithSugarFor(m => m.HydromodificationAppliesID)
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        <div class="radio-inline">
-                            <label>
-                                @Html.RadioButtonFor(m => m.HydromodificationApplies, "True")
-                                Applicable
-                            </label>
-                        </div>
-                        <div class="radio-inline">
-                            <label>
-                                @Html.RadioButtonFor(m => m.HydromodificationApplies, "False")
-                                Exempt
-                            </label>
-                        </div>
-                        @Html.ValidationMessageFor(m => m.HydromodificationApplies)
+                        @foreach (var HydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
+                        {
+                            <div class="radio-inline">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.HydromodificationAppliesID, HydromodificationAppliesType.HydromodificationAppliesID)
+                                    @HydromodificationAppliesType.HydromodificationAppliesDisplayName
+                                </label>
+                            </div>
+                        }
+                        @Html.ValidationMessageFor(m => m.HydromodificationAppliesID)
                     </div>
                 </div>
                 <div class="form-group">

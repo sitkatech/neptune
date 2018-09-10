@@ -95,7 +95,12 @@
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Hydromodification Applies</label>
-                    <div class="col-sm-7"> @ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies.ToString() </div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies.HydromodificationAppliesDisplayName
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Permit Term</label>
