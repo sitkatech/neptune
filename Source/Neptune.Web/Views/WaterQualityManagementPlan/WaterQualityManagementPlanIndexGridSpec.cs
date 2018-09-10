@@ -48,7 +48,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Status", x => x.WaterQualityManagementPlanStatus.WaterQualityManagementPlanStatusDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Development Type", x => x.WaterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Land Use", x => x.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Permit Term", x => x.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Approval Date", x => x.ApprovalDate, 120);
+            Add("Date of Construction", x => x.DateOfContruction, 120);
+            Add("Hydromodification Applies", x => x.HydromodificationApplies.ToString(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Maintenance Contact Name", x => x.MaintenanceContactName, 100);
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
             Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
