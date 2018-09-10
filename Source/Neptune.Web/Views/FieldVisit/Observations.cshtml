@@ -52,8 +52,17 @@
     }
 </style>
 
-<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData()" name="observationForm" class="field-visit-form">
+<form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
+        <div ng-show="$first" style="background-color: #f9f9f9; text-align: right; padding-bottom: 16px;">
+            <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations != null" ng-click="openCopyDataFromInitialAssessmentModal(observationTypeSchema.InitialAssessmentObservations)">
+                Copy Data from Initial Assessment
+            </button>
+            <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations == null"
+                    title="No Pre-Maintenance Assessment data entered" disabled="disabled">
+                Copy Data from Initial Assessment
+            </button>
+        </div>
         <div class="col-xs-12">
             <h4 ng-bind="observationTypeSchema.TreatmentBMPAssessmentObservationTypeName"></h4>
         </div>
@@ -80,10 +89,31 @@
             <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Save &amp; Wrap Up Visit</a>
             <input type="hidden" name="@Html.NameFor(x => x.StepToAdvanceTo)" value="@StepToAdvanceToEnum.WrapUpPage">
         </div>
-        
+
         <div ng-repeat="obs in ObservationData | orderBy: TreatmentBMPAssessmentObservationTypeID">
-            <input type="hidden" name="@Html.NameFor(m => m.Observations[0].TreatmentBMPAssessmentObservationTypeID).ToString().Replace("0", "{{$index}}")" ng-value="obs.TreatmentBMPAssessmentObservationTypeID"/>
-            <input type="hidden" name="@Html.NameFor(m => m.Observations[0].ObservationData).ToString().Replace("0", "{{$index}}")" ng-value="jsonify(obs)"/>
+            <input type="hidden" name="@Html.NameFor(m => m.Observations[0].TreatmentBMPAssessmentObservationTypeID).ToString().Replace("0", "{{$index}}")" ng-value="obs.TreatmentBMPAssessmentObservationTypeID" />
+            <input type="hidden" name="@Html.NameFor(m => m.Observations[0].ObservationData).ToString().Replace("0", "{{$index}}")" ng-value="jsonify(obs)" />
+        </div>
+    </div>
+
+    <div class="modal-backdrop in" style="display:none" ng-style="showModalBackdrop"></div>
+    <div class='modal neptune-modal' id='copyDataFromInitialAssessment' tabindex='-1' ng-style="showModal">
+        <div class='modal-dialog neptune-modal-dialog' style='width:500px; max-width: 500px'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='modal-close-button btn btn-xs btn-neptune' data-dismiss='modal' ng-click='closeCopyDataFromInitialAssessmentModal()'><span>&times;</span></button>
+                    <span class='modal-title'>Copy Data from Initial Assessment?</span>
+                </div>
+                <div class='modal-body'>{{modalContent}}</div>
+                <div class='modal-footer'>
+                    <div class='modal-footer-buttons'>
+                        <button type='button' ng-click="preloadWithInitialAssessmentData()" class='btn btn-xs btn-neptune'>Confirm</button>
+                        <button type='button' ng-click='closeCopyDataFromInitialAssessmentModal()' class='btn btn-xs btn-neptune' data-dismiss='modal'>Cancel</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
+
+

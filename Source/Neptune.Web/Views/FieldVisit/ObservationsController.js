@@ -57,10 +57,10 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
         return newObservationData;
     };
 
-    $scope.initializeData = function () {
+    $scope.initializeData = function (existingObservations) {
         var existingObservationData = [];
-        if ($scope.AngularModel.Observations.length > 0) {
-            existingObservationData = $scope.AngularModel.Observations;
+        if (existingObservations.length > 0) {
+            existingObservationData = existingObservations;
         }
         var observationData = [];
         for (var j = 0; j < $scope.AngularViewData.ObservationTypeSchemas.length; j++) {
@@ -91,4 +91,42 @@ angular.module("NeptuneApp").controller("ObservationsController", function ($sco
     $scope.jsonify = function(observation) {
         return angular.toJson(observation.ObservationData);
     };
+
+
+    $scope.preloadWithInitialAssessmentData = function () {
+        $scope.initializeData(_.cloneDeep($scope.InitialAssessmentObservations));
+        $scope.showModal = {
+            "display": "none"
+        };
+        $scope.showModalBackdrop = {
+            "display": "none"
+        };
+    }
+
+
+
+
+    $scope.openCopyDataFromInitialAssessmentModal = function (initialAssessmentObservations) {
+        $scope.InitialAssessmentObservations = initialAssessmentObservations;
+        $scope.modalContent = "This will overwrite any existing data on the Post-Maintenance Assessment for " + initialAssessmentObservations.length + " observations.";
+        $scope.showModal = {
+            "display": "block"
+        };
+        $scope.showModalBackdrop = {
+            "display": "block"
+        };
+    }
+    
+
+    $scope.closeCopyDataFromInitialAssessmentModal = function () {
+        $scope.showModal = {
+            "display": "none"
+        };
+        $scope.showModalBackdrop = {
+            "display": "none"
+        };
+    }
+
 });
+
+
