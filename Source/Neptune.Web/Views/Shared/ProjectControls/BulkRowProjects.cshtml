@@ -26,7 +26,7 @@
 {
 
     <p>
-        No projects selected to be tagged.
+        No @{@ViewDataTyped.EntityLabel}s selected to be verified.
     </p>
 
     <script type="text/javascript">
@@ -39,7 +39,7 @@
 }
 else
 {
-    <form action="@ViewDataTyped.AddTagsPostUrl" method="post">      
+    <form action="@ViewDataTyped.BulkRowPostUrl" method="post">      
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
             <div style="margin: 5px 0">Marking @Model.ProjectIDList.Count @ViewDataTyped.TreatmentBMPLabel as Verified:</div>
             <ul>

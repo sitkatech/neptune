@@ -112,10 +112,10 @@ namespace Neptune.Web.Controllers
             if (viewModel.ProjectIDList != null)
             {
                 var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.ProjectIDList.Contains(x.TreatmentBMPID)).ToList();
-                projectDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
+                projectDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).OrderBy(x => x).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)));
+            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP");
             return RazorPartialView<BulkRowProjects, BulkRowProjectsViewData, BulkRowProjectsViewModel>(viewData, viewModel);
         }
 
@@ -139,10 +139,10 @@ namespace Neptune.Web.Controllers
             if (viewModel.ProjectIDList != null)
             {
                 var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.ProjectIDList.Contains(x.FieldVisitID)).ToList();
-                fieldVisitDisplayNames = fieldVisits.Select(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+                fieldVisitDisplayNames = fieldVisits.Select(x => x.TreatmentBMP.TreatmentBMPName).OrderBy(x => x).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowProjectsViewData(fieldVisitDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)));
+            var viewData = new BulkRowProjectsViewData(fieldVisitDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit");
             return RazorPartialView<BulkRowProjects, BulkRowProjectsViewData, BulkRowProjectsViewModel>(viewData, viewModel);
         }
     }

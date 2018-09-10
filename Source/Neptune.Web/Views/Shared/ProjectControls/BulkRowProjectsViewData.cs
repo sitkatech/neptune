@@ -28,17 +28,18 @@ namespace Neptune.Web.Views.Shared.ProjectControls
 {
     public class BulkRowProjectsViewData
     {
-        public readonly string FindTagUrl;
-        public readonly List<string> ProjectDisplayNames;
-        public readonly string TreatmentBMPLabel;
-        public readonly string AddTagsPostUrl;
+        public List<string> ProjectDisplayNames { get; }
+        public string TreatmentBMPLabel { get; }
+        public string BulkRowPostUrl { get; }
+        public string EntityLabel { get;  }
 
-        public BulkRowProjectsViewData(List<string> projectDisplayNames, string addTagsPostUrl)
+        public BulkRowProjectsViewData(List<string> projectDisplayNames, string bulkRowPostUrl, string entityLabel)
         {
             ProjectDisplayNames = projectDisplayNames;
-            AddTagsPostUrl = addTagsPostUrl;
+            BulkRowPostUrl = bulkRowPostUrl;
 
-            TreatmentBMPLabel = "Treatment BMP" + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
+            EntityLabel = entityLabel;
+            TreatmentBMPLabel = entityLabel + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
         }
     }
 }
