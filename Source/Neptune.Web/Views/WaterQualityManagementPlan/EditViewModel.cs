@@ -105,7 +105,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
         }
 
-        public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
