@@ -13,6 +13,7 @@
         <div class="form-horizontal">
             @using (Html.BeginForm())
             {
+                @Html.HiddenFor(m => m.WaterQualityManagementPlanID, new { Value = "-1"})
             <fieldset>
                 <legend>Water Quality Management Plan Details</legend>
                 <div class="form-group">
