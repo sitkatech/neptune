@@ -13,6 +13,8 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string GridDataUrl { get; }
         public int FieldVisitCount { get; }
         public string FieldVisitsIndexUrl { get; }
+        public string ProvisionalFieldVisitGridCheckAllUrl { get; }
+        public string ProvisionalFieldVisitGridUncheckAllUrl { get; }
         public ProvisionalTreatmentBMPGridSpec ProvisionalTreatmentBMPGridSpec { get; }
         public string ProvisionalTreatmentBMPGridName { get; }
         public string ProvisionalTreatmentBMPGridDataUrl { get; }
@@ -34,6 +36,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             };
             GridName = "ProvisionalFieldVisitGrid";
             GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData());
+            ProvisionalFieldVisitGridCheckAllUrl = $"Sitka.{GridName}.grid.checkAll()";
+            ProvisionalFieldVisitGridUncheckAllUrl = $"Sitka.{GridName}.grid.uncheckAll()";
             FieldVisitCount = fieldVisitCount;
             FieldVisitsIndexUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
 

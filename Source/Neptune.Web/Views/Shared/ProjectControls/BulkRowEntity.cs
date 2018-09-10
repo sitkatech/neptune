@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowProjectsViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowProjects.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,27 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-
-
 namespace Neptune.Web.Views.Shared.ProjectControls
 {
-    public class BulkRowProjectsViewData
+    public abstract class BulkRowEntity : LtInfo.Common.Mvc.TypedWebPartialViewPage<BulkRowEntityViewData, BulkRowEntityViewModel>
     {
-        public readonly string FindTagUrl;
-        public readonly List<string> ProjectDisplayNames;
-        public readonly string TreatmentBMPLabel;
-        public readonly string AddTagsPostUrl;
-
-        public BulkRowProjectsViewData(List<string> projectDisplayNames, string addTagsPostUrl)
-        {
-            ProjectDisplayNames = projectDisplayNames;
-            AddTagsPostUrl = addTagsPostUrl;
-
-            TreatmentBMPLabel = "Treatment BMP" + (ProjectDisplayNames.Count > 1 ? "s" : String.Empty);
-        }
     }
 }

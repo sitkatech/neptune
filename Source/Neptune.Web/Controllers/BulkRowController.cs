@@ -52,25 +52,51 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult MarkTreatmentBMPAsVerifiedModal(BulkRowProjectsViewModel viewModel)
+        public ActionResult MarkTreatmentBMPAsVerifiedModal(BulkRowEntityViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return new ModalDialogFormJsonResult();
             }
 
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.ProjectIDList.Contains(x.TreatmentBMPID)).ToList();
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
             treatmentBMPs = treatmentBMPs.Select(x => { x.InventoryIsVerified = true; return x; }).ToList();
             return new ModalDialogFormJsonResult();
         }
 
-       
 
 
         [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
-        public ContentResult BulkRowProjects()
+        public ContentResult MarkFieldVistsVerifiedModal()
+        {
+            return new ContentResult();
+        }
+
+        [CrossAreaRoute]
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult MarkFieldVistsVerifiedModal(BulkRowEntityViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ModalDialogFormJsonResult();
+            }
+
+            var fieldVisit = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+            fieldVisit = fieldVisit.Select(x => { x.IsFieldVisitVerified = true; return x; }).ToList();
+            return new ModalDialogFormJsonResult();
+        }
+
+
+
+
+        [CrossAreaRoute]
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult BulkRowTreatmentBMPs()
         {
             return new ContentResult();
         }
@@ -79,18 +105,45 @@ namespace Neptune.Web.Controllers
         [CrossAreaRoute]
         [HttpPost]
         [JurisdictionManageFeature]
-        public PartialViewResult BulkRowProjects(BulkRowProjectsViewModel viewModel)
+        public PartialViewResult BulkRowTreatmentBMPs(BulkRowEntityViewModel viewModel)
         {
-            var projectDisplayNames = new List<string>();
+            var treatmentBMPDisplayNames = new List<string>();
 
-            if (viewModel.ProjectIDList != null)
+            if (viewModel.EntityIDList != null)
             {
-                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.ProjectIDList.Contains(x.TreatmentBMPID)).ToList();
-                projectDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).ToList();
+                var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
+                treatmentBMPDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).OrderBy(x => x).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowProjectsViewData(projectDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)));
-            return RazorPartialView<BulkRowProjects, BulkRowProjectsViewData, BulkRowProjectsViewModel>(viewData, viewModel);
+            var viewData = new BulkRowEntityViewData(treatmentBMPDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP");
+            return RazorPartialView<BulkRowEntity, BulkRowEntityViewData, BulkRowEntityViewModel>(viewData, viewModel);
+        }
+
+
+        [CrossAreaRoute]
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult BulkRowFieldVisits()
+        {
+            return new ContentResult();
+        }
+
+
+        [CrossAreaRoute]
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public PartialViewResult BulkRowFieldVisits(BulkRowEntityViewModel viewModel)
+        {
+            var fieldVisitDisplayNames = new List<string>();
+
+            if (viewModel.EntityIDList != null)
+            {
+                var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+                fieldVisitDisplayNames = fieldVisits.Select(x => x.TreatmentBMP.TreatmentBMPName).OrderBy(x => x).ToList();
+            }
+            ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
+            var viewData = new BulkRowEntityViewData(fieldVisitDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit");
+            return RazorPartialView<BulkRowEntity, BulkRowEntityViewData, BulkRowEntityViewModel>(viewData, viewModel);
         }
     }
 }
