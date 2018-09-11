@@ -39,7 +39,6 @@ namespace Neptune.Web.Views.ManagerDashboard
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
 
-            BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits");
             AddCheckBoxColumn();
             Add("EntityID", x => x.FieldVisitID, 0);
             Add(string.Empty,

@@ -20,7 +20,12 @@
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
+@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Common
+@using Neptune.Web.Controllers
+
 @inherits Neptune.Web.Views.ManagerDashboard.Index
 @section JavascriptAndStylesContent
 {
@@ -37,12 +42,16 @@
                 Provisional Assessment and Maintenance Records
             </div>
             <div class="panel-body">
+
                 @if (ViewDataTyped.FieldVisitCount > 0)
                 {
+                    <p>A list of all Field Visits that are in progress or are complete but not yet verified ("provisional") are shown here. Click the View button to see details of the Field Visit and verify the Field Visit Assessment and Maintenance records. You can also select multiple Field Visit records and verify them in bulk through grid.</p>
                     @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                     <div>
-                        <a onclick="@ViewDataTyped.ProvisionalFieldVisitGridCheckAllUrl" style="cursor: pointer; margin-right: 8px"><span class="glyphicon glyphicon-check"></span> Check All</a>
-                        <a onclick="@ViewDataTyped.ProvisionalFieldVisitGridUncheckAllUrl" style="cursor: pointer"><span class="glyphicon glyphicon-unchecked"></span> Uncheck All</a>
+                        <a onclick="@ViewDataTyped.ProvisionalFieldVisitGridCheckAllUrl" style="cursor: pointer; margin-right: 8px"><span class="glyphicon glyphicon-check"></span> Select All</a>
+                        <a onclick="@ViewDataTyped.ProvisionalFieldVisitGridUncheckAllUrl" style="cursor: pointer"><span class="glyphicon glyphicon-unchecked"></span> Unselect All</a>
+                        @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(@ViewDataTyped.ProvisionalTreatmentBMPGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
+                            .BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits")))
                     </div>
                 }
                 else
@@ -60,17 +69,29 @@
                 Provisional BMP Records
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.TreatmentBMPsCount > 0)
+
+                @using (Html.BeginForm())
                 {
-                    @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
-                    <div>
-                        <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" style="cursor: pointer; margin-right: 8px"><span class="glyphicon glyphicon-check"></span> Check All</a>
-                        <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" style="cursor: pointer"><span class="glyphicon glyphicon-unchecked"></span> Uncheck All</a>
-                    </div>
-                }
-                else
-                {
-                    <p> All provisional BMP Records have been reviewed and verified. <a href="@ViewDataTyped.TreatmentBMPIndexUrl">View all BMP Records</a></p>
+                    if (ViewDataTyped.TreatmentBMPsCount > 0)
+
+                    {
+                        <div class="pull-right">
+                            @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(@ViewDataTyped.ProvisionalTreatmentBMPGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
+                                .BuildUrlFromExpression(x => x.BulkRowTreatmentBMPs(null)), "Verify all Selected BMPs", "Verify all Selected BMPs")))
+                        </div>
+                        <p>A list of all BMPs with unverified inventory data is shown here. Click the View button to see details of an individual BMP and verify the BMP inventory data. You can also select multiple BMP records and verify them in bulk through grid.</p>
+                        <div style="margin-bottom: 12px">
+                            <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridCheckAllUrl" class=""><span class="glyphicon glyphicon-check"></span> Select All</a>
+                            <a onclick="@ViewDataTyped.ProvisionalTreatmentBMPGridUncheckAllUrl" class=""><span class="glyphicon glyphicon-unchecked"></span> Unselect All</a>
+                            
+                            
+                        </div>
+                        @Html.DhtmlxGrid(ViewDataTyped.ProvisionalTreatmentBMPGridSpec, ViewDataTyped.ProvisionalTreatmentBMPGridName, ViewDataTyped.ProvisionalTreatmentBMPGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                    }
+                    else
+                    {
+                        <p> All provisional BMP Records have been reviewed and verified. <a href="@ViewDataTyped.TreatmentBMPIndexUrl">View all BMP Records</a></p>
+                    }
                 }
             </div>
         </div>

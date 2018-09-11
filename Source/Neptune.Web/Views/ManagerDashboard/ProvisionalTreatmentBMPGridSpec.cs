@@ -36,7 +36,6 @@ namespace Neptune.Web.Views.ManagerDashboard
         public ProvisionalTreatmentBMPGridSpec(Person currentPerson)
         {
 
-            BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.BulkRowTreatmentBMPs(null)), "Verify all Selected BMPs", "Verify all Selected BMPs");
             AddCheckBoxColumn();
             Add("EntityID", x => x.TreatmentBMPID, 0);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);
