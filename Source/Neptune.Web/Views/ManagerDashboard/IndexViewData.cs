@@ -28,28 +28,28 @@ namespace Neptune.Web.Views.ManagerDashboard
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";
-            GridSpec = new ProvisionalFieldVisitGridSpec(currentPerson)
+            GridName = "ProvisionalFieldVisitGrid";
+            GridSpec = new ProvisionalFieldVisitGridSpec(currentPerson, GridName)
             {
                 ObjectNameSingular = "Field Visit",
                 ObjectNamePlural = "Field Visits",
                 SaveFiltersInCookie = true
             };
-            GridName = "ProvisionalFieldVisitGrid";
-            GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData());
+            GridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(j => j.AllFieldVisitsGridJsonData(GridName));
             ProvisionalFieldVisitGridCheckAllUrl = $"Sitka.{GridName}.grid.checkAll()";
             ProvisionalFieldVisitGridUncheckAllUrl = $"Sitka.{GridName}.grid.uncheckAll()";
             FieldVisitCount = fieldVisitCount;
             FieldVisitsIndexUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
 
-            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson)
+            ProvisionalTreatmentBMPGridName = "assessmentsGrid";
+            ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson, ProvisionalTreatmentBMPGridName)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",
                 SaveFiltersInCookie = true
             };
-            ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridDataUrl =
-                SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x => x.ProvisionalTreatmentBMPGridJsonData());
+                SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x => x.ProvisionalTreatmentBMPGridJsonData(ProvisionalTreatmentBMPGridName));
             ProvisionalTreatmentBMPGridCheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.checkAll()";
             ProvisionalTreatmentBMPGridUncheckAllUrl = $"Sitka.{ProvisionalTreatmentBMPGridName}.grid.uncheckAll()";
             TreatmentBMPsCount = treatmentBMPsCount;

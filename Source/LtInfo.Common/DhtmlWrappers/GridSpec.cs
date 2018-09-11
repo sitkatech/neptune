@@ -53,6 +53,7 @@ namespace LtInfo.Common.DhtmlWrappers
         public string CustomExcelDownloadLinkText { get; set; }
 
         public List<String> ArbitraryHtml { get; set; }
+        public List<String> ArbitraryHeaderHtml { get; set; }
         public bool? SaveFiltersInCookie { get; set; }
         public string GridInstructionsWhenEmpty { get; set; }
         public ModalDialogForm CreateEntityModalDialogForm { get; set; }

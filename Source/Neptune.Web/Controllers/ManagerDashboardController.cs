@@ -45,18 +45,18 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData()
+        public GridJsonNetJObjectResult<FieldVisit> AllFieldVisitsGridJsonData(string gridName)
         {
-            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson);
+            var gridSpec = new ProvisionalFieldVisitGridSpec(CurrentPerson, gridName);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ThenBy(x => x.VisitDate).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<FieldVisit>(fieldVisits, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
         [JurisdictionManageFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData()
+        public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
         {
-            var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson);
+            var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }

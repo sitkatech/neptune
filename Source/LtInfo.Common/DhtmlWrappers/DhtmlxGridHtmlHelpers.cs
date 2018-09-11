@@ -222,11 +222,13 @@ namespace LtInfo.Common.DhtmlWrappers
         {
             var filteredStateHtml = CreateFilteredStateHtml(gridName, gridSpec.ShowFilterBar);
             var gridHeaderIconsHtml = CreateGridHeaderIconsHtml(gridSpec, gridName, excelDownloadWithFooterUrl, excelDownloadWithoutFooterUrl);
+            var arbitraryHeaderHtml = CreateArbitraryHeaderHtml(gridSpec.ArbitraryHeaderHtml, "    ");
 
             return $@"
     <span class=""record-count"">
         {CreateViewingRowCountGridHeaderHtml(gridName, gridSpec.ObjectNamePlural)}
         {filteredStateHtml}
+        {arbitraryHeaderHtml}
     </span>
     <span class=""actions pull-right"">
     {gridHeaderIconsHtml}
@@ -288,7 +290,7 @@ namespace LtInfo.Common.DhtmlWrappers
                     ModalDialogFormHelper.DefaultDialogWidth,
                     "Save",
                     "Cancel",
-                    new List<string>(),
+                    new List<string>{ "btn", "btn-neptune"},
                     null,
                     getProjectIDFunctionString).ToString();
         }
@@ -319,6 +321,17 @@ namespace LtInfo.Common.DhtmlWrappers
         public static string CreateArbitraryHtml(IEnumerable<string> arbitraryHtml, string indent)
         {
             return arbitraryHtml != null ? String.Join("\r\n", arbitraryHtml.Select(x => $"{indent}{x}")) : String.Empty;
+        }
+
+        /// <summary>
+        /// Arbitraty html that goes up in the grid header
+        /// </summary>
+        /// <param name="arbitraryHeaderHtml"></param>
+        /// <param name="indent"></param>
+        /// <returns></returns>
+        public static string CreateArbitraryHeaderHtml(IEnumerable<string> arbitraryHeaderHtml, string indent)
+        {
+            return arbitraryHeaderHtml != null ? String.Join("\r\n", arbitraryHeaderHtml.Select(x => $"{indent}{x}")) : String.Empty;
         }
 
         /// <summary>
