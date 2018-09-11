@@ -26,7 +26,7 @@
 {
 
     <p>
-        No @{@ViewDataTyped.EntityLabel}s have been selected.
+        No @{@ViewDataTyped.EntityLabel}s selected for Verification
     </p>
 
     <script type="text/javascript">
@@ -41,7 +41,7 @@ else
 {
     <form action="@ViewDataTyped.BulkRowPostUrl" method="post">      
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
-            <div style="margin: 5px 0">Marking @Model.EntityIDList.Count @ViewDataTyped.EntityLabel as Verified:</div>
+            <div style="margin: 5px 0">Do you want to set the inventory status for @Model.EntityIDList.Count @ViewDataTyped.EntityLabel to Verified? @ViewDataTyped.EntityModalDescription</div>
             <ul>
                 @foreach (var projectName in ViewDataTyped.EntityDisplayNames)
                 {

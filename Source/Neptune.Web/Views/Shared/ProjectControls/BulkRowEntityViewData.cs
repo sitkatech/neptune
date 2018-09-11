@@ -31,14 +31,15 @@ namespace Neptune.Web.Views.Shared.ProjectControls
         public List<string> EntityDisplayNames { get; }
         public string BulkRowPostUrl { get; }
         public string EntityLabel { get;  }
+        public string EntityModalDescription { get;  }
 
-        public BulkRowEntityViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel)
+        public BulkRowEntityViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
         {
             EntityDisplayNames = entityDisplayNames;
             BulkRowPostUrl = bulkRowPostUrl;
 
             EntityLabel = entityLabel + (EntityDisplayNames.Count > 1 ? "s" : String.Empty);
-
+            EntityModalDescription = entityModalDescription;
         }
     }
 }
