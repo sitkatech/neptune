@@ -47,7 +47,7 @@
                 {
                     <p>A list of all Field Visits that are in progress or are complete but not yet verified ("provisional") are shown here. Click the View button to see details of the Field Visit and verify the Field Visit Assessment and Maintenance records. You can also select multiple Field Visit records and verify them in bulk through grid.</p>
                     <div>
-                        @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(@ViewDataTyped.ProvisionalTreatmentBMPGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
+                        @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(@ViewDataTyped.GridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
                             .BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits")))
                     </div>
                     @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
