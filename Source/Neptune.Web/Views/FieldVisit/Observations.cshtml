@@ -70,6 +70,7 @@
             <div class="form-horizontal">
                 <div>
                     <span ng-bind="observationTypeSchema.AssessmentDescription"></span>
+                    <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span>
                 </div>
                 <br />
                 <div ng-if="observationTypeSchema.ObservationTypeCollectionMethod == 1" observation-type-id="{{observationTypeSchema.TreatmentBMPAssessmentObservationTypeID}}" discrete-value-collection-method datasource="getObservationData(observationTypeSchema)" measurement-unit-label-and-unit="{{observationTypeSchema.MeasurementUnitLabelAndUnit}}" properties-to-observe="observationTypeSchema.PropertiesToObserve" maximum-value-of-observations="{{observationTypeSchema.MaximumValueOfObservations}}" minimum-value-of-observations="{{observationTypeSchema.MinimumValueOfObservations}}"></div>
