@@ -134,7 +134,8 @@ namespace Neptune.Web.Controllers
             var stormwaterJurisdictions = new List<Role> {Role.Admin, Role.SitkaAdmin}.Contains(CurrentPerson.Role)
                 ? HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList()
                 : CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
-            var viewData = new NewViewData(stormwaterJurisdictions);
+            var hydrologicSubareas = HttpRequestStorage.DatabaseEntities.HydrologicSubareas.ToList();
+            var viewData = new NewViewData(stormwaterJurisdictions, hydrologicSubareas);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
@@ -168,7 +169,8 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewEdit(EditViewModel viewModel)
         {
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
-            var viewData = new EditViewData(stormwaterJurisdictions);
+            var hydrologicSubareas = HttpRequestStorage.DatabaseEntities.HydrologicSubareas.ToList();
+            var viewData = new EditViewData(stormwaterJurisdictions, hydrologicSubareas);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

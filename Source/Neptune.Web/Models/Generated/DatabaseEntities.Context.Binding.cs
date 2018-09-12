@@ -103,7 +103,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FundingEvent> FundingEvents { get { return AllFundingEvents.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FundingSource> AllFundingSources { get; set; }
         public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
+        public virtual DbSet<HydrologicSubarea> AllHydrologicSubareas { get; set; }
+        public virtual IQueryable<HydrologicSubarea> HydrologicSubareas { get { return AllHydrologicSubareas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
         public virtual IQueryable<MaintenanceRecordObservation> MaintenanceRecordObservations { get { return AllMaintenanceRecordObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservationValue> AllMaintenanceRecordObservationValues { get; set; }

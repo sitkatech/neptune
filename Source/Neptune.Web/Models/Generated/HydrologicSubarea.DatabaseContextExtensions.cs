@@ -4,7 +4,6 @@
 //  Source Table: [dbo].[HydrologicSubarea]
 using System.Collections.Generic;
 using System.Linq;
-using EntityFramework.Extensions;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -20,31 +19,30 @@ namespace Neptune.Web.Models
             return hydrologicSubarea;
         }
 
-        public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, List<int> hydrologicSubareaIDList)
+        public static void DeleteHydrologicSubarea(this List<int> hydrologicSubareaIDList)
         {
             if(hydrologicSubareaIDList.Any())
             {
-                hydrologicSubareas.Where(x => hydrologicSubareaIDList.Contains(x.HydrologicSubareaID)).Delete();
+                HttpRequestStorage.DatabaseEntities.AllHydrologicSubareas.RemoveRange(HttpRequestStorage.DatabaseEntities.HydrologicSubareas.Where(x => hydrologicSubareaIDList.Contains(x.HydrologicSubareaID)));
             }
         }
 
-        public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, ICollection<HydrologicSubarea> hydrologicSubareasToDelete)
+        public static void DeleteHydrologicSubarea(this ICollection<HydrologicSubarea> hydrologicSubareasToDelete)
         {
             if(hydrologicSubareasToDelete.Any())
             {
-                var hydrologicSubareaIDList = hydrologicSubareasToDelete.Select(x => x.HydrologicSubareaID).ToList();
-                hydrologicSubareas.Where(x => hydrologicSubareaIDList.Contains(x.HydrologicSubareaID)).Delete();
+                HttpRequestStorage.DatabaseEntities.AllHydrologicSubareas.RemoveRange(hydrologicSubareasToDelete);
             }
         }
 
-        public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, int hydrologicSubareaID)
+        public static void DeleteHydrologicSubarea(this int hydrologicSubareaID)
         {
-            DeleteHydrologicSubarea(hydrologicSubareas, new List<int> { hydrologicSubareaID });
+            DeleteHydrologicSubarea(new List<int> { hydrologicSubareaID });
         }
 
-        public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, HydrologicSubarea hydrologicSubareaToDelete)
+        public static void DeleteHydrologicSubarea(this HydrologicSubarea hydrologicSubareaToDelete)
         {
-            DeleteHydrologicSubarea(hydrologicSubareas, new List<HydrologicSubarea> { hydrologicSubareaToDelete });
+            DeleteHydrologicSubarea(new List<HydrologicSubarea> { hydrologicSubareaToDelete });
         }
     }
 }
