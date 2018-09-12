@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[InventoryIsVerified] [bit] NOT NULL,
 	[DateOfLastInventoryVerification] [datetime] NULL,
 	[InventoryVerifiedByPersonID] [int] NULL,
+	[InventoryLastChangedDate] [datetime] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
