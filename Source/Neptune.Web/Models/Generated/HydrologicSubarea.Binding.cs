@@ -3,11 +3,10 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[HydrologicSubarea]
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -16,146 +15,88 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    public abstract partial class HydrologicSubarea : IHavePrimaryKey
+    [Table("[dbo].[HydrologicSubarea]")]
+    public partial class HydrologicSubarea : IHavePrimaryKey, IHaveATenantID
     {
-        public static readonly HydrologicSubareaAlisoCreek AlisoCreek = HydrologicSubareaAlisoCreek.Instance;
-        public static readonly HydrologicSubareaDanaPointCoastal DanaPointCoastal = HydrologicSubareaDanaPointCoastal.Instance;
-        public static readonly HydrologicSubareaLagunaCoastal LagunaCoastal = HydrologicSubareaLagunaCoastal.Instance;
-        public static readonly HydrologicSubareaSanClementeCoastal SanClementeCoastal = HydrologicSubareaSanClementeCoastal.Instance;
-        public static readonly HydrologicSubareaSanJuanCreek SanJuanCreek = HydrologicSubareaSanJuanCreek.Instance;
-
-        public static readonly List<HydrologicSubarea> All;
-        public static readonly ReadOnlyDictionary<int, HydrologicSubarea> AllLookupDictionary;
-
         /// <summary>
-        /// Static type constructor to coordinate static initialization order
+        /// Default Constructor; only used by EF
         /// </summary>
-        static HydrologicSubarea()
+        protected HydrologicSubarea()
         {
-            All = new List<HydrologicSubarea> { AlisoCreek, DanaPointCoastal, LagunaCoastal, SanClementeCoastal, SanJuanCreek };
-            AllLookupDictionary = new ReadOnlyDictionary<int, HydrologicSubarea>(All.ToDictionary(x => x.HydrologicSubareaID));
+            this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
+            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
-        /// Protected constructor only for use in instantiating the set of static lookup values that match database
+        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        protected HydrologicSubarea(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder)
+        public HydrologicSubarea(int hydrologicSubareaID, string hydrologicSubareaName) : this()
         {
-            HydrologicSubareaID = hydrologicSubareaID;
-            HydrologicSubareaName = hydrologicSubareaName;
-            HydrologicSubareaDisplayName = hydrologicSubareaDisplayName;
-            SortOrder = sortOrder;
+            this.HydrologicSubareaID = hydrologicSubareaID;
+            this.HydrologicSubareaName = hydrologicSubareaName;
+        }
+
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
+        /// </summary>
+        public HydrologicSubarea(string hydrologicSubareaName) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.HydrologicSubareaID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            
+            this.HydrologicSubareaName = hydrologicSubareaName;
+        }
+
+
+        /// <summary>
+        /// Creates a "blank" object of this type and populates primitives with defaults
+        /// </summary>
+        public static HydrologicSubarea CreateNewBlank()
+        {
+            return new HydrologicSubarea(default(string));
+        }
+
+        /// <summary>
+        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
+        /// </summary>
+        /// <returns></returns>
+        public bool HasDependentObjects()
+        {
+            return WaterQualityManagementPlans.Any();
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(HydrologicSubarea).Name, typeof(WaterQualityManagementPlan).Name};
+
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull()
+        {
+
+            foreach(var x in WaterQualityManagementPlans.ToList())
+            {
+                x.DeleteFull();
+            }
+            HttpRequestStorage.DatabaseEntities.AllHydrologicSubareas.Remove(this);                
         }
 
         [Key]
-        public int HydrologicSubareaID { get; private set; }
-        public string HydrologicSubareaName { get; private set; }
-        public string HydrologicSubareaDisplayName { get; private set; }
-        public int SortOrder { get; private set; }
+        public int HydrologicSubareaID { get; set; }
+        public int TenantID { get; private set; }
+        public string HydrologicSubareaName { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return HydrologicSubareaID; } }
+        public int PrimaryKey { get { return HydrologicSubareaID; } set { HydrologicSubareaID = value; } }
 
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public bool Equals(HydrologicSubarea other)
+        public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
+        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+
+        public static class FieldLengths
         {
-            if (other == null)
-            {
-                return false;
-            }
-            return other.HydrologicSubareaID == HydrologicSubareaID;
+            public const int HydrologicSubareaName = 100;
         }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as HydrologicSubarea);
-        }
-
-        /// <summary>
-        /// Enum types are equal by primary key
-        /// </summary>
-        public override int GetHashCode()
-        {
-            return HydrologicSubareaID;
-        }
-
-        public static bool operator ==(HydrologicSubarea left, HydrologicSubarea right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(HydrologicSubarea left, HydrologicSubarea right)
-        {
-            return !Equals(left, right);
-        }
-
-        public HydrologicSubareaEnum ToEnum { get { return (HydrologicSubareaEnum)GetHashCode(); } }
-
-        public static HydrologicSubarea ToType(int enumValue)
-        {
-            return ToType((HydrologicSubareaEnum)enumValue);
-        }
-
-        public static HydrologicSubarea ToType(HydrologicSubareaEnum enumValue)
-        {
-            switch (enumValue)
-            {
-                case HydrologicSubareaEnum.AlisoCreek:
-                    return AlisoCreek;
-                case HydrologicSubareaEnum.DanaPointCoastal:
-                    return DanaPointCoastal;
-                case HydrologicSubareaEnum.LagunaCoastal:
-                    return LagunaCoastal;
-                case HydrologicSubareaEnum.SanClementeCoastal:
-                    return SanClementeCoastal;
-                case HydrologicSubareaEnum.SanJuanCreek:
-                    return SanJuanCreek;
-                default:
-                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
-            }
-        }
-    }
-
-    public enum HydrologicSubareaEnum
-    {
-        AlisoCreek = 1,
-        DanaPointCoastal = 2,
-        LagunaCoastal = 3,
-        SanClementeCoastal = 4,
-        SanJuanCreek = 5
-    }
-
-    public partial class HydrologicSubareaAlisoCreek : HydrologicSubarea
-    {
-        private HydrologicSubareaAlisoCreek(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaAlisoCreek Instance = new HydrologicSubareaAlisoCreek(1, @"AlisoCreek", @"Aliso Creek", 10);
-    }
-
-    public partial class HydrologicSubareaDanaPointCoastal : HydrologicSubarea
-    {
-        private HydrologicSubareaDanaPointCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaDanaPointCoastal Instance = new HydrologicSubareaDanaPointCoastal(2, @"DanaPointCoastal", @"Dana Point Coastal", 20);
-    }
-
-    public partial class HydrologicSubareaLagunaCoastal : HydrologicSubarea
-    {
-        private HydrologicSubareaLagunaCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaLagunaCoastal Instance = new HydrologicSubareaLagunaCoastal(3, @"LagunaCoastal", @"Laguna Coastal", 30);
-    }
-
-    public partial class HydrologicSubareaSanClementeCoastal : HydrologicSubarea
-    {
-        private HydrologicSubareaSanClementeCoastal(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaSanClementeCoastal Instance = new HydrologicSubareaSanClementeCoastal(4, @"SanClementeCoastal", @"San Clemente Coastal", 40);
-    }
-
-    public partial class HydrologicSubareaSanJuanCreek : HydrologicSubarea
-    {
-        private HydrologicSubareaSanJuanCreek(int hydrologicSubareaID, string hydrologicSubareaName, string hydrologicSubareaDisplayName, int sortOrder) : base(hydrologicSubareaID, hydrologicSubareaName, hydrologicSubareaDisplayName, sortOrder) {}
-        public static readonly HydrologicSubareaSanJuanCreek Instance = new HydrologicSubareaSanJuanCreek(5, @"SanJuanCreek", @"San Juan Creek", 50);
     }
 }

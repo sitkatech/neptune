@@ -28,7 +28,10 @@
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
-<p>Review the status of your visit. If you've completed everything needed for this visit, use the Finalize Visit button. Otherwise navigate to any section to continue entering visit data.</p>
+@if (ViewDataTyped.FieldVisit.FieldVisitStatus != FieldVisitStatus.Complete)
+{
+    <p>Review the status of your visit. If you've completed everything you intended to enter for this visit, use the Wrap Up Visit button. Otherwise navigate to any section to continue entering visit data.</p>
+}
 <h4>Visit Overview</h4>
 <div class="row">
     <label class="col-sm-3 control-label text-right">Status</label>

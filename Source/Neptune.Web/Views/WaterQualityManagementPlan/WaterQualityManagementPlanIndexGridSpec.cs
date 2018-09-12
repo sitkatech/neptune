@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Approval Date", x => x.ApprovalDate, 120);
             Add("Date of Construction", x => x.DateOfContruction, 120);
             Add("Hydromodification Applies", x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Maintenance Contact Name", x => x.MaintenanceContactName, 100);
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
             Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);

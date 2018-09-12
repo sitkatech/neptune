@@ -21,9 +21,9 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[MaintenanceContactState] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[MaintenanceContactZip] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[WaterQualityManagementPlanPermitTermID] [int] NULL,
-	[HydrologicSubareaID] [int] NULL,
 	[HydromodificationAppliesID] [int] NULL,
 	[DateOfContruction] [datetime] NULL,
+	[HydrologicSubareaID] [int] NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC

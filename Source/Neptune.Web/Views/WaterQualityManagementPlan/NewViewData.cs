@@ -9,7 +9,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     public class NewViewData : EditViewData
     {
 
-        public NewViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions) : base(stormwaterJurisdictions)
+        public NewViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
+            List<HydrologicSubarea> hydrologicSubareas) : base(stormwaterJurisdictions, hydrologicSubareas)
         {
             
         }

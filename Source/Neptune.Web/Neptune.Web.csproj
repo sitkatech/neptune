@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,7 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Models\ManagerDashbaord.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -117,6 +116,8 @@
     <Compile Include="Models\Generated\GoogleChartType.Binding.cs" />
     <Compile Include="Models\Generated\GoogleChartTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\HydrologicSubarea.Binding.cs" />
+    <Compile Include="Models\Generated\HydrologicSubarea.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\HydrologicSubareaConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\HydrologicSubareaPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\HydromodificationApplies.Binding.cs" />
     <Compile Include="Models\Generated\HydromodificationAppliesPrimaryKey.Binding.cs" />
@@ -292,6 +293,8 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\HydrologicSubarea.cs" />
+    <Compile Include="Models\ManagerDashbaord.DatabaseContextExtensions.cs" />
     <Compile Include="Controllers\BulkRowController.cs" />
     <Compile Include="Models\FieldVisit.DatabaseContextExtensions.cs" />
     <Compile Include="Controllers\ManagerDashboardController.cs" />
@@ -313,9 +316,12 @@
     <Compile Include="Views\ManagerDashboard\Index.cs" />
     <Compile Include="Views\ManagerDashboard\IndexViewData.cs" />
     <Compile Include="Views\ManagerDashboard\ProvisionalTreatmentBMPGridSpec.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntity.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntityViewData.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntityViewModel.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisit.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMP.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisitViewData.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMPViewData.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisitViewModel.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMPViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodViewData.cs" />
     <Compile Include="Views\FieldVisit\Observations.cs" />
@@ -1282,7 +1288,8 @@
     <Content Include="Views\FieldVisit\Observations.cshtml" />
     <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cshtml" />
     <Content Include="Views\ManagerDashboard\Index.cshtml" />
-    <Content Include="Views\Shared\ProjectControls\BulkRowEntity.cshtml" />
+    <Content Include="Views\Shared\ProjectControls\BulkRowTreatmentBMP.cshtml" />
+    <Content Include="Views\Shared\ProjectControls\BulkRowFieldVisit.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

@@ -33,12 +33,13 @@ namespace Neptune.Web.Models
             Property(x => x.MaintenanceContactState).HasColumnName(@"MaintenanceContactState").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.MaintenanceContactZip).HasColumnName(@"MaintenanceContactZip").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.WaterQualityManagementPlanPermitTermID).HasColumnName(@"WaterQualityManagementPlanPermitTermID").HasColumnType("int").IsOptional();
-            Property(x => x.HydrologicSubareaID).HasColumnName(@"HydrologicSubareaID").HasColumnType("int").IsOptional();
             Property(x => x.HydromodificationAppliesID).HasColumnName(@"HydromodificationAppliesID").HasColumnType("int").IsOptional();
             Property(x => x.DateOfContruction).HasColumnName(@"DateOfContruction").HasColumnType("datetime").IsOptional();
+            Property(x => x.HydrologicSubareaID).HasColumnName(@"HydrologicSubareaID").HasColumnType("int").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.WaterQualityManagementPlans).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID
+            HasOptional(a => a.HydrologicSubarea).WithMany(b => b.WaterQualityManagementPlans).HasForeignKey(c => c.HydrologicSubareaID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID
         }
     }
 }

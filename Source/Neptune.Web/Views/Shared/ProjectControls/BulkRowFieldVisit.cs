@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowProjectsViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowFieldVisit.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -18,28 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-
-
 namespace Neptune.Web.Views.Shared.ProjectControls
 {
-    public class BulkRowEntityViewData
+    public abstract class BulkRowFieldVisit : LtInfo.Common.Mvc.TypedWebPartialViewPage<BulkRowFieldVisitViewData, BulkRowFieldVisitViewModel>
     {
-        public List<string> EntityDisplayNames { get; }
-        public string BulkRowPostUrl { get; }
-        public string EntityLabel { get;  }
-        public string EntityModalDescription { get;  }
-
-        public BulkRowEntityViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
-        {
-            EntityDisplayNames = entityDisplayNames;
-            BulkRowPostUrl = bulkRowPostUrl;
-
-            EntityLabel = entityLabel + (EntityDisplayNames.Count > 1 ? "s" : String.Empty);
-            EntityModalDescription = entityModalDescription;
-        }
     }
 }

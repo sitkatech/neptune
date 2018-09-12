@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="FieldVisit.DatabaseContextExtensions.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
-Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+<copyright file="BulkRowTreatmentBMPViewModel.cs" company="Tahoe Regional Planning Agency">
+Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -18,17 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using Neptune.Web.Models;
+using LtInfo.Common.Models;
 
-namespace Neptune.Web.Models
+namespace Neptune.Web.Views.Shared.ProjectControls
 {
-    public static partial class DatabaseContextExtensions
+    public class BulkRowTreatmentBMPViewModel : FormViewModel
     {
-        public static List<FieldVisit> GetProvisionalFieldVisits(this IQueryable<FieldVisit> fieldVisits, Person currentPerson)
-        {
-            return fieldVisits.Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).ToList();
-        }
+        [Required]
+        public List<int> EntityIDList { get; set; }
+
     }
 }
