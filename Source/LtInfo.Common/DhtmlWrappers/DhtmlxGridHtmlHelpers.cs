@@ -288,7 +288,7 @@ namespace LtInfo.Common.DhtmlWrappers
                     bulkTagModalDialogForm.DialogUrl,
                     bulkTagModalDialogForm.DialogTitle,
                     ModalDialogFormHelper.DefaultDialogWidth,
-                    "Save",
+                    "Verify",
                     "Cancel",
                     new List<string>{ "btn", "btn-neptune"},
                     null,

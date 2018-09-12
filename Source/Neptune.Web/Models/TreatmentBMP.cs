@@ -149,6 +149,7 @@ namespace Neptune.Web.Models
             if (!isAssignedToStormwaterJurisdiction)
             {
                 InventoryIsVerified = false;
+                InventoryLastChangedDate = DateTime.Now;
             }
         }
 

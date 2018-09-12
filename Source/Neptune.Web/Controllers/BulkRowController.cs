@@ -61,6 +61,8 @@ namespace Neptune.Web.Controllers
 
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
             treatmentBMPs = treatmentBMPs.Select(x => { x.InventoryIsVerified = true; return x; }).ToList();
+            var numberOfVerifiedTreatmentBMPs = treatmentBMPs.Count;
+            SetMessageForDisplay($"{numberOfVerifiedTreatmentBMPs} BMPs were successfully verified.");
             return new ModalDialogFormJsonResult();
         }
 
@@ -85,8 +87,11 @@ namespace Neptune.Web.Controllers
                 return new ModalDialogFormJsonResult();
             }
 
-            var fieldVisit = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
-            fieldVisit = fieldVisit.Select(x => { x.IsFieldVisitVerified = true; return x; }).ToList();
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+            fieldVisits = fieldVisits.Select(x => { x.IsFieldVisitVerified = true; return x; }).ToList();
+
+            var numberOfVerifiedFieldVists = fieldVisits.Count;
+            SetMessageForDisplay($"{numberOfVerifiedFieldVists} Field Visits were successfully verified.");
             return new ModalDialogFormJsonResult();
         }
 
@@ -111,7 +116,7 @@ namespace Neptune.Web.Controllers
 
             if (viewModel.EntityIDList != null)
             {
-                treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
+                treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).OrderBy(x => x.TreatmentBMPName).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
             var viewData = new BulkRowTreatmentBMPViewData(treatmentBMPs, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP", "The BMP inventory for the selected BMPs will be marked as Verified until the inventory is updated or a Jurisdiction Manager later flags the data as provisional.");
@@ -137,7 +142,7 @@ namespace Neptune.Web.Controllers
 
             if (viewModel.EntityIDList != null)
             {
-                fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
+                fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
             var viewData = new BulkRowFieldVisitViewData(fieldVisits, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit", "The selected Field Visits will be marked as Verified until the Field Visit is updated or a Jurisdiction Manager later flags the data as provisional.");
