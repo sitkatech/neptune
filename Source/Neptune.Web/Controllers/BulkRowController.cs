@@ -115,7 +115,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMPDisplayNames = treatmentBMPs.Select(x => x.TreatmentBMPName).OrderBy(x => x).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowEntityViewData(treatmentBMPDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP");
+            var viewData = new BulkRowEntityViewData(treatmentBMPDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP", "The BMP inventory for the selected BMPs will be marked as Verified until the inventory is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowEntity, BulkRowEntityViewData, BulkRowEntityViewModel>(viewData, viewModel);
         }
 
@@ -142,7 +142,7 @@ namespace Neptune.Web.Controllers
                 fieldVisitDisplayNames = fieldVisits.Select(x => x.TreatmentBMP.TreatmentBMPName).OrderBy(x => x).ToList();
             }
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
-            var viewData = new BulkRowEntityViewData(fieldVisitDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit");
+            var viewData = new BulkRowEntityViewData(fieldVisitDisplayNames, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkFieldVistsVerifiedModal(null)), "Field Visit", "The selected Field Visits will be marked as Verified until the Field Visit is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowEntity, BulkRowEntityViewData, BulkRowEntityViewModel>(viewData, viewModel);
         }
     }

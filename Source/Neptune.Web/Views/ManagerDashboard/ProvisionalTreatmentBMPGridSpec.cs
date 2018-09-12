@@ -33,10 +33,10 @@ namespace Neptune.Web.Views.ManagerDashboard
 {
     public class ProvisionalTreatmentBMPGridSpec : GridSpec<Models.TreatmentBMP>
     {
-        public ProvisionalTreatmentBMPGridSpec(Person currentPerson)
+        public ProvisionalTreatmentBMPGridSpec(Person currentPerson, string gridName)
         {
 
-            BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.BulkRowTreatmentBMPs(null)), "Verify all Selected BMPs", "Verify all Selected BMPs");
+            ArbitraryHeaderHtml = new List<string> { DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.checkAll()", "glyphicon-check", "Select All"), DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.uncheckAll()", "glyphicon-unchecked", "Unselect All") };
             AddCheckBoxColumn();
             Add("EntityID", x => x.TreatmentBMPID, 0);
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), x.CanDelete(currentPerson), x.CanDelete(currentPerson)), 30, DhtmlxGridColumnFilterType.None);

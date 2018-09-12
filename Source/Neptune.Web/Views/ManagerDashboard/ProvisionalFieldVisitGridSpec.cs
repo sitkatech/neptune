@@ -34,12 +34,12 @@ namespace Neptune.Web.Views.ManagerDashboard
 {
     public class ProvisionalFieldVisitGridSpec : GridSpec<Models.FieldVisit>
     {
-        public ProvisionalFieldVisitGridSpec(Person currentPerson)
+        public ProvisionalFieldVisitGridSpec(Person currentPerson, string gridName)
         {
             ObjectNameSingular = "Field Visit";
             ObjectNamePlural = "Field Visits";
 
-            BulkTagModalDialogForm = new BulkTagModalDialogForm(SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.BulkRowFieldVisits(null)), "Verify all Selected Field Visits", "Verify all Selected Field Visits");
+            ArbitraryHeaderHtml = new List<string> { DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.checkAll()", "glyphicon-check", "Select All"), DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.uncheckAll()", "glyphicon-unchecked", "Unselect All") };
             AddCheckBoxColumn();
             Add("EntityID", x => x.FieldVisitID, 0);
             Add(string.Empty,
