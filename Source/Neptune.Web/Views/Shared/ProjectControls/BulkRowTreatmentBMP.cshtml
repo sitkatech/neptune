@@ -1,5 +1,5 @@
 ﻿@*-----------------------------------------------------------------------
-    <copyright file="BulkRowProjects.cshtml" company="Tahoe Regional Planning Agency">
+    <copyright file="BulkRowTreatmentBMP.cshtml" company="Tahoe Regional Planning Agency">
     Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
     <author>Sitka Technology Group</author>
     </copyright>
@@ -20,7 +20,7 @@
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
-@inherits Neptune.Web.Views.Shared.ProjectControls.BulkRowEntity
+@inherits Neptune.Web.Views.Shared.ProjectControls.BulkRowTreatmentBMP
 
 @if (Model.EntityIDList == null || !Model.EntityIDList.Any())
 {
@@ -42,12 +42,25 @@ else
     <form action="@ViewDataTyped.BulkRowPostUrl" method="post">      
         <div style="min-height: 150px; max-height: 350px; overflow-y: auto; overflow-x: hidden">
             <div style="margin: 5px 0">Do you want to set the inventory status for @Model.EntityIDList.Count @ViewDataTyped.EntityLabel to Verified? @ViewDataTyped.EntityModalDescription</div>
-            <ul>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">BMP Name</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+                </thead>
+                <tbody>
                 @foreach (var projectName in ViewDataTyped.EntityDisplayNames)
                 {
-                    <li>@projectName</li>
+                    <tr>
+                        <td>@projectName</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 }
-            </ul>
+                </tbody>
+            </table>
 
         </div>
 

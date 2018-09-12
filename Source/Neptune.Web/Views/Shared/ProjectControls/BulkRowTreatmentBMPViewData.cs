@@ -1,5 +1,5 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="BulkRowProjectsViewData.cs" company="Tahoe Regional Planning Agency">
+<copyright file="BulkRowTreatmentBMPViewData.cs" company="Tahoe Regional Planning Agency">
 Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -26,14 +26,14 @@ using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Views.Shared.ProjectControls
 {
-    public class BulkRowEntityViewData
+    public class BulkRowTreatmentBMPViewData
     {
         public List<string> EntityDisplayNames { get; }
         public string BulkRowPostUrl { get; }
         public string EntityLabel { get;  }
         public string EntityModalDescription { get;  }
 
-        public BulkRowEntityViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
+        public BulkRowTreatmentBMPViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
         {
             EntityDisplayNames = entityDisplayNames;
             BulkRowPostUrl = bulkRowPostUrl;

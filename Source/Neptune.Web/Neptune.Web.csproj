@@ -316,9 +316,12 @@
     <Compile Include="Views\ManagerDashboard\Index.cs" />
     <Compile Include="Views\ManagerDashboard\IndexViewData.cs" />
     <Compile Include="Views\ManagerDashboard\ProvisionalTreatmentBMPGridSpec.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntity.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntityViewData.cs" />
-    <Compile Include="Views\Shared\ProjectControls\BulkRowEntityViewModel.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisit.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMP.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisitViewData.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMPViewData.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowFieldVisitViewModel.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowTreatmentBMPViewModel.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cs" />
     <Compile Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodViewData.cs" />
     <Compile Include="Views\FieldVisit\Observations.cs" />
@@ -1285,7 +1288,8 @@
     <Content Include="Views\FieldVisit\Observations.cshtml" />
     <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethod.cshtml" />
     <Content Include="Views\ManagerDashboard\Index.cshtml" />
-    <Content Include="Views\Shared\ProjectControls\BulkRowEntity.cshtml" />
+    <Content Include="Views\Shared\ProjectControls\BulkRowTreatmentBMP.cshtml" />
+    <Content Include="Views\Shared\ProjectControls\BulkRowFieldVisit.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
