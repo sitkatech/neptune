@@ -46,17 +46,35 @@ else
                 <thead>
                 <tr>
                     <th scope="col">BMP Name</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Verified By</th>
+                    <th scope="col">Date Last Modified</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var projectName in ViewDataTyped.EntityDisplayNames)
+                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                 {
                     <tr>
-                        <td>@projectName</td>
-                        <td></td>
-                        <td></td>
+                        <td>@treatmentBMP.TreatmentBMPName</td>
+                        <td>
+                            @if (treatmentBMP.InventoryVerifiedByPerson != null)
+                            {
+                                @treatmentBMP.InventoryVerifiedByPerson.GetFullNameFirstLast()
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @if (treatmentBMP.GetLastFieldVisitWithAnInventoryUpdate() != null)
+                            {
+                                <span>@treatmentBMP.GetLastFieldVisitWithAnInventoryUpdate().VisitDate</span>
+                            }
+                            else
+                            {
+                                <span>N/A</span>
+                            }
+                        </td>
                     </tr>
                 }
                 </tbody>

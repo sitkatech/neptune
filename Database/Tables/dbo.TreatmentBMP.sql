@@ -5,12 +5,12 @@ GO
 CREATE TABLE [dbo].[TreatmentBMP](
 	[TreatmentBMPID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
-	[TreatmentBMPName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[TreatmentBMPName] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[LocationPoint] [geometry] NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[ModeledCatchmentID] [int] NULL,
-	[Notes] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Notes] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[SystemOfRecordID] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[YearBuilt] [int] NULL,
 	[OwnerOrganizationID] [int] NOT NULL,
@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[RequiredPostStormFieldVisitsPerYear] [int] NULL,
 	[InventoryIsVerified] [bit] NOT NULL,
 	[DateOfLastInventoryVerification] [datetime] NULL,
+	[InventoryVerifiedByPersonID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -42,6 +43,11 @@ CREATE TABLE [dbo].[TreatmentBMP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Person_InventoryVerifiedByPersonID_PersonID] FOREIGN KEY([InventoryVerifiedByPersonID])
+REFERENCES [dbo].[Person] ([PersonID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_FieldVisit_Person_InventoryVerifiedByPersonID_PersonID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID] FOREIGN KEY([ModeledCatchmentID])
 REFERENCES [dbo].[ModeledCatchment] ([ModeledCatchmentID])

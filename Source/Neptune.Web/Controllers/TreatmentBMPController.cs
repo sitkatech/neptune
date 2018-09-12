@@ -244,6 +244,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMP.InventoryIsVerified)
             {
                 treatmentBMP.DateOfLastInventoryVerification = DateTime.Now;
+                treatmentBMP.InventoryVerifiedByPersonID = CurrentPerson.PersonID;
             }
             
             return new ModalDialogFormJsonResult();

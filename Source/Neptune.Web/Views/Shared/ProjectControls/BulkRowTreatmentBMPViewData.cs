@@ -28,17 +28,17 @@ namespace Neptune.Web.Views.Shared.ProjectControls
 {
     public class BulkRowTreatmentBMPViewData
     {
-        public List<string> EntityDisplayNames { get; }
+        public List<Models.TreatmentBMP> TreatmentBMPs { get; }
         public string BulkRowPostUrl { get; }
         public string EntityLabel { get;  }
         public string EntityModalDescription { get;  }
 
-        public BulkRowTreatmentBMPViewData(List<string> entityDisplayNames, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
+        public BulkRowTreatmentBMPViewData(List<Models.TreatmentBMP> treatmentBMPs, string bulkRowPostUrl, string entityLabel, string entityModalDescription)
         {
-            EntityDisplayNames = entityDisplayNames;
+            TreatmentBMPs = treatmentBMPs;
             BulkRowPostUrl = bulkRowPostUrl;
 
-            EntityLabel = entityLabel + (EntityDisplayNames.Count > 1 ? "s" : String.Empty);
+            EntityLabel = entityLabel + (TreatmentBMPs.Count > 1 ? "s" : String.Empty);
             EntityModalDescription = entityModalDescription;
         }
     }
