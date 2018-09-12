@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Controllers
 @using Neptune.Web.Views.FieldVisit
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -54,15 +55,18 @@
 
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
-        <div ng-show="$first" style="background-color: #f9f9f9; text-align: right; padding-bottom: 16px;">
-            <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations != null" ng-click="openCopyDataFromInitialAssessmentModal(observationTypeSchema.InitialAssessmentObservations)">
-                Copy Data from Initial Assessment
-            </button>
-            <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations == null"
-                    title="No Pre-Maintenance Assessment data entered" disabled="disabled">
-                Copy Data from Initial Assessment
-            </button>
-        </div>
+        @if (ViewDataTyped.FieldVisitAssessmentType == FieldVisitAssessmentType.PostMaintenance)
+        {
+            <div ng-show="$first" style="background-color: #f9f9f9; text-align: right; padding-bottom: 16px;">
+                <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations == null || observationTypeSchema.InitialAssessmentObservations.length == 0"
+                        title="No Pre-Maintenance Assessment data entered" disabled="disabled">
+                    Copy Data from Initial Assessment
+                </button>
+                <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations != null && observationTypeSchema.InitialAssessmentObservations.length > 0" ng-click="openCopyDataFromInitialAssessmentModal(observationTypeSchema.InitialAssessmentObservations)">
+                    Copy Data from Initial Assessment
+                </button>
+            </div>
+        }
         <div class="col-xs-12">
             <h4 ng-bind="observationTypeSchema.TreatmentBMPAssessmentObservationTypeName"></h4>
         </div>
