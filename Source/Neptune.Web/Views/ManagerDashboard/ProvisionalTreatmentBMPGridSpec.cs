@@ -43,10 +43,10 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add(string.Empty, x => UrlTemplate.MakeHrefString(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(y => y.Detail(x.PrimaryKey)), "View", new Dictionary<string, string> { { "class", "gridButton" } }), 50, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString(), x => x.TreatmentBMPType.TreatmentBMPTypeName, 180, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Date of Last Verification", x => x.DateOfLastInventoryVerification, 125, DhtmlxGridColumnFormatType.Date);
+            Add("Date of Last BMP Record Verification", x => x.DateOfLastInventoryVerification, 125, DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.DateOfLastInventoryChangeDuringFieldVisit.ToGridHeaderString(), x => x.GetLastFieldVisitWithAnInventoryUpdate()?.VisitDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Has Photos?", x => x.TreatmentBMPImages.Any().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Benchmark and Thresholds Set?", x => x.IsBenchmarkAndThresholdsComplete().ToString(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Benchmark and Thresholds Set?", x => x.IsBenchmarkAndThresholdsComplete().ToYesNo(), 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(), x => x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }

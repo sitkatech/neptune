@@ -28,7 +28,7 @@ namespace Neptune.Web.Models
     {
         public static List<FieldVisit> GetProvisionalFieldVisits(this IQueryable<FieldVisit> fieldVisits, Person currentPerson)
         {
-            return fieldVisits.Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).ToList().Where(x => x.FieldVisitStatus == FieldVisitStatus.Complete).ToList();
+            return fieldVisits.Where(x => x.IsFieldVisitVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).ToList();
         }
     }
 }

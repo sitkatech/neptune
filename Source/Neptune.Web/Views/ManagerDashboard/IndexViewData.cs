@@ -44,8 +44,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson, ProvisionalTreatmentBMPGridName)
             {
-                ObjectNameSingular = "Assessment",
-                ObjectNamePlural = "Assessments",
+                ObjectNameSingular = "Provisional BMP Record",
+                ObjectNamePlural = "Provisional BMP Records",
                 SaveFiltersInCookie = true
             };
             ProvisionalTreatmentBMPGridDataUrl =
