@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Views\FieldVisit\Detail.cs" />
+    <Compile Include="Views\FieldVisit\DetailViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1290,6 +1292,7 @@
     <Content Include="Views\ManagerDashboard\Index.cshtml" />
     <Content Include="Views\Shared\ProjectControls\BulkRowTreatmentBMP.cshtml" />
     <Content Include="Views\Shared\ProjectControls\BulkRowFieldVisit.cshtml" />
+    <Content Include="Views\FieldVisit\Detail.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

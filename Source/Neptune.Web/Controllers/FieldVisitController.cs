@@ -96,6 +96,15 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [FieldVisitViewFeature]
+        public ViewResult Detail(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewData = new DetailViewData(CurrentPerson, StormwaterBreadCrumbEntity.FieldVisits, fieldVisit);
+            return RazorView<Detail, DetailViewData>(viewData);
+        }
+
+        [HttpGet]
         [FieldVisitCreateFeature]
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {

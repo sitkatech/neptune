@@ -1,0 +1,180 @@
+﻿@using LtInfo.Common
+@using Neptune.Web.Models
+@inherits Neptune.Web.Views.FieldVisit.Detail
+
+@section JavascriptAndStylesContent
+{
+    <style>
+        #fieldVisitDetailNav li a,
+        #fieldVisitDetailNav li span {
+            color: #fff;
+            background: #0099ab;
+            cursor: pointer;
+        }
+
+        ul.fieldVisitTierTwoMenu {
+            border-left: 4px solid;
+            border-bottom: 4px solid;
+            border-color: #0099ab;
+        }
+
+        @@media (max-width: 768px) {
+            ul.fieldVisitTierTwoMenu {
+                border-right: 3px solid;
+                border-color: #0099ab;
+            }
+        }
+
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu li a {
+            background-color: #fff;
+            color: #333;
+        }
+
+            nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu li a span {
+                color: #f0ad4e;
+                background-color: inherit;
+            }
+
+
+        @@media (min-width: 769px) {
+            nav#fieldVisitDetailNav ul li.activeGroup a.activeItem:after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                margin-top: -10px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: 8px solid #0099ab;
+                z-index: 900;
+            }
+
+            nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem:after {
+                border-left: 8px solid #e49937 !important;
+            }
+        }
+
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a:hover {
+            background-color: #e9ad5d;
+            color: #fff;
+        }
+
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem,
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem span,
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem:hover {
+            background-color: #e49937;
+            color: #fff;
+        }
+
+        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a:hover .glyphicon-exclamation-sign {
+            color: #fff;
+        }
+    </style>
+}
+
+
+<div class="row wizard">
+    <div class="col-xs-12 col-sm-3">
+        <ul class="nav nav-pills nav-stacked nav-tabs" id="fieldVisitDetailNav" role="tablist">
+            <li role="presentation" class="nav-item">
+                <a class="nav-link active" href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab">Inventory</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" href="#maintenance" aria-controls="maintenance" role="tab" data-toggle="tab">Maintenance</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" href="#postMaintenanceAssessment" aria-controls="postMaintenanceAssessment" role="tab" data-toggle="tab">Post-Maintenance Assessment</a>
+            </li>
+            <li role="presentation" class="nav-item">
+                <a class="nav-link" href="#visitSummary" aria-controls="visitSummary" role="tab" data-toggle="tab">Visit Summary</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-12 col-sm-9" id="wizardContent">
+        <div class="tab-content">
+            <div id="inventory" role="tabpanel" class="tab-pane active">
+                <div class="wizardHeader"><h2>Inventory</h2></div>
+                <div class="wizardMain">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>BMP Name:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.TreatmentBMP.TreatmentBMPName
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>BMP Type:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Inventory Updated During Visit?</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.InventoryUpdated.ToYesNo()
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>BMP Verification Status:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @(ViewDataTyped.FieldVisit.TreatmentBMP.InventoryIsVerified ? "Verified" : "Not Verified")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Last Verified by:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @(ViewDataTyped.FieldVisit.TreatmentBMP.InventoryIsVerified ?
+                                  ViewDataTyped.FieldVisit.TreatmentBMP.InventoryVerifiedByPerson.GetFullNameFirstLast()
+                                  : "N/A")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Last Verified on:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @(ViewDataTyped.FieldVisit.TreatmentBMP.DateOfLastInventoryVerification != null ? ViewDataTyped.FieldVisit.TreatmentBMP.DateOfLastInventoryVerification.Value.ToShortDateString() :
+                              "N/A")
+                        </div>
+                    </div>
+                    <div class="row text-right">
+                        <a class="btn btn-neptune" href="@ViewDataTyped.FieldVisit.TreatmentBMP.GetDetailUrl()">View BMP Details</a>
+                    </div>
+                </div>
+            </div>
+            <div id="assessment" role="tabpanel" class="tab-pane">
+                <div class="wizardHeader"><h2>Assessment</h2></div>
+                <div class="wizardHeader">Coming Soon!</div>
+            </div>
+            <div id="maintenance" role="tabpanel" class="tab-pane">
+                <div class="wizardHeader"><h2>Maintenance</h2></div>
+                <div class="wizardHeader">Coming Soon!</div>
+            </div>
+            <div id="postMaintenanceAssessment" role="tabpanel" class="tab-pane">
+                <div class="wizardHeader"><h2>Post-Maintenance Assessment</h2></div>
+                <div class="wizardHeader">Coming Soon!</div>
+            </div>
+            <div id="visitSummary" role="tabpanel" class="tab-pane">
+                <div class="wizardHeader"><h2>Visit Summary</h2></div>
+                <div class="wizardHeader">Coming Soon!</div>
+            </div>
+        </div>
+    </div>
+</div>
