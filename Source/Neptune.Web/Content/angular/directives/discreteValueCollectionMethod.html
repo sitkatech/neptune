@@ -19,6 +19,9 @@
             </td>
             <td class="col-xs-3" ng-if="propertiesToObserve.length == 1">
                 <span ng-bind="propertiesToObserve[0].DisplayName" ng-model="observation.PropertyObserved" ng-init="observation.PropertyObserved = propertiesToObserve[0].DisplayName"></span>
+                <sup>
+                    <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span>
+                </sup>
             </td>
             <td class="col-xs-3" ng-if="propertiesToObserve.length > 1">
                 <select style="width: 100%" ng-model="observation.PropertyObserved"

@@ -10,6 +10,9 @@
         <tr class="row" ng-repeat="observation in datasource.SingleValueObservations track by $index">
             <td class="col-xs-3">
                 <span ng-bind="observation.PropertyObserved"></span>
+                <sup>
+                    <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span>
+                </sup>
             </td>
             <td class="col-xs-2">
                 <input class="form-control" type="number" step="any" ng-model="observation.ObservationValue" min="0" max="100" />
