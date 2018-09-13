@@ -25,6 +25,7 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -325,7 +326,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPAssessment == null)
             {
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
-                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment,fieldVisit,FieldVisitAssessmentType.Initial);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.Initial);
             }
             if (viewModel.FinalizeVisit == "true")
             {
@@ -559,7 +560,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPAssessment == null)
             {
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
-                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.Initial);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, fieldVisitAssessmentTypeID.ParseAsEnum<FieldVisitAssessmentType>());
             }
 
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
@@ -635,7 +636,7 @@ namespace Neptune.Web.Controllers
         private static void SaveNewAssessmentToFieldVisit(TreatmentBMPAssessment treatmentBMPAssessment, FieldVisit fieldVisit,
             FieldVisitAssessmentType fieldVisitAssessmentType)
         {
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.AddOrUpdate(treatmentBMPAssessment); //todo - AddOrUpdate??
+            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.Add(treatmentBMPAssessment); //todo - AddOrUpdate??
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             switch (fieldVisitAssessmentType)
             {
@@ -688,7 +689,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMPAssessment == null)
             {
                 treatmentBMPAssessment = CreatePlaceholderTreatmentBMPAssessment(fieldVisit.TreatmentBMP);
-                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, FieldVisitAssessmentType.Initial);
+                SaveNewAssessmentToFieldVisit(treatmentBMPAssessment, fieldVisit, fieldVisitAssessmentTypeID.ParseAsEnum<FieldVisitAssessmentType>());
             }
 
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
@@ -736,7 +737,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.InitialAssessment?.DeleteFull();
             fieldVisit.MaintenanceRecord?.DeleteFull();
             fieldVisit.PostMaintenanceAssessment?.DeleteFull();
-            fieldVisit.DeleteFieldVisit();
+            fieldVisit.DeleteFull();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("Successfully deleted the field visit.");

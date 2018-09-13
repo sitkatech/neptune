@@ -61,6 +61,7 @@ namespace Neptune.Web.Controllers
             }
 
             treatmentBMPAssessment.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
+            treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.DeleteTreatmentBMPAssessmentPhoto();
             if (treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment!= null)
             {
                 treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment.InitialAssessmentID = null;
@@ -74,7 +75,7 @@ namespace Neptune.Web.Controllers
 
             SetMessageForDisplay("BMP Assessment successfully deleted.");
 
-            return new ModalDialogFormJsonResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Detail(treatmentBMPID)));
+            return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewDeleteTreatmentBMPAssessment(TreatmentBMPAssessment treatmentBMPAssessment, ConfirmDialogFormViewModel viewModel)
