@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
@@ -28,7 +27,7 @@ using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AttributesViewModel : EditAttributesViewModel, IValidatableObject
+    public class AttributesViewModel : EditAttributesViewModel
     {
         /// <summary>
         /// Needed by ModelBinder
@@ -40,10 +39,7 @@ namespace Neptune.Web.Views.FieldVisit
         public AttributesViewModel(Models.FieldVisit fieldVisit)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            CustomAttributes = treatmentBMP.CustomAttributes
-                .Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID !=
-                            CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID)
-                .Select(x => new CustomAttributeSimple(x)).ToList();
+            CustomAttributes = treatmentBMP.CustomAttributes.Where(x => x.CustomAttributeType.CustomAttributeTypePurposeID != CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID).Select(x => new CustomAttributeSimple(x)).ToList();
         }
 
         public void UpdateModel(Models.FieldVisit fieldVisit, Person currentPerson)
@@ -83,17 +79,6 @@ namespace Neptune.Web.Views.FieldVisit
                 (x, y) => x.CustomAttributeValueID == y.CustomAttributeValueID
                           && x.CustomAttributeID == y.CustomAttributeID,
                 (x, y) => { x.AttributeValue = y.AttributeValue; });
-        }
-
-        public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var errors = new List<ValidationResult>();
-
-            var customAttributeTypes = GetCustomAttributeTypes();
-
-            CheckTypeExpectations(customAttributeTypes, errors);
-
-            return errors;
         }
     }
 }

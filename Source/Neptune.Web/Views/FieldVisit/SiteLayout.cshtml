@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.FieldVisit.FieldVisitSection
 @{
@@ -99,6 +100,32 @@
         }
     </style>
 }
+<div class="pull-right">
+    @if(ViewDataTyped.FieldVisit.FieldVisitStatus == FieldVisitStatus.Complete){
+        if (ViewDataTyped.FieldVisit.IsFieldVisitVerified)
+         {
+             <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
+             <span style="margin-right: 5px">Assessment and Maintenance Records have been verified</span>
+         }
+         else
+         {
+             <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
+             <span style="margin-right: 5px">Assessment and Maintenance Records have not been verified</span>
+         }
+
+        if (ViewDataTyped.CanManageStormwaterJurisdiction && ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
+         {
+             @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune", "headerButtonText", "inactivateUserButton"}, null, null)
+        }
+    }
+    else
+    {
+        <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
+        <span style="margin-right: 5px">Field visit is in progress</span>
+    } 
+</div>
+<div style="clear:both"></div>
+
 @Html.ValidationSummary()
 <div>
     <div class="row wizard">
@@ -113,7 +140,7 @@
                             <a class="@(topLevelIsActive ? "activeItem" : string.Empty)" href="@fieldVisitSection.GetSectionUrl(ViewDataTyped.FieldVisit)">
                                 <span>@fieldVisitSection.FieldVisitSectionDisplayName</span>
                             </a>
-                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)) )
+                            @if (sectionIsActive && (!topLevelIsActive || fieldVisitSection.ExpandMenu(ViewDataTyped.FieldVisit)))
                             {
                                 <ul class="nav nav-stacked fieldVisitTierTwoMenu">
                                     @foreach (var fieldVisitSubsection in fieldVisitSection.GetSubsections(ViewDataTyped.FieldVisit))
@@ -124,7 +151,6 @@
                                                 @if (fieldVisitSubsection.SectionCompletionStatusIndicator != null)
                                                 {
                                                     @fieldVisitSubsection.SectionCompletionStatusIndicator
-                                                    ;
                                                 }
                                                 @fieldVisitSubsection.SubsectionName
                                             </a>
@@ -148,3 +174,43 @@
         </div>
     </div>
 </div>
+
+<script>
+    function launchSaveAndWrapUpConfirmModal() {
+        var dialogTitle = "Save &amp; Wrap Up";
+        var dialogContent = "Are you sure you want to wrap up the field visit? Wrapping up will mark the field visit as complete and ready for review by the Jurisdiction Manager.";
+        var modalHtml =
+            "<div class='modal neptune-modal' id='saveAndWrapupModal' tabindex='-1'>" +
+            "<div class='modal-dialog neptune-modal-dialog' style = 'width:90%; max-width: 500px'>" +
+            "<div class='modal-content'>" +
+            "<div class='modal-header'>" +
+            "<button type='button' class='modal-close-button btn btn-xs btn-neptune' data-dismiss='modal'><span>&times;</span></button>" +
+            "<span class='modal-title'>" + dialogTitle + "</span>" +
+            "</div>" +
+            "<div class='modal-body'>" + dialogContent + "</div>" +
+            "<div class='modal-footer'>" +
+            "<div class='modal-footer-buttons'>" +
+            "<button type='button' onclick='saveAndWrapUp()' class='btn btn-xs btn-neptune'>Continue</button>" +
+            "<button type='button' class='btn btn-xs btn-neptune' data-dismiss='modal'>Cancel</button>" +
+            "</div>" +
+            "</div>" +
+            "<div class='progress' style='display:none'>" +
+            "<div class='progress-bar progress-bar-info progress-bar-striped active' role='progressbar' style='width:100%'>Saving</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+
+        var dialogDiv = jQuery(modalHtml);
+        dialogDiv.modal({ backdrop: "static" });
+        dialogDiv.draggable({ handle: ".modal-header" });
+        $("body").append(dialogDiv);
+    }
+
+    function saveAndWrapUp() {
+        $("#hiddenIsFinalizeVisitInput").val("true");
+        var theForm = jQuery('form.field-visit-form');
+        theForm.append('<input type="hidden" name="FinalizeVisit" id="hiddenIsFinalizeVisitInput" value="true">');
+        theForm.submit();
+    }
+</script>

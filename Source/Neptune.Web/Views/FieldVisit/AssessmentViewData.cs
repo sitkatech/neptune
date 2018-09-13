@@ -13,14 +13,4 @@ namespace Neptune.Web.Views.FieldVisit
 
         public string MaintenanceUrl { get; }
     }
-
-    public class AssessmentViewModel : FieldVisitSectionViewModel
-    {
-
-    }
-
-    public class PostMaintenanceAssessmentViewModel : FieldVisitSectionViewModel
-    {
-
-    }
 }

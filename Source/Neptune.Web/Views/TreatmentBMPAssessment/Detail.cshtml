@@ -140,7 +140,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         {
                                             <tr>
                                                 <td>@observation.PropertyObserved</td>
-                                                <td>@observation.ObservationValue</td>
+                                                <td>@string.Format("{0} {1}", observation.ObservationValue, treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName)</td>
                                                 <td>@observation.Notes</td>
                                             </tr>
                                         }
@@ -180,11 +180,11 @@ Source code is available upon request via <support@sitkatech.com>.
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var observation in treatmentBMPObservation.GetPassFailObservationData().PassFailObservations)
+                                @foreach (var observation in treatmentBMPObservation.GetPassFailObservationData().SingleValueObservations)
                                 {
                                     <tr>
                                         <td>@observation.PropertyObserved</td>
-                                        <td>@(observation.ObservationValue ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel)</td>
+                                        <td>@(Convert.ToBoolean(observation.ObservationValue) ? treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().PassingScoreLabel : treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetPassFailSchema().FailingScoreLabel)</td>
                                         <td>@observation.Notes</td>
                                     </tr>
                                 }

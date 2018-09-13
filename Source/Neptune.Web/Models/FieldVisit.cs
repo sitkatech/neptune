@@ -18,8 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Linq;
 using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
@@ -33,21 +31,25 @@ namespace Neptune.Web.Models
                 : PostMaintenanceAssessment;
         }
 
-        public string GetAuditDescriptionString() => $"Field Visit deleted";
+        public string GetAuditDescriptionString() => "Field Visit deleted";
 
         public void DetachMaintenanceRecord()
         {
             MaintenanceRecordID = null;
         }
 
-        public void DetachPostMaintenanceAssessment()
+        public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
         {
-            PostMaintenanceAssessmentID = null;
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(TreatmentBMP.StormwaterJurisdiction);
+            if (!isAssignedToStormwaterJurisdiction)
+            {
+                IsFieldVisitVerified = false;
+            }
         }
-
-        public void DetachInitialAssessment()
+        public void VerifyFieldVisit(Person person)
         {
-            InitialAssessmentID = null;
+            IsFieldVisitVerified = true;
+            FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
         }
     }
 }

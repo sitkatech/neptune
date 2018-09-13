@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
             Property(x => x.VisitDate).HasColumnName(@"VisitDate").HasColumnType("datetime").IsRequired();
             Property(x => x.InventoryUpdated).HasColumnName(@"InventoryUpdated").HasColumnType("bit").IsRequired();
             Property(x => x.FieldVisitTypeID).HasColumnName(@"FieldVisitTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.IsFieldVisitVerified).HasColumnName(@"IsFieldVisitVerified").HasColumnType("bit").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.FieldVisits).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_FieldVisit_TreatmentBMP_TreatmentBMPID

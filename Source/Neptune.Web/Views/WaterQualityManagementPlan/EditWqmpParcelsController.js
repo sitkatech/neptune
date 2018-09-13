@@ -6,31 +6,28 @@
         return $scope.AngularViewData.ParcelNumberByID[parcelId];
     };
 
-    var typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
+    $scope.getParcelAddress = function (parcelId) {
+        var parcelAddress = $scope.AngularViewData.ParcelAddressByID[parcelId];
+        parcelAddress = parcelAddress == null ? "Address is unavailable" : parcelAddress;
+        return parcelAddress ;
+    };
+
+    var typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, findParcelByAddressUrl, findParcelByApnUrl) {
         var finder = jQuery(typeaheadSelector);
         finder.typeahead({
-            highlight: true,
-            minLength: 1
-        },
-            {
-                source: new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.whitespace,
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: summaryUrl +
-                            "?term=%QUERY",
-                        wildcard: "%QUERY"
-                    }
-                }),
-                display: "ParcelNumber",
-                limit: Number.MAX_VALUE
-            });
+                highlight: true,
+                minLength: 3
+            },
+            $scope.makeTypeaheadObject('Parcels', findParcelByApnUrl, 'Parcels'),
+            $scope.makeTypeaheadObject('Addresses', findParcelByAddressUrl, 'Addresses')
+        );
 
         finder.bind("typeahead:select",
             function (event, suggestion) {
-                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, function () {
+                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () { 
                     $scope.$apply();
                 });
+                $('.typeahead').typeahead('val', '');
             });
 
         jQuery(typeaheadSelectorButton).click(function () { $scope.selectFirstSuggestionFunction(finder); });
@@ -43,6 +40,33 @@
             }
         });
     };
+
+    $scope.makeTypeaheadObject = function (name, url, displayName) {
+        var bloodhound = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: url + '?term=%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        var displayText = displayName === 'Parcels' ? 'ParcelNumber' : 'ParcelAddress';
+        displayName = displayName === 'Parcels' ? 'Parcel Numbers' : 'Addresses';
+
+        return {
+            name: name,
+            source: bloodhound,
+            display: displayText,
+            limit: Number.MAX_VALUE,
+            templates: {
+                header: '<p class="findResultsHeader">' + displayName + '</p>',
+                empty: function (context) {
+                    return '<p class="findResultsHeader">' + displayName + '</p>' + '<div class="tt-dataset" style="padding: 3px 40px;">No parcels matching search criteria</div>';
+                }
+            }
+        }
+    }
 
     $scope.selectFirstSuggestionFunction = function () {
         var selectables = jQuery($scope.typeaheadSelectorButton).siblings(".tt-menu").find(".tt-selectable");
@@ -76,7 +100,7 @@
 
                 var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
 
-                $scope.toggleParcel(mergedProperties.ParcelID, mergedProperties.ParcelNumber, function () {
+                $scope.toggleParcel(mergedProperties.ParcelID, mergedProperties.ParcelNumber, mergedProperties.ParcelAddress, function () {
                     $scope.$apply();
                 });
 
@@ -86,9 +110,13 @@
             });
     }
 
-    $scope.toggleParcel = function (parcelId, parcelNumber, callback) {
+    $scope.toggleParcel = function (parcelId, parcelNumber, parcelAddress, callback) {
         if (parcelNumber && typeof $scope.AngularViewData.ParcelNumberByID[parcelId] === "undefined") {
             $scope.AngularViewData.ParcelNumberByID[parcelId] = parcelNumber;
+        }
+
+        if (parcelNumber && typeof $scope.AngularViewData.ParcelAddressByID[parcelId] === "undefined") {
+            $scope.AngularViewData.ParcelAddressByID[parcelId] = parcelAddress;
         }
 
         if (_.includes($scope.AngularModel.ParcelIDs, parcelId)) {
@@ -160,8 +188,13 @@
         $scope.neptuneMap.map.on("click", onMapClick);
         $scope.neptuneMap.map.scrollWheelZoom.enable();
 
+        //typeaheadSearch("#" + $scope.AngularViewData.TypeAheadInputId,
+        //    "#" + $scope.AngularViewData.TypeAheadInputId + "Button",
+        //    $scope.AngularViewData.FindParcelByNameUrl, "ParcelNumber");
+
         typeaheadSearch("#" + $scope.AngularViewData.TypeAheadInputId,
             "#" + $scope.AngularViewData.TypeAheadInputId + "Button",
+            $scope.AngularViewData.FindParcelByAddress,
             $scope.AngularViewData.FindParcelByNameUrl);
 
         updateSelectedParcelLayer();

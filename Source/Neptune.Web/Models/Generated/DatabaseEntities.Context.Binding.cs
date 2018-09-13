@@ -44,6 +44,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingEventConfiguration());
             modelBuilder.Configurations.Add(new FundingEventFundingSourceConfiguration());
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
+            modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
@@ -102,6 +103,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<FundingEvent> FundingEvents { get { return AllFundingEvents.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<FundingSource> AllFundingSources { get; set; }
         public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<HydrologicSubarea> AllHydrologicSubareas { get; set; }
+        public virtual IQueryable<HydrologicSubarea> HydrologicSubareas { get { return AllHydrologicSubareas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
         public virtual IQueryable<MaintenanceRecordObservation> MaintenanceRecordObservations { get { return AllMaintenanceRecordObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<MaintenanceRecordObservationValue> AllMaintenanceRecordObservationValues { get; set; }
@@ -258,6 +261,14 @@ namespace Neptune.Web.Models
                     var googleChartType = GoogleChartType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(googleChartType, "GoogleChartType", primaryKey);
                     return googleChartType;
+
+                case "HydrologicSubarea":
+                    return HydrologicSubareas.GetHydrologicSubarea(primaryKey);
+
+                case "HydromodificationApplies":
+                    var hydromodificationApplies = HydromodificationApplies.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
+                    return hydromodificationApplies;
 
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
@@ -439,6 +450,11 @@ namespace Neptune.Web.Models
 
                 case "WaterQualityManagementPlanParcel":
                     return WaterQualityManagementPlanParcels.GetWaterQualityManagementPlanParcel(primaryKey);
+
+                case "WaterQualityManagementPlanPermitTerm":
+                    var waterQualityManagementPlanPermitTerm = WaterQualityManagementPlanPermitTerm.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(waterQualityManagementPlanPermitTerm, "WaterQualityManagementPlanPermitTerm", primaryKey);
+                    return waterQualityManagementPlanPermitTerm;
 
                 case "WaterQualityManagementPlanPriority":
                     var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

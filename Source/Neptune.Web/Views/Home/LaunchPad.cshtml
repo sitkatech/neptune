@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.ModalDialog
+﻿@using LtInfo.Common
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Home
 @using Neptune.Web.Views.Shared
@@ -24,8 +25,7 @@
 {
     <div class="row">
         <div class="col-xs-12 launchPadHeader">
-            <h2>Launch Pad</h2>
-            <h4>Welcome @ViewDataTyped.CurrentPerson.FirstName,</h4>
+            <h2>Welcome @ViewDataTyped.CurrentPerson.FirstName,</h2>
             @if (ViewDataTyped.IsUnassigned)
             {
             <p>
@@ -69,6 +69,19 @@
                 <p>You are not assigned to a Jurisdiction</p>
             }
         </div>
+        @if (ViewDataTyped.IsJurisdictionManager)
+        {
+            <div class="col-xs-12">
+                @if (ViewDataTyped.ManagerDashboardDescription != null)
+                {
+                    <div class="alert alert-info" role="alert">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                        <span>@ViewDataTyped.ManagerDashboardDescription.ToHTMLFormattedString()
+                            <a href="@ViewDataTyped.ManagerDashboardUrl" class="alert-link">Go to the Manager Dashboard</a>.</span>
+                    </div>
+                }
+            </div>
+        }
         <div class="col-xs-12">
             <h4>Common Tasks</h4>
         </div>
@@ -164,6 +177,16 @@
                     </div>
                     <div class="col-xs-6 col-md-7 col-lg-8">
                         Edit roles of an existing user in your jurisdiction
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 launchPadAction">
+                <div class="row">
+                    <div class="col-xs-6 col-md-5 col-lg-4">
+                        <a href="@ViewDataTyped.ManagerDashboardUrl" class="btn btn-neptune launchPadActionButton" style="word-wrap: break-word; white-space: pre-wrap;">View Manager Dashboard</a>
+                    </div>
+                    <div class="col-xs-6 col-md-7 col-lg-8">
+                        View and verify provisional records
                     </div>
                 </div>
             </div>

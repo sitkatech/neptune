@@ -31,6 +31,7 @@ using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMPType;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Detail = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Detail;
 using DetailViewData = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.DetailViewData;
 using Edit = Neptune.Web.Views.TreatmentBMPAssessmentObservationType.Edit;
@@ -136,7 +137,7 @@ namespace Neptune.Web.Controllers
             var labelAndUnitsInstructionsNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManageObservationTypeLabelsAndUnitsInstructions);
 
             var submitUrl = ModelObjectHelpers.IsRealPrimaryKeyValue(viewModel.TreatmentBMPAssessmentObservationTypeID) ? SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Edit(viewModel.TreatmentBMPAssessmentObservationTypeID)) : SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.New());
-            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.Except(new []{ObservationTypeCollectionMethod.Rate}).ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, treatmentBMPAssessmentObservationType);
+            var viewData = new EditViewData(CurrentPerson, MeasurementUnitType.All, ObservationTypeSpecification.All, ObservationThresholdType.All, ObservationTargetType.All, ObservationTypeCollectionMethod.All.ToList(), submitUrl, instructionsNeptunePage, observationInstructionsNeptunePage, labelAndUnitsInstructionsNeptunePage, treatmentBMPAssessmentObservationType);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 
@@ -223,5 +224,51 @@ namespace Neptune.Web.Controllers
             var viewData = new ViewPercentageSchemaDetailViewData(schema);
             return RazorPartialView<ViewPercentageSchemaDetail, ViewPercentageSchemaDetailViewData>(viewData);
         }
+
+        // This Get has to exist so that the jQuery posting on the front-end will work
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public ContentResult PreviewObservationType()
+        {
+            return Content("");
+        }
+
+        // This Post looks like it has zero references, but it actually is consumed by the jQuery posting on the front-end
+        [HttpPost]
+        [JurisdictionEditFeature]
+        public ActionResult PreviewObservationType(EditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var modelStateSerialized = JObject
+                    .FromObject(ModelState.ToDictionary(x => x.Key,
+                        x => x.Value.Errors.Select(y => y.ErrorMessage).ToList())).ToString(Formatting.None);
+                Response.StatusCode = 400;
+                Response.ContentType = "application/json";
+                return Content(modelStateSerialized);
+            }
+
+            var observationTypeCollectionMethod = ObservationTypeCollectionMethod.All.Single(x => x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var observationTypeSpecification = ObservationTypeSpecification.All.Single(x =>
+                x.ObservationTargetTypeID == viewModel.ObservationTargetTypeID &&
+                x.ObservationThresholdTypeID == viewModel.ObservationThresholdTypeID &&
+                x.ObservationTypeCollectionMethodID == viewModel.ObservationTypeCollectionMethodID);
+            var treatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(viewModel.TreatmentBMPAssessmentObservationTypeName, observationTypeSpecification, viewModel.TreatmentBMPAssessmentObservationTypeSchema);
+            switch (observationTypeCollectionMethod.ToEnum)
+            {
+                case ObservationTypeCollectionMethodEnum.DiscreteValue:
+                    var discreteCollectionMethodViewData = new DiscreteCollectionMethodViewData(treatmentBMPAssessmentObservationType);
+                    return RazorPartialView<DiscreteCollectionMethod, DiscreteCollectionMethodViewData>(discreteCollectionMethodViewData);
+                case ObservationTypeCollectionMethodEnum.PassFail:
+                    var passFailCollectionMethodViewData = new PassFailCollectionMethodViewData(treatmentBMPAssessmentObservationType);
+                    return RazorPartialView<PassFailCollectionMethod, PassFailCollectionMethodViewData>(passFailCollectionMethodViewData);
+                case ObservationTypeCollectionMethodEnum.Percentage:
+                    var percentageCollectionMethodViewData = new PercentageCollectionMethodViewData(treatmentBMPAssessmentObservationType);
+                    return RazorPartialView<PercentageCollectionMethod, PercentageCollectionMethodViewData>(percentageCollectionMethodViewData);
+                default:
+                    throw new ArgumentException($"Observation Collection Method {observationTypeCollectionMethod.ObservationTypeCollectionMethodDisplayName} not supported by Observation Type Preview.");
+            }
+        }
+
     }
 }

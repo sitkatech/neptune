@@ -25,12 +25,6 @@ namespace Neptune.Web.Models
         public static readonly ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark DiscreteValues_LowTargetValue_PercentFromBenchmark = ObservationTypeSpecificationDiscreteValues_LowTargetValue_PercentFromBenchmark.Instance;
         public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue DiscreteValues_SpecificTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_DiscreteThresholdValue.Instance;
         public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark DiscreteValues_SpecificTargetValue_PercentFromBenchmark = ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark = ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark = ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue.Instance;
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark = ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark.Instance;
         public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue PercentValue_HighTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue.Instance;
         public static readonly ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark PercentValue_HighTargetValue_PercentFromBenchmark = ObservationTypeSpecificationPercentValue_HighTargetValue_PercentFromBenchmark.Instance;
         public static readonly ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue PercentValue_LowTargetValue_DiscreteThresholdValue = ObservationTypeSpecificationPercentValue_LowTargetValue_DiscreteThresholdValue.Instance;
@@ -46,7 +40,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static ObservationTypeSpecification()
         {
-            All = new List<ObservationTypeSpecification> { PassFail_PassFail_None, DiscreteValues_HighTargetValue_DiscreteThresholdValue, DiscreteValues_HighTargetValue_PercentFromBenchmark, DiscreteValues_LowTargetValue_DiscreteThresholdValue, DiscreteValues_LowTargetValue_PercentFromBenchmark, DiscreteValues_SpecificTargetValue_DiscreteThresholdValue, DiscreteValues_SpecificTargetValue_PercentFromBenchmark, MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue, MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark, MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue, MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark, MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue, MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark, PercentValue_HighTargetValue_DiscreteThresholdValue, PercentValue_HighTargetValue_PercentFromBenchmark, PercentValue_LowTargetValue_DiscreteThresholdValue, PercentValue_LowTargetValue_PercentFromBenchmark, PercentValue_SpecificTargetValue_DiscreteThresholdValue, PercentValue_SpecificTargetValue_PercentFromBenchmark };
+            All = new List<ObservationTypeSpecification> { PassFail_PassFail_None, DiscreteValues_HighTargetValue_DiscreteThresholdValue, DiscreteValues_HighTargetValue_PercentFromBenchmark, DiscreteValues_LowTargetValue_DiscreteThresholdValue, DiscreteValues_LowTargetValue_PercentFromBenchmark, DiscreteValues_SpecificTargetValue_DiscreteThresholdValue, DiscreteValues_SpecificTargetValue_PercentFromBenchmark, PercentValue_HighTargetValue_DiscreteThresholdValue, PercentValue_HighTargetValue_PercentFromBenchmark, PercentValue_LowTargetValue_DiscreteThresholdValue, PercentValue_LowTargetValue_PercentFromBenchmark, PercentValue_SpecificTargetValue_DiscreteThresholdValue, PercentValue_SpecificTargetValue_PercentFromBenchmark };
             AllLookupDictionary = new ReadOnlyDictionary<int, ObservationTypeSpecification>(All.ToDictionary(x => x.ObservationTypeSpecificationID));
         }
 
@@ -138,18 +132,6 @@ namespace Neptune.Web.Models
                     return DiscreteValues_SpecificTargetValue_DiscreteThresholdValue;
                 case ObservationTypeSpecificationEnum.DiscreteValues_SpecificTargetValue_PercentFromBenchmark:
                     return DiscreteValues_SpecificTargetValue_PercentFromBenchmark;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue:
-                    return MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark:
-                    return MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue:
-                    return MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark:
-                    return MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue:
-                    return MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue;
-                case ObservationTypeSpecificationEnum.MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark:
-                    return MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark;
                 case ObservationTypeSpecificationEnum.PassFail_PassFail_None:
                     return PassFail_PassFail_None;
                 case ObservationTypeSpecificationEnum.PercentValue_HighTargetValue_DiscreteThresholdValue:
@@ -179,12 +161,6 @@ namespace Neptune.Web.Models
         DiscreteValues_LowTargetValue_PercentFromBenchmark = 5,
         DiscreteValues_SpecificTargetValue_DiscreteThresholdValue = 6,
         DiscreteValues_SpecificTargetValue_PercentFromBenchmark = 7,
-        MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue = 8,
-        MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark = 9,
-        MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue = 10,
-        MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark = 11,
-        MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue = 12,
-        MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark = 13,
         PercentValue_HighTargetValue_DiscreteThresholdValue = 14,
         PercentValue_HighTargetValue_PercentFromBenchmark = 15,
         PercentValue_LowTargetValue_DiscreteThresholdValue = 16,
@@ -233,42 +209,6 @@ namespace Neptune.Web.Models
     {
         private ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
         public static readonly ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark Instance = new ObservationTypeSpecificationDiscreteValues_SpecificTargetValue_PercentFromBenchmark(7, @"DiscreteValues_SpecificTargetValue_PercentFromBenchmark", @" DiscreteValues_SpecificTargetValue_PercentFromBenchmark", 70, 1, 4, 2);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue(8, @"MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue", @" MultipleTimeValuePairs_HighTargetValue_DiscreteThresholdValue", 80, 2, 2, 1);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark(9, @"MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark", @" MultipleTimeValuePairs_HighTargetValue_PercentFromBenchmark", 90, 2, 2, 2);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue(10, @"MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue", @" MultipleTimeValuePairs_LowTargetValue_DiscreteThresholdValue", 100, 2, 3, 1);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark(11, @"MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark", @" MultipleTimeValuePairs_LowTargetValue_PercentFromBenchmark", 110, 2, 3, 2);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue(12, @"MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue", @" MultipleTimeValuePairs_SpecificTargetValue_DiscreteThresholdValue", 120, 2, 4, 1);
-    }
-
-    public partial class ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark : ObservationTypeSpecification
-    {
-        private ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark(int observationTypeSpecificationID, string observationTypeSpecificationName, string observationTypeSpecificationDisplayName, int sortOrder, int observationTypeCollectionMethodID, int observationTargetTypeID, int observationThresholdTypeID) : base(observationTypeSpecificationID, observationTypeSpecificationName, observationTypeSpecificationDisplayName, sortOrder, observationTypeCollectionMethodID, observationTargetTypeID, observationThresholdTypeID) {}
-        public static readonly ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark Instance = new ObservationTypeSpecificationMultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark(13, @"MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark", @" MultipleTimeValuePairs_SpecificTargetValue_PercentFromBenchmark", 130, 2, 4, 2);
     }
 
     public partial class ObservationTypeSpecificationPercentValue_HighTargetValue_DiscreteThresholdValue : ObservationTypeSpecification

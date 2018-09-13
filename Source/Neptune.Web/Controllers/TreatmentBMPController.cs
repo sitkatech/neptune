@@ -19,10 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -31,7 +34,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
-using FindABMP = Neptune.Web.Views.TreatmentBMP.FindABMP;
 
 namespace Neptune.Web.Controllers
 {
@@ -46,10 +48,9 @@ namespace Neptune.Web.Controllers
             var jurisdictionLayerGeoJson = mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
-
-
+            var treatmentBMPTypeSimples = treatmentBmps.GroupBy(x => x.TreatmentBMPType).Select(x => new TreatmentBMPTypeSimple(x.Key)).ToList();
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.FindABMP);
-            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps);
+            var viewData = new FindABMPViewData(CurrentPerson, mapInitJson, neptunePage, treatmentBmps, treatmentBMPTypeSimples);
             return RazorView<FindABMP, FindABMPViewData>(viewData);
         }
         [NeptuneViewFeature]
@@ -85,8 +86,9 @@ namespace Neptune.Web.Controllers
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
+            var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.VerifyInventory(treatmentBMPPrimaryKey));
 
-            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData);
+            var viewData = new DetailViewData(CurrentPerson, treatmentBMP, mapInitJson, imageCarouselViewData, verifiedUnverifiedUrl);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -107,8 +109,9 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel);
             }
 
+            var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
-                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID);
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
@@ -177,6 +180,7 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
@@ -213,6 +217,44 @@ namespace Neptune.Web.Controllers
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
                 organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [TreatmentBMPManageFeature]
+        public PartialViewResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(treatmentBMP.TreatmentBMPID);
+            return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+        }
+
+        [HttpPost]
+        [TreatmentBMPManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult VerifyInventory(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
+            }
+
+            if (!treatmentBMP.InventoryIsVerified)
+            {
+                treatmentBMP.MarkAsVerified(CurrentPerson);
+            }
+            else
+            {
+                treatmentBMP.InventoryIsVerified = false;
+            }
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewVerifyInventoryTreatmentBMP(TreatmentBMP treatmentBMP, ConfirmDialogFormViewModel viewModel)
+        {
+            var action = treatmentBMP.InventoryIsVerified ? "provisional" : "verified";
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to mark BMP record, '{treatmentBMP.TreatmentBMPName}', as '{action}'?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
         [HttpGet]
@@ -258,13 +300,23 @@ namespace Neptune.Web.Controllers
         }
 
         [NeptuneViewFeature]
-        public JsonResult FindByName(string term)
+        [HttpGet]
+        public ContentResult FindByName()
         {
-            var searchString = term.Trim();
+            return new ContentResult();
+        }
+
+        [NeptuneViewFeature]
+        [HttpPost]
+        public JsonResult FindByName(FindABMPViewModel viewModel)
+        {
+            var searchString = viewModel.SearchTerm.Trim();
+            var treatmentBMPTypeIDs = viewModel.TreatmentBMPTypeIDs ?? new List<int>();
             // ReSharper disable once InconsistentNaming
             var allTreatmentBMPsMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(
-                    x => x.TreatmentBMPName.Contains(searchString)).ToList();
+                    x => treatmentBMPTypeIDs.Contains(x.TreatmentBMPTypeID) &&
+                         x.TreatmentBMPName.Contains(searchString)).ToList();
 
             var listItems = allTreatmentBMPsMatchingSearchString.OrderBy(x => x.TreatmentBMPName).Take(20).Select(bmp =>
             {
@@ -300,6 +352,7 @@ namespace Neptune.Web.Controllers
 
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             viewModel.UpdateModel(treatmentBMP, CurrentPerson, customAttributeTypePurpose, allCustomAttributeTypes);
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             SetMessageForDisplay("Custom Attributes successfully saved.");
             return RedirectToAction(new SitkaRoute<TreatmentBMPController>(c => c.Detail(treatmentBMP.PrimaryKey)));
         }
@@ -371,6 +424,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditLocation(treatmentBMP, viewModel);
             }
+            treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
 
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
 
@@ -401,5 +455,11 @@ namespace Neptune.Web.Controllers
             };
             return Content(dl.ToString());
         }
+    }
+
+    public class FindABMPViewModel
+    {
+        public string SearchTerm { get; set; }
+        public List<int> TreatmentBMPTypeIDs { get; set; }
     }
 }

@@ -46,8 +46,8 @@
 <hr>
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-        
-        @using (Html.BeginForm())
+
+        @using (Html.BeginForm("Assessment", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
         {
             <button class="btn btn-neptune" style="display: inline-block;">
                 <span>
@@ -55,8 +55,9 @@
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
-            
+
             <a href="@ViewDataTyped.MaintenanceUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Maintenance <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
+            <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Wrap Up Visit</a>
         }
     </div>
 </div>

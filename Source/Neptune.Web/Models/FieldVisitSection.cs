@@ -21,10 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
-using System;
 using System.Linq;
 using System.Web;
-using Neptune.Web.Views.Shared.SortOrder;
 
 namespace Neptune.Web.Models
 {
@@ -45,20 +43,23 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            yield return new FieldVisitSubsectionData
+            return new[]
             {
-                SubsectionName = "Location",
-                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Location(fieldVisit))
-            };
-            yield return new FieldVisitSubsectionData
-            {
-                SubsectionName = "Photos",
-                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Photos(fieldVisit))
-            };
-            yield return new FieldVisitSubsectionData
-            {
-                SubsectionName = "Attributes",
-                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
+                new FieldVisitSubsectionData
+                {
+                    SubsectionName = "Location",
+                    SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Location(fieldVisit))
+                },
+                new FieldVisitSubsectionData
+                {
+                    SubsectionName = "Photos",
+                    SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Photos(fieldVisit))
+                },
+                new FieldVisitSubsectionData
+                {
+                    SubsectionName = "Attributes",
+                    SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Attributes(fieldVisit))
+                }
             };
         }
 
@@ -133,11 +134,11 @@ namespace Neptune.Web.Models
         }
     }
 
-    public partial class FieldVisitSectionWrapUpVisit
+    public partial class FieldVisitSectionVisitSummary
     {
         public override string GetSectionUrl(FieldVisit fieldVisit)
         {
-            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.WrapUpVisit(fieldVisit));
+            return SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
         }
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
@@ -158,27 +159,33 @@ namespace Neptune.Web.Models
             var treatmentBMP = fieldVisit.TreatmentBMP;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
-            foreach (var observationType in treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
-                .SortByOrderThenName().Select(x => x.TreatmentBMPAssessmentObservationType))
+            var assessmentSubsections = new List<FieldVisitSubsectionData>
             {
-                yield return new FieldVisitSubsectionData
+                new FieldVisitSubsectionData
                 {
-                    SubsectionName = observationType.TreatmentBMPAssessmentObservationTypeName,
-                    SubsectionUrl = observationType.AssessmentUrl(fieldVisit, fieldVisitAssessmentType),
-                    SectionCompletionStatusIndicator = treatmentBMPAssessment.IsObservationComplete(observationType)
-                        ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
-                        : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
-                };
-            }
-
-            yield return new FieldVisitSubsectionData
-            {
-                SubsectionName = "Photos",
-                SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)),
-                SectionCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
-                    ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
-                    : new HtmlString("<span style=\"width: 19px; display: inline-block;\"></span>")
+                    SubsectionName = "Observations",
+                    SubsectionUrl =
+                        SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
+                            c.Observations(fieldVisit, (int) fieldVisitAssessmentType)),
+                    SectionCompletionStatusIndicator =
+                        treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.All(x =>
+                            treatmentBMPAssessment.IsObservationComplete(x.TreatmentBMPAssessmentObservationType))
+                            ? new HtmlString("<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
+                            : new HtmlString("<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left' style='margin-right: 4px'></span>")
+                },
+                new FieldVisitSubsectionData
+                {
+                    SubsectionName = "Photos",
+                    SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
+                        c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)),
+                    SectionCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
+                        ? new HtmlString(
+                            "<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")
+                        : new HtmlString("<span style=\"width: 19px; display: inline-block;\"></span>")
+                }
             };
+
+            return assessmentSubsections;
         }
     }
 }

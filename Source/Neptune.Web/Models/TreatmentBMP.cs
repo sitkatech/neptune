@@ -142,5 +142,27 @@ namespace Neptune.Web.Models
                 !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
             );
         }
+
+        public void MarkInventoryAsProvisionalIfNonManager(Person person)
+        {
+            var isAssignedToStormwaterJurisdiction = person.CanManageStormwaterJurisdiction(StormwaterJurisdiction);
+            if (!isAssignedToStormwaterJurisdiction)
+            {
+                InventoryIsVerified = false;
+            }
+            InventoryLastChangedDate = DateTime.Now;
+        }
+
+        public FieldVisit GetLastFieldVisitWithAnInventoryUpdate()
+        {
+            return FieldVisits.Where(y => y.InventoryUpdated).OrderByDescending(y => y.VisitDate).FirstOrDefault();
+        }
+
+        public void MarkAsVerified(Person currentPerson)
+        {
+            InventoryIsVerified = true;
+            DateOfLastInventoryVerification = DateTime.Now;
+            InventoryVerifiedByPersonID = currentPerson.PersonID;
+        }
     }
 }

@@ -18,10 +18,17 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
+        public static List<TreatmentBMP> GetProvisionalTreatmentBMPs(this IQueryable<TreatmentBMP> treatmentBMP, Person currentPerson)
+        {
+            return treatmentBMP.Where(x => x.InventoryIsVerified == false).ToList().Where(x => x.CanView(currentPerson)).OrderBy(x => x.TreatmentBMPName).ToList();
+        }
     }
 
 }

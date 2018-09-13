@@ -1,7 +1,11 @@
-﻿using System.Web;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Models
 {
@@ -28,6 +32,32 @@ namespace Neptune.Web.Models
         public static string GetDetailUrl(this CustomAttributeType customAttributeType)
         {
             return customAttributeType == null ? "" : DetailUrlTemplate.ParameterReplace(customAttributeType.CustomAttributeTypeID);
+        }
+
+        public static List<ValidationResult> CheckCustomAttributeTypeExpectations(List<CustomAttributeSimple> customAttributeSimples)
+        {
+            var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.GetCustomAttributeTypes(customAttributeSimples);
+            var errors = new List<ValidationResult>();
+            foreach (var customAttributeSimple in customAttributeSimples.Where(x =>
+                x.CustomAttributeValues != null && x.CustomAttributeValues.Count > 0))
+            {
+                var customAttributeType = customAttributeTypes.Single(x =>
+                    x.CustomAttributeTypeID == customAttributeSimple.CustomAttributeTypeID);
+
+                var customAttributeDataType = customAttributeType.CustomAttributeDataType;
+
+                foreach (var value in customAttributeSimple.CustomAttributeValues)
+                {
+                    if (!string.IsNullOrWhiteSpace(value) && !customAttributeDataType.ValueIsCorrectDataType(value))
+                    {
+                        errors.Add(new SitkaValidationResult<EditAttributesViewModel, List<CustomAttributeSimple>>(
+                            $"Entered value for {customAttributeType.CustomAttributeTypeName} does not match expected type ({customAttributeDataType.CustomAttributeDataTypeDisplayName}).",
+                            m => m.CustomAttributes));
+                    }
+                }
+            }
+
+            return errors;
         }
     }
 }

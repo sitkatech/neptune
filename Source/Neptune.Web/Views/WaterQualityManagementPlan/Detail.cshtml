@@ -77,8 +77,39 @@
                     <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName</div>
                 </div>
                 <div class="row">
+                    <label class="col-sm-5 control-label text-right">Permit Term</label>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPermitTerm != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPermitTerm.WaterQualityManagementPlanPermitTermDisplayName
+                        }
+                    </div>
+                </div>
+                <div class="row">
                     <label class="col-sm-5 control-label text-right">Approval Date</label>
                     <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.ApprovalDate.ToStringDate()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Date of Construction</label>
+                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.DateOfContruction.ToStringDate()</div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Hydromodification Applies</label>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.HydromodificationApplies.HydromodificationAppliesDisplayName
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-5 control-label text-right">Hydrologic Subarea</label>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.HydrologicSubarea != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.HydrologicSubarea.HydrologicSubareaName
+                        }
+                    </div>
                 </div>
                 <hr />
                 <div class="row">
@@ -87,7 +118,7 @@
                         <address>
                             @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName))
                             {
-                                <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName</strong><br/>
+                                <strong>@ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactName</strong><br />
                             }
                             @if (!string.IsNullOrWhiteSpace(ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactOrganization))
                             {
@@ -103,11 +134,11 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                {
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                };
+                                                                        {
+                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                                                        };
                             }
                             @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
                             {
@@ -130,6 +161,10 @@
                 Locations
             </div>
             <div class="panel-body">
+                <div>
+                    <a class="btn btn-neptune" href="@ViewDataTyped.EditWaterQualityManagementPlanParcelsUrl">Add Parcels</a>
+                    @ModalDialogFormHelper.ModalDialogFormLink("Add Treatment BMPs", ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl, string.Format("Edit {0} for {1}", FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(), FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(){ "btn", "btn-neptune" }, true)
+                </div>
                 <div id="@ViewDataTyped.MapInitJson.MapDivID"></div>
             </div>
         </div>

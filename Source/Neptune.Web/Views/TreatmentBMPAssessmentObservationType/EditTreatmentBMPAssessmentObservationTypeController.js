@@ -89,11 +89,6 @@
             $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.DiscreteObservationTypeCollectionMethodID;
     }
 
-    $scope.selectedCollectionMethodIsRate = function () {
-        return $scope.ObservationTypeCollectionMethodSelected != null &&
-            $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.RateObservationTypeCollectionMethodID;
-    }
-
     $scope.selectedCollectionMethodIsPassFail = function () {
         return $scope.ObservationTypeCollectionMethodSelected != null &&
             $scope.ObservationTypeCollectionMethodSelected.ID === $scope.AngularViewData.PassFailObservationTypeCollectionMethodID;
@@ -167,7 +162,6 @@
     $scope.previewObservationType = function () {
 
         $scope.populateDefaults();
-        $scope.$apply();
 
         var postData = jQuery("#EditObservationTypeControllerApp").serialize();
 

@@ -18,18 +18,16 @@
         Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-
-@using LtInfo.Common
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Common
-@inherits Neptune.Web.Views.FieldVisit.EditMaintenanceRecord
+@using Neptune.Web.Views.FieldVisit
+@inherits EditMaintenanceRecord
 
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditMaintenanceRecord", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class= "field-visit-form" }))
 {
     <div class="form-horizontal">
         <div class="form-group">
@@ -56,8 +54,10 @@
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.StayOnPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.NextPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Save &amp; Wrap Up Visit</a>
+            <input type="hidden" name="@Html.NameFor(x => x.StepToAdvanceTo)" value="@StepToAdvanceToEnum.WrapUpPage">
         </div>
     </div>
 

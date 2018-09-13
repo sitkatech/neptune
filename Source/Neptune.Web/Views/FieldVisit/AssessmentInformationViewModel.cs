@@ -19,18 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using LtInfo.Common;
-using LtInfo.Common.Models;
-using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
 {
-    public class AssessmentInformationViewModel : FieldVisitSectionViewModel
+    public class AssessmentInformationViewModel : FieldVisitViewModel
     {
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPAssessmentID { get; set; }

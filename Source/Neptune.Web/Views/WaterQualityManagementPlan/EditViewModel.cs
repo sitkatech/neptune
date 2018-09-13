@@ -63,6 +63,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Phone")]
         public string MaintenanceContactPhone { get; set; }
 
+        [DisplayName("Date of Contruction")]
+        public DateTime? DateOfContruction { get; set; }
+
+        [DisplayName("Hydromodification Applies")]
+        public int? HydromodificationAppliesID { get; set; }
+
+        [DisplayName("Permit Term")]
+        public int? WaterQualityManagementPlanPermitTermID { get; set; }
+
+        [DisplayName("Hydrologic Subarea")]
+        public int? HydrologicSubareaID { get; set; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -87,9 +99,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             MaintenanceContactState = waterQualityManagementPlan.MaintenanceContactState;
             MaintenanceContactZip = waterQualityManagementPlan.MaintenanceContactZip;
             MaintenanceContactPhone = waterQualityManagementPlan.MaintenanceContactPhone;
+            DateOfContruction = waterQualityManagementPlan.DateOfContruction;
+            HydromodificationAppliesID = waterQualityManagementPlan.HydromodificationAppliesID;
+            WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
+            HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
         }
 
-        public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
@@ -109,6 +125,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.MaintenanceContactState = MaintenanceContactState;
             waterQualityManagementPlan.MaintenanceContactZip = MaintenanceContactZip;
             waterQualityManagementPlan.MaintenanceContactPhone = MaintenanceContactPhone;
+            waterQualityManagementPlan.DateOfContruction = DateOfContruction;
+            waterQualityManagementPlan.HydromodificationAppliesID = HydromodificationAppliesID;
+            waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
+            waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

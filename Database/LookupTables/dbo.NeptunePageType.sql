@@ -31,4 +31,5 @@ values
 (26, 'InviteUser', 'Invite User', 2),
 (27, 'WaterQualityMaintenancePlan', 'Water Quality Maintenance Plan', 2),
 (28, 'ParcelList', 'Parcel List', 2),
-(29, 'Training', 'Training', 2)
+(29, 'Training', 'Training', 2),
+(30, 'ManagerDashboard', 'Manager Dashboard', 2)

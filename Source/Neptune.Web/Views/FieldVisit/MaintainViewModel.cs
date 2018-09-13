@@ -1,6 +1,8 @@
-﻿namespace Neptune.Web.Views.FieldVisit
+﻿using LtInfo.Common.Models;
+
+namespace Neptune.Web.Views.FieldVisit
 {
-    public class MaintainViewModel : FieldVisitSectionViewModel
+    public class MaintainViewModel : FieldVisitViewModel
     {
     }
 }
