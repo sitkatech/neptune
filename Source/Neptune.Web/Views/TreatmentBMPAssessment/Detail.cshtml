@@ -140,7 +140,7 @@ Source code is available upon request via <support@sitkatech.com>.
                                         {
                                             <tr>
                                                 <td>@observation.PropertyObserved</td>
-                                                <td>@observation.ObservationValue</td>
+                                                <td>@string.Format("{0} {1}", observation.ObservationValue, treatmentBMPObservation.TreatmentBMPAssessmentObservationType.GetMeasurementUnitType().LegendDisplayName)</td>
                                                 <td>@observation.Notes</td>
                                             </tr>
                                         }
