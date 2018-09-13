@@ -247,6 +247,7 @@ namespace Neptune.Web.Controllers
             }
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
+            fieldVisit.InventoryUpdated = true;
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
 
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
@@ -508,9 +509,7 @@ namespace Neptune.Web.Controllers
                 return ViewVerifyFieldVisit(fieldVisit, viewModel);
             }
 
-            fieldVisit.IsFieldVisitVerified = true;
-            fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
-
+            fieldVisit.VerifyFieldVisit(CurrentPerson);
             return new ModalDialogFormJsonResult();
         }
 

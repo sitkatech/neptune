@@ -60,7 +60,7 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => viewModel.EntityIDList.Contains(x.TreatmentBMPID)).ToList();
-            treatmentBMPs = treatmentBMPs.Select(x => { x.InventoryIsVerified = true; return x; }).ToList();
+            treatmentBMPs.ForEach(x => x.MarkAsVerified(CurrentPerson));
             var numberOfVerifiedTreatmentBMPs = treatmentBMPs.Count;
             SetMessageForDisplay($"{numberOfVerifiedTreatmentBMPs} BMPs were successfully verified.");
             return new ModalDialogFormJsonResult();
@@ -88,10 +88,8 @@ namespace Neptune.Web.Controllers
             }
 
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => viewModel.EntityIDList.Contains(x.FieldVisitID)).ToList();
-            fieldVisits = fieldVisits.Select(x => { x.IsFieldVisitVerified = true; return x; }).ToList();
-
-            var numberOfVerifiedFieldVists = fieldVisits.Count;
-            SetMessageForDisplay($"{numberOfVerifiedFieldVists} Field Visits were successfully verified.");
+            fieldVisits.ForEach(x => x.VerifyFieldVisit(CurrentPerson));
+            SetMessageForDisplay($"{fieldVisits.Count} Field Visits were successfully verified.");
             return new ModalDialogFormJsonResult();
         }
 

@@ -239,14 +239,14 @@ namespace Neptune.Web.Controllers
                 return ViewVerifyInventoryTreatmentBMP(treatmentBMP, viewModel);
             }
 
-            treatmentBMP.InventoryIsVerified = !treatmentBMP.InventoryIsVerified;
-
-            if (treatmentBMP.InventoryIsVerified)
+            if (!treatmentBMP.InventoryIsVerified)
             {
-                treatmentBMP.DateOfLastInventoryVerification = DateTime.Now;
-                treatmentBMP.InventoryVerifiedByPersonID = CurrentPerson.PersonID;
+                treatmentBMP.MarkAsVerified(CurrentPerson);
             }
-            
+            else
+            {
+                treatmentBMP.InventoryIsVerified = false;
+            }
             return new ModalDialogFormJsonResult();
         }
 
