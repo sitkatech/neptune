@@ -1,11 +1,11 @@
-ALTER TABLE WaterQualityManagementPlan DROP CONSTRAINT FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID
+ALTER TABLE dbo.WaterQualityManagementPlan DROP CONSTRAINT FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID
 GO
 
-DROP TABLE HydrologicSubarea;
+DROP TABLE dbo.HydrologicSubarea;
 GO
 
 
-CREATE TABLE HydrologicSubarea (
+CREATE TABLE dbo.HydrologicSubarea (
     HydrologicSubareaID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_HydrologicSubarea_HydrologicSubareaID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_HydrologicSubarea_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	HydrologicSubareaName VARCHAR(100) NOT NULL CONSTRAINT AK_HydrologicSubarea_HydrologicSubareaName UNIQUE
@@ -28,8 +28,8 @@ VALUES
 
 
 
-ALTER TABLE WaterQualityManagementPlan
+ALTER TABLE dbo.WaterQualityManagementPlan
 DROP COLUMN HydrologicSubareaID
 
-ALTER TABLE WaterQualityManagementPlan
+ALTER TABLE dbo.WaterQualityManagementPlan
 ADD HydrologicSubareaID INT NULL CONSTRAINT FK_WaterQualityManagementPlan_HydrologicSubarea_HydrologicSubareaID FOREIGN KEY REFERENCES dbo.HydrologicSubarea (HydrologicSubareaID);
