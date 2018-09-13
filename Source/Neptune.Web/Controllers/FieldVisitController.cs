@@ -737,7 +737,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.InitialAssessment?.DeleteFull();
             fieldVisit.MaintenanceRecord?.DeleteFull();
             fieldVisit.PostMaintenanceAssessment?.DeleteFull();
-            fieldVisit.DeleteFieldVisit();
+            fieldVisit.DeleteFull();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay("Successfully deleted the field visit.");
