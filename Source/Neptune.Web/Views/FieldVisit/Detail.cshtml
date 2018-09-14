@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @inherits Neptune.Web.Views.FieldVisit.Detail
 
@@ -161,19 +162,160 @@
             </div>
             <div id="assessment" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Assessment</h2></div>
-                <div class="wizardHeader">Coming Soon!</div>
+                <div class="wizardMain">Coming Soon!</div>
             </div>
             <div id="maintenance" role="tabpanel" class="tab-pane">
-                <div class="wizardHeader"><h2>Maintenance</h2></div>
-                <div class="wizardHeader">Coming Soon!</div>
+                <div class="row wizardHeader">
+                    <div class="col-sm-6" style="padding-left: 0;">
+                        <h2>Maintenance</h2>
+                    </div>
+                    <div class="col-sm-6 text-right" style="margin-top: 20px;">
+                        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.MaintenanceRecord.GetDeleteUrl(), new List<string>{"btn btn-neptune"}, ViewDataTyped.UserCanDeleteMaintenanceRecord)
+                    </div>
+                </div>
+                <div class="wizardMain">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Status:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordStatus()
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Type:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Performed By:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.MaintenanceRecord.GetMaintenanceRecordPerson().GetFullNameFirstLast()
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Description:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordDescription
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4>Observations</h4>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Attribute</th>
+                                    <th class="text-right">Value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
+                                            <br />
+                                            <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                        </td>
+                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.FieldVisit.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="postMaintenanceAssessment" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Post-Maintenance Assessment</h2></div>
-                <div class="wizardHeader">Coming Soon!</div>
+                <div class="wizardMain">Coming Soon!</div>
             </div>
             <div id="visitSummary" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Visit Summary</h2></div>
-                <div class="wizardHeader">Coming Soon!</div>
+                <div class="wizardMain">
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Status</label>
+                        <div class="col-sm-9">@ViewDataTyped.FieldVisit.FieldVisitStatus.FieldVisitStatusDisplayName</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Performed by</label>
+                        <div class="col-sm-9">@ViewDataTyped.FieldVisit.PerformedByPerson.GetFullNameFirstLast()</div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Date</label>
+                        <div class="col-sm-9">@ViewDataTyped.FieldVisit.VisitDate.ToShortDateString()</div>
+                    </div>
+
+                    <h4>Visit Details</h4>
+
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Inventory Updated?</label>
+                        <div class="col-sm-9">@ViewDataTyped.FieldVisit.InventoryUpdated.ToYesNo()</div>
+                    </div>
+                    @if (ViewDataTyped.FieldVisit.InventoryUpdated)
+                    {
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Status</label>
+                            <div class="col-sm-9">@ViewDataTyped.FieldVisit.TreatmentBMP.CustomAttributeStatus()</div>
+                        </div>
+                    }
+                    <br />
+
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Assessment Performed?</label>
+                        <div class="col-sm-9">@(ViewDataTyped.FieldVisit.InitialAssessment == null ? "No" : "Yes")</div>
+                    </div>
+                    @if (ViewDataTyped.FieldVisit.InitialAssessment != null)
+                    {
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Status</label>
+                            <div class="col-sm-9">@(ViewDataTyped.FieldVisit.InitialAssessment.AssessmentStatus())</div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Score</label>
+                            <div class="col-sm-9">@ViewDataTyped.FieldVisit.InitialAssessment.FormattedScore()</div>
+                        </div>
+                    }
+                    <br />
+
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Maintenance Performed?</label>
+                        <div class="col-sm-9">@(ViewDataTyped.FieldVisit.MaintenanceRecord == null ? "No" : "Yes")</div>
+                    </div>
+                    @if (ViewDataTyped.FieldVisit.MaintenanceRecord != null)
+                    {
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Status</label>
+                            <div class="col-sm-9">@ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordStatus()</div>
+                        </div>
+                    }
+                    <br />
+
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Post-Maintenance Assessment Performed?</label>
+                        <div class="col-sm-9">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment == null ? "No" : "Yes")</div>
+                    </div>
+                    @if (ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null)
+                    {
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Status</label>
+                            <div class="col-sm-9">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment.AssessmentStatus())</div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Score</label>
+                            <div class="col-sm-9">@ViewDataTyped.FieldVisit.PostMaintenanceAssessment.FormattedScore()</div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
