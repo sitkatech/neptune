@@ -47,7 +47,7 @@ else
                 <tr>
                     <th scope="col">BMP Name</th>
                     <th scope="col">Verified By</th>
-                    <th scope="col">Date Last Modified</th>
+                    <th scope="col">Date of Last Inventory Change</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -66,9 +66,9 @@ else
                             }
                         </td>
                         <td>
-                            @if (treatmentBMP.GetLastFieldVisitWithAnInventoryUpdate() != null)
+                            @if (treatmentBMP.InventoryLastChangedDate != null)
                             {
-                                <span>@treatmentBMP.GetLastFieldVisitWithAnInventoryUpdate().VisitDate</span>
+                                <span>@treatmentBMP.InventoryLastChangedDate</span>
                             }
                             else
                             {
