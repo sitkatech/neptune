@@ -139,7 +139,14 @@
                 </div>
             </div>
             <div id="assessment" role="tabpanel" class="tab-pane">
-                <div class="wizardHeader"><h2>Assessment</h2></div>
+                <div class="row wizardHeader">
+                    <div class="col-sm-6" style="padding-left: 0;">
+                        <h2>Assesment</h2>
+                    </div>
+                    <div class="col-sm-6 text-right" style="margin-top: 20px;">
+                        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.InitialAssessment != null ? ViewDataTyped.FieldVisit.InitialAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-neptune" }, ViewDataTyped.UserCanDeleteInitialAssessment)
+                    </div>
+                </div>
                 <div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.InitialAssessmentViewData);}</div>
             </div>
             <div id="maintenance" role="tabpanel" class="tab-pane">
@@ -220,12 +227,19 @@
                     }
                     else
                     {
-                        <p class="systemText">No maintenance performed during this Field Visit</p>
+                        <p class="systemText">No maintenance was performed during this Field Visit</p>
                     }
                 </div>
             </div>
             <div id="postMaintenanceAssessment" role="tabpanel" class="tab-pane">
-                <div class="wizardHeader"><h2>Post-Maintenance Assessment</h2></div>
+                <div class="row wizardHeader">
+                    <div class="col-sm-6" style="padding-left: 0;">
+                        <h2>Post-Maintenance Assesment</h2>
+                    </div>
+                    <div class="col-sm-6 text-right" style="margin-top: 20px;">
+                        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null ? ViewDataTyped.FieldVisit.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-neptune" }, ViewDataTyped.UserCanDeletePostMaintenanceAssessment)
+                    </div>
+                </div>
                 <div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.PostMaintenanceAssessmentViewData);}</div>
             </div>
             <div id="visitSummary" role="tabpanel" class="tab-pane">
