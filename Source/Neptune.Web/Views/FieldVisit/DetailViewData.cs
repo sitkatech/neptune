@@ -21,6 +21,8 @@ namespace Neptune.Web.Views.FieldVisit
         public Models.MaintenanceRecord MaintenanceRecord { get; }
         public bool UserCanDeleteInitialAssessment { get; }
         public bool UserCanDeletePostMaintenanceAssessment { get; }
+        public bool CanManageStormwaterJurisdiction { get; }
+        public string VerifiedUnverifiedFieldVisitUrl { get; }
 
         public DetailViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
             Models.FieldVisit fieldVisit, AssessmentDetailViewData initialAssessmentViewData, AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, stormwaterBreadCrumbEntity)
@@ -50,6 +52,9 @@ namespace Neptune.Web.Views.FieldVisit
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
                 .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            
+            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+            VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
         }
 
     }
