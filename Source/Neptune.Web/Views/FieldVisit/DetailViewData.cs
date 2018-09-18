@@ -18,11 +18,13 @@ namespace Neptune.Web.Views.FieldVisit
 
         public AssessmentDetailViewData InitialAssessmentViewData { get; }
         public AssessmentDetailViewData PostMaintenanceAssessmentViewData { get; }
+        public Models.MaintenanceRecord MaintenanceRecord { get; }
 
         public DetailViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
             Models.FieldVisit fieldVisit, AssessmentDetailViewData initialAssessmentViewData, AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, stormwaterBreadCrumbEntity)
         {
             FieldVisit  = fieldVisit;
+            MaintenanceRecord = FieldVisit.MaintenanceRecord;
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
             EntityName = "Treatment BMP Field Visits";
@@ -30,8 +32,11 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityName = FieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = FieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = FieldVisit.VisitDate.ToStringDate();
-            UserCanDeleteMaintenanceRecord = new MaintenanceRecordManageFeature().HasPermission(currentPerson, FieldVisit.MaintenanceRecord).HasPermission;
-            SortedMaintenanceRecordObservations = FieldVisit.MaintenanceRecord.MaintenanceRecordObservations.ToList()
+            UserCanDeleteMaintenanceRecord = FieldVisit.MaintenanceRecord != null &&
+                                             new MaintenanceRecordManageFeature()
+                                                 .HasPermission(currentPerson, FieldVisit.MaintenanceRecord)
+                                                 .HasPermission;
+            SortedMaintenanceRecordObservations = FieldVisit.MaintenanceRecord?.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
                 .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);

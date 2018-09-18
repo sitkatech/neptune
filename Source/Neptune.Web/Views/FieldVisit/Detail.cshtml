@@ -148,16 +148,18 @@
                         <h2>Maintenance</h2>
                     </div>
                     <div class="col-sm-6 text-right" style="margin-top: 20px;">
-                        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.MaintenanceRecord.GetDeleteUrl(), new List<string>{"btn btn-neptune"}, ViewDataTyped.UserCanDeleteMaintenanceRecord)
+                        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.MaintenanceRecord != null ? ViewDataTyped.MaintenanceRecord.GetDeleteUrl() : "", new List<string>{"btn btn-neptune"}, ViewDataTyped.UserCanDeleteMaintenanceRecord)
                     </div>
                 </div>
                 <div class="wizardMain">
+                    @if(ViewDataTyped.MaintenanceRecord != null)
+                    {
                     <div class="row">
                         <div class="col-sm-3">
                             <label>Status:</label>
                         </div>
                         <div class="col-sm-9">
-                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordStatus()
+                            @ViewDataTyped.MaintenanceRecord.MaintenanceRecordStatus()
                         </div>
                     </div>
                     <div class="row">
@@ -165,7 +167,7 @@
                             <label>Type:</label>
                         </div>
                         <div class="col-sm-9">
-                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName
+                            @ViewDataTyped.MaintenanceRecord.MaintenanceRecordType.MaintenanceRecordTypeDisplayName
                         </div>
                     </div>
                     <div class="row">
@@ -173,7 +175,7 @@
                             <label>Performed By:</label>
                         </div>
                         <div class="col-sm-9">
-                            @ViewDataTyped.FieldVisit.MaintenanceRecord.GetMaintenanceRecordPerson().GetFullNameFirstLast()
+                            @ViewDataTyped.MaintenanceRecord.GetMaintenanceRecordPerson().GetFullNameFirstLast()
                         </div>
                     </div>
                     <div class="row">
@@ -181,7 +183,7 @@
                             <label>Description:</label>
                         </div>
                         <div class="col-sm-9">
-                            @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordDescription
+                            @ViewDataTyped.MaintenanceRecord.MaintenanceRecordDescription
                         </div>
                     </div>
                     <hr/>
@@ -192,29 +194,34 @@
                                 <div class="panel-body">
                                     <table class="table">
                                         <thead>
-                                            <tr>
-                                                <th>Attribute</th>
-                                                <th class="text-right">Value</th>
-                                            </tr>
+                                        <tr>
+                                            <th>Attribute</th>
+                                            <th class="text-right">Value</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
-                                            {
-                                                <tr>
-                                                    <td>
-                                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
-                                                        <br />
-                                                        <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
-                                                    </td>
-                                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.FieldVisit.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
-                                                </tr>
-                                            }
+                                        @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
+                                                    <br/>
+                                                    <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                                </td>
+                                                <td class="text-right" style="min-width: 150px">@ViewDataTyped.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
+                                            </tr>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    }
+                    else
+                    {
+                        <p class="systemText">No maintenance performed during this Field Visit</p>
+                    }
                 </div>
             </div>
             <div id="postMaintenanceAssessment" role="tabpanel" class="tab-pane">
@@ -271,13 +278,13 @@
 
                     <div class="row">
                         <label class="col-sm-3 control-label text-right">Maintenance Performed?</label>
-                        <div class="col-sm-9">@(ViewDataTyped.FieldVisit.MaintenanceRecord == null ? "No" : "Yes")</div>
+                        <div class="col-sm-9">@(ViewDataTyped.MaintenanceRecord == null ? "No" : "Yes")</div>
                     </div>
-                    @if (ViewDataTyped.FieldVisit.MaintenanceRecord != null)
+                    @if (ViewDataTyped.MaintenanceRecord != null)
                     {
                         <div class="row">
                             <label class="col-sm-3 control-label text-right">Status</label>
-                            <div class="col-sm-9">@ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordStatus()</div>
+                            <div class="col-sm-9">@ViewDataTyped.MaintenanceRecord.MaintenanceRecordStatus()</div>
                         </div>
                     }
                     <br />
