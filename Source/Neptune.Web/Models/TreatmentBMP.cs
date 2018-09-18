@@ -153,11 +153,6 @@ namespace Neptune.Web.Models
             InventoryLastChangedDate = DateTime.Now;
         }
 
-        public FieldVisit GetLastFieldVisitWithAnInventoryUpdate()
-        {
-            return FieldVisits.Where(y => y.InventoryUpdated).OrderByDescending(y => y.VisitDate).FirstOrDefault();
-        }
-
         public void MarkAsVerified(Person currentPerson)
         {
             InventoryIsVerified = true;
