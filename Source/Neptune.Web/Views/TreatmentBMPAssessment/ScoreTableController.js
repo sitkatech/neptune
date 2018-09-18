@@ -22,14 +22,6 @@ angular.module("NeptuneApp").controller("ScoreTableController", function ($scope
 {
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-    $scope.overrideScore = function()
-    {
-        var overridingObservationTypes = $scope.AngularViewData.ObservationTypeSimples.filter(function(observationTypeSimple) {
-            return observationTypeSimple.TreatmentBMPObservationSimple == null ? null : observationTypeSimple.TreatmentBMPObservationSimple.OverrideScore;
-        });
-        return overridingObservationTypes.length !== 0;
-    }
-
     $scope.getHue = function (value) {
         if (Sitka.Methods.isUndefinedNullOrEmpty(value) || value <= 2)
         {
