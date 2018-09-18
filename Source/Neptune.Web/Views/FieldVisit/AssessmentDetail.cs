@@ -19,8 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Mvc;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Models;
+using Neptune.Web.Views.Shared;
+using Neptune.Web.Views.TreatmentBMPAssessment;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -34,8 +40,26 @@ namespace Neptune.Web.Views.FieldVisit
 
     public class AssessmentDetailViewData
     {
-        public AssessmentDetailViewData(Models.TreatmentBMPAssessment assessment)
+        public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
+        public bool CurrentPersonCanManage { get; }
+        public bool CanEdit { get; }
+        public ScoreDetailViewData ScoreDetailViewData { get; }
+        public string EditBenchmarkAndThresholdUrl { get; }
+        public ImageCarouselViewData ImageCarouselViewData { get; }
+
+        public AssessmentDetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
         {
+            TreatmentBMPAssessment = treatmentBMPAssessment;
+            CurrentPersonCanManage = currentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);
+            ScoreDetailViewData = new ScoreDetailViewData(treatmentBMPAssessment);
+            EditBenchmarkAndThresholdUrl =
+                SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x =>
+                    x.Instructions(treatmentBMPAssessment.TreatmentBMP));
+
+            CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(currentPerson) && !treatmentBMPAssessment.IsAssessmentComplete();
+
+            var carouselImages = TreatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
+            ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
         }
     }
 }

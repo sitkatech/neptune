@@ -140,7 +140,7 @@
             </div>
             <div id="assessment" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Assessment</h2></div>
-                <div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.InitialAssessmentViewData);}</div>
+                @*<div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.InitialAssessmentViewData);}</div>*@
             </div>
             <div id="maintenance" role="tabpanel" class="tab-pane">
                 <div class="row wizardHeader">
@@ -184,30 +184,35 @@
                             @ViewDataTyped.FieldVisit.MaintenanceRecord.MaintenanceRecordDescription
                         </div>
                     </div>
+                    <hr/>
                     <div class="row">
                         <div class="col-sm-12">
-                            <h4>Observations</h4>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Attribute</th>
-                                    <th class="text-right">Value</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
-                                            <br />
-                                            <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
-                                        </td>
-                                        <td class="text-right" style="min-width: 150px">@ViewDataTyped.FieldVisit.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
+                            <div class="panel panelNeptune">
+                                <div class="panel-heading panelTitle">Observations</div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Attribute</th>
+                                                <th class="text-right">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var mro in ViewDataTyped.SortedMaintenanceRecordObservations)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? mro.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(mro.CustomAttributeType.CustomAttributeTypeName))
+                                                        <br />
+                                                        <span class="help-block">@mro.CustomAttributeType.CustomAttributeTypeDescription</span>
+                                                    </td>
+                                                    <td class="text-right" style="min-width: 150px">@ViewDataTyped.FieldVisit.MaintenanceRecord.GetObservationValueWithUnitsForAttributeType(mro.CustomAttributeType)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
