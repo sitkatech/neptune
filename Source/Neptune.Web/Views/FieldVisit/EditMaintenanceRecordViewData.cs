@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.FieldVisit
 
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
-            MaintenanceRecordUrl = fieldVisit.MaintenanceRecord?.GetDetailUrl();
+            MaintenanceRecordUrl = fieldVisit.GetMaintenanceRecord()?.GetDetailUrl();
         }
 
         public bool IsNew { get; }

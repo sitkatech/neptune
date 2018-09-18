@@ -23,8 +23,6 @@ namespace Neptune.Web.Models
         /// </summary>
         protected TreatmentBMPAssessment()
         {
-            this.FieldVisitsWhereYouAreTheInitialAssessment = new HashSet<FieldVisit>();
-            this.FieldVisitsWhereYouAreThePostMaintenanceAssessment = new HashSet<FieldVisit>();
             this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
@@ -33,30 +31,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, string notes) : this()
+        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, string notes) : this()
         {
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.FieldVisitID = fieldVisitID;
+            this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentTypeID;
             this.Notes = notes;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID) : this()
+        public TreatmentBMPAssessment(int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.FieldVisitID = fieldVisitID;
+            this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType) : this()
+        public TreatmentBMPAssessment(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit, TreatmentBMPAssessmentType treatmentBMPAssessmentType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -66,14 +68,18 @@ namespace Neptune.Web.Models
             this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
             this.TreatmentBMPType = treatmentBMPType;
             treatmentBMPType.TreatmentBMPAssessments.Add(this);
+            this.FieldVisitID = fieldVisit.FieldVisitID;
+            this.FieldVisit = fieldVisit;
+            fieldVisit.TreatmentBMPAssessments.Add(this);
+            this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentType.TreatmentBMPAssessmentTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType)
+        public static TreatmentBMPAssessment CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit, TreatmentBMPAssessmentType treatmentBMPAssessmentType)
         {
-            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType);
+            return new TreatmentBMPAssessment(treatmentBMP, treatmentBMPType, fieldVisit, treatmentBMPAssessmentType);
         }
 
         /// <summary>
@@ -82,13 +88,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return (FieldVisitWhereYouAreTheInitialAssessment != null) || (FieldVisitWhereYouAreThePostMaintenanceAssessment != null) || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPObservations.Any();
+            return TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPObservations.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessment).Name, typeof(FieldVisit).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPObservation).Name};
 
 
         /// <summary>
@@ -96,16 +102,6 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
-
-            foreach(var x in FieldVisitsWhereYouAreTheInitialAssessment.ToList())
-            {
-                x.DeleteFull();
-            }
-
-            foreach(var x in FieldVisitsWhereYouAreThePostMaintenanceAssessment.ToList())
-            {
-                x.DeleteFull();
-            }
 
             foreach(var x in TreatmentBMPAssessmentPhotos.ToList())
             {
@@ -124,21 +120,19 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
+        public int FieldVisitID { get; set; }
+        public int TreatmentBMPAssessmentTypeID { get; set; }
         public string Notes { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
 
-        public virtual ICollection<FieldVisit> FieldVisitsWhereYouAreTheInitialAssessment { get; set; }
-        [NotMapped]
-        public FieldVisit FieldVisitWhereYouAreTheInitialAssessment { get { return FieldVisitsWhereYouAreTheInitialAssessment.SingleOrDefault(); } set { FieldVisitsWhereYouAreTheInitialAssessment = new List<FieldVisit>{value};} }
-        public virtual ICollection<FieldVisit> FieldVisitsWhereYouAreThePostMaintenanceAssessment { get; set; }
-        [NotMapped]
-        public FieldVisit FieldVisitWhereYouAreThePostMaintenanceAssessment { get { return FieldVisitsWhereYouAreThePostMaintenanceAssessment.SingleOrDefault(); } set { FieldVisitsWhereYouAreThePostMaintenanceAssessment = new List<FieldVisit>{value};} }
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
+        public virtual FieldVisit FieldVisit { get; set; }
+        public TreatmentBMPAssessmentType TreatmentBMPAssessmentType { get { return TreatmentBMPAssessmentType.AllLookupDictionary[TreatmentBMPAssessmentTypeID]; } }
 
         public static class FieldLengths
         {

@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.Views;
 
 namespace Neptune.Web.Models
 {
@@ -134,41 +135,25 @@ namespace Neptune.Web.Models
             return treatmentBMPObservation != null;
         }
 
-        public FieldVisit GetFieldVisit()
-        {
-            return FieldVisitWhereYouAreTheInitialAssessment ??
-                   FieldVisitWhereYouAreThePostMaintenanceAssessment;
-        }
-
         public Person GetFieldVisitPerson()
         {
-            return GetFieldVisit().PerformedByPerson;
+            return FieldVisit.PerformedByPerson;
         }
 
 
         public DateTime GetAssessmentDate()
         {
-            return GetFieldVisit().VisitDate;
-        }
-
-        public bool IsInitialAssessment()
-        {
-            return FieldVisitWhereYouAreTheInitialAssessment != null;
-        }
-
-        public bool IsPostMaintenanceAssessment()
-        {
-            return FieldVisitWhereYouAreThePostMaintenanceAssessment != null;
+            return FieldVisit.VisitDate;
         }
 
         public string CalculateObservationValueForObservationType(TreatmentBMPAssessmentObservationType observationType)
         {
-            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
-                .Select(x => x.TreatmentBMPAssessmentObservationType).Contains(observationType))
-                return "N/A";
-            return TreatmentBMPObservations?.SingleOrDefault(y =>
-                       y.TreatmentBMPAssessmentObservationTypeID ==
-                       observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue() ?? "Not Provided";
+            if (!TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.Select(x => x.TreatmentBMPAssessmentObservationType).Contains(observationType))
+            {
+                return ViewUtilities.NaString;
+            }
+
+            return TreatmentBMPObservations?.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationTypeID == observationType.TreatmentBMPAssessmentObservationTypeID)?.FormattedObservationValue() ?? ViewUtilities.NotProvidedString;
         }
     }
 }

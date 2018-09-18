@@ -18,7 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
-@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
 @inherits Assessment
@@ -46,18 +46,17 @@
 <hr>
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-
-        @using (Html.BeginForm("Assessment", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
-        {
+        
+        <form method="post" class="field-visit-form">
             <button class="btn btn-neptune" style="display: inline-block;">
                 <span>
-                    @(ViewDataTyped.FieldVisit.InitialAssessment == null ? "Begin Assessment" : "Continue Assessment")
+                    @(ViewDataTyped.FieldVisit.GetInitialAssessment() == null ? "Begin Assessment" : "Continue Assessment")
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
 
             <a href="@ViewDataTyped.MaintenanceUrl" class="btn btn-neptune" style="display: inline-block;">Skip to Maintenance <span class="glyphicon glyphicon-forward" style="margin-left: 10px;"></span></a>
             <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Wrap Up Visit</a>
-        }
+        </form>
     </div>
 </div>

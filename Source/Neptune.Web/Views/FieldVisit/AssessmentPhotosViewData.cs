@@ -9,7 +9,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public AssessmentPhotosViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment,
             Models.FieldVisitSection fieldVisitSection, ManagePhotosWithPreviewViewData managePhotosWithPreviewViewData)
-            : base(currentPerson, treatmentBMPAssessment.GetFieldVisit(), fieldVisitSection)
+            : base(currentPerson, treatmentBMPAssessment.FieldVisit, fieldVisitSection)
         {
             SubsectionName = "Photos";
             SectionHeader = $"{SectionHeader} - {SubsectionName}";

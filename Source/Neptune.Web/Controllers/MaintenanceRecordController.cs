@@ -6,8 +6,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.MaintenanceRecord;
 using Neptune.Web.Views.Shared;
-using  DetailViewData = Neptune.Web.Views.MaintenanceRecord.DetailViewData;
-using  Detail = Neptune.Web.Views.MaintenanceRecord.Detail;
 
 namespace Neptune.Web.Controllers
 {
@@ -65,12 +63,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDelete(viewModel);
             }
-
-            maintenanceRecord.MaintenanceRecordObservations.DeleteMaintenanceRecordObservation();
-            maintenanceRecord.FieldVisit?.DetachMaintenanceRecord();
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-            maintenanceRecord.DeleteMaintenanceRecord();
-
+            maintenanceRecord.DeleteFull();
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
         }

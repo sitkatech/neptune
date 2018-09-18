@@ -401,6 +401,11 @@ namespace Neptune.Web.Models
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);
 
+                case "TreatmentBMPAssessmentType":
+                    var treatmentBMPAssessmentType = TreatmentBMPAssessmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPAssessmentType, "TreatmentBMPAssessmentType", primaryKey);
+                    return treatmentBMPAssessmentType;
+
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);
 

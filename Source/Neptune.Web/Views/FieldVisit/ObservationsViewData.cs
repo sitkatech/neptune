@@ -34,18 +34,18 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public ObservationsViewDataForAngular ViewDataForAngular { get; }
         public string SubmitUrl { get; }    
-        public FieldVisitAssessmentType FieldVisitAssessmentType { get; set; }
+        public TreatmentBMPAssessmentTypeEnum TreatmentBMPAssessmentTypeEnum { get; set; }
 
-        public ObservationsViewData(Models.FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType, Person currentPerson)
-            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection) Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
+        public ObservationsViewData(Models.FieldVisit fieldVisit, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum, Person currentPerson)
+            : base(currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (Models.FieldVisitSection) Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
-            var initialAssessmentObservations = fieldVisit.InitialAssessment?.TreatmentBMPObservations.Select(x =>
+            var initialAssessmentObservations = fieldVisit.GetInitialAssessment()?.TreatmentBMPObservations.Select(x =>
                 new CollectionMethodSectionViewModel(x, x.TreatmentBMPAssessmentObservationType)).ToList();
             SubsectionName = "Observations";
             SectionHeader = "Observations";
-            FieldVisitAssessmentType = fieldVisitAssessmentType;
+            TreatmentBMPAssessmentTypeEnum = treatmentBMPAssessmentTypeEnum;
             ViewDataForAngular = new ObservationsViewDataForAngular(fieldVisit.TreatmentBMP.TreatmentBMPType, initialAssessmentObservations);
-            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Observations(fieldVisit, (int)fieldVisitAssessmentType));
+            SubmitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum));
         }
 
         public class ObservationsViewDataForAngular

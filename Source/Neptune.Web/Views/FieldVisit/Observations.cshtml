@@ -19,7 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
-@using Neptune.Web.Controllers
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -55,7 +55,7 @@
 
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
-        @if (ViewDataTyped.FieldVisitAssessmentType == FieldVisitAssessmentType.PostMaintenance)
+        @if (ViewDataTyped.TreatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.PostMaintenance)
         {
             <div ng-show="$first" style="background-color: #f9f9f9; text-align: right; padding-bottom: 16px;">
                 <button type="button" class="btn btn-neptune" ng-if="observationTypeSchema.InitialAssessmentObservations == null || observationTypeSchema.InitialAssessmentObservations.length == 0"

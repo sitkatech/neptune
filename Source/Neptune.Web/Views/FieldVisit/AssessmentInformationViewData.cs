@@ -21,7 +21,6 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -31,12 +30,12 @@ namespace Neptune.Web.Views.FieldVisit
         public readonly IEnumerable<SelectListItem> JurisdictionPeople;
         public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
 
-        public AssessmentInformationViewData(Person currentPerson, Models.FieldVisit fieldVisit, IEnumerable<SelectListItem> jurisdictionPeople, FieldVisitAssessmentType fieldVisitAssessmentType)
-            : base(currentPerson, fieldVisit, fieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
+        public AssessmentInformationViewData(Person currentPerson, Models.FieldVisit fieldVisit, IEnumerable<SelectListItem> jurisdictionPeople, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+            : base(currentPerson, fieldVisit, treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial ? (Models.FieldVisitSection)Models.FieldVisitSection.Assessment : Models.FieldVisitSection.PostMaintenanceAssessment)
         {
             JurisdictionPeople = jurisdictionPeople;
             SubsectionName = "Assessment Information";
-            TreatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            TreatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
         }  
     }
 }
