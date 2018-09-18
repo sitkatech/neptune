@@ -100,7 +100,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            var viewData = new DetailViewData(CurrentPerson, StormwaterBreadCrumbEntity.FieldVisits, fieldVisit);
+            var initialAssessmentViewData = new AssessmentDetailViewData(fieldVisit.InitialAssessment);
+            var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(fieldVisit.PostMaintenanceAssessment);
+            var viewData = new DetailViewData(CurrentPerson, StormwaterBreadCrumbEntity.FieldVisits, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 

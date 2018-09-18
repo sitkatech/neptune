@@ -1,44 +1,38 @@
 ﻿@using LtInfo.Common
 @using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
+@using Neptune.Web.Views.FieldVisit
 @inherits Neptune.Web.Views.FieldVisit.Detail
 
 @section JavascriptAndStylesContent
 {
     <style>
-        #fieldVisitDetailNav li a,
-        #fieldVisitDetailNav li span {
-            color: #fff;
-            background: #0099ab;
+        #fieldVisitDetailNav li a {
+            color: #000;
+            background: #fff;
             cursor: pointer;
         }
-
-        ul.fieldVisitTierTwoMenu {
-            border-left: 4px solid;
-            border-bottom: 4px solid;
-            border-color: #0099ab;
-        }
-
+        
         @@media (max-width: 768px) {
-            ul.fieldVisitTierTwoMenu {
+            ul {
                 border-right: 3px solid;
                 border-color: #0099ab;
             }
         }
 
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu li a {
-            background-color: #fff;
-            color: #333;
+        #fieldVisitDetailNav li a:hover {
+            background-color: #00c1d5;
+            color: #fff;
         }
 
-            nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu li a span {
-                color: #f0ad4e;
-                background-color: inherit;
-            }
-
+        #fieldVisitDetailNav li.active a,
+        #fieldVisitDetailNav li.active a:hover {
+            background-color: #0099ab;
+            color: #fff;
+        }
 
         @@media (min-width: 769px) {
-            nav#fieldVisitDetailNav ul li.activeGroup a.activeItem:after {
+            #fieldVisitDetailNav li.active a:after {
                 content: '';
                 display: block;
                 position: absolute;
@@ -53,26 +47,10 @@
                 border-left: 8px solid #0099ab;
                 z-index: 900;
             }
-
-            nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem:after {
-                border-left: 8px solid #e49937 !important;
-            }
         }
 
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a:hover {
-            background-color: #e9ad5d;
-            color: #fff;
-        }
-
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem,
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem span,
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a.activeItem:hover {
-            background-color: #e49937;
-            color: #fff;
-        }
-
-        nav#fieldVisitDetailNav ul.fieldVisitTierTwoMenu a:hover .glyphicon-exclamation-sign {
-            color: #fff;
+        #fieldVisitDetailNav.nav-tabs > li > a {
+            border-radius: 0;
         }
     </style>
 }
@@ -80,9 +58,9 @@
 
 <div class="row wizard">
     <div class="col-xs-12 col-sm-3">
-        <ul class="nav nav-pills nav-stacked nav-tabs" id="fieldVisitDetailNav" role="tablist">
-            <li role="presentation" class="nav-item">
-                <a class="nav-link active" href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab">Inventory</a>
+        <ul class="nav nav-stacked nav-tabs" id="fieldVisitDetailNav" role="tablist">
+            <li role="presentation" class="nav-item active">
+                <a class="nav-link" href="#inventory" aria-controls="inventory" role="tab" data-toggle="tab">Inventory</a>
             </li>
             <li role="presentation" class="nav-item">
                 <a class="nav-link" href="#assessment" aria-controls="assessment" role="tab" data-toggle="tab">Assessment</a>
@@ -162,7 +140,7 @@
             </div>
             <div id="assessment" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Assessment</h2></div>
-                <div class="wizardMain">Coming Soon!</div>
+                <div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.InitialAssessmentViewData);}</div>
             </div>
             <div id="maintenance" role="tabpanel" class="tab-pane">
                 <div class="row wizardHeader">
@@ -236,7 +214,7 @@
             </div>
             <div id="postMaintenanceAssessment" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Post-Maintenance Assessment</h2></div>
-                <div class="wizardMain">Coming Soon!</div>
+                <div class="wizardMain">@{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.PostMaintenanceAssessmentViewData);}</div>
             </div>
             <div id="visitSummary" role="tabpanel" class="tab-pane">
                 <div class="wizardHeader"><h2>Visit Summary</h2></div>
