@@ -66,6 +66,8 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(viewModel);
             }
 
+            HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservationValues.RemoveRange(
+                maintenanceRecord.MaintenanceRecordObservations.SelectMany(x => x.MaintenanceRecordObservationValues));
             maintenanceRecord.MaintenanceRecordObservations.DeleteMaintenanceRecordObservation();
             maintenanceRecord.FieldVisit?.DetachMaintenanceRecord();
             HttpRequestStorage.DatabaseEntities.SaveChanges();
