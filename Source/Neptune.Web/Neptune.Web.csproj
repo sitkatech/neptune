@@ -1191,7 +1191,6 @@
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsController.js" />
-    <Content Include="Views\TreatmentBMPAssessment\ScoreTableController.js" />
     <Content Include="Views\Tenant\Detail.cshtml" />
     <Content Include="Views\Tenant\EditBasics.cshtml" />
     <Content Include="Views\Tenant\EditBoundingBox.cshtml" />
