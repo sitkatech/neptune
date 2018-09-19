@@ -22,7 +22,6 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
@@ -45,7 +44,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
                     currentPersonCanEditOrDelete), 30, DhtmlxGridColumnFilterType.None);
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"),40, DhtmlxGridColumnFilterType.None);
 
-            Add("Date", x => x.GetMaintenanceRecordDate().ToStringDate(), 150);
+            Add("Date", x => x.GetMaintenanceRecordDate(), 150, DhtmlxGridColumnFormatType.Date);
             Add("Performed By", x => x.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.Text);
             Add("Entered By", x => x.GetMaintenanceRecordPerson().GetFullNameLastFirst(), 100, DhtmlxGridColumnFilterType.Text);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),
@@ -73,7 +72,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
             Add(string.Empty, x => new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>"), 40, DhtmlxGridColumnFilterType.None);
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            Add("Date", x => x.GetMaintenanceRecordDate().ToStringDate(), 150);
+            Add("Date", x => x.GetMaintenanceRecordDate(), 150, DhtmlxGridColumnFormatType.Date);
             Add("Organization", x => x.GetMaintenanceRecordOrganization().GetDisplayNameAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Performed By", x => x.GetMaintenanceRecordPerson() == null ? new HtmlString(string.Empty) : x.GetMaintenanceRecordPerson().GetFullNameFirstLastAsUrl(), 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add(Models.FieldDefinition.MaintenanceRecordType.ToGridHeaderString("Type"),

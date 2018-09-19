@@ -20,7 +20,7 @@ namespace Neptune.Web.Views.FieldVisit
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PostMaintenanceAssessment(fieldVisit));
             EditMaintenanceRecordUrl =
                 SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.EditMaintenanceRecord(fieldVisit));
-            IsNew = fieldVisit.MaintenanceRecord == null;
+            IsNew = fieldVisit.GetMaintenanceRecord() == null;
         }
     }
 }

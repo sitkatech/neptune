@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Common;
@@ -26,6 +27,21 @@ namespace Neptune.Web.Models
                 ? new HtmlString(fieldVisitStatus.FieldVisitStatusDisplayName)
                 : UrlTemplate.MakeHrefString(WorkflowUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID),
                     fieldVisitStatus.FieldVisitStatusDisplayName);
+        }
+
+        public static TreatmentBMPAssessment GetInitialAssessment(this FieldVisit fieldVisit)
+        {
+            return fieldVisit.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.Initial);
+        }
+
+        public static TreatmentBMPAssessment GetPostMaintenanceAssessment(this FieldVisit fieldVisit)
+        {
+            return fieldVisit.TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.PostMaintenance);
+        }
+
+        public static MaintenanceRecord GetMaintenanceRecord(this FieldVisit fieldVisit)
+        {
+            return fieldVisit.MaintenanceRecords.SingleOrDefault();
         }
 
         public static string GetEditUrl(this FieldVisit fieldVisit)

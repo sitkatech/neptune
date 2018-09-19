@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -15,10 +13,11 @@ namespace Neptune.Web.Views.FieldVisit
         public bool UserCanDeleteMaintenanceRecord { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get;  }
         public IOrderedEnumerable<MaintenanceRecordObservation> SortedMaintenanceRecordObservations { get; }
-
         public AssessmentDetailViewData InitialAssessmentViewData { get; }
         public AssessmentDetailViewData PostMaintenanceAssessmentViewData { get; }
         public Models.MaintenanceRecord MaintenanceRecord { get; }
+        public Models.TreatmentBMPAssessment InitialAssessment { get; }
+        public Models.TreatmentBMPAssessment PostMaintenanceAssessment { get; }
         public bool UserCanDeleteInitialAssessment { get; }
         public bool UserCanDeletePostMaintenanceAssessment { get; }
         public bool CanManageStormwaterJurisdiction { get; }
@@ -29,7 +28,7 @@ namespace Neptune.Web.Views.FieldVisit
             Models.FieldVisit fieldVisit, AssessmentDetailViewData initialAssessmentViewData, AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, stormwaterBreadCrumbEntity)
         {
             FieldVisit  = fieldVisit;
-            MaintenanceRecord = FieldVisit.MaintenanceRecord;
+            MaintenanceRecord = FieldVisit.GetMaintenanceRecord();
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
             EntityName = "Treatment BMP Field Visits";
@@ -37,19 +36,21 @@ namespace Neptune.Web.Views.FieldVisit
             SubEntityName = FieldVisit.TreatmentBMP.TreatmentBMPName ?? "Preview Treatment BMP Field Visit";
             SubEntityUrl = FieldVisit.TreatmentBMP?.GetDetailUrl() ?? "#";
             PageTitle = FieldVisit.VisitDate.ToStringDate();
-            UserCanDeleteInitialAssessment = FieldVisit.InitialAssessment != null &&
+            InitialAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
+            UserCanDeleteInitialAssessment = InitialAssessment != null &&
                                              new TreatmentBMPAssessmentManageFeature()
-                                                 .HasPermission(currentPerson, FieldVisit.InitialAssessment)
+                                                 .HasPermission(currentPerson, InitialAssessment)
                                                  .HasPermission;
-            UserCanDeletePostMaintenanceAssessment = FieldVisit.PostMaintenanceAssessment != null &&
+            PostMaintenanceAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
+            UserCanDeletePostMaintenanceAssessment = PostMaintenanceAssessment != null &&
                                              new TreatmentBMPAssessmentManageFeature()
-                                                 .HasPermission(currentPerson, FieldVisit.PostMaintenanceAssessment)
+                                                 .HasPermission(currentPerson, PostMaintenanceAssessment)
                                                  .HasPermission;
-            UserCanDeleteMaintenanceRecord = FieldVisit.MaintenanceRecord != null &&
+            UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
-                                                 .HasPermission(currentPerson, FieldVisit.MaintenanceRecord)
+                                                 .HasPermission(currentPerson, MaintenanceRecord)
                                                  .HasPermission;
-            SortedMaintenanceRecordObservations = FieldVisit.MaintenanceRecord?.MaintenanceRecordObservations.ToList()
+            SortedMaintenanceRecordObservations = MaintenanceRecord?.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
                 .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
             UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);

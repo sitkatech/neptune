@@ -36,6 +36,16 @@ REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TenantID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TenantID]
 GO
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
+REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecordID_TreatmentBMPTypeID] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
+REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecordID_TreatmentBMPTypeID]
+GO
 ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_Tenant_TenantID] FOREIGN KEY([TenantID])
 REFERENCES [dbo].[Tenant] ([TenantID])
 GO

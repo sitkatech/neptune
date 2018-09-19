@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -54,27 +55,12 @@ namespace Neptune.Web.Controllers
         public ActionResult Delete(TreatmentBMPAssessmentPrimaryKey treatmentBMPAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var treatmentBMPAssessment = treatmentBMPAssessmentPrimaryKey.EntityObject;
-            var treatmentBMPID = treatmentBMPAssessment.TreatmentBMPID;
             if (!ModelState.IsValid)
             {
                 return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
             }
-
-            treatmentBMPAssessment.TreatmentBMPObservations.DeleteTreatmentBMPObservation();
-            treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.DeleteTreatmentBMPAssessmentPhoto();
-            if (treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment!= null)
-            {
-                treatmentBMPAssessment.FieldVisitWhereYouAreTheInitialAssessment.InitialAssessmentID = null;
-            }
-            if (treatmentBMPAssessment.FieldVisitWhereYouAreThePostMaintenanceAssessment != null)
-            {
-                treatmentBMPAssessment.FieldVisitWhereYouAreThePostMaintenanceAssessment.PostMaintenanceAssessmentID = null;
-            }
-            treatmentBMPAssessment.DeleteTreatmentBMPAssessment();
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
+            treatmentBMPAssessment.DeleteFull();
             SetMessageForDisplay("BMP Assessment successfully deleted.");
-
             return new ModalDialogFormJsonResult();
         }
 
@@ -82,7 +68,7 @@ namespace Neptune.Web.Controllers
         {
             var canDelete = treatmentBMPAssessment.CanDelete(CurrentPerson);
             var confirmMessage = canDelete
-                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate().ToShortDateString()}?"
+                ? $"Are you sure you want to delete the assessment dated {treatmentBMPAssessment.GetAssessmentDate().ToStringDate()}?"
                 : ConfirmDialogFormViewData.GetStandardCannotDeleteMessage("Treatment BMP", SitkaRoute<TreatmentBMPAssessmentController>.BuildLinkFromExpression(x => x.Detail(treatmentBMPAssessment), "here"));
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, canDelete);

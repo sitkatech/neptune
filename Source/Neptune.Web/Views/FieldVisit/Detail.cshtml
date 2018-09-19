@@ -2,8 +2,9 @@
 @using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
-@inherits Neptune.Web.Views.FieldVisit.Detail
+@inherits Detail
 
+@* ReSharper disable UnknownCssClass *@
 @section JavascriptAndStylesContent
 {
     <style>
@@ -321,17 +322,17 @@
 
                         <div class="row">
                             <label class="col-sm-3 control-label text-right">Assessment Performed?</label>
-                            <div class="col-sm-9">@(ViewDataTyped.FieldVisit.InitialAssessment == null ? "No" : "Yes")</div>
+                            <div class="col-sm-9">@(ViewDataTyped.InitialAssessment == null ? "No" : "Yes")</div>
                         </div>
-                        @if (ViewDataTyped.FieldVisit.InitialAssessment != null)
+                        @if (ViewDataTyped.InitialAssessment != null)
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.FieldVisit.InitialAssessment.AssessmentStatus())</div>
+                                <div class="col-sm-9">@(ViewDataTyped.InitialAssessment.AssessmentStatus())</div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Score</label>
-                                <div class="col-sm-9">@ViewDataTyped.FieldVisit.InitialAssessment.FormattedScore()</div>
+                                <div class="col-sm-9">@ViewDataTyped.InitialAssessment.FormattedScore()</div>
                             </div>
                         }
                         <br />
@@ -351,19 +352,19 @@
 
                         <div class="row">
                             <label class="col-sm-3 control-label text-right">Post-Maintenance Assessment Performed?</label>
-                            <div class="col-sm-9">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment == null ? "No" : "Yes")</div>
+                            <div class="col-sm-9">@(ViewDataTyped.PostMaintenanceAssessment == null ? "No" : "Yes")</div>
                         </div>
 
-                        @if (ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null)
+                        @if (ViewDataTyped.PostMaintenanceAssessment != null)
                         {
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Status</label>
-                                <div class="col-sm-9">@(ViewDataTyped.FieldVisit.PostMaintenanceAssessment.AssessmentStatus())</div>
+                                <div class="col-sm-9">@(ViewDataTyped.PostMaintenanceAssessment.AssessmentStatus())</div>
                             </div>
 
                             <div class="row">
                                 <label class="col-sm-3 control-label text-right">Score</label>
-                                <div class="col-sm-9">@ViewDataTyped.FieldVisit.PostMaintenanceAssessment.FormattedScore()</div>
+                                <div class="col-sm-9">@ViewDataTyped.PostMaintenanceAssessment.FormattedScore()</div>
                             </div>
                         }
                         <div class="row text-right">

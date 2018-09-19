@@ -8,7 +8,7 @@ namespace Neptune.Web.Views.FieldVisit
 {
     public class AssessmentDetailViewData
     {
-        public FieldVisitAssessmentType FieldVisitAssessmentType { get; }
+        public TreatmentBMPAssessmentTypeEnum FieldVisitAssessmentType { get; }
         public Models.TreatmentBMPAssessment TreatmentBMPAssessment { get; }
         public bool CurrentPersonCanManage { get; }
         public bool CanEdit { get; }
@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.FieldVisit
         public string EditBenchmarkAndThresholdUrl { get; }
         public ImageCarouselViewData ImageCarouselViewData { get; }
 
-        public AssessmentDetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, FieldVisitAssessmentType fieldVisitAssessmentType)
+        public AssessmentDetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, TreatmentBMPAssessmentTypeEnum fieldVisitAssessmentType)
         {
             FieldVisitAssessmentType = fieldVisitAssessmentType;
             if (treatmentBMPAssessment != null)

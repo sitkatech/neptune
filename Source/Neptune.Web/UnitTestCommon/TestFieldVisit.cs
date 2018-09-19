@@ -19,19 +19,20 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.UnitTestCommon
 {
     public static partial class TestFramework
     {
-        public static class TestTreatmentBMPAssessment
+        public static class TestFieldVisit
         {
-            public static TreatmentBMPAssessment Create(TreatmentBMP treatmentBMP)
+            public static FieldVisit Create(TreatmentBMP treatmentBMP)
             {
-                var fieldVisit = TestFieldVisit.Create(treatmentBMP);
-                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, fieldVisit, TreatmentBMPAssessmentType.Initial);
-                return treatmentBMPAssessment;
+                var person = TestPerson.Create();
+                var fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, person, DateTime.Now, false, FieldVisitType.DryWeather, false);
+                return fieldVisit;
             }
         }
     }

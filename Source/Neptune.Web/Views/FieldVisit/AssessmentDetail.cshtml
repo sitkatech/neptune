@@ -1,6 +1,4 @@
 ﻿@using LtInfo.Common.HtmlHelperExtensions
-@using MoreLinq
-@using Neptune.Web.Controllers
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Neptune.Web.Views.TreatmentBMPAssessment
@@ -8,7 +6,7 @@
 
 @if (ViewDataTyped.TreatmentBMPAssessment == null)
 {
-    <p class="systemText">No @(ViewDataTyped.FieldVisitAssessmentType == FieldVisitAssessmentType.Initial ? "initial assessment" : "post-maintenance assessment") was performed during this Field Visit</p>
+    <p class="systemText">No @(ViewDataTyped.FieldVisitAssessmentType == TreatmentBMPAssessmentTypeEnum.Initial ? "initial assessment" : "post-maintenance assessment") was performed during this Field Visit</p>
 }
 else
 {

@@ -51,7 +51,7 @@
 
     <div class="row">
         <hr /><div class="col-sm-2">
-            @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.MaintenanceRecord != null ? ViewDataTyped.FieldVisit.MaintenanceRecord.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteMaintenanceRecord)
+            @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.MaintenanceRecord != null ? ViewDataTyped.MaintenanceRecord.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteMaintenanceRecord)
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">

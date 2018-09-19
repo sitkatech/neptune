@@ -18,8 +18,6 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-
-using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -31,7 +29,6 @@ namespace Neptune.Web.Models
         public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
         public static string GetDetailUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            if (treatmentBMPAssessment == null) { return ""; }
             return DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
         }
 
@@ -39,21 +36,11 @@ namespace Neptune.Web.Models
         public static readonly UrlTemplate<int> EditPostMaintenanceAssessmentUrlTemplate = new UrlTemplate<int>(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.PostMaintenanceAssessment(UrlTemplate.Parameter1Int)));
         public static string GetEditUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
         {
-            if (treatmentBMPAssessment.IsInitialAssessment()){
-                return EditInitialAssessmentUrlTemplate.ParameterReplace(
-                    treatmentBMPAssessment.GetFieldVisit().FieldVisitID);
+            if (treatmentBMPAssessment.TreatmentBMPAssessmentType == TreatmentBMPAssessmentType.Initial){
+                return EditInitialAssessmentUrlTemplate.ParameterReplace(treatmentBMPAssessment.FieldVisit.FieldVisitID);
             }
-            else
-            {
-                return EditPostMaintenanceAssessmentUrlTemplate.ParameterReplace(treatmentBMPAssessment.GetFieldVisit()
-                    .FieldVisitID);
-            }
-        }
 
-        public static readonly UrlTemplate<int> EditScoreUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Score(UrlTemplate.Parameter1Int)));
-        public static string GetEditScoreUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
-        {
-            return EditScoreUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
+            return EditPostMaintenanceAssessmentUrlTemplate.ParameterReplace(treatmentBMPAssessment.FieldVisit.FieldVisitID);
         }
 
         public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPAssessmentController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
@@ -61,12 +48,5 @@ namespace Neptune.Web.Models
         {
             return DeleteUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID);
         }
-
-        public static HtmlString GetDateAsDetailUrl(this TreatmentBMPAssessment treatmentBMPAssessment)
-        {
-            return treatmentBMPAssessment == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMPAssessment.TreatmentBMPAssessmentID), treatmentBMPAssessment.GetAssessmentDate().ToShortDateString());
-        }
-
-
     }
 }

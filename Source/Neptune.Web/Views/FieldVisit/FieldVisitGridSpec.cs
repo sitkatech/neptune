@@ -84,25 +84,39 @@ namespace Neptune.Web.Views.FieldVisit
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Field Visit Type", x => x.FieldVisitType.FieldVisitTypeDisplayName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Inventory Updated?", x => new HtmlString(x.InventoryUpdated ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Required Attributes Entered?", x => new HtmlString(!x.TreatmentBMP.RequiredAttributeDoesNotHaveValue(x) ? "Yes" : "No"), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Required Attributes Entered?", x => new HtmlString((!x.TreatmentBMP.RequiredAttributeDoesNotHaveValue(x)).ToYesNo()), 100, DhtmlxGridColumnFilterType.SelectFilterStrict, DhtmlxGridColumnAlignType.Center);
             Add("Initial Assessment?",
-                x => x.InitialAssessmentID != null
-                    ? UrlTemplate.MakeHrefString(x.InitialAssessment.GetDetailUrl(), x.InitialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
-                           new Dictionary<string, string> ())
-                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Initial Assessment Score", x => x.InitialAssessment?.FormattedScore() ?? "N/A", 95,
+                x =>
+                {
+                    var initialAssessment = x.GetInitialAssessment();
+                    return initialAssessment != null
+                        ? UrlTemplate.MakeHrefString(initialAssessment.GetDetailUrl(),
+                            initialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
+                            new Dictionary<string, string>())
+                        : new HtmlString("Not Performed");
+                }, 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Initial Assessment Score", x => x.GetInitialAssessment()?.FormattedScore() ?? "N/A", 95,
                 DhtmlxGridColumnFilterType.Numeric);
             Add("Maintenance Occurred?",
-                x => x.MaintenanceRecordID != null
-                    ? UrlTemplate.MakeHrefString(x.MaintenanceRecord.GetDetailUrl(), "Performed",
-                        new Dictionary<string, string>())
-                    : new HtmlString("Not Performed"), 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+                x =>
+                {
+                    var maintenanceRecord = x.GetMaintenanceRecord();
+                    return maintenanceRecord != null
+                        ? UrlTemplate.MakeHrefString(maintenanceRecord.GetDetailUrl(), "Performed",
+                            new Dictionary<string, string>())
+                        : new HtmlString("Not Performed");
+                }, 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Post-Maintenance Assessment?",
-                x => x.PostMaintenanceAssessmentID != null
-                    ? UrlTemplate.MakeHrefString(x.PostMaintenanceAssessment.GetDetailUrl(), x.PostMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
-                        new Dictionary<string, string>())
-                    : new HtmlString("Not Performed"), 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
-            Add("Post-Maintenance Assessment Score", x => x.PostMaintenanceAssessment?.FormattedScore() ?? "N/A", 95,
+                x =>
+                {
+                    var postMaintenanceAssessment = x.GetPostMaintenanceAssessment();
+                    return postMaintenanceAssessment != null
+                        ? UrlTemplate.MakeHrefString(postMaintenanceAssessment.GetDetailUrl(),
+                            postMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
+                            new Dictionary<string, string>())
+                        : new HtmlString("Not Performed");
+                }, 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Post-Maintenance Assessment Score", x => x.GetPostMaintenanceAssessment()?.FormattedScore() ?? "N/A", 95,
                 DhtmlxGridColumnFilterType.Numeric);
         }
     }

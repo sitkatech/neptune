@@ -45,23 +45,21 @@
     </li>
 </ul>
 <hr>
-
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-sm-2">
-        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null ? ViewDataTyped.FieldVisit.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.FieldVisit.PostMaintenanceAssessment))
+        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.PostMaintenanceAssessment != null ? ViewDataTyped.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.PostMaintenanceAssessment))
     </div>
     <div class="col-xs-10 text-right">
 
-        @using (Html.BeginForm("PostMaintenanceAssessment", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
-        {
+        <form method="post" class="field-visit-form">
             <button class="btn btn-neptune" style="display: inline-block;">
                 <span>
-                    @(ViewDataTyped.FieldVisit.PostMaintenanceAssessment == null ? "Begin Post-Maintenance Assessment" : "Continue Post-Maintenance Assessment")
+                    @(ViewDataTyped.FieldVisit.GetPostMaintenanceAssessment() == null ? "Begin Post-Maintenance Assessment" : "Continue Post-Maintenance Assessment")
                 </span>
                 <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
             </button>
 
             <a class="btn btn-neptune" onclick="launchSaveAndWrapUpConfirmModal()">Wrap Up Visit</a>
-        }
+        </form>
     </div>
 </div>

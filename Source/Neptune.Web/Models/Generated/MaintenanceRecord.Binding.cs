@@ -23,7 +23,6 @@ namespace Neptune.Web.Models
         /// </summary>
         protected MaintenanceRecord()
         {
-            this.FieldVisits = new HashSet<FieldVisit>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
@@ -31,10 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, string maintenanceRecordDescription, int? maintenanceRecordTypeID) : this()
+        public MaintenanceRecord(int maintenanceRecordID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, string maintenanceRecordDescription, int? maintenanceRecordTypeID) : this()
         {
             this.MaintenanceRecordID = maintenanceRecordID;
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.FieldVisitID = fieldVisitID;
             this.MaintenanceRecordDescription = maintenanceRecordDescription;
             this.MaintenanceRecordTypeID = maintenanceRecordTypeID;
         }
@@ -42,32 +43,38 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public MaintenanceRecord(int treatmentBMPID) : this()
+        public MaintenanceRecord(int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.TreatmentBMPID = treatmentBMPID;
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.FieldVisitID = fieldVisitID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public MaintenanceRecord(TreatmentBMP treatmentBMP) : this()
+        public MaintenanceRecord(TreatmentBMP treatmentBMP, int treatmentBMPTypeID, FieldVisit fieldVisit) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.MaintenanceRecords.Add(this);
+            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.FieldVisitID = fieldVisit.FieldVisitID;
+            this.FieldVisit = fieldVisit;
+            fieldVisit.MaintenanceRecords.Add(this);
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP)
+        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, FieldVisit fieldVisit)
         {
-            return new MaintenanceRecord(treatmentBMP);
+            return new MaintenanceRecord(treatmentBMP, default(int), fieldVisit);
         }
 
         /// <summary>
@@ -76,13 +83,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return (FieldVisit != null) || MaintenanceRecordObservations.Any();
+            return MaintenanceRecordObservations.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name, typeof(FieldVisit).Name, typeof(MaintenanceRecordObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(MaintenanceRecord).Name, typeof(MaintenanceRecordObservation).Name};
 
 
         /// <summary>
@@ -90,11 +97,6 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
-
-            foreach(var x in FieldVisits.ToList())
-            {
-                x.DeleteFull();
-            }
 
             foreach(var x in MaintenanceRecordObservations.ToList())
             {
@@ -107,17 +109,17 @@ namespace Neptune.Web.Models
         public int MaintenanceRecordID { get; set; }
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
+        public int TreatmentBMPTypeID { get; set; }
+        public int FieldVisitID { get; set; }
         public string MaintenanceRecordDescription { get; set; }
         public int? MaintenanceRecordTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
-        public virtual ICollection<FieldVisit> FieldVisits { get; set; }
-        [NotMapped]
-        public FieldVisit FieldVisit { get { return FieldVisits.SingleOrDefault(); } set { FieldVisits = new List<FieldVisit>{value};} }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual FieldVisit FieldVisit { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null; } }
 
         public static class FieldLengths

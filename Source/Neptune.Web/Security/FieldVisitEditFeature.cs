@@ -49,7 +49,7 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
-            if (contextModelObject.IsFieldVisitVerified)
+            if (contextModelObject.IsFieldVisitVerified || contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
             {
                 return new PermissionCheckResult("The Field Visit cannot be edited because it has already been verified by a Jurisdiction Manager.");
             }

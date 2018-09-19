@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -237,6 +237,8 @@
     <Compile Include="Models\Generated\TreatmentBMPAssessmentPhotoConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessmentPhotoPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessmentPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentType.Binding.cs" />
+    <Compile Include="Models\Generated\TreatmentBMPAssessmentTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThreshold.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPBenchmarkAndThresholdConfiguration.Binding.cs" />
@@ -312,8 +314,8 @@
     <Compile Include="Models\WaterQualityManagementPlanParcel.cs" />
     <Compile Include="Security\TreatmentBMPViewFeature.cs" />
     <Compile Include="Security\WaterQualityManagementPlanDeleteFeature.cs" />
+    <Compile Include="UnitTestCommon\TestFieldVisit.cs" />
     <Compile Include="Views\FieldVisit\InventoryViewModel.cs" />
-    <Compile Include="Views\FieldVisit\AssessmentViewModel.cs" />
     <Compile Include="Views\FieldVisit\FieldVisitViewModel.cs" />
     <Compile Include="Views\FieldVisit\VisitSummary.cs" />
     <Compile Include="Views\ManagerDashboard\ProvisionalFieldVisitGridSpec.cs" />
@@ -331,7 +333,6 @@
     <Compile Include="Views\FieldVisit\Observations.cs" />
     <Compile Include="Views\FieldVisit\ObservationsViewData.cs" />
     <Compile Include="Views\FieldVisit\ObservationsViewModel.cs" />
-    <Compile Include="Views\FieldVisit\PostMaintenanceAssessmentViewModel.cs" />
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />

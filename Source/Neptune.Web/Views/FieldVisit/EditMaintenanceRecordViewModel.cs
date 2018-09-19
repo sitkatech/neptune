@@ -55,7 +55,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public void UpdateModel(Models.FieldVisit fieldVisit, List<Models.CustomAttributeType> allCustomAttributeTypes)
         {
-            var maintenanceRecord = fieldVisit.MaintenanceRecord;
+            var maintenanceRecord = fieldVisit.GetMaintenanceRecord();
             maintenanceRecord.MaintenanceRecordTypeID = MaintenanceRecordTypeID.Value;
             maintenanceRecord.MaintenanceRecordDescription = MaintenanceRecordDescription;
 
