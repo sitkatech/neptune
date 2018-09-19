@@ -23,6 +23,7 @@ namespace Neptune.Web.Views.FieldVisit
         public bool UserCanDeletePostMaintenanceAssessment { get; }
         public bool CanManageStormwaterJurisdiction { get; }
         public string VerifiedUnverifiedFieldVisitUrl { get; }
+        public string MarkAsProvisionalUrl { get; set; }
 
         public DetailViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
             Models.FieldVisit fieldVisit, AssessmentDetailViewData initialAssessmentViewData, AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, stormwaterBreadCrumbEntity)
@@ -55,6 +56,7 @@ namespace Neptune.Web.Views.FieldVisit
             
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
             VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
+            MarkAsProvisionalUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.MarkProvisionalFieldVisit(FieldVisit.PrimaryKey));
         }
 
     }

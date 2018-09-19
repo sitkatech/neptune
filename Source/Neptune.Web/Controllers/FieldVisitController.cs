@@ -502,7 +502,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [FieldVisitEditFeature]
+        [FieldVisitVerifyFeature]
         public PartialViewResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -511,7 +511,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [FieldVisitEditFeature]
+        [FieldVisitVerifyFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
@@ -522,12 +522,44 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.VerifyFieldVisit(CurrentPerson);
-            return new ModalDialogFormJsonResult();
+            SetMessageForDisplay("The Field Visit was successfully verified.");
+            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Detail(fieldVisitPrimaryKey)));
         }
 
         private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
         {
             var viewData = new ConfirmDialogFormViewData($"Are you sure you want to verify the Assessment and Maintenance Records for the Field Visit to the treatment BMP '{fieldVisit.TreatmentBMP.TreatmentBMPName}' dated '{fieldVisit.VisitDate}'? ");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [FieldVisitVerifyFeature]
+        public PartialViewResult MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewMarkProvisionalFieldVisit(fieldVisit, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitVerifyFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewMarkProvisionalFieldVisit(fieldVisit, viewModel);
+            }
+
+            fieldVisit.MarkFieldVisitAsProvisional();
+            SetMessageForDisplay("The Field Visit was successfully marked as provisional.");
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewMarkProvisionalFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to mark the Assessment and Maintenance Records as provisional for the Field Visit to the treatment BMP '{fieldVisit.TreatmentBMP.TreatmentBMPName}' dated '{fieldVisit.VisitDate}'? ");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 

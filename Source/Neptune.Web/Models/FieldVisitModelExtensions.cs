@@ -16,7 +16,7 @@ namespace Neptune.Web.Models
             return DeleteUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID);
         }
 
-        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
+        public static readonly UrlTemplate<int> WorkflowUrlTemplate = new UrlTemplate<int>(
             SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.Inventory(UrlTemplate.Parameter1Int)));
 
         public static HtmlString GetStatusAsWorkflowUrl(this FieldVisit fieldVisit)
@@ -24,8 +24,21 @@ namespace Neptune.Web.Models
             var fieldVisitStatus = fieldVisit.FieldVisitStatus;
             return fieldVisitStatus != FieldVisitStatus.InProgress
                 ? new HtmlString(fieldVisitStatus.FieldVisitStatusDisplayName)
-                : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID),
+                : UrlTemplate.MakeHrefString(WorkflowUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID),
                     fieldVisitStatus.FieldVisitStatusDisplayName);
+        }
+
+        public static string GetEditUrl(this FieldVisit fieldVisit)
+        {
+            return WorkflowUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID);
+        }
+
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(
+            SitkaRoute<FieldVisitController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+
+        public static string GetDetailUrl(this FieldVisit fieldVisit)
+        {
+            return DetailUrlTemplate.ParameterReplace(fieldVisit.FieldVisitID);
         }
     }
 }
