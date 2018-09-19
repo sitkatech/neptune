@@ -395,10 +395,16 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.MaintenanceRecord;
+            // need this check to support deleting maintenance records from the edit page
+            if (maintenanceRecord == null)
+            {
+                return Redirect(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Maintain(fieldVisitPrimaryKey)));
+            }
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
             return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit, maintenanceRecord);
         }
@@ -572,6 +578,7 @@ namespace Neptune.Web.Controllers
             var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
 
+            // need this check to support deleting assessments from the edit page
             if (treatmentBMPAssessment == null)
             {
                 if (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial)
