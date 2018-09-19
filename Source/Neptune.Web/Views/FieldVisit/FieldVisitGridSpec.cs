@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.FieldVisit
                 x =>
                 {
                     // do this first because if the field visit is verified, fieldvisiteditfeature will fail
-                    if (x.IsFieldVisitVerified)
+                    if (x.IsFieldVisitVerified || x.FieldVisitStatus == FieldVisitStatus.Complete)
                     {
                         return new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>");
                     }
