@@ -18,6 +18,7 @@ namespace Neptune.Web.Views.FieldVisit
         public List<string> ValidationWarnings { get; set; }
 
         public string WrapupUrl { get; }
+        public bool UserCanDeleteMaintenanceRecord { get; }
 
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
@@ -39,6 +40,11 @@ namespace Neptune.Web.Views.FieldVisit
             ValidationWarnings = new List<string>();
 
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
+
+            UserCanDeleteMaintenanceRecord = FieldVisit.MaintenanceRecord != null &&
+                                             new MaintenanceRecordManageFeature()
+                                                 .HasPermission(CurrentPerson, FieldVisit.MaintenanceRecord)
+                                                 .HasPermission;
         }
 
         public bool UserCanDeleteAssessment(Models.TreatmentBMPAssessment assessment)

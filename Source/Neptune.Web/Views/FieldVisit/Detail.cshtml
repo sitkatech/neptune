@@ -196,9 +196,6 @@
                         <div class="col-sm-6" style="padding-left: 0;">
                             <h2>Maintenance</h2>
                         </div>
-                        <div class="col-sm-6 text-right" style="margin-top: 20px;">
-                            @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.MaintenanceRecord != null ? ViewDataTyped.MaintenanceRecord.GetDeleteUrl() : "", new List<string> { "btn btn-neptune" }, ViewDataTyped.UserCanDeleteMaintenanceRecord)
-                        </div>
                     </div>
                     <div class="wizardMain">
                         @if (ViewDataTyped.MaintenanceRecord != null)
@@ -281,9 +278,6 @@
                     <div class="row wizardHeader">
                         <div class="col-sm-6" style="padding-left: 0;">
                             <h2>Post-Maintenance Assesment</h2>
-                        </div>
-                        <div class="col-sm-6 text-right" style="margin-top: 20px;">
-                            @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null ? ViewDataTyped.FieldVisit.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-neptune" }, ViewDataTyped.UserCanDeletePostMaintenanceAssessment)
                         </div>
                     </div>
                     <div class="wizardMain">

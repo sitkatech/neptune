@@ -566,11 +566,24 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID)
+        public ActionResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, int fieldVisitAssessmentTypeID)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var fieldVisitAssessmentType = (FieldVisitAssessmentType) fieldVisitAssessmentTypeID;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+
+            if (treatmentBMPAssessment == null)
+            {
+                if (fieldVisitAssessmentType == FieldVisitAssessmentType.Initial)
+                {
+                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisitPrimaryKey)));
+                }
+                else
+                {
+                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PostMaintenanceAssessment(fieldVisitPrimaryKey)));
+
+                }
+            }
 
             var existingObservations = treatmentBMPAssessment != null ? treatmentBMPAssessment.TreatmentBMPObservations.ToList() : new List<TreatmentBMPObservation>();
             var viewModel = new ObservationsViewModel(existingObservations);

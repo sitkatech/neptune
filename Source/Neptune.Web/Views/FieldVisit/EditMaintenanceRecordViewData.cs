@@ -50,10 +50,6 @@ namespace Neptune.Web.Views.FieldVisit
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
             MaintenanceRecordUrl = fieldVisit.MaintenanceRecord?.GetDetailUrl();
-            UserCanDeleteMaintenanceRecord = FieldVisit.MaintenanceRecord != null &&
-                                             new MaintenanceRecordManageFeature()
-                                                 .HasPermission(CurrentPerson, FieldVisit.MaintenanceRecord)
-                                                 .HasPermission;
         }
 
         public bool IsNew { get; }
@@ -64,6 +60,5 @@ namespace Neptune.Web.Views.FieldVisit
         public string TreatmentBMPUrl { get; }
         public object MaintenanceRecordUrl { get; }
         public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
-        public bool UserCanDeleteMaintenanceRecord { get; }
     }
 }
