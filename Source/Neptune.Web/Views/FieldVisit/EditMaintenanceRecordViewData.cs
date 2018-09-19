@@ -26,6 +26,7 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
@@ -49,6 +50,10 @@ namespace Neptune.Web.Views.FieldVisit
 
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
             MaintenanceRecordUrl = fieldVisit.MaintenanceRecord?.GetDetailUrl();
+            UserCanDeleteMaintenanceRecord = FieldVisit.MaintenanceRecord != null &&
+                                             new MaintenanceRecordManageFeature()
+                                                 .HasPermission(CurrentPerson, FieldVisit.MaintenanceRecord)
+                                                 .HasPermission;
         }
 
         public bool IsNew { get; }
@@ -59,5 +64,6 @@ namespace Neptune.Web.Views.FieldVisit
         public string TreatmentBMPUrl { get; }
         public object MaintenanceRecordUrl { get; }
         public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
+        public bool UserCanDeleteMaintenanceRecord { get; }
     }
 }

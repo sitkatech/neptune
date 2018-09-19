@@ -182,9 +182,6 @@
                         <div class="col-sm-6" style="padding-left: 0;">
                             <h2>Assesment</h2>
                         </div>
-                        <div class="col-sm-6 text-right" style="margin-top: 20px;">
-                            @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.InitialAssessment != null ? ViewDataTyped.FieldVisit.InitialAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-neptune" }, ViewDataTyped.UserCanDeleteInitialAssessment)
-                        </div>
                     </div>
                     <div class="wizardMain">
                         @{ AssessmentDetail.RenderPartialView(Html, ViewDataTyped.InitialAssessmentViewData);}

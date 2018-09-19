@@ -3,6 +3,7 @@ using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -38,6 +39,12 @@ namespace Neptune.Web.Views.FieldVisit
             ValidationWarnings = new List<string>();
 
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
+        }
+
+        public bool UserCanDeleteAssessment(Models.TreatmentBMPAssessment assessment)
+        {
+            return assessment != null &&
+                   new TreatmentBMPAssessmentManageFeature().HasPermission(CurrentPerson, assessment).HasPermission;
         }
     }
 }

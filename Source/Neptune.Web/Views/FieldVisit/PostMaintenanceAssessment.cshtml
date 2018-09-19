@@ -18,6 +18,8 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
 @inherits PostMaintenanceAssessment
@@ -45,7 +47,10 @@
 <hr>
 
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12 text-right">
+    <div class="col-sm-2">
+        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.FieldVisit.PostMaintenanceAssessment != null ? ViewDataTyped.FieldVisit.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.FieldVisit.PostMaintenanceAssessment))
+    </div>
+    <div class="col-xs-10 text-right">
 
         @using (Html.BeginForm("PostMaintenanceAssessment", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
         {
