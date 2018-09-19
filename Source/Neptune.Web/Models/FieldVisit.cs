@@ -51,5 +51,10 @@ namespace Neptune.Web.Models
             IsFieldVisitVerified = true;
             FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
         }
+
+        public void MarkFieldVisitAsProvisional()
+        {
+            IsFieldVisitVerified = false;
+        }
     }
 }

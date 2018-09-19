@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using Neptune.Web.Models
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Views.FieldVisit
 
 @inherits Assessment
@@ -26,7 +27,6 @@
 @{
     @SetLayout("SiteLayout.cshtml", ViewDataTyped)
 }
-
 <p>
     The assessment workflow allows input of observations to quantify the BMPs performance. An assessment consists of several rapid observations and/or measurements made at a BMP, which results in a score between 0-5.
 </p>
@@ -45,7 +45,10 @@
 </ul>
 <hr>
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12 text-right">
+    <div class="col-sm-2">
+        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.InitialAssessment != null ? ViewDataTyped.InitialAssessment.GetDeleteUrl() : "", new List<string> {"btn btn-sm btn-neptune"}, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.InitialAssessment))
+    </div>
+    <div class="col-xs-10 text-right">
         
         <form method="post" class="field-visit-form">
             <button class="btn btn-neptune" style="display: inline-block;">

@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
@@ -45,7 +46,10 @@
 </ul>
 <hr>
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12 text-right">
+    <div class="col-sm-2">
+        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.PostMaintenanceAssessment != null ? ViewDataTyped.PostMaintenanceAssessment.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.PostMaintenanceAssessment))
+    </div>
+    <div class="col-xs-10 text-right">
 
         <form method="post" class="field-visit-form">
             <button class="btn btn-neptune" style="display: inline-block;">

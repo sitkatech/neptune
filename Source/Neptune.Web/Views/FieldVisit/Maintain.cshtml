@@ -18,6 +18,7 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
@@ -30,8 +31,11 @@
 <p>Some observation are required for the Maintenance Record to be considered complete. The required observations are identified with <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 12px; "></span> icon. </p>
 <hr />
 <div class="row" style="margin-bottom: 21px;">
-    <div class="col-xs-12 text-right">
-        @using (Html.BeginForm("Maintain", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+    <div class="col-xs-2">
+        @ModalDialogFormHelper.MakeDeleteLink("Delete", ViewDataTyped.MaintenanceRecord != null ? ViewDataTyped.MaintenanceRecord.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteMaintenanceRecord)
+    </div>
+    <div class="col-xs-10 text-right">
+        @using (Html.BeginForm("Maintain", "FieldVisit", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "field-visit-form"}))
         {
             if (ViewDataTyped.IsNew)
             {

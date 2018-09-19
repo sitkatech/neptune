@@ -94,6 +94,17 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [FieldVisitViewFeature]
+        public ViewResult Detail(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var initialAssessmentViewData = new AssessmentDetailViewData(CurrentPerson, fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial), TreatmentBMPAssessmentTypeEnum.Initial);
+            var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(CurrentPerson, fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance), TreatmentBMPAssessmentTypeEnum.PostMaintenance);
+            var viewData = new DetailViewData(CurrentPerson, StormwaterBreadCrumbEntity.FieldVisits, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData);
+            return RazorView<Detail, DetailViewData>(viewData);
+        }
+
+        [HttpGet]
         [FieldVisitCreateFeature]
         public PartialViewResult New(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
@@ -370,10 +381,16 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        public ActionResult EditMaintenanceRecord(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var maintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            // need this check to support deleting maintenance records from the edit page
+            if (maintenanceRecord == null)
+            {
+                return Redirect(
+                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Maintain(fieldVisitPrimaryKey)));
+            }
             var viewModel = new EditMaintenanceRecordViewModel(maintenanceRecord);
             return ViewEditMaintenanceRecord(viewModel, maintenanceRecord.TreatmentBMP, false, fieldVisit, maintenanceRecord);
         }
@@ -444,7 +461,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [FieldVisitEditFeature]
+        [FieldVisitVerifyFeature]
         public PartialViewResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
@@ -453,7 +470,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [FieldVisitEditFeature]
+        [FieldVisitVerifyFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult VerifyFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
@@ -464,7 +481,8 @@ namespace Neptune.Web.Controllers
             }
 
             fieldVisit.VerifyFieldVisit(CurrentPerson);
-            return new ModalDialogFormJsonResult();
+            SetMessageForDisplay("The Field Visit was successfully verified.");
+            return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x=>x.Detail(fieldVisitPrimaryKey)));
         }
 
         private PartialViewResult ViewVerifyFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
@@ -473,13 +491,62 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
+        [FieldVisitVerifyFeature]
+        public PartialViewResult MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewMarkProvisionalFieldVisit(fieldVisit, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitVerifyFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult MarkProvisionalFieldVisit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewMarkProvisionalFieldVisit(fieldVisit, viewModel);
+            }
+
+            fieldVisit.MarkFieldVisitAsProvisional();
+            SetMessageForDisplay("The Field Visit was successfully marked as provisional.");
+            var redirectUrl =
+                (fieldVisit.IsFieldVisitVerified || fieldVisit.FieldVisitStatus == FieldVisitStatus.Complete)
+                    ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Detail(fieldVisitPrimaryKey))
+                    : SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Inventory(fieldVisitPrimaryKey));
+            return new ModalDialogFormJsonResult(redirectUrl);
+        }
+
+        private PartialViewResult ViewMarkProvisionalFieldVisit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to mark the Assessment and Maintenance Records as provisional for the Field Visit to the treatment BMP '{fieldVisit.TreatmentBMP.TreatmentBMPName}' dated '{fieldVisit.VisitDate}'? ");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
 
         [HttpGet]
         [FieldVisitEditFeature]
-        public ViewResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
+        public ActionResult Observations(FieldVisitPrimaryKey fieldVisitPrimaryKey, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
+
+            // need this check to support deleting assessments from the edit page
+            if (treatmentBMPAssessment == null)
+            {
+                if (treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial)
+                {
+                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisitPrimaryKey)));
+                }
+                else
+                {
+                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PostMaintenanceAssessment(fieldVisitPrimaryKey)));
+
+                }
+            }
 
             var existingObservations = treatmentBMPAssessment != null ? treatmentBMPAssessment.TreatmentBMPObservations.ToList() : new List<TreatmentBMPObservation>();
             var viewModel = new ObservationsViewModel(existingObservations);

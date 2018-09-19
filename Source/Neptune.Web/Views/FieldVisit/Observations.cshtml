@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 @using Newtonsoft.Json
@@ -53,6 +54,11 @@
     }
 </style>
 
+
+@{
+    var assessment = ViewDataTyped.FieldVisit.GetAssessmentByType(ViewDataTyped.TreatmentBMPAssessmentTypeEnum);
+}
+
 <form method="POST" action="@ViewDataTyped.SubmitUrl" ng-app="NeptuneApp" id="ObservationsControllerApp" ng-controller="ObservationsController" ng-init="initializeData(AngularModel.Observations)" name="observationForm" class="field-visit-form">
     <div class="row observation-panel" ng-repeat="observationTypeSchema in AngularViewData.ObservationTypeSchemas">
         @if (ViewDataTyped.TreatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.PostMaintenance)
@@ -85,7 +91,7 @@
     <div class="row">
         <hr />
         <div class="col-xs-12 col-sm-2">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            @ModalDialogFormHelper.MakeDeleteLink("Delete", assessment != null ? assessment.GetDeleteUrl() : "", new List<string> { "btn btn-sm btn-neptune" }, ViewDataTyped.UserCanDeleteAssessment(assessment))
         </div>
         <div class="col-xs-12 col-sm-10" style="text-align: right">
             <button type="submit" class="btn btn-neptune" value="@StepToAdvanceToEnum.StayOnPage" name="@Html.NameFor(x => x.StepToAdvanceTo)">Save</button>
@@ -97,6 +103,11 @@
         <div ng-repeat="obs in ObservationData | orderBy: TreatmentBMPAssessmentObservationTypeID">
             <input type="hidden" name="@Html.NameFor(m => m.Observations[0].TreatmentBMPAssessmentObservationTypeID).ToString().Replace("0", "{{$index}}")" ng-value="obs.TreatmentBMPAssessmentObservationTypeID" />
             <input type="hidden" name="@Html.NameFor(m => m.Observations[0].ObservationData).ToString().Replace("0", "{{$index}}")" ng-value="jsonify(obs)" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>
     </div>
 

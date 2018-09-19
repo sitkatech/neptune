@@ -4,9 +4,14 @@
     {       
         public string ObservationScore { get; }
         public double? ObservationValue { get; }
-        public bool IsComplete { get; }
+        public bool IsComplete { get; set; }
         public string OverrideScoreText { get; }
-        public bool OverrideScore { get; }
+        public bool OverrideScore { get; set; }
+
+        public TreatmentBMPObservationSimple()
+        {
+        }
+
         public TreatmentBMPObservationSimple(TreatmentBMPObservation treatmentBMPObservation,
             bool overrideAssessmentScoreIfFailing)
         {           
