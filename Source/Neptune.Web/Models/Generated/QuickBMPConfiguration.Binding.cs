@@ -19,7 +19,7 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsRequired();
             Property(x => x.TreatmentBMPTypeID).HasColumnName(@"TreatmentBMPTypeID").HasColumnType("int").IsRequired();
             Property(x => x.QuickBMPName).HasColumnName(@"QuickBMPName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
-            Property(x => x.Note).HasColumnName(@"Note").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
+            Property(x => x.QuickBMPNote).HasColumnName(@"QuickBMPNote").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
 
             // Foreign keys
             HasRequired(a => a.WaterQualityManagementPlan).WithMany(b => b.QuickBMPs).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_QuickBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID

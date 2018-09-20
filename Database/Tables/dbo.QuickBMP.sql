@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[QuickBMP](
 	[WaterQualityManagementPlanID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[QuickBMPName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Note] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[QuickBMPNote] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_QuickBMP_QuickBMPID] PRIMARY KEY CLUSTERED 
 (
 	[QuickBMPID] ASC
