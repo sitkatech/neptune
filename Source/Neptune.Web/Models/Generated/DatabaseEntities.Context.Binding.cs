@@ -132,7 +132,8 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
+        public virtual DbSet<QuickBMP> AllQuickBMPs { get; set; }
+        public virtual IQueryable<QuickBMP> QuickBMPs { get { return AllQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
         public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }

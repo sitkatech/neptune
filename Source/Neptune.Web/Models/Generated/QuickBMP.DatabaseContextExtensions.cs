@@ -4,7 +4,6 @@
 //  Source Table: [dbo].[QuickBMP]
 using System.Collections.Generic;
 using System.Linq;
-using EntityFramework.Extensions;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -20,31 +19,30 @@ namespace Neptune.Web.Models
             return quickBMP;
         }
 
-        public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, List<int> quickBMPIDList)
+        public static void DeleteQuickBMP(this List<int> quickBMPIDList)
         {
             if(quickBMPIDList.Any())
             {
-                quickBMPs.Where(x => quickBMPIDList.Contains(x.QuickBMPID)).Delete();
+                HttpRequestStorage.DatabaseEntities.AllQuickBMPs.RemoveRange(HttpRequestStorage.DatabaseEntities.QuickBMPs.Where(x => quickBMPIDList.Contains(x.QuickBMPID)));
             }
         }
 
-        public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, ICollection<QuickBMP> quickBMPsToDelete)
+        public static void DeleteQuickBMP(this ICollection<QuickBMP> quickBMPsToDelete)
         {
             if(quickBMPsToDelete.Any())
             {
-                var quickBMPIDList = quickBMPsToDelete.Select(x => x.QuickBMPID).ToList();
-                quickBMPs.Where(x => quickBMPIDList.Contains(x.QuickBMPID)).Delete();
+                HttpRequestStorage.DatabaseEntities.AllQuickBMPs.RemoveRange(quickBMPsToDelete);
             }
         }
 
-        public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, int quickBMPID)
+        public static void DeleteQuickBMP(this int quickBMPID)
         {
-            DeleteQuickBMP(quickBMPs, new List<int> { quickBMPID });
+            DeleteQuickBMP(new List<int> { quickBMPID });
         }
 
-        public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, QuickBMP quickBMPToDelete)
+        public static void DeleteQuickBMP(this QuickBMP quickBMPToDelete)
         {
-            DeleteQuickBMP(quickBMPs, new List<QuickBMP> { quickBMPToDelete });
+            DeleteQuickBMP(new List<QuickBMP> { quickBMPToDelete });
         }
     }
 }

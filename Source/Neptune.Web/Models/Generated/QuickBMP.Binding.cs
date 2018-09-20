@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[QuickBMP]")]
-    public partial class QuickBMP : IHavePrimaryKey, ICanDeleteFull
+    public partial class QuickBMP : IHavePrimaryKey, IHaveATenantID
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         protected QuickBMP()
         {
 
+            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -95,11 +96,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
-            HttpRequestStorage.DatabaseEntities.QuickBMPs.Remove(this);                
+            HttpRequestStorage.DatabaseEntities.AllQuickBMPs.Remove(this);                
         }
 
         [Key]
         public int QuickBMPID { get; set; }
+        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public string QuickBMPName { get; set; }
@@ -107,6 +109,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return QuickBMPID; } set { QuickBMPID = value; } }
 
+        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
 
