@@ -12,9 +12,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public EditWqmpTreatmentBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan) : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
-            PageTitle = waterQualityManagementPlan.WaterQualityManagementPlanName;
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
+            SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
+            SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
+            PageTitle = "Edit WQMP BMPs";
 
 
             var treatmentBMPSimples = waterQualityManagementPlan.StormwaterJurisdiction.TreatmentBMPs
