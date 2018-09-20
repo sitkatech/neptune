@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
 
-        public EditWqmpTreatmentBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan) : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+        public EditWqmpTreatmentBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes) : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
@@ -25,16 +25,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 .Select(x => new TreatmentBMPSimple(x))
                 .OrderBy(x => x.DisplayName)
                 .ToList();
-            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPSimples);
+
+            ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPSimples, treatmentBMPTypes);
         }
 
         public class EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular
         {
             public IEnumerable<TreatmentBMPSimple> TreatmentBmps { get; }
+            public IEnumerable<TreatmentBMPTypeSimple> TreatmentBMPTypes { get; }
 
-            public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(IEnumerable<TreatmentBMPSimple> treatmentBmps)
+            public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(IEnumerable<TreatmentBMPSimple> treatmentBmps, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes)
             {
                 TreatmentBmps = treatmentBmps;
+                TreatmentBMPTypes = treatmentBMPTypes;
             }
         }
     }

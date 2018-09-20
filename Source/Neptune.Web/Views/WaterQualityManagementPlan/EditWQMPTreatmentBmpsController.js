@@ -24,4 +24,25 @@
                 return !_.includes($scope.AngularModel.TreatmentBmpIDs, x.TreatmentBMPID);
             });
         };
+
+
+
+
+
+
+        $scope.addQuickBMPRow = function (quickBMP) {
+            var newQuickBMP = $scope.createNewQuickBMPRow(quickBMP, 5);
+            quickBMP.push(newQuickBMP);
+        };
+
+        $scope.createNewQuickBMPRow = function (quickBMP, quickBMPID) {
+            //var fundingSource = $scope.getFundingSource(quickBMPID);
+            var newQuickBMP = {
+                QuickBMPID: quickBMPID,
+                DisplayName : "",
+                QuickBMPTypeName: null,
+                QuickBMPNote : ""
+            };
+            return newQuickBMP;
+        };
     });

@@ -244,7 +244,8 @@ namespace Neptune.Web.Controllers
         private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpTreatmentBmpsViewModel viewModel)
         {
-            var viewData = new EditWqmpTreatmentBmpsViewData(CurrentPerson, waterQualityManagementPlan);
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
+            var viewData = new EditWqmpTreatmentBmpsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
             return RazorView<EditWqmpTreatmentBmps, EditWqmpTreatmentBmpsViewData, EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
         }
 

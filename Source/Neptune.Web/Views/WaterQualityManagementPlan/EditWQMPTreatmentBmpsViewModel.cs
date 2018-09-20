@@ -2,12 +2,14 @@
 using System.Linq;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpTreatmentBmpsViewModel : FormViewModel
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
+        public List<QuickBMPSimple> QuickBmps { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -19,6 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpTreatmentBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             TreatmentBmpIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
+            QuickBmps = waterQualityManagementPlan.QuickBMPs.Select(x => new QuickBMPSimple(x)).ToList();
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
