@@ -169,16 +169,19 @@ namespace Neptune.Web.Controllers
         public ActionResult Inventory(FieldVisitPrimaryKey fieldVisitPrimaryKey, InventoryViewModel viewModel)
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit)));
         }
 
-        private static void FinalizeVisitIfNecessary(FieldVisitViewModel viewModel, FieldVisit fieldVisit)
+        private static bool FinalizeVisitIfNecessary(FieldVisitViewModel viewModel, FieldVisit fieldVisit)
         {
             if (viewModel.FinalizeVisit ?? false)
             {
                 fieldVisit.FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+                return true;
             }
+
+            return false;
         }
 
         [HttpGet]
@@ -223,7 +226,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(fieldVisit.TreatmentBMP, CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
 
             SetMessageForDisplay("Successfully updated Treatment BMP Location.");
 
@@ -254,7 +257,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModels(CurrentPerson, fieldVisit.TreatmentBMP);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c => c.Photos(fieldVisit)), new SitkaRoute<FieldVisitController>(c => c.Attributes(fieldVisit)), fieldVisit);
         }
@@ -297,7 +300,7 @@ namespace Neptune.Web.Controllers
             viewModel.UpdateModel(fieldVisit, CurrentPerson);
             fieldVisit.TreatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             fieldVisit.InventoryUpdated = true;
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Successfully updated Treatment BMP Attributes.");
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
                 c.Attributes(fieldVisit)), new SitkaRoute<FieldVisitController>(c =>
@@ -321,7 +324,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.Initial;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) ?? CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
@@ -342,7 +345,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.PostMaintenance;
             var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) ?? CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
@@ -375,7 +378,7 @@ namespace Neptune.Web.Controllers
                 return ViewMaintain(fieldVisit, viewModel);
             }
             var maintenanceRecord = fieldVisit.GetMaintenanceRecord() ?? new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPTypeID, fieldVisit) { MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID };
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
@@ -423,7 +426,7 @@ namespace Neptune.Web.Controllers
             fieldVisit.MarkFieldVisitAsProvisionalIfNonManager(CurrentPerson);
             var allCustomAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.ToList();
             viewModel.UpdateModel(fieldVisit, allCustomAttributeTypes);
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
 
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully updated.");
 
@@ -586,7 +589,7 @@ namespace Neptune.Web.Controllers
                 collectionMethodSectionViewModel.UpdateModel(treatmentBMPObservation);
             }
 
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Assessment Information successfully saved.");
 
             return RedirectToNextStep(viewModel, new SitkaRoute<FieldVisitController>(c =>
@@ -681,7 +684,7 @@ namespace Neptune.Web.Controllers
             }
 
             viewModel.UpdateModels(CurrentPerson, treatmentBMPAssessment);
-            FinalizeVisitIfNecessary(viewModel, fieldVisit);
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Successfully updated treatment BMP assessment photos.");
             
             return treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial

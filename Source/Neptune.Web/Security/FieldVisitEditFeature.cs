@@ -49,39 +49,14 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
-            if (contextModelObject.IsFieldVisitVerified || contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
+            if (contextModelObject.IsFieldVisitVerified)
             {
                 return new PermissionCheckResult("The Field Visit cannot be edited because it has already been verified by a Jurisdiction Manager.");
             }
 
-            return new PermissionCheckResult();
-        }
-    }
-
-    [SecurityFeatureDescription("Allows verifying and unverifying Field Visits for a BMP if you are assigned to edit that BMP's jurisdiction")]
-    public class FieldVisitVerifyFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
-    {
-        private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
-
-        public FieldVisitVerifyFeature()
-            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager })
-        {
-            _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FieldVisit>(this);
-            ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
-        }
-
-        public void DemandPermission(Person person, FieldVisit contextModelObject)
-        {
-            _lakeTahoeInfoFeatureWithContextImpl.DemandPermission(person, contextModelObject);
-        }
-
-        public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject)
-        {
-            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
-
-            if (!isAssignedToStormwaterJurisdiction)
+            if( contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
             {
-                return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult("The Field Visit cannot be edited because it has already been wrapped up.");
             }
 
             return new PermissionCheckResult();
