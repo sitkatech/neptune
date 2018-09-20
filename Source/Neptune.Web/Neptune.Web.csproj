@@ -191,6 +191,10 @@
     <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PersonConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\PersonPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\QuickBMP.Binding.cs" />
+    <Compile Include="Models\Generated\QuickBMP.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\QuickBMPConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\QuickBMPPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Role.Binding.cs" />
     <Compile Include="Models\Generated\RolePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\StateProvince.Binding.cs" />

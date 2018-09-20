@@ -58,6 +58,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new StateProvinceConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
@@ -131,6 +132,7 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
         public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }
@@ -353,6 +355,9 @@ namespace Neptune.Web.Models
 
                 case "Person":
                     return People.GetPerson(primaryKey);
+
+                case "QuickBMP":
+                    return QuickBMPs.GetQuickBMP(primaryKey);
 
                 case "Role":
                     var role = Role.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

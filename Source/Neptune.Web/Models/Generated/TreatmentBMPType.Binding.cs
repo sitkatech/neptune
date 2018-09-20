@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
+            this.QuickBMPs = new HashSet<QuickBMP>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
@@ -71,13 +72,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return CustomAttributes.Any() || MaintenanceRecordObservations.Any() || TreatmentBMPs.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPObservations.Any() || TreatmentBMPTypeAssessmentObservationTypes.Any() || TreatmentBMPTypeCustomAttributeTypes.Any();
+            return CustomAttributes.Any() || MaintenanceRecordObservations.Any() || QuickBMPs.Any() || TreatmentBMPs.Any() || TreatmentBMPAssessments.Any() || TreatmentBMPBenchmarkAndThresholds.Any() || TreatmentBMPObservations.Any() || TreatmentBMPTypeAssessmentObservationTypes.Any() || TreatmentBMPTypeCustomAttributeTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name, typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name, typeof(TreatmentBMPTypeCustomAttributeType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TreatmentBMPType).Name, typeof(CustomAttribute).Name, typeof(MaintenanceRecordObservation).Name, typeof(QuickBMP).Name, typeof(TreatmentBMP).Name, typeof(TreatmentBMPAssessment).Name, typeof(TreatmentBMPBenchmarkAndThreshold).Name, typeof(TreatmentBMPObservation).Name, typeof(TreatmentBMPTypeAssessmentObservationType).Name, typeof(TreatmentBMPTypeCustomAttributeType).Name};
 
 
         /// <summary>
@@ -92,6 +93,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in MaintenanceRecordObservations.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in QuickBMPs.ToList())
             {
                 x.DeleteFull();
             }
@@ -138,6 +144,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
+        public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public virtual ICollection<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
