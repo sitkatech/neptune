@@ -55,10 +55,10 @@
             color: #333;
         }
 
-            nav#wizardNav ul.fieldVisitTierTwoMenu li a span {
-                color: #f0ad4e;
-                background-color: inherit;
-            }
+        nav#wizardNav ul.fieldVisitTierTwoMenu li a span {
+            color: #f0ad4e;
+            background-color: inherit;
+        }
 
 
         @@media (min-width: 769px) {
@@ -98,32 +98,64 @@
         nav#wizardNav ul.fieldVisitTierTwoMenu a:hover .glyphicon-exclamation-sign {
             color: #fff;
         }
-    </style>
-}
-<div class="pull-right">
-    @if(ViewDataTyped.FieldVisit.FieldVisitStatus == FieldVisitStatus.Complete){
-        if (ViewDataTyped.FieldVisit.IsFieldVisitVerified)
-         {
-             <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
-             <span style="margin-right: 5px">Assessment and Maintenance Records have been verified</span>
-         }
-         else
-         {
-             <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-             <span style="margin-right: 5px">Assessment and Maintenance Records have not been verified</span>
+
+        hr {
+             border-top: 1px solid #ddd;
          }
 
-        if (ViewDataTyped.CanManageStormwaterJurisdiction && ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
-         {
-             @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> {"btn", "btn-neptune", "headerButtonText", "inactivateUserButton"}, null, null)
+        .moreActionsToggle .open > .moreActionsToggle .dropdown-toggle {
+            color: #3e72b0 !important;
         }
-    }
-    else
-    {
-        <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-        <span style="margin-right: 5px">Field visit is in progress</span>
-    } 
-</div>
+
+
+        .moreActionsToggle ul.dropdown-menu.moreActionsToggle li a,
+        .moreActionsToggle ul.dropdown-menu.moreActionsToggle li a:hover {
+            color: #3e72b0;
+        }
+
+        .moreActionsToggle .btn.dropdown-toggle {
+            border: none;
+            color: #3e72b0;
+        }
+
+        .glyphicon-chevron-down {
+            margin-left: 7px;
+            margin-top: 7px;
+        }
+    </style>
+}
+    <div class="pull-right">
+            <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
+            <span style="margin-right: 5px">Field visit is in progress</span>
+            <div class="dropdown moreActionsToggle" style="display: inline;">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li>
+                        <a href="@ViewDataTyped.FieldVisit.TreatmentBMP.GetDetailUrl()">Treatment BMP Details</a>
+                    </li>
+                    @if (ViewDataTyped.InitialAssessment != null)
+                    {
+                        <li>
+                            @ModalDialogFormHelper.MakeDeleteLink("Delete Initial Assessment", ViewDataTyped.InitialAssessment.GetDeleteUrl(), new List<string> { "" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.InitialAssessment))
+                        </li>
+                    }
+                    @if (ViewDataTyped.MaintenanceRecord != null)
+                    {
+                        <li>
+                            @ModalDialogFormHelper.MakeDeleteLink("Delete Maintenance Record", ViewDataTyped.MaintenanceRecord.GetDeleteUrl(), new List<string> { "" }, ViewDataTyped.UserCanDeleteMaintenanceRecord)
+                        </li>
+                    }
+                    @if (ViewDataTyped.PostMaintenanceAssessment != null)
+                    {
+                        <li>
+                            @ModalDialogFormHelper.MakeDeleteLink("Delete Post-Maintenance Assessment", ViewDataTyped.PostMaintenanceAssessment.GetDeleteUrl(), new List<string> { "" }, ViewDataTyped.UserCanDeleteAssessment(ViewDataTyped.PostMaintenanceAssessment))
+                        </li>
+                    }
+                </ul>
+            </div>
+    </div>
 <div style="clear:both"></div>
 
 @Html.ValidationSummary()
