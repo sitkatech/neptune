@@ -213,7 +213,7 @@ namespace Neptune.Web.Controllers
         #region WQMP Treatment BMPs
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]
-        public PartialViewResult EditWqmpTreatmentBmps(
+        public ViewResult EditWqmpTreatmentBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
@@ -236,19 +236,16 @@ namespace Neptune.Web.Controllers
 
             viewModel.UpdateModels(waterQualityManagementPlan);
             SetMessageForDisplay(
-                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " +
-                $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+                $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            return new ModalDialogFormJsonResult();
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
         }
 
-        private PartialViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
+        private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpTreatmentBmpsViewModel viewModel)
         {
-            var viewData = new EditWqmpTreatmentBmpsViewData(waterQualityManagementPlan);
-            return RazorPartialView<EditWqmpTreatmentBmps,
-                EditWqmpTreatmentBmpsViewData,
-                EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
+            var viewData = new EditWqmpTreatmentBmpsViewData(CurrentPerson, waterQualityManagementPlan);
+            return RazorView<EditWqmpTreatmentBmps, EditWqmpTreatmentBmpsViewData, EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
         }
 
         #endregion

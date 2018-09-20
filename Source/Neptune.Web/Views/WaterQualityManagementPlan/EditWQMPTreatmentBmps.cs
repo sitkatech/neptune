@@ -2,8 +2,7 @@
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public abstract class EditWqmpTreatmentBmps : TypedWebPartialViewPage<
-        EditWqmpTreatmentBmpsViewData, EditWqmpTreatmentBmpsViewModel>
+    public abstract class EditWqmpTreatmentBmps : TypedWebViewPage<EditWqmpTreatmentBmpsViewData, EditWqmpTreatmentBmpsViewModel>
     {
     }
 }
