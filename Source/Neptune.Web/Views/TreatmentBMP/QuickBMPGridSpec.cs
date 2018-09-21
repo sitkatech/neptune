@@ -29,9 +29,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         public QuickBMPGridSpec()
         {
 
-            Add("Quick BMP Name", x => x.QuickBMPName, 250, DhtmlxGridColumnFilterType.Html);
+            Add("Name", x => x.QuickBMPName, 250, DhtmlxGridColumnFilterType.Html);
             Add(Models.FieldDefinition.TreatmentBMPType.ToGridHeaderString("Type"), x => x.TreatmentBMPType.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Notes", x => x.QuickBMPNote, 300);
+            Add("Notes", x => x.QuickBMPNote, 500);
         }
     }
 }
