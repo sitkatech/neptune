@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[SourceControlBMPAttribute](
-	[SourceControlBMPAttributeID] [int] IDENTITY(1,1) NOT NULL,
+	[SourceControlBMPAttributeID] [int] NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[SourceControlBMPAttributeCategoryID] [int] NOT NULL,
 	[SourceControlBMPAttributeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

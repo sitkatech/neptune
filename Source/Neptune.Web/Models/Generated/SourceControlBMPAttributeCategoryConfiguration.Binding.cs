@@ -15,7 +15,7 @@ namespace Neptune.Web.Models
         {
             ToTable("SourceControlBMPAttributeCategory", schema);
             HasKey(x => x.SourceControlBMPAttributeCategoryID);
-            Property(x => x.SourceControlBMPAttributeCategoryID).HasColumnName(@"SourceControlBMPAttributeCategoryID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(x => x.SourceControlBMPAttributeCategoryID).HasColumnName(@"SourceControlBMPAttributeCategoryID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.SourceControlBMPAttributeCategoryName).HasColumnName(@"SourceControlBMPAttributeCategoryName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
 
