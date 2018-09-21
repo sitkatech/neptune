@@ -2,8 +2,9 @@
 {
     public class QuickBMPSimple
     {
-        public int QuickBMPID { get; set; }
+        public int? QuickBMPID { get; set; }
         public string DisplayName { get; set; }
+        public int QuickTreatmentBMPTypeID { get; set; }
         public string QuickBMPTypeName { get; set; }
         public string QuickBMPNote { get; set; }
 
@@ -18,16 +19,9 @@
         {
             QuickBMPID = quickBMP.QuickBMPID;
             DisplayName = quickBMP.QuickBMPName;
+            QuickTreatmentBMPTypeID = quickBMP.TreatmentBMPTypeID;
             QuickBMPTypeName = quickBMP.TreatmentBMPType.TreatmentBMPTypeName;
             QuickBMPNote = quickBMP.QuickBMPNote;
-        }
-
-        public QuickBMPSimple(int quickBMPID, string displayName, string quickBMPTypeName, string quickBMPNote)
-        {
-            QuickBMPID = quickBMPID;
-            DisplayName = displayName;
-            QuickBMPTypeName = quickBMPTypeName;
-            QuickBMPNote = quickBMPNote;
         }
     }
 }

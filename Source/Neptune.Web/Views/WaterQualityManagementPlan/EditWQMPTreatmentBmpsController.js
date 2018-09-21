@@ -25,24 +25,22 @@
             });
         };
 
-
-
-
-
-
         $scope.addQuickBMPRow = function (quickBMP) {
-            var newQuickBMP = $scope.createNewQuickBMPRow(quickBMP, 5);
+            var newQuickBMP = $scope.createNewQuickBMPRow(quickBMP);
             quickBMP.push(newQuickBMP);
         };
 
-        $scope.createNewQuickBMPRow = function (quickBMP, quickBMPID) {
-            //var fundingSource = $scope.getFundingSource(quickBMPID);
+        $scope.createNewQuickBMPRow = function (quickBMP) {
             var newQuickBMP = {
-                QuickBMPID: quickBMPID,
+                QuickBMPID: null,
                 DisplayName : "",
                 QuickBMPTypeName: null,
                 QuickBMPNote : ""
             };
             return newQuickBMP;
+        };
+
+        $scope.deleteQuickBMPRow = function (quickBmps, rowToDelete) {
+            Sitka.Methods.removeFromJsonArray(quickBmps, rowToDelete);
         };
     });

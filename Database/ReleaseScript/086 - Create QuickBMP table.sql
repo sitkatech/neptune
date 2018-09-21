@@ -5,10 +5,7 @@ CREATE TABLE dbo.QuickBMP (
     TreatmentBMPTypeID INT NOT NULL CONSTRAINT FK_QuickBMP_TreatmentBMPType_TreatmentBMPTypeID FOREIGN KEY REFERENCES dbo.TreatmentBMPType (TreatmentBMPTypeID),
     QuickBMPName VARCHAR(100) NOT NULL,
     QuickBMPNote VARCHAR(100) NULL,
-    Constraint AK_QuickBMP_QuickBMPName_QuickBMPID unique(QuickBMPName, QuickBMPID)
+    Constraint AK_QuickBMP_WaterQualityManagementPlanID_QuickBMPName unique(WaterQualityManagementPlanID, QuickBMPName)
 );
-
-
-
 
 
