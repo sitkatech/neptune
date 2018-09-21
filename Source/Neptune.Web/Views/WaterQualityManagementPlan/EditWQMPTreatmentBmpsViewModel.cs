@@ -12,7 +12,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     public class EditWqmpTreatmentBmpsViewModel : FormViewModel
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
-        public List<QuickBMPSimple> QuickBmps { get; set; }
+        public List<QuickBMPSimple> QuickBmpSimples { get; set; }
+        public List<SourceControlBMPSimple> SourceControlBMPSimples { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -24,7 +25,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpTreatmentBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
             TreatmentBmpIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
-            QuickBmps = waterQualityManagementPlan.QuickBMPs.Select(x => new QuickBMPSimple(x)).ToList();
+            QuickBmpSimples = waterQualityManagementPlan.QuickBMPs.Select(x => new QuickBMPSimple(x)).ToList();
+            SourceControlBMPSimples =
+                waterQualityManagementPlan.SourceControlBMPs.Select(x => new SourceControlBMPSimple(x)).ToList();
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMPSimple> quickBMPSimples)

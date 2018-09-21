@@ -247,7 +247,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmps);
+            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples);
             SetMessageForDisplay(
                 $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
