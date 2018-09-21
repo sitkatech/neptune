@@ -5,6 +5,7 @@ GO
 CREATE TABLE [dbo].[SourceControlBMP](
 	[SourceControlBMPID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
+	[WaterQualityManagementPlanID] [int] NOT NULL,
 	[SourceControlBMPAttributeID] [int] NOT NULL,
 	[IsPresent] [bit] NOT NULL,
 	[SourceControlBMPNote] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -24,3 +25,8 @@ ALTER TABLE [dbo].[SourceControlBMP]  WITH CHECK ADD  CONSTRAINT [FK_SourceContr
 REFERENCES [dbo].[Tenant] ([TenantID])
 GO
 ALTER TABLE [dbo].[SourceControlBMP] CHECK CONSTRAINT [FK_SourceControlBMP_Tenant_TenantID]
+GO
+ALTER TABLE [dbo].[SourceControlBMP]  WITH CHECK ADD  CONSTRAINT [FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
+REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
+GO
+ALTER TABLE [dbo].[SourceControlBMP] CHECK CONSTRAINT [FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID]

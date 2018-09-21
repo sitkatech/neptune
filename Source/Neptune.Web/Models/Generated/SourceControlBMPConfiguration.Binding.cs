@@ -17,11 +17,13 @@ namespace Neptune.Web.Models
             HasKey(x => x.SourceControlBMPID);
             Property(x => x.SourceControlBMPID).HasColumnName(@"SourceControlBMPID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
+            Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsRequired();
             Property(x => x.SourceControlBMPAttributeID).HasColumnName(@"SourceControlBMPAttributeID").HasColumnType("int").IsRequired();
             Property(x => x.IsPresent).HasColumnName(@"IsPresent").HasColumnType("bit").IsRequired();
             Property(x => x.SourceControlBMPNote).HasColumnName(@"SourceControlBMPNote").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(200);
 
             // Foreign keys
+            HasRequired(a => a.WaterQualityManagementPlan).WithMany(b => b.SourceControlBMPs).HasForeignKey(c => c.WaterQualityManagementPlanID).WillCascadeOnDelete(false); // FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID
             HasRequired(a => a.SourceControlBMPAttribute).WithMany(b => b.SourceControlBMPs).HasForeignKey(c => c.SourceControlBMPAttributeID).WillCascadeOnDelete(false); // FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID
         }
     }

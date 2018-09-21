@@ -30,9 +30,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMP(int sourceControlBMPID, int sourceControlBMPAttributeID, bool isPresent, string sourceControlBMPNote) : this()
+        public SourceControlBMP(int sourceControlBMPID, int waterQualityManagementPlanID, int sourceControlBMPAttributeID, bool isPresent, string sourceControlBMPNote) : this()
         {
             this.SourceControlBMPID = sourceControlBMPID;
+            this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.SourceControlBMPAttributeID = sourceControlBMPAttributeID;
             this.IsPresent = isPresent;
             this.SourceControlBMPNote = sourceControlBMPNote;
@@ -41,11 +42,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMP(int sourceControlBMPAttributeID, bool isPresent) : this()
+        public SourceControlBMP(int waterQualityManagementPlanID, int sourceControlBMPAttributeID, bool isPresent) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.SourceControlBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
+            this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.SourceControlBMPAttributeID = sourceControlBMPAttributeID;
             this.IsPresent = isPresent;
         }
@@ -53,10 +55,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public SourceControlBMP(SourceControlBMPAttribute sourceControlBMPAttribute, bool isPresent) : this()
+        public SourceControlBMP(WaterQualityManagementPlan waterQualityManagementPlan, SourceControlBMPAttribute sourceControlBMPAttribute, bool isPresent) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.SourceControlBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
+            this.WaterQualityManagementPlan = waterQualityManagementPlan;
+            waterQualityManagementPlan.SourceControlBMPs.Add(this);
             this.SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID;
             this.SourceControlBMPAttribute = sourceControlBMPAttribute;
             sourceControlBMPAttribute.SourceControlBMPs.Add(this);
@@ -66,9 +71,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static SourceControlBMP CreateNewBlank(SourceControlBMPAttribute sourceControlBMPAttribute)
+        public static SourceControlBMP CreateNewBlank(WaterQualityManagementPlan waterQualityManagementPlan, SourceControlBMPAttribute sourceControlBMPAttribute)
         {
-            return new SourceControlBMP(sourceControlBMPAttribute, default(bool));
+            return new SourceControlBMP(waterQualityManagementPlan, sourceControlBMPAttribute, default(bool));
         }
 
         /// <summary>
@@ -97,6 +102,7 @@ namespace Neptune.Web.Models
         [Key]
         public int SourceControlBMPID { get; set; }
         public int TenantID { get; private set; }
+        public int WaterQualityManagementPlanID { get; set; }
         public int SourceControlBMPAttributeID { get; set; }
         public bool IsPresent { get; set; }
         public string SourceControlBMPNote { get; set; }
@@ -104,6 +110,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return SourceControlBMPID; } set { SourceControlBMPID = value; } }
 
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+        public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual SourceControlBMPAttribute SourceControlBMPAttribute { get; set; }
 
         public static class FieldLengths

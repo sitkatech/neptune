@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlan()
         {
             this.QuickBMPs = new HashSet<QuickBMP>();
+            this.SourceControlBMPs = new HashSet<SourceControlBMP>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
@@ -104,13 +105,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return QuickBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any();
+            return QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name};
 
 
         /// <summary>
@@ -120,6 +121,11 @@ namespace Neptune.Web.Models
         {
 
             foreach(var x in QuickBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in SourceControlBMPs.ToList())
             {
                 x.DeleteFull();
             }
@@ -167,6 +173,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
         public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
+        public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }

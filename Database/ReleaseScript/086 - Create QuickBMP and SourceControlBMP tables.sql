@@ -9,15 +9,11 @@ CREATE TABLE dbo.QuickBMP (
 );
 
 
-
-
-
 CREATE Table dbo.SourceControlBMPAttributeCategory (
 	SourceControlBMPAttributeCategoryID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_SourceControlBMPAttributeCategory_SourceControlBMPAttributeCategoryID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_SourceControlBMPAttributeCategory_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	SourceControlBMPAttributeCategoryName VARCHAR(100) NOT NULL
 );
-
 
 
 CREATE Table dbo.SourceControlBMPAttribute (
@@ -28,13 +24,10 @@ CREATE Table dbo.SourceControlBMPAttribute (
 );
 
 
-
-
-
-
 CREATE TABLE dbo.SourceControlBMP(
 	SourceControlBMPID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_SourceControlBMP_SourceControlBMPID PRIMARY KEY, 
 	TenantID INT NOT NULL CONSTRAINT FK_SourceControlBMP_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
+	WaterQualityManagementPlanID INT NOT NULL CONSTRAINT FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlan (WaterQualityManagementPlanID),
 	SourceControlBMPAttributeID INT NOT NULL CONSTRAINT FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID FOREIGN KEY REFERENCES dbo.SourceControlBMPAttribute (SourceControlBMPAttributeID), 
 	IsPresent BIT NOT NULL,
     SourceControlBMPNote VARCHAR(200) NULL
