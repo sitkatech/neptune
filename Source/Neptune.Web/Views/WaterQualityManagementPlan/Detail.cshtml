@@ -199,7 +199,11 @@
                 }
             </div>
             <div class="panel-body">
+                <h4>Inventoried BMPs</h4>
                 @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+
+                <h4>Quick BMPs</h4>
+                @Html.DhtmlxGrid(ViewDataTyped.QuickBmpGridSpec, ViewDataTyped.QuickBmpGridName, ViewDataTyped.QuickBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
             </div>
         </div>
     </div>
