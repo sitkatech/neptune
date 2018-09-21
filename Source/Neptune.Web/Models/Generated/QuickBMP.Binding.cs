@@ -116,7 +116,7 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int QuickBMPName = 100;
-            public const int QuickBMPNote = 100;
+            public const int QuickBMPNote = 200;
         }
     }
 }
