@@ -20,6 +20,8 @@ namespace Neptune.Web.Views.FieldVisit
         public string WrapupUrl { get; }
         public bool UserCanDeleteMaintenanceRecord { get; }
         public Models.MaintenanceRecord MaintenanceRecord { get; }
+        public Models.TreatmentBMPAssessment InitialAssessment { get; }
+        public Models.TreatmentBMPAssessment PostMaintenanceAssessment { get; }
 
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
@@ -44,6 +46,8 @@ namespace Neptune.Web.Views.FieldVisit
 
 
             MaintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
+            PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
                                                  .HasPermission(CurrentPerson, MaintenanceRecord)
