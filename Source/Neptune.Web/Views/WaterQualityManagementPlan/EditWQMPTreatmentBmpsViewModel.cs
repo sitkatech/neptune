@@ -22,12 +22,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpTreatmentBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditWqmpTreatmentBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<SourceControlBMPAttribute> sourceControlBMPAttributes)
         {
             TreatmentBmpIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
             QuickBmpSimples = waterQualityManagementPlan.QuickBMPs.Select(x => new QuickBMPSimple(x)).ToList();
-            SourceControlBMPSimples =
-                waterQualityManagementPlan.SourceControlBMPs.Select(x => new SourceControlBMPSimple(x)).ToList();
+            SourceControlBMPSimples = waterQualityManagementPlan.SourceControlBMPs.Select(x => new SourceControlBMPSimple(x)).ToList();
+
+            foreach (var sourceControlBMPAttribute in sourceControlBMPAttributes)
+            {
+                if (!SourceControlBMPSimples.Select(x => x.SourceControlBMPAttributeName).Contains(sourceControlBMPAttribute.SourceControlBMPAttributeName))
+                {
+                    SourceControlBMPSimples.Add(new SourceControlBMPSimple(sourceControlBMPAttribute));
+                }
+            }
         }
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMPSimple> quickBMPSimples)

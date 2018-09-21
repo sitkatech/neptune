@@ -174,12 +174,14 @@
         <div class="row row-group">
             <div class="col-xs-12">
                 <table class="dialogFormLayout table table-condensed">
-                    <tbody>
+                    <thead>
                         <tr>
                             <th style="white-space: nowrap"> Source Control Attribute </th>
                             <th style="white-space: nowrap"> Is Present <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
                             <th style="white-space: nowrap"> Note</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <tr ng-repeat="sourceControlSimple in AngularModel.SourceControlBMPSimples">
                             <td style="padding-right: 17px; border:none">
                                 <label>{{sourceControlSimple.SourceControlBMPAttributeName}}</label>

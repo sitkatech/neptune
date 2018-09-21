@@ -230,7 +230,8 @@ namespace Neptune.Web.Controllers
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var viewModel = new EditWqmpTreatmentBmpsViewModel(waterQualityManagementPlan);
+            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
+            var viewModel = new EditWqmpTreatmentBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
             return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
         }
 
