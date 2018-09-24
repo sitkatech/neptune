@@ -61,9 +61,18 @@
         span.glyphicon-chevron-right {
             margin-left:5px
         }
+        .returnToEditButton {
+            margin-left: 5px;
+        }
     </style>
 }
-
+<div class="row">
+    <div class="col-xs-12">
+        <div class="alert alert-info" role="alert">
+            This field visit has been wrapped up and is therefore not editable. @(ViewDataTyped.CanManageStormwaterJurisdiction ? "Use the return to edit button if you wish to make any changes." : "")
+        </div>
+    </div>
+</div>
     <div class="row">
         <div class="col-xs-12">
             <div class="pull-right">
@@ -82,13 +91,22 @@
                 {
                     if (ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
                     {
-                        @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+                        @ModalDialogFormHelper.ModalDialogFormLink("Verify Assessment and Maintenance Records", ViewDataTyped.VerifiedUnverifiedFieldVisitUrl, "Verify Assessment and Maintenance Records?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", }, null, null)
                     }
                     else
                     {
                         @ModalDialogFormHelper.ModalDialogFormLink("Mark as provisional", ViewDataTyped.MarkAsProvisionalUrl, "Mark as Provisional?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
                     }
                 }
+
+                @if (ViewDataTyped.CanEditStormwaterJurisdiction)
+                {
+                    if (ViewDataTyped.FieldVisit.IsFieldVisitVerified == false)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Return to edit", ViewDataTyped.ReturnToEditUrl, "Mark as Provisional?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "returnToEditButton" }, null, null)
+                    }
+                }
+
             </div>
         </div>
     </div>

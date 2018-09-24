@@ -21,6 +21,7 @@ namespace Neptune.Web.Models
         public static readonly FieldVisitStatusInProgress InProgress = FieldVisitStatusInProgress.Instance;
         public static readonly FieldVisitStatusComplete Complete = FieldVisitStatusComplete.Instance;
         public static readonly FieldVisitStatusUnresolved Unresolved = FieldVisitStatusUnresolved.Instance;
+        public static readonly FieldVisitStatusReturnedToEdit ReturnedToEdit = FieldVisitStatusReturnedToEdit.Instance;
 
         public static readonly List<FieldVisitStatus> All;
         public static readonly ReadOnlyDictionary<int, FieldVisitStatus> AllLookupDictionary;
@@ -30,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldVisitStatus()
         {
-            All = new List<FieldVisitStatus> { InProgress, Complete, Unresolved };
+            All = new List<FieldVisitStatus> { InProgress, Complete, Unresolved, ReturnedToEdit };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldVisitStatus>(All.ToDictionary(x => x.FieldVisitStatusID));
         }
 
@@ -104,6 +105,8 @@ namespace Neptune.Web.Models
                     return Complete;
                 case FieldVisitStatusEnum.InProgress:
                     return InProgress;
+                case FieldVisitStatusEnum.ReturnedToEdit:
+                    return ReturnedToEdit;
                 case FieldVisitStatusEnum.Unresolved:
                     return Unresolved;
                 default:
@@ -116,7 +119,8 @@ namespace Neptune.Web.Models
     {
         InProgress = 1,
         Complete = 2,
-        Unresolved = 3
+        Unresolved = 3,
+        ReturnedToEdit = 4
     }
 
     public partial class FieldVisitStatusInProgress : FieldVisitStatus
@@ -135,5 +139,11 @@ namespace Neptune.Web.Models
     {
         private FieldVisitStatusUnresolved(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : base(fieldVisitStatusID, fieldVisitStatusName, fieldVisitStatusDisplayName) {}
         public static readonly FieldVisitStatusUnresolved Instance = new FieldVisitStatusUnresolved(3, @"Unresolved", @"Unresolved");
+    }
+
+    public partial class FieldVisitStatusReturnedToEdit : FieldVisitStatus
+    {
+        private FieldVisitStatusReturnedToEdit(int fieldVisitStatusID, string fieldVisitStatusName, string fieldVisitStatusDisplayName) : base(fieldVisitStatusID, fieldVisitStatusName, fieldVisitStatusDisplayName) {}
+        public static readonly FieldVisitStatusReturnedToEdit Instance = new FieldVisitStatusReturnedToEdit(4, @"ReturnedToEdit", @"Returned to Edit");
     }
 }

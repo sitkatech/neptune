@@ -56,5 +56,11 @@ namespace Neptune.Web.Models
         {
             IsFieldVisitVerified = false;
         }
+
+        public void ReturnFieldVisitToEdit()
+        {
+            IsFieldVisitVerified = false;
+            FieldVisitStatusID = FieldVisitStatus.ReturnedToEdit.FieldVisitStatusID;
+        }
     }
 }
