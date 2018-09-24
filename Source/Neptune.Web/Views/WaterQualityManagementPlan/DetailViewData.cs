@@ -19,13 +19,16 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public QuickBMPGridSpec QuickBmpGridSpec { get; }
         public string QuickBmpGridName { get; }
         public string QuickBmpGridDataUrl { get; }
+        public SourceControlBMPGridSpec SourceControlBmpGridSpec { get; }
+        public string SourceControlBmpGridName { get; }
+        public string SourceControlBmpGridDataUrl { get; }
         public MapInitJson MapInitJson { get; }
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
-            TreatmentBMPGridSpec treatmentBMPGridSpec, QuickBMPGridSpec quickBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
+            TreatmentBMPGridSpec treatmentBMPGridSpec, QuickBMPGridSpec quickBMPGridSpec, SourceControlBMPGridSpec sourceControlBmpGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -53,6 +56,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             QuickBmpGridName = "quickBmpGrid";
             QuickBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.QuickBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+            SourceControlBmpGridSpec = sourceControlBmpGridSpec;
+            SourceControlBmpGridName = "sourceControlBmpGrid";
+            SourceControlBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.SourceControlBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
             MapInitJson = mapInitJson;
             ParcelGridSpec = parcelGridSpec;
             ParcelGridName = "parcelGrid";

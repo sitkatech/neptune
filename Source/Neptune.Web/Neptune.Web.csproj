@@ -357,6 +357,7 @@
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\SourceControlBMPGridSpec.cs" />
     <Compile Include="Views\TreatmentBMP\QuickBMPGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
