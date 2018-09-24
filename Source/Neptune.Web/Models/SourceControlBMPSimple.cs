@@ -4,6 +4,7 @@
     {
         public int? SourceControlBMPID { get; set; }
         public string SourceControlBMPAttributeCategoryName { get; set; }
+        public int SourceControlBMPAttributeID { get; set; }
         public string SourceControlBMPAttributeName { get; set; }
         public bool IsPresent { get; set; }
         public string SourceControlBMPNote { get; set; }
@@ -20,6 +21,7 @@
             SourceControlBMPID = null;
             SourceControlBMPAttributeCategoryName = sourceControlBMPAttribute
                 .SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
+            SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID;
             SourceControlBMPAttributeName = sourceControlBMPAttribute.SourceControlBMPAttributeName;
             IsPresent = false;
             SourceControlBMPNote = null;
@@ -30,6 +32,7 @@
             SourceControlBMPID = sourceControlBMP.SourceControlBMPID;
             SourceControlBMPAttributeCategoryName = sourceControlBMP.SourceControlBMPAttribute
                 .SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
+            SourceControlBMPAttributeID = sourceControlBMP.SourceControlBMPAttributeID;
             SourceControlBMPAttributeName = sourceControlBMP.SourceControlBMPAttribute.SourceControlBMPAttributeName;
             IsPresent = sourceControlBMP.IsPresent;
             SourceControlBMPNote = sourceControlBMP.SourceControlBMPNote;

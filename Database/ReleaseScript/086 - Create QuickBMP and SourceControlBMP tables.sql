@@ -12,6 +12,7 @@ CREATE TABLE dbo.QuickBMP (
 CREATE Table dbo.SourceControlBMPAttributeCategory (
 	SourceControlBMPAttributeCategoryID INT NOT NULL CONSTRAINT PK_SourceControlBMPAttributeCategory_SourceControlBMPAttributeCategoryID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_SourceControlBMPAttributeCategory_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
+	SourceControlBMPAttributeCategoryShortName VARCHAR(50) NOT NULL,
 	SourceControlBMPAttributeCategoryName VARCHAR(100) NOT NULL
 );
 
@@ -40,11 +41,11 @@ CREATE TABLE dbo.SourceControlBMP(
 
 
 
-INSERT INTO dbo.SourceControlBMPAttributeCategory (SourceControlBMPAttributeCategoryID, TenantID, SourceControlBMPAttributeCategoryName)
+INSERT INTO dbo.SourceControlBMPAttributeCategory (SourceControlBMPAttributeCategoryID, TenantID, SourceControlBMPAttributeCategoryShortName, SourceControlBMPAttributeCategoryName)
 VALUES 
-(1, 2, 'Site Design BMPs'),
-(2, 2, 'Applicable Routine Non-Structural Source Control BMPs'),
-(3, 2, 'Applicable Routine Structural Source Control BMPs');
+(1, 2, 'Site Design', 'Hydrologic Source Control and Site Design BMPs'),
+(2, 2, 'Non-Structural', 'Applicable Routine Non-Structural Source Control BMPs'),
+(3, 2, 'Structural', 'Applicable Routine Structural Source Control BMPs');
 
 
 

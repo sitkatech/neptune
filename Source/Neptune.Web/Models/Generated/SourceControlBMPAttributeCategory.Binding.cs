@@ -30,20 +30,22 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMPAttributeCategory(int sourceControlBMPAttributeCategoryID, string sourceControlBMPAttributeCategoryName) : this()
+        public SourceControlBMPAttributeCategory(int sourceControlBMPAttributeCategoryID, string sourceControlBMPAttributeCategoryShortName, string sourceControlBMPAttributeCategoryName) : this()
         {
             this.SourceControlBMPAttributeCategoryID = sourceControlBMPAttributeCategoryID;
+            this.SourceControlBMPAttributeCategoryShortName = sourceControlBMPAttributeCategoryShortName;
             this.SourceControlBMPAttributeCategoryName = sourceControlBMPAttributeCategoryName;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMPAttributeCategory(string sourceControlBMPAttributeCategoryName) : this()
+        public SourceControlBMPAttributeCategory(string sourceControlBMPAttributeCategoryShortName, string sourceControlBMPAttributeCategoryName) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.SourceControlBMPAttributeCategoryID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
+            this.SourceControlBMPAttributeCategoryShortName = sourceControlBMPAttributeCategoryShortName;
             this.SourceControlBMPAttributeCategoryName = sourceControlBMPAttributeCategoryName;
         }
 
@@ -53,7 +55,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static SourceControlBMPAttributeCategory CreateNewBlank()
         {
-            return new SourceControlBMPAttributeCategory(default(string));
+            return new SourceControlBMPAttributeCategory(default(string), default(string));
         }
 
         /// <summary>
@@ -87,6 +89,7 @@ namespace Neptune.Web.Models
         [Key]
         public int SourceControlBMPAttributeCategoryID { get; set; }
         public int TenantID { get; private set; }
+        public string SourceControlBMPAttributeCategoryShortName { get; set; }
         public string SourceControlBMPAttributeCategoryName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return SourceControlBMPAttributeCategoryID; } set { SourceControlBMPAttributeCategoryID = value; } }
@@ -96,6 +99,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
+            public const int SourceControlBMPAttributeCategoryShortName = 50;
             public const int SourceControlBMPAttributeCategoryName = 100;
         }
     }

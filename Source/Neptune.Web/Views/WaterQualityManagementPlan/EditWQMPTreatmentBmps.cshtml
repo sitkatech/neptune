@@ -186,9 +186,9 @@
                             <td style="padding-right: 17px; border:none">
                                 <label>{{sourceControlSimple.SourceControlBMPAttributeName}}</label>
                             </td>
-                            <td style="padding-right: 17px; border:none">
-                                <label style="margin-right: 10px"><input type="radio" ng-model="sourceControlSimple.IsPresent" value="true"> Yes</label>
-                                <label style="margin-right: 10px"><input type="radio" ng-model="sourceControlSimple.IsPresent" value="false"> No</label>
+                            <td style="padding-right: 17px; border: none">
+                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{$index}}]" ng-model="sourceControlSimple.IsPresent" ng-value="true"> Yes</label>
+                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{$index}}]" ng-model="sourceControlSimple.IsPresent" ng-value="false"> No</label>
                             </td>
                             <td style="padding-right: 17px; border:none">
                                 <input class="form-control" ng-model="sourceControlSimple.SourceControlBMPNote" value="{{sourceControlSimple.SourceControlBMPNote}}" />
@@ -197,9 +197,10 @@
                     </tbody>
                 </table>
                 <div ng-repeat="sourceControlSimple in AngularModel.SourceControlBMPSimples">
-                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
-                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].IsPresent).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.IsPresent}}" />
-                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPNote).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPNote}}" />
+                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
+                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeID}}" />
+                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].IsPresent).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.IsPresent}}" />
+                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPNote).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPNote}}" />
                 </div>
             </div>
         </div>
