@@ -10,7 +10,6 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using TreatmentBMPGridSpec = Neptune.Web.Views.TreatmentBMP.TreatmentBMPGridSpec;
 using QuickBMPGridSpec = Neptune.Web.Views.TreatmentBMP.QuickBMPGridSpec;
-using SourceControlBMPGridSpec = Neptune.Web.Views.TreatmentBMP.SourceControlBMPGridSpec;
 
 namespace Neptune.Web.Controllers
 {
@@ -43,7 +42,6 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var treatmentBMPGridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
             var quickBMPGridSpec = new QuickBMPGridSpec();
-            var sourceControlBmpGridSpec = new SourceControlBMPGridSpec();
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
@@ -76,7 +74,7 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, sourceControlBmpGridSpec, mapInitJson, new ParcelGridSpec());
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -99,16 +97,6 @@ namespace Neptune.Web.Controllers
             var quickBmps = waterQualityManagementPlan.QuickBMPs.ToList();
             var gridSpec = new QuickBMPGridSpec();
             return new GridJsonNetJObjectResult<QuickBMP>(quickBmps, gridSpec);
-        }
-
-        [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<SourceControlBMP> SourceControlBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var sourceControlBmps = waterQualityManagementPlan.SourceControlBMPs.OrderBy(x => x.SourceControlBMPAttributeID).ToList();
-            var gridSpec = new SourceControlBMPGridSpec();
-            return new GridJsonNetJObjectResult<SourceControlBMP>(sourceControlBmps, gridSpec);
         }
 
         [HttpGet]
