@@ -116,6 +116,14 @@ namespace Neptune.Web.Models
             return isAdministrator || (isStormwaterJurisdictionManager && isPartOfStormwaterJurisdiction);
         }
 
+        public static bool CanEditStormwaterJurisdiction(this Person person,
+            StormwaterJurisdiction stormwaterJurisdiction)
+        {
+            return person.CanManageStormwaterJurisdiction(stormwaterJurisdiction) ||
+                   (person.IsAssignedToStormwaterJurisdiction(stormwaterJurisdiction) &&
+                    person.Role == Role.JurisdictionEditor);
+        }
+
         /// <summary>
         /// List of Organizations for which this Person is the primary contact
         /// </summary>

@@ -3,14 +3,13 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription(
-        "Allows verifying and unverifying Field Visits for a BMP if you are assigned to manage that BMP's jurisdiction")]
-    public class FieldVisitVerifyFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
+    [SecurityFeatureDescription("Allows returning unverified Vield Fisits to edit if you are assigned to edit that jurisdiction")]
+    public class FieldVisitReturnToEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FieldVisit>
     {
         private readonly NeptuneFeatureWithContextImpl<FieldVisit> _lakeTahoeInfoFeatureWithContextImpl;
 
-        public FieldVisitVerifyFeature()
-            : base(new List<Role> {Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager})
+        public FieldVisitReturnToEditFeature()
+            : base(new List<Role> { Role.SitkaAdmin, Role.Admin, Role.JurisdictionManager, Role.JurisdictionEditor })
         {
             _lakeTahoeInfoFeatureWithContextImpl = new NeptuneFeatureWithContextImpl<FieldVisit>(this);
             ActionFilter = _lakeTahoeInfoFeatureWithContextImpl;
@@ -23,13 +22,11 @@ namespace Neptune.Web.Security
 
         public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject)
         {
-            var isAssignedToStormwaterJurisdiction =
-                person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
+            var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
 
             if (!isAssignedToStormwaterJurisdiction)
             {
-                return new PermissionCheckResult(
-                    $"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+                return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
             }
 
             return new PermissionCheckResult();

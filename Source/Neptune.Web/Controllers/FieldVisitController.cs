@@ -529,6 +529,41 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
+        [FieldVisitReturnToEditFeature]
+        public PartialViewResult ReturnFieldVisitToEdit(FieldVisitPrimaryKey fieldVisitPrimaryKey)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(fieldVisit.FieldVisitID);
+            return ViewReturnFieldVisitToEdit(fieldVisit, viewModel);
+        }
+
+        [HttpPost]
+        [FieldVisitReturnToEditFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult ReturnFieldVisitToEdit(FieldVisitPrimaryKey fieldVisitPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var fieldVisit = fieldVisitPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewReturnFieldVisitToEdit(fieldVisit, viewModel);
+            }
+
+            fieldVisit.ReturnFieldVisitToEdit();
+            SetMessageForDisplay("The Field Visit was successfully returned to edit.");
+            var redirectUrl =
+                (fieldVisit.IsFieldVisitVerified || fieldVisit.FieldVisitStatus == FieldVisitStatus.Complete)
+                    ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Detail(fieldVisitPrimaryKey))
+                    : SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Inventory(fieldVisitPrimaryKey));
+            return new ModalDialogFormJsonResult(redirectUrl);
+        }
+
+        private PartialViewResult ViewReturnFieldVisitToEdit(FieldVisit fieldVisit, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData($"Are you sure you want to re-enable editing the Field Visit to the treatment BMP '{fieldVisit.TreatmentBMP.TreatmentBMPName}' dated '{fieldVisit.VisitDate}'? ");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
 
         [HttpGet]
         [FieldVisitEditFeature]
