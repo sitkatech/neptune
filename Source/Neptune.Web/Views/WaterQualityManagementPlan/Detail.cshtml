@@ -191,7 +191,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 BMPs
-                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                @if (ViewDataTyped.CurrentPersonCanManageBMPs)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -212,12 +212,12 @@
 
                         <thead>
                             <tr>
-                                <th colspan="3"><h5>@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
+                                <th colspan="3" style="border-top: none; border-bottom: none"><h5 style="margin-top: 32px;">@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
                             </tr>
                             <tr>
-                                <th> Source Control Attribute</th>
-                                <th> Is Present</th>
-                                <th> Note</th>
+                                <th style="white-space: nowrap; border-top:none"> Source Control Attribute</th>
+                                <th style="white-space: nowrap; border-top:none"> Is Present</th>
+                                <th style="white-space: nowrap; border-top:none"> Note</th>
                             </tr>
                         </thead>
                         foreach (var sourceControlBMP in sourceControlBMPs)

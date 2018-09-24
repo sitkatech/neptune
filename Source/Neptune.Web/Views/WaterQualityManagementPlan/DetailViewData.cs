@@ -12,6 +12,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public bool CurrentPersonCanManageWaterQualityManagementPlans { get; }
+        public bool CurrentPersonCanManageBMPs { get; }
         public string EditWaterQualityManagementPlanTreatmentBmpsUrl { get; }
         public string EditWaterQualityManagementPlanParcelsUrl { get; }
         public string NewWaterQualityManagementPlanDocumentUrl { get; }
@@ -39,6 +40,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
                 .HasPermission(currentPerson, waterQualityManagementPlan)
                 .HasPermission;
+            CurrentPersonCanManageBMPs = currentPerson.IsManagerOrAdmin();
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpTreatmentBmps(WaterQualityManagementPlan));
@@ -61,7 +63,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
-            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent || x.SourceControlBMPNote != null).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
         }
     }
 }
