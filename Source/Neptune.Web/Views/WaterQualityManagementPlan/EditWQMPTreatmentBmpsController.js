@@ -26,11 +26,15 @@
         };
 
         $scope.addQuickBMPRow = function (quickBMP) {
-            var newQuickBMP = $scope.createNewQuickBMPRow(quickBMP);
-            quickBMP.push(newQuickBMP);
+            var newQuickBMP = $scope.createNewQuickBMPRow();
+            if ($scope.AngularModel.QuickBmpSimples) {
+                $scope.AngularModel.QuickBmpSimples.push(newQuickBMP);
+            } else {
+                $scope.AngularModel.QuickBmpSimples = [newQuickBMP];
+            }
         };
 
-        $scope.createNewQuickBMPRow = function (quickBMP) {
+        $scope.createNewQuickBMPRow = function () {
             var newQuickBMP = {
                 QuickBMPID: null,
                 DisplayName : "",

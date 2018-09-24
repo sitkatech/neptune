@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using ApprovalUtilities.Utilities;
 using LtInfo.Common;
 using LtInfo.Common.Models;
-using MoreLinq;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpTreatmentBmpsViewModel : FormViewModel
+    public class EditWqmpTreatmentBmpsViewModel : FormViewModel, IValidatableObject
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
         public List<QuickBMPSimple> QuickBmpSimples { get; set; }
+
         public List<SourceControlBMPSimple> SourceControlBMPSimples { get; set; }
 
         /// <summary>
@@ -73,6 +73,36 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Where(x => TreatmentBmpIDs.Contains(x.TreatmentBMPID))
                 .ToList()
                 .ForEach(x => { x.WaterQualityManagementPlan = waterQualityManagementPlan; });
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var validationResults = new List<ValidationResult>();
+
+            var quickBMPNoteMaxCharacterLength = QuickBMP.FieldLengths.QuickBMPNote;
+            var sourceControlBMPNoteMaxCharacterLength = SourceControlBMP.FieldLengths.SourceControlBMPNote;
+            
+            foreach (var quickBMPSimple in QuickBmpSimples ?? new List<QuickBMPSimple>())
+            {
+                var quickBMPNoteCharacterLength = quickBMPSimple?.QuickBMPNote.Length;
+                if (quickBMPNoteCharacterLength != null && quickBMPNoteCharacterLength > quickBMPNoteMaxCharacterLength)
+                {
+                    validationResults.Add(new ValidationResult($"\"{quickBMPSimple?.DisplayName}\"'s note is too long. Notes have a maximum of {quickBMPNoteMaxCharacterLength} characters and is {quickBMPNoteCharacterLength - quickBMPNoteMaxCharacterLength} over the limit."));
+
+                }
+            }
+
+            foreach (var sourceControlBMP in SourceControlBMPSimples)
+            {
+                var sourceControlBMPNoteCharacterLength = sourceControlBMP.SourceControlBMPNote?.Length;
+                if (sourceControlBMPNoteCharacterLength > sourceControlBMPNoteMaxCharacterLength)
+                {
+                    validationResults.Add(new ValidationResult($"\"{sourceControlBMP.SourceControlBMPAttributeName}\"'s note is too long. Notes have a maximum of {sourceControlBMPNoteMaxCharacterLength} characters and is {sourceControlBMPNoteCharacterLength - sourceControlBMPNoteMaxCharacterLength} over the limit."));
+
+                }
+            }
+
+            return validationResults;
         }
     }
 }
