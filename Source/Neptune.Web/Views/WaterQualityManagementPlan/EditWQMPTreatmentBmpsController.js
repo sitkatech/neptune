@@ -43,4 +43,8 @@
         $scope.deleteQuickBMPRow = function (quickBmps, rowToDelete) {
             Sitka.Methods.removeFromJsonArray(quickBmps, rowToDelete);
         };
+
+
+        $scope.orderSourceControlBMPsByAttributeCategory = _.sortBy(_.groupBy($scope.AngularModel.SourceControlBMPSimples, 'SourceControlBMPAttributeCategoryName'), [function (o) { return o.SourceControlBMPAttributeID; }]);
+
     });

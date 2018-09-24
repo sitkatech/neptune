@@ -172,17 +172,20 @@
             </div>
         </div>
         <div class="row row-group">
-            <div class="col-xs-12">
-                <table class="dialogFormLayout table table-condensed">
-                    <thead>
+            <div class="col-xs-12" >
+                <table class="dialogFormLayout table table-condensed" ng-repeat="sourceControlSimpleGroupedByAttributeCategory in orderSourceControlBMPsByAttributeCategory">
+                    <thead>                    
                         <tr>
-                            <th style="white-space: nowrap"> Source Control Attribute </th>
-                            <th style="white-space: nowrap"> Is Present <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
-                            <th style="white-space: nowrap"> Note</th>
+                            <td><h5> {{sourceControlSimpleGroupedByAttributeCategory[0].SourceControlBMPAttributeCategoryName}}</h5></td>
+                        </tr>
+                        <tr>
+                            <th style="white-space: nowrap; border-top:none"> Source Control Attribute </th>
+                            <th style="white-space: nowrap; border-top:none"> Is Present <span class="requiredFieldIcon glyphicon glyphicon-flash" style="color: #800020; font-size: 8px; "></span></th>
+                            <th style="white-space: nowrap; border-top:none"> Note</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr ng-repeat="sourceControlSimple in AngularModel.SourceControlBMPSimples">
+                    <tbody ng-repeat="sourceControlSimple in sourceControlSimpleGroupedByAttributeCategory" style="border:none">
+                        <tr>
                             <td style="padding-right: 17px; border:none">
                                 <label>{{sourceControlSimple.SourceControlBMPAttributeName}}</label>
                             </td>
@@ -197,10 +200,10 @@
                     </tbody>
                 </table>
                 <div ng-repeat="sourceControlSimple in AngularModel.SourceControlBMPSimples">
-                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
-                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeID}}" />
-                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].IsPresent).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.IsPresent}}" />
-                    <input type="text" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPNote).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPNote}}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeID}}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].IsPresent).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.IsPresent}}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPNote).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPNote}}" />
                 </div>
             </div>
         </div>
