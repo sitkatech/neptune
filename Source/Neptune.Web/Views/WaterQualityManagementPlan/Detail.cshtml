@@ -202,8 +202,36 @@
                 <h4>Inventoried BMPs</h4>
                 @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
 
-                <h4 style="margin-top:32px">Quick BMPs</h4>
+                <h4 style="margin-top:64px">Quick BMPs</h4>
                 @Html.DhtmlxGrid(ViewDataTyped.QuickBmpGridSpec, ViewDataTyped.QuickBmpGridName, ViewDataTyped.QuickBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+                
+                <h4 style="margin-top:64px">Source Control BMPs</h4>
+                <table class="table table-condensed">
+                    @foreach (var sourceControlBMPs in ViewDataTyped.SourceControlBMPs)
+                    {
+
+                        <thead>
+                            <tr>
+                                <th colspan="3"><h5>@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
+                            </tr>
+                            <tr>
+                                <th> Source Control Attribute</th>
+                                <th> Is Present</th>
+                                <th> Note</th>
+                            </tr>
+                        </thead>
+                        foreach (var sourceControlBMP in sourceControlBMPs)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td> @sourceControlBMP.SourceControlBMPAttribute.SourceControlBMPAttributeName </td>
+                                    <td> @sourceControlBMP.IsPresent.ToYesNo()</td>
+                                    <td> @sourceControlBMP.SourceControlBMPNote</td>
+                                </tr>
+                            </tbody>
+                        }
+                    }
+                </table>
             </div>
         </div>
     </div>

@@ -3,6 +3,8 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.TreatmentBMP;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -23,6 +25,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
+        public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             TreatmentBMPGridSpec treatmentBMPGridSpec, QuickBMPGridSpec quickBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
@@ -58,6 +61,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
         }
     }
 }
