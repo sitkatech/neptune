@@ -311,11 +311,16 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanPriorityPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatus.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanStatusPrimaryKey.Binding.cs" />
+<<<<<<< HEAD
     <Compile Include="Models\SourceControlBMPAttribute.cs" />
     <Compile Include="Models\SourceControlBMP.cs" />
     <Compile Include="Models\QuickBMP.cs" />
     <Compile Include="Models\SourceControlBMPSimple.cs" />
     <Compile Include="Models\QuickBMPSimple.cs" />
+=======
+    <Compile Include="Security\FieldVisitReturnToEditFeature.cs" />
+    <Compile Include="Security\FieldVisitVerifyFeature.cs" />
+>>>>>>> develop
     <Compile Include="Views\FieldVisit\AssessmentDetail.cs" />
     <Compile Include="Views\FieldVisit\AssessmentDetailViewData.cs" />
     <Compile Include="Views\FieldVisit\Detail.cs" />
