@@ -178,7 +178,7 @@
         </div>
         <div class="row row-group">
             <div class="col-xs-12" >
-                <table class="dialogFormLayout table table-condensed" ng-repeat="sourceControlSimpleGroupedByAttributeCategory in orderSourceControlBMPsByAttributeCategory">
+                <table class="dialogFormLayout table table-condensed" ng-repeat="sourceControlSimpleGroupedByAttributeCategory in orderSourceControlBMPsByAttributeCategory" ng-init="sourControlIndex = 0">
                     <thead>                    
                         <tr>
                             <td><h5> {{sourceControlSimpleGroupedByAttributeCategory[0].SourceControlBMPAttributeCategoryName}}</h5></td>
@@ -194,9 +194,9 @@
                             <td style="padding-right: 17px; border:none">
                                 <label>{{sourceControlSimple.SourceControlBMPAttributeName}}</label>
                             </td>
-                            <td style="padding-right: 17px; border: none">
-                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{$index}}]" ng-model="sourceControlSimple.IsPresent" ng-value="true"> Yes</label>
-                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{$index}}]" ng-model="sourceControlSimple.IsPresent" ng-value="false"> No</label>
+                            <td style="padding-right: 17px; border: none" ng-init="sourControlIndex = sourControlIndex + 1">
+                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{sourceControlSimple.SourceControlBMPAttributeID}}]" ng-model="sourceControlSimple.IsPresent"  ng-value="true"> Yes</label>
+                                <label style="margin-right: 10px"><input type="radio" name="sourceControl[{{sourceControlSimple.SourceControlBMPAttributeID}}]" ng-model="sourceControlSimple.IsPresent" ng-value="false"> No</label>
                             </td>
                             <td style="padding-right: 17px; border:none">
                                 <input class="form-control" ng-model="sourceControlSimple.SourceControlBMPNote" value="{{sourceControlSimple.SourceControlBMPNote}}" />
@@ -209,6 +209,7 @@
                            }}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPID}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeID}}" />
+                    <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeCategoryID).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeCategoryID}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPAttributeCategoryName).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPAttributeCategoryName}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].IsPresent).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.IsPresent}}" />
                     <input type="hidden" name="@Html.NameFor(x => x.SourceControlBMPSimples[0].SourceControlBMPNote).ToString().Replace("0", "{{$index}}")" value="{{sourceControlSimple.SourceControlBMPNote}}" />
@@ -221,6 +222,7 @@
         <div class="row row-spacing">
             <div class="col-xs-12">
                 <div class="pull-right">
+                    <a href="@ViewDataTyped.WaterQualityManagementPlanDetailUrl" class="btn btn-neptune" style="margin-right: 15px">Cancel</a>
                     <button type="submit" class="btn btn-neptune">Save</button>
                 </div>
             </div>

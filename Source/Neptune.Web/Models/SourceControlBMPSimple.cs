@@ -6,6 +6,7 @@ namespace Neptune.Web.Models
     {
         public int? SourceControlBMPID { get; set; }
         public string SourceControlBMPAttributeCategoryName { get; set; }
+        public int SourceControlBMPAttributeCategoryID { get; set; }
         public int SourceControlBMPAttributeID { get; set; }
         public string SourceControlBMPAttributeName { get; set; }
         public bool IsPresent { get; set; }
@@ -21,8 +22,8 @@ namespace Neptune.Web.Models
         public SourceControlBMPSimple(SourceControlBMPAttribute sourceControlBMPAttribute)
         {
             SourceControlBMPID = null;
-            SourceControlBMPAttributeCategoryName = sourceControlBMPAttribute
-                .SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
+            SourceControlBMPAttributeCategoryID = sourceControlBMPAttribute.SourceControlBMPAttributeCategoryID;
+            SourceControlBMPAttributeCategoryName = sourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
             SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID;
             SourceControlBMPAttributeName = sourceControlBMPAttribute.SourceControlBMPAttributeName;
             IsPresent = false;
@@ -32,6 +33,8 @@ namespace Neptune.Web.Models
         public SourceControlBMPSimple(SourceControlBMP sourceControlBMP)
         {
             SourceControlBMPID = sourceControlBMP.SourceControlBMPID;
+            SourceControlBMPAttributeCategoryID = sourceControlBMP.SourceControlBMPAttribute
+                .SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryID;
             SourceControlBMPAttributeCategoryName = sourceControlBMP.SourceControlBMPAttribute
                 .SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
             SourceControlBMPAttributeID = sourceControlBMP.SourceControlBMPAttributeID;
