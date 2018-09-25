@@ -324,7 +324,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpOMVerificationRecord(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpOMVerificationRecordViewModel viewModel)
         {
-            var viewData = new EditWqmpOMVerificationRecordViewData(waterQualityManagementPlan);
+            var viewData = new EditWqmpOMVerificationRecordViewData(CurrentPerson, waterQualityManagementPlan);
             return RazorView<EditWqmpOMVerificationRecord, EditWqmpOMVerificationRecordViewData, EditWqmpOMVerificationRecordViewModel>(viewData, viewModel);
         }
 
