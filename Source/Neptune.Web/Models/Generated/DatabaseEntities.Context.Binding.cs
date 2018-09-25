@@ -58,6 +58,10 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new QuickBMPConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPAttributeConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPAttributeCategoryConfiguration());
             modelBuilder.Configurations.Add(new StateProvinceConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
@@ -131,6 +135,14 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<QuickBMP> AllQuickBMPs { get; set; }
+        public virtual IQueryable<QuickBMP> QuickBMPs { get { return AllQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMPAttributeCategory> AllSourceControlBMPAttributeCategories { get; set; }
+        public virtual IQueryable<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get { return AllSourceControlBMPAttributeCategories.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMPAttribute> AllSourceControlBMPAttributes { get; set; }
+        public virtual IQueryable<SourceControlBMPAttribute> SourceControlBMPAttributes { get { return AllSourceControlBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMP> AllSourceControlBMPs { get; set; }
+        public virtual IQueryable<SourceControlBMP> SourceControlBMPs { get { return AllSourceControlBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
         public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }
@@ -354,10 +366,22 @@ namespace Neptune.Web.Models
                 case "Person":
                     return People.GetPerson(primaryKey);
 
+                case "QuickBMP":
+                    return QuickBMPs.GetQuickBMP(primaryKey);
+
                 case "Role":
                     var role = Role.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(role, "Role", primaryKey);
                     return role;
+
+                case "SourceControlBMPAttributeCategory":
+                    return SourceControlBMPAttributeCategories.GetSourceControlBMPAttributeCategory(primaryKey);
+
+                case "SourceControlBMPAttribute":
+                    return SourceControlBMPAttributes.GetSourceControlBMPAttribute(primaryKey);
+
+                case "SourceControlBMP":
+                    return SourceControlBMPs.GetSourceControlBMP(primaryKey);
 
                 case "StateProvince":
                     return StateProvinces.GetStateProvince(primaryKey);
