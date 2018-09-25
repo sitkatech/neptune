@@ -190,16 +190,55 @@
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()
-                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                BMPs
+                @if (ViewDataTyped.CurrentPersonCanManageBMPs)
                 {
                     <span class="pull-right">
-                        @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit").ToString(), ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl, string.Format("Edit {0} for {1}", FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel(), FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()), new List<string>(), true)
+                        <a href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
                     </span>
                 }
             </div>
             <div class="panel-body">
+                <h4>Inventoried BMPs</h4>
                 @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+
+                <h4 style="margin-top:64px">Quick BMPs</h4>
+                @Html.DhtmlxGrid(ViewDataTyped.QuickBmpGridSpec, ViewDataTyped.QuickBmpGridName, ViewDataTyped.QuickBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+
+                <h4 style="margin-top:64px">Source Control BMPs</h4>
+                @if (ViewDataTyped.SourceControlBMPs.Any())
+                {
+                    <table class="table table-condensed">
+                        @foreach (var sourceControlBMPs in ViewDataTyped.SourceControlBMPs)
+                        {
+
+                            <thead>
+                            <tr>
+                                <th colspan="3" style="border-top: none; border-bottom: none"><h5 style="margin-top: 32px;">@sourceControlBMPs.Select(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName).FirstOrDefault()</h5></th>
+                            </tr>
+                            <tr>
+                                <th style="white-space: nowrap; border-top:none"> Source Control Attribute</th>
+                                <th style="white-space: nowrap; border-top:none"> Is Present</th>
+                                <th style="white-space: nowrap; border-top:none"> Note</th>
+                            </tr>
+                            </thead>
+                            foreach (var sourceControlBMP in sourceControlBMPs)
+                            {
+                                <tbody>
+                                <tr>
+                                    <td> @sourceControlBMP.SourceControlBMPAttribute.SourceControlBMPAttributeName </td>
+                                    <td> @sourceControlBMP.IsPresent.ToYesNo()</td>
+                                    <td> @sourceControlBMP.SourceControlBMPNote</td>
+                                </tr>
+                                </tbody>
+                            }
+                        }
+                    </table>
+                }
+                else
+                {
+                    <p>No Source Control BMPs are present or have a note.</p>
+                }
             </div>
         </div>
     </div>

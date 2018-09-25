@@ -9,6 +9,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using TreatmentBMPGridSpec = Neptune.Web.Views.TreatmentBMP.TreatmentBMPGridSpec;
+using QuickBMPGridSpec = Neptune.Web.Views.TreatmentBMP.QuickBMPGridSpec;
 
 namespace Neptune.Web.Controllers
 {
@@ -39,7 +40,8 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
+            var treatmentBMPGridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
+            var quickBMPGridSpec = new QuickBMPGridSpec();
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
@@ -72,7 +74,7 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, gridSpec, mapInitJson, new ParcelGridSpec());
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -84,6 +86,17 @@ namespace Neptune.Web.Controllers
             var treatmentBmPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
             var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
+        }
+
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public GridJsonNetJObjectResult<QuickBMP> QuickBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var quickBmps = waterQualityManagementPlan.QuickBMPs.ToList();
+            var gridSpec = new QuickBMPGridSpec();
+            return new GridJsonNetJObjectResult<QuickBMP>(quickBmps, gridSpec);
         }
 
         [HttpGet]
@@ -212,21 +225,22 @@ namespace Neptune.Web.Controllers
 
         #region WQMP Treatment BMPs
         [HttpGet]
-        [WaterQualityManagementPlanManageFeature]
-        public PartialViewResult EditWqmpTreatmentBmps(
+        [JurisdictionManageFeature]
+        public ViewResult EditWqmpTreatmentBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var viewModel = new EditWqmpTreatmentBmpsViewModel(waterQualityManagementPlan);
+            var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
+            var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
             return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
         }
 
         [HttpPost]
-        [WaterQualityManagementPlanManageFeature]
+        [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditWqmpTreatmentBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
-            EditWqmpTreatmentBmpsViewModel viewModel)
+            EditWqmpBmpsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -234,21 +248,19 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
             }
 
-            viewModel.UpdateModels(waterQualityManagementPlan);
+            viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples, viewModel.SourceControlBMPSimples);
             SetMessageForDisplay(
-                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " +
-                $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+                $"Successfully updated BMPs for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            return new ModalDialogFormJsonResult();
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
         }
 
-        private PartialViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
-            EditWqmpTreatmentBmpsViewModel viewModel)
+        private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
+            EditWqmpBmpsViewModel viewModel)
         {
-            var viewData = new EditWqmpTreatmentBmpsViewData(waterQualityManagementPlan);
-            return RazorPartialView<EditWqmpTreatmentBmps,
-                EditWqmpTreatmentBmpsViewData,
-                EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
+            var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
+            var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
+            return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
 
         #endregion
