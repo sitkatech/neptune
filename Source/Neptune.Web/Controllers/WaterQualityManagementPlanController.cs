@@ -231,7 +231,7 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
-            var viewModel = new EditWqmpTreatmentBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
+            var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
             return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
         }
 
@@ -240,7 +240,7 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditWqmpTreatmentBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
-            EditWqmpTreatmentBmpsViewModel viewModel)
+            EditWqmpBmpsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -256,11 +256,11 @@ namespace Neptune.Web.Controllers
         }
 
         private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
-            EditWqmpTreatmentBmpsViewModel viewModel)
+            EditWqmpBmpsViewModel viewModel)
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
-            var viewData = new EditWqmpTreatmentBmpsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
-            return RazorView<EditWqmpTreatmentBmps, EditWqmpTreatmentBmpsViewData, EditWqmpTreatmentBmpsViewModel>(viewData, viewModel);
+            var viewData = new EditWqmpBmpsViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPTypes);
+            return RazorView<EditWqmpBmps, EditWqmpBmpsViewData, EditWqmpBmpsViewModel>(viewData, viewModel);
         }
 
         #endregion

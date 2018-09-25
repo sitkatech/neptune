@@ -8,7 +8,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpTreatmentBmpsViewModel : FormViewModel, IValidatableObject
+    public class EditWqmpBmpsViewModel : FormViewModel, IValidatableObject
     {
         public IEnumerable<int> TreatmentBmpIDs { get; set; }
         public List<QuickBMPSimple> QuickBmpSimples { get; set; }
@@ -18,11 +18,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public EditWqmpTreatmentBmpsViewModel()
+        public EditWqmpBmpsViewModel()
         {
         }
 
-        public EditWqmpTreatmentBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<SourceControlBMPAttribute> sourceControlBMPAttributes)
+        public EditWqmpBmpsViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<SourceControlBMPAttribute> sourceControlBMPAttributes)
         {
             TreatmentBmpIDs = waterQualityManagementPlan.TreatmentBMPs.Select(x => x.TreatmentBMPID).ToList();
             QuickBmpSimples = waterQualityManagementPlan.QuickBMPs.Select(x => new QuickBMPSimple(x)).ToList();
