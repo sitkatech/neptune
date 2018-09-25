@@ -292,5 +292,43 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+
+        #region BWMP O&M Verification Record
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult EditWqmpOMVerificationRecord(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var viewModel = new EditWqmpOMVerificationRecordViewModel(waterQualityManagementPlan);
+            return ViewEditWqmpOMVerificationRecord(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpOMVerificationRecord( WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpOMVerificationRecordViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpOMVerificationRecord(waterQualityManagementPlan, viewModel);
+            }
+
+            viewModel.UpdateModels(waterQualityManagementPlan);
+            SetMessageForDisplay(
+                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " + $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private ViewResult ViewEditWqmpOMVerificationRecord(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpOMVerificationRecordViewModel viewModel)
+        {
+            var viewData = new EditWqmpOMVerificationRecordViewData(waterQualityManagementPlan);
+            return RazorView<EditWqmpOMVerificationRecord, EditWqmpOMVerificationRecordViewData, EditWqmpOMVerificationRecordViewModel>(viewData, viewModel);
+        }
+
+        #endregion
+
     }
 }

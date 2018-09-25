@@ -20,6 +20,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
+        public string EditWqmpOMVerificationRecordUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
             TreatmentBMPGridSpec treatmentBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
@@ -51,6 +52,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+            EditWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.EditWqmpOMVerificationRecord(waterQualityManagementPlan));
         }
     }
 }
