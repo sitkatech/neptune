@@ -9,7 +9,6 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan;
 using TreatmentBMPGridSpec = Neptune.Web.Views.TreatmentBMP.TreatmentBMPGridSpec;
-using QuickBMPGridSpec = Neptune.Web.Views.TreatmentBMP.QuickBMPGridSpec;
 
 namespace Neptune.Web.Controllers
 {
@@ -41,7 +40,6 @@ namespace Neptune.Web.Controllers
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var treatmentBMPGridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
-            var quickBMPGridSpec = new QuickBMPGridSpec();
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
@@ -74,7 +72,7 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec());
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
@@ -88,16 +86,6 @@ namespace Neptune.Web.Controllers
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
         }
 
-
-        [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<QuickBMP> QuickBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var quickBmps = waterQualityManagementPlan.QuickBMPs.ToList();
-            var gridSpec = new QuickBMPGridSpec();
-            return new GridJsonNetJObjectResult<QuickBMP>(quickBmps, gridSpec);
-        }
 
         [HttpGet]
         [WaterQualityManagementPlanViewFeature]

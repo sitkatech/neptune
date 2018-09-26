@@ -19,17 +19,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public TreatmentBMPGridSpec TreatmentBmpGridSpec { get; }
         public string TreatmentBmpGridName { get; }
         public string TreatmentBmpGridDataUrl { get; }
-        public QuickBMPGridSpec QuickBmpGridSpec { get; }
-        public string QuickBmpGridName { get; }
-        public string QuickBmpGridDataUrl { get; }
         public MapInitJson MapInitJson { get; }
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
+        public List<QuickBMP> QuickBMPs { get; }
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
 
         public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
-            TreatmentBMPGridSpec treatmentBMPGridSpec, QuickBMPGridSpec quickBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
+            TreatmentBMPGridSpec treatmentBMPGridSpec, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -54,15 +52,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBmpGridName = "treatmentBmpGrid";
             TreatmentBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.TreatmentBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
-            QuickBmpGridSpec = quickBMPGridSpec;
-            QuickBmpGridName = "quickBmpGrid";
-            QuickBmpGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                c.QuickBmpsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
             MapInitJson = mapInitJson;
             ParcelGridSpec = parcelGridSpec;
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+            QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true)).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
         }
     }
