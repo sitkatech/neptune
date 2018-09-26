@@ -30,7 +30,7 @@ CREATE TABLE dbo.SourceControlBMP(
 	TenantID INT NOT NULL CONSTRAINT FK_SourceControlBMP_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	WaterQualityManagementPlanID INT NOT NULL CONSTRAINT FK_SourceControlBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlan (WaterQualityManagementPlanID),
 	SourceControlBMPAttributeID INT NOT NULL CONSTRAINT FK_SourceControlBMP_SourceControlBMPAttribute_SourceControlBMPAttributeID FOREIGN KEY REFERENCES dbo.SourceControlBMPAttribute (SourceControlBMPAttributeID), 
-	IsPresent BIT NOT NULL,
+	IsPresent BIT NULL,
     SourceControlBMPNote VARCHAR(200) NULL
 );
 

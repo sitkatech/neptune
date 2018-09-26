@@ -19,7 +19,7 @@ namespace Neptune.Web.Models
             Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsRequired();
             Property(x => x.SourceControlBMPAttributeID).HasColumnName(@"SourceControlBMPAttributeID").HasColumnType("int").IsRequired();
-            Property(x => x.IsPresent).HasColumnName(@"IsPresent").HasColumnType("bit").IsRequired();
+            Property(x => x.IsPresent).HasColumnName(@"IsPresent").HasColumnType("bit").IsOptional();
             Property(x => x.SourceControlBMPNote).HasColumnName(@"SourceControlBMPNote").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(200);
 
             // Foreign keys

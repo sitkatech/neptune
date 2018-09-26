@@ -81,10 +81,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             var quickBMPNoteMaxCharacterLength = QuickBMP.FieldLengths.QuickBMPNote;
             var sourceControlBMPNoteMaxCharacterLength = SourceControlBMP.FieldLengths.SourceControlBMPNote;
-            var quickBmpWithDuplicateNames = QuickBmpSimples.Duplicates(x => x.DisplayName).Select(x => x.DisplayName).Distinct();
+            var quickBmpWithDuplicateNames = QuickBmpSimples?.Duplicates(x => x.DisplayName).Select(x => x.DisplayName).Distinct();
 
 
-            foreach (var quickBmpWithDuplicateName in quickBmpWithDuplicateNames)
+            foreach (var quickBmpWithDuplicateName in quickBmpWithDuplicateNames ?? new List<string>())
             {
                 validationResults.Add(new ValidationResult($"\"{quickBmpWithDuplicateName}\" has already been used Under Other Strucural BMPs. Make sure that all names are unique."));
             }
