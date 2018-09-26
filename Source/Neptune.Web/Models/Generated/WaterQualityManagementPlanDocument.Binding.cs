@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected WaterQualityManagementPlanDocument()
         {
-
+            this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -88,13 +88,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlanDocument).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -102,6 +102,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in WaterQualityManagementPlanVerifies.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanDocuments.Remove(this);                
         }
 
@@ -117,6 +122,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanDocumentID; } set { WaterQualityManagementPlanDocumentID = value; } }
 
+        public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual FileResource FileResource { get; set; }

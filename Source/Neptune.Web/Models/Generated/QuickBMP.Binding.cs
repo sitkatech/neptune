@@ -23,7 +23,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected QuickBMP()
         {
-
+            this.WaterQualityManagementPlanVerifyQuickBMPs = new HashSet<WaterQualityManagementPlanVerifyQuickBMP>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -82,13 +82,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return WaterQualityManagementPlanVerifyQuickBMPs.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(QuickBMP).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(QuickBMP).Name, typeof(WaterQualityManagementPlanVerifyQuickBMP).Name};
 
 
         /// <summary>
@@ -96,6 +96,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in WaterQualityManagementPlanVerifyQuickBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllQuickBMPs.Remove(this);                
         }
 
@@ -109,6 +114,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return QuickBMPID; } set { QuickBMPID = value; } }
 
+        public virtual ICollection<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

@@ -28,6 +28,7 @@ namespace Neptune.Web.Models
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
+            this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
@@ -105,13 +106,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any();
+            return QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -141,6 +142,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in WaterQualityManagementPlanParcels.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in WaterQualityManagementPlanVerifies.ToList())
             {
                 x.DeleteFull();
             }
@@ -177,6 +183,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
+        public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID]; } }
