@@ -13,42 +13,103 @@
         <div class="form-horizontal">
             @using (Html.BeginForm())
             {
-                @*@Html.HiddenFor(m => m.WaterQualityManagementPlanID)*@
-                <fieldset>
-                    <legend>Water Quality Management Plan Details</legend>
-                    <div class="form-group">
-                        <div class="col-xs-12 col-sm-3 control-label">
-                            Select type of verification
-                        </div>
-                        <div class="col-xs-12 col-sm-9">
-                            
-                        </div>
+                @Html.HiddenFor(m => m.WaterQualityManagementPlanID)
+            <fieldset>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Select type of verification
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-12 col-sm-3 control-label">
-
-                        </div>
-                        <div class="col-xs-12 col-sm-9">
-
-                        </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
+                        {
+                            <div class="radio-inline">
+                                <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</label>
+                            </div>
+                        }
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-12 col-sm-3 control-label">
-
-                        </div>
-                        <div class="col-xs-12 col-sm-9">
-
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Select Visit Status
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-12 col-sm-3 control-label">
-
-                        </div>
-                        <div class="col-xs-12 col-sm-9">
-
-                        </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
+                        {
+                            <div class="radio-inline">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName)
+                                    @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
+                                </label>
+                            </div>
+                        }
                     </div>
-                </fieldset>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Structural BMP O&M Document
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Images
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Source control BMPs
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Quick Treatment BMPs
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Inventoried Treatment BMPs
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Finalize
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @foreach (var waterQualityManagementPlanVerifyStatus in ViewDataTyped.WaterQualityManagementPlanVerifyStatuses)
+                        {
+                            <div class="radio-inline">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID, waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName)
+                                    @waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        Enforcement or Follow-up Actions
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @Html.TextAreaFor(m => m.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions)
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-neptune">Save</button>
+            </fieldset>
             }
         </div>
     </div>

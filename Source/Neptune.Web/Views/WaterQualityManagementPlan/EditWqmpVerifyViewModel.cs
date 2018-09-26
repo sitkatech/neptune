@@ -13,6 +13,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     public class EditWqmpVerifyViewModel : FormViewModel, IValidatableObject
     {
 
+        public WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
+        public int WaterQualityManagementPlanID { get; }
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -20,12 +23,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpVerifyViewModel(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
+        public EditWqmpVerifyViewModel(int waterQualityManagementPlanID, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
+            WaterQualityManagementPlanID = waterQualityManagementPlanID;
+            WaterQualityManagementPlanVerify = waterQualityManagementPlanVerify;
         }
 
-        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
+        public virtual void UpdateModels(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
+            WaterQualityManagementPlanVerify = waterQualityManagementPlanVerify;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
