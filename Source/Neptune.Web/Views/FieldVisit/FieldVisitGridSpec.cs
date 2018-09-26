@@ -58,8 +58,8 @@ namespace Neptune.Web.Views.FieldVisit
                         return new HtmlString("");
                     }
 
-                    return new HtmlString($"<a href={x.GetEditUrl()} class='gridButton'>Edit</a>");
-                }, 40,
+                    return new HtmlString($"<a href={x.GetEditUrl()} class='gridButton'>Continue</a>");
+                }, 60,
                 DhtmlxGridColumnFilterType.None);
 
             if (!detailPage)
