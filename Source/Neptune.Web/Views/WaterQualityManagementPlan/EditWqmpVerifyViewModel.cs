@@ -6,28 +6,26 @@ using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpOMVerificationRecordViewModel : FormViewModel, IValidatableObject
+    public class EditWqmpVerifyViewModel : FormViewModel, IValidatableObject
     {
-        
 
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public EditWqmpOMVerificationRecordViewModel()
+        public EditWqmpVerifyViewModel()
         {
         }
 
-        public EditWqmpOMVerificationRecordViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditWqmpVerifyViewModel(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
-
         }
 
-        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
-
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

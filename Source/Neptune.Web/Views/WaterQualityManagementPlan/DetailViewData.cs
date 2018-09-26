@@ -65,7 +65,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
             EditWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                c.EditWqmpOMVerificationRecord(waterQualityManagementPlan));
+                c.EditWqmpVerify(waterQualityManagementPlan));
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent || x.SourceControlBMPNote != null).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
         }
     }

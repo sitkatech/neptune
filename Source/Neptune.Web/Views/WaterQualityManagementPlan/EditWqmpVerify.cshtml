@@ -1,0 +1,55 @@
+﻿@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Views.WaterQualityManagementPlan
+
+@inherits EditWqmpVerify
+
+<style>
+    .radio-inline label {
+        font-weight: normal;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="form-horizontal">
+            @using (Html.BeginForm())
+            {
+                @*@Html.HiddenFor(m => m.WaterQualityManagementPlanID)*@
+                <fieldset>
+                    <legend>Water Quality Management Plan Details</legend>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            Select type of verification
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+
+                        </div>
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>
