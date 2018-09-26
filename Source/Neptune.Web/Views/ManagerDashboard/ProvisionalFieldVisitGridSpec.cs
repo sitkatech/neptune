@@ -52,10 +52,26 @@ namespace Neptune.Web.Views.ManagerDashboard
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30,
                 DhtmlxGridColumnFilterType.None);
+
             Add(string.Empty,
-                x => UrlTemplate.MakeHrefString(
-                    SitkaRoute<FieldVisitController>.BuildUrlFromExpression(y => y.Inventory(x)), "View",
-                    new Dictionary<string, string> {{"class", "gridButton"}}), 50, DhtmlxGridColumnFilterType.None);
+                x =>
+                {
+                    // do this first because if the field visit is verified, fieldvisiteditfeature will fail
+                    if (x.IsFieldVisitVerified || x.FieldVisitStatus == FieldVisitStatus.Complete)
+                    {
+                        return new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>");
+                    }
+
+                    if (!new FieldVisitEditFeature().HasPermission(currentPerson, x).HasPermission)
+                    {
+                        // only reason we would get here is that the user can't manage field visits for this jurisdiction
+                        return new HtmlString("");
+                    }
+
+                    return new HtmlString($"<a href={x.GetEditUrl()} class='gridButton'>Continue</a>");
+                }, 60,
+                DhtmlxGridColumnFilterType.None);
+
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("Visit Date", x => x.VisitDate, 130, DhtmlxGridColumnFormatType.Date);
             Add("Performed By", x => x.PerformedByPerson.GetFullNameFirstLastAsUrl(), 105,
