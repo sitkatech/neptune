@@ -98,12 +98,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
                 }
 
-                if (quickBMPSimple.DisplayName == null)
+                if (quickBMPSimple?.DisplayName == null)
                 {
                     validationResults.Add(new ValidationResult("An Other Structural BMP is missing a name."));
                 }
 
-                if (quickBMPSimple.QuickTreatmentBMPTypeID <= 0)
+                if (quickBMPSimple?.QuickTreatmentBMPTypeID <= 0)
                 {
                     validationResults.Add(new ValidationResult("An Other Structural BMP is missing a Treatment Type."));
                 }
