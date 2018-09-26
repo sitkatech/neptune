@@ -97,6 +97,16 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     validationResults.Add(new ValidationResult($"\"{quickBMPSimple?.DisplayName}\"'s note is too long. Notes have a maximum of {quickBMPNoteMaxCharacterLength} characters and is {quickBMPNoteCharacterLength - quickBMPNoteMaxCharacterLength} over the limit."));
 
                 }
+
+                if (quickBMPSimple.DisplayName == null)
+                {
+                    validationResults.Add(new ValidationResult("An Other Structural BMP is missing a name."));
+                }
+
+                if (quickBMPSimple.QuickTreatmentBMPTypeID <= 0)
+                {
+                    validationResults.Add(new ValidationResult("An Other Structural BMP is missing a Treatment Type."));
+                }
             }
 
             foreach (var sourceControlBMP in SourceControlBMPSimples)

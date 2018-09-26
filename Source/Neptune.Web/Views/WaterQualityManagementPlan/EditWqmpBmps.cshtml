@@ -98,14 +98,14 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="treatmentBmpID in AngularModel.TreatmentBmpIDs">
-                                            <td>
+                                            <td style="border: none">
                                                 <span>
                                                     <a href="#" ng-click="removeTreatmentBmp(treatmentBmpID)" style="margin-right: 15px">
                                                         <i class="glyphicon glyphicon-trash" title="Remove @FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()"></i>
                                                     </a>
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td style="border: none">
                                                 <span ng-bind="getTreatmentBmpDisplayName(treatmentBmpID)"></span>
                                             </td>
                                         </tr>
