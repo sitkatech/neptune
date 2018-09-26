@@ -8,7 +8,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan;
-using TreatmentBMPGridSpec = Neptune.Web.Views.TreatmentBMP.TreatmentBMPGridSpec;
 
 namespace Neptune.Web.Controllers
 {
@@ -39,7 +38,6 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var treatmentBMPGridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
@@ -72,18 +70,8 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, mapInitJson, new ParcelGridSpec());
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec());
             return RazorView<Detail, DetailViewData>(viewData);
-        }
-        
-        [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var treatmentBmPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
-            return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
         }
 
 

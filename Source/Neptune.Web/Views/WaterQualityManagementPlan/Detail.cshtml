@@ -200,13 +200,8 @@
             </div>
             <div class="panel-body">
                 <h4>Structural Treatment and Hydromodification BMPs</h4>
-                <h5>Structural BMPs in Detailed Inventory</h5>
-                @Html.DhtmlxGrid(ViewDataTyped.TreatmentBmpGridSpec, ViewDataTyped.TreatmentBmpGridName, ViewDataTyped.TreatmentBmpGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
-
-
                 <div style="padding: 0 16px">
-                    <h5 style="margin-top: 64px">Other Structural BMPs</h5>
-                    @if (ViewDataTyped.QuickBMPs.Any())
+                    @if (ViewDataTyped.QuickBMPs.Any() || ViewDataTyped.TreatmentBMPs.Any())
                     {
                         <table class="table table-condensed">
                             <thead>
@@ -214,15 +209,26 @@
                                     <th style="white-space: nowrap; border-top: none"> Name</th>
                                     <th style="white-space: nowrap; border-top: none"> Type</th>
                                     <th style="white-space: nowrap; border-top: none"> Notes</th>
+                                    <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
+                                {
+                                    <tr>
+                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                        <td>@treatmentBMP.Notes</td>
+                                        <td> Yes</td>
+                                    </tr>
+                                }
                                 @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
                                 {
                                     <tr>
                                         <td>@quickBMP.QuickBMPName</td>
                                         <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
                                         <td>@quickBMP.QuickBMPNote</td>
+                                        <td> No</td>
                                     </tr>
                                 }
                             </tbody>
@@ -230,7 +236,7 @@
                     }
                     else
                     {
-                        <p>No Other Structural BMPs have been selected.</p>
+                        <p>No Structural Treatment and Hydromodification BMPs have been selected.</p>
                     }
                 </div>
 
