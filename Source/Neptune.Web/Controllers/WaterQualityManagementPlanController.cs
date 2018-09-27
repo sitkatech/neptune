@@ -335,7 +335,7 @@ namespace Neptune.Web.Controllers
                 viewModel.WaterQualityManagementPlanVerifyStatusID,
                 CurrentPerson.PersonID,
                 DateTime.Now);
-            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify);
+            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, CurrentPerson);
 
 
 
