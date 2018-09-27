@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerify](
 	[WaterQualityManagementPlanID] [int] NOT NULL,
 	[WaterQualityManagementPlanVerifyTypeID] [int] NOT NULL,
 	[WaterQualityManagementPlanVisitStatusID] [int] NOT NULL,
-	[WaterQualityManagementPlanDocumentID] [int] NULL,
+	[FileResourceID] [int] NULL,
 	[WaterQualityManagementPlanVerifyStatusID] [int] NOT NULL,
 	[LastEditedByPersonID] [int] NOT NULL,
 	[SourceControlCondition] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -20,6 +20,11 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerify](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_FileResource_FileResourceID] FOREIGN KEY([FileResourceID])
+REFERENCES [dbo].[FileResource] ([FileResourceID])
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlanVerify] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerify_FileResource_FileResourceID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_Person_LastEditedByPersonID_PersonID] FOREIGN KEY([LastEditedByPersonID])
 REFERENCES [dbo].[Person] ([PersonID])
@@ -35,11 +40,6 @@ ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT
 REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerify] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlan_WaterQualityManagementPlanID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID] FOREIGN KEY([WaterQualityManagementPlanDocumentID])
-REFERENCES [dbo].[WaterQualityManagementPlanDocument] ([WaterQualityManagementPlanDocumentID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerify] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID] FOREIGN KEY([WaterQualityManagementPlanVerifyStatusID])
 REFERENCES [dbo].[WaterQualityManagementPlanVerifyStatus] ([WaterQualityManagementPlanVerifyStatusID])

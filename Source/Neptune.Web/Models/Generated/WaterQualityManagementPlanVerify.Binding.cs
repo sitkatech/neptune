@@ -33,13 +33,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? waterQualityManagementPlanDocumentID, int waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate) : this()
+        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? fileResourceID, int waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate) : this()
         {
             this.WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.WaterQualityManagementPlanVerifyTypeID = waterQualityManagementPlanVerifyTypeID;
             this.WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVisitStatusID;
-            this.WaterQualityManagementPlanDocumentID = waterQualityManagementPlanDocumentID;
+            this.FileResourceID = fileResourceID;
             this.WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerifyStatusID;
             this.LastEditedByPersonID = lastEditedByPersonID;
             this.SourceControlCondition = sourceControlCondition;
@@ -145,7 +145,7 @@ namespace Neptune.Web.Models
         public int WaterQualityManagementPlanID { get; set; }
         public int WaterQualityManagementPlanVerifyTypeID { get; set; }
         public int WaterQualityManagementPlanVisitStatusID { get; set; }
-        public int? WaterQualityManagementPlanDocumentID { get; set; }
+        public int? FileResourceID { get; set; }
         public int WaterQualityManagementPlanVerifyStatusID { get; set; }
         public int LastEditedByPersonID { get; set; }
         public string SourceControlCondition { get; set; }
@@ -162,7 +162,7 @@ namespace Neptune.Web.Models
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual WaterQualityManagementPlanVerifyType WaterQualityManagementPlanVerifyType { get; set; }
         public virtual WaterQualityManagementPlanVisitStatus WaterQualityManagementPlanVisitStatus { get; set; }
-        public virtual WaterQualityManagementPlanDocument WaterQualityManagementPlanDocument { get; set; }
+        public virtual FileResource FileResource { get; set; }
         public virtual WaterQualityManagementPlanVerifyStatus WaterQualityManagementPlanVerifyStatus { get; set; }
         public virtual Person LastEditedByPerson { get; set; }
 
