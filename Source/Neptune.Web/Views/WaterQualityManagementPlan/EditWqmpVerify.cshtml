@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.HtmlHelperExtensions
+﻿@using LtInfo.Common.BootstrapWrappers
+
 @using Neptune.Web.Views.WaterQualityManagementPlan
 
 @inherits EditWqmpVerify
@@ -13,31 +14,34 @@
         <div class="form-horizontal">
             @using (Html.BeginForm())
             {
-                @Html.HiddenFor(m => m.WaterQualityManagementPlanID)
+                @Html.TextBoxFor(m => m.WaterQualityManagementPlanID)
+                @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyID)
             <fieldset>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-3 control-label">
-                        Select type of verification
+                        Type of verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)
                     </div>
                     <div class="col-xs-12 col-sm-9">
                         @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
                         {
                             <div class="radio-inline">
-                                <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</label>
+                                <label>
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName 
+                                </label>
                             </div>
                         }
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-3 control-label">
-                        Select Visit Status
+                        Select Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)
                     </div>
                     <div class="col-xs-12 col-sm-9">
                         @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
                         {
                             <div class="radio-inline">
                                 <label>
-                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName)
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID)
                                     @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
                                 </label>
                             </div>
@@ -86,14 +90,14 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-3 control-label">
-                        Finalize
+                        Finalize @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)
                     </div>
                     <div class="col-xs-12 col-sm-9">
                         @foreach (var waterQualityManagementPlanVerifyStatus in ViewDataTyped.WaterQualityManagementPlanVerifyStatuses)
                         {
                             <div class="radio-inline">
                                 <label>
-                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID, waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName)
+                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyStatusID, waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusID)
                                     @waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName
                                 </label>
                             </div>
@@ -105,7 +109,7 @@
                         Enforcement or Follow-up Actions
                     </div>
                     <div class="col-xs-12 col-sm-9">
-                        @Html.TextAreaFor(m => m.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions)
+                        @Html.TextAreaFor(m => m.EnforcementOrFollowupActions)
                     </div>
                 </div>
                 <button type="submit" class="btn btn-neptune">Save</button>
