@@ -33,7 +33,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? waterQualityManagementPlanDocumentID, int? waterQualityManagementPlanVerifyStatusID, int? lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate) : this()
+        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanVerifyID, int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int? waterQualityManagementPlanDocumentID, int waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, string sourceControlCondition, string enforcementOrFollowupActions, DateTime lastEditedDate) : this()
         {
             this.WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -50,7 +50,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, DateTime lastEditedDate) : this()
+        public WaterQualityManagementPlanVerify(int waterQualityManagementPlanID, int waterQualityManagementPlanVerifyTypeID, int waterQualityManagementPlanVisitStatusID, int waterQualityManagementPlanVerifyStatusID, int lastEditedByPersonID, DateTime lastEditedDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanVerifyID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -58,13 +58,15 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.WaterQualityManagementPlanVerifyTypeID = waterQualityManagementPlanVerifyTypeID;
             this.WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVisitStatusID;
+            this.WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerifyStatusID;
+            this.LastEditedByPersonID = lastEditedByPersonID;
             this.LastEditedDate = lastEditedDate;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public WaterQualityManagementPlanVerify(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, DateTime lastEditedDate) : this()
+        public WaterQualityManagementPlanVerify(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, WaterQualityManagementPlanVerifyStatus waterQualityManagementPlanVerifyStatus, Person lastEditedByPerson, DateTime lastEditedDate) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanVerifyID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -77,15 +79,21 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID;
             this.WaterQualityManagementPlanVisitStatus = waterQualityManagementPlanVisitStatus;
             waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVerifies.Add(this);
+            this.WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusID;
+            this.WaterQualityManagementPlanVerifyStatus = waterQualityManagementPlanVerifyStatus;
+            waterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifies.Add(this);
+            this.LastEditedByPersonID = lastEditedByPerson.PersonID;
+            this.LastEditedByPerson = lastEditedByPerson;
+            lastEditedByPerson.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Add(this);
             this.LastEditedDate = lastEditedDate;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static WaterQualityManagementPlanVerify CreateNewBlank(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus)
+        public static WaterQualityManagementPlanVerify CreateNewBlank(WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerifyType waterQualityManagementPlanVerifyType, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatus, WaterQualityManagementPlanVerifyStatus waterQualityManagementPlanVerifyStatus, Person lastEditedByPerson)
         {
-            return new WaterQualityManagementPlanVerify(waterQualityManagementPlan, waterQualityManagementPlanVerifyType, waterQualityManagementPlanVisitStatus, default(DateTime));
+            return new WaterQualityManagementPlanVerify(waterQualityManagementPlan, waterQualityManagementPlanVerifyType, waterQualityManagementPlanVisitStatus, waterQualityManagementPlanVerifyStatus, lastEditedByPerson, default(DateTime));
         }
 
         /// <summary>
@@ -138,8 +146,8 @@ namespace Neptune.Web.Models
         public int WaterQualityManagementPlanVerifyTypeID { get; set; }
         public int WaterQualityManagementPlanVisitStatusID { get; set; }
         public int? WaterQualityManagementPlanDocumentID { get; set; }
-        public int? WaterQualityManagementPlanVerifyStatusID { get; set; }
-        public int? LastEditedByPersonID { get; set; }
+        public int WaterQualityManagementPlanVerifyStatusID { get; set; }
+        public int LastEditedByPersonID { get; set; }
         public string SourceControlCondition { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
         public DateTime LastEditedDate { get; set; }

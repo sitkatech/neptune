@@ -21,8 +21,8 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityManagementPlanVerifyTypeID).HasColumnName(@"WaterQualityManagementPlanVerifyTypeID").HasColumnType("int").IsRequired();
             Property(x => x.WaterQualityManagementPlanVisitStatusID).HasColumnName(@"WaterQualityManagementPlanVisitStatusID").HasColumnType("int").IsRequired();
             Property(x => x.WaterQualityManagementPlanDocumentID).HasColumnName(@"WaterQualityManagementPlanDocumentID").HasColumnType("int").IsOptional();
-            Property(x => x.WaterQualityManagementPlanVerifyStatusID).HasColumnName(@"WaterQualityManagementPlanVerifyStatusID").HasColumnType("int").IsOptional();
-            Property(x => x.LastEditedByPersonID).HasColumnName(@"LastEditedByPersonID").HasColumnType("int").IsOptional();
+            Property(x => x.WaterQualityManagementPlanVerifyStatusID).HasColumnName(@"WaterQualityManagementPlanVerifyStatusID").HasColumnType("int").IsRequired();
+            Property(x => x.LastEditedByPersonID).HasColumnName(@"LastEditedByPersonID").HasColumnType("int").IsRequired();
             Property(x => x.SourceControlCondition).HasColumnName(@"SourceControlCondition").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
             Property(x => x.EnforcementOrFollowupActions).HasColumnName(@"EnforcementOrFollowupActions").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
             Property(x => x.LastEditedDate).HasColumnName(@"LastEditedDate").HasColumnType("datetime").IsRequired();
@@ -32,8 +32,8 @@ namespace Neptune.Web.Models
             HasRequired(a => a.WaterQualityManagementPlanVerifyType).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanVerifyTypeID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyType_WaterQualityManagementPlanVerifyTypeID
             HasRequired(a => a.WaterQualityManagementPlanVisitStatus).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanVisitStatusID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVisitStatus_WaterQualityManagementPlanVisitStatusID
             HasOptional(a => a.WaterQualityManagementPlanDocument).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanDocumentID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanDocument_WaterQualityManagementPlanDocumentID
-            HasOptional(a => a.WaterQualityManagementPlanVerifyStatus).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanVerifyStatusID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID
-            HasOptional(a => a.LastEditedByPerson).WithMany(b => b.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson).HasForeignKey(c => c.LastEditedByPersonID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_Person_LastEditedByPersonID_PersonID
+            HasRequired(a => a.WaterQualityManagementPlanVerifyStatus).WithMany(b => b.WaterQualityManagementPlanVerifies).HasForeignKey(c => c.WaterQualityManagementPlanVerifyStatusID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID
+            HasRequired(a => a.LastEditedByPerson).WithMany(b => b.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson).HasForeignKey(c => c.LastEditedByPersonID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlanVerify_Person_LastEditedByPersonID_PersonID
         }
     }
 }
