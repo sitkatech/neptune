@@ -108,7 +108,29 @@
                             Inventoried Treatment BMPs
                         </div>
                         <div class="col-xs-12 col-sm-9">
-
+                            @foreach (var waterQualityManagementPlanVerifyTreatmentBMPs in Model.WaterQualityManagementPlanVerifyTreatmentBMPs)
+                            {
+                                <div class="row">
+                                    <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMPs.TreatmentBMP.TreatmentBMPName</div>
+                                    <div class="col-xs-4">
+                                        <div class="radio-inline">
+                                            <label>
+                                                @Html.RadioButtonFor(m => waterQualityManagementPlanVerifyTreatmentBMPs.IsAdequate, true)
+                                                Yes
+                                            </label>
+                                        </div>
+                                        <div class="radio-inline">
+                                            <label>
+                                                @Html.RadioButtonFor(m => waterQualityManagementPlanVerifyTreatmentBMPs.IsAdequate, false)
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        @Html.TextBoxFor(m => waterQualityManagementPlanVerifyTreatmentBMPs.WaterQualityManagementPlanVerifyQuickTreatmentNote, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="form-group">

@@ -30,13 +30,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlanVerifyTreatmentBMP(int waterQualityManagementPlanVerifyTreatmentBMPID, int waterQualityManagementPlanVerifyID, int treatmentBMPID, bool? isAdequate, string waterQualityManagementPlanVerifyQuickBMPNote) : this()
+        public WaterQualityManagementPlanVerifyTreatmentBMP(int waterQualityManagementPlanVerifyTreatmentBMPID, int waterQualityManagementPlanVerifyID, int treatmentBMPID, bool? isAdequate, string waterQualityManagementPlanVerifyQuickTreatmentNote) : this()
         {
             this.WaterQualityManagementPlanVerifyTreatmentBMPID = waterQualityManagementPlanVerifyTreatmentBMPID;
             this.WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyID;
             this.TreatmentBMPID = treatmentBMPID;
             this.IsAdequate = isAdequate;
-            this.WaterQualityManagementPlanVerifyQuickBMPNote = waterQualityManagementPlanVerifyQuickBMPNote;
+            this.WaterQualityManagementPlanVerifyQuickTreatmentNote = waterQualityManagementPlanVerifyQuickTreatmentNote;
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Neptune.Web.Models
         public int WaterQualityManagementPlanVerifyID { get; set; }
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
-        public string WaterQualityManagementPlanVerifyQuickBMPNote { get; set; }
+        public string WaterQualityManagementPlanVerifyQuickTreatmentNote { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifyTreatmentBMPID; } set { WaterQualityManagementPlanVerifyTreatmentBMPID = value; } }
 
@@ -113,7 +113,7 @@ namespace Neptune.Web.Models
 
         public static class FieldLengths
         {
-            public const int WaterQualityManagementPlanVerifyQuickBMPNote = 500;
+            public const int WaterQualityManagementPlanVerifyQuickTreatmentNote = 500;
         }
     }
 }
