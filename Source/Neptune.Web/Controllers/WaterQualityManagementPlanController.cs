@@ -313,7 +313,9 @@ namespace Neptune.Web.Controllers
         public ViewResult EditWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlan);
+            var quickBMPs = waterQualityManagementPlan.QuickBMPs.ToList();
+            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
+            var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlan, quickBMPs, treatmentBMPs);
             return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
         }
 
@@ -328,13 +330,7 @@ namespace Neptune.Web.Controllers
                 return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
             }
 
-            var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
-                waterQualityManagementPlan.WaterQualityManagementPlanID, 
-                viewModel.WaterQualityManagementPlanVerifyTypeID,
-                viewModel.WaterQualityManagementPlanVisitStatusID,
-                viewModel.WaterQualityManagementPlanVerifyStatusID,
-                CurrentPerson.PersonID,
-                DateTime.Now);
+            
             viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, CurrentPerson);
 
 

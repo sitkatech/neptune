@@ -18,8 +18,8 @@ CREATE TABLE WaterQualityManagementPlanVisitStatus(
 
 INSERT INTO WaterQualityManagementPlanVisitStatus (WaterQualityManagementPlanVisitStatusID, TenantID, WaterQualityManagementPlanVisitStatusName)
 VALUES 
-(1, 2, 'Initial Annual Verify'),
-(2, 2, 'Follow-up Verify');
+(1, 2, 'Initial Annual Verification'),
+(2, 2, 'Follow-up Verification');
 
 CREATE TABLE WaterQualityManagementPlanVerifyStatus(
     WaterQualityManagementPlanVerifyStatusID INT NOT NULL CONSTRAINT PK_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID PRIMARY KEY,

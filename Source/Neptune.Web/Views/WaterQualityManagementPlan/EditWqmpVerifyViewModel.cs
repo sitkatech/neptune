@@ -32,6 +32,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 
+        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
+        public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -40,10 +42,22 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan)
+        public EditWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs)
         {
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanVerifyID = ModelObjectHelpers.NotYetAssignedID;
+
+            WaterQualityManagementPlanVerifyQuickBMPs = new List<WaterQualityManagementPlanVerifyQuickBMP>();
+            foreach (var quickBMP in quickBMPs)
+            {
+                WaterQualityManagementPlanVerifyQuickBMPs.Add(new WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanID, quickBMP.QuickBMPID));
+            }
+
+            WaterQualityManagementPlanVerifyTreatmentBMPs = new List<WaterQualityManagementPlanVerifyTreatmentBMP>();
+            foreach (var treatmentBMP in treatmentBMPs )
+            {
+                WaterQualityManagementPlanVerifyTreatmentBMPs.Add(new WaterQualityManagementPlanVerifyTreatmentBMP(WaterQualityManagementPlanID, treatmentBMP.TreatmentBMPID));
+            }
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
