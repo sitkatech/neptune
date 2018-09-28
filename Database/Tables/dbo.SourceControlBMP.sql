@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[SourceControlBMP](
 	[TenantID] [int] NOT NULL,
 	[WaterQualityManagementPlanID] [int] NOT NULL,
 	[SourceControlBMPAttributeID] [int] NOT NULL,
-	[IsPresent] [bit] NOT NULL,
+	[IsPresent] [bit] NULL,
 	[SourceControlBMPNote] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_SourceControlBMP_SourceControlBMPID] PRIMARY KEY CLUSTERED 
 (

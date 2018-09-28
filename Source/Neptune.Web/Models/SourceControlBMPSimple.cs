@@ -9,7 +9,7 @@ namespace Neptune.Web.Models
         public int SourceControlBMPAttributeCategoryID { get; set; }
         public int SourceControlBMPAttributeID { get; set; }
         public string SourceControlBMPAttributeName { get; set; }
-        public bool IsPresent { get; set; }
+        public bool? IsPresent { get; set; }
         public string SourceControlBMPNote { get; set; }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Neptune.Web.Models
             SourceControlBMPAttributeCategoryName = sourceControlBMPAttribute.SourceControlBMPAttributeCategory.SourceControlBMPAttributeCategoryName;
             SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID;
             SourceControlBMPAttributeName = sourceControlBMPAttribute.SourceControlBMPAttributeName;
-            IsPresent = false;
+            IsPresent = null;
             SourceControlBMPNote = null;
         }
 

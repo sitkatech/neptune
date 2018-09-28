@@ -25,6 +25,13 @@
             });
         };
 
+        $scope.ifAnyTreatmentkBMPSimple = function(treatmentBmpIDs) {
+            if (treatmentBmpIDs && treatmentBmpIDs.length > 0) {
+                return true;
+            }
+            return false;
+        }
+
         $scope.addQuickBMPRow = function (quickBMP) {
             var newQuickBMP = $scope.createNewQuickBMPRow();
             if ($scope.AngularModel.QuickBmpSimples) {
@@ -47,6 +54,13 @@
         $scope.deleteQuickBMPRow = function (quickBmps, rowToDelete) {
             Sitka.Methods.removeFromJsonArray(quickBmps, rowToDelete);
         };
+
+        $scope.ifAnyQuickBMPSimple = function (quickBmpSimples) {
+            if (quickBmpSimples && quickBmpSimples.length > 0) {
+                return true;
+            }
+            return false;
+        }
 
 
         $scope.orderSourceControlBMPsByAttributeCategory = _.sortBy(_.groupBy($scope.AngularModel.SourceControlBMPSimples, 'SourceControlBMPAttributeCategoryName'), [function (o) { return o.SourceControlBMPAttributeID; }]);

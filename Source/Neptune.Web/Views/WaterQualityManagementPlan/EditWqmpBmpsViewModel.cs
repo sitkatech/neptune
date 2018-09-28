@@ -81,14 +81,31 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             var quickBMPNoteMaxCharacterLength = QuickBMP.FieldLengths.QuickBMPNote;
             var sourceControlBMPNoteMaxCharacterLength = SourceControlBMP.FieldLengths.SourceControlBMPNote;
-            
+            var quickBmpWithDuplicateNames = QuickBmpSimples?.Duplicates(x => x.DisplayName).Select(x => x.DisplayName).Distinct();
+
+
+            foreach (var quickBmpWithDuplicateName in quickBmpWithDuplicateNames ?? new List<string>())
+            {
+                validationResults.Add(new ValidationResult($"\"{quickBmpWithDuplicateName}\" has already been used Under Other Strucural BMPs. Make sure that all names are unique."));
+            }
+
             foreach (var quickBMPSimple in QuickBmpSimples ?? new List<QuickBMPSimple>())
             {
-                var quickBMPNoteCharacterLength = quickBMPSimple?.QuickBMPNote.Length;
+                var quickBMPNoteCharacterLength = quickBMPSimple?.QuickBMPNote?.Length;
                 if (quickBMPNoteCharacterLength != null && quickBMPNoteCharacterLength > quickBMPNoteMaxCharacterLength)
                 {
                     validationResults.Add(new ValidationResult($"\"{quickBMPSimple?.DisplayName}\"'s note is too long. Notes have a maximum of {quickBMPNoteMaxCharacterLength} characters and is {quickBMPNoteCharacterLength - quickBMPNoteMaxCharacterLength} over the limit."));
 
+                }
+
+                if (quickBMPSimple?.DisplayName == null)
+                {
+                    validationResults.Add(new ValidationResult("An Other Structural BMP is missing a name."));
+                }
+
+                if (quickBMPSimple?.QuickTreatmentBMPTypeID <= 0)
+                {
+                    validationResults.Add(new ValidationResult("An Other Structural BMP is missing a Treatment Type."));
                 }
             }
 
