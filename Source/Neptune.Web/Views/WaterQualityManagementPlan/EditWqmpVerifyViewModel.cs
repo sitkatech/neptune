@@ -32,6 +32,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 
+        public Models.WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
 
@@ -42,21 +43,29 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public EditWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs)
+        public EditWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs, Person currentPerson)
         {
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanVerifyID = ModelObjectHelpers.NotYetAssignedID;
+            WaterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
+                waterQualityManagementPlan.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanVerifyTypeID,
+                WaterQualityManagementPlanVisitStatusID,
+                WaterQualityManagementPlanVerifyStatusID,
+                currentPerson.PersonID,
+                DateTime.Now);
+
 
             WaterQualityManagementPlanVerifyQuickBMPs = new List<WaterQualityManagementPlanVerifyQuickBMP>();
             foreach (var quickBMP in quickBMPs)
             {
-                WaterQualityManagementPlanVerifyQuickBMPs.Add(new WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanID, quickBMP.QuickBMPID));
+                WaterQualityManagementPlanVerifyQuickBMPs.Add(new WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanVerify, quickBMP));
             }
 
             WaterQualityManagementPlanVerifyTreatmentBMPs = new List<WaterQualityManagementPlanVerifyTreatmentBMP>();
             foreach (var treatmentBMP in treatmentBMPs )
             {
-                WaterQualityManagementPlanVerifyTreatmentBMPs.Add(new WaterQualityManagementPlanVerifyTreatmentBMP(WaterQualityManagementPlanID, treatmentBMP.TreatmentBMPID));
+                WaterQualityManagementPlanVerifyTreatmentBMPs.Add(new WaterQualityManagementPlanVerifyTreatmentBMP(WaterQualityManagementPlanVerify, treatmentBMP));
             }
         }
 
