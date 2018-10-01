@@ -11,7 +11,7 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpVerifyViewModel : FormViewModel, IValidatableObject
+    public class NewWqmpVerifyViewModel : FormViewModel, IValidatableObject
     {
 
         public int WaterQualityManagementPlanID { get; set; }
@@ -39,37 +39,47 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         /// <summary>
         /// Needed by model binder
         /// </summary>
-        public EditWqmpVerifyViewModel()
+        public NewWqmpVerifyViewModel()
         {
         }
 
-        public EditWqmpVerifyViewModel(Models.WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs)
+        public NewWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs, Person currentPerson)
         {
-            WaterQualityManagementPlanID = waterQualityManagementPlanVerify.WaterQualityManagementPlanID;
-            WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID;
+            WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
+            WaterQualityManagementPlanVerifyID = ModelObjectHelpers.NotYetAssignedID;
+            WaterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
+                waterQualityManagementPlan.WaterQualityManagementPlanID,
+                WaterQualityManagementPlanVerifyTypeID,
+                WaterQualityManagementPlanVisitStatusID,
+                WaterQualityManagementPlanVerifyStatusID,
+                currentPerson.PersonID,
+                DateTime.Now);
 
-            WaterQualityManagementPlanVerifyTypeID =
-                waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID;
-            WaterQualityManagementPlanVisitStatusID =
-                waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusID;
-            WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerify
-                .WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusID;
 
-            EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
-            SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
+            WaterQualityManagementPlanVerifyQuickBMPs = new List<WaterQualityManagementPlanVerifyQuickBMP>();
+            foreach (var quickBMP in quickBMPs)
+            {
+                WaterQualityManagementPlanVerifyQuickBMPs.Add(new WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanVerify, quickBMP));
+            }
+
+            WaterQualityManagementPlanVerifyTreatmentBMPs = new List<WaterQualityManagementPlanVerifyTreatmentBMP>();
+            foreach (var treatmentBMP in treatmentBMPs )
+            {
+                WaterQualityManagementPlanVerifyTreatmentBMPs.Add(new WaterQualityManagementPlanVerifyTreatmentBMP(WaterQualityManagementPlanVerify, treatmentBMP));
+            }
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
         {
-            //var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+            var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
 
 
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
-            //waterQualityManagementPlanVerify.FileResource = fileResource;
+            waterQualityManagementPlanVerify.FileResource = fileResource;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
 
-            //HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

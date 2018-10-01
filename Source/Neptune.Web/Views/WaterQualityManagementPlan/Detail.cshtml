@@ -304,6 +304,10 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
+                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
+                    </span>
+
+                    <span class="pull-right">
                         <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
                     </span>
                 }
