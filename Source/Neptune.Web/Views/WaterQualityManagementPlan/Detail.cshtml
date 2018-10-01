@@ -304,17 +304,56 @@
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
+                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
                     </span>
 
-                    <span class="pull-right">
+                    @*<span class="pull-right">
                         <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
-                    </span>
+                    </span>*@
                 }
             </div>
             <div class="panel-body">
+                    <h4> Type of Verification</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</p>
+
+                    <h4> Visit Status</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</p>
+
+                    <h4> Structural BMP O&M Document</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()</p>
+
+                    <h4> Images</h4>
+                    <p> </p>
+
+                    <h4>Source control BMPs</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition</p>
+
+                    <h4> Other Structural BMPs</h4>
+                    @foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
+                     {
+                        <div class="row">
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.IsAdequate.ToYesNo()</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</div>
+                        </div>
+                     }
+
+                    <h4> Structural BMPs in Detailed Inventory</h4>
+                    @foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
+                    {
+                        <div class="row">
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate.ToYesNo()</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote</div>
+                        </div>
+                    }
+
+                    <h4> Finalize </h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</p>
 
 
+                    <h4> Enforcement or Follow-up Actions</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions</p>
             </div>
         </div>
     </div>

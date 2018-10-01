@@ -13,6 +13,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; }
         public List<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; }
         public List<WaterQualityManagementPlanVerifyStatus>  WaterQualityManagementPlanVerifyStatuses { get; }
+        public string WaterQualityManagementPlanUrl { get; }
 
         public NewWqmpVerifyViewData(Person currentPerson, 
             Models.WaterQualityManagementPlan waterQualityManagementPlan, 
@@ -33,6 +34,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyTypes = waterQualityManagementPlanVerifyTypes;
             WaterQualityManagementPlanVisitStatuses = waterQualityManagementPlanVisitStatuses;
             WaterQualityManagementPlanVerifyStatuses = waterQualityManagementPlanVerifyStatuses;
+
+            WaterQualityManagementPlanUrl =
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
         }
     }
 }

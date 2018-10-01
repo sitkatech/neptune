@@ -75,7 +75,19 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec());
+
+            var waterQualityManagementPlanVerify = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
+                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderBy(x => x.LastEditedDate).FirstOrDefault();
+            var waterQualityManagementPlanVerifyQuickBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerifyID ==
+                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+            var waterQualityManagementPlanVerifyTreatmentBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerifyID ==
+                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
             return RazorView<Detail, DetailViewData>(viewData);
         }
         
