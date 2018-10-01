@@ -27,6 +27,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [SitkaFileExtensions("pdf|zip|doc|docx|xls|xlsx|jpg|png")]
         public HttpPostedFileBase StructuralDocumentFile { get; set; }
 
+        public bool DeleteStructuralDocumentFile { get; set; }
+
+        public string StructuralDocumentFileName { get; set; }
+
         [Required]
         public int WaterQualityManagementPlanVerifyStatusID { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
@@ -55,21 +59,32 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerify
                 .WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusID;
 
+            StructuralDocumentFileName = waterQualityManagementPlanVerify.FileResource.OriginalBaseFilename + waterQualityManagementPlanVerify.FileResource.OriginalFileExtension;
+            DeleteStructuralDocumentFile = false;
+
+            WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBMPs;
+            WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBMPs;
+
             EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
             SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
         }
 
-        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, Person currentPerson)
         {
-            //var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+            if (deleteStructuralDocumentFile && StructuralDocumentFile != null)
+            {
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+                waterQualityManagementPlanVerify.FileResource = fileResource;
+                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            }
 
 
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
-            //waterQualityManagementPlanVerify.FileResource = fileResource;
+            
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
 
-            //HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

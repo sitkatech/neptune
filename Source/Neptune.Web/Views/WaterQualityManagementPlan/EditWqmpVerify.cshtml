@@ -54,7 +54,8 @@
                         <div class="col-xs-12 col-sm-9">
                             @Html.EditorFor(m => m.StructuralDocumentFile)
                             <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
-                            @Html.ValidationMessageFor(m => m.StructuralDocumentFile)
+                            <p> @Model.StructuralDocumentFileName @Html.CheckBoxFor(m => m.DeleteStructuralDocumentFile)</p>
+                            <span class="slider round"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -73,14 +74,14 @@
                             @Html.TextAreaFor(m => m.SourceControlCondition, new { @class = "form-control" })
                         </div>
                     </div>
-                    @*<div class="form-group">
+                    <div class="form-group">
                         <div class="col-xs-12 col-sm-3 control-label">
                             Quick Treatment BMPs
                         </div>
                         <div class="col-xs-12 col-sm-9">
                             @foreach (var waterQualityManagementPlanVerifyQuickBMP in Model.WaterQualityManagementPlanVerifyQuickBMPs)
                             {
-                                <div class="row">
+                                @*<div class="row">
                                     <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
                                     <div class="col-xs-4">
                                         <div class="radio-inline">
@@ -99,18 +100,18 @@
                                     <div class="col-xs-4">
                                         @Html.TextBoxFor(m => waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })
                                     </div>
-                                </div>
+                                </div>*@
                             }
                         </div>
-                    </div>*@
-                    @*<div class="form-group">
+                    </div>
+                    <div class="form-group">
                         <div class="col-xs-12 col-sm-3 control-label">
                             Inventoried Treatment BMPs
                         </div>
                         <div class="col-xs-12 col-sm-9">
                             @foreach (var waterQualityManagementPlanVerifyTreatmentBMPs in Model.WaterQualityManagementPlanVerifyTreatmentBMPs)
                             {
-                                <div class="row">
+                                @*<div class="row">
                                     <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMPs.TreatmentBMP.TreatmentBMPName</div>
                                     <div class="col-xs-4">
                                         <div class="radio-inline">
@@ -129,10 +130,10 @@
                                     <div class="col-xs-4">
                                         @Html.TextBoxFor(m => waterQualityManagementPlanVerifyTreatmentBMPs.WaterQualityManagementPlanVerifyQuickTreatmentNote, new { @class = "form-control" })
                                     </div>
-                                </div>
+                                </div>*@
                             }
                         </div>
-                    </div>*@
+                    </div>
                     <div class="form-group">
                         <div class="col-xs-12 col-sm-3 control-label">
                             Finalize @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)

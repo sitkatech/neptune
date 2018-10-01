@@ -375,7 +375,7 @@ namespace Neptune.Web.Controllers
 
             var waterQualityManagementPlanVerifyQuickBMPs =
                 HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                    x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlan.PrimaryKey).ToList();
+                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).ToList();
             var waterQualityManagementPlanVerifyTreatmentBMPs = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
                 x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlan.PrimaryKey).ToList();
 
@@ -401,7 +401,7 @@ namespace Neptune.Web.Controllers
                 viewModel.WaterQualityManagementPlanVerifyStatusID,
                 CurrentPerson.PersonID,
                 DateTime.Now);
-            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, CurrentPerson);
+            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, CurrentPerson);
 
 
             SetMessageForDisplay(

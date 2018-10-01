@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web;
 using Neptune.Web.Common;
 using LtInfo.Common.Models;
@@ -33,7 +34,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string SourceControlCondition { get; set; }
 
         public Models.WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
-        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
+        public List<WaterQualityManagementPlanVerifyQuickBMPSimple> WaterQualityManagementPlanVerifyQuickBMPSimples { get; set; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
 
         /// <summary>
@@ -56,11 +57,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 DateTime.Now);
 
 
-            WaterQualityManagementPlanVerifyQuickBMPs = new List<WaterQualityManagementPlanVerifyQuickBMP>();
-            foreach (var quickBMP in quickBMPs)
-            {
-                WaterQualityManagementPlanVerifyQuickBMPs.Add(new WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanVerify, quickBMP));
-            }
+            WaterQualityManagementPlanVerifyQuickBMPSimples = quickBMPs?.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
+
 
             WaterQualityManagementPlanVerifyTreatmentBMPs = new List<WaterQualityManagementPlanVerifyTreatmentBMP>();
             foreach (var treatmentBMP in treatmentBMPs )
@@ -69,17 +67,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             }
         }
 
-        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
+        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan,
+            WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
         {
-            var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+            if (StructuralDocumentFile != null) { 
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+                waterQualityManagementPlanVerify.FileResource = fileResource;
+                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            }
 
 
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
-            waterQualityManagementPlanVerify.FileResource = fileResource;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
-
-            HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

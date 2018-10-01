@@ -734,6 +734,8 @@
     <Compile Include="Models\LayerGeoJsonType.cs" />
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Controllers\TenantController.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
+    <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.js" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.min.js" />
     <Content Include="Content\angular\directives\discreteValueCollectionMethod.html" />
