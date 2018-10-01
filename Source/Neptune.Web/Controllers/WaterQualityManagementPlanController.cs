@@ -306,7 +306,7 @@ namespace Neptune.Web.Controllers
 
         #endregion
 
-        #region BWMP O&M Verification Record
+        #region WQMP O&M Verification Record
 
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]
@@ -338,7 +338,7 @@ namespace Neptune.Web.Controllers
                 DateTime.Now);
 
 
-            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, CurrentPerson);
+            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
 
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifies.Add(waterQualityManagementPlanVerify);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

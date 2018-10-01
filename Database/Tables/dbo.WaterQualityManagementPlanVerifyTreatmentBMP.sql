@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP](
 	[WaterQualityManagementPlanVerifyID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[IsAdequate] [bit] NULL,
-	[WaterQualityManagementPlanVerifyQuickTreatmentNote] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[WaterQualityManagementPlanVerifyTreatmentBMPNote] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerifyTreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanVerifyTreatmentBMPID] ASC
