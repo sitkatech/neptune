@@ -313,6 +313,8 @@
                 }
             </div>
             <div class="panel-body">
+                @if (ViewDataTyped.WaterQualityManagementPlanVerify != null)
+                {
                     <h4> Type of Verification</h4>
                     <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</p>
 
@@ -329,17 +331,17 @@
                     <p> @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition</p>
 
                     <h4> Other Structural BMPs</h4>
-                    @foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
-                     {
+                    foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
+                    {
                         <div class="row">
                             <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
                             <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.IsAdequate.ToYesNo()</div>
                             <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</div>
                         </div>
-                     }
+                    }
 
                     <h4> Structural BMPs in Detailed Inventory</h4>
-                    @foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
+                    foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
                     {
                         <div class="row">
                             <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName</div>
@@ -354,6 +356,11 @@
 
                     <h4> Enforcement or Follow-up Actions</h4>
                     <p> @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions</p>
+                }
+                else
+                {
+                    <p class="systemText">No Verification has been provided</p>
+                }
             </div>
         </div>
     </div>
