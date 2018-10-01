@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMP(int sourceControlBMPID, int waterQualityManagementPlanID, int sourceControlBMPAttributeID, bool isPresent, string sourceControlBMPNote) : this()
+        public SourceControlBMP(int sourceControlBMPID, int waterQualityManagementPlanID, int sourceControlBMPAttributeID, bool? isPresent, string sourceControlBMPNote) : this()
         {
             this.SourceControlBMPID = sourceControlBMPID;
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
@@ -42,20 +42,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public SourceControlBMP(int waterQualityManagementPlanID, int sourceControlBMPAttributeID, bool isPresent) : this()
+        public SourceControlBMP(int waterQualityManagementPlanID, int sourceControlBMPAttributeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.SourceControlBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.SourceControlBMPAttributeID = sourceControlBMPAttributeID;
-            this.IsPresent = isPresent;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public SourceControlBMP(WaterQualityManagementPlan waterQualityManagementPlan, SourceControlBMPAttribute sourceControlBMPAttribute, bool isPresent) : this()
+        public SourceControlBMP(WaterQualityManagementPlan waterQualityManagementPlan, SourceControlBMPAttribute sourceControlBMPAttribute) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.SourceControlBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -65,7 +64,6 @@ namespace Neptune.Web.Models
             this.SourceControlBMPAttributeID = sourceControlBMPAttribute.SourceControlBMPAttributeID;
             this.SourceControlBMPAttribute = sourceControlBMPAttribute;
             sourceControlBMPAttribute.SourceControlBMPs.Add(this);
-            this.IsPresent = isPresent;
         }
 
         /// <summary>
@@ -73,7 +71,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static SourceControlBMP CreateNewBlank(WaterQualityManagementPlan waterQualityManagementPlan, SourceControlBMPAttribute sourceControlBMPAttribute)
         {
-            return new SourceControlBMP(waterQualityManagementPlan, sourceControlBMPAttribute, default(bool));
+            return new SourceControlBMP(waterQualityManagementPlan, sourceControlBMPAttribute);
         }
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int WaterQualityManagementPlanID { get; set; }
         public int SourceControlBMPAttributeID { get; set; }
-        public bool IsPresent { get; set; }
+        public bool? IsPresent { get; set; }
         public string SourceControlBMPNote { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return SourceControlBMPID; } set { SourceControlBMPID = value; } }

@@ -9,8 +9,6 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.WaterQualityManagementPlan;
-using TreatmentBMPGridSpec = Neptune.Web.Views.TreatmentBMP.TreatmentBMPGridSpec;
-using QuickBMPGridSpec = Neptune.Web.Views.TreatmentBMP.QuickBMPGridSpec;
 
 namespace Neptune.Web.Controllers
 {
@@ -41,8 +39,6 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var treatmentBMPGridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
-            var quickBMPGridSpec = new QuickBMPGridSpec();
 
             var parcelGeoJsonFeatureCollection = waterQualityManagementPlan.WaterQualityManagementPlanParcels
                 .Select(x => x.Parcel).ToGeoJsonFeatureCollection();
@@ -76,6 +72,7 @@ namespace Neptune.Web.Controllers
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
 
+
             var waterQualityManagementPlanVerify = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).FirstOrDefault();
 
@@ -93,30 +90,11 @@ namespace Neptune.Web.Controllers
                         waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
             }
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, treatmentBMPGridSpec, quickBMPGridSpec, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+
             return RazorView<Detail, DetailViewData>(viewData);
         }
-        
-        [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<TreatmentBMP> TreatmentBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var treatmentBmPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
-            var gridSpec = new TreatmentBMPGridSpec(CurrentPerson, false, false);
-            return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBmPs, gridSpec);
-        }
 
-
-        [HttpGet]
-        [WaterQualityManagementPlanViewFeature]
-        public GridJsonNetJObjectResult<QuickBMP> QuickBmpsForWaterQualityManagementPlanGridData(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
-        {
-            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
-            var quickBmps = waterQualityManagementPlan.QuickBMPs.ToList();
-            var gridSpec = new QuickBMPGridSpec();
-            return new GridJsonNetJObjectResult<QuickBMP>(quickBmps, gridSpec);
-        }
 
         [HttpGet]
         [WaterQualityManagementPlanViewFeature]

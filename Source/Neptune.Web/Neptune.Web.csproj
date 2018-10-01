@@ -407,7 +407,6 @@
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpVerifyViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewWqmpVerifyViewModel.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpVerifyViewModel.cs" />
-    <Compile Include="Views\TreatmentBMP\QuickBMPGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpParcels.cs" />
     <Compile Include="Controllers\ParcelController.cs" />
     <Compile Include="Models\Parcel.cs" />
