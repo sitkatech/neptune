@@ -113,8 +113,19 @@
                             @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Count; i++)
                             {
                                 var waterQualityManagementPlanVerifyTreatmentBMPSimple = Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i];
-                                <div class="row">
-                                    <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</div>
+                                <div class="row" style="padding-bottom: 16px;">
+                                    <div class="col-xs-4">
+                                        <label>@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</label><br/>
+
+                                        @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
+                                        {
+                                            <span>This BMP was last visited on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate. The most recent assessment score was "@waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore". <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.NewFieldVisitUrl">Record a new Field Visit</a></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">No Field Visits are recorded for this BMP in the prior 12 months </span>
+                                        }
+                                    </div>
                                     <div class="col-xs-4">
                                         <div class="radio-inline">
                                             <label>

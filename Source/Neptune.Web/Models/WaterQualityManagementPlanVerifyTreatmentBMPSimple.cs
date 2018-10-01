@@ -1,4 +1,8 @@
-﻿namespace Neptune.Web.Models
+﻿using System.Linq;
+using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+
+namespace Neptune.Web.Models
 {
     public class WaterQualityManagementPlanVerifyTreatmentBMPSimple : IAuditableEntity
     {
@@ -7,6 +11,11 @@
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
         public string WaterQualityManagementPlanVerifyTreatmentBMPNote { get; set; }
+
+
+        public string FieldVisiLastVisitedtDate { get; set; }
+        public string FieldVisitMostRecentScore { get; set; }
+        public string NewFieldVisitUrl { get; set; }
 
         public WaterQualityManagementPlanVerifyTreatmentBMPSimple()
         {
@@ -18,6 +27,12 @@
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             IsAdequate = null;
             WaterQualityManagementPlanVerifyTreatmentBMPNote = null;
+
+            var mostRecentFieldVisit = treatmentBMP.FieldVisits.Where(x => x.FieldVisitStatus == FieldVisitStatus.Complete).OrderBy(x => x.VisitDate).FirstOrDefault();
+            FieldVisiLastVisitedtDate = mostRecentFieldVisit?.VisitDate.ToShortDateString();
+            FieldVisitMostRecentScore = mostRecentFieldVisit?.GetPostMaintenanceAssessment()?.FormattedScore();
+            NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
+                c.New(treatmentBMP.PrimaryKey));
         }
 
         public WaterQualityManagementPlanVerifyTreatmentBMPSimple(Models.WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMP)
