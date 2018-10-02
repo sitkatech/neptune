@@ -200,19 +200,20 @@
             </div>
             <div class="panel-body">
                 <h4>Structural Treatment and Hydromodification BMPs</h4>
-                <div style="padding: 0 16px">
+                <div>
                     @if (ViewDataTyped.QuickBMPs.Any() || ViewDataTyped.TreatmentBMPs.Any())
                     {
-                        <table class="table table-condensed">
-                            <thead>
+                        <div style="padding: 0 16px">
+                            <table class="table table-condensed">
+                                <thead>
                                 <tr>
                                     <th style="white-space: nowrap; border-top: none"> Name</th>
                                     <th style="white-space: nowrap; border-top: none"> Type</th>
                                     <th style="white-space: nowrap; border-top: none"> Notes</th>
                                     <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                 {
                                     <tr>
@@ -231,12 +232,13 @@
                                         <td> No</td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     }
                     else
                     {
-                        <p>No Structural Treatment and Hydromodification BMPs have been selected.</p>
+                        <p class="systemText">No Structural Treatment and Hydromodification BMPs have been selected.</p>
                     }
                 </div>
 
@@ -276,7 +278,7 @@
                 }
                 else
                 {
-                    <p>No Source Control BMPs are present or have a note.</p>
+                    <p class="systemText">No Source Control BMPs are present or have a note.</p>
                 }
             </div>
         </div>
@@ -332,6 +334,77 @@
                         <p class="systemText">No documents provided</p>
                     }
 
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Verification
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
+                {
+                    <span class="pull-right">
+                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                    </span>
+
+                    @*<span class="pull-right">
+                        <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                    </span>*@
+                }
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.WaterQualityManagementPlanVerify != null)
+                {
+                    <h4> Type of Verification</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</p>
+
+                    <h4> Visit Status</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</p>
+
+                    <h4> Structural BMP O&M Document</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()</p>
+
+                    <h4> Images</h4>
+                    <p> </p>
+
+                    <h4>Source control BMPs</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition</p>
+
+                    <h4> Other Structural BMPs</h4>
+                    foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
+                    {
+                        <div class="row">
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.IsAdequate.ToYesNo()</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</div>
+                        </div>
+                    }
+
+                    <h4> Structural BMPs in Detailed Inventory</h4>
+                    foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
+                    {
+                        <div class="row">
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate.ToYesNo()</div>
+                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote</div>
+                        </div>
+                    }
+
+                    <h4> Finalize </h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</p>
+
+
+                    <h4> Enforcement or Follow-up Actions</h4>
+                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions</p>
+
+
+                    <h4> Verification</h4>
+                    <p>Verified by @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast() on @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedDate.ToStringDate()</p>
+                }
+                else
+                {
+                    <p class="systemText">No Verification has been provided</p>
                 }
             </div>
         </div>

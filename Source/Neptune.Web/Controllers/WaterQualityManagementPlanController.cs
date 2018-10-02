@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Models;
@@ -70,7 +71,27 @@ namespace Neptune.Web.Controllers
             var mapInitJson = new MapInitJson("waterQualityManagementPlanMap", 0, layerGeoJsons,
                 BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(layerGeoJsons));
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec());
+
+
+            var waterQualityManagementPlanVerify = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
+                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).FirstOrDefault();
+
+            List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMP = null;
+            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMP = null;
+            if (waterQualityManagementPlanVerify != null)
+            {
+                waterQualityManagementPlanVerifyQuickBMP =
+                    HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                        x.WaterQualityManagementPlanVerifyID ==
+                        waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+                waterQualityManagementPlanVerifyTreatmentBMP =
+                    HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+                        x.WaterQualityManagementPlanVerifyID ==
+                        waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+            }
+
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -202,26 +223,26 @@ namespace Neptune.Web.Controllers
         #region WQMP Treatment BMPs
         [HttpGet]
         [JurisdictionManageFeature]
-        public ViewResult EditWqmpTreatmentBmps(
+        public ViewResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
-            return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+            return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditWqmpTreatmentBmps(
+        public ActionResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
             EditWqmpBmpsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+                return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
             }
 
             viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples, viewModel.SourceControlBMPSimples);
@@ -231,7 +252,7 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
         }
 
-        private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
+        private ViewResult ViewEditWqmpBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpBmpsViewModel viewModel)
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));
@@ -280,5 +301,121 @@ namespace Neptune.Web.Controllers
         }
 
         #endregion
+
+        #region WQMP O&M Verification Record
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult NewWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            var quickBMPs = waterQualityManagementPlan.QuickBMPs.ToList();
+            var treatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.ToList();
+            var viewModel = new NewWqmpVerifyViewModel(waterQualityManagementPlan, quickBMPs, treatmentBMPs, CurrentPerson);
+            return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult NewWqmpVerify( WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, NewWqmpVerifyViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
+            }
+            var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
+                waterQualityManagementPlan.WaterQualityManagementPlanID,
+                viewModel.WaterQualityManagementPlanVerifyTypeID,
+                viewModel.WaterQualityManagementPlanVisitStatusID,
+                viewModel.WaterQualityManagementPlanVerifyStatusID,
+                CurrentPerson.PersonID,
+                DateTime.Now);
+
+
+            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
+
+            HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifies.Add(waterQualityManagementPlanVerify);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            SetMessageForDisplay(
+                $"Successfully updated {FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()} " + $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
+        }
+
+        private ViewResult ViewNewWqmpVerify(WaterQualityManagementPlan waterQualityManagementPlan, NewWqmpVerifyViewModel viewModel)
+        {
+            var waterQualityManagementPlanVerifyTypes = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTypes.ToList();
+            var waterQualityManagementPlanVisitStatuses = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVisitStatuses.ToList();
+            var waterQualityManagementPlanVerifyStatuses = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyStatuses.ToList();
+            var viewData = new NewWqmpVerifyViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
+            return RazorView<NewWqmpVerify, NewWqmpVerifyViewData, NewWqmpVerifyViewModel>(viewData, viewModel);
+        }
+
+
+
+
+
+
+
+        [HttpGet]
+        [WaterQualityManagementPlanManageFeature]
+        public ViewResult EditWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+
+            var waterQualityManagementPlanVerify = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
+                x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlan.PrimaryKey).SingleOrDefault();
+
+            var waterQualityManagementPlanVerifyQuickBMPs =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).ToList();
+            var waterQualityManagementPlanVerifyTreatmentBMPs = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+                x.WaterQualityManagementPlanVerifyID == waterQualityManagementPlan.PrimaryKey).ToList();
+
+            var viewModel = new EditWqmpVerifyViewModel(waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPs, waterQualityManagementPlanVerifyTreatmentBMPs);
+            return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey, EditWqmpVerifyViewModel viewModel)
+        {
+            var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
+            }
+
+            var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
+                waterQualityManagementPlan.WaterQualityManagementPlanID,
+                viewModel.WaterQualityManagementPlanVerifyTypeID,
+                viewModel.WaterQualityManagementPlanVisitStatusID,
+                viewModel.WaterQualityManagementPlanVerifyStatusID,
+                CurrentPerson.PersonID,
+                DateTime.Now);
+            viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, CurrentPerson);
+
+
+            SetMessageForDisplay(
+                $"Successfully updated Verification " + $"for {waterQualityManagementPlan.WaterQualityManagementPlanName}");
+
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlan)));
+        }
+
+        private ViewResult ViewEditWqmpVerify(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpVerifyViewModel viewModel)
+        {
+            var waterQualityManagementPlanVerifyTypes = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTypes.ToList();
+            var waterQualityManagementPlanVisitStatuses = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVisitStatuses.ToList();
+            var waterQualityManagementPlanVerifyStatuses = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyStatuses.ToList();
+            var viewData = new EditWqmpVerifyViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
+            return RazorView<EditWqmpVerify, EditWqmpVerifyViewData, EditWqmpVerifyViewModel>(viewData, viewModel);
+        }
+
+        #endregion
+
     }
 }

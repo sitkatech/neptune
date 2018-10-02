@@ -19,12 +19,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
+
+        public string NewWqmpOMVerificationRecordUrl { get; }
+        public string EditWqmpOMVerificationRecordUrl { get; }
+
         public List<Models.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
-        public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
 
-        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
-            MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec)
+        public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
+        public WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; }
+        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs  { get; }
+        public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
+
+        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -38,7 +45,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             CurrentPersonCanManageBMPs = currentPerson.IsManagerOrAdmin();
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.EditWqmpTreatmentBmps(WaterQualityManagementPlan));
+                    c.EditWqmpBmps(WaterQualityManagementPlan));
             EditWaterQualityManagementPlanParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpParcels(WaterQualityManagementPlan));
@@ -50,9 +57,21 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridName = "parcelGrid";
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
+
+            NewWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.NewWqmpVerify(waterQualityManagementPlan));
+            EditWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                c.EditWqmpVerify(waterQualityManagementPlan));
+            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent == true || x.SourceControlBMPNote != null).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            WaterQualityManagementPlanVerify = waterQualityManagementPlanVerify;
+            WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBmPs;
+            WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
+
             TreatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true)).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+
+
         }
     }
 }
