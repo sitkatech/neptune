@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web;
 using Neptune.Web.Common;
 using LtInfo.Common.Models;
@@ -37,8 +38,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string SourceControlCondition { get; set; }
 
         public Models.WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
-        public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
-        public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
+        public List<WaterQualityManagementPlanVerifyQuickBMPSimple> WaterQualityManagementPlanVerifyQuickBMPSimples { get; set; }
+        public List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> WaterQualityManagementPlanVerifyTreatmentBMPSimples { get; set; }
 
         /// <summary>
         /// Needed by model binder
@@ -62,8 +63,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             StructuralDocumentFileName = waterQualityManagementPlanVerify.FileResource.OriginalBaseFilename + waterQualityManagementPlanVerify.FileResource.OriginalFileExtension;
             DeleteStructuralDocumentFile = false;
 
-            WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBMPs;
-            WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBMPs;
+            WaterQualityManagementPlanVerifyQuickBMPSimples = waterQualityManagementPlanVerifyQuickBMPs.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
+            WaterQualityManagementPlanVerifyTreatmentBMPSimples = waterQualityManagementPlanVerifyTreatmentBMPs.Select(x => new WaterQualityManagementPlanVerifyTreatmentBMPSimple(x)).ToList();
 
             EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
             SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
