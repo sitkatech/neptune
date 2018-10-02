@@ -11,6 +11,7 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
         public string WaterQualityManagementPlanVerifyTreatmentBMPNote { get; set; }
+        public string TreatmentBMPType { get; set; }
 
 
         public string FieldVisiLastVisitedtDate { get; set; }
@@ -27,6 +28,7 @@ namespace Neptune.Web.Models
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             IsAdequate = null;
             WaterQualityManagementPlanVerifyTreatmentBMPNote = null;
+            TreatmentBMPType = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
 
             var mostRecentFieldVisit = treatmentBMP.FieldVisits.Where(x => x.FieldVisitStatus == FieldVisitStatus.Complete).OrderBy(x => x.VisitDate).FirstOrDefault();
             FieldVisiLastVisitedtDate = mostRecentFieldVisit?.VisitDate.ToShortDateString();

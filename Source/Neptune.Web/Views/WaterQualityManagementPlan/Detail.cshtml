@@ -354,53 +354,32 @@
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.WaterQualityManagementPlanVerify != null)
+                @if (ViewDataTyped.WaterQualityManagementPlanVerifies != null)
                 {
-                    <h4> Type of Verification</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</p>
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Last edited</th>
+                            <th>Last edited by</th>
+                            <th>Type of verification</th>
+                            <th>Visit Status</th>
+                            <th>Verification of O&M Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
+                            {
+                                <tr>
+                                    <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
+                                    <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
+                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>
+                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</td>
+                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</td>
 
-                    <h4> Visit Status</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</p>
-
-                    <h4> Structural BMP O&M Document</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()</p>
-
-                    <h4> Images</h4>
-                    <p> </p>
-
-                    <h4>Source control BMPs</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition</p>
-
-                    <h4> Other Structural BMPs</h4>
-                    foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
-                    {
-                        <div class="row">
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.IsAdequate.ToYesNo()</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</div>
-                        </div>
-                    }
-
-                    <h4> Structural BMPs in Detailed Inventory</h4>
-                    foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
-                    {
-                        <div class="row">
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate.ToYesNo()</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote</div>
-                        </div>
-                    }
-
-                    <h4> Finalize </h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</p>
-
-
-                    <h4> Enforcement or Follow-up Actions</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions</p>
-
-
-                    <h4> Verification</h4>
-                    <p>Verified by @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast() on @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedDate.ToStringDate()</p>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
                 else
                 {

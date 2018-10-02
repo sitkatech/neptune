@@ -49,13 +49,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
             WaterQualityManagementPlanVerifyID = ModelObjectHelpers.NotYetAssignedID;
+            var isDraft = true;
             WaterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 WaterQualityManagementPlanVerifyTypeID,
                 WaterQualityManagementPlanVisitStatusID,
-                WaterQualityManagementPlanVerifyStatusID,
                 currentPerson.PersonID,
-                DateTime.Now);
+                DateTime.Now,
+                isDraft);
 
 
             WaterQualityManagementPlanVerifyQuickBMPSimples = quickBMPs?.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();

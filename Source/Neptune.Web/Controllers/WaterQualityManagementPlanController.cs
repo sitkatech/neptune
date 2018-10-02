@@ -73,24 +73,20 @@ namespace Neptune.Web.Controllers
 
 
 
-            var waterQualityManagementPlanVerify = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
-                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).FirstOrDefault();
+            var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
+                x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
 
-            List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMP = null;
-            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMP = null;
-            if (waterQualityManagementPlanVerify != null)
-            {
-                waterQualityManagementPlanVerifyQuickBMP =
-                    HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
-                        x.WaterQualityManagementPlanVerifyID ==
-                        waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-                waterQualityManagementPlanVerifyTreatmentBMP =
-                    HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
-                        x.WaterQualityManagementPlanVerifyID ==
-                        waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
-            }
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var waterQualityManagementPlanVerifyQuickBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
+                    waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
+            var waterQualityManagementPlanVerifyTreatmentBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+            x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
+                waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
+
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -325,13 +321,15 @@ namespace Neptune.Web.Controllers
             {
                 return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
             }
+
+            var isDraft = true;
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 viewModel.WaterQualityManagementPlanVerifyTypeID,
                 viewModel.WaterQualityManagementPlanVisitStatusID,
-                viewModel.WaterQualityManagementPlanVerifyStatusID,
                 CurrentPerson.PersonID,
-                DateTime.Now);
+                DateTime.Now,
+                isDraft);
 
 
             viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
@@ -389,14 +387,14 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
             }
-
+            var isDraft = true;
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 viewModel.WaterQualityManagementPlanVerifyTypeID,
                 viewModel.WaterQualityManagementPlanVisitStatusID,
-                viewModel.WaterQualityManagementPlanVerifyStatusID,
                 CurrentPerson.PersonID,
-                DateTime.Now);
+                DateTime.Now,
+                isDraft);
             viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, CurrentPerson);
 
 

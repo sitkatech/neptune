@@ -55,11 +55,12 @@ CREATE TABLE WaterQualityManagementPlanVerify (
     WaterQualityManagementPlanVerifyTypeID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyType_WaterQualityManagementPlanVerifyTypeID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerifyType (WaterQualityManagementPlanVerifyTypeID),
     WaterQualityManagementPlanVisitStatusID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVisitStatus_WaterQualityManagementPlanVisitStatusID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVisitStatus (WaterQualityManagementPlanVisitStatusID), 
     FileResourceID INT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_FileResource_FileResourceID FOREIGN KEY REFERENCES dbo.FileResource (FileResourceID),    
-    WaterQualityManagementPlanVerifyStatusID INT NOT NULL CONSTRAINT  FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerifyStatus (WaterQualityManagementPlanVerifyStatusID),
+    WaterQualityManagementPlanVerifyStatusID INT NULL CONSTRAINT  FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerifyStatus (WaterQualityManagementPlanVerifyStatusID),
 	LastEditedByPersonID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_Person_LastEditedByPersonID_PersonID FOREIGN KEY REFERENCES dbo.Person (PersonID),
 	SourceControlCondition VARCHAR(1000) NULL,
 	EnforcementOrFollowupActions VARCHAR(1000) NULL,
-    LastEditedDate DATETIME NOT NULL
+    LastEditedDate DATETIME NOT NULL,
+	IsDraft BIT NOT NULL
 );
 
 

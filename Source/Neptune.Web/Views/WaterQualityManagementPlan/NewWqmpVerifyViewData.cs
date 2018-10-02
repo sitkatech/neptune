@@ -3,7 +3,8 @@ using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -12,7 +13,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public List<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; }
         public List<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; }
-        public List<WaterQualityManagementPlanVerifyStatus>  WaterQualityManagementPlanVerifyStatuses { get; }
+        public IEnumerable<SelectListItem> WaterQualityManagementPlanVerifyStatuses { get; }
         public string WaterQualityManagementPlanUrl { get; }
 
         public NewWqmpVerifyViewData(Person currentPerson, 
@@ -33,7 +34,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             WaterQualityManagementPlanVerifyTypes = waterQualityManagementPlanVerifyTypes;
             WaterQualityManagementPlanVisitStatuses = waterQualityManagementPlanVisitStatuses;
-            WaterQualityManagementPlanVerifyStatuses = waterQualityManagementPlanVerifyStatuses;
+            WaterQualityManagementPlanVerifyStatuses = waterQualityManagementPlanVerifyStatuses.OrderBy(x => x.WaterQualityManagementPlanVerifyStatusName)
+                .ToSelectListWithEmptyFirstRow(x => x.WaterQualityManagementPlanVerifyStatusID.ToString(), x => x.WaterQualityManagementPlanVerifyStatusName, "Status Not Set");
 
             WaterQualityManagementPlanUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
