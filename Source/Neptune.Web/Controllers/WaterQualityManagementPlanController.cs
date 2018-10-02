@@ -223,26 +223,26 @@ namespace Neptune.Web.Controllers
         #region WQMP Treatment BMPs
         [HttpGet]
         [JurisdictionManageFeature]
-        public ViewResult EditWqmpTreatmentBmps(
+        public ViewResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             var sourceControlBMPAttributes = HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.ToList();
             var viewModel = new EditWqmpBmpsViewModel(waterQualityManagementPlan, sourceControlBMPAttributes);
-            return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+            return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
         }
 
         [HttpPost]
         [JurisdictionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult EditWqmpTreatmentBmps(
+        public ActionResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,
             EditWqmpBmpsViewModel viewModel)
         {
             var waterQualityManagementPlan = waterQualityManagementPlanPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                return ViewEditWqmpTreatmentBmps(waterQualityManagementPlan, viewModel);
+                return ViewEditWqmpBmps(waterQualityManagementPlan, viewModel);
             }
 
             viewModel.UpdateModels(waterQualityManagementPlan, viewModel.QuickBmpSimples, viewModel.SourceControlBMPSimples);
@@ -252,7 +252,7 @@ namespace Neptune.Web.Controllers
             return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanPrimaryKey)));
         }
 
-        private ViewResult ViewEditWqmpTreatmentBmps(WaterQualityManagementPlan waterQualityManagementPlan,
+        private ViewResult ViewEditWqmpBmps(WaterQualityManagementPlan waterQualityManagementPlan,
             EditWqmpBmpsViewModel viewModel)
         {
             var treatmentBMPTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToList().Select(x => new TreatmentBMPTypeSimple(x));

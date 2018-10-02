@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             CurrentPersonCanManageBMPs = currentPerson.IsManagerOrAdmin();
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.EditWqmpTreatmentBmps(WaterQualityManagementPlan));
+                    c.EditWqmpBmps(WaterQualityManagementPlan));
             EditWaterQualityManagementPlanParcelsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpParcels(WaterQualityManagementPlan));

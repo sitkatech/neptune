@@ -31,6 +31,16 @@
         .row-spacing {
             margin-top: 32px;
         }
+        .panel-heading a.collapsePanel:after {
+            font-family: 'Glyphicons Halflings';
+            content: "\e114";
+            float: right;
+            margin-top: -11px;
+        }
+
+        .panel-heading a.collapsePanel.collapsed:after {
+            content: "\e080";
+        }
     </style>
 }
 
@@ -133,7 +143,7 @@
                     <div class="panel-collapse" style="padding: 21px 15px">
                         <div class="row" ng-if="ifAnyQuickBMPSimple(AngularModel.QuickBmpSimples) == false">
                             <div class="col-xs-12">
-                                <p>There are no Quick BMPs associated with this WQMP. Use the Add button to enter one or more Quick BMPs</p>
+                                <p class="systemText">There are no Other Structural BMPs associated with this WQMP. Use the Add button to enter one or more Other Structural BMPs</p>
                             </div>
                         </div>
                         <div class="row" ng-if="ifAnyQuickBMPSimple(AngularModel.QuickBmpSimples) == true">
@@ -208,9 +218,9 @@
             <div class="col-xs-12">
                 <div ng-repeat="sourceControlSimpleGroupedByAttributeCategory in orderSourceControlBMPsByAttributeCategory" class="panel panel-default">
                     <div class="panel-heading">
-                        <button type="button" class="btn-link" data-toggle="collapse" data-target="#sourceControlCategory{{$index}}" style="padding: 0">
+                        <a data-toggle="collapse" data-target="#sourceControlCategory{{$index}}" href="#collapse{{$index}}" class="collapsed collapsePanel">
                             <h5> {{sourceControlSimpleGroupedByAttributeCategory[0].SourceControlBMPAttributeCategoryName}}</h5>
-                        </button>
+                        </a>
                         <p>Optionally identify which BMPs are present on the project.</p>
                     </div>
                     <div id="sourceControlCategory{{$index}}" class="panel-collapse collapse" style="padding: 21px 15px">
@@ -218,7 +228,7 @@
                             <thead>
                                 <tr>
                                     <th style="white-space: nowrap; border-top: none"> Source Control Attribute </th>
-                                    <th style="white-space: nowrap; border-top: none"> Is Present</th>
+                                    <th style="white-space: nowrap; border-top: none"> Present?</th>
                                     <th style="white-space: nowrap; border-top: none"> Note</th>
                                 </tr>
                             </thead>
@@ -258,7 +268,7 @@
             <div class="col-xs-12">
                 <div class="pull-right">
 
-                    <button type="submit" class="btn btn-neptune" style="margin-right: 15px">Save</button>
+                    <button type="submit" class="btn btn-neptune">Save</button>
                     <a href="@ViewDataTyped.WaterQualityManagementPlanDetailUrl" class="btn btn-neptune">Cancel</a>
                 </div>
             </div>

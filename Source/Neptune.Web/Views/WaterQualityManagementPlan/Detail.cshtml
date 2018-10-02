@@ -200,19 +200,20 @@
             </div>
             <div class="panel-body">
                 <h4>Structural Treatment and Hydromodification BMPs</h4>
-                <div style="padding: 0 16px">
+                <div>
                     @if (ViewDataTyped.QuickBMPs.Any() || ViewDataTyped.TreatmentBMPs.Any())
                     {
-                        <table class="table table-condensed">
-                            <thead>
+                        <div style="padding: 0 16px">
+                            <table class="table table-condensed">
+                                <thead>
                                 <tr>
                                     <th style="white-space: nowrap; border-top: none"> Name</th>
                                     <th style="white-space: nowrap; border-top: none"> Type</th>
                                     <th style="white-space: nowrap; border-top: none"> Notes</th>
                                     <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
                                 {
                                     <tr>
@@ -231,12 +232,13 @@
                                         <td> No</td>
                                     </tr>
                                 }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     }
                     else
                     {
-                        <p>No Structural Treatment and Hydromodification BMPs have been selected.</p>
+                        <p class="systemText">No Structural Treatment and Hydromodification BMPs have been selected.</p>
                     }
                 </div>
 
@@ -276,7 +278,7 @@
                 }
                 else
                 {
-                    <p>No Source Control BMPs are present or have a note.</p>
+                    <p class="systemText">No Source Control BMPs are present or have a note.</p>
                 }
             </div>
         </div>
