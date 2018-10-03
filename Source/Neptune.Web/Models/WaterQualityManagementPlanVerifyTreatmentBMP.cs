@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return TreatmentBMP.TreatmentBMPName;
+            return  $"Treatment BMP Name: {TreatmentBMP?.TreatmentBMPName};  WaterQualityManagementPlanName: {WaterQualityManagementPlanVerify?.WaterQualityManagementPlan?.WaterQualityManagementPlanName}";
         }
     }
 

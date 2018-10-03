@@ -359,6 +359,8 @@
                     <table class="table table-condensed">
                         <thead>
                             <tr>
+                                <th> </th>
+                                <th> </th>
                                 <th>Last edited</th>
                                 <th>Last edited by</th>
                                 <th>Type of verification</th>
@@ -370,6 +372,8 @@
                             @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
                             {
                                 <tr>
+                                    <td> @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDetailUrl(), string.Format("Delete {0} Verification", waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()), new List<string>(), true)</td>
+                                    <td> View</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
                                     <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>

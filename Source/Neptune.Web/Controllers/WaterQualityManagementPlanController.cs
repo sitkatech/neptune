@@ -387,7 +387,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditWqmpVerify(waterQualityManagementPlan, viewModel);
             }
-            var isDraft = true;
+            var isDraft = viewModel.WaterQualityManagementPlanVerifyStatusID == null;
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 viewModel.WaterQualityManagementPlanVerifyTypeID,
@@ -411,6 +411,62 @@ namespace Neptune.Web.Controllers
             var waterQualityManagementPlanVerifyStatuses = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyStatuses.ToList();
             var viewData = new EditWqmpVerifyViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
             return RazorView<EditWqmpVerify, EditWqmpVerifyViewData, EditWqmpVerifyViewModel>(viewData, viewModel);
+        }
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [WaterQualityManagementPlanDeleteFeature]
+        public PartialViewResult DeleteVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        {
+            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            return ViewDeleteVerify(waterQualityManagementPlanVerify, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult DeleteVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteVerify(waterQualityManagementPlanVerify, viewModel);
+            }
+
+            var waterQualityManagementPlanQuickBMP = HttpRequestStorage.DatabaseEntities
+                .WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerifyID ==
+                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+
+            var waterQualityManagementPlanTreatmentBMP = HttpRequestStorage.DatabaseEntities
+                .WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerifyID ==
+                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+
+            var lastEditedDate = waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString();
+
+            waterQualityManagementPlanQuickBMP.DeleteWaterQualityManagementPlanVerifyQuickBMP();
+            waterQualityManagementPlanTreatmentBMP.DeleteWaterQualityManagementPlanVerifyTreatmentBMP();
+            waterQualityManagementPlanVerify.DeleteFull();
+            SetMessageForDisplay($"Successfully deleted \"{lastEditedDate}\".");
+
+            return new ModalDialogFormJsonResult();
+        }
+
+        private PartialViewResult ViewDeleteVerify(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData(
+                $"Are you sure you want to delete Verification last edited on \"{waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}\"?");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
         #endregion
