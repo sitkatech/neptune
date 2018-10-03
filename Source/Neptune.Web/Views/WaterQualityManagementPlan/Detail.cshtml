@@ -40,6 +40,23 @@
 }
 
 <div class="row">
+    <div class="col-xs-12">
+        <span class="pull-right">
+
+
+            @if (ViewDataTyped.HasSavedWqmpDraft)
+            {
+                @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+            }
+            else
+            {
+                <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+            }
+        </span>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
@@ -344,13 +361,16 @@
                 Verification
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
-                    <span class="pull-right">
-                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
-                    </span>
-
-                    @*<span class="pull-right">
-                            <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
-                        </span>*@
+                <span class="pull-right">
+                    @if (ViewDataTyped.HasSavedWqmpDraft)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
+                    }
+                    else
+                    {
+                        <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                    }
+                </span>
                 }
             </div>
             <div class="panel-body">
@@ -372,7 +392,7 @@
                             @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
                             {
                                 <tr>
-                                    <td> @ModalDialogFormHelper.ModalDialogFormLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDetailUrl(), string.Format("Delete {0} Verification", waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()), new List<string>(), true)</td>
+                                    <td> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDetailUrl(), new List<string>(), true)</td>
                                     <td> View</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>

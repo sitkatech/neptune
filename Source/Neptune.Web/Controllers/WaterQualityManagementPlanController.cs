@@ -358,11 +358,7 @@ namespace Neptune.Web.Controllers
             var viewData = new NewWqmpVerifyViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
             return RazorView<NewWqmpVerify, NewWqmpVerifyViewData, NewWqmpVerifyViewModel>(viewData, viewModel);
         }
-
-
-
-
-
+        
 
 
         [HttpGet]
@@ -409,13 +405,7 @@ namespace Neptune.Web.Controllers
             return RazorView<EditWqmpVerify, EditWqmpVerifyViewData, EditWqmpVerifyViewModel>(viewData, viewModel);
         }
 
-
-
-
-
-
-
-
+        
 
 
         [HttpGet]
@@ -465,6 +455,37 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
+
+        [HttpGet]
+        [WaterQualityManagementPlanVerifyManageFeature]
+        public PartialViewResult EditWqmpVerifyModal(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        {
+            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+            return ViewEditWqmpVerifyModal(waterQualityManagementPlanVerify, viewModel);
+        }
+
+        [HttpPost]
+        [WaterQualityManagementPlanVerifyDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditWqmpVerifyModal(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditWqmpVerifyModal(waterQualityManagementPlanVerify, viewModel);
+            }
+
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c => c.EditWqmpVerify(waterQualityManagementPlanVerifyPrimaryKey)));
+        }
+
+        private PartialViewResult ViewEditWqmpVerifyModal(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, ConfirmDialogFormViewModel viewModel)
+        {
+            var viewData = new ConfirmDialogFormViewData(
+                "There is a verification in progress. Click OK to resume the existing verification record. Alternately, delete the in-progress verification from the verification panel on the WQMP page");
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
         #endregion
 
     }
