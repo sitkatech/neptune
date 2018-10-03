@@ -134,11 +134,11 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                                        {
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                                                        };
+                                {
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                };
                             }
                             @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
                             {
@@ -206,32 +206,32 @@
                         <div style="padding: 0 16px">
                             <table class="table table-condensed">
                                 <thead>
-                                <tr>
-                                    <th style="white-space: nowrap; border-top: none"> Name</th>
-                                    <th style="white-space: nowrap; border-top: none"> Type</th>
-                                    <th style="white-space: nowrap; border-top: none"> Notes</th>
-                                    <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
-                                </tr>
+                                    <tr>
+                                        <th style="white-space: nowrap; border-top: none"> Name</th>
+                                        <th style="white-space: nowrap; border-top: none"> Type</th>
+                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
+                                        <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
-                                {
-                                    <tr>
-                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@treatmentBMP.Notes</td>
-                                        <td> Yes</td>
-                                    </tr>
-                                }
-                                @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                {
-                                    <tr>
-                                        <td>@quickBMP.QuickBMPName</td>
-                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@quickBMP.QuickBMPNote</td>
-                                        <td> No</td>
-                                    </tr>
-                                }
+                                    @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
+                                    {
+                                        <tr>
+                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@treatmentBMP.Notes</td>
+                                            <td> Yes</td>
+                                        </tr>
+                                    }
+                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                                    {
+                                        <tr>
+                                            <td>@quickBMP.QuickBMPName</td>
+                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@quickBMP.QuickBMPNote</td>
+                                            <td> No</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -349,32 +349,41 @@
                     </span>
 
                     @*<span class="pull-right">
-                        <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
-                    </span>*@
+                            <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                        </span>*@
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.WaterQualityManagementPlanVerifies != null)
+                @if (ViewDataTyped.WaterQualityManagementPlanVerifies.Any())
                 {
                     <table class="table table-condensed">
                         <thead>
-                        <tr>
-                            <th>Last edited</th>
-                            <th>Last edited by</th>
-                            <th>Type of verification</th>
-                            <th>Visit Status</th>
-                            <th>Verification of O&M Status</th>
-                        </tr>
+                            <tr>
+                                <th>Last edited</th>
+                                <th>Last edited by</th>
+                                <th>Type of verification</th>
+                                <th>Visit Status</th>
+                                <th>Verification of O&M Status</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            @foreach(var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
+                            @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
                             {
                                 <tr>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
                                     <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>
                                     <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</td>
-                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</td>
+                                    <td>
+                                        @if (waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus != null)
+                                        {
+                                        <span>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Draft</span>
+                                        }
+                                    </td>
 
                                 </tr>
                             }

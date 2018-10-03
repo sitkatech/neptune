@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string StructuralDocumentFileName { get; set; }
 
         [Required]
-        public int WaterQualityManagementPlanVerifyStatusID { get; set; }
+        public int? WaterQualityManagementPlanVerifyStatusID { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 

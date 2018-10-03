@@ -29,8 +29,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [SitkaFileExtensions("pdf|zip|doc|docx|xls|xlsx|jpg|png")]
         public HttpPostedFileBase StructuralDocumentFile { get; set; }
 
-        [Required]
-        public int WaterQualityManagementPlanVerifyStatusID { get; set; }
+        
+        public int? WaterQualityManagementPlanVerifyStatusID { get; set; }
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 
@@ -57,6 +57,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 currentPerson.PersonID,
                 DateTime.Now,
                 isDraft);
+            WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = null;
 
 
             WaterQualityManagementPlanVerifyQuickBMPSimples = quickBMPs?.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
@@ -76,6 +77,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
             waterQualityManagementPlanVerify.SourceControlCondition = SourceControlCondition;
+            waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = WaterQualityManagementPlanVerifyStatusID;
 
 
             var waterQualityManagementPlanVerifyQuickBMPsInDatabase = HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyQuickBMPs.Local;

@@ -173,11 +173,13 @@
 
                                                     @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
                                                     {
-                                                        <span>This BMP was last visited on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate. The most recent assessment score was "@waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore". <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.NewFieldVisitUrl">Record a new Field Visit</a></span>
+                                                    <span>
+                                                        This BMP was last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a>
+                                                    </span>
                                                     }
                                                     else
                                                     {
-                                                        <span class="text-danger">No Field Visits are recorded for this BMP in the prior 12 months </span>
+                                                        <span class="text-danger">This BMP has no finalized assessment. <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a> </span>
                                                     }
                                                 </td>
                                             </tr>

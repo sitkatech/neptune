@@ -322,7 +322,7 @@ namespace Neptune.Web.Controllers
                 return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
             }
 
-            var isDraft = true;
+            var isDraft = viewModel.WaterQualityManagementPlanVerifyStatusID == null;
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 viewModel.WaterQualityManagementPlanVerifyTypeID,
