@@ -34,7 +34,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string EnforcementOrFollowupActions { get; set; }
         public string SourceControlCondition { get; set; }
 
-        public Models.WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
         public List<WaterQualityManagementPlanVerifyQuickBMPSimple> WaterQualityManagementPlanVerifyQuickBMPSimples { get; set; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> WaterQualityManagementPlanVerifyTreatmentBMPSimples { get; set; }
 
@@ -45,26 +44,21 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
         }
 
-        public NewWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs, Person currentPerson)
+        public NewWqmpVerifyViewModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<QuickBMP> quickBMPs, List<Models.TreatmentBMP> treatmentBMPs, Person currentPerson)
         {
             WaterQualityManagementPlanID = waterQualityManagementPlan.WaterQualityManagementPlanID;
-            WaterQualityManagementPlanVerifyID = ModelObjectHelpers.NotYetAssignedID;
-            var isDraft = true;
-            WaterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
-                waterQualityManagementPlan.WaterQualityManagementPlanID,
-                WaterQualityManagementPlanVerifyTypeID,
-                WaterQualityManagementPlanVisitStatusID,
-                currentPerson.PersonID,
-                DateTime.Now,
-                isDraft);
-            WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID = null;
-
+            WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID;
+            WaterQualityManagementPlanVerifyTypeID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyTypeID;
+            WaterQualityManagementPlanVisitStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatusID;
+            WaterQualityManagementPlanVerifyStatusID = waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatusID;
+            EnforcementOrFollowupActions = waterQualityManagementPlanVerify.EnforcementOrFollowupActions;
+            SourceControlCondition = waterQualityManagementPlanVerify.SourceControlCondition;
 
             WaterQualityManagementPlanVerifyQuickBMPSimples = quickBMPs?.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
             WaterQualityManagementPlanVerifyTreatmentBMPSimples = treatmentBMPs?.Select(x => new WaterQualityManagementPlanVerifyTreatmentBMPSimple(x)).ToList();
         }
 
-        public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan,
+        public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMPSimple> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson)
         {
             if (StructuralDocumentFile != null) { 

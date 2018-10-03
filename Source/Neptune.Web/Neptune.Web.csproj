@@ -361,6 +361,8 @@
     <Compile Include="Models\QuickBMPSimple.cs" />
     <Compile Include="Security\FieldVisitReturnToEditFeature.cs" />
     <Compile Include="Security\FieldVisitVerifyFeature.cs" />
+    <Compile Include="Security\WaterQualityManagementPlanVerifyDeleteFeature.cs" />
+    <Compile Include="Security\WaterQualityManagementPlanVerifyManageFeature.cs" />
     <Compile Include="Views\FieldVisit\AssessmentDetail.cs" />
     <Compile Include="Views\FieldVisit\AssessmentDetailViewData.cs" />
     <Compile Include="Views\FieldVisit\Detail.cs" />
