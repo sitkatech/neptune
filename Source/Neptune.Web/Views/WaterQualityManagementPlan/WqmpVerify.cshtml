@@ -50,8 +50,22 @@
                 Supporting Documentation
             </div>
             <div class="panel-body">
-                @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()
-            </div>
+                <div class="row">
+                    <label class="col-xs-6 col-sm-2 control-label text-right">File Name</label>
+                    <div class="col-xs-6 col-sm-10">
+                        <a href="@ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetFileResourceUrl()">
+                            @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName() <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-xs-6 col-sm-2 control-label text-right">Uploaded On</label>
+                    <div class="col-xs-6 col-sm-10"> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.CreateDate.ToShortDateString()</div>
+                </div>
+                <div class="row">
+                    <label class="col-xs-6 col-sm-2 control-label text-right">File Type</label>
+                    <div class="col-xs-6 col-sm-10"> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</div>
+                </div>
         </div>
     </div>
 </div>

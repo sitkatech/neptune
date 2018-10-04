@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public bool DeleteStructuralDocumentFile { get; set; }
 
-        public string StructuralDocumentFileName { get; set; }
+        public FileResource StructuralDocumentFileResource{ get; set; }
 
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpVerifyViewModel(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs, Person currentPerson) : base (waterQualityManagementPlanVerify.WaterQualityManagementPlan, waterQualityManagementPlanVerify, new List<QuickBMP>(), new List<Models.TreatmentBMP>(), currentPerson)
         {
 
-            StructuralDocumentFileName = waterQualityManagementPlanVerify.FileResource.OriginalBaseFilename + waterQualityManagementPlanVerify.FileResource.OriginalFileExtension;
+            StructuralDocumentFileResource = waterQualityManagementPlanVerify.FileResource;
             DeleteStructuralDocumentFile = false;
 
             WaterQualityManagementPlanVerifyQuickBMPSimples = waterQualityManagementPlanVerifyQuickBMPs.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
@@ -38,17 +38,30 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             
         }
 
-        public void UpdateModels(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, Person currentPerson)
+        public void UpdateModels(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, List<WaterQualityManagementPlanVerifyQuickBMPSimple> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson)
+        {
+            waterQualityManagementPlanVerify =
+                updateStructuralDocument(waterQualityManagementPlanVerify, currentPerson, deleteStructuralDocumentFile);
+
+            base.UpdateModels(waterQualityManagementPlanVerify.WaterQualityManagementPlan,
+                 waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPSimples, waterQualityManagementPlanVerifyTreatmentBMPSimples, currentPerson);
+        }
+
+
+        private WaterQualityManagementPlanVerify updateStructuralDocument(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson, bool deleteStructuralDocumentFile)
         {
             if (deleteStructuralDocumentFile && StructuralDocumentFile != null)
             {
+                waterQualityManagementPlanVerify.FileResource.DeleteFull();
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
                 waterQualityManagementPlanVerify.FileResource = fileResource;
                 HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
             }
-
-            //base.UpdateModels(waterQualityManagementPlan,
-            //     waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPSimples,  waterQualityManagementPlanVerifyTreatmentBMPSimples, currentPerson);
+            else if (deleteStructuralDocumentFile && StructuralDocumentFile == null)
+            {
+                waterQualityManagementPlanVerify.FileResource.DeleteFull();
+            }
+            return waterQualityManagementPlanVerify;
         }
     }
 }

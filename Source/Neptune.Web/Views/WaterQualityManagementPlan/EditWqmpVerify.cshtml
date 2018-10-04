@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.WaterQualityManagementPlan
 
 
@@ -8,6 +9,15 @@
     .radio-inline label {
         font-weight: normal;
     }
+
+    .row-group {
+        background: whitesmoke;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 0;
+    }
+
     .switch {
         position: relative;
         display: inline-block;
@@ -15,9 +25,10 @@
         height: 26px;
     }
 
-    .switch input {
-        display: none;
-    }
+        .switch input {
+            display: none;
+        }
+
     .slider {
         position: absolute;
         cursor: pointer;
@@ -30,17 +41,17 @@
         transition: .2s;
     }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 18px;
-        width: 18px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .2s;
-        transition: .2s;
-    }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .2s;
+            transition: .2s;
+        }
 
     input:checked + .slider {
         background-color: #d9534f;
@@ -63,9 +74,9 @@
         border-radius: 26px;
     }
 
-    .slider.round:before {
-        border-radius: 50%;
-    }
+        .slider.round:before {
+            border-radius: 50%;
+        }
 </style>
 <div class="row">
     <div class="col-xs-12">
@@ -132,14 +143,40 @@
                             <div style="padding: 21px 15px">
                                 @Html.EditorFor(m => m.StructuralDocumentFile)
                                 <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
-                                
-                                <p>Delete @Model.StructuralDocumentFileName</p>
-                                <label class="switch">
-                                    <input type="checkbox" value="True"
-                                           name="@Html.NameFor(m => m.DeleteStructuralDocumentFile)"
-                                           id="@Html.IdFor(m => m.DeleteStructuralDocumentFile)" />
-                                    <span class="slider round"></span>
-                                </label>
+
+
+
+                                @if (Model.StructuralDocumentFileResource != null)
+                                {
+                                    <div class="row">
+                                        <label class="col-xs-6 col-sm-2 control-label text-right">File Name</label>
+                                        <div class="col-xs-6 col-sm-10">
+                                            <a href="@Model.StructuralDocumentFileResource.GetFileResourceUrl()">
+                                                @Model.StructuralDocumentFileResource.GetOriginalCompleteFileName() <i class='glyphicon glyphicon-download' style='margin-right: 3px'></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-xs-6 col-sm-2 control-label text-right">Uploaded On</label>
+                                        <div class="col-xs-6 col-sm-10"> @Model.StructuralDocumentFileResource.CreateDate.ToShortDateString()</div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-xs-6 col-sm-2 control-label text-right">File Type</label>
+                                        <div class="col-xs-6 col-sm-10"> @Model.StructuralDocumentFileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xs-6 col-sm-2 control-label text-right">Delete File?</label>
+                                        <div class="col-xs-6 col-sm-10">
+                                            <label class="switch">
+                                                <input type="checkbox" value="True"
+                                                       name="@Html.NameFor(m => m.DeleteStructuralDocumentFile)"
+                                                       id="@Html.IdFor(m => m.DeleteStructuralDocumentFile)" />
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -262,7 +299,7 @@
                                 <div class="alert alert-warning" role="alert">
                                     This question needs to be answered in order to complete the form.
                                 </div>
-                                @*@Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses)*@
+                                @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses)
                             </div>
                         </div>
                     </div>
@@ -283,7 +320,7 @@
 
                 <div class="pull-right">
                     <button type="submit" class="btn btn-neptune">Save</button>
-                    @*<a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>*@
+                    <a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>
                 </div>
 
 

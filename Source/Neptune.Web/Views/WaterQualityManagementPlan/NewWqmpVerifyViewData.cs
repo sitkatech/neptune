@@ -24,7 +24,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
-            PageTitle = "Water Quality Management Plan O&M Verification";
+            PageTitle = "New Water Quality Management Plan O&M Verification";
 
             SubEntityName = WaterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));

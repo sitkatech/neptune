@@ -88,7 +88,8 @@ CREATE TABLE WaterQualityManagementPlanVerifyQuickBMP (
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyQuickBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
 	QuickBMPID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyQuickBMP_QuickBMP_QuickBMPID FOREIGN KEY REFERENCES dbo.QuickBMP (QuickBMPID),
 	IsAdequate BIT NULL,
-	WaterQualityManagementPlanVerifyQuickBMPNote VARCHAR(500) NULL
+	WaterQualityManagementPlanVerifyQuickBMPNote VARCHAR(500) NULL,
+	Constraint AK_WaterQualityManagementPlanVerifyQuickBMP_QuickBMPID_WaterQualityManagementPlanVerifyQuickBMPID unique(QuickBMPID, WaterQualityManagementPlanVerifyQuickBMPID)
 );
 
 
@@ -98,5 +99,6 @@ CREATE TABLE WaterQualityManagementPlanVerifyTreatmentBMP (
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
 	TreatmentBMPID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyQuickBMP_TreatmentBMP_TreatmentBMPID FOREIGN KEY REFERENCES dbo.TreatmentBMP (TreatmentBMPID),
 	IsAdequate BIT NULL,
-	WaterQualityManagementPlanVerifyTreatmentBMPNote VARCHAR(500) NULL
+	WaterQualityManagementPlanVerifyTreatmentBMPNote VARCHAR(500) NULL,
+	Constraint AK_WaterQualityManagementPlanVerifyTreatmentBMP_TreatmentBMPID_WaterQualityManagementPlanVerifyTreatmentBMPID unique(TreatmentBMPID, WaterQualityManagementPlanVerifyTreatmentBMPID)
 );
