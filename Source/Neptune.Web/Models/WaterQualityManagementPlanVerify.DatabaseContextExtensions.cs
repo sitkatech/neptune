@@ -28,9 +28,16 @@ namespace Neptune.Web.Models
     {
 
         public static readonly UrlTemplate<int> DeleteUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(t => t.DeleteVerify(UrlTemplate.Parameter1Int)));
-        public static string GetDetailUrl(this WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
+        public static string GetDeleteUrl(this WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
         {
             return DeleteUrlTemplate.ParameterReplace(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
+        }
+
+
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(t => t.WqmpVerify(UrlTemplate.Parameter1Int)));
+        public static string GetDetailUrl(this WaterQualityManagementPlanVerify waterQualityManagementPlanVerify)
+        {
+            return DetailUrlTemplate.ParameterReplace(waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID);
         }
 
 

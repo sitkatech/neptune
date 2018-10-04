@@ -404,6 +404,8 @@
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\WqmpVerify.cs" />
+    <Compile Include="Views\WaterQualityManagementPlan\WqmpVerifyViewData.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewWqmpVerify.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\EditWqmpVerify.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\NewWqmpVerifyViewData.cs" />
@@ -1374,6 +1376,7 @@
     <Content Include="Views\FieldVisit\AssessmentDetail.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpVerify.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\NewWqmpVerify.cshtml" />
+    <Content Include="Views\WaterQualityManagementPlan\WqmpVerify.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

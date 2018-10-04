@@ -1,0 +1,146 @@
+﻿@using LtInfo.Common
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@using Neptune.Web.Views.WaterQualityManagementPlan
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+
+@inherits WqmpVerify
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+
+}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Type of Verification
+            </div>
+            <div class="panel-body">
+                @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Visit Status
+            </div>
+            <div class="panel-body">
+                @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Supporting Documentation
+            </div>
+            <div class="panel-body">
+                @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Source control BMPs
+            </div>
+            <div class="panel-body">
+                @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Structural Treatment and Hydromodification BMPs
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th> Name</th>
+                        <th> Type</th>
+                        <th> O&amp;M Adequate</th>
+                        <th> O&amp;M Notes</th>
+                        <th> Detailed Inventory Record?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for (var i = 0; i < ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs.Count; i++)
+                    {
+                        var waterQualityManagementPlanVerifyQuickBMP = ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs[i];
+                        <tr>
+                            <td> @waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</td>
+                            <td> @waterQualityManagementPlanVerifyQuickBMP.QuickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                            <td> @waterQualityManagementPlanVerifyQuickBMP.IsAdequate </td>
+                            <td> @waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</td>
+                            <td> No</td>
+                        </tr>
+                    }
+                    @for (var i = 0; i < ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs.Count; i++)
+                    {
+                        var waterQualityManagementPlanVerifyTreatmentBMPSimple = ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs[i];
+                        <tr>
+                            <td> <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMP.GetDetailUrl()">@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMP.TreatmentBMPName</a></td>
+                            <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                            <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.IsAdequate.ToYesNo()</td>
+                            <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.WaterQualityManagementPlanVerifyTreatmentBMPNote</td>
+                            <td> Yes </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Verification of O&amp;M Status
+            </div>
+            <div class="panel-body">
+                @if (ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus != null)
+                {
+                    <span>@ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</span>
+                }
+                else
+                {
+                    <span>Draft</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Enforcement or Follow-up Actions
+            </div>
+            <div class="panel-body">
+                @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions
+            </div>
+        </div>
+    </div>
+</div>

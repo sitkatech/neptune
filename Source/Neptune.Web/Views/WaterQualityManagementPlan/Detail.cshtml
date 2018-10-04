@@ -368,7 +368,7 @@
                     }
                     else
                     {
-                        <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                        <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
                     }
                 </span>
                 }
@@ -392,8 +392,8 @@
                             @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
                             {
                                 <tr>
-                                    <td> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDetailUrl(), new List<string>(), true)</td>
-                                    <td> View</td>
+                                    <td> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDeleteUrl(), new List<string>(), true)</td>
+                                    <td> <a class="btn btn-neptune" href="@waterQualityManagementPlanVerify.GetDetailUrl()">View</a></td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
                                     <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
                                     <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>

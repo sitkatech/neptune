@@ -300,6 +300,35 @@ namespace Neptune.Web.Controllers
 
         #region WQMP O&M Verification Record
 
+
+
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public ViewResult WqmpVerify(WaterQualityManagementPlanVerifyPrimaryKey waterQualityManagementPlanVerifyPrimaryKey)
+        {
+            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifyPrimaryKey.EntityObject;
+
+
+            var waterQualityManagementPlanVerifyQuickBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
+                    x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID ==
+                    waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+            var waterQualityManagementPlanVerifyTreatmentBMP =
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x =>
+            x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID ==
+            waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID).ToList();
+
+            var viewData = new WqmpVerifyViewData(CurrentPerson, waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+
+            return RazorView<WqmpVerify, WqmpVerifyViewData>(viewData);
+        }
+
+
+
+
+
+
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]
         public ViewResult NewWqmpVerify(WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
