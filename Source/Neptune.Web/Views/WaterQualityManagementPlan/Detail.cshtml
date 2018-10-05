@@ -208,7 +208,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 BMPs
-                @if (ViewDataTyped.CurrentPersonCanManageBMPs)
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -358,19 +358,19 @@
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Verification
+                WQMP O&M Verification
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
-                <span class="pull-right">
-                    @if (ViewDataTyped.HasSavedWqmpDraft)
-                    {
-                        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
-                    }
-                    else
-                    {
-                        <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
-                    }
-                </span>
+                    <span class="pull-right">
+                        @if (ViewDataTyped.HasSavedWqmpDraft)
+                        {
+                            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
+                        }
+                        else
+                        {
+                            <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
+                        }
+                    </span>
                 }
             </div>
             <div class="panel-body">

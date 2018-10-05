@@ -218,7 +218,7 @@ namespace Neptune.Web.Controllers
 
         #region WQMP Treatment BMPs
         [HttpGet]
-        [JurisdictionManageFeature]
+        [WaterQualityManagementPlanViewFeature]
         public ViewResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey)
         {
@@ -229,7 +229,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [JurisdictionManageFeature]
+        [WaterQualityManagementPlanViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult EditWqmpBmps(
             WaterQualityManagementPlanPrimaryKey waterQualityManagementPlanPrimaryKey,

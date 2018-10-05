@@ -14,6 +14,8 @@
         background: whitesmoke;
     }
 </style>
+
+@Html.ValidationSummary()
 <div class="row">
     <div class="col-xs-12">
         <div class="form-horizontal">
@@ -79,19 +81,11 @@
                             <div style="padding: 21px 15px">
                                 @Html.EditorFor(m => m.StructuralDocumentFile)
                                 <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5> Images</h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
 
+                                @if (Model.StructuralDocumentFile != null)
+                                {
+                                    <p>@Model.StructuralDocumentFile.FileName</p>
+                                }
                             </div>
                         </div>
                     </div>
@@ -141,7 +135,12 @@
                                                 <td>  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
                                                 <td> No</td>
                                             </tr>
-                                            <tr style="display:none;"><td>@Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPID)</td></tr>
+                                            <tr style="display: none;">
+                                                <td>
+                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPName)
+                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPID)
+                                                </td>
+                                            </tr>
                                         }
                                     </tbody>
                                     <tbody>
@@ -167,7 +166,12 @@
 
                                                 <td> Yes </td>
                                             </tr>
-                                            <tr style="display:none;"><td>@Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)</td></tr>
+                                            <tr style="display: none;">
+                                                <td>
+                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPName)
+                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td colspan="5" style="border-top: none">
 
@@ -222,9 +226,9 @@
 
                 <div class="pull-right" style="margin-top: 16px">
                     <button type="submit" class="btn btn-neptune">Save</button>
-                    <button type="button" class="btn btn-neptune" onclick="saveAndFinalize()">Save &amp; Finalize</button>
+                    <button type="button" class="btn btn-neptune" onclick="saveAndFinalize()" id="saveAndFinalizeButton">Save &amp; Finalize</button>
                     <a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>
-                    @Html.HiddenFor(m => m.HiddenIsFinalizeVerificationInput, new{ Value ="false"})
+                    @Html.HiddenFor(m => m.HiddenIsFinalizeVerificationInput, new { Value = "false" })
                 </div>
             </form>
         </div>

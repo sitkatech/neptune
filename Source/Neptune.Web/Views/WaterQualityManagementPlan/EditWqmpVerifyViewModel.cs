@@ -40,28 +40,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, bool deleteStructuralDocumentFile, List<WaterQualityManagementPlanVerifyQuickBMPSimple> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson)
         {
-            waterQualityManagementPlanVerify =
-                updateStructuralDocument(waterQualityManagementPlanVerify, currentPerson, deleteStructuralDocumentFile);
-
             base.UpdateModels(waterQualityManagementPlan,
                  waterQualityManagementPlanVerify, waterQualityManagementPlanVerifyQuickBMPSimples, waterQualityManagementPlanVerifyTreatmentBMPSimples, currentPerson);
         }
 
 
-        private WaterQualityManagementPlanVerify updateStructuralDocument(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson, bool deleteStructuralDocumentFile)
-        {
-            if (deleteStructuralDocumentFile && StructuralDocumentFile != null)
-            {
-                waterQualityManagementPlanVerify.FileResource.DeleteFull();
-                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
-                waterQualityManagementPlanVerify.FileResource = fileResource;
-                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
-            }
-            else if (deleteStructuralDocumentFile && StructuralDocumentFile == null)
-            {
-                waterQualityManagementPlanVerify.FileResource.DeleteFull();
-            }
-            return waterQualityManagementPlanVerify;
-        }
+     
     }
 }

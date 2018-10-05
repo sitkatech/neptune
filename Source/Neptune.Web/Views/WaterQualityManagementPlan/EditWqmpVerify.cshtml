@@ -78,6 +78,8 @@
             border-radius: 50%;
         }
 </style>
+
+@Html.ValidationSummary()
 <div class="row">
     <div class="col-xs-12">
         <div class="form-horizontal">
@@ -144,7 +146,10 @@
                                 @Html.EditorFor(m => m.StructuralDocumentFile)
                                 <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
 
-
+                                @if (Model.StructuralDocumentFile != null)
+                                {
+                                    <p>@Model.StructuralDocumentFile.FileName</p>
+                                }
 
                                 @if (Model.StructuralDocumentFileResource != null)
                                 {
@@ -164,32 +169,7 @@
                                         <label class="col-xs-6 col-sm-2 control-label text-right">File Type</label>
                                         <div class="col-xs-6 col-sm-10"> @Model.StructuralDocumentFileResource.FileResourceMimeType.FileResourceMimeTypeDisplayName</div>
                                     </div>
-
-                                    <div class="row">
-                                        <label class="col-xs-6 col-sm-2 control-label text-right">Delete File?</label>
-                                        <div class="col-xs-6 col-sm-10">
-                                            <label class="switch">
-                                                <input type="checkbox" value="True"
-                                                       name="@Html.NameFor(m => m.DeleteStructuralDocumentFile)"
-                                                       id="@Html.IdFor(m => m.DeleteStructuralDocumentFile)" />
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                    </div>
                                 }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5> Images</h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
-
                             </div>
                         </div>
                     </div>
@@ -239,7 +219,12 @@
                                                 <td>  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
                                                 <td> No</td>
                                             </tr>
-                                            <tr style="display:none;"><td>@Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPID)</td></tr>
+                                            <tr style="display: none;">
+                                                <td>
+                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPName)
+                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyQuickBMPSimples[i].QuickBMPID)
+                                                </td>
+                                            </tr>
                                         }
                                     </tbody>
                                     <tbody>
@@ -265,7 +250,12 @@
 
                                                 <td> Yes </td>
                                             </tr>
-                                            <tr style="display:none;"><td>@Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)</td></tr>
+                                            <tr style="display: none;">
+                                                <td>
+                                                    @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPName)
+                                                    @Html.HiddenFor(x => x.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].TreatmentBMPID)
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td colspan="5" style="border-top: none">
 
@@ -299,7 +289,7 @@
                                 <div class="alert alert-warning" role="alert">
                                     This question needs to be answered in order to complete the form.
                                 </div>
-                                @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new{ onchange= "verificationOMStatus()" })
+                                @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new { onchange = "verificationOMStatus()" })
                             </div>
                         </div>
                     </div>

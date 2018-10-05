@@ -62,8 +62,21 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan,
             WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMPSimple> waterQualityManagementPlanVerifyQuickBMPSimples, List<WaterQualityManagementPlanVerifyTreatmentBMPSimple> waterQualityManagementPlanVerifyTreatmentBMPSimples, Person currentPerson)
         {
-            waterQualityManagementPlanVerify =
-                updateStructuralDocument(waterQualityManagementPlanVerify, currentPerson);
+
+            if (waterQualityManagementPlanVerify.FileResource == null && StructuralDocumentFile != null)
+            {
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+                waterQualityManagementPlanVerify.FileResource = fileResource;
+                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            }
+            else if (StructuralDocumentFile != null)
+            {
+                waterQualityManagementPlanVerify.FileResource.DeleteFileResource();
+                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
+                waterQualityManagementPlanVerify.FileResource = fileResource;
+                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            }
+            
 
             waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyID = WaterQualityManagementPlanVerifyID ?? ModelObjectHelpers.NotYetAssignedID;
             waterQualityManagementPlanVerify.EnforcementOrFollowupActions = EnforcementOrFollowupActions;
@@ -101,21 +114,46 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         }
 
 
-        private WaterQualityManagementPlanVerify updateStructuralDocument(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, Person currentPerson)
-        {
-            if (StructuralDocumentFile != null)
-            {
-                var fileResource = FileResource.CreateNewFromHttpPostedFile(StructuralDocumentFile, currentPerson);
-                waterQualityManagementPlanVerify.FileResource = fileResource;
-                HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
-            }
-
-            return waterQualityManagementPlanVerify;
-        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var validationResults = new List<ValidationResult>();
+            var waterQualityManagementPlanVerifyQuickBMPNoteMaxLength = WaterQualityManagementPlanVerifyQuickBMP.FieldLengths.WaterQualityManagementPlanVerifyQuickBMPNote;
+            var waterQualityManagementPlanVerifyTreatmentBMPNoteMaxLength = WaterQualityManagementPlanVerifyTreatmentBMP.FieldLengths.WaterQualityManagementPlanVerifyTreatmentBMPNote;
+            var sourceControlConditionMaxLength = WaterQualityManagementPlanVerify.FieldLengths.SourceControlCondition;
+            var enforcementOrFollowupActionsMaxLength = WaterQualityManagementPlanVerify.FieldLengths.EnforcementOrFollowupActions;
+
+            foreach (var waterQualityManagementPlanVerifyQuickBMPSimple in WaterQualityManagementPlanVerifyQuickBMPSimples ?? new List<WaterQualityManagementPlanVerifyQuickBMPSimple>())
+            {
+                var waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength = waterQualityManagementPlanVerifyQuickBMPSimple.WaterQualityManagementPlanVerifyQuickBMPNote?.Length;
+                if (waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength != null && waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength > waterQualityManagementPlanVerifyQuickBMPNoteMaxLength)
+                {
+                    validationResults.Add(new ValidationResult($"\"{waterQualityManagementPlanVerifyQuickBMPSimple.QuickBMPName}\"'s note is too long. Notes have a maximum of {waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} characters and is {waterQualityManagementPlanVerifyQuickBMPSimpleNoteLength - waterQualityManagementPlanVerifyQuickBMPNoteMaxLength} over the limit."));
+
+                }
+            }
+
+            foreach (var waterQualityManagementPlanVerifyTreatmentBMPSimple in WaterQualityManagementPlanVerifyTreatmentBMPSimples ?? new List<WaterQualityManagementPlanVerifyTreatmentBMPSimple>())
+            {
+                var waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength = waterQualityManagementPlanVerifyTreatmentBMPSimple.WaterQualityManagementPlanVerifyTreatmentBMPNote?.Length;
+                if (waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength != null && waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength > waterQualityManagementPlanVerifyTreatmentBMPNoteMaxLength)
+                {
+                    validationResults.Add(new ValidationResult($"\"{waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName}\"'s note is too long. Notes have a maximum of {waterQualityManagementPlanVerifyTreatmentBMPNoteMaxLength} characters and is {waterQualityManagementPlanVerifyTreatmentBMPSimpleNoteLength - waterQualityManagementPlanVerifyTreatmentBMPNoteMaxLength} over the limit."));
+
+                }
+            }
+
+            if (SourceControlCondition != null && SourceControlCondition.Length > sourceControlConditionMaxLength)
+            {
+                validationResults.Add(new ValidationResult($"\"Source control BMPs\"'s message is too long. It has a maximum of {sourceControlConditionMaxLength} characters and is {SourceControlCondition.Length - sourceControlConditionMaxLength} over the limit."));
+            }
+
+
+            if (EnforcementOrFollowupActions != null && EnforcementOrFollowupActions.Length > enforcementOrFollowupActionsMaxLength)
+            {
+                validationResults.Add(new ValidationResult($"\"Enforcement or Follow-up Actions\"'s message is too long. It has a maximum of {enforcementOrFollowupActionsMaxLength} characters and is {EnforcementOrFollowupActions.Length - enforcementOrFollowupActionsMaxLength} over the limit."));
+            }
+
             return validationResults;
         }
     }
