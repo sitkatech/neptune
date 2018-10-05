@@ -147,6 +147,25 @@
                         @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPermitTermID)
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.RecordNumber)
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @Html.TextAreaFor(m => m.RecordNumber, new { @class = "form-control" })
+                        <p class="help-block">If there are multiple Record Numbers separate them with a comma</p>
+                        @Html.ValidationMessageFor(m => m.RecordNumber)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.RecordedWQMPAreaInAcres)
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @Html.TextBoxFor(m => m.RecordedWQMPAreaInAcres, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.RecordedWQMPAreaInAcres)
+                    </div>
+                </div>
             </fieldset>
                 <fielset>
                     <legend>Maintenance Contact</legend>
