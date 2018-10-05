@@ -17,7 +17,7 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="form-horizontal">
-            <form method="post" enctype="multipart/form-data" class="field-visit-form">
+            <form method="post" enctype="multipart/form-data" class="verify-form">
                 @Html.HiddenFor(m => m.WaterQualityManagementPlanID)
                 @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyID)
 
@@ -173,9 +173,9 @@
 
                                                     @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
                                                     {
-                                                    <span>
-                                                        This BMP was last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a>
-                                                    </span>
+                                                        <span>
+                                                            This BMP was last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a>
+                                                        </span>
                                                     }
                                                     else
                                                     {
@@ -220,13 +220,38 @@
                     </div>
                 </div>
 
-                <div class="pull-right">
+                <div class="pull-right" style="margin-top: 16px">
                     <button type="submit" class="btn btn-neptune">Save</button>
+                    <button type="button" class="btn btn-neptune" onclick="saveAndFinalize()">Save &amp; Finalize</button>
                     <a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>
+                    @Html.HiddenFor(m => m.HiddenIsFinalizeVerificationInput, new{ Value ="false"})
                 </div>
-
-
             </form>
         </div>
     </div>
 </div>
+
+
+<script>
+    function saveAndFinalize() {
+        var theForm = jQuery('form.verify-form');
+        var hiddenIsFinalizeVerificationInput = jQuery('#@Html.IdFor(m => m.HiddenIsFinalizeVerificationInput)');
+        hiddenIsFinalizeVerificationInput.val(true);
+        theForm.submit();
+    }
+
+    function verificationOMStatus() {
+        var verificationOMStatusValue = jQuery('#@Html.IdFor(m => m.WaterQualityManagementPlanVerifyStatusID)').val();
+        if (verificationOMStatusValue == "") {
+            jQuery('#saveAndFinalizeButton').addClass("disabled");
+            jQuery('#saveAndFinalizeButton').attr("title", "The \"Verification of O&M Status\" needs to be set for this to be finalized");
+        } else {
+            jQuery('#saveAndFinalizeButton').removeClass("disabled");
+            jQuery('#saveAndFinalizeButton').attr("title", "");
+        }
+    }
+
+    jQuery(document).ready(function() {
+        verificationOMStatus();
+    });
+</script>

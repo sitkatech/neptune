@@ -366,7 +366,7 @@ namespace Neptune.Web.Controllers
                 CurrentPerson.PersonID,
                 DateTime.Now,
                 isDraft);
-
+            waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
 
             viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
 
@@ -387,7 +387,6 @@ namespace Neptune.Web.Controllers
             var viewData = new NewWqmpVerifyViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses);
             return RazorView<NewWqmpVerify, NewWqmpVerifyViewData, NewWqmpVerifyViewModel>(viewData, viewModel);
         }
-        
 
 
         [HttpGet]
@@ -416,13 +415,16 @@ namespace Neptune.Web.Controllers
             {
                 return ViewEditWqmpVerify(waterQualityManagementPlanVerify.WaterQualityManagementPlan, viewModel);
             }
-            viewModel.UpdateModels(waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
+            var WaterQualityManagementPlan = waterQualityManagementPlanVerify.WaterQualityManagementPlan;
+            waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
+            viewModel.UpdateModels(WaterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.DeleteStructuralDocumentFile, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
 
+            
 
             SetMessageForDisplay(
-                $"Successfully updated Verification " + $"for {waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName}");
+                $"Successfully updated Verification " + $"for {WaterQualityManagementPlan.WaterQualityManagementPlanName}");
 
-            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(waterQualityManagementPlanVerify.WaterQualityManagementPlan)));
+            return RedirectToAction(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Detail(WaterQualityManagementPlan)));
         }
 
         private ViewResult ViewEditWqmpVerify(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpVerifyViewModel viewModel)
