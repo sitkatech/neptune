@@ -11,11 +11,12 @@ namespace Neptune.Web.Models
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
         public string WaterQualityManagementPlanVerifyTreatmentBMPNote { get; set; }
+        public string TreatmentBMPType { get; set; }
 
 
         public string FieldVisiLastVisitedtDate { get; set; }
         public string FieldVisitMostRecentScore { get; set; }
-        public string NewFieldVisitUrl { get; set; }
+        public string TreatmentBMPDetailUrl { get; set; }
 
         public WaterQualityManagementPlanVerifyTreatmentBMPSimple()
         {
@@ -27,12 +28,13 @@ namespace Neptune.Web.Models
             TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             IsAdequate = null;
             WaterQualityManagementPlanVerifyTreatmentBMPNote = null;
+            TreatmentBMPType = treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
 
             var mostRecentFieldVisit = treatmentBMP.FieldVisits.Where(x => x.FieldVisitStatus == FieldVisitStatus.Complete).OrderBy(x => x.VisitDate).FirstOrDefault();
             FieldVisiLastVisitedtDate = mostRecentFieldVisit?.VisitDate.ToShortDateString();
-            FieldVisitMostRecentScore = mostRecentFieldVisit?.GetPostMaintenanceAssessment()?.FormattedScore();
-            NewFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
-                c.New(treatmentBMP.PrimaryKey));
+            FieldVisitMostRecentScore = mostRecentFieldVisit?.GetPostMaintenanceAssessment() != null ? mostRecentFieldVisit.GetPostMaintenanceAssessment().FormattedScore() :  mostRecentFieldVisit?.GetInitialAssessment().FormattedScore();
+            TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c =>
+                c.Detail(treatmentBMP.PrimaryKey));
         }
 
         public WaterQualityManagementPlanVerifyTreatmentBMPSimple(Models.WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMP)

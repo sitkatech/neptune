@@ -7,6 +7,7 @@
         public int QuickBMPID { get; set; }
         public bool? IsAdequate { get; set; }
         public string WaterQualityManagementPlanVerifyQuickBMPNote { get; set; }
+        public string TreatmentBMPType { get; set; }
 
 
         public WaterQualityManagementPlanVerifyQuickBMPSimple()
@@ -19,6 +20,7 @@
             QuickBMPID = quickBMP.QuickBMPID;
             IsAdequate = null;
             WaterQualityManagementPlanVerifyQuickBMPNote = null;
+            TreatmentBMPType = quickBMP.TreatmentBMPType.TreatmentBMPTypeName;
         }
 
         public WaterQualityManagementPlanVerifyQuickBMPSimple(Models.WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMP)
@@ -29,6 +31,7 @@
             QuickBMPID = waterQualityManagementPlanVerifyQuickBMP.QuickBMPID;
             IsAdequate = waterQualityManagementPlanVerifyQuickBMP.IsAdequate;
             WaterQualityManagementPlanVerifyQuickBMPNote = waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote;
+            TreatmentBMPType = waterQualityManagementPlanVerifyQuickBMP.QuickBMP.TreatmentBMPType.TreatmentBMPTypeName;
         }
 
         public string GetAuditDescriptionString()

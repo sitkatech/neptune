@@ -46,7 +46,8 @@
                 QuickBMPID: null,
                 DisplayName : "",
                 QuickBMPTypeName: null,
-                QuickBMPNote : ""
+                QuickBMPNote: "",
+                QuickTreatmentBMPTypeID: 0
             };
             return newQuickBMP;
         };

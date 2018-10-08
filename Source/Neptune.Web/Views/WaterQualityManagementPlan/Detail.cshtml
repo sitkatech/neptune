@@ -40,6 +40,23 @@
 }
 
 <div class="row">
+    <div class="col-xs-12">
+        <span class="pull-right">
+
+
+            @if (ViewDataTyped.HasSavedWqmpDraft)
+            {
+                @ModalDialogFormHelper.ModalDialogFormLink("Begin WQMP O&M Verification", ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
+            }
+            else
+            {
+                <a class="btn btn-neptune" href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> Begin WQMP O&M Verification</a>
+            }
+        </span>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
@@ -146,11 +163,11 @@
                             }
                             @{
                                 var addressParts = new List<string>
-                                                                        {
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
-                                                                            ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
-                                                                        };
+                                {
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactCity,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactState,
+                                    ViewDataTyped.WaterQualityManagementPlan.MaintenanceContactZip
+                                };
                             }
                             @if (addressParts.Any(x => !string.IsNullOrWhiteSpace(x)))
                             {
@@ -203,7 +220,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 BMPs
-                @if (ViewDataTyped.CurrentPersonCanManageBMPs)
+                @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
                         <a href="@ViewDataTyped.EditWaterQualityManagementPlanTreatmentBmpsUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")</a>
@@ -218,32 +235,32 @@
                         <div style="padding: 0 16px">
                             <table class="table table-condensed">
                                 <thead>
-                                <tr>
-                                    <th style="white-space: nowrap; border-top: none"> Name</th>
-                                    <th style="white-space: nowrap; border-top: none"> Type</th>
-                                    <th style="white-space: nowrap; border-top: none"> Notes</th>
-                                    <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
-                                </tr>
+                                    <tr>
+                                        <th style="white-space: nowrap; border-top: none"> Name</th>
+                                        <th style="white-space: nowrap; border-top: none"> Type</th>
+                                        <th style="white-space: nowrap; border-top: none"> Notes</th>
+                                        <th style="white-space: nowrap; border-top: none"> Detailed Inventory Record?</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
-                                {
-                                    <tr>
-                                        <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
-                                        <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@treatmentBMP.Notes</td>
-                                        <td> Yes</td>
-                                    </tr>
-                                }
-                                @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
-                                {
-                                    <tr>
-                                        <td>@quickBMP.QuickBMPName</td>
-                                        <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
-                                        <td>@quickBMP.QuickBMPNote</td>
-                                        <td> No</td>
-                                    </tr>
-                                }
+                                    @foreach (var treatmentBMP in ViewDataTyped.TreatmentBMPs)
+                                    {
+                                        <tr>
+                                            <td><a href="@treatmentBMP.GetDetailUrl()">@treatmentBMP.TreatmentBMPName</a></td>
+                                            <td>@treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@treatmentBMP.Notes</td>
+                                            <td> Yes</td>
+                                        </tr>
+                                    }
+                                    @foreach (var quickBMP in ViewDataTyped.QuickBMPs)
+                                    {
+                                        <tr>
+                                            <td>@quickBMP.QuickBMPName</td>
+                                            <td>@quickBMP.TreatmentBMPType.TreatmentBMPTypeName</td>
+                                            <td>@quickBMP.QuickBMPNote</td>
+                                            <td> No</td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -353,66 +370,61 @@
     <div class="col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                Verification
+                WQMP O&M Verification
                 @if (ViewDataTyped.CurrentPersonCanManageWaterQualityManagementPlans)
                 {
                     <span class="pull-right">
-                        <a href="@ViewDataTyped.NewWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
+                        @if (ViewDataTyped.HasSavedWqmpDraft)
+                        {
+                            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.BeginWqmpOMVerificationRecordUrl, "Begin WQMP O&M Verification", 500, "OK", "Cancel", new List<string>(), null, null)
+                        }
+                        else
+                        {
+                            <a href="@ViewDataTyped.BeginWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") </a>
+                        }
                     </span>
-
-                    @*<span class="pull-right">
-                        <a href="@ViewDataTyped.EditWqmpOMVerificationRecordUrl"> @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit") </a>
-                    </span>*@
                 }
             </div>
             <div class="panel-body">
-                @if (ViewDataTyped.WaterQualityManagementPlanVerify != null)
+                @if (ViewDataTyped.WaterQualityManagementPlanVerifies.Any())
                 {
-                    <h4> Type of Verification</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</p>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th> </th>
+                                <th> </th>
+                                <th>Last edited</th>
+                                <th>Last edited by</th>
+                                <th>Type of verification</th>
+                                <th>Visit Status</th>
+                                <th>Verification of O&M Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var waterQualityManagementPlanVerify in ViewDataTyped.WaterQualityManagementPlanVerifies)
+                            {
+                                <tr>
+                                    <td style="padding-top: 8px"> @ModalDialogFormHelper.MakeDeleteLink(BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash").ToString(), waterQualityManagementPlanVerify.GetDeleteUrl(), new List<string>(), true)</td>
+                                    <td> <a class="gridButton" href="@waterQualityManagementPlanVerify.GetDetailUrl()" style=" padding: 3px 9px; margin:0;">View</a></td>
+                                    <td>@waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</td>
+                                    <td>@waterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</td>
+                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName</td>
+                                    <td>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</td>
+                                    <td>
+                                        @if (waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus != null)
+                                        {
+                                        <span>@waterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Draft</span>
+                                        }
+                                    </td>
 
-                    <h4> Visit Status</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName</p>
-
-                    <h4> Structural BMP O&M Document</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.FileResource.GetOriginalCompleteFileName()</p>
-
-                    <h4> Images</h4>
-                    <p> </p>
-
-                    <h4>Source control BMPs</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.SourceControlCondition</p>
-
-                    <h4> Other Structural BMPs</h4>
-                    foreach (var waterQualityManagementPlanVerifyQuickBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyQuickBMPs)
-                    {
-                        <div class="row">
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.QuickBMP.QuickBMPName</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.IsAdequate.ToYesNo()</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyQuickBMP.WaterQualityManagementPlanVerifyQuickBMPNote</div>
-                        </div>
-                    }
-
-                    <h4> Structural BMPs in Detailed Inventory</h4>
-                    foreach (var waterQualityManagementPlanVerifyTreatmentBMP in @ViewDataTyped.WaterQualityManagementPlanVerifyTreatmentBMPs)
-                    {
-                        <div class="row">
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate.ToYesNo()</div>
-                            <div class="col-xs-4">@waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote</div>
-                        </div>
-                    }
-
-                    <h4> Finalize </h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.WaterQualityManagementPlanVerifyStatus.WaterQualityManagementPlanVerifyStatusName</p>
-
-
-                    <h4> Enforcement or Follow-up Actions</h4>
-                    <p> @ViewDataTyped.WaterQualityManagementPlanVerify.EnforcementOrFollowupActions</p>
-
-
-                    <h4> Verification</h4>
-                    <p>Verified by @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast() on @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedDate.ToStringDate()</p>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 }
                 else
                 {

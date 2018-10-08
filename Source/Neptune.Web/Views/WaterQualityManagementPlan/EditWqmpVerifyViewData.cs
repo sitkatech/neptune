@@ -7,32 +7,23 @@ using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
-    public class EditWqmpVerifyViewData : NeptuneViewData
+    public class EditWqmpVerifyViewData : NewWqmpVerifyViewData
     {
-        public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
-        public List<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; }
-        public List<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; }
-        public List<WaterQualityManagementPlanVerifyStatus>  WaterQualityManagementPlanVerifyStatuses { get; }
 
         public EditWqmpVerifyViewData(Person currentPerson, 
             Models.WaterQualityManagementPlan waterQualityManagementPlan, 
             List<WaterQualityManagementPlanVerifyType>  waterQualityManagementPlanVerifyTypes, 
             List<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses,
             List<WaterQualityManagementPlanVerifyStatus>  waterQualityManagementPlanVerifyStatuses) 
-            : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+            : base(currentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyTypes, waterQualityManagementPlanVisitStatuses, waterQualityManagementPlanVerifyStatuses)
         {
-            WaterQualityManagementPlan = waterQualityManagementPlan;
-            PageTitle = "Water Quality Management Plan O&M Verification";
+            PageTitle = "Edit Water Quality Management Plan O&M Verification";
 
             SubEntityName = WaterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
 
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
-
-            WaterQualityManagementPlanVerifyTypes = waterQualityManagementPlanVerifyTypes;
-            WaterQualityManagementPlanVisitStatuses = waterQualityManagementPlanVisitStatuses;
-            WaterQualityManagementPlanVerifyStatuses = waterQualityManagementPlanVerifyStatuses;
         }
     }
 }

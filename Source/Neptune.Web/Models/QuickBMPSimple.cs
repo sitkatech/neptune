@@ -1,7 +1,9 @@
-﻿namespace Neptune.Web.Models
+﻿
+namespace Neptune.Web.Models
 {
     public class QuickBMPSimple
     {
+        
         public int? QuickBMPID { get; set; }
         public string DisplayName { get; set; }
         public int QuickTreatmentBMPTypeID { get; set; }

@@ -9,11 +9,12 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerify](
 	[WaterQualityManagementPlanVerifyTypeID] [int] NOT NULL,
 	[WaterQualityManagementPlanVisitStatusID] [int] NOT NULL,
 	[FileResourceID] [int] NULL,
-	[WaterQualityManagementPlanVerifyStatusID] [int] NOT NULL,
+	[WaterQualityManagementPlanVerifyStatusID] [int] NULL,
 	[LastEditedByPersonID] [int] NOT NULL,
 	[SourceControlCondition] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[EnforcementOrFollowupActions] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[LastEditedDate] [datetime] NOT NULL,
+	[IsDraft] [bit] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanVerifyID] ASC
