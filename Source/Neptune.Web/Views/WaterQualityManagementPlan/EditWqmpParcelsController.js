@@ -133,7 +133,7 @@
     }
 
     function updateSelectedParcelLayer() {
-        $scope.calculatedParcelArea = 0;
+        $scope.calculatedParcelArea = null;
 
         if ($scope.AngularModel.ParcelIDs == null) {
             $scope.AngularModel.ParcelIDs = [];
@@ -174,12 +174,11 @@
 
                     $scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
                     if (response.features.length > 0) {
+                        $scope.calculatedParcelArea = 0;
                         for (var i = 0; i < response.features.length; ++i) {
                             $scope.calculatedParcelArea += response.features[i].properties.ParcelArea;
                         }
                         $scope.calculatedParcelArea = $scope.calculatedParcelArea.toFixed(1);
-                    } else {
-                        $scope.calculatedParcelArea = null;
                     }
                     $scope.$apply();
                 },
