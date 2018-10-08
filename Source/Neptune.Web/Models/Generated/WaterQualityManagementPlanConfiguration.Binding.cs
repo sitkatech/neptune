@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
             Property(x => x.DateOfContruction).HasColumnName(@"DateOfContruction").HasColumnType("datetime").IsOptional();
             Property(x => x.HydrologicSubareaID).HasColumnName(@"HydrologicSubareaID").HasColumnType("int").IsOptional();
             Property(x => x.RecordNumber).HasColumnName(@"RecordNumber").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
-            Property(x => x.RecordedWQMPAreaInAcres).HasColumnName(@"RecordedWQMPAreaInAcres").HasColumnType("int").IsOptional();
+            Property(x => x.RecordedWQMPAreaInAcres).HasColumnName(@"RecordedWQMPAreaInAcres").HasColumnType("decimal").IsOptional().HasPrecision(5,1);
 
             // Foreign keys
             HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.WaterQualityManagementPlans).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID

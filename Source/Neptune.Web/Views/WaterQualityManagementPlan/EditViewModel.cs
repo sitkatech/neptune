@@ -79,7 +79,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public string RecordNumber { get; set; }
 
         [DisplayName("Recorded WQMP Area (Acres)")]
-        public int? RecordedWQMPAreaInAcres { get; set; }
+        public decimal? RecordedWQMPAreaInAcres { get; set; }
 
 
 
@@ -145,6 +145,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var recordNumberMaxLength = Models.WaterQualityManagementPlan.FieldLengths.RecordNumber;
+            if (RecordNumber.Length > recordNumberMaxLength)
+            {
+                yield return new SitkaValidationResult<EditViewModel, string>($"{RecordNumber.Length - recordNumberMaxLength} characters over the limit.", m => m.RecordNumber);
+            }
+
+
             if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Any(x =>
                 x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
                 x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
