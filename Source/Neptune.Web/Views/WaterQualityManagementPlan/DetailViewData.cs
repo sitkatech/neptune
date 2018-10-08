@@ -11,7 +11,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public bool CurrentPersonCanManageWaterQualityManagementPlans { get; }
-        public bool CurrentPersonCanManageBMPs { get; }
         public string EditWaterQualityManagementPlanTreatmentBmpsUrl { get; }
         public string EditWaterQualityManagementPlanParcelsUrl { get; }
         public string NewWaterQualityManagementPlanDocumentUrl { get; }
@@ -19,19 +18,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ParcelGridSpec ParcelGridSpec { get; }
         public string ParcelGridName { get; }
         public string ParcelGridDataUrl { get; }
-
-        public string NewWqmpOMVerificationRecordUrl { get; }
-        public string EditWqmpOMVerificationRecordUrl { get; }
+        public bool HasSavedWqmpDraft { get; }
+        public string BeginWqmpOMVerificationRecordUrl { get; }
 
         public List<Models.TreatmentBMP> TreatmentBMPs { get; }
         public List<QuickBMP> QuickBMPs { get; }
 
         public IEnumerable<IGrouping<int, SourceControlBMP>> SourceControlBMPs { get; }
-        public WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; }
+        public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs  { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
 
-        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
+        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -42,7 +40,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             CurrentPersonCanManageWaterQualityManagementPlans = new WaterQualityManagementPlanManageFeature()
                 .HasPermission(currentPerson, waterQualityManagementPlan)
                 .HasPermission;
-            CurrentPersonCanManageBMPs = currentPerson.IsManagerOrAdmin();
+            currentPerson.IsManagerOrAdmin();
             EditWaterQualityManagementPlanTreatmentBmpsUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                     c.EditWqmpBmps(WaterQualityManagementPlan));
@@ -58,12 +56,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
 
-            NewWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+            HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null;
+            BeginWqmpOMVerificationRecordUrl = HasSavedWqmpDraft ? SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+            c.EditWqmpVerifyModal(waterQualityManagementPlanVerifyDraft)) : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.NewWqmpVerify(waterQualityManagementPlan));
-            EditWqmpOMVerificationRecordUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                c.EditWqmpVerify(waterQualityManagementPlan));
+
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent == true || x.SourceControlBMPNote != null).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
-            WaterQualityManagementPlanVerify = waterQualityManagementPlanVerify;
+            WaterQualityManagementPlanVerifies = waterQualityManagementPlanVerifies;
             WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBmPs;
             WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
 

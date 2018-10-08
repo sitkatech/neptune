@@ -11,7 +11,7 @@ namespace Neptune.Web.Models
 
         public string GetAuditDescriptionString()
         {
-            return WaterQualityManagementPlan.WaterQualityManagementPlanName;
+            return LastEditedDate.ToLongDateString();
         }
     }
 }
