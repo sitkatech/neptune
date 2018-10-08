@@ -63,8 +63,8 @@
                 <p>This is the recorded area as manually entered on the WQMP Basics panel</p>
             </div>
             <div class="col-xs-6">
-                <label ng-if="calculatedParcelArea > 0">Calculated Parcel Area: <span ng-bind="calculatedParcelArea">{{calculatedParcelArea}}</span> acres</label>
-                <label ng-if="calculatedParcelArea <= 0"> No parcels have been associated with this WQMP</label>
+                <label ng-if="calculatedParcelArea != null">Calculated Parcel Area: <span ng-bind="calculatedParcelArea">{{calculatedParcelArea}}</span> acres</label>
+                <label ng-if="calculatedParcelArea == null"> No parcels have been associated with this WQMP</label>
                 <p>This is the total area of all parcels associated with this WQMP</p>
             </div>
         </div>

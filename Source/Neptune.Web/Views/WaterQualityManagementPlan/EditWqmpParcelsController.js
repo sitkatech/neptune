@@ -173,8 +173,13 @@
                         return;
 
                     $scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
-                    for (var i = 0; i < response.features.length; ++i) {
-                        $scope.calculatedParcelArea += response.features[i].properties.ParcelArea;
+                    if (response.features.length > 0) {
+                        for (var i = 0; i < response.features.length; ++i) {
+                            $scope.calculatedParcelArea += response.features[i].properties.ParcelArea;
+                        }
+                        $scope.calculatedParcelArea = $scope.calculatedParcelArea.toFixed(1);
+                    } else {
+                        $scope.calculatedParcelArea = null;
                     }
                     $scope.$apply();
                 },
