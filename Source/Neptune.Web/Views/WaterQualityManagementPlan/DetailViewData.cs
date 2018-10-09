@@ -56,7 +56,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
 
-            HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null;
+            HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null && waterQualityManagementPlanVerifyDraft.IsDraft;
             BeginWqmpOMVerificationRecordUrl = HasSavedWqmpDraft ? SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
             c.EditWqmpVerifyModal(waterQualityManagementPlanVerifyDraft)) : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.NewWqmpVerify(waterQualityManagementPlan));

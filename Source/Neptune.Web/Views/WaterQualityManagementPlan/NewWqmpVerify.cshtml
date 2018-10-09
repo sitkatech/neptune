@@ -24,48 +24,41 @@
                 @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyID)
 
 
-                <div class="row row-group row-spacing">
-                    <div class="col-xs-12">
-                        <h4> </h4>
-                    </div>
-                </div>
+
                 <div class="row row-group">
                     <div class="col-xs-12 ">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5> Type of Verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</h5>
-                                <p> </p>
+                                <h5> Water Quality Management Plan Verification Basics</h5>
                             </div>
                             <div style="padding: 21px 15px">
-                                @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
-                                {
-                                    <div class="radio-inline">
-                                        <label>
-                                            @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
-                                        </label>
+                                <div class="row">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Type of Verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-9">
+                                        @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
+                                        {
+                                            <div class="radio-inline">
+                                                <label>
+                                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5> Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
-                                @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
-                                {
-                                    <div class="radio-inline">
-                                        <label>
-                                            @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID)
-                                            @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
-                                        </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-9">
+                                        @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
+                                        {
+                                            <div class="radio-inline">
+                                                <label>
+                                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID)
+                                                    @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -94,7 +87,7 @@
                     <div class="col-xs-12 ">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5> Source control BMPs</h5>
+                                <h5> Source Control BMPs</h5>
                                 <p> Provide a narrative assessment of the applicable source control BMPs present on the site</p>
                             </div>
                             <div style="padding: 21px 15px">
@@ -108,11 +101,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h5>  Structural Treatment and Hydromodification BMPs</h5>
-                                <p> </p>
                             </div>
                             <div style="padding: 21px 15px">
-                                <table class="table table-condensed">
-                                    <thead>
+                                @if (Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Any())
+                                {
+                                    <table class="table table-condensed">
+                                        <thead>
                                         <tr>
                                             <th> Name</th>
                                             <th> Type</th>
@@ -120,8 +114,8 @@
                                             <th> O&amp;M Notes</th>
                                             <th> Detailed Inventory Record?</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
                                         @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Count; i++)
                                         {
                                             var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPSimples[i];
@@ -132,7 +126,7 @@
                                                     <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, true) Yes</label>
                                                     <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, false) No </label>
                                                 </td>
-                                                <td>  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
+                                                <td> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new {@class = "form-control"})</td>
                                                 <td> No</td>
                                             </tr>
                                             <tr style="display: none;">
@@ -142,8 +136,8 @@
                                                 </td>
                                             </tr>
                                         }
-                                    </tbody>
-                                    <tbody>
+                                        </tbody>
+                                        <tbody>
                                         @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Count; i++)
                                         {
                                             var waterQualityManagementPlanVerifyTreatmentBMPSimple = Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i];
@@ -151,7 +145,7 @@
 
                                             <tr>
                                                 <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</td>
-                                                <td>  @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
+                                                <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
                                                 <td>
                                                     <label>
                                                         @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, true)
@@ -162,7 +156,7 @@
                                                         No
                                                     </label>
                                                 </td>
-                                                <td> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new { @class = "form-control" })</td>
+                                                <td> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new {@class = "form-control"})</td>
 
                                                 <td> Yes </td>
                                             </tr>
@@ -188,8 +182,12 @@
                                                 </td>
                                             </tr>
                                         }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                }else
+                                {
+                                    <p class="systemText">No Structural Treatment or Hydromodification BMPs are currently associated with this WQMP</p>
+                                }
                             </div>
                         </div>
                     </div>
@@ -198,37 +196,30 @@
                     <div class="col-xs-12 ">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5> Verification of O&M Status</h5>
-                                <p> </p>
+                                <h5> Finalize Verification</h5>
                             </div>
                             <div style="padding: 21px 15px">
                                 <div class="alert alert-warning" role="alert">
-                                    This question needs to be answered in order to complete the form.
+                                    The Verification of O&amp;M Status needs to be answered in order to Finalize this O&amp;M Verification.
                                 </div>
-                                @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>  Enforcement or Follow-up Actions </h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
-                                @Html.TextAreaFor(m => m.EnforcementOrFollowupActions, new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
+                                <div class="row">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Verification of O&amp;M Status</label>
+                                    <div class="col-xs-6 col-sm-9">  @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new { onchange= "verificationOMStatus()" })</div>
+                                </div>
+                                <div class="row" style="margin-top: 16px">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> VEnforcement or Follow-up Actions</label>
+                                    <div class="col-xs-6 col-sm-9">  @Html.TextAreaFor(m => m.EnforcementOrFollowupActions, new { @class = "form-control" })</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="pull-right" style="margin-top: 16px">
                     <button type="submit" class="btn btn-neptune">Save</button>
                     <button type="button" class="btn btn-neptune" onclick="saveAndFinalize()" id="saveAndFinalizeButton">Save &amp; Finalize</button>
                     <a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>
-                    @Html.HiddenFor(m => m.HiddenIsFinalizeVerificationInput, new { Value = "false" })
+                    @Html.TextBoxFor(m => m.HiddenIsFinalizeVerificationInput, new { Value = "false" })
                 </div>
             </form>
         </div>
