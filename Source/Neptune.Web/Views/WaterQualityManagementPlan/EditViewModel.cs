@@ -75,6 +75,14 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Hydrologic Subarea")]
         public int? HydrologicSubareaID { get; set; }
 
+        [DisplayName("Record Number")]
+        public string RecordNumber { get; set; }
+
+        [DisplayName("Recorded WQMP Area (Acres)")]
+        public decimal? RecordedWQMPAreaInAcres { get; set; }
+
+
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -103,6 +111,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HydromodificationAppliesID = waterQualityManagementPlan.HydromodificationAppliesID;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
+            RecordNumber = waterQualityManagementPlan.RecordNumber;
+            RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -129,10 +139,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.HydromodificationAppliesID = HydromodificationAppliesID;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
+            waterQualityManagementPlan.RecordNumber = RecordNumber;
+            waterQualityManagementPlan.RecordedWQMPAreaInAcres = RecordedWQMPAreaInAcres;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var recordNumberMaxLength = Models.WaterQualityManagementPlan.FieldLengths.RecordNumber;
+            if (RecordNumber.Length > recordNumberMaxLength)
+            {
+                yield return new SitkaValidationResult<EditViewModel, string>($"{RecordNumber.Length - recordNumberMaxLength} characters over the limit.", m => m.RecordNumber);
+            }
+
+
             if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Any(x =>
                 x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
                 x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))

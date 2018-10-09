@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -57,6 +57,8 @@ namespace Neptune.Web.Models
             this.HydromodificationAppliesID = hydromodificationAppliesID;
             this.DateOfContruction = dateOfContruction;
             this.HydrologicSubareaID = hydrologicSubareaID;
+            this.RecordNumber = recordNumber;
+            this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
         }
 
         /// <summary>
@@ -175,6 +177,8 @@ namespace Neptune.Web.Models
         public int? HydromodificationAppliesID { get; set; }
         public DateTime? DateOfContruction { get; set; }
         public int? HydrologicSubareaID { get; set; }
+        public string RecordNumber { get; set; }
+        public decimal? RecordedWQMPAreaInAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
@@ -205,6 +209,7 @@ namespace Neptune.Web.Models
             public const int MaintenanceContactCity = 100;
             public const int MaintenanceContactState = 100;
             public const int MaintenanceContactZip = 100;
+            public const int RecordNumber = 500;
         }
     }
 }

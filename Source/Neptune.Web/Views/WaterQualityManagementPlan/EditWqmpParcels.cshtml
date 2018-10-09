@@ -45,8 +45,28 @@
         </p>
     </div>
     <div class="col-xs-12 col-sm-8 col-sm-push-4">
-        <div id="mapContainer">
-            <div id="@ViewDataTyped.ViewDataForAngular.MapInitJson.MapDivID"></div>
+        <div class="row">
+            <div id="mapContainer" class="col-xs-12">
+                <div id="@ViewDataTyped.ViewDataForAngular.MapInitJson.MapDivID"></div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 8px">
+            <div class="col-xs-6">
+                @if (ViewDataTyped.RecordedWQMPAreaInAcres != null)
+                {
+                    <label>Record WQMP Area: <span> @ViewDataTyped.RecordedWQMPAreaInAcres</span> acres</label>
+                }
+                else
+                {
+                    <label>Recorded Area not provided</label>
+                }
+                <p>This is the recorded area as manually entered on the WQMP Basics panel</p>
+            </div>
+            <div class="col-xs-6">
+                <label ng-if="calculatedParcelArea != null">Calculated Parcel Area: <span ng-bind="calculatedParcelArea">{{calculatedParcelArea}}</span> acres</label>
+                <label ng-if="calculatedParcelArea == null"> No parcels have been associated with this WQMP</label>
+                <p>This is the total area of all parcels associated with this WQMP</p>
+            </div>
         </div>
     </div>
     @using (Html.BeginForm())
@@ -103,11 +123,8 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <a href="@ViewDataTyped.SubEntityUrl" class="btn btn-neptune">
-                @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-chevron-left")
-                Return to Detail
-            </a>
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)"> Save </button>
+            <a href="@ViewDataTyped.SubEntityUrl" class="btn btn-neptune"> Cancel </a>
         </div>
     }
 </div>

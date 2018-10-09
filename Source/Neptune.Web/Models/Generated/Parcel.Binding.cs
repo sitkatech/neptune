@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Parcel(int parcelID, string parcelNumber, DbGeometry parcelGeometry, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse) : this()
+        public Parcel(int parcelID, string parcelNumber, DbGeometry parcelGeometry, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse, double? parcelAreaInAcres) : this()
         {
             this.ParcelID = parcelID;
             this.ParcelNumber = parcelNumber;
@@ -40,6 +40,7 @@ namespace Neptune.Web.Models
             this.ParcelAddress = parcelAddress;
             this.ParcelZipCode = parcelZipCode;
             this.LandUse = landUse;
+            this.ParcelAreaInAcres = parcelAreaInAcres;
         }
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace Neptune.Web.Models
         public string ParcelAddress { get; set; }
         public string ParcelZipCode { get; set; }
         public string LandUse { get; set; }
+        public double? ParcelAreaInAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ParcelID; } set { ParcelID = value; } }
 

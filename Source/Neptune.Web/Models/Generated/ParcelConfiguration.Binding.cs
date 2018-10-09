@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
             Property(x => x.ParcelAddress).HasColumnName(@"ParcelAddress").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(150);
             Property(x => x.ParcelZipCode).HasColumnName(@"ParcelZipCode").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(5);
             Property(x => x.LandUse).HasColumnName(@"LandUse").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(4);
+            Property(x => x.ParcelAreaInAcres).HasColumnName(@"ParcelAreaInAcres").HasColumnType("float").IsOptional();
 
             // Foreign keys
 
