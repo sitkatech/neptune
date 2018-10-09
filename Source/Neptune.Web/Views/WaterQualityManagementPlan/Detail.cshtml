@@ -398,6 +398,7 @@
                                 <th>Type of Verification</th>
                                 <th>Visit Status</th>
                                 <th>Verification Status</th>
+                                <th>Draft or Finalized?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -420,7 +421,16 @@
                                             <span>Draft</span>
                                         }
                                     </td>
-
+                                    <td>
+                                        @if (waterQualityManagementPlanVerify.IsDraft)
+                                        {
+                                            <span>Draft</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Finalized</span>
+                                        }
+                                    </td>
                                 </tr>
                             }
                         </tbody>

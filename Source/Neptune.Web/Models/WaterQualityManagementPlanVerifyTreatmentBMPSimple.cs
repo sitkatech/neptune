@@ -43,6 +43,7 @@ namespace Neptune.Web.Models
                 .WaterQualityManagementPlanVerifyTreatmentBMPID;
             TreatmentBMPName = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName;
             TreatmentBMPID = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMPID;
+            TreatmentBMPType = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
             IsAdequate = waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate;
             WaterQualityManagementPlanVerifyTreatmentBMPNote = waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote;
         }

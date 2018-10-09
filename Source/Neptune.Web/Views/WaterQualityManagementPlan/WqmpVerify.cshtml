@@ -76,6 +76,16 @@
                         }
                     </div>
                 </div>
+
+
+                <div class="row">
+                    <label class="col-xs-6 col-sm-3 control-label text-right"> Last Edited </label>
+                    <div class="col-xs-6 col-sm-9"> @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()</div>
+                </div>
+                <div class="row">
+                    <label class="col-xs-6 col-sm-3 control-label text-right"> Last Edited By</label>
+                    <div class="col-xs-6 col-sm-9"> @ViewDataTyped.WaterQualityManagementPlanVerify.LastEditedByPerson.GetFullNameFirstLast()</div>
+                </div>
             </div>
         </div>
     </div>
