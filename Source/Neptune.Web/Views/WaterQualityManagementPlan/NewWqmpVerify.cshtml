@@ -220,7 +220,7 @@
                     <button type="submit" class="btn btn-neptune">Save</button>
                     <button type="button" class="btn btn-neptune" onclick="saveAndFinalize()" id="saveAndFinalizeButton">Save &amp; Finalize</button>
                     <a href="@ViewDataTyped.WaterQualityManagementPlanUrl" class="btn btn-neptune">Cancel</a>
-                    @Html.TextBoxFor(m => m.HiddenIsFinalizeVerificationInput, new { Value = "false" })
+                    @Html.HiddenFor(m => m.HiddenIsFinalizeVerificationInput, new { Value = "false" })
                 </div>
             </form>
         </div>

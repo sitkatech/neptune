@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             WaterQualityManagementPlanUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
+                    c.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
     }
 }
