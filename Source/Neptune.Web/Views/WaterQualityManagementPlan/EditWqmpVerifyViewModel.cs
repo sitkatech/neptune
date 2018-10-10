@@ -32,8 +32,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             StructuralDocumentFileResource = waterQualityManagementPlanVerify.FileResource;
             DeleteStructuralDocumentFile = false;
 
-            WaterQualityManagementPlanVerifyQuickBMPSimples = waterQualityManagementPlanVerifyQuickBMPs.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).ToList();
-            WaterQualityManagementPlanVerifyTreatmentBMPSimples = waterQualityManagementPlanVerifyTreatmentBMPs.Select(x => new WaterQualityManagementPlanVerifyTreatmentBMPSimple(x)).ToList();
+            WaterQualityManagementPlanVerifyQuickBMPSimples = waterQualityManagementPlanVerifyQuickBMPs.Select(x => new WaterQualityManagementPlanVerifyQuickBMPSimple(x)).OrderBy(x => x.QuickBMPName).ToList();
+            WaterQualityManagementPlanVerifyTreatmentBMPSimples = waterQualityManagementPlanVerifyTreatmentBMPs.Select(x => new WaterQualityManagementPlanVerifyTreatmentBMPSimple(x)).OrderBy(x => x.TreatmentBMPName).ToList();
 
             
         }

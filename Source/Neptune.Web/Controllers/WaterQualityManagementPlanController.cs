@@ -75,7 +75,7 @@ namespace Neptune.Web.Controllers
 
             var waterQualityManagementPlanVerifies = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifies.Where(x =>
                 x.WaterQualityManagementPlanID == waterQualityManagementPlan.PrimaryKey).OrderByDescending(x => x.LastEditedDate).ToList();
-            var waterQualityManagementPlanVerify = waterQualityManagementPlanVerifies.FirstOrDefault(x => x.WaterQualityManagementPlanVerifyStatusID == null);
+            var waterQualityManagementPlanVerifyDraft = waterQualityManagementPlanVerifies.SingleOrDefault(x => x.IsDraft);
 
             var waterQualityManagementPlanVerifyQuickBMP =
                 HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x =>
@@ -86,7 +86,7 @@ namespace Neptune.Web.Controllers
             x.WaterQualityManagementPlanVerify.WaterQualityManagementPlanID ==
                 waterQualityManagementPlan.WaterQualityManagementPlanID).ToList();
 
-            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerify, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
+            var viewData = new DetailViewData(CurrentPerson, waterQualityManagementPlan, waterQualityManagementPlanVerifyDraft, mapInitJson, new ParcelGridSpec(), waterQualityManagementPlanVerifies, waterQualityManagementPlanVerifyQuickBMP, waterQualityManagementPlanVerifyTreatmentBMP);
 
             return RazorView<Detail, DetailViewData>(viewData);
         }
@@ -358,15 +358,13 @@ namespace Neptune.Web.Controllers
                 return ViewNewWqmpVerify(waterQualityManagementPlan, viewModel);
             }
 
-            var isDraft = viewModel.WaterQualityManagementPlanVerifyStatusID == null;
             var waterQualityManagementPlanVerify = new WaterQualityManagementPlanVerify(
                 waterQualityManagementPlan.WaterQualityManagementPlanID,
                 viewModel.WaterQualityManagementPlanVerifyTypeID,
                 viewModel.WaterQualityManagementPlanVisitStatusID,
                 CurrentPerson.PersonID,
                 DateTime.Now,
-                isDraft);
-            waterQualityManagementPlanVerify.IsDraft = !viewModel.HiddenIsFinalizeVerificationInput;
+                !viewModel.HiddenIsFinalizeVerificationInput);
 
             viewModel.UpdateModels(waterQualityManagementPlan, waterQualityManagementPlanVerify, viewModel.WaterQualityManagementPlanVerifyQuickBMPSimples, viewModel.WaterQualityManagementPlanVerifyTreatmentBMPSimples, CurrentPerson);
 
@@ -482,7 +480,7 @@ namespace Neptune.Web.Controllers
         private PartialViewResult ViewDeleteVerify(WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, ConfirmDialogFormViewModel viewModel)
         {
             var viewData = new ConfirmDialogFormViewData(
-                $"Are you sure you want to delete Verification last edited on \"{waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}\"?");
+                $"Are you sure you want to delete the O&M Verification last edited on {waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}?");
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 

@@ -393,11 +393,12 @@
                             <tr>
                                 <th> </th>
                                 <th> </th>
-                                <th>Last edited</th>
-                                <th>Last edited by</th>
-                                <th>Type of verification</th>
+                                <th>Last Edited</th>
+                                <th>Last Edited By</th>
+                                <th>Type of Verification</th>
                                 <th>Visit Status</th>
-                                <th>Verification of O&M Status</th>
+                                <th>Verification Status</th>
+                                <th>Draft or Finalized?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -420,7 +421,16 @@
                                             <span>Draft</span>
                                         }
                                     </td>
-
+                                    <td>
+                                        @if (waterQualityManagementPlanVerify.IsDraft)
+                                        {
+                                            <span>Draft</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Finalized</span>
+                                        }
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -428,7 +438,7 @@
                 }
                 else
                 {
-                    <p class="systemText">No Verification has been provided</p>
+                    <p class="systemText">No Verifications have been provided</p>
                 }
             </div>
         </div>

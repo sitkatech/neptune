@@ -18,65 +18,9 @@
         padding-top: 0;
     }
 
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 52px;
-        height: 26px;
+    #WaterQualityManagementPlanVerifyBmpTable .table-padding {
+        padding: 20px 10px 0 10px;
     }
-
-        .switch input {
-            display: none;
-        }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: .2s;
-        transition: .2s;
-    }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .2s;
-            transition: .2s;
-        }
-
-    input:checked + .slider {
-        background-color: #d9534f;
-        border: 1px solid #d43f3a;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #d9534f;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-        left: 3px;
-        bottom: 3px;
-    }
-
-    .slider.round {
-        border-radius: 26px;
-    }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
 </style>
 
 @Html.ValidationSummary()
@@ -88,48 +32,40 @@
                 @Html.HiddenFor(m => m.WaterQualityManagementPlanVerifyID)
 
 
-                <div class="row row-group row-spacing">
-                    <div class="col-xs-12">
-                        <h4> </h4>
-                    </div>
-                </div>
                 <div class="row row-group">
                     <div class="col-xs-12 ">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5> Type of Verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</h5>
-                                <p> </p>
+                                <h5> Water Quality Management Plan Verification Basics</h5>
                             </div>
                             <div style="padding: 21px 15px">
-                                @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
-                                {
-                                    <div class="radio-inline">
-                                        <label>
-                                            @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
-                                        </label>
+                                <div class="row">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Type of Verification @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-9">
+                                        @foreach (var waterQualityManagementPlanVerifyType in ViewDataTyped.WaterQualityManagementPlanVerifyTypes)
+                                        {
+                                            <div class="radio-inline">
+                                                <label style="margin: 0">
+                                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTypeID, waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeID) @waterQualityManagementPlanVerifyType.WaterQualityManagementPlanVerifyTypeName
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5> Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
-                                @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
-                                {
-                                    <div class="radio-inline">
-                                        <label>
-                                            @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID)
-                                            @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
-                                        </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-xs-6 col-sm-3 control-label text-right"> Visit Status @Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</label>
+                                    <div class="col-xs-6 col-sm-9">
+                                        @foreach (var waterQualityManagementPlanVisitStatus in ViewDataTyped.WaterQualityManagementPlanVisitStatuses)
+                                        {
+                                            <div class="radio-inline">
+                                                <label style="margin: 0">
+                                                    @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVisitStatusID, waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusID)
+                                                    @waterQualityManagementPlanVisitStatus.WaterQualityManagementPlanVisitStatusName
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,7 +114,7 @@
                     <div class="col-xs-12 ">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h5> Source control BMPs</h5>
+                                <h5> Source Control BMPs</h5>
                                 <p> Provide a narrative assessment of the applicable source control BMPs present on the site</p>
                             </div>
                             <div style="padding: 21px 15px">
@@ -192,11 +128,12 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h5>  Structural Treatment and Hydromodification BMPs</h5>
-                                <p> </p>
                             </div>
                             <div style="padding: 21px 15px">
-                                <table class="table table-condensed">
-                                    <thead>
+                                @if (Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Any() || Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Any())
+                                {
+                                    <table class="table table-condensed table-striped" id="WaterQualityManagementPlanVerifyBmpTable">
+                                        <thead>
                                         <tr>
                                             <th> Name</th>
                                             <th> Type</th>
@@ -204,20 +141,20 @@
                                             <th> O&amp;M Notes</th>
                                             <th> Detailed Inventory Record?</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
                                         @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyQuickBMPSimples.Count; i++)
                                         {
                                             var waterQualityManagementPlanVerifyQuickBMP = Model.WaterQualityManagementPlanVerifyQuickBMPSimples[i];
                                             <tr>
-                                                <td> @waterQualityManagementPlanVerifyQuickBMP.QuickBMPName</td>
-                                                <td> @waterQualityManagementPlanVerifyQuickBMP.TreatmentBMPType</td>
-                                                <td>
+                                                <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.QuickBMPName</td>
+                                                <td class="table-padding"> @waterQualityManagementPlanVerifyQuickBMP.TreatmentBMPType</td>
+                                                <td class="table-padding">
                                                     <label>@Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, true) Yes</label>
                                                     <label> @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].IsAdequate, false) No </label>
                                                 </td>
-                                                <td>  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
-                                                <td> No</td>
+                                                <td class="table-padding">  @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyQuickBMPSimples[i].WaterQualityManagementPlanVerifyQuickBMPNote, new { @class = "form-control" })</td>
+                                                <td class="table-padding"> No</td>
                                             </tr>
                                             <tr style="display: none;">
                                                 <td>
@@ -226,17 +163,15 @@
                                                 </td>
                                             </tr>
                                         }
-                                    </tbody>
-                                    <tbody>
                                         @for (var i = 0; i < Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples.Count; i++)
                                         {
                                             var waterQualityManagementPlanVerifyTreatmentBMPSimple = Model.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i];
 
 
                                             <tr>
-                                                <td> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</td>
-                                                <td>  @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
-                                                <td>
+                                                <td class="table-padding"> @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPName</td>
+                                                <td class="table-padding">  @waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPType</td>
+                                                <td class="table-padding">
                                                     <label>
                                                         @Html.RadioButtonFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].IsAdequate, true)
                                                         Yes
@@ -246,9 +181,9 @@
                                                         No
                                                     </label>
                                                 </td>
-                                                <td> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new { @class = "form-control" })</td>
+                                                <td class="table-padding"> @Html.TextBoxFor(m => m.WaterQualityManagementPlanVerifyTreatmentBMPSimples[i].WaterQualityManagementPlanVerifyTreatmentBMPNote, new { @class = "form-control" })</td>
 
-                                                <td> Yes </td>
+                                                <td class="table-padding"> Yes </td>
                                             </tr>
                                             <tr style="display: none;">
                                                 <td>
@@ -257,56 +192,55 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" style="border-top: none">
+                                                <td colspan="5" style="border-top: none; padding-bottom: 20px">
 
                                                     @if (waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate != null)
                                                     {
                                                         <span>
-                                                            This BMP was last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a>
+                                                            Last assessed on @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisiLastVisitedtDate (Score @waterQualityManagementPlanVerifyTreatmentBMPSimple.FieldVisitMostRecentScore). <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a>
                                                         </span>
                                                     }
                                                     else
                                                     {
-                                                        <span class="text-danger">This BMP has no finalized assessment. <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment</a> </span>
+                                                        <span class="text-danger">This BMP has no finalized assessment. <a href="@waterQualityManagementPlanVerifyTreatmentBMPSimple.TreatmentBMPDetailUrl" target="_blank" rel="noopener noreferrer">Conduct a new Assessment <span class="glyphicon glyphicon-new-window"></span></a> </span>
                                                     }
                                                 </td>
                                             </tr>
                                         }
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <p class="systemText">No Structural Treatment or Hydromodification BMPs are currently associated with this WQMP</p>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5> Verification of O&M Status</h5>
-                                <p> </p>
+            <div class="row row-group">
+                <div class="col-xs-12 ">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5> Finalize Verification</h5>
+                        </div>
+                        <div style="padding: 21px 15px">
+                            <div class="alert alert-warning" role="alert">
+                                The Verification of O&amp;M Status needs to be answered in order to Finalize this O&amp;M Verification.
                             </div>
-                            <div style="padding: 21px 15px">
-                                <div class="alert alert-warning" role="alert">
-                                    This question needs to be answered in order to complete the form.
-                                </div>
-                                @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new { onchange = "verificationOMStatus()" })
+
+                            <div class="row">
+                                <label class="col-xs-6 col-sm-3 control-label text-right"> Verification of O&amp;M Status</label>
+                                <div class="col-xs-6 col-sm-9">  @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new { onchange = "verificationOMStatus()" })</div>
+                            </div>
+                            <div class="row" style="margin-top: 16px">
+                                <label class="col-xs-6 col-sm-3 control-label text-right"> VEnforcement or Follow-up Actions</label>
+                                <div class="col-xs-6 col-sm-9">  @Html.TextAreaFor(m => m.EnforcementOrFollowupActions, new { @class = "form-control" })</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row row-group">
-                    <div class="col-xs-12 ">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>  Enforcement or Follow-up Actions </h5>
-                                <p> </p>
-                            </div>
-                            <div style="padding: 21px 15px">
-                                @Html.TextAreaFor(m => m.EnforcementOrFollowupActions, new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
 
                 <div class="pull-right" style="margin-top: 16px">
                     <button type="submit" class="btn btn-neptune">Save</button>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -27,7 +28,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             PageTitle = "New Water Quality Management Plan O&M Verification";
 
             SubEntityName = WaterQualityManagementPlan.WaterQualityManagementPlanName;
-            SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
+            SubEntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
 
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());
@@ -39,7 +40,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             WaterQualityManagementPlanUrl =
                 SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                    c.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
+                    c.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
     }
 }

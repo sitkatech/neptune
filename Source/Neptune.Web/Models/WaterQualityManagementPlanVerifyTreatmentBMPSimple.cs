@@ -43,8 +43,15 @@ namespace Neptune.Web.Models
                 .WaterQualityManagementPlanVerifyTreatmentBMPID;
             TreatmentBMPName = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPName;
             TreatmentBMPID = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMPID;
+            TreatmentBMPType = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName;
             IsAdequate = waterQualityManagementPlanVerifyTreatmentBMP.IsAdequate;
             WaterQualityManagementPlanVerifyTreatmentBMPNote = waterQualityManagementPlanVerifyTreatmentBMP.WaterQualityManagementPlanVerifyTreatmentBMPNote;
+
+            var mostRecentFieldVisit = waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.FieldVisits.Where(x => x.FieldVisitStatus == FieldVisitStatus.Complete).OrderBy(x => x.VisitDate).FirstOrDefault();
+            FieldVisiLastVisitedtDate = mostRecentFieldVisit?.VisitDate.ToShortDateString();
+            FieldVisitMostRecentScore = mostRecentFieldVisit?.GetPostMaintenanceAssessment() != null ? mostRecentFieldVisit.GetPostMaintenanceAssessment().FormattedScore() : mostRecentFieldVisit?.GetInitialAssessment().FormattedScore();
+            TreatmentBMPDetailUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c =>
+                c.Detail(waterQualityManagementPlanVerifyTreatmentBMP.TreatmentBMP.PrimaryKey));
         }
 
         
