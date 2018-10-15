@@ -9,22 +9,22 @@
     $scope.getParcelAddress = function (parcelId) {
         var parcelAddress = $scope.AngularViewData.ParcelAddressByID[parcelId];
         parcelAddress = parcelAddress == null ? "Address is unavailable" : parcelAddress;
-        return parcelAddress ;
+        return parcelAddress;
     };
 
     var typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, findParcelByAddressUrl, findParcelByApnUrl) {
         var finder = jQuery(typeaheadSelector);
         finder.typeahead({
-                highlight: true,
-                minLength: 3
-            },
+            highlight: true,
+            minLength: 3
+        },
             $scope.makeTypeaheadObject('Parcels', findParcelByApnUrl, 'Parcels'),
             $scope.makeTypeaheadObject('Addresses', findParcelByAddressUrl, 'Addresses')
         );
 
         finder.bind("typeahead:select",
             function (event, suggestion) {
-                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () { 
+                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () {
                     $scope.$apply();
                 });
                 $('.typeahead').typeahead('val', '');
@@ -174,11 +174,11 @@
 
                     $scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
                     if (response.features.length > 0) {
-                        $scope.calculatedParcelArea = 0;
+                        var calculatedParcelArea = 0;
                         for (var i = 0; i < response.features.length; ++i) {
-                            $scope.calculatedParcelArea += response.features[i].properties.ParcelArea;
+                            calculatedParcelArea += response.features[i].properties.ParcelArea;
                         }
-                        $scope.calculatedParcelArea = $scope.calculatedParcelArea.toFixed(1);
+                        $scope.calculatedParcelArea = calculatedParcelArea.toFixed(1);
                     }
                     $scope.$apply();
                 },
