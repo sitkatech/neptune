@@ -80,6 +80,7 @@
                             </div>
                             <div style="padding: 21px 15px">
                                 @Html.EditorFor(m => m.StructuralDocumentFile)
+                                <p class="help-block">Max file size is 100 MB</p>
                                 <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
 
                                 @if (Model.StructuralDocumentFile != null)

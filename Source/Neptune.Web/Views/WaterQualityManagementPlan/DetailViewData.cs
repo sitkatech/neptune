@@ -2,6 +2,7 @@
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,8 +29,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; }
         public List<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs  { get; }
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
+        public string CalculatedParcelArea {  get; }
 
-        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
+        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, List<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -70,7 +72,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true)).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
 
-
+            CalculatedParcelArea = waterQualityManagementPlanParcels.Any() ?  string.Format("{0} acres", Math.Round(waterQualityManagementPlanParcels.Sum(x => x.Parcel.ParcelAreaInAcres), 1).ToString()) : "No parcels have been associated with this WQMP";
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Neptune.Web.Models
             Property(x => x.LandUse).HasColumnName(@"LandUse").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(4);
             Property(x => x.SquareFeetHome).HasColumnName(@"SquareFeetHome").HasColumnType("int").IsOptional();
             Property(x => x.SquareFeetLot).HasColumnName(@"SquareFeetLot").HasColumnType("int").IsOptional();
-            Property(x => x.ParcelAreaInAcres).HasColumnName(@"ParcelAreaInAcres").HasColumnType("float").IsOptional();
+            Property(x => x.ParcelAreaInAcres).HasColumnName(@"ParcelAreaInAcres").HasColumnType("float").IsRequired();
 
             // Foreign keys
 
