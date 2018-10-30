@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 {
                     x.QuickBMPName = y.QuickBMPName;
                     x.QuickBMPNote = y.QuickBMPNote;
-                    x.TreatmentBMPType = y.TreatmentBMPType;
+                    x.TreatmentBMPTypeID = y.TreatmentBMPTypeID;
                 });
 
 
