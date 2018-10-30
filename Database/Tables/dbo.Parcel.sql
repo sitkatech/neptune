@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[Parcel](
 	[LandUse] [varchar](4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[SquareFeetHome] [int] NULL,
 	[SquareFeetLot] [int] NULL,
-	[ParcelAreaInAcres] [float] NULL,
+	[ParcelAreaInAcres] [float] NOT NULL,
  CONSTRAINT [PK_Parcel_ParcelID] PRIMARY KEY CLUSTERED 
 (
 	[ParcelID] ASC

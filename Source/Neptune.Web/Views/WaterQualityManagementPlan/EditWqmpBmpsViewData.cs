@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             ViewDataForAngular = new EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular(treatmentBMPSimples, treatmentBMPTypes);
 
-            WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanPriorityID));
+            WaterQualityManagementPlanDetailUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Detail(waterQualityManagementPlan.WaterQualityManagementPlanID));
         }
 
         public class EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular

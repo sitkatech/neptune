@@ -80,6 +80,7 @@
                             </div>
                             <div style="padding: 21px 15px">
                                 @Html.EditorFor(m => m.StructuralDocumentFile)
+                                <p class="help-block">Max file size is 100 MB</p>
                                 <p class="help-block">Allowed Extensions: pdf, zip, doc, docx, xls, xlsx, jpg, png</p>
 
                                 @if (Model.StructuralDocumentFile != null)
@@ -234,7 +235,7 @@
                                 <div class="col-xs-6 col-sm-9">  @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanVerifyStatusID, ViewDataTyped.WaterQualityManagementPlanVerifyStatuses, new { onchange = "verificationOMStatus()" })</div>
                             </div>
                             <div class="row" style="margin-top: 16px">
-                                <label class="col-xs-6 col-sm-3 control-label text-right"> VEnforcement or Follow-up Actions</label>
+                                <label class="col-xs-6 col-sm-3 control-label text-right"> Enforcement or Follow-up Actions</label>
                                 <div class="col-xs-6 col-sm-9">  @Html.TextAreaFor(m => m.EnforcementOrFollowupActions, new { @class = "form-control" })</div>
                             </div>
                         </div>
