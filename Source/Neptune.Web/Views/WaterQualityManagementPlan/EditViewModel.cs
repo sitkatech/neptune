@@ -17,7 +17,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         [Required]
         [DisplayName("WQMP Name")]
-        [MaxLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
         public string WaterQualityManagementPlanName { get; set; }
 
         [Required]
@@ -76,6 +76,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public int? HydrologicSubareaID { get; set; }
 
         [DisplayName("Record Number")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.RecordNumber)]
         public string RecordNumber { get; set; }
 
         [DisplayName("Recorded WQMP Area (Acres)")]
@@ -145,13 +146,6 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var recordNumberMaxLength = Models.WaterQualityManagementPlan.FieldLengths.RecordNumber;
-            if (RecordNumber.Length > recordNumberMaxLength)
-            {
-                yield return new SitkaValidationResult<EditViewModel, string>($"{RecordNumber.Length - recordNumberMaxLength} characters over the limit.", m => m.RecordNumber);
-            }
-
-
             if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Any(x =>
                 x.WaterQualityManagementPlanName == WaterQualityManagementPlanName &&
                 x.WaterQualityManagementPlanID != WaterQualityManagementPlanID))
