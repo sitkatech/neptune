@@ -3,6 +3,7 @@ using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -17,6 +18,10 @@ namespace Neptune.Web.Views.FieldVisit
         public List<string> ValidationWarnings { get; set; }
 
         public string WrapupUrl { get; }
+        public bool UserCanDeleteMaintenanceRecord { get; }
+        public Models.MaintenanceRecord MaintenanceRecord { get; }
+        public Models.TreatmentBMPAssessment InitialAssessment { get; }
+        public Models.TreatmentBMPAssessment PostMaintenanceAssessment { get; }
 
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
@@ -38,6 +43,21 @@ namespace Neptune.Web.Views.FieldVisit
             ValidationWarnings = new List<string>();
 
             WrapupUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VisitSummary(fieldVisit));
+
+
+            MaintenanceRecord = fieldVisit.GetMaintenanceRecord();
+            InitialAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial);
+            PostMaintenanceAssessment = fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
+            UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
+                                             new MaintenanceRecordManageFeature()
+                                                 .HasPermission(CurrentPerson, MaintenanceRecord)
+                                                 .HasPermission;
+        }
+
+        public bool UserCanDeleteAssessment(Models.TreatmentBMPAssessment assessment)
+        {
+            return assessment != null &&
+                   new TreatmentBMPAssessmentManageFeature().HasPermission(CurrentPerson, assessment).HasPermission;
         }
     }
 }

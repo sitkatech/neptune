@@ -96,15 +96,15 @@ namespace Neptune.Web.Models
                     x.CustomAttributeTypeID == treatmentBMPTypeCustomAttributeType.CustomAttributeTypeID);
                 if (customAttribute != null)
                 {
-                    var measurmentUnit = "";
+                    var measurementUnit = "";
                     if (customAttribute.CustomAttributeType.MeasurementUnitTypeID.HasValue)
                     {
-                        measurmentUnit = $" {customAttribute.CustomAttributeType.MeasurementUnitType.LegendDisplayName}";
+                        measurementUnit = $" {customAttribute.CustomAttributeType.MeasurementUnitType.LegendDisplayName}";
                     }
 
                     var value = string.Join(", ", customAttribute.CustomAttributeValues.OrderBy(x => x.AttributeValue).Select(x => x.AttributeValue));
 
-                    return $"{value}{measurmentUnit}";
+                    return $"{value}{measurementUnit}";
                 }           
             }
             return string.Empty;
@@ -112,9 +112,12 @@ namespace Neptune.Web.Models
 
         public DateTime? LastMaintainedDateTime()
         {
-            return !MaintenanceRecords.Any()
-                ? null
-                : (DateTime?) MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
+            if (!MaintenanceRecords.Any())
+            {
+                return null;
+            }
+
+            return MaintenanceRecords.Max(x => x.GetMaintenanceRecordDate());
         }
 
         public string CustomAttributeStatus()
@@ -136,7 +139,7 @@ namespace Neptune.Web.Models
 
         public bool RequiredAttributeDoesNotHaveValue(FieldVisit fieldVisit)
         {
-            return this.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
+            return TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.Any(x =>
                 x.CustomAttributeType.IsRequired && x.CustomAttributeType.CustomAttributeTypePurpose !=
                 CustomAttributeTypePurpose.Maintenance &&
                 !x.CustomAttributeType.IsCompleteForTreatmentBMP(fieldVisit.TreatmentBMP)
@@ -151,11 +154,6 @@ namespace Neptune.Web.Models
                 InventoryIsVerified = false;
             }
             InventoryLastChangedDate = DateTime.Now;
-        }
-
-        public FieldVisit GetLastFieldVisitWithAnInventoryUpdate()
-        {
-            return FieldVisits.Where(y => y.InventoryUpdated).OrderByDescending(y => y.VisitDate).FirstOrDefault();
         }
 
         public void MarkAsVerified(Person currentPerson)

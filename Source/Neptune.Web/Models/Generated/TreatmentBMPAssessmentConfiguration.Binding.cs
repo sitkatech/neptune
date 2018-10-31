@@ -19,11 +19,14 @@ namespace Neptune.Web.Models
             Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsRequired();
             Property(x => x.TreatmentBMPTypeID).HasColumnName(@"TreatmentBMPTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.FieldVisitID).HasColumnName(@"FieldVisitID").HasColumnType("int").IsRequired();
+            Property(x => x.TreatmentBMPAssessmentTypeID).HasColumnName(@"TreatmentBMPAssessmentTypeID").HasColumnType("int").IsRequired();
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.TreatmentBMPAssessments).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPAssessments).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMPAssessment_TreatmentBMPType_TreatmentBMPTypeID
+            HasRequired(a => a.FieldVisit).WithMany(b => b.TreatmentBMPAssessments).HasForeignKey(c => c.FieldVisitID).WillCascadeOnDelete(false); // FK_TreatmentBMPAssessment_FieldVisit_FieldVisitID
         }
     }
 }

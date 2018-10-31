@@ -1,0 +1,2 @@
+ALTER TABLE dbo.Parcel 
+ALTER COLUMN ParcelAreaInAcres FLOAT NOT NULL

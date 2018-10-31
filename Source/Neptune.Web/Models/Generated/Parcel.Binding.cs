@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Parcel(int parcelID, string parcelNumber, DbGeometry parcelGeometry, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse) : this()
+        public Parcel(int parcelID, string parcelNumber, DbGeometry parcelGeometry, string ownerName, string parcelStreetNumber, string parcelAddress, string parcelZipCode, string landUse, int? squareFeetHome, int? squareFeetLot, double parcelAreaInAcres) : this()
         {
             this.ParcelID = parcelID;
             this.ParcelNumber = parcelNumber;
@@ -40,18 +40,22 @@ namespace Neptune.Web.Models
             this.ParcelAddress = parcelAddress;
             this.ParcelZipCode = parcelZipCode;
             this.LandUse = landUse;
+            this.SquareFeetHome = squareFeetHome;
+            this.SquareFeetLot = squareFeetLot;
+            this.ParcelAreaInAcres = parcelAreaInAcres;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Parcel(string parcelNumber, DbGeometry parcelGeometry) : this()
+        public Parcel(string parcelNumber, DbGeometry parcelGeometry, double parcelAreaInAcres) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.ParcelID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.ParcelNumber = parcelNumber;
             this.ParcelGeometry = parcelGeometry;
+            this.ParcelAreaInAcres = parcelAreaInAcres;
         }
 
 
@@ -60,7 +64,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Parcel CreateNewBlank()
         {
-            return new Parcel(default(string), default(DbGeometry));
+            return new Parcel(default(string), default(DbGeometry), default(double));
         }
 
         /// <summary>
@@ -101,6 +105,9 @@ namespace Neptune.Web.Models
         public string ParcelAddress { get; set; }
         public string ParcelZipCode { get; set; }
         public string LandUse { get; set; }
+        public int? SquareFeetHome { get; set; }
+        public int? SquareFeetLot { get; set; }
+        public double ParcelAreaInAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return ParcelID; } set { ParcelID = value; } }
 

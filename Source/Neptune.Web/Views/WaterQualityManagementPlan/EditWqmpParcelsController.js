@@ -9,22 +9,22 @@
     $scope.getParcelAddress = function (parcelId) {
         var parcelAddress = $scope.AngularViewData.ParcelAddressByID[parcelId];
         parcelAddress = parcelAddress == null ? "Address is unavailable" : parcelAddress;
-        return parcelAddress ;
+        return parcelAddress;
     };
 
     var typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, findParcelByAddressUrl, findParcelByApnUrl) {
         var finder = jQuery(typeaheadSelector);
         finder.typeahead({
-                highlight: true,
-                minLength: 3
-            },
+            highlight: true,
+            minLength: 3
+        },
             $scope.makeTypeaheadObject('Parcels', findParcelByApnUrl, 'Parcels'),
             $scope.makeTypeaheadObject('Addresses', findParcelByAddressUrl, 'Addresses')
         );
 
         finder.bind("typeahead:select",
             function (event, suggestion) {
-                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () { 
+                $scope.toggleParcel(suggestion.ParcelID, suggestion.ParcelNumber, suggestion.ParcelAddress, function () {
                     $scope.$apply();
                 });
                 $('.typeahead').typeahead('val', '');
@@ -133,6 +133,8 @@
     }
 
     function updateSelectedParcelLayer() {
+        $scope.calculatedParcelArea = null;
+
         if ($scope.AngularModel.ParcelIDs == null) {
             $scope.AngularModel.ParcelIDs = [];
         }
@@ -171,6 +173,14 @@
                         return;
 
                     $scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
+                    if (response.features.length > 0) {
+                        var calculatedParcelArea = 0;
+                        for (var i = 0; i < response.features.length; ++i) {
+                            calculatedParcelArea += response.features[i].properties.ParcelArea;
+                        }
+                        $scope.calculatedParcelArea = calculatedParcelArea.toFixed(1);
+                    }
+                    $scope.$apply();
                 },
                 function () {
                     console.error("There was an error setting map extent to the selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel + "s");

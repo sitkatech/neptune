@@ -85,12 +85,12 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.Initial);
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, TreatmentBMPAssessmentTypeEnum.Initial);
         }
 
         public override bool ExpandMenu(FieldVisit fieldVisit)
         {
-            return fieldVisit.InitialAssessmentID != null;
+            return fieldVisit.GetInitialAssessment() != null;
         }
     }
 
@@ -112,7 +112,7 @@ namespace Neptune.Web.Models
 
         public override bool ExpandMenu(FieldVisit fieldVisit)
         {
-            return fieldVisit.MaintenanceRecordID != null;
+            return fieldVisit.GetMaintenanceRecord() != null;
         }
     }
 
@@ -125,12 +125,12 @@ namespace Neptune.Web.Models
 
         public override IEnumerable<FieldVisitSubsectionData> GetSubsections(FieldVisit fieldVisit)
         {
-            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, FieldVisitAssessmentType.PostMaintenance);
+            return FieldVisitSectionImpl.GetAssessmentSubsections(fieldVisit, TreatmentBMPAssessmentTypeEnum.PostMaintenance);
         }
 
         public override bool ExpandMenu(FieldVisit fieldVisit)
         {
-            return fieldVisit.PostMaintenanceAssessmentID != null;
+            return fieldVisit.GetPostMaintenanceAssessment() != null;
         }
     }
 
@@ -154,10 +154,10 @@ namespace Neptune.Web.Models
 
     public class FieldVisitSectionImpl
     {
-        public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit, FieldVisitAssessmentType fieldVisitAssessmentType)
+        public static IEnumerable<FieldVisitSubsectionData> GetAssessmentSubsections(FieldVisit fieldVisit, TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
             var treatmentBMP = fieldVisit.TreatmentBMP;
-            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(fieldVisitAssessmentType);
+            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum);
 
             var assessmentSubsections = new List<FieldVisitSubsectionData>
             {
@@ -166,7 +166,7 @@ namespace Neptune.Web.Models
                     SubsectionName = "Observations",
                     SubsectionUrl =
                         SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
-                            c.Observations(fieldVisit, (int) fieldVisitAssessmentType)),
+                            c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)),
                     SectionCompletionStatusIndicator =
                         treatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes.All(x =>
                             treatmentBMPAssessment.IsObservationComplete(x.TreatmentBMPAssessmentObservationType))
@@ -177,7 +177,7 @@ namespace Neptune.Web.Models
                 {
                     SubsectionName = "Photos",
                     SubsectionUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c =>
-                        c.AssessmentPhotos(fieldVisit, (int) fieldVisitAssessmentType)),
+                        c.AssessmentPhotos(fieldVisit, treatmentBMPAssessmentTypeEnum)),
                     SectionCompletionStatusIndicator = treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Any()
                         ? new HtmlString(
                             "<span class='glyphicon glyphicon-ok field-validation-success text-left' style='color: #5cb85c; margin-right: 4px'></span>")

@@ -108,12 +108,12 @@
                             @Html.LabelWithSugarFor(m => m.HydromodificationAppliesID)
                         </div>
                         <div class="col-xs-12 col-sm-9">
-                            @foreach (var HydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
+                            @foreach (var hydromodificationAppliesType in ViewDataTyped.HydromodificationAppliesType)
                             {
                                 <div class="radio-inline">
                                     <label>
-                                        @Html.RadioButtonFor(m => m.HydromodificationAppliesID, HydromodificationAppliesType.HydromodificationAppliesID)
-                                        @HydromodificationAppliesType.HydromodificationAppliesDisplayName
+                                        @Html.RadioButtonFor(m => m.HydromodificationAppliesID, hydromodificationAppliesType.HydromodificationAppliesID)
+                                        @hydromodificationAppliesType.HydromodificationAppliesDisplayName
                                     </label>
                                 </div>
                             }
@@ -136,6 +136,25 @@
                         <div class="col-xs-12 col-sm-9">
                             @Html.SearchableDropDownListFor(m => m.WaterQualityManagementPlanPermitTermID, ViewDataTyped.WaterQualityManagementPlanPermitTerms)
                             @Html.ValidationMessageFor(m => m.WaterQualityManagementPlanPermitTermID)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.RecordNumber)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextAreaWithMaxLengthFor(m => m.RecordNumber, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                            <p class="help-block">If there are multiple Record Numbers separate them with a comma</p>
+                            @Html.ValidationMessageFor(m => m.RecordNumber)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12 col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.RecordedWQMPAreaInAcres)
+                        </div>
+                        <div class="col-xs-12 col-sm-9">
+                            @Html.TextBoxFor(m => m.RecordedWQMPAreaInAcres, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.RecordedWQMPAreaInAcres)
                         </div>
                     </div>
                 </fieldset>

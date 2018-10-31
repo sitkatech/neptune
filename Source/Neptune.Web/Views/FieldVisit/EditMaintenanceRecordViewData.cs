@@ -26,38 +26,36 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 using Neptune.Web.Views.Shared.EditAttributes;
 
 namespace Neptune.Web.Views.FieldVisit
 {
     public class EditMaintenanceRecordViewData : FieldVisitSectionViewData
     {
+        public bool IsNew { get; }
+        public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
+        public IEnumerable<SelectListItem> AllOrganizations { get; }
+        public string TreatmentBMPUrl { get; }
+        public string MaintenanceRecordUrl { get; }
+        public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
+
         public EditMaintenanceRecordViewData(Person currentPerson, List<Models.Organization> organizations,
-            Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit, EditAttributesViewData editMaintenanceRecordObservationsViewData) : base(currentPerson,fieldVisit,Models.FieldVisitSection.Maintenance)
+            Models.TreatmentBMP treatmentBMP, bool isNew, Models.FieldVisit fieldVisit, EditAttributesViewData editMaintenanceRecordObservationsViewData) : base(currentPerson, fieldVisit, Models.FieldVisitSection.Maintenance)
         {
             SubsectionName = "Edit Maintenance Record";
             IsNew = isNew;
             EditMaintenanceRecordObservationsViewData = editMaintenanceRecordObservationsViewData;
 
-            AllOrganizations = organizations.OrderBy(x=>x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
-                x => x.OrganizationName,"Choose an Organization");
+            AllOrganizations = organizations.OrderBy(x => x.OrganizationName).ToSelectListWithDisabledEmptyFirstRow(x => x.OrganizationID.ToString(CultureInfo.InvariantCulture),
+                x => x.OrganizationName, "Choose an Organization");
 
             AllMaintenanceRecordTypes = MaintenanceRecordType.All.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.MaintenanceRecordTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.MaintenanceRecordTypeDisplayName, "Choose a type");
-
-
+            
             TreatmentBMPUrl = treatmentBMP.GetDetailUrl();
-            MaintenanceRecordUrl = fieldVisit.MaintenanceRecord?.GetDetailUrl();
+            MaintenanceRecordUrl = MaintenanceRecord?.GetDetailUrl();
         }
-
-        public bool IsNew { get; }
-
-        public IEnumerable<SelectListItem> AllMaintenanceRecordTypes { get; }
-
-        public IEnumerable<SelectListItem> AllOrganizations { get; }
-        public string TreatmentBMPUrl { get; }
-        public object MaintenanceRecordUrl { get; }
-        public EditAttributesViewData EditMaintenanceRecordObservationsViewData { get; }
     }
 }

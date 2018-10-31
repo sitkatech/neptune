@@ -17,7 +17,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         [Required]
         [DisplayName("WQMP Name")]
-        [MaxLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.WaterQualityManagementPlanName)]
         public string WaterQualityManagementPlanName { get; set; }
 
         [Required]
@@ -75,6 +75,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Hydrologic Subarea")]
         public int? HydrologicSubareaID { get; set; }
 
+        [DisplayName("Record Number")]
+        [StringLength(Models.WaterQualityManagementPlan.FieldLengths.RecordNumber)]
+        public string RecordNumber { get; set; }
+
+        [DisplayName("Recorded WQMP Area (Acres)")]
+        public decimal? RecordedWQMPAreaInAcres { get; set; }
+
+
+
         /// <summary>
         /// Needed by model binder
         /// </summary>
@@ -103,6 +112,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HydromodificationAppliesID = waterQualityManagementPlan.HydromodificationAppliesID;
             WaterQualityManagementPlanPermitTermID = waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID;
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
+            RecordNumber = waterQualityManagementPlan.RecordNumber;
+            RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
@@ -129,6 +140,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.HydromodificationAppliesID = HydromodificationAppliesID;
             waterQualityManagementPlan.WaterQualityManagementPlanPermitTermID = WaterQualityManagementPlanPermitTermID;
             waterQualityManagementPlan.HydrologicSubareaID = HydrologicSubareaID;
+            waterQualityManagementPlan.RecordNumber = RecordNumber;
+            waterQualityManagementPlan.RecordedWQMPAreaInAcres = RecordedWQMPAreaInAcres;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

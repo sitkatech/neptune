@@ -61,25 +61,15 @@ Source code is available upon request via <support@sitkatech.com>.
     }
 </style>
 
-<script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMPAssessment/ScoreTableController.js")"></script>
 <script type="text/javascript">
     // <![CDATA[
-    angular.module("NeptuneApp")
-        .factory("angularModelAndViewData",
-            function()
-            {
-                return {
-                    AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular))
-                };
-            });
-
-    jQuery(document).ready(function () {
+        jQuery(document).ready(function () {
         HookupCheckIfFormIsDirtyNoDisable(undefined);
     });
     // ]]>
 </script>
 
-<div ng-app="NeptuneApp" id="ScoreTableAngularApp" ng-controller="ScoreTableController">
+<div>
     <div class="table-responsive">
         <table class="table table-condensed scoreTable">
             <thead>
@@ -93,53 +83,94 @@ Source code is available upon request via <support@sitkatech.com>.
                 </tr>
             </thead>
             <tbody>
-                <tr class="row" ng-repeat="TreatmentBMPAssessmentObservationType in AngularViewData.ObservationTypeSimples" ng-class="overrideScore() && !TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScore ? 'grayOut' : ''">
-                    <td class="col-xs-3">{{TreatmentBMPAssessmentObservationType.DisplayName}}</td>
+                @foreach (var treatmentBMPAssessmentObservationType in ViewDataTyped.ViewDataForAngular.ObservationTypeSimples)
+                {
+                    var treatmentBMPObservationSimple = treatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple != null ?
+                        treatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple :
+                        new TreatmentBMPObservationSimple { IsComplete = false, OverrideScore = false };
 
-                    <td class="col-xs-2 text-center" ng-if="TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds">
-                        <span class="badge colorBadge">{{TreatmentBMPAssessmentObservationType.ThresholdValueInObservedUnits | setDecimal:3 }}</span>
-                    </td>
-
-                    <td class="col-xs-2 text-center" ng-if="TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete">
-                        <span class="badge colorBadge">{{TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.ObservationValue | setDecimal:3 }}</span>
-                    </td>
-                    
-                    <td class="col-xs-2 text-center" ng-if="TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && !TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
-                    
-                    <td class="col-xs-2 text-center" ng-if="TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds">
-                        <span class="badge colorBadge">{{TreatmentBMPAssessmentObservationType.BenchmarkValue | setDecimal:3 }}</span>
-                    </td>
-
-                    <td class="text-center" colspan="3" ng-if="!TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && !TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete">
-                        <em>Observation incomplete</em>
-                    </td>
-
-                    <td class="text-center" colspan="3" ng-if="!TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete && !TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScore">
-                        <em style="font-weight: bold">{{TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
-                    </td>
-
-                    <td class="text-center" colspan="3" ng-if="!TreatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete && TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScore">
-                        <em style="font-weight: bold">{{TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScoreText}}</em>
-                    </td>
-
-                    <td class="col-xs-2 text-center" ng-if="!TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.OverrideScore">{{TreatmentBMPAssessmentObservationType.Weight}}</td>
-
-                    <td class="col-xs-1 text-center" ng-if="TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete">
-                        <span class="bold badge">{{TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.ObservationScore | setDecimal:1 }}</span>
-                    </td>
-                    <td class="col-xs-1 text-center" ng-if="!TreatmentBMPAssessmentObservationType.TreatmentBMPObservationSimple.IsComplete"><span>-</span></td>
+                    <tr class="row" class="@(ViewDataTyped.OverrideScore && !treatmentBMPObservationSimple.OverrideScore ? "grayOut" : "")">
+                        <td class="col-xs-3">@treatmentBMPAssessmentObservationType.DisplayName</td>
+                        
+                        @if (treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds)
+                        {
+                            <td class="col-xs-2 text-center">
+                                <span class="badge colorBadge">@treatmentBMPAssessmentObservationType.ThresholdValueInObservedUnits </span> @*setDecimal:3*@
+                            </td>
+                        }
+                        @if(treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && treatmentBMPObservationSimple.IsComplete)
+                        {
+                            <td class="col-xs-2 text-center">
+                                <span class="badge colorBadge">@treatmentBMPObservationSimple.ObservationValue @*| setDecimal:3 }}*@</span>
+                            </td>
+                        }
+                        
+                        @if (treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && !treatmentBMPObservationSimple.IsComplete)
+                        {
+                            <td class="col-xs-2 text-center"><span>-</span></td>
+                        }
+                        @if (treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds)
+                        {
+                            <td class="col-xs-2 text-center">
+                                <span class="badge colorBadge">@treatmentBMPAssessmentObservationType.BenchmarkValue @*| setDecimal:3 }}*@</span>
+                            </td>
+                        }
+                        @if(!treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && !treatmentBMPObservationSimple.IsComplete)
+                        {
+                            <td class="text-center" colspan="3">
+                                <em>Observation incomplete</em>
+                            </td>
+                        }
+                        
+                        @if (!treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && treatmentBMPObservationSimple.IsComplete && !treatmentBMPObservationSimple.OverrideScore)
+                        {
+                            <td class="text-center" colspan="3">
+                                <em style="font-weight: bold">@treatmentBMPObservationSimple.OverrideScoreText</em>
+                            </td>
+                        }
+                        
+                        @if (!treatmentBMPAssessmentObservationType.HasBenchmarkAndThresholds && treatmentBMPObservationSimple.IsComplete && treatmentBMPObservationSimple.OverrideScore)
+                        {
+                            <td class="text-center" colspan="3">
+                                <em style="font-weight: bold">@treatmentBMPObservationSimple.OverrideScoreText</em>
+                            </td>
+                        }
+                        
+                        @if (!treatmentBMPObservationSimple.OverrideScore)
+                        {
+                            <td class="col-xs-2 text-center">@treatmentBMPAssessmentObservationType.Weight</td>
+                        }
+                        
+                        @if (treatmentBMPObservationSimple.IsComplete)
+                        {
+                            <td class="col-xs-1 text-center">
+                                <span class="bold badge">@treatmentBMPObservationSimple.ObservationScore @*| setDecimal:1 }}*@</span>
+                            </td>
+                        }
+                        
+                        @if (!treatmentBMPObservationSimple.IsComplete)
+                        {
+                            <td class="col-xs-1 text-center" ng-if=""><span>-</span></td>
+                        }
+                    </tr>
+                }
+                <tr class="row totalRow">
+                    <td class="col-xs-3">Assessment Total</td>
+                    <td class="col-xs-2 text-center">-</td>
+                    <td class="col-xs-2 text-center">-</td>
+                    <td class="col-xs-2 text-center">-</td>
+                    <td class="col-xs-2 text-center">100%</td>
+                    @if (ViewDataTyped.ViewDataForAngular.AssessmentIsComplete)
+                    {
+                        <td class="col-xs-1 text-center" ng-if="">
+                            <span class="badge colorBadge">@ViewDataTyped.ViewDataForAngular.AssessmentScore @*| setDecimal:2 }}*@</span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="col-xs-1 text-center">-</td>
+                    }
                 </tr>
-            <tr class="row totalRow">
-                <td class="col-xs-3">Assessment Total</td>
-                <td class="col-xs-2 text-center">-</td>
-                <td class="col-xs-2 text-center">-</td>
-                <td class="col-xs-2 text-center">-</td>
-                <td class="col-xs-2 text-center">100%</td>
-                <td class="col-xs-1 text-center" ng-if="AngularViewData.AssessmentIsComplete">
-                    <span class="badge colorBadge">{{AngularViewData.AssessmentScore | setDecimal:2 }}</span>
-                </td>
-                <td class="col-xs-1 text-center" ng-if="!AngularViewData.AssessmentIsComplete">-</td>
-            </tr>
             </tbody>
         </table>
     </div>

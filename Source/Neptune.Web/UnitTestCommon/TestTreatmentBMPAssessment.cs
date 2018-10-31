@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.UnitTestCommon
@@ -30,8 +29,8 @@ namespace Neptune.Web.UnitTestCommon
         {
             public static TreatmentBMPAssessment Create(TreatmentBMP treatmentBMP)
             {
-                var person = TestPerson.Create();
-                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType);
+                var fieldVisit = TestFieldVisit.Create(treatmentBMP);
+                var treatmentBMPAssessment = new TreatmentBMPAssessment(treatmentBMP, treatmentBMP.TreatmentBMPType, fieldVisit, TreatmentBMPAssessmentType.Initial);
                 return treatmentBMPAssessment;
             }
         }

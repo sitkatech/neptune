@@ -41,7 +41,7 @@ namespace LtInfo.Common
             {
                 existingList.MergeUpdate(updatedList, matchCriteria, updateFunction);
             }
-            existingList.MergeDelete(updatedList, matchCriteria, allInDatabase);
+            existingList.MergeDelete(updatedList, matchCriteria);
         }
 
         public static void MergeNew<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, ICollection<T> allInDatabase) where T : IHaveATenantID
@@ -70,7 +70,7 @@ namespace LtInfo.Common
             }
         }
 
-        private static void MergeDelete<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, ICollection<T> allInDatabase) where T : IHaveATenantID
+        private static void MergeDelete<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria) where T : IHaveATenantID
         {
             // Deleting records from existing that are no longer in fromForm
             var recordsToDelete = existingList.Where(existingRecord => Equals(updatedList.MatchRecord(existingRecord, matchCriteria), default(T))).ToList();

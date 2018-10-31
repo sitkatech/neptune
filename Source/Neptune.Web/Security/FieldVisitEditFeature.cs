@@ -43,9 +43,20 @@ namespace Neptune.Web.Security
         public PermissionCheckResult HasPermission(Person person, FieldVisit contextModelObject)
         {
             var isAssignedToStormwaterJurisdiction = person.IsAssignedToStormwaterJurisdiction(contextModelObject.TreatmentBMP.StormwaterJurisdiction);
+
             if (!isAssignedToStormwaterJurisdiction)
             {
                 return new PermissionCheckResult($"You aren't assigned to edit Field Visit data for Jurisdiction {contextModelObject.TreatmentBMP.StormwaterJurisdiction.GetOrganizationDisplayName()}");
+            }
+
+            if (contextModelObject.IsFieldVisitVerified)
+            {
+                return new PermissionCheckResult("The Field Visit cannot be edited because it has already been verified by a Jurisdiction Manager.");
+            }
+
+            if( contextModelObject.FieldVisitStatus == FieldVisitStatus.Complete)
+            {
+                return new PermissionCheckResult("The Field Visit cannot be edited because it has already been wrapped up.");
             }
 
             return new PermissionCheckResult();

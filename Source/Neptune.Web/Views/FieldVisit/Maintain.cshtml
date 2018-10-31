@@ -18,6 +18,8 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 
 @inherits Maintain
@@ -30,7 +32,7 @@
 <hr />
 <div class="row" style="margin-bottom: 21px;">
     <div class="col-xs-12 text-right">
-        @using (Html.BeginForm("Maintain", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+        @using (Html.BeginForm("Maintain", "FieldVisit", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "field-visit-form"}))
         {
             if (ViewDataTyped.IsNew)
             {
@@ -38,7 +40,7 @@
                     <div class="col-xs-12" style="margin-top: 10px;">
                         <button class="btn btn-neptune" style="display: inline-block;">
                             <span>
-                                @(ViewDataTyped.FieldVisit.MaintenanceRecord == null ? "Create a Maintenance Record" : "Edit the Maintenance Record")
+                                @(ViewDataTyped.FieldVisit.GetMaintenanceRecord() == null ? "Create a Maintenance Record" : "Edit the Maintenance Record")
                             </span>
                             <span class="glyphicon glyphicon-triangle-right" style="margin-left: 10px;"></span>
                         </button>

@@ -6,6 +6,7 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public PostMaintenanceAssessmentViewData(Person currentPerson, Models.FieldVisit fieldVisit) : base(currentPerson, fieldVisit, Models.FieldVisitSection.PostMaintenanceAssessment)
         {
+            
         }
     }
 }

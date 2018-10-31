@@ -18,24 +18,24 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System.Linq;
 using Neptune.Web.Controllers;
 
 namespace Neptune.Web.Models
 {
     public partial class FieldVisit : IAuditableEntity
     {
-        public TreatmentBMPAssessment GetAssessmentByType(FieldVisitAssessmentType fieldVisitAssessmentType)
+        public TreatmentBMPAssessment GetAssessmentByType(TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum)
         {
-            return fieldVisitAssessmentType == FieldVisitAssessmentType.Initial
-                ? InitialAssessment
-                : PostMaintenanceAssessment;
+            return TreatmentBMPAssessments.SingleOrDefault(x => x.TreatmentBMPAssessmentTypeID == (int) treatmentBMPAssessmentTypeEnum);
         }
 
         public string GetAuditDescriptionString() => "Field Visit deleted";
 
         public void DetachMaintenanceRecord()
         {
-            MaintenanceRecordID = null;
+            //MaintenanceRecordID = null;
         }
 
         public void MarkFieldVisitAsProvisionalIfNonManager(Person person)
@@ -50,6 +50,17 @@ namespace Neptune.Web.Models
         {
             IsFieldVisitVerified = true;
             FieldVisitStatusID = FieldVisitStatus.Complete.FieldVisitStatusID;
+        }
+
+        public void MarkFieldVisitAsProvisional()
+        {
+            IsFieldVisitVerified = false;
+        }
+
+        public void ReturnFieldVisitToEdit()
+        {
+            IsFieldVisitVerified = false;
+            FieldVisitStatusID = FieldVisitStatus.ReturnedToEdit.FieldVisitStatusID;
         }
     }
 }

@@ -35,6 +35,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
             var treatmentBMPType = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType;
             var TreatmentBMPTypeAssessmentObservationTypes = treatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes;
             ViewDataForAngular = new ScoreViewDataForAngular(TreatmentBMPTypeAssessmentObservationTypes, treatmentBMPAssessment);
+            OverrideScore =
+                ViewDataForAngular.ObservationTypeSimples.Any(x => x.TreatmentBMPObservationSimple?.OverrideScore ?? false);
         }
 
         public class ScoreViewDataForAngular
@@ -51,7 +53,10 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                             x.OverrideAssessmentScoreIfFailing)).ToList();
                 AssessmentIsComplete = treatmentBMPAssessment.IsAssessmentComplete();
                 AssessmentScore = treatmentBMPAssessment.IsAssessmentComplete() ? treatmentBMPAssessment.FormattedScore() : null;
+
             }
         }
+
+        public bool OverrideScore { get; }
     }
 }

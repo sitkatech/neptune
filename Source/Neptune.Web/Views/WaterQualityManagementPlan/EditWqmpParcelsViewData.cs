@@ -10,6 +10,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
         public Models.WaterQualityManagementPlan WaterQualityManagementPlan { get; }
         public EditWqmpParcelsViewDataForAngular ViewDataForAngular { get; }
+        public decimal? RecordedWQMPAreaInAcres { get; }
 
         public EditWqmpParcelsViewData(Person currentPerson,
             Models.WaterQualityManagementPlan waterQualityManagementPlan,
@@ -23,6 +24,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             SubEntityName = waterQualityManagementPlan.WaterQualityManagementPlanName;
             SubEntityUrl = waterQualityManagementPlan.GetDetailUrl();
             PageTitle = "Edit Associated Parcels";
+            RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
             ViewDataForAngular = new EditWqmpParcelsViewDataForAngular(mapInitJson,
                 waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList(),
                 tenantAttribute);

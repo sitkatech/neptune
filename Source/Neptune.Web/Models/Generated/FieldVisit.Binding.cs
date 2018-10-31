@@ -23,21 +23,19 @@ namespace Neptune.Web.Models
         /// </summary>
         protected FieldVisit()
         {
-
+            this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
+            this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public FieldVisit(int fieldVisitID, int treatmentBMPID, int fieldVisitStatusID, int? initialAssessmentID, int? maintenanceRecordID, int? postMaintenanceAssessmentID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated, int fieldVisitTypeID, bool isFieldVisitVerified) : this()
+        public FieldVisit(int fieldVisitID, int treatmentBMPID, int fieldVisitStatusID, int performedByPersonID, DateTime visitDate, bool inventoryUpdated, int fieldVisitTypeID, bool isFieldVisitVerified) : this()
         {
             this.FieldVisitID = fieldVisitID;
             this.TreatmentBMPID = treatmentBMPID;
             this.FieldVisitStatusID = fieldVisitStatusID;
-            this.InitialAssessmentID = initialAssessmentID;
-            this.MaintenanceRecordID = maintenanceRecordID;
-            this.PostMaintenanceAssessmentID = postMaintenanceAssessmentID;
             this.PerformedByPersonID = performedByPersonID;
             this.VisitDate = visitDate;
             this.InventoryUpdated = inventoryUpdated;
@@ -96,13 +94,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return MaintenanceRecords.Any() || TreatmentBMPAssessments.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FieldVisit).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FieldVisit).Name, typeof(MaintenanceRecord).Name, typeof(TreatmentBMPAssessment).Name};
 
 
         /// <summary>
@@ -110,6 +108,16 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in MaintenanceRecords.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in TreatmentBMPAssessments.ToList())
+            {
+                x.DeleteFull();
+            }
             HttpRequestStorage.DatabaseEntities.AllFieldVisits.Remove(this);                
         }
 
@@ -118,9 +126,6 @@ namespace Neptune.Web.Models
         public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int FieldVisitStatusID { get; set; }
-        public int? InitialAssessmentID { get; set; }
-        public int? MaintenanceRecordID { get; set; }
-        public int? PostMaintenanceAssessmentID { get; set; }
         public int PerformedByPersonID { get; set; }
         public DateTime VisitDate { get; set; }
         public bool InventoryUpdated { get; set; }
@@ -129,12 +134,11 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return FieldVisitID; } set { FieldVisitID = value; } }
 
+        public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
+        public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public FieldVisitStatus FieldVisitStatus { get { return FieldVisitStatus.AllLookupDictionary[FieldVisitStatusID]; } }
-        public virtual TreatmentBMPAssessment InitialAssessment { get; set; }
-        public virtual TreatmentBMPAssessment PostMaintenanceAssessment { get; set; }
-        public virtual MaintenanceRecord MaintenanceRecord { get; set; }
         public virtual Person PerformedByPerson { get; set; }
         public FieldVisitType FieldVisitType { get { return FieldVisitType.AllLookupDictionary[FieldVisitTypeID]; } }
 

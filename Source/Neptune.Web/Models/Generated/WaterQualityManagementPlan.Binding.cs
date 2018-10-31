@@ -23,16 +23,19 @@ namespace Neptune.Web.Models
         /// </summary>
         protected WaterQualityManagementPlan()
         {
+            this.QuickBMPs = new HashSet<QuickBMP>();
+            this.SourceControlBMPs = new HashSet<SourceControlBMP>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
+            this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
             this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -54,6 +57,8 @@ namespace Neptune.Web.Models
             this.HydromodificationAppliesID = hydromodificationAppliesID;
             this.DateOfContruction = dateOfContruction;
             this.HydrologicSubareaID = hydrologicSubareaID;
+            this.RecordNumber = recordNumber;
+            this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
         }
 
         /// <summary>
@@ -103,13 +108,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any();
+            return QuickBMPs.Any() || SourceControlBMPs.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanParcels.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(WaterQualityManagementPlan).Name, typeof(QuickBMP).Name, typeof(SourceControlBMP).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanParcel).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -117,6 +122,16 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+
+            foreach(var x in QuickBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in SourceControlBMPs.ToList())
+            {
+                x.DeleteFull();
+            }
 
             foreach(var x in TreatmentBMPs.ToList())
             {
@@ -129,6 +144,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in WaterQualityManagementPlanParcels.ToList())
+            {
+                x.DeleteFull();
+            }
+
+            foreach(var x in WaterQualityManagementPlanVerifies.ToList())
             {
                 x.DeleteFull();
             }
@@ -157,12 +177,17 @@ namespace Neptune.Web.Models
         public int? HydromodificationAppliesID { get; set; }
         public DateTime? DateOfContruction { get; set; }
         public int? HydrologicSubareaID { get; set; }
+        public string RecordNumber { get; set; }
+        public decimal? RecordedWQMPAreaInAcres { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
+        public virtual ICollection<QuickBMP> QuickBMPs { get; set; }
+        public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
+        public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID]; } }
@@ -184,6 +209,7 @@ namespace Neptune.Web.Models
             public const int MaintenanceContactCity = 100;
             public const int MaintenanceContactState = 100;
             public const int MaintenanceContactZip = 100;
+            public const int RecordNumber = 500;
         }
     }
 }

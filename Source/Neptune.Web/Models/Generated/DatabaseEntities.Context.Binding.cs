@@ -58,6 +58,10 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
+            modelBuilder.Configurations.Add(new QuickBMPConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPAttributeConfiguration());
+            modelBuilder.Configurations.Add(new SourceControlBMPAttributeCategoryConfiguration());
             modelBuilder.Configurations.Add(new StateProvinceConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
@@ -78,6 +82,15 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanDocumentConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanParcelConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanPhotoConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyPhotoConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyQuickBMPConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifySourceControlBMPConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyStatusConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTreatmentBMPConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
+            modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
         }
         public virtual DbSet<AuditLog> AllAuditLogs { get; set; }
         public virtual IQueryable<AuditLog> AuditLogs { get { return AllAuditLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
@@ -131,6 +144,14 @@ namespace Neptune.Web.Models
         public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<Person> AllPeople { get; set; }
         public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<QuickBMP> AllQuickBMPs { get; set; }
+        public virtual IQueryable<QuickBMP> QuickBMPs { get { return AllQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMPAttributeCategory> AllSourceControlBMPAttributeCategories { get; set; }
+        public virtual IQueryable<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get { return AllSourceControlBMPAttributeCategories.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMPAttribute> AllSourceControlBMPAttributes { get; set; }
+        public virtual IQueryable<SourceControlBMPAttribute> SourceControlBMPAttributes { get { return AllSourceControlBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<SourceControlBMP> AllSourceControlBMPs { get; set; }
+        public virtual IQueryable<SourceControlBMP> SourceControlBMPs { get { return AllSourceControlBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
         public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }
@@ -169,8 +190,26 @@ namespace Neptune.Web.Models
         public virtual IQueryable<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get { return AllWaterQualityManagementPlanDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlanParcel> AllWaterQualityManagementPlanParcels { get; set; }
         public virtual IQueryable<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get { return AllWaterQualityManagementPlanParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanPhoto> AllWaterQualityManagementPlanPhotos { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get { return AllWaterQualityManagementPlanPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
         public virtual DbSet<WaterQualityManagementPlan> AllWaterQualityManagementPlans { get; set; }
         public virtual IQueryable<WaterQualityManagementPlan> WaterQualityManagementPlans { get { return AllWaterQualityManagementPlans.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerify> AllWaterQualityManagementPlanVerifies { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get { return AllWaterQualityManagementPlanVerifies.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifyPhoto> AllWaterQualityManagementPlanVerifyPhotos { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifyPhoto> WaterQualityManagementPlanVerifyPhotos { get { return AllWaterQualityManagementPlanVerifyPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifyQuickBMP> AllWaterQualityManagementPlanVerifyQuickBMPs { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get { return AllWaterQualityManagementPlanVerifyQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifySourceControlBMP> AllWaterQualityManagementPlanVerifySourceControlBMPs { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifySourceControlBMP> WaterQualityManagementPlanVerifySourceControlBMPs { get { return AllWaterQualityManagementPlanVerifySourceControlBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifyStatus> AllWaterQualityManagementPlanVerifyStatuses { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifyStatus> WaterQualityManagementPlanVerifyStatuses { get { return AllWaterQualityManagementPlanVerifyStatuses.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> AllWaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get { return AllWaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVerifyType> AllWaterQualityManagementPlanVerifyTypes { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get { return AllWaterQualityManagementPlanVerifyTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<WaterQualityManagementPlanVisitStatus> AllWaterQualityManagementPlanVisitStatuses { get; set; }
+        public virtual IQueryable<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get { return AllWaterQualityManagementPlanVisitStatuses.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -354,10 +393,22 @@ namespace Neptune.Web.Models
                 case "Person":
                     return People.GetPerson(primaryKey);
 
+                case "QuickBMP":
+                    return QuickBMPs.GetQuickBMP(primaryKey);
+
                 case "Role":
                     var role = Role.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(role, "Role", primaryKey);
                     return role;
+
+                case "SourceControlBMPAttributeCategory":
+                    return SourceControlBMPAttributeCategories.GetSourceControlBMPAttributeCategory(primaryKey);
+
+                case "SourceControlBMPAttribute":
+                    return SourceControlBMPAttributes.GetSourceControlBMPAttribute(primaryKey);
+
+                case "SourceControlBMP":
+                    return SourceControlBMPs.GetSourceControlBMP(primaryKey);
 
                 case "StateProvince":
                     return StateProvinces.GetStateProvince(primaryKey);
@@ -400,6 +451,11 @@ namespace Neptune.Web.Models
 
                 case "TreatmentBMPAssessment":
                     return TreatmentBMPAssessments.GetTreatmentBMPAssessment(primaryKey);
+
+                case "TreatmentBMPAssessmentType":
+                    var treatmentBMPAssessmentType = TreatmentBMPAssessmentType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(treatmentBMPAssessmentType, "TreatmentBMPAssessmentType", primaryKey);
+                    return treatmentBMPAssessmentType;
 
                 case "TreatmentBMPBenchmarkAndThreshold":
                     return TreatmentBMPBenchmarkAndThresholds.GetTreatmentBMPBenchmarkAndThreshold(primaryKey);
@@ -456,6 +512,9 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanPermitTerm, "WaterQualityManagementPlanPermitTerm", primaryKey);
                     return waterQualityManagementPlanPermitTerm;
 
+                case "WaterQualityManagementPlanPhoto":
+                    return WaterQualityManagementPlanPhotos.GetWaterQualityManagementPlanPhoto(primaryKey);
+
                 case "WaterQualityManagementPlanPriority":
                     var waterQualityManagementPlanPriority = WaterQualityManagementPlanPriority.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanPriority, "WaterQualityManagementPlanPriority", primaryKey);
@@ -468,6 +527,30 @@ namespace Neptune.Web.Models
                     var waterQualityManagementPlanStatus = WaterQualityManagementPlanStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(waterQualityManagementPlanStatus, "WaterQualityManagementPlanStatus", primaryKey);
                     return waterQualityManagementPlanStatus;
+
+                case "WaterQualityManagementPlanVerify":
+                    return WaterQualityManagementPlanVerifies.GetWaterQualityManagementPlanVerify(primaryKey);
+
+                case "WaterQualityManagementPlanVerifyPhoto":
+                    return WaterQualityManagementPlanVerifyPhotos.GetWaterQualityManagementPlanVerifyPhoto(primaryKey);
+
+                case "WaterQualityManagementPlanVerifyQuickBMP":
+                    return WaterQualityManagementPlanVerifyQuickBMPs.GetWaterQualityManagementPlanVerifyQuickBMP(primaryKey);
+
+                case "WaterQualityManagementPlanVerifySourceControlBMP":
+                    return WaterQualityManagementPlanVerifySourceControlBMPs.GetWaterQualityManagementPlanVerifySourceControlBMP(primaryKey);
+
+                case "WaterQualityManagementPlanVerifyStatus":
+                    return WaterQualityManagementPlanVerifyStatuses.GetWaterQualityManagementPlanVerifyStatus(primaryKey);
+
+                case "WaterQualityManagementPlanVerifyTreatmentBMP":
+                    return WaterQualityManagementPlanVerifyTreatmentBMPs.GetWaterQualityManagementPlanVerifyTreatmentBMP(primaryKey);
+
+                case "WaterQualityManagementPlanVerifyType":
+                    return WaterQualityManagementPlanVerifyTypes.GetWaterQualityManagementPlanVerifyType(primaryKey);
+
+                case "WaterQualityManagementPlanVisitStatus":
+                    return WaterQualityManagementPlanVisitStatuses.GetWaterQualityManagementPlanVisitStatus(primaryKey);
                 default:
                     throw new NotImplementedException(string.Format("No loader for type \"{0}\"", type.FullName));
             }

@@ -18,6 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common
 @using Neptune.Web.Models
 @using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
@@ -49,7 +50,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Assessment Date</label>
-                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetAssessmentDate().Date.ToShortDateString()</div>
+                    <div class="col-sm-7">@ViewDataTyped.TreatmentBMPAssessment.GetAssessmentDate().ToStringDate()</div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Field Notes</label>

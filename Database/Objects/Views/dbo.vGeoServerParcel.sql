@@ -12,5 +12,7 @@ select
 	ParcelStreetNumber,
 	ParcelAddress,
 	ParcelZipCode,
-	LandUse
+	LandUse,
+	isnull(ParcelAreaInAcres, 0) as ParcelArea 
+
 from dbo.Parcel
