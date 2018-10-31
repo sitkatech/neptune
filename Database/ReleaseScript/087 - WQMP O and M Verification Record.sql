@@ -1,34 +1,34 @@
-CREATE TABLE WaterQualityManagementPlanVerifyType(
+CREATE TABLE dbo.WaterQualityManagementPlanVerifyType(
     WaterQualityManagementPlanVerifyTypeID INT NOT NULL CONSTRAINT PK_WaterQualityManagementPlanVerifyType_WaterQualityManagementPlanVerifyTypeID PRIMARY KEY,
     TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyType_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
     WaterQualityManagementPlanVerifyTypeName VARCHAR(100) NOT NULL
 );
 
-INSERT INTO WaterQualityManagementPlanVerifyType (WaterQualityManagementPlanVerifyTypeID, TenantID, WaterQualityManagementPlanVerifyTypeName)
+INSERT INTO dbo.WaterQualityManagementPlanVerifyType (WaterQualityManagementPlanVerifyTypeID, TenantID, WaterQualityManagementPlanVerifyTypeName)
 VALUES 
 (1, 2, 'Jurisdiction Performed'),
 (2, 2, 'Self Certification');
 
 
-CREATE TABLE WaterQualityManagementPlanVisitStatus(
+CREATE TABLE dbo.WaterQualityManagementPlanVisitStatus(
     WaterQualityManagementPlanVisitStatusID INT NOT NULL CONSTRAINT PK_WaterQualityManagementPlanVisitStatus_WaterQualityManagementPlanVisitStatusID PRIMARY KEY,
     TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVisitStatus_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
     WaterQualityManagementPlanVisitStatusName VARCHAR(100) NOT NULL
 );
 
-INSERT INTO WaterQualityManagementPlanVisitStatus (WaterQualityManagementPlanVisitStatusID, TenantID, WaterQualityManagementPlanVisitStatusName)
+INSERT INTO dbo.WaterQualityManagementPlanVisitStatus (WaterQualityManagementPlanVisitStatusID, TenantID, WaterQualityManagementPlanVisitStatusName)
 VALUES 
 (1, 2, 'Initial Annual Verification'),
 (2, 2, 'Follow-up Verification');
 
-CREATE TABLE WaterQualityManagementPlanVerifyStatus(
+CREATE TABLE dbo.WaterQualityManagementPlanVerifyStatus(
     WaterQualityManagementPlanVerifyStatusID INT NOT NULL CONSTRAINT PK_WaterQualityManagementPlanVerifyStatus_WaterQualityManagementPlanVerifyStatusID PRIMARY KEY,
     TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyStatus_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
     WaterQualityManagementPlanVerifyStatusName VARCHAR(100) NOT NULL
 );
 
 
-INSERT INTO WaterQualityManagementPlanVerifyStatus (WaterQualityManagementPlanVerifyStatusID, TenantID, WaterQualityManagementPlanVerifyStatusName)
+INSERT INTO dbo.WaterQualityManagementPlanVerifyStatus (WaterQualityManagementPlanVerifyStatusID, TenantID, WaterQualityManagementPlanVerifyStatusName)
 VALUES 
 (1, 2, 'Verify Adequate O&M of WQMP'),
 (2, 2, 'Deficiencies are Present and Follow-up is Required');
@@ -48,7 +48,7 @@ CREATE TABLE dbo.WaterQualityManagementPlanPhoto(
 
 
 
-CREATE TABLE WaterQualityManagementPlanVerify (
+CREATE TABLE dbo.WaterQualityManagementPlanVerify (
     WaterQualityManagementPlanVerifyID  INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID PRIMARY KEY,
     TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
     WaterQualityManagementPlanID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlan_WaterQualityManagementPlanID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlan (WaterQualityManagementPlanID),
@@ -64,7 +64,7 @@ CREATE TABLE WaterQualityManagementPlanVerify (
 );
 
 
-CREATE TABLE WaterQualityManagementPlanVerifyPhoto(
+CREATE TABLE dbo.WaterQualityManagementPlanVerifyPhoto(
 	WaterQualityManagementPlanVerifyPhotoID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_WaterQualityManagementPlanVerifyPhoto_WaterQualityManagementPlanVerifyPhotoID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyPhoto_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyPhoto_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
@@ -72,7 +72,7 @@ CREATE TABLE WaterQualityManagementPlanVerifyPhoto(
 );
 
 
-CREATE TABLE WaterQualityManagementPlanVerifySourceControlBMP(
+CREATE TABLE dbo.WaterQualityManagementPlanVerifySourceControlBMP(
 	WaterQualityManagementPlanVerifySourceControlBMPID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_WaterQualityManagementPlanVerifySourceControlBMP_WaterQualityManagementPlanVerifySourceControlBMPID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifySourceControlBMP_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifySourceControlBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
@@ -82,7 +82,7 @@ CREATE TABLE WaterQualityManagementPlanVerifySourceControlBMP(
 
 
 
-CREATE TABLE WaterQualityManagementPlanVerifyQuickBMP (
+CREATE TABLE dbo.WaterQualityManagementPlanVerifyQuickBMP (
 	WaterQualityManagementPlanVerifyQuickBMPID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_WaterQualityManagementPlanVerifyQuickBMP_WaterQualityManagementPlanVerifyQuickBMPID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyQuickBMP_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyQuickBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
@@ -93,7 +93,7 @@ CREATE TABLE WaterQualityManagementPlanVerifyQuickBMP (
 );
 
 
-CREATE TABLE WaterQualityManagementPlanVerifyTreatmentBMP (
+CREATE TABLE dbo.WaterQualityManagementPlanVerifyTreatmentBMP (
 	WaterQualityManagementPlanVerifyTreatmentBMPID INT NOT NULL IDENTITY(1,1) CONSTRAINT PK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerifyTreatmentBMPID PRIMARY KEY,
 	TenantID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyTreatmentBMP_Tenant_TenantID FOREIGN KEY REFERENCES dbo.Tenant (TenantID),
 	WaterQualityManagementPlanVerifyID INT NOT NULL CONSTRAINT FK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID FOREIGN KEY REFERENCES dbo.WaterQualityManagementPlanVerify (WaterQualityManagementPlanVerifyID),
