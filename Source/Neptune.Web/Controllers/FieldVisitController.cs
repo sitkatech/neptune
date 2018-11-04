@@ -323,9 +323,20 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.Initial;
-            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) ?? CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
-            return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
+            // check if we are wrapping up the visit
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit))
+            {
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));
+            }
+
+            // we are not finalizing the visit, so we are beginning the assessment
+            // if we don't already have one created now is the time
+            if (fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) == null)
+            {
+                CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
+            }
+
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
         [HttpGet]
@@ -344,9 +355,20 @@ namespace Neptune.Web.Controllers
         {
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             const TreatmentBMPAssessmentTypeEnum treatmentBMPAssessmentTypeEnum = TreatmentBMPAssessmentTypeEnum.PostMaintenance;
-            var treatmentBMPAssessment = fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) ?? CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
-            return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
+            // check if we are wrapping up the visit
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit))
+            {
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));
+            }
+
+            // we are not finalizing the visit, so we are beginning the assessment
+            // if we don't already have one created now is the time
+            if (fieldVisit.GetAssessmentByType(treatmentBMPAssessmentTypeEnum) == null)
+            {
+                CreatePlaceholderTreatmentBMPAssessment(fieldVisit, treatmentBMPAssessmentTypeEnum);
+            }
+
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Observations(fieldVisit, treatmentBMPAssessmentTypeEnum)));
         }
 
         [HttpGet]
@@ -377,9 +399,19 @@ namespace Neptune.Web.Controllers
             {
                 return ViewMaintain(fieldVisit, viewModel);
             }
-            var maintenanceRecord = fieldVisit.GetMaintenanceRecord() ?? new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPTypeID, fieldVisit) { MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID };
-            if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
-            return viewModel.FinalizeVisit ?? false ? RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.VisitSummary(fieldVisit))) : RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
+            // check if we are wrapping up the visit
+            if (FinalizeVisitIfNecessary(viewModel, fieldVisit))
+            {
+                return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));
+            }
+            // we are not finalizing the visit, so we are beginning the maintenance
+            // if we don't already have one created now is the time
+            if (fieldVisit.GetMaintenanceRecord() == null)
+            {
+                new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPTypeID, fieldVisit) { MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID };
+            }
+            
+            return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));
         }
 
         [HttpGet]
