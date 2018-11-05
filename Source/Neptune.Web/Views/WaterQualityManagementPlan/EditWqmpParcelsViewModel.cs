@@ -30,10 +30,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
             var newWaterQualityManagementPlanParcels = ParcelIDs?.Select(x => new WaterQualityManagementPlanParcel(waterQualityManagementPlan.WaterQualityManagementPlanID, x)).ToList() ?? new List<WaterQualityManagementPlanParcel>();
 
-            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.ToList().Merge(
+            waterQualityManagementPlan.WaterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
                 HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanParcels.Local,
-                (x, y) => x.WaterQualityManagementPlanID == y.WaterQualityManagementPlanID && x.ParcelID == y.ParcelID);
+                (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
         }
     }
 }
