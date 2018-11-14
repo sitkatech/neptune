@@ -21,11 +21,16 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
+using GeoJSON.Net.Feature;
+using LtInfo.Common;
+using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
@@ -384,8 +389,6 @@ namespace Neptune.Web.Controllers
             return RazorView<EditAttributes, EditAttributesViewData, EditAttributesViewModel>(viewData, viewModel);
         }
 
-
-
         [HttpGet]
         [TreatmentBMPEditFeature]
         public ViewResult EditLocation(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
@@ -454,6 +457,46 @@ namespace Neptune.Web.Controllers
                 }).ToList())
             };
             return Content(dl.ToString());
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public FileResult BMPInventoryExport()
+        {
+            var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
+                Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
+                NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            
+            using (var workingDirectory = new DisposableTempDirectory())
+            {
+                FeatureCollection allTreatmentBMPsFeatureCollection = treatmentBmps.ToExportGeoJsonFeatureCollection();
+                CreateEsriShapefileFromFeatureCollection(allTreatmentBMPsFeatureCollection, workingDirectory, ogr2OgrCommandLineRunner, "AllTreatmentBMPs");
+
+                foreach (var grouping in treatmentBmps.GroupBy(x=>x.TreatmentBMPType))
+                {
+                    var subsetTreatmentBMPsFeatureCollection = grouping.ToExportGeoJsonFeatureCollection(grouping.Key);
+                    CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection, workingDirectory, ogr2OgrCommandLineRunner, grouping.Key.TreatmentBMPTypeName.Replace(" ",""));
+                }
+
+                using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
+                {
+                    ZipFile.CreateFromDirectory(workingDirectory.DirectoryInfo.FullName, zipFile.FileInfo.FullName);
+                    var fileStream = zipFile.FileInfo.OpenRead();
+                    var bytes = fileStream.ReadFully();
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    return File(bytes, "application/zip");
+                }
+            }
+        }
+
+        private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,
+            DisposableTempDirectory workingDirectory, Ogr2OgrCommandLineRunner ogr2OgrCommandLineRunner, string outputShapefileName)
+        {
+            var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, outputShapefileName);
+            ogr2OgrCommandLineRunner.ImportGeoJsonToEsriShapefile(JsonConvert.SerializeObject(featureCollection), outputPath,
+                outputShapefileName);
         }
     }
 

@@ -69,7 +69,7 @@ namespace LtInfo.Common.GdalOgr
         }
 
         public string ImportFileGdbToGeoJson(FileInfo inputGdbFile, string sourceLayerName, bool explodeCollections)
-        {            
+        {
             Check.Require(inputGdbFile.FullName.ToLower().EndsWith(".gdb.zip"),
                 $"Input filename for GDB input must end with .gdb.zip. Filename passed is {inputGdbFile.FullName}");
             Check.RequireFileExists(inputGdbFile, "Can't find input File GDB for import with ogr2ogr");
@@ -87,6 +87,16 @@ namespace LtInfo.Common.GdalOgr
                 File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
                 var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToMsSql(geoJsonFile.FileInfo,
                     sourceColumnName, destinationTableName, destinationColumnName, _gdalDataPath, databaseConnectionString, _coordinateSystemId, extraColumns);
+                ExecuteOgr2OgrCommand(commandLineArguments);
+            }
+        }
+
+        public void ImportGeoJsonToEsriShapefile(string geoJson, string outputFilePath, string outputFileName)
+        {
+            using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
+            {
+                File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToEsriShapefile(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputFileName);
                 ExecuteOgr2OgrCommand(commandLineArguments);
             }
         }
@@ -132,7 +142,7 @@ namespace LtInfo.Common.GdalOgr
 
             var selectStatement =
                 $"select {String.Join(ogr2OgrColumnListSeparator + " ", filteredColumnNameList)} from {sourceLayerName}";
-            var commandLineArguments =  new List<string>
+            var commandLineArguments = new List<string>
             {
                 "-append",
                 "-sql",
@@ -159,7 +169,7 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         internal static List<string> BuildCommandLineArgumentsForArgGisQueryToMsSql(string arcGisQuery, DirectoryInfo gdalDataDirectoryInfo, string databaseConnectionString, string targetTableName, string sourceColumnName, string destinationColumnName, int coordinateSystemId)
         {
-            var commandLineArguments =  new List<string>
+            var commandLineArguments = new List<string>
             {
                 "-append",
                 "-sql",
@@ -212,7 +222,7 @@ namespace LtInfo.Common.GdalOgr
         /// </summary>
         internal static List<string> BuildCommandLineArgumentsForFileGdbToGeoJson(FileInfo inputGdbFile, DirectoryInfo gdalDataDirectoryInfo, string sourceLayerName, int coordinateSystemId, bool explodeCollections)
         {
-            var commandLineArguments =  new List<string>
+            var commandLineArguments = new List<string>
             {
                 "--config",
                 "GDAL_DATA",
@@ -230,6 +240,33 @@ namespace LtInfo.Common.GdalOgr
             };
 
             return commandLineArguments.Where(x => x != null).ToList();
+        }
+        /// <summary>
+        /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
+        /// <example>
+        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f "ESRI Shapefile" "c:\temp\gestalten" "C:\temp\megadamn\damn.txt" -nln gestalten
+        /// </example>
+        /// </summary>
+        private List<string> BuildCommandLineArgumentsForGeoJsonToEsriShapefile(FileInfo sourceGeoJsonFile,
+            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputName)
+        {
+            var commandLineArguments = new List<string>
+            {
+                "-preserve_fid",
+                "--config",
+                "GDAL_DATA",
+                gdalDataDirectoryInfo.FullName,
+                "-t_srs",
+                GetMapProjection(coordinateSystemId),
+                "-f",
+                "ESRI Shapefile",
+                outputPath,
+                sourceGeoJsonFile.FullName,
+                "-nln",
+                outputName
+            };
+
+            return commandLineArguments;
         }
 
         public static string GetMapProjection(int coordinateSystemId)
