@@ -101,6 +101,16 @@ namespace LtInfo.Common.GdalOgr
             }
         }
 
+        public void ImportGeoJsonToFileGdb(string geoJson, string outputFilePath, string outputLayerName, bool update)
+        {
+            using (var geoJsonFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".json"))
+            {
+                File.WriteAllText(geoJsonFile.FileInfo.FullName, geoJson);
+                var commandLineArguments = BuildCommandLineArgumentsForGeoJsonToFileGdb(geoJsonFile.FileInfo, _gdalDataPath, _coordinateSystemId, outputFilePath, outputLayerName, update);
+                ExecuteOgr2OgrCommandForFileGdbWrite(commandLineArguments);
+            }
+        }
+
         /// <summary>
         /// Import GDB to SQL using GDAL Ogr2Ogr command line tool
         /// </summary>
@@ -115,6 +125,22 @@ namespace LtInfo.Common.GdalOgr
         {
             var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
             if (processUtilityResult.ReturnCode != 0)
+            {
+                var argumentsAsString = String.Join(" ", commandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
+                var fullProcessAndArguments =
+                    $"{ProcessUtility.EncodeArgumentForCommandLine(_ogr2OgrExecutable.FullName)} {argumentsAsString}";
+                var errorMessage =
+                    $"Process \"{_ogr2OgrExecutable.Name}\" returned with exit code {processUtilityResult}, expected exit code 0.\r\n\r\nStdErr and StdOut:\r\n{processUtilityResult.StdOutAndStdErr}\r\n\r\nProcess Command Line:\r\n{fullProcessAndArguments}\r\n\r\nProcess Working Directory: {_ogr2OgrExecutable.DirectoryName}";
+                throw new Ogr2OgrCommandLineException(errorMessage);
+            }
+            return processUtilityResult;
+        }
+
+        // The FileGDB driver for Ogr2Ogr prints an empty line to standard error and returns a code even when successful, so we have to trap that case explicitly
+        private ProcessUtilityResult ExecuteOgr2OgrCommandForFileGdbWrite(List<string> commandLineArguments)
+        {
+            var processUtilityResult = ProcessUtility.ShellAndWaitImpl(_ogr2OgrExecutable.DirectoryName, _ogr2OgrExecutable.FullName, commandLineArguments, true, Convert.ToInt32(_totalMilliseconds));
+            if (processUtilityResult.ReturnCode != 0 && !(processUtilityResult.StdOutAndStdErr.Equals("[stdout] \r\n[stderr] \r\n") || processUtilityResult.StdOutAndStdErr.Equals("[stderr] \r\n[stdout] \r\n")))
             {
                 var argumentsAsString = String.Join(" ", commandLineArguments.Select(ProcessUtility.EncodeArgumentForCommandLine).ToList());
                 var fullProcessAndArguments =
@@ -276,31 +302,38 @@ namespace LtInfo.Common.GdalOgr
         /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs EPSG:4326 -f FileGDB "C:\temp\gestalten" "C:\temp\geoJay.txt" -nln gestalten
         /// </example>
         /// </summary>
-        private List<string> BuildCommandLineArgumentsForGeoJsonToFileGDB(FileInfo sourceGeoJsonFile,
-            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputName)
+        private List<string> BuildCommandLineArgumentsForGeoJsonToFileGdb(FileInfo sourceGeoJsonFile,
+            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputLayerName, bool update)
         {
             var commandLineArguments = new List<string>
             {
                 "-preserve_fid",
+                update ? "-update" : null,
                 "--config",
                 "GDAL_DATA",
                 gdalDataDirectoryInfo.FullName,
                 "-t_srs",
                 GetMapProjection(coordinateSystemId),
                 "-f",
-                "ESRI Shapefile",
-                outputPath,
+                "FileGDB",
+                outputPath  + ".gdb",
                 sourceGeoJsonFile.FullName,
                 "-nln",
-                outputName
+                outputLayerName
             };
 
-            return commandLineArguments;
+            return commandLineArguments.Where(x => x != null).ToList();
         }
 
         public static string GetMapProjection(int coordinateSystemId)
         {
             return $"EPSG:{coordinateSystemId}";
+        }
+
+        public static string SanitizeStringForGdb(string str)
+        {
+            var arr = str.Where(c => char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)).ToArray();
+            return new string(arr).Replace(" ", "_");
         }
     }
 }

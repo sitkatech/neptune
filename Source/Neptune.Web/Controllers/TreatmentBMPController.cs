@@ -474,12 +474,14 @@ namespace Neptune.Web.Controllers
             using (var workingDirectory = new DisposableTempDirectory())
             {
                 FeatureCollection allTreatmentBMPsFeatureCollection = treatmentBmps.ToExportGeoJsonFeatureCollection();
-                CreateEsriShapefileFromFeatureCollection(allTreatmentBMPsFeatureCollection, workingDirectory, ogr2OgrCommandLineRunner, "AllTreatmentBMPs");
+                var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, "BMPInventoryExport");
+                CreateEsriShapefileFromFeatureCollection(allTreatmentBMPsFeatureCollection, ogr2OgrCommandLineRunner, "AllTreatmentBMPs", outputPath, false);
 
-                foreach (var grouping in treatmentBmps.GroupBy(x=>x.TreatmentBMPType))
+                foreach (var grouping in treatmentBmps.GroupBy(x => x.TreatmentBMPType))
                 {
                     var subsetTreatmentBMPsFeatureCollection = grouping.ToExportGeoJsonFeatureCollection(grouping.Key);
-                    CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection, workingDirectory, ogr2OgrCommandLineRunner, grouping.Key.TreatmentBMPTypeName.Replace(" ",""));
+                    string outputShapefileName = Ogr2OgrCommandLineRunner.SanitizeStringForGdb(grouping.Key.TreatmentBMPTypeName);
+                    CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection, ogr2OgrCommandLineRunner, outputShapefileName, outputPath, true);
                 }
 
                 using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
@@ -495,11 +497,11 @@ namespace Neptune.Web.Controllers
         }
 
         private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,
-            DisposableTempDirectory workingDirectory, Ogr2OgrCommandLineRunner ogr2OgrCommandLineRunner, string outputShapefileName)
+            Ogr2OgrCommandLineRunner ogr2OgrCommandLineRunner, string outputShapefileName, string outputPath,
+            bool update)
         {
-            var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, outputShapefileName);
-            ogr2OgrCommandLineRunner.ImportGeoJsonToEsriShapefile(JsonConvert.SerializeObject(featureCollection), outputPath,
-                outputShapefileName);
+            ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
+                outputShapefileName, update);
         }
     }
 
