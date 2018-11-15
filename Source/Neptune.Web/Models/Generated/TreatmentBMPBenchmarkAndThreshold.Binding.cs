@@ -108,7 +108,15 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPBenchmarkAndThresholds.Remove(this);                
+            DeleteFull(HttpRequestStorage.DatabaseEntities);
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
+            dbContext.AllTreatmentBMPBenchmarkAndThresholds.Remove(this);
         }
 
         [Key]

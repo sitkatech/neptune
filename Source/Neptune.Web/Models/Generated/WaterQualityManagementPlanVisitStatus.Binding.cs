@@ -76,12 +76,20 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+            DeleteFull(HttpRequestStorage.DatabaseEntities);
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
 
             foreach(var x in WaterQualityManagementPlanVerifies.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
-            HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVisitStatuses.Remove(this);                
+            dbContext.AllWaterQualityManagementPlanVisitStatuses.Remove(this);
         }
 
         [Key]

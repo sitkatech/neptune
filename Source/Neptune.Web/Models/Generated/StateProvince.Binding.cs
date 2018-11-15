@@ -82,17 +82,25 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+            DeleteFull(HttpRequestStorage.DatabaseEntities);
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
 
             foreach(var x in Counties.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in StormwaterJurisdictions.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
-            HttpRequestStorage.DatabaseEntities.AllStateProvinces.Remove(this);                
+            dbContext.AllStateProvinces.Remove(this);
         }
 
         [Key]

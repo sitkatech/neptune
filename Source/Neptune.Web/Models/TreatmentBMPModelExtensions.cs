@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
@@ -74,9 +75,9 @@ namespace Neptune.Web.Models
             return treatmentBMP == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
         }
 
-        public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
         {
-            var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
+            var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
@@ -92,9 +93,9 @@ namespace Neptune.Web.Models
             return featureCollection;
         }
 
-        public static GeoJSON.Net.Feature.FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)
+        public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)
         {
-            var featureCollection = new GeoJSON.Net.Feature.FeatureCollection();
+            var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
@@ -108,5 +109,63 @@ namespace Neptune.Web.Models
             return featureCollection;
         }
 
+        public static FeatureCollection ToExportGeoJsonFeatureCollection(
+            this IEnumerable<TreatmentBMP> treatmentBMPs)
+        {
+            var featureCollection = new FeatureCollection();
+            featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
+            {
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
+                return feature;
+            }));
+            return featureCollection;
+        }
+
+        /// <summary>
+        /// Overload taking a TreatmentBMPType so it can access the Custom Attributes
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <param name="treatmentBMPType"></param>
+        /// <returns></returns>
+        public static FeatureCollection ToExportGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs, TreatmentBMPType treatmentBMPType)
+        {
+            var featureCollection = new FeatureCollection();
+            featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
+            {
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
+                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
+                {
+                    feature.Properties.Add(ca.CustomAttributeType.CustomAttributeTypeName, x.GetCustomAttributeValueWithUnits(ca));
+                }
+                return feature;
+            }));
+            return featureCollection;
+        }
+
+        private static void AddAllCommonPropertiesToTreatmentBMPFeature(Feature feature, TreatmentBMP x)
+        {
+            feature.Properties.Add("Name", x.TreatmentBMPName);
+            feature.Properties.Add("Jurisdiction", x.StormwaterJurisdiction.GetOrganizationDisplayName());
+            feature.Properties.Add("Type", x.TreatmentBMPType.TreatmentBMPTypeName);
+            feature.Properties.Add("Owner", x.OwnerOrganization.GetDisplayName());
+            feature.Properties.Add("Year Built", x.YearBuilt);
+            feature.Properties.Add("ID in System of Record", x.SystemOfRecordID);
+            feature.Properties.Add("Water Quality Management Plan", x.WaterQualityManagementPlan?.WaterQualityManagementPlanName);
+            feature.Properties.Add("Notes", x.Notes);
+            feature.Properties.Add("Last Assessment Date", x.GetMostRecentAssessment()?.GetAssessmentDate());
+            feature.Properties.Add("Last Assessed Score", x.GetMostRecentScoreAsString());
+            feature.Properties.Add("Number of Assessments", x.TreatmentBMPAssessments.Count);
+            feature.Properties.Add("Benchmark and Threshold Set?", x.IsBenchmarkAndThresholdsComplete().ToYesNo());
+            feature.Properties.Add("Required Lifespan of Installation",
+                x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown");
+            feature.Properties.Add("Lifespan End Date (if Fixed End Date)", x.TreatmentBMPLifespanEndDate);
+            feature.Properties.Add(FieldDefinition.RequiredFieldVisitsPerYear.GetFieldDefinitionLabel(),
+                x.RequiredFieldVisitsPerYear);
+            feature.Properties.Add(
+                FieldDefinition.RequiredPostStormFieldVisitsPerYear.GetFieldDefinitionLabel(),
+                x.RequiredPostStormFieldVisitsPerYear);
+        }
     }
 }

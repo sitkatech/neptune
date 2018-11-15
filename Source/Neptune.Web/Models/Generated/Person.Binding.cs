@@ -127,62 +127,70 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+            DeleteFull(HttpRequestStorage.DatabaseEntities);
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
 
             foreach(var x in AuditLogs.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in FieldVisitsWhereYouAreThePerformedByPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in FileResourcesWhereYouAreTheCreatePerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in ModeledCatchmentGeometryStagings.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in Notifications.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in OrganizationsWhereYouAreThePrimaryContactPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in StormwaterJurisdictionPeople.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in SupportRequestLogsWhereYouAreTheRequestPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in TenantAttributesWhereYouAreThePrimaryContactPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
-            HttpRequestStorage.DatabaseEntities.AllPeople.Remove(this);                
+            dbContext.AllPeople.Remove(this);
         }
 
         [Key]

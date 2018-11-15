@@ -93,22 +93,30 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull()
         {
+            DeleteFull(HttpRequestStorage.DatabaseEntities);
+        }
+
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteFull(DatabaseEntities dbContext)
+        {
 
             foreach(var x in TreatmentBMPBenchmarkAndThresholds.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in TreatmentBMPObservations.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
 
             foreach(var x in TreatmentBMPTypeAssessmentObservationTypes.ToList())
             {
-                x.DeleteFull();
+                x.DeleteFull(dbContext);
             }
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentObservationTypes.Remove(this);                
+            dbContext.AllTreatmentBMPAssessmentObservationTypes.Remove(this);
         }
 
         [Key]
