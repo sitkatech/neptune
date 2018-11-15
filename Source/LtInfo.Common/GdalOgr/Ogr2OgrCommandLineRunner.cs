@@ -241,13 +241,42 @@ namespace LtInfo.Common.GdalOgr
 
             return commandLineArguments.Where(x => x != null).ToList();
         }
+
         /// <summary>
         /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
         /// <example>
-        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f "ESRI Shapefile" "c:\temp\gestalten" "C:\temp\megadamn\damn.txt" -nln gestalten
+        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\\Program Files\\GDAL\\gdal-data" -t_srs EPSG:4326 -f "ESRI Shapefile" "c:\temp\gestalten" "C:\temp\geoJay" -nln gestalten
         /// </example>
         /// </summary>
         private List<string> BuildCommandLineArgumentsForGeoJsonToEsriShapefile(FileInfo sourceGeoJsonFile,
+            DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputName)
+        {
+            var commandLineArguments = new List<string>
+            {
+                "-preserve_fid",
+                "--config",
+                "GDAL_DATA",
+                gdalDataDirectoryInfo.FullName,
+                "-t_srs",
+                GetMapProjection(coordinateSystemId),
+                "-f",
+                "ESRI Shapefile",
+                outputPath,
+                sourceGeoJsonFile.FullName,
+                "-nln",
+                outputName
+            };
+
+            return commandLineArguments;
+        }
+
+        /// <summary>
+        /// Produces the command line arguments for ogr2ogr.exe to run the File Geodatabase import.
+        /// <example>
+        /// "C:\Program Files\GDAL\ogr2ogr.exe" -preserve_fid --config GDAL_DATA "C:\Program Files\GDAL\gdal-data" -t_srs EPSG:4326 -f FileGDB "C:\temp\gestalten" "C:\temp\geoJay.txt" -nln gestalten
+        /// </example>
+        /// </summary>
+        private List<string> BuildCommandLineArgumentsForGeoJsonToFileGDB(FileInfo sourceGeoJsonFile,
             DirectoryInfo gdalDataDirectoryInfo, int coordinateSystemId, string outputPath, string outputName)
         {
             var commandLineArguments = new List<string>
