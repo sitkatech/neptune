@@ -116,7 +116,7 @@ namespace Neptune.Web.Models
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
-                // TODO: plop the props
+                AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
                 return feature;
             }));
             return featureCollection;
@@ -134,10 +134,38 @@ namespace Neptune.Web.Models
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
-                // TODO: plop the props
+                AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
+                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
+                {
+                    feature.Properties.Add(ca.CustomAttributeType.CustomAttributeTypeName, x.GetCustomAttributeValueWithUnits(ca));
+                }
                 return feature;
             }));
             return featureCollection;
+        }
+
+        private static void AddAllCommonPropertiesToTreatmentBMPFeature(Feature feature, TreatmentBMP x)
+        {
+            feature.Properties.Add("Name", x.TreatmentBMPName);
+            feature.Properties.Add("Jurisdiction", x.StormwaterJurisdiction.GetOrganizationDisplayName());
+            feature.Properties.Add("Type", x.TreatmentBMPType.TreatmentBMPTypeName);
+            feature.Properties.Add("Owner", x.OwnerOrganization.GetDisplayName());
+            feature.Properties.Add("Year Built", x.YearBuilt);
+            feature.Properties.Add("ID in System of Record", x.SystemOfRecordID);
+            feature.Properties.Add("Water Quality Management Plan", x.WaterQualityManagementPlan?.WaterQualityManagementPlanName);
+            feature.Properties.Add("Notes", x.Notes);
+            feature.Properties.Add("Last Assessment Date", x.GetMostRecentAssessment()?.GetAssessmentDate());
+            feature.Properties.Add("Last Assessed Score", x.GetMostRecentScoreAsString());
+            feature.Properties.Add("Number of Assessments", x.TreatmentBMPAssessments.Count);
+            feature.Properties.Add("Benchmark and Threshold Set?", x.IsBenchmarkAndThresholdsComplete().ToYesNo());
+            feature.Properties.Add("Required Lifespan of Installation",
+                x.TreatmentBMPLifespanType?.TreatmentBMPLifespanTypeDisplayName ?? "Unknown");
+            feature.Properties.Add("Lifespan End Date (if Fixed End Date)", x.TreatmentBMPLifespanEndDate);
+            feature.Properties.Add(FieldDefinition.RequiredFieldVisitsPerYear.GetFieldDefinitionLabel(),
+                x.RequiredFieldVisitsPerYear);
+            feature.Properties.Add(
+                FieldDefinition.RequiredPostStormFieldVisitsPerYear.GetFieldDefinitionLabel(),
+                x.RequiredPostStormFieldVisitsPerYear);
         }
     }
 }

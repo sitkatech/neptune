@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -466,7 +467,9 @@ namespace Neptune.Web.Controllers
             var ogr2OgrCommandLineRunner = new Ogr2OgrCommandLineRunner(NeptuneWebConfiguration.Ogr2OgrExecutable,
                 Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
                 NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
+                .Include(x=>x.TreatmentBMPType).Include(x=>x.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x=>x.TreatmentBMPAssessments).Include(x=>x.WaterQualityManagementPlan).Include(x=>x.CustomAttributes)
+                .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             
             using (var workingDirectory = new DisposableTempDirectory())
             {
