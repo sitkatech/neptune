@@ -73,7 +73,7 @@
                 "This will open a new tab and may take several minutes. Please do not close your browser or the new tab until the download is complete.</div>" +
             "<div class='modal-footer'>" +
             "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
-                "<a class='btn btn-neptune pull-right' style='margin-right:5px;' href='@ViewDataTyped.DownloadBMPInventoryUrl' target='_blank' data-dismiss='modal'>Continue</a>" +
+                "<a class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='openDownloadUrl()' data-dismiss='modal'>Continue</a>" +
                 "</div>" +
                 "</div>" +
                 "</div>" +
@@ -81,5 +81,9 @@
         var alertDiv = jQuery(alertHtml);
         alertDiv.modal({ keyboard: true });
         alertDiv.draggable({ handle: ".modal-header" });
+    }
+
+    function openDownloadUrl() {
+        window.open("@ViewDataTyped.DownloadBMPInventoryUrl");
     }
 </script>
