@@ -63,7 +63,10 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage);
+            var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x=> x.CanView(CurrentPerson)).ToList();
+            var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
+            var featureClassesInExportCount = treatmentBmpsCurrentUserCanSee.Select(x=>x.TreatmentBMPTypeID).Distinct().Count() + 1;
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
 

@@ -8,6 +8,8 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class IndexViewData : NeptuneViewData
     {
+        public int TreatmentBmpsInExportCount { get; }
+        public int FeatureClassesInExportCount { get; }
         public TreatmentBMPGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
@@ -15,9 +17,11 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasManagePermissions { get; }
         public string DownloadBMPInventoryUrl { get; }
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
         {
+            TreatmentBmpsInExportCount = treatmentBmpsInExportCount;
+            FeatureClassesInExportCount = featureClassesInExportCount;
             PageTitle = "All Treatment BMPs";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);

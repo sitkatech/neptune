@@ -40,7 +40,7 @@
     {
         <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
     }
-    <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker"></span>Export Inventory to GIS</button>
+    <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker" style="margin-right: 5px;"></span>Export Inventory to GIS</button>
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
@@ -60,7 +60,7 @@
 
 <script>
     function createDownloadConfirmDialog()
-    {         
+    {
         var alertHtml =
             "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
                 "<div class='modal-dialog neptune-modal-dialog'>" +
@@ -69,10 +69,11 @@
                 "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
                 "<span class='modal-title'>Export Inventory to GIS</span>" +
                 "</div>" +
-                "<div class='modal-body'>This will download the BMP Inventory to your computer as a collection of shapefiles. " +
-                "This will open a new tab and may take several minutes. Please do not close your browser or the new tab until the download is complete.</div>" +
-            "<div class='modal-footer'>" +
-            "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
+                "<div class='modal-body'><p>This will download the BMP Inventory to your computer as a file geodatabase. " +
+                "This will open a new tab and may take several minutes. Please do not close your browser or the new tab until the download is complete.</p>" +
+                "<p>The file geodatabase will contain @ViewDataTyped.FeatureClassesInExportCount feature classes and a total of @ViewDataTyped.TreatmentBmpsInExportCount BMPs.</p></div>" +
+                "<div class='modal-footer'>" +
+                "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
                 "<a class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='openDownloadUrl()' data-dismiss='modal'>Continue</a>" +
                 "</div>" +
                 "</div>" +
