@@ -63,9 +63,9 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TreatmentBMP);
-            var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x=> x.CanView(CurrentPerson)).ToList();
+            var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
-            var featureClassesInExportCount = treatmentBmpsCurrentUserCanSee.Select(x=>x.TreatmentBMPTypeID).Distinct().Count() + 1;
+            var featureClassesInExportCount = treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
             var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
@@ -92,7 +92,7 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
-            mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] {treatmentBMP}, false, true));
+            mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] { treatmentBMP }, false, true));
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
             var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.VerifyInventory(treatmentBMPPrimaryKey));
@@ -152,7 +152,7 @@ namespace Neptune.Web.Controllers
                 };
             var editLocationViewData = new Views.Shared.Location.EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, "treatmentBMPLocation");
             var treatmentBMPStormwaterJurisdictionIDs = treatmentBMP != null
-                ? new List<int>{treatmentBMP.StormwaterJurisdictionID}
+                ? new List<int> { treatmentBMP.StormwaterJurisdictionID }
                 : stormwaterJurisdictions.Select(x => x.StormwaterJurisdictionID).ToList(); // todo: UI needs to adapt to stormwater jurisdiction selected
             var waterQualityManagementPlans = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans
                 .Where(x => treatmentBMPStormwaterJurisdictionIDs.Contains(x.StormwaterJurisdictionID)).ToList();
@@ -415,7 +415,7 @@ namespace Neptune.Web.Controllers
                 {
                     AllowFullScreen = false
                 };
-            var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP,mapInitJson, mapFormID);
+            var viewData = new EditLocationViewData(CurrentPerson, treatmentBMP, mapInitJson, mapFormID);
 
             return RazorView<EditLocation, EditLocationViewData, EditLocationViewModel>(viewData, viewModel);
         }
@@ -455,8 +455,8 @@ namespace Neptune.Web.Controllers
             {
                 InnerHtml = string.Join("", properties.Select(x =>
                 {
-                    var dt = new TagBuilder("dt") {InnerHtml = x.Key};
-                    var dd = new TagBuilder("dd") {InnerHtml = x.Value};
+                    var dt = new TagBuilder("dt") { InnerHtml = x.Key };
+                    var dd = new TagBuilder("dd") { InnerHtml = x.Value };
                     return $"{dt}{dd}";
                 }).ToList())
             };
@@ -471,20 +471,23 @@ namespace Neptune.Web.Controllers
                 Ogr2OgrCommandLineRunner.DefaultCoordinateSystemId,
                 NeptuneWebConfiguration.HttpRuntimeExecutionTimeout.TotalMilliseconds);
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs
-                .Include(x=>x.TreatmentBMPType).Include(x=>x.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x=>x.TreatmentBMPAssessments).Include(x=>x.WaterQualityManagementPlan).Include(x=>x.CustomAttributes)
+                .Include(x => x.TreatmentBMPType).Include(x => x.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x => x.TreatmentBMPAssessments).Include(x => x.WaterQualityManagementPlan).Include(x => x.CustomAttributes)
                 .ToList().Where(x => x.CanView(CurrentPerson)).ToList();
-            
+
             using (var workingDirectory = new DisposableTempDirectory())
             {
                 FeatureCollection allTreatmentBMPsFeatureCollection = treatmentBmps.ToExportGeoJsonFeatureCollection();
-                var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, "BMPInventoryExport");
+                var outputPath = Path.Combine(workingDirectory.DirectoryInfo.FullName, "AllTreatmentBMPs");
                 CreateEsriShapefileFromFeatureCollection(allTreatmentBMPsFeatureCollection, ogr2OgrCommandLineRunner, "AllTreatmentBMPs", outputPath, false);
 
                 foreach (var grouping in treatmentBmps.GroupBy(x => x.TreatmentBMPType))
                 {
+                    string outputLayerName = Ogr2OgrCommandLineRunner.SanitizeStringForGdb(grouping.Key.TreatmentBMPTypeName);
+                    var outputPathForLayer =
+                        Path.Combine(workingDirectory.DirectoryInfo.FullName, outputLayerName);
                     var subsetTreatmentBMPsFeatureCollection = grouping.ToExportGeoJsonFeatureCollection(grouping.Key);
-                    string outputShapefileName = Ogr2OgrCommandLineRunner.SanitizeStringForGdb(grouping.Key.TreatmentBMPTypeName);
-                    CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection, ogr2OgrCommandLineRunner, outputShapefileName, outputPath, true);
+                    CreateEsriShapefileFromFeatureCollection(subsetTreatmentBMPsFeatureCollection,
+                        ogr2OgrCommandLineRunner, outputLayerName, outputPathForLayer, false);
                 }
 
                 using (var zipFile = DisposableTempFile.MakeDisposableTempFileEndingIn(".zip"))
