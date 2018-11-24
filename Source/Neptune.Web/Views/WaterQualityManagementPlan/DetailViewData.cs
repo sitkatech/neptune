@@ -71,8 +71,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             TreatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
             SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true)).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
-
-            CalculatedParcelArea = waterQualityManagementPlanParcels.Any() ?  string.Format("{0} acres", Math.Round(waterQualityManagementPlanParcels.Sum(x => x.Parcel.ParcelAreaInAcres), 1).ToString()) : "No parcels have been associated with this WQMP";
+            var calculatedParcelAcres = WaterQualityManagementPlan.GetRecordedParcelAcreageTotal(); // This is 'calculated' by summing parcel recorded acres - not sure that's what's intended by calculated in this case
+            CalculatedParcelArea = calculatedParcelAcres != 0 ? string.Format("{0} acres", Math.Round(calculatedParcelAcres, 1).ToString()) : "No parcels have been associated with this WQMP";
         }
     }
 }

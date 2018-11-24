@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using LtInfo.Common.BootstrapWrappers;
 using LtInfo.Common.ModalDialog;
 
@@ -41,6 +42,7 @@ namespace LtInfo.Common.DhtmlWrappers
         public static readonly HtmlString EditIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit gi-1x blue");
         public static readonly HtmlString DeleteIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x blue");
         public static readonly HtmlString OkCircleIconBootstrap = BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle gi-1x blue", "Yes");
+
 
         public const string EditIcon = "<img src=\"/Content/img/bg-edit-single.png\" />";
         public const string DeleteIcon = "<img src=\"/Content/img/bg-delete-single.png\" />";
@@ -680,6 +682,29 @@ namespace LtInfo.Common.DhtmlWrappers
             var deleteIcon = deletePossibleForObject ? $"{DeleteIconBootstrap}<span style=\"display:none\">Delete</span>"
                 : BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x disabled").ToString();
             return ModalDialogFormHelper.MakeDeleteLink(deleteIcon, deleteDialogUrl, new List<string>(), userHasDeletePermission);
+        }
+
+        public static HtmlString MakeViewButtonLink(string linkID,
+            string linkText,
+            string linkUrl,
+            List<string> extraCssClasses,
+            string precedingText
+            )
+        {
+            var builder = new TagBuilder("a");
+            builder.InnerHtml += linkText;
+            builder.Attributes.Add("id", linkID);
+            builder.Attributes.Add("href", linkUrl);
+            if (extraCssClasses != null)
+            {
+                foreach (var extraCssClass in extraCssClasses)
+                {
+                    builder.AddCssClass(extraCssClass);
+                }
+            }
+            var outString = builder.ToString();
+            outString = precedingText != null ? precedingText + outString : outString;
+            return new HtmlString(outString);
         }
     }
 
