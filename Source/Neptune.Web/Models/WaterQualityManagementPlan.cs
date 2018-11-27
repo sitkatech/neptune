@@ -56,14 +56,14 @@ namespace Neptune.Web.Models
                 }.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
 
-        public double GetRecordedParcelAcreageTotal()
+        public double CalculateParcelAcreageTotal()
         {
             return this.WaterQualityManagementPlanParcels.Select(x => x.Parcel).Sum(x => x.ParcelAreaInAcres);
         }
 
         public string GetLatestOandMVerificationDate()
         {
-            return this.WaterQualityManagementPlanVerifies.Count > 0 ? this.WaterQualityManagementPlanVerifies.Select(x => x.LastEditedDate).Max().ToString("dd/MM/yyyy") : "N/A";
+            return this.WaterQualityManagementPlanVerifies.Count > 0 ? this.WaterQualityManagementPlanVerifies.Select(x => x.LastEditedDate).Max().ToString("MM/dd/yyyy") : "";
         }
 
         public string GetLatestOandMVerificationUrl()

@@ -683,29 +683,6 @@ namespace LtInfo.Common.DhtmlWrappers
                 : BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-trash gi-1x disabled").ToString();
             return ModalDialogFormHelper.MakeDeleteLink(deleteIcon, deleteDialogUrl, new List<string>(), userHasDeletePermission);
         }
-
-        public static HtmlString MakeViewButtonLink(string linkID,
-            string linkText,
-            string linkUrl,
-            List<string> extraCssClasses,
-            string precedingText
-            )
-        {
-            var builder = new TagBuilder("a");
-            builder.InnerHtml += linkText;
-            builder.Attributes.Add("id", linkID);
-            builder.Attributes.Add("href", linkUrl);
-            if (extraCssClasses != null)
-            {
-                foreach (var extraCssClass in extraCssClasses)
-                {
-                    builder.AddCssClass(extraCssClass);
-                }
-            }
-            var outString = builder.ToString();
-            outString = precedingText != null ? precedingText + outString : outString;
-            return new HtmlString(outString);
-        }
     }
 
     public enum DhtmlxGridResizeType

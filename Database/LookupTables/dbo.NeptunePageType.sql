@@ -32,4 +32,5 @@ values
 (27, 'WaterQualityMaintenancePlan', 'Water Quality Maintenance Plan', 2),
 (28, 'ParcelList', 'Parcel List', 2),
 (29, 'Training', 'Training', 2),
-(30, 'ManagerDashboard', 'Manager Dashboard', 2)
+(30, 'ManagerDashboard', 'Manager Dashboard', 2),
+(31, 'WaterQualityMaintenancePlanOandMVerifications', 'Water Quality Maintenance Plan O&M Verifications', 2)

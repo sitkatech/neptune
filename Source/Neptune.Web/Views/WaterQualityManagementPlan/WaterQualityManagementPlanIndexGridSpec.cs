@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web;
 using LtInfo.Common.BootstrapWrappers;
 using LtInfo.Common.DhtmlWrappers;
@@ -81,26 +80,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     : new HtmlString("<span style='display:none;'>No</span>")
                 , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
             Add("Record Number", x => x.RecordNumber, 150);
-            Add("Recorded Parcel Acreage", x => Math.Round(x.GetRecordedParcelAcreageTotal(), 1).ToString(), 100);
-            Add("Calculated Parcel Acreage", x => Math.Round(x.GetRecordedParcelAcreageTotal(), 1).ToString(), 100);
-            Add("Latest O&M Verification", x =>
-                {
-                    var latestUrl = x.GetLatestOandMVerificationUrl();
-                    if (!latestUrl.IsNullOrWhiteSpace())
-                    {
-                        return DhtmlxGridHtmlHelpers.MakeViewButtonLink("ViewLatestOandMButton", "View",
-                            x.GetLatestOandMVerificationUrl(), new List<string> {"gridButton"}, x.GetLatestOandMVerificationDate());
-                    }
-                    else
-                    {
-                        return new HtmlString("N/A");
-                    }
-                },
-                 150);
-        
-            }
-
+            Add("Recorded Parcel Acreage", x => x.RecordedWQMPAreaInAcres, 100);
+            Add("Calculated Parcel Acreage", x => Math.Round(x.CalculateParcelAcreageTotal(), 1).ToString(), 100);
+            Add("Latest O&M Verification", x => new HtmlString(!x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace() ? $"<a href=\"{x.GetLatestOandMVerificationUrl()}\" alt=\"{x.GetLatestOandMVerificationDate()}\" title=\"{x.GetLatestOandMVerificationDate()}\" >{x.GetLatestOandMVerificationDate()}</a>" : "N/A"), 100);
         }
+
     }
+}
 
  

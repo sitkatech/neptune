@@ -19,8 +19,10 @@ namespace Neptune.Web.Controllers
         public ViewResult Index()
         {
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.WaterQualityMaintenancePlan);
-            var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, gridSpec);
+            var wqmpGridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
+            var verificationNeptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.WaterQualityMaintenancePlanOandMVerifications);
+            var verificationGridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, wqmpGridSpec, verificationNeptunePage, verificationGridSpec);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -32,6 +34,20 @@ namespace Neptune.Web.Controllers
 
             var gridSpec = new WaterQualityManagementPlanIndexGridSpec(CurrentPerson);
             return new GridJsonNetJObjectResult<WaterQualityManagementPlan>(waterQualityManagementPlans, gridSpec);
+        }
+
+        [HttpGet]
+        [WaterQualityManagementPlanViewFeature]
+        public GridJsonNetJObjectResult<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerificationGridData()
+        {
+            var waterQualityManagementPlanVerifications = HttpRequestStorage.DatabaseEntities
+                .WaterQualityManagementPlanVerifies
+                .OrderBy(x => x.WaterQualityManagementPlan.StormwaterJurisdiction.Organization.OrganizationName)
+                .ThenBy(x => x.WaterQualityManagementPlan.WaterQualityManagementPlanName)
+                .ThenByDescending(x => x.LastEditedDate).ToList();
+
+            var gridSpec = new WaterQualityManagementPlanVerificationGridSpec(CurrentPerson);
+            return new GridJsonNetJObjectResult<WaterQualityManagementPlanVerify>(waterQualityManagementPlanVerifications, gridSpec);
         }
 
         [HttpGet]
