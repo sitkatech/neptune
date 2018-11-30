@@ -35,7 +35,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -64,42 +64,34 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int stormwaterJurisdictionID, int waterQualityManagementPlanLandUseID, int waterQualityManagementPlanPriorityID, int waterQualityManagementPlanStatusID, int waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName) : this()
+        public WaterQualityManagementPlan(int stormwaterJurisdictionID, string waterQualityManagementPlanName) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
-            this.WaterQualityManagementPlanLandUseID = waterQualityManagementPlanLandUseID;
-            this.WaterQualityManagementPlanPriorityID = waterQualityManagementPlanPriorityID;
-            this.WaterQualityManagementPlanStatusID = waterQualityManagementPlanStatusID;
-            this.WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlanDevelopmentTypeID;
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, WaterQualityManagementPlanLandUse waterQualityManagementPlanLandUse, WaterQualityManagementPlanPriority waterQualityManagementPlanPriority, WaterQualityManagementPlanStatus waterQualityManagementPlanStatus, WaterQualityManagementPlanDevelopmentType waterQualityManagementPlanDevelopmentType, string waterQualityManagementPlanName) : this()
+        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, string waterQualityManagementPlanName) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.StormwaterJurisdictionID = stormwaterJurisdiction.StormwaterJurisdictionID;
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.WaterQualityManagementPlans.Add(this);
-            this.WaterQualityManagementPlanLandUseID = waterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseID;
-            this.WaterQualityManagementPlanPriorityID = waterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityID;
-            this.WaterQualityManagementPlanStatusID = waterQualityManagementPlanStatus.WaterQualityManagementPlanStatusID;
-            this.WaterQualityManagementPlanDevelopmentTypeID = waterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeID;
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction, WaterQualityManagementPlanLandUse waterQualityManagementPlanLandUse, WaterQualityManagementPlanPriority waterQualityManagementPlanPriority, WaterQualityManagementPlanStatus waterQualityManagementPlanStatus, WaterQualityManagementPlanDevelopmentType waterQualityManagementPlanDevelopmentType)
+        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction)
         {
-            return new WaterQualityManagementPlan(stormwaterJurisdiction, waterQualityManagementPlanLandUse, waterQualityManagementPlanPriority, waterQualityManagementPlanStatus, waterQualityManagementPlanDevelopmentType, default(string));
+            return new WaterQualityManagementPlan(stormwaterJurisdiction, default(string));
         }
 
         /// <summary>
@@ -167,10 +159,10 @@ namespace Neptune.Web.Models
         public int WaterQualityManagementPlanID { get; set; }
         public int TenantID { get; private set; }
         public int StormwaterJurisdictionID { get; set; }
-        public int WaterQualityManagementPlanLandUseID { get; set; }
-        public int WaterQualityManagementPlanPriorityID { get; set; }
-        public int WaterQualityManagementPlanStatusID { get; set; }
-        public int WaterQualityManagementPlanDevelopmentTypeID { get; set; }
+        public int? WaterQualityManagementPlanLandUseID { get; set; }
+        public int? WaterQualityManagementPlanPriorityID { get; set; }
+        public int? WaterQualityManagementPlanStatusID { get; set; }
+        public int? WaterQualityManagementPlanDevelopmentTypeID { get; set; }
         public string WaterQualityManagementPlanName { get; set; }
         public DateTime? ApprovalDate { get; set; }
         public string MaintenanceContactName { get; set; }
@@ -198,10 +190,10 @@ namespace Neptune.Web.Models
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
         public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID]; } }
-        public WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority { get { return WaterQualityManagementPlanPriority.AllLookupDictionary[WaterQualityManagementPlanPriorityID]; } }
-        public WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get { return WaterQualityManagementPlanStatus.AllLookupDictionary[WaterQualityManagementPlanStatusID]; } }
-        public WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get { return WaterQualityManagementPlanDevelopmentType.AllLookupDictionary[WaterQualityManagementPlanDevelopmentTypeID]; } }
+        public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUseID.HasValue ? WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID.Value] : null; } }
+        public WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority { get { return WaterQualityManagementPlanPriorityID.HasValue ? WaterQualityManagementPlanPriority.AllLookupDictionary[WaterQualityManagementPlanPriorityID.Value] : null; } }
+        public WaterQualityManagementPlanStatus WaterQualityManagementPlanStatus { get { return WaterQualityManagementPlanStatusID.HasValue ? WaterQualityManagementPlanStatus.AllLookupDictionary[WaterQualityManagementPlanStatusID.Value] : null; } }
+        public WaterQualityManagementPlanDevelopmentType WaterQualityManagementPlanDevelopmentType { get { return WaterQualityManagementPlanDevelopmentTypeID.HasValue ? WaterQualityManagementPlanDevelopmentType.AllLookupDictionary[WaterQualityManagementPlanDevelopmentTypeID.Value] : null; } }
         public WaterQualityManagementPlanPermitTerm WaterQualityManagementPlanPermitTerm { get { return WaterQualityManagementPlanPermitTermID.HasValue ? WaterQualityManagementPlanPermitTerm.AllLookupDictionary[WaterQualityManagementPlanPermitTermID.Value] : null; } }
         public HydromodificationApplies HydromodificationApplies { get { return HydromodificationAppliesID.HasValue ? HydromodificationApplies.AllLookupDictionary[HydromodificationAppliesID.Value] : null; } }
         public virtual HydrologicSubarea HydrologicSubarea { get; set; }
