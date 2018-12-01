@@ -79,19 +79,39 @@
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Priority</label>
-                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityDisplayName</div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPriority != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityDisplayName
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Status</label>
-                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanStatus.WaterQualityManagementPlanStatusDisplayName</div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanStatus != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanStatus.WaterQualityManagementPlanStatusDisplayName
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Development Type</label>
-                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName</div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Land Use</label>
-                    <div class="col-sm-7">@ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName</div>
+                    <div class="col-sm-7">
+                        @if (ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanLandUse != null)
+                        {
+                            @ViewDataTyped.WaterQualityManagementPlan.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName
+                        }
+                    </div>
                 </div>
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Permit Term</label>
