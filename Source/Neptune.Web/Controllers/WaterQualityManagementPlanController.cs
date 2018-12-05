@@ -140,9 +140,7 @@ namespace Neptune.Web.Controllers
                 return ViewNew(viewModel);
             }
 
-            var waterQualityManagementPlan = new WaterQualityManagementPlan(ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID,
-                ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, null);
+            var waterQualityManagementPlan = new WaterQualityManagementPlan(ModelObjectHelpers.NotYetAssignedID, null);
             viewModel.UpdateModels(waterQualityManagementPlan);
             HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlans.Add(waterQualityManagementPlan);
             HttpRequestStorage.DatabaseEntities.SaveChanges();

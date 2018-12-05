@@ -50,18 +50,11 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             Add("Name", x => x.GetNameAsUrl(), 300);
             Add("Jurisdiction", x => x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 150);
-            Add("Priority", x => x.WaterQualityManagementPlanPriority.WaterQualityManagementPlanPriorityDisplayName,
-                100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Status", x => x.WaterQualityManagementPlanStatus.WaterQualityManagementPlanStatusDisplayName, 100,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Development Type",
-                x => x.WaterQualityManagementPlanDevelopmentType.WaterQualityManagementPlanDevelopmentTypeDisplayName,
-                100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Land Use", x => x.WaterQualityManagementPlanLandUse.WaterQualityManagementPlanLandUseDisplayName, 100,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Permit Term",
-                x => x.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName, 100,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Priority", x => x.WaterQualityManagementPlanPriority?.WaterQualityManagementPlanPriorityDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Status", x => x.WaterQualityManagementPlanStatus?.WaterQualityManagementPlanStatusDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Development Type", x => x.WaterQualityManagementPlanDevelopmentType?.WaterQualityManagementPlanDevelopmentTypeDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Land Use", x => x.WaterQualityManagementPlanLandUse?.WaterQualityManagementPlanLandUseDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Permit Term", x => x.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Approval Date", x => x.ApprovalDate, 120);
             Add("Date of Construction", x => x.DateOfContruction, 120);
             Add("Hydromodification Applies", x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 120,

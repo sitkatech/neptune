@@ -1,0 +1,5 @@
+ALTER TABLE dbo.WaterQualityManagementPlan DROP CONSTRAINT AK_WaterQualityManagementPlan_WaterQualityManagementPlanName
+GO
+
+ALTER TABLE dbo.WaterQualityManagementPlan ADD  CONSTRAINT AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID UNIQUE (WaterQualityManagementPlanName, StormwaterJurisdictionID)
+

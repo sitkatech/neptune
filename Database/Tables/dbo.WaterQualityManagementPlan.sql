@@ -6,10 +6,10 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[WaterQualityManagementPlanID] [int] IDENTITY(1,1) NOT NULL,
 	[TenantID] [int] NOT NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
-	[WaterQualityManagementPlanLandUseID] [int] NOT NULL,
-	[WaterQualityManagementPlanPriorityID] [int] NOT NULL,
-	[WaterQualityManagementPlanStatusID] [int] NOT NULL,
-	[WaterQualityManagementPlanDevelopmentTypeID] [int] NOT NULL,
+	[WaterQualityManagementPlanLandUseID] [int] NULL,
+	[WaterQualityManagementPlanPriorityID] [int] NULL,
+	[WaterQualityManagementPlanStatusID] [int] NULL,
+	[WaterQualityManagementPlanDevelopmentTypeID] [int] NULL,
 	[WaterQualityManagementPlanName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[ApprovalDate] [datetime] NULL,
 	[MaintenanceContactName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -35,9 +35,10 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[WaterQualityManagementPlanID] ASC,
 	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_WaterQualityManagementPlan_WaterQualityManagementPlanName] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_WaterQualityManagementPlan_WaterQualityManagementPlanName_StormwaterJurisdictionID] UNIQUE NONCLUSTERED 
 (
-	[WaterQualityManagementPlanName] ASC
+	[WaterQualityManagementPlanName] ASC,
+	[StormwaterJurisdictionID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 

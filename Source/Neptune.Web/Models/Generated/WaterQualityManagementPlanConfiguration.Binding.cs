@@ -18,10 +18,10 @@ namespace Neptune.Web.Models
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
-            Property(x => x.WaterQualityManagementPlanLandUseID).HasColumnName(@"WaterQualityManagementPlanLandUseID").HasColumnType("int").IsRequired();
-            Property(x => x.WaterQualityManagementPlanPriorityID).HasColumnName(@"WaterQualityManagementPlanPriorityID").HasColumnType("int").IsRequired();
-            Property(x => x.WaterQualityManagementPlanStatusID).HasColumnName(@"WaterQualityManagementPlanStatusID").HasColumnType("int").IsRequired();
-            Property(x => x.WaterQualityManagementPlanDevelopmentTypeID).HasColumnName(@"WaterQualityManagementPlanDevelopmentTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.WaterQualityManagementPlanLandUseID).HasColumnName(@"WaterQualityManagementPlanLandUseID").HasColumnType("int").IsOptional();
+            Property(x => x.WaterQualityManagementPlanPriorityID).HasColumnName(@"WaterQualityManagementPlanPriorityID").HasColumnType("int").IsOptional();
+            Property(x => x.WaterQualityManagementPlanStatusID).HasColumnName(@"WaterQualityManagementPlanStatusID").HasColumnType("int").IsOptional();
+            Property(x => x.WaterQualityManagementPlanDevelopmentTypeID).HasColumnName(@"WaterQualityManagementPlanDevelopmentTypeID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanName).HasColumnName(@"WaterQualityManagementPlanName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.ApprovalDate).HasColumnName(@"ApprovalDate").HasColumnType("datetime").IsOptional();
             Property(x => x.MaintenanceContactName).HasColumnName(@"MaintenanceContactName").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
