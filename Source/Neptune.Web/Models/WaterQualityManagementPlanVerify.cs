@@ -8,7 +8,6 @@ namespace Neptune.Web.Models
     {
 
 
-
         public string GetAuditDescriptionString()
         {
             return LastEditedDate.ToLongDateString();

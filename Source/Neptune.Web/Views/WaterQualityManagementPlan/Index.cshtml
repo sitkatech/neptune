@@ -25,9 +25,27 @@
 
 <div class="row">
     <div class="col-xs-12">
+        <h2>All Water Quality Mangement Plans</h2>
+    </div>
+    <div class="col-xs-12">
         @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
     </div>
     <div class="col-xs-12">
         @Html.DhtmlxGrid(ViewDataTyped.IndexGridSpec, ViewDataTyped.IndexGridName, ViewDataTyped.IndexGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
+    </div>
+</div>
+<br />
+<br />
+<br />
+
+<div class="row">
+    <div class="col-xs-12">
+        <h2>All Water Quality Mangement Plan O&M Verifications</h2>
+    </div>
+    <div class="col-xs-12">
+        @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.VerificationNeptunePage); }
+    </div>
+    <div class="col-xs-12">
+        @Html.DhtmlxGrid(ViewDataTyped.VerificationGridSpec, ViewDataTyped.VerificationGridName, ViewDataTyped.VerificationGridDataUrl, "", DhtmlxGridResizeType.VerticalFillHorizontalAutoFit)
     </div>
 </div>

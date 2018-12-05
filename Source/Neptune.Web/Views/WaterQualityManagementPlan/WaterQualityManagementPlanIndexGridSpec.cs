@@ -1,10 +1,11 @@
-﻿using System.Web;
-using LtInfo.Common;
+﻿using System;
+using System.Web;
 using LtInfo.Common.BootstrapWrappers;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.ModalDialog;
 using LtInfo.Common.Views;
+using Microsoft.Ajax.Utilities;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 
@@ -16,7 +17,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         {
             var waterQualityManagementPlanManageFeature = new WaterQualityManagementPlanManageFeature();
             var waterQualityManagementPlanDeleteFeature = new WaterQualityManagementPlanDeleteFeature();
-            
+
             var currentUserCanManage = waterQualityManagementPlanManageFeature.HasPermissionByPerson(currentPerson);
 
             ObjectNameSingular = Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel();
@@ -27,17 +28,22 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             {
                 Add(string.Empty, x =>
                     {
-                        var userHasDeletePermission = waterQualityManagementPlanDeleteFeature.HasPermission(currentPerson, x).HasPermission;
-                        return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), userHasDeletePermission);
+                        var userHasDeletePermission = waterQualityManagementPlanDeleteFeature
+                            .HasPermission(currentPerson, x).HasPermission;
+                        return DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
+                            userHasDeletePermission);
                     }, 26,
                     DhtmlxGridColumnFilterType.None);
                 Add(string.Empty,
                     x =>
                     {
-                        var userCanEdit = waterQualityManagementPlanManageFeature.HasPermission(currentPerson, x).HasPermission;
-                        var modalDialogForm = new ModalDialogForm(x.GetEditUrl(), ModalDialogFormHelper.DefaultDialogWidth,
+                        var userCanEdit = waterQualityManagementPlanManageFeature.HasPermission(currentPerson, x)
+                            .HasPermission;
+                        var modalDialogForm = new ModalDialogForm(x.GetEditUrl(),
+                            ModalDialogFormHelper.DefaultDialogWidth,
                             $"Edit {Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabel()}");
-                        return DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(modalDialogForm, userCanEdit);
+                        return DhtmlxGridHtmlHelpers.MakeEditIconAsModalDialogLinkBootstrap(modalDialogForm,
+                            userCanEdit);
                     },
                     26, DhtmlxGridColumnFilterType.None);
             }
@@ -51,8 +57,10 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Add("Permit Term", x => x.WaterQualityManagementPlanPermitTerm?.WaterQualityManagementPlanPermitTermDisplayName, 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Approval Date", x => x.ApprovalDate, 120);
             Add("Date of Construction", x => x.DateOfContruction, 120);
-            Add("Hydromodification Applies", x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Hydromodification Applies", x => x.HydromodificationApplies?.HydromodificationAppliesDisplayName, 120,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Hydrologic Subarea", x => x.HydrologicSubarea?.HydrologicSubareaName, 120,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Maintenance Contact Name", x => x.MaintenanceContactName, 100);
             Add("Maintenance Contact Organization", x => x.MaintenanceContactOrganization, 120);
             Add("Maintenance Contact Address", x => x.MaintenanceContactAddressToString(), 200);
@@ -64,6 +72,13 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                     ? BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-ok-circle", "Yes")
                     : new HtmlString("<span style='display:none;'>No</span>")
                 , 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
+            Add("Record Number", x => x.RecordNumber, 150);
+            Add("Recorded Parcel Acreage", x => x.RecordedWQMPAreaInAcres, 100);
+            Add("Calculated Parcel Acreage", x => Math.Round(x.CalculateParcelAcreageTotal(), 1).ToString(), 100);
+            Add("Latest O&M Verification", x => new HtmlString(!x.GetLatestOandMVerificationDate().IsNullOrWhiteSpace() ? $"<a href=\"{x.GetLatestOandMVerificationUrl()}\" alt=\"{x.GetLatestOandMVerificationDate()}\" title=\"{x.GetLatestOandMVerificationDate()}\" >{x.GetLatestOandMVerificationDate()}</a>" : "N/A"), 100);
         }
+
     }
 }
+
+ 

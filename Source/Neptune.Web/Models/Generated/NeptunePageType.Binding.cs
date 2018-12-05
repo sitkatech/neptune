@@ -48,6 +48,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeParcelList ParcelList = NeptunePageTypeParcelList.Instance;
         public static readonly NeptunePageTypeTraining Training = NeptunePageTypeTraining.Instance;
         public static readonly NeptunePageTypeManagerDashboard ManagerDashboard = NeptunePageTypeManagerDashboard.Instance;
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications WaterQualityMaintenancePlanOandMVerifications = NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -57,7 +58,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -189,6 +190,8 @@ namespace Neptune.Web.Models
                     return TreatmentBMPType;
                 case NeptunePageTypeEnum.WaterQualityMaintenancePlan:
                     return WaterQualityMaintenancePlan;
+                case NeptunePageTypeEnum.WaterQualityMaintenancePlanOandMVerifications:
+                    return WaterQualityMaintenancePlanOandMVerifications;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -226,7 +229,8 @@ namespace Neptune.Web.Models
         WaterQualityMaintenancePlan = 27,
         ParcelList = 28,
         Training = 29,
-        ManagerDashboard = 30
+        ManagerDashboard = 30,
+        WaterQualityMaintenancePlanOandMVerifications = 31
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -407,5 +411,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeManagerDashboard(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeManagerDashboard Instance = new NeptunePageTypeManagerDashboard(30, @"ManagerDashboard", @"Manager Dashboard", 2);
+    }
+
+    public partial class NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications : NeptunePageType
+    {
+        private NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications Instance = new NeptunePageTypeWaterQualityMaintenancePlanOandMVerifications(31, @"WaterQualityMaintenancePlanOandMVerifications", @"Water Quality Maintenance Plan O&M Verifications", 2);
     }
 }
