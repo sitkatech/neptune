@@ -290,7 +290,7 @@ namespace Neptune.Web.Controllers
                 treatmentBMP.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
             }
 
-            treatmentBMP.DeleteFull();
+            treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);
             return new ModalDialogFormJsonResult();
         }
 

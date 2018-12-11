@@ -180,7 +180,7 @@ namespace Neptune.Web.Controllers
             }
 
             var message = $"{FieldDefinition.TreatmentBMPAssessmentObservationType.GetFieldDefinitionLabel()} '{treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName}' successfully deleted!";
-            treatmentBMPAssessmentObservationType.DeleteFull();
+            treatmentBMPAssessmentObservationType.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }

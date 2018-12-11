@@ -63,7 +63,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDelete(viewModel);
             }
-            maintenanceRecord.DeleteFull();
+            maintenanceRecord.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay($"{FieldDefinition.MaintenanceRecord.GetFieldDefinitionLabel()} successfully deleted");
             return new ModalDialogFormJsonResult();
         }

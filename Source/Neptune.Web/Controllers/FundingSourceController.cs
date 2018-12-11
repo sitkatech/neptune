@@ -151,7 +151,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteFundingSource(fundingSource, viewModel);
             }
-            fundingSource.DeleteFull();
+            fundingSource.DeleteFull(HttpRequestStorage.DatabaseEntities);
             return new ModalDialogFormJsonResult();
         }
 

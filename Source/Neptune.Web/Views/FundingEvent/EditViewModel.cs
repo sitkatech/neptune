@@ -26,6 +26,7 @@ using System.Linq;
 using Antlr.Runtime.Misc;
 using LtInfo.Common;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.FundingEvent

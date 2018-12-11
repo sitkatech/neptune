@@ -790,7 +790,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteFieldVisit(fieldVisit, viewModel);
             }
-            fieldVisit.DeleteFull();
+            fieldVisit.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay("Successfully deleted the field visit.");
             return new ModalDialogFormJsonResult(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index()));
         }

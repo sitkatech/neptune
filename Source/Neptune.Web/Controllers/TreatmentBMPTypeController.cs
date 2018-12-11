@@ -181,7 +181,7 @@ namespace Neptune.Web.Controllers
             }
 
             var message = $"{FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabel()} '{treatmentBMPType.TreatmentBMPTypeName}' successfully deleted!";
-            treatmentBMPType.DeleteFull();
+            treatmentBMPType.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }

@@ -125,15 +125,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public void DeleteFull()
+        public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteFull(HttpRequestStorage.DatabaseEntities);
+            DeleteChildren(HttpRequestStorage.DatabaseEntities);
+            dbContext.AllPeople.Remove(this);
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public void DeleteFull(DatabaseEntities dbContext)
+        public void DeleteChildren(DatabaseEntities dbContext)
         {
 
             foreach(var x in AuditLogs.ToList())
@@ -190,7 +191,6 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
-            dbContext.AllPeople.Remove(this);
         }
 
         [Key]

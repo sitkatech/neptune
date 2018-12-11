@@ -18,12 +18,13 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace LtInfo.Common.Models
+
+using Neptune.Web.Common;
+
+namespace Neptune.Web.Models
 {
-    public interface IHaveATenantID
+    public interface IHaveATenantID : ICanDeleteFull
     {
         int TenantID { get; }
-
-        void DeleteFull();
     }
 }

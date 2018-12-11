@@ -165,7 +165,7 @@ namespace Neptune.Web.Controllers
             }
 
             var message = $"{FieldDefinition.CustomAttributeType.GetFieldDefinitionLabel()} '{customAttributeType.CustomAttributeTypeName}' successfully deleted!";
-            customAttributeType.DeleteFull();
+            customAttributeType.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay(message);
             return new ModalDialogFormJsonResult();
         }

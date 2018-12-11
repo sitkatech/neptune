@@ -20,9 +20,9 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Linq;
-using LtInfo.Common.Models;
+using Neptune.Web.Models;
 
-namespace LtInfo.Common
+namespace Neptune.Web.Common
 {
     public static class MergeListHelper
     {
@@ -76,7 +76,7 @@ namespace LtInfo.Common
             var recordsToDelete = existingList.Where(existingRecord => Equals(updatedList.MatchRecord(existingRecord, matchCriteria), default(T))).ToList();
             recordsToDelete.ForEach(recordToDelete =>
             {
-                recordToDelete.DeleteFull();
+                recordToDelete.DeleteFull(HttpRequestStorage.DatabaseEntities);
                 existingList.Remove(recordToDelete);
             });
         }

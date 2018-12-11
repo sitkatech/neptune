@@ -24,6 +24,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions

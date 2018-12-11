@@ -216,7 +216,7 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(waterQualityManagementPlan, viewModel);
             }
 
-            waterQualityManagementPlan.DeleteFull();
+            waterQualityManagementPlan.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay($"Successfully delete \"{waterQualityManagementPlan.WaterQualityManagementPlanName}\".");
 
             return new ModalDialogFormJsonResult();
@@ -487,7 +487,7 @@ namespace Neptune.Web.Controllers
 
             waterQualityManagementPlanQuickBMP.DeleteWaterQualityManagementPlanVerifyQuickBMP();
             waterQualityManagementPlanTreatmentBMP.DeleteWaterQualityManagementPlanVerifyTreatmentBMP();
-            waterQualityManagementPlanVerify.DeleteFull();
+            waterQualityManagementPlanVerify.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay($"Successfully deleted \"{lastEditedDate}\".");
 
             return new ModalDialogFormJsonResult();

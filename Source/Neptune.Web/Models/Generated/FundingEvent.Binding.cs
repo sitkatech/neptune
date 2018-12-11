@@ -92,22 +92,22 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public void DeleteFull()
+        public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteFull(HttpRequestStorage.DatabaseEntities);
+            DeleteChildren(HttpRequestStorage.DatabaseEntities);
+            dbContext.AllFundingEvents.Remove(this);
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public void DeleteFull(DatabaseEntities dbContext)
+        public void DeleteChildren(DatabaseEntities dbContext)
         {
 
             foreach(var x in FundingEventFundingSources.ToList())
             {
                 x.DeleteFull(dbContext);
             }
-            dbContext.AllFundingEvents.Remove(this);
         }
 
         [Key]

@@ -121,7 +121,7 @@ namespace Neptune.Web.Controllers
                 return ViewDelete(viewModel, fundingEvent);
             }
 
-            fundingEvent.DeleteFull();
+            fundingEvent.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully deleted");

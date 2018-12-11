@@ -59,7 +59,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteTreatmentBMPAssessment(treatmentBMPAssessment, viewModel);
             }
-            treatmentBMPAssessment.DeleteFull();
+            treatmentBMPAssessment.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay("BMP Assessment successfully deleted.");
             return new ModalDialogFormJsonResult();
         }
