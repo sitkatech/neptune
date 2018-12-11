@@ -132,13 +132,13 @@ namespace Neptune.Web.Models
         public static FeatureCollection ToExportGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs, TreatmentBMPType treatmentBMPType)
         {
             var featureCollection = new FeatureCollection();
-            featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
+            featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
-                AddAllCommonPropertiesToTreatmentBMPFeature(feature, x);
-                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes)
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.LocationPoint);
+                AddAllCommonPropertiesToTreatmentBMPFeature(feature, treatmentBMP);
+                foreach (var ca in treatmentBMPType.TreatmentBMPTypeCustomAttributeTypes.OrderBy(x => x.SortOrder))
                 {
-                    feature.Properties.Add(Ogr2OgrCommandLineRunner.SanitizeStringForGdb(ca.CustomAttributeType.CustomAttributeTypeName), x.GetCustomAttributeValueWithUnits(ca));
+                    feature.Properties.Add(Ogr2OgrCommandLineRunner.SanitizeStringForGdb(ca.CustomAttributeType.CustomAttributeTypeName), treatmentBMP.GetCustomAttributeValueWithUnits(ca));
                 }
                 return feature;
             }));
