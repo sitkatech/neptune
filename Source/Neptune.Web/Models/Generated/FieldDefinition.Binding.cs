@@ -352,7 +352,7 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionPassword : FieldDefinition
     {
         private FieldDefinitionPassword(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionPassword Instance = new FieldDefinitionPassword(3, @"Password", @"Password", @"<p>Password required to log into the ProjectNeptune tool in order to access and edit project and program information.</p>", false);
+        public static readonly FieldDefinitionPassword Instance = new FieldDefinitionPassword(3, @"Password", @"Password", @"<p>Password required to log into the Orange County Stormwater Tools in order to access and edit project and program information.</p>", false);
     }
 
     public partial class FieldDefinitionMeasurementUnit : FieldDefinition

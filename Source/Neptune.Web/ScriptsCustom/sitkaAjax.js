@@ -72,7 +72,7 @@ SitkaAjax.load = function (jqSelector, url, errorHandler) {
 
 SitkaAjax.errorHandler = function (xhr, status)
 {
-    var errorMessage = "Please reload the page and try again. If the problem persists, please contact projectneptune@sitkatech.com";
+    var errorMessage = "Please reload the page and try again. If the problem persists, please use the Request Support form on the Help menu on the top right to let us know about this error.";
     try
     {
         if (!Sitka.Methods.isUndefinedNullOrEmpty(xhr))

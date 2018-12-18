@@ -88,5 +88,11 @@
     "inputFiles": [
       "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
     ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/sitkaAjax.min.js",
+    "inputFiles": [
+      "ScriptsCustom/sitkaAjax.js"
+    ]
   }
 ]

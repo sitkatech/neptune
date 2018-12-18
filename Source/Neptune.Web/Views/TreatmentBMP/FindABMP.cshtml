@@ -104,7 +104,7 @@
             <span style="font-weight: bold">Filter by BMP Type</span>
             <select id="treatmentBMPTypeDropDown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByBmpType()" ng-model="selectedTreatmentBMPTypeIDs"
                     data-selected-text-format = "count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                <option ng-repeat="treatmentBMPType in AngularViewData.TreatmentBMPTypes" value="{{treatmentBMPType.TreatmentBMPTypeID}}">
+                <option ng-repeat="treatmentBMPType in AngularViewData.TreatmentBMPTypes | orderBy:'TreatmentBMPTypeName'" value="{{treatmentBMPType.TreatmentBMPTypeID}}">
                     {{treatmentBMPType.TreatmentBMPTypeName}}
                 </option>
             </select>

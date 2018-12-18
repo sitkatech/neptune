@@ -62,12 +62,18 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
+            var errors = new List<ValidationResult>();
+
             if (HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanDocuments.Any(x =>
                 x.WaterQualityManagementPlanID == WaterQualityManagementPlanID && x.DisplayName == DisplayName))
             {
-                yield return new SitkaValidationResult<NewViewModel, string>(
-                    "Display Name is already in use for this plan.", m => m.DisplayName);
+                errors.Add(new SitkaValidationResult<NewViewModel, string>(
+                    "Display Name is already in use for this plan.", m => m.DisplayName));
             }
+
+            FileResource.ValidateFileSize(File, errors, GeneralUtility.NameOf(() => File));
+
+            return errors;
         }
     }
 }
