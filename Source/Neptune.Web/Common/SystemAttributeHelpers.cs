@@ -60,7 +60,7 @@ namespace Neptune.Web.Common
         public static string GetTenantStyleSheetUrl()
         {
             return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantStyleSheetFileResource != null
-                ? new SitkaRoute<HomeController>(c=>c.Style()).BuildUrlFromExpression()
+                ? SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(c => c.Style(), NeptuneWebConfiguration.CanonicalHostNameRoot)
                 : "~/Content/Bootstrap/neptune/base.theme.min.css";
         }
         

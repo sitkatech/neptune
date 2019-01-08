@@ -989,6 +989,7 @@
     <Content Include="Content\Bootstrap\neptune\base.theme.less" />
     <Content Include="Areas\Trash\Views\Home\Index.cshtml" />
     <Content Include="Areas\Trash\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Trash\Views\web.config" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

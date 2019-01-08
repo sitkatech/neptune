@@ -124,6 +124,17 @@ namespace Neptune.Web.Common
             return BuildAbsoluteUrlFromExpressionImpl(routeExpression, "https");
         }
 
+        public static string BuildAbsoluteUrlHttpsFromExpression(Expression<Action<T>> routeExpression, string canonicalHostName)
+        {
+            var relativeUrl = LinkBuilderBuildUrlFromExpressionImpl(routeExpression);
+            if (relativeUrl.Contains("https://"))
+            {
+                return relativeUrl;
+            }
+
+            return $"https://{canonicalHostName}{relativeUrl}";
+        }
+
         public static string BuildAbsoluteUrlFromExpression(Expression<Action<T>> routeExpression)
         {
             return BuildAbsoluteUrlFromExpressionImpl(routeExpression, "http");

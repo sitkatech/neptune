@@ -52,7 +52,7 @@ namespace Neptune.Web.Common
 
         public static string GenerateLogInUrlWithReturnUrl()
         {
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn());
+            var logInUrl = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot);
 
             var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
 
@@ -61,8 +61,8 @@ namespace Neptune.Web.Common
 
         public static string GenerateLogOutUrlWithReturnUrl()
         {
-            var logOutUrl = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOff());
-            
+            var logOutUrl = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOff(), NeptuneWebConfiguration.CanonicalHostNameRoot);
+
             var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
 
             return OnErrorOrNotFoundPage(returnUrl) ? logOutUrl : String.Format("{0}?returnUrl={1}", logOutUrl, HttpUtility.UrlEncode(returnUrl));

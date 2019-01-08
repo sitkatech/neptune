@@ -151,12 +151,12 @@ namespace Neptune.Web
 
         public override string ErrorUrl
         {
-            get { return SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Error()); }
+            get { return SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Error(), NeptuneWebConfiguration.CanonicalHostNameRoot); }
         }
 
         public override string NotFoundUrl
         {
-            get { return SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.NotFound()); }
+            get { return SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.NotFound(), NeptuneWebConfiguration.CanonicalHostNameRoot); }
         }
 
         public override string ErrorHtml

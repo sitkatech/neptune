@@ -35,7 +35,9 @@ namespace Neptune.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
-                CookieManager = new Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager()
+                CookieDomain = ".ocstormwatertools.org",
+                CookieManager = new Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager(),
+                CookieName = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_{NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType}"
             });
 
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
@@ -43,7 +45,7 @@ namespace Neptune.Web
                 ClientId = NeptuneWebConfiguration.KeystoneOpenIDClientId,
                 Authority = NeptuneWebConfiguration.KeystoneOpenIDUrl,
                 RedirectUri = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn()), // this has to match the keystone client redirect uri
-                PostLogoutRedirectUri = $"https://{NeptuneWebConfiguration.CanonicalHostName}/", // OpenID is super picky about this; url must match what Keystone has EXACTLY (Trailing slash and all)
+                PostLogoutRedirectUri = $"https://{NeptuneWebConfiguration.CanonicalHostNameRoot}/", // OpenID is super picky about this; url must match what Keystone has EXACTLY (Trailing slash and all)
                 ResponseType = "id_token token",
                 Scope = "openid all_claims keystone",
                 UseTokenLifetime = false,
