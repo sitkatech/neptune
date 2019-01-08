@@ -96,7 +96,7 @@ namespace Neptune.Web.Controllers
             }
             var supportRequestLog = SupportRequestLog.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
+            HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
             return new ModalDialogFormJsonResult();
@@ -153,7 +153,7 @@ namespace Neptune.Web.Controllers
             }
             var supportRequestLog = SupportRequestLog.Create(CurrentPerson);
             viewModel.UpdateModel(supportRequestLog, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.Add(supportRequestLog);
+            HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
             return Redirect(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x=>x.Index()));

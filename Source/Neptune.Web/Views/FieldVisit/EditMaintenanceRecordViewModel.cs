@@ -80,8 +80,8 @@ namespace Neptune.Web.Views.FieldVisit
                 }
             }
 
-            var maintenanceRecordObservationsInDatabase = HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservations.Local;
-            var maintenanceRecordObservationValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservationValues.Local;
+            var maintenanceRecordObservationsInDatabase = HttpRequestStorage.DatabaseEntities.MaintenanceRecordObservations.Local;
+            var maintenanceRecordObservationValuesInDatabase = HttpRequestStorage.DatabaseEntities.MaintenanceRecordObservationValues.Local;
 
             var existingMaintenanceRecordObservations = maintenanceRecord.MaintenanceRecordObservations.Where(x =>
                 x.CustomAttributeType.CustomAttributeTypePurposeID ==

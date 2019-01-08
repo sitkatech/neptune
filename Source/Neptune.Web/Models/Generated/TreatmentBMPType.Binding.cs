@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPType]")]
-    public partial class TreatmentBMPType : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -32,7 +32,6 @@ namespace Neptune.Web.Models
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
             this.TreatmentBMPTypeAssessmentObservationTypes = new HashSet<TreatmentBMPTypeAssessmentObservationType>();
             this.TreatmentBMPTypeCustomAttributeTypes = new HashSet<TreatmentBMPTypeCustomAttributeType>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -86,10 +85,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.TreatmentBMPTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -144,7 +142,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int TreatmentBMPTypeID { get; set; }
-        public int TenantID { get; private set; }
         public string TreatmentBMPTypeName { get; set; }
         public string TreatmentBMPTypeDescription { get; set; }
         [NotMapped]
@@ -159,7 +156,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
         public virtual ICollection<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
         public virtual ICollection<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[WaterQualityManagementPlanPhoto](
 	[WaterQualityManagementPlanPhotoID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[FileResourceID] [int] NOT NULL,
 	[Caption] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[UploadDate] [datetime] NOT NULL,
@@ -19,8 +18,3 @@ ALTER TABLE [dbo].[WaterQualityManagementPlanPhoto]  WITH CHECK ADD  CONSTRAINT 
 REFERENCES [dbo].[FileResource] ([FileResourceID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanPhoto] CHECK CONSTRAINT [FK_WaterQualityManagementPlanPhoto_FileResource_FileResourceID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanPhoto]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanPhoto_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanPhoto] CHECK CONSTRAINT [FK_WaterQualityManagementPlanPhoto_Tenant_TenantID]

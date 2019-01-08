@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPAssessmentObservationType]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPAssessmentObservationType;
         }
 
-        public static void DeleteTreatmentBMPAssessmentObservationType(this List<int> treatmentBMPAssessmentObservationTypeIDList)
+        public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, List<int> treatmentBMPAssessmentObservationTypeIDList)
         {
             if(treatmentBMPAssessmentObservationTypeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentObservationTypes.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.Where(x => treatmentBMPAssessmentObservationTypeIDList.Contains(x.TreatmentBMPAssessmentObservationTypeID)));
+                treatmentBMPAssessmentObservationTypes.Where(x => treatmentBMPAssessmentObservationTypeIDList.Contains(x.TreatmentBMPAssessmentObservationTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessmentObservationType(this ICollection<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypesToDelete)
+        public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, ICollection<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypesToDelete)
         {
             if(treatmentBMPAssessmentObservationTypesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentObservationTypes.RemoveRange(treatmentBMPAssessmentObservationTypesToDelete);
+                var treatmentBMPAssessmentObservationTypeIDList = treatmentBMPAssessmentObservationTypesToDelete.Select(x => x.TreatmentBMPAssessmentObservationTypeID).ToList();
+                treatmentBMPAssessmentObservationTypes.Where(x => treatmentBMPAssessmentObservationTypeIDList.Contains(x.TreatmentBMPAssessmentObservationTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessmentObservationType(this int treatmentBMPAssessmentObservationTypeID)
+        public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, int treatmentBMPAssessmentObservationTypeID)
         {
-            DeleteTreatmentBMPAssessmentObservationType(new List<int> { treatmentBMPAssessmentObservationTypeID });
+            DeleteTreatmentBMPAssessmentObservationType(treatmentBMPAssessmentObservationTypes, new List<int> { treatmentBMPAssessmentObservationTypeID });
         }
 
-        public static void DeleteTreatmentBMPAssessmentObservationType(this TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationTypeToDelete)
+        public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationTypeToDelete)
         {
-            DeleteTreatmentBMPAssessmentObservationType(new List<TreatmentBMPAssessmentObservationType> { treatmentBMPAssessmentObservationTypeToDelete });
+            DeleteTreatmentBMPAssessmentObservationType(treatmentBMPAssessmentObservationTypes, new List<TreatmentBMPAssessmentObservationType> { treatmentBMPAssessmentObservationTypeToDelete });
         }
     }
 }

@@ -40,15 +40,15 @@ namespace Neptune.Web.Views.ModeledCatchment
         public void UpdateModel(Person currentPerson)
         {
             var modeledCatchmentGeometryStagings = currentPerson.ModeledCatchmentGeometryStagings.ToList();
-            modeledCatchmentGeometryStagings.DeleteModeledCatchmentGeometryStaging();
+            HttpRequestStorage.DatabaseEntities.ModeledCatchmentGeometryStagings.DeleteModeledCatchmentGeometryStaging(modeledCatchmentGeometryStagings);
 
             currentPerson.ModeledCatchmentGeometryStagings.Clear();
             if (ModeledCatchmentGeometryLayers != null && ModeledCatchmentGeometryLayers.Count > 0)
             {
-                var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.Value);
+                var stormwaterJurisdiction = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetStormwaterJurisdiction(StormwaterJurisdictionID.GetValueOrDefault()); // will never be null due to RequiredAttribute
                 Debug.Assert(stormwaterJurisdiction != null, "Stormwater Jurisdiction should not be null. Either the \"Required\" validation is missing, or UpdateModel() was run before validations.");
 
-                var modeledCatchmentsInDatabase = HttpRequestStorage.DatabaseEntities.AllModeledCatchments.Local;
+                var modeledCatchmentsInDatabase = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Local;
                 var modeledCatchmentsToSave =
                     WktAndAnnotations.Select(x => new Models.ModeledCatchment(x.Annotation, stormwaterJurisdiction.StormwaterJurisdictionID) {ModeledCatchmentGeometry = DbGeometry.FromText(x.Wkt)})
                         .ToList();

@@ -19,8 +19,8 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System;
+using System.Collections.Generic;
 using LtInfo.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {
@@ -34,7 +34,7 @@ namespace Neptune.Web.Common
 
         public abstract string DomainPrefix { get; }
 
-        public abstract string GetCanonicalHostNameForEnvironment(Tenant tenant);
+        public abstract IEnumerable<string> GetCanonicalHostNamesForEnvironment();
 
         public static NeptuneEnvironment MakeNeptuneEnvironment(string neptuneEnvironmentSetting)
         {
@@ -61,11 +61,10 @@ namespace Neptune.Web.Common
             public override NeptuneEnvironmentType NeptuneEnvironmentType => NeptuneEnvironmentType.Local;
             public override string DomainPrefix => "localhost";
 
-            public override string GetCanonicalHostNameForEnvironment(Tenant tenant)
+            public override IEnumerable<string> GetCanonicalHostNamesForEnvironment()
             {
-                var environmentPrefix = !string.IsNullOrWhiteSpace(DomainPrefix) ? $"{DomainPrefix}." : string.Empty;
-                var subdomainPrefix = !string.IsNullOrWhiteSpace(tenant.TenantSubdomain) ? $"{tenant.TenantSubdomain}." : string.Empty;
-                return $"{subdomainPrefix}{environmentPrefix}{tenant.TenantDomain}";
+                var canonicalHostNames = SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName");
+                return canonicalHostNames;
             }
         }
 
@@ -78,11 +77,10 @@ namespace Neptune.Web.Common
             public override NeptuneEnvironmentType NeptuneEnvironmentType => NeptuneEnvironmentType.Prod;
             public override string DomainPrefix => "www";
 
-            public override string GetCanonicalHostNameForEnvironment(Tenant tenant)
+            public override IEnumerable<string> GetCanonicalHostNamesForEnvironment()
             {
-                var subdomainPrefix = !string.IsNullOrWhiteSpace(tenant.TenantSubdomain) ? $"{tenant.TenantSubdomain}." : string.Empty;
-                var environmentPrefix = string.IsNullOrWhiteSpace(subdomainPrefix) ? $"{DomainPrefix}." : string.Empty;
-                return $"{subdomainPrefix}{environmentPrefix}{tenant.TenantDomain}";
+                var canonicalHostNames = SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName");
+                return canonicalHostNames;
             }
         }
 
@@ -94,11 +92,10 @@ namespace Neptune.Web.Common
             public override NeptuneEnvironmentType NeptuneEnvironmentType => NeptuneEnvironmentType.Qa;
             public override string DomainPrefix => "qa";
 
-            public override string GetCanonicalHostNameForEnvironment(Tenant tenant)
+            public override IEnumerable<string> GetCanonicalHostNamesForEnvironment()
             {
-                var environmentPrefix = !string.IsNullOrWhiteSpace(DomainPrefix) ? $"{DomainPrefix}." : string.Empty;
-                var subdomainPrefix = !string.IsNullOrWhiteSpace(tenant.TenantSubdomain) ? $"{tenant.TenantSubdomain}." : string.Empty;
-                return $"{subdomainPrefix}{environmentPrefix}{tenant.TenantDomain}";
+                var canonicalHostNames = SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName");
+                return canonicalHostNames;
             }
         }
     }

@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("Notification", schema);
             HasKey(x => x.NotificationID);
             Property(x => x.NotificationID).HasColumnName(@"NotificationID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.NotificationTypeID).HasColumnName(@"NotificationTypeID").HasColumnType("int").IsRequired();
             Property(x => x.PersonID).HasColumnName(@"PersonID").HasColumnType("int").IsRequired();
             Property(x => x.NotificationDate).HasColumnName(@"NotificationDate").HasColumnType("datetime").IsRequired();

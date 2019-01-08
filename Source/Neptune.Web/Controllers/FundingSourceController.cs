@@ -72,7 +72,7 @@ namespace Neptune.Web.Controllers
                 true);
 
             viewModel.UpdateModel(fundingSource, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllFundingSources.Add(fundingSource);
+            HttpRequestStorage.DatabaseEntities.FundingSources.Add(fundingSource);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay($"{FieldDefinition.FundingSource.GetFieldDefinitionLabel()} {fundingSource.GetDisplayNameAsUrl()} succesfully created.");
 

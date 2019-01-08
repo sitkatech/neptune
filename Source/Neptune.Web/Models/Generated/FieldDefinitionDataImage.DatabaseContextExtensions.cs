@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[FieldDefinitionDataImage]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return fieldDefinitionDataImage;
         }
 
-        public static void DeleteFieldDefinitionDataImage(this List<int> fieldDefinitionDataImageIDList)
+        public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, List<int> fieldDefinitionDataImageIDList)
         {
             if(fieldDefinitionDataImageIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldDefinitionDataImages.RemoveRange(HttpRequestStorage.DatabaseEntities.FieldDefinitionDataImages.Where(x => fieldDefinitionDataImageIDList.Contains(x.FieldDefinitionDataImageID)));
+                fieldDefinitionDataImages.Where(x => fieldDefinitionDataImageIDList.Contains(x.FieldDefinitionDataImageID)).Delete();
             }
         }
 
-        public static void DeleteFieldDefinitionDataImage(this ICollection<FieldDefinitionDataImage> fieldDefinitionDataImagesToDelete)
+        public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, ICollection<FieldDefinitionDataImage> fieldDefinitionDataImagesToDelete)
         {
             if(fieldDefinitionDataImagesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldDefinitionDataImages.RemoveRange(fieldDefinitionDataImagesToDelete);
+                var fieldDefinitionDataImageIDList = fieldDefinitionDataImagesToDelete.Select(x => x.FieldDefinitionDataImageID).ToList();
+                fieldDefinitionDataImages.Where(x => fieldDefinitionDataImageIDList.Contains(x.FieldDefinitionDataImageID)).Delete();
             }
         }
 
-        public static void DeleteFieldDefinitionDataImage(this int fieldDefinitionDataImageID)
+        public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, int fieldDefinitionDataImageID)
         {
-            DeleteFieldDefinitionDataImage(new List<int> { fieldDefinitionDataImageID });
+            DeleteFieldDefinitionDataImage(fieldDefinitionDataImages, new List<int> { fieldDefinitionDataImageID });
         }
 
-        public static void DeleteFieldDefinitionDataImage(this FieldDefinitionDataImage fieldDefinitionDataImageToDelete)
+        public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, FieldDefinitionDataImage fieldDefinitionDataImageToDelete)
         {
-            DeleteFieldDefinitionDataImage(new List<FieldDefinitionDataImage> { fieldDefinitionDataImageToDelete });
+            DeleteFieldDefinitionDataImage(fieldDefinitionDataImages, new List<FieldDefinitionDataImage> { fieldDefinitionDataImageToDelete });
         }
     }
 }

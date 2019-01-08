@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("HydrologicSubarea", schema);
             HasKey(x => x.HydrologicSubareaID);
             Property(x => x.HydrologicSubareaID).HasColumnName(@"HydrologicSubareaID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.HydrologicSubareaName).HasColumnName(@"HydrologicSubareaName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
 
             // Foreign keys

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanVisitStatus]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanVisitStatus;
         }
 
-        public static void DeleteWaterQualityManagementPlanVisitStatus(this List<int> waterQualityManagementPlanVisitStatusIDList)
+        public static void DeleteWaterQualityManagementPlanVisitStatus(this IQueryable<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses, List<int> waterQualityManagementPlanVisitStatusIDList)
         {
             if(waterQualityManagementPlanVisitStatusIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVisitStatuses.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVisitStatuses.Where(x => waterQualityManagementPlanVisitStatusIDList.Contains(x.WaterQualityManagementPlanVisitStatusID)));
+                waterQualityManagementPlanVisitStatuses.Where(x => waterQualityManagementPlanVisitStatusIDList.Contains(x.WaterQualityManagementPlanVisitStatusID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVisitStatus(this ICollection<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatusesToDelete)
+        public static void DeleteWaterQualityManagementPlanVisitStatus(this IQueryable<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses, ICollection<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatusesToDelete)
         {
             if(waterQualityManagementPlanVisitStatusesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVisitStatuses.RemoveRange(waterQualityManagementPlanVisitStatusesToDelete);
+                var waterQualityManagementPlanVisitStatusIDList = waterQualityManagementPlanVisitStatusesToDelete.Select(x => x.WaterQualityManagementPlanVisitStatusID).ToList();
+                waterQualityManagementPlanVisitStatuses.Where(x => waterQualityManagementPlanVisitStatusIDList.Contains(x.WaterQualityManagementPlanVisitStatusID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVisitStatus(this int waterQualityManagementPlanVisitStatusID)
+        public static void DeleteWaterQualityManagementPlanVisitStatus(this IQueryable<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses, int waterQualityManagementPlanVisitStatusID)
         {
-            DeleteWaterQualityManagementPlanVisitStatus(new List<int> { waterQualityManagementPlanVisitStatusID });
+            DeleteWaterQualityManagementPlanVisitStatus(waterQualityManagementPlanVisitStatuses, new List<int> { waterQualityManagementPlanVisitStatusID });
         }
 
-        public static void DeleteWaterQualityManagementPlanVisitStatus(this WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatusToDelete)
+        public static void DeleteWaterQualityManagementPlanVisitStatus(this IQueryable<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses, WaterQualityManagementPlanVisitStatus waterQualityManagementPlanVisitStatusToDelete)
         {
-            DeleteWaterQualityManagementPlanVisitStatus(new List<WaterQualityManagementPlanVisitStatus> { waterQualityManagementPlanVisitStatusToDelete });
+            DeleteWaterQualityManagementPlanVisitStatus(waterQualityManagementPlanVisitStatuses, new List<WaterQualityManagementPlanVisitStatus> { waterQualityManagementPlanVisitStatusToDelete });
         }
     }
 }

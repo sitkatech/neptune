@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPTypeAssessmentObservationType]")]
-    public partial class TreatmentBMPTypeAssessmentObservationType : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPTypeAssessmentObservationType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         {
             this.TreatmentBMPBenchmarkAndThresholds = new HashSet<TreatmentBMPBenchmarkAndThreshold>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -100,10 +99,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPTypeAssessmentObservationTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.TreatmentBMPTypeAssessmentObservationTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -123,7 +121,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int TreatmentBMPAssessmentObservationTypeID { get; set; }
         public decimal? AssessmentScoreWeight { get; set; }

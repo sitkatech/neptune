@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPType]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPType;
         }
 
-        public static void DeleteTreatmentBMPType(this List<int> treatmentBMPTypeIDList)
+        public static void DeleteTreatmentBMPType(this IQueryable<TreatmentBMPType> treatmentBMPTypes, List<int> treatmentBMPTypeIDList)
         {
             if(treatmentBMPTypeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.Where(x => treatmentBMPTypeIDList.Contains(x.TreatmentBMPTypeID)));
+                treatmentBMPTypes.Where(x => treatmentBMPTypeIDList.Contains(x.TreatmentBMPTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPType(this ICollection<TreatmentBMPType> treatmentBMPTypesToDelete)
+        public static void DeleteTreatmentBMPType(this IQueryable<TreatmentBMPType> treatmentBMPTypes, ICollection<TreatmentBMPType> treatmentBMPTypesToDelete)
         {
             if(treatmentBMPTypesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypes.RemoveRange(treatmentBMPTypesToDelete);
+                var treatmentBMPTypeIDList = treatmentBMPTypesToDelete.Select(x => x.TreatmentBMPTypeID).ToList();
+                treatmentBMPTypes.Where(x => treatmentBMPTypeIDList.Contains(x.TreatmentBMPTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPType(this int treatmentBMPTypeID)
+        public static void DeleteTreatmentBMPType(this IQueryable<TreatmentBMPType> treatmentBMPTypes, int treatmentBMPTypeID)
         {
-            DeleteTreatmentBMPType(new List<int> { treatmentBMPTypeID });
+            DeleteTreatmentBMPType(treatmentBMPTypes, new List<int> { treatmentBMPTypeID });
         }
 
-        public static void DeleteTreatmentBMPType(this TreatmentBMPType treatmentBMPTypeToDelete)
+        public static void DeleteTreatmentBMPType(this IQueryable<TreatmentBMPType> treatmentBMPTypes, TreatmentBMPType treatmentBMPTypeToDelete)
         {
-            DeleteTreatmentBMPType(new List<TreatmentBMPType> { treatmentBMPTypeToDelete });
+            DeleteTreatmentBMPType(treatmentBMPTypes, new List<TreatmentBMPType> { treatmentBMPTypeToDelete });
         }
     }
 }

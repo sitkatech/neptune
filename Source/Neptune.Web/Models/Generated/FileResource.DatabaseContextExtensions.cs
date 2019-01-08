@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[FileResource]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return fileResource;
         }
 
-        public static void DeleteFileResource(this List<int> fileResourceIDList)
+        public static void DeleteFileResource(this IQueryable<FileResource> fileResources, List<int> fileResourceIDList)
         {
             if(fileResourceIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFileResources.RemoveRange(HttpRequestStorage.DatabaseEntities.FileResources.Where(x => fileResourceIDList.Contains(x.FileResourceID)));
+                fileResources.Where(x => fileResourceIDList.Contains(x.FileResourceID)).Delete();
             }
         }
 
-        public static void DeleteFileResource(this ICollection<FileResource> fileResourcesToDelete)
+        public static void DeleteFileResource(this IQueryable<FileResource> fileResources, ICollection<FileResource> fileResourcesToDelete)
         {
             if(fileResourcesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFileResources.RemoveRange(fileResourcesToDelete);
+                var fileResourceIDList = fileResourcesToDelete.Select(x => x.FileResourceID).ToList();
+                fileResources.Where(x => fileResourceIDList.Contains(x.FileResourceID)).Delete();
             }
         }
 
-        public static void DeleteFileResource(this int fileResourceID)
+        public static void DeleteFileResource(this IQueryable<FileResource> fileResources, int fileResourceID)
         {
-            DeleteFileResource(new List<int> { fileResourceID });
+            DeleteFileResource(fileResources, new List<int> { fileResourceID });
         }
 
-        public static void DeleteFileResource(this FileResource fileResourceToDelete)
+        public static void DeleteFileResource(this IQueryable<FileResource> fileResources, FileResource fileResourceToDelete)
         {
-            DeleteFileResource(new List<FileResource> { fileResourceToDelete });
+            DeleteFileResource(fileResources, new List<FileResource> { fileResourceToDelete });
         }
     }
 }

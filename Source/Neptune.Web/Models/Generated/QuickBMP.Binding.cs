@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[QuickBMP]")]
-    public partial class QuickBMP : IHavePrimaryKey, IHaveATenantID
+    public partial class QuickBMP : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected QuickBMP()
         {
             this.WaterQualityManagementPlanVerifyQuickBMPs = new HashSet<WaterQualityManagementPlanVerifyQuickBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -96,10 +95,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllQuickBMPs.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.QuickBMPs.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -114,7 +112,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int QuickBMPID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public string QuickBMPName { get; set; }
@@ -123,7 +120,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return QuickBMPID; } set { QuickBMPID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
 

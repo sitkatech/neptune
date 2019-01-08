@@ -84,7 +84,8 @@ namespace Neptune.Web.Views.ModeledCatchment
             {
                 var gdbFile = disposableTempFile.FileInfo;
                 FileResourceData.SaveAs(gdbFile.FullName);
-                currentPerson.ModeledCatchmentGeometryStagings.ToList().DeleteModeledCatchmentGeometryStaging();
+
+                HttpRequestStorage.DatabaseEntities.ModeledCatchmentGeometryStagings.DeleteModeledCatchmentGeometryStaging(currentPerson.ModeledCatchmentGeometryStagings);
                 currentPerson.ModeledCatchmentGeometryStagings.Clear();
                 ModeledCatchmentGeometryStaging.CreateModeledCatchmentGeometryStagingListFromGdb(gdbFile, currentPerson);
             }

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[MaintenanceRecord]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return maintenanceRecord;
         }
 
-        public static void DeleteMaintenanceRecord(this List<int> maintenanceRecordIDList)
+        public static void DeleteMaintenanceRecord(this IQueryable<MaintenanceRecord> maintenanceRecords, List<int> maintenanceRecordIDList)
         {
             if(maintenanceRecordIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.RemoveRange(HttpRequestStorage.DatabaseEntities.MaintenanceRecords.Where(x => maintenanceRecordIDList.Contains(x.MaintenanceRecordID)));
+                maintenanceRecords.Where(x => maintenanceRecordIDList.Contains(x.MaintenanceRecordID)).Delete();
             }
         }
 
-        public static void DeleteMaintenanceRecord(this ICollection<MaintenanceRecord> maintenanceRecordsToDelete)
+        public static void DeleteMaintenanceRecord(this IQueryable<MaintenanceRecord> maintenanceRecords, ICollection<MaintenanceRecord> maintenanceRecordsToDelete)
         {
             if(maintenanceRecordsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecords.RemoveRange(maintenanceRecordsToDelete);
+                var maintenanceRecordIDList = maintenanceRecordsToDelete.Select(x => x.MaintenanceRecordID).ToList();
+                maintenanceRecords.Where(x => maintenanceRecordIDList.Contains(x.MaintenanceRecordID)).Delete();
             }
         }
 
-        public static void DeleteMaintenanceRecord(this int maintenanceRecordID)
+        public static void DeleteMaintenanceRecord(this IQueryable<MaintenanceRecord> maintenanceRecords, int maintenanceRecordID)
         {
-            DeleteMaintenanceRecord(new List<int> { maintenanceRecordID });
+            DeleteMaintenanceRecord(maintenanceRecords, new List<int> { maintenanceRecordID });
         }
 
-        public static void DeleteMaintenanceRecord(this MaintenanceRecord maintenanceRecordToDelete)
+        public static void DeleteMaintenanceRecord(this IQueryable<MaintenanceRecord> maintenanceRecords, MaintenanceRecord maintenanceRecordToDelete)
         {
-            DeleteMaintenanceRecord(new List<MaintenanceRecord> { maintenanceRecordToDelete });
+            DeleteMaintenanceRecord(maintenanceRecords, new List<MaintenanceRecord> { maintenanceRecordToDelete });
         }
     }
 }

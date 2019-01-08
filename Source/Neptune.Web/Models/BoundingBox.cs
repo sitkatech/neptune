@@ -77,7 +77,7 @@ namespace Neptune.Web.Models
             }
             else
             {
-                DbGeometry geometry = MultiTenantHelpers.GetDefaultBoundingBox();
+                DbGeometry geometry = SystemAttributeHelpers.GetDefaultBoundingBox();
                 var pointCount = geometry.Envelope.ElementAt(1).PointCount.Value;
                 var envelope = geometry.Envelope.ElementAt(1);
                 var pointList1 = new List<Point>();
@@ -158,7 +158,7 @@ namespace Neptune.Web.Models
 
         public static BoundingBox MakeNewDefaultBoundingBox()
         {
-            return new BoundingBox(MultiTenantHelpers.GetDefaultBoundingBox());
+            return new BoundingBox(SystemAttributeHelpers.GetDefaultBoundingBox());
         }
 
         public static List<Point> GetPointsFromDbGeometry(DbGeometry geometry)

@@ -1,7 +1,7 @@
 //  IMPORTANT:
 //  This file is generated. Your changes will be lost.
 //  Use the corresponding partial class for customizations.
-//  Source Table: [dbo].[TenantAttribute]
+//  Source Table: [dbo].[SystemAttribute]
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,24 +15,23 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    [Table("[dbo].[TenantAttribute]")]
-    public partial class TenantAttribute : IHavePrimaryKey, IHaveATenantID
+    [Table("[dbo].[SystemAttribute]")]
+    public partial class SystemAttribute : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
         /// </summary>
-        protected TenantAttribute()
+        protected SystemAttribute()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TenantAttribute(int tenantAttributeID, DbGeometry defaultBoundingBox, int minimumYear, int? primaryContactPersonID, int? tenantSquareLogoFileResourceID, int? tenantBannerLogoFileResourceID, int? tenantStyleSheetFileResourceID, string tenantDisplayName, string toolDisplayName, string recaptchaPublicKey, string recaptchaPrivateKey, string mapServiceUrl, string parcelLayerName) : this()
+        public SystemAttribute(int systemAttributeID, DbGeometry defaultBoundingBox, int minimumYear, int? primaryContactPersonID, int? tenantSquareLogoFileResourceID, int? tenantBannerLogoFileResourceID, int? tenantStyleSheetFileResourceID, string tenantDisplayName, string toolDisplayName, string recaptchaPublicKey, string recaptchaPrivateKey, string mapServiceUrl, string parcelLayerName) : this()
         {
-            this.TenantAttributeID = tenantAttributeID;
+            this.SystemAttributeID = systemAttributeID;
             this.DefaultBoundingBox = defaultBoundingBox;
             this.MinimumYear = minimumYear;
             this.PrimaryContactPersonID = primaryContactPersonID;
@@ -50,10 +49,10 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TenantAttribute(DbGeometry defaultBoundingBox, int minimumYear, string tenantDisplayName, string toolDisplayName) : this()
+        public SystemAttribute(DbGeometry defaultBoundingBox, int minimumYear, string tenantDisplayName, string toolDisplayName) : this()
         {
             // Mark this as a new object by setting primary key with special value
-            this.TenantAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.SystemAttributeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.DefaultBoundingBox = defaultBoundingBox;
             this.MinimumYear = minimumYear;
@@ -65,9 +64,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TenantAttribute CreateNewBlank()
+        public static SystemAttribute CreateNewBlank()
         {
-            return new TenantAttribute(default(DbGeometry), default(int), default(string), default(string));
+            return new SystemAttribute(default(DbGeometry), default(int), default(string), default(string));
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(TenantAttribute).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(SystemAttribute).Name};
 
 
         /// <summary>
@@ -90,21 +89,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTenantAttributes.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.SystemAttributes.Remove(this);
         }
 
         [Key]
-        public int TenantAttributeID { get; set; }
-        public int TenantID { get; private set; }
+        public int SystemAttributeID { get; set; }
         public DbGeometry DefaultBoundingBox { get; set; }
         public int MinimumYear { get; set; }
         public int? PrimaryContactPersonID { get; set; }
@@ -118,9 +108,8 @@ namespace Neptune.Web.Models
         public string MapServiceUrl { get; set; }
         public string ParcelLayerName { get; set; }
         [NotMapped]
-        public int PrimaryKey { get { return TenantAttributeID; } set { TenantAttributeID = value; } }
+        public int PrimaryKey { get { return SystemAttributeID; } set { SystemAttributeID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person PrimaryContactPerson { get; set; }
         public virtual FileResource TenantBannerLogoFileResource { get; set; }
         public virtual FileResource TenantSquareLogoFileResource { get; set; }

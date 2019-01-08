@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlan]")]
-    public partial class WaterQualityManagementPlan : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlan : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -29,7 +29,6 @@ namespace Neptune.Web.Models
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
             this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -114,10 +113,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlans.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.WaterQualityManagementPlans.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -157,7 +155,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int WaterQualityManagementPlanID { get; set; }
-        public int TenantID { get; private set; }
         public int StormwaterJurisdictionID { get; set; }
         public int? WaterQualityManagementPlanLandUseID { get; set; }
         public int? WaterQualityManagementPlanPriorityID { get; set; }
@@ -188,7 +185,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public WaterQualityManagementPlanLandUse WaterQualityManagementPlanLandUse { get { return WaterQualityManagementPlanLandUseID.HasValue ? WaterQualityManagementPlanLandUse.AllLookupDictionary[WaterQualityManagementPlanLandUseID.Value] : null; } }
         public WaterQualityManagementPlanPriority WaterQualityManagementPlanPriority { get { return WaterQualityManagementPlanPriorityID.HasValue ? WaterQualityManagementPlanPriority.AllLookupDictionary[WaterQualityManagementPlanPriorityID.Value] : null; } }

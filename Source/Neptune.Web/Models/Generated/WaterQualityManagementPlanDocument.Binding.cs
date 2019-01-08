@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlanDocument]")]
-    public partial class WaterQualityManagementPlanDocument : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlanDocument : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlanDocument()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -102,21 +101,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlanDocuments.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.WaterQualityManagementPlanDocuments.Remove(this);
         }
 
         [Key]
         public int WaterQualityManagementPlanDocumentID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanID { get; set; }
         public int FileResourceID { get; set; }
         public string DisplayName { get; set; }
@@ -126,7 +116,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanDocumentID; } set { WaterQualityManagementPlanDocumentID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual FileResource FileResource { get; set; }
         public WaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType { get { return WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID]; } }

@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[SourceControlBMPAttributeCategory]")]
-    public partial class SourceControlBMPAttributeCategory : IHavePrimaryKey, IHaveATenantID
+    public partial class SourceControlBMPAttributeCategory : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected SourceControlBMPAttributeCategory()
         {
             this.SourceControlBMPAttributes = new HashSet<SourceControlBMPAttribute>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -78,10 +77,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllSourceControlBMPAttributeCategories.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.SourceControlBMPAttributeCategories.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -96,14 +94,12 @@ namespace Neptune.Web.Models
 
         [Key]
         public int SourceControlBMPAttributeCategoryID { get; set; }
-        public int TenantID { get; private set; }
         public string SourceControlBMPAttributeCategoryShortName { get; set; }
         public string SourceControlBMPAttributeCategoryName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return SourceControlBMPAttributeCategoryID; } set { SourceControlBMPAttributeCategoryID = value; } }
 
         public virtual ICollection<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

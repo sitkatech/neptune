@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[MaintenanceRecordObservationValue]")]
-    public partial class MaintenanceRecordObservationValue : IHavePrimaryKey, IHaveATenantID
+    public partial class MaintenanceRecordObservationValue : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected MaintenanceRecordObservationValue()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -90,27 +89,17 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllMaintenanceRecordObservationValues.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.MaintenanceRecordObservationValues.Remove(this);
         }
 
         [Key]
         public int MaintenanceRecordObservationValueID { get; set; }
-        public int TenantID { get; private set; }
         public int MaintenanceRecordObservationID { get; set; }
         public string ObservationValue { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return MaintenanceRecordObservationValueID; } set { MaintenanceRecordObservationValueID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual MaintenanceRecordObservation MaintenanceRecordObservation { get; set; }
 
         public static class FieldLengths

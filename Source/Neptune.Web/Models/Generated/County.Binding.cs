@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[County]")]
-    public partial class County : IHavePrimaryKey, IHaveATenantID
+    public partial class County : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected County()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -91,28 +90,18 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllCounties.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.Counties.Remove(this);
         }
 
         [Key]
         public int CountyID { get; set; }
-        public int TenantID { get; private set; }
         public string CountyName { get; set; }
         public int StateProvinceID { get; set; }
         public DbGeometry CountyFeature { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return CountyID; } set { CountyID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StateProvince StateProvince { get; set; }
 
         public static class FieldLengths

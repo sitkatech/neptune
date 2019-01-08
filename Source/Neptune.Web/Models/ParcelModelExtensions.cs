@@ -10,10 +10,10 @@ namespace Neptune.Web.Models
     {
         public const string ParcelColor = "#fb00be";
 
-        public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, TenantAttribute tenantAttribute)
+        public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, SystemAttribute systemAttribute)
         {
             return new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
-                NeptuneWebConfiguration.ParcelMapServiceUrl, tenantAttribute.ParcelLayerName, "#", layerColor,
+                NeptuneWebConfiguration.ParcelMapServiceUrl, systemAttribute.ParcelLayerName, "#", layerColor,
                 layerOpacity, layerInitialVisibility);
         }
 

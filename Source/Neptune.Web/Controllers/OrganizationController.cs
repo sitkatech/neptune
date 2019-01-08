@@ -81,7 +81,7 @@ namespace Neptune.Web.Controllers
             }
             var organization = new Organization(String.Empty, true, ModelObjectHelpers.NotYetAssignedID);
             viewModel.UpdateModel(organization, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(organization);
+            HttpRequestStorage.DatabaseEntities.Organizations.Add(organization);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay($"Organization {organization.GetDisplayName()} succesfully created.");
 
@@ -135,12 +135,11 @@ namespace Neptune.Web.Controllers
         {
             var organization = organizationPrimaryKey.EntityObject;
 
-            var mapInitJson = GetMapInitJson(organization, out var hasSpatialData, CurrentPerson);
-
             var viewData = new DetailViewData(CurrentPerson, organization);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
+        // ReSharper disable once UnusedMember.Local
         private static MapInitJson GetMapInitJson(Organization organization, out bool hasSpatialData, Person person)
         {
             hasSpatialData = false;
@@ -182,7 +181,8 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteOrganization(organization, viewModel);
             }
-            organization.DeleteOrganization();
+
+            HttpRequestStorage.DatabaseEntities.Organizations.DeleteOrganization(organization);
             return new ModalDialogFormJsonResult();
         }
 
@@ -207,7 +207,7 @@ namespace Neptune.Web.Controllers
 
             var keystoneClient = new KeystoneDataClient();
 
-            var organizationGuid = viewModel.OrganizationGuid.Value;
+            var organizationGuid = viewModel.OrganizationGuid.GetValueOrDefault(); // never null due to RequiredAttribute
             KeystoneDataService.Organization keystoneOrganization;
             try
             {
@@ -233,7 +233,7 @@ namespace Neptune.Web.Controllers
                 OrganizationShortName = keystoneOrganization.ShortName,
                 OrganizationUrl = keystoneOrganization.URL
             };
-            HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(neptuneOrganization);
+            HttpRequestStorage.DatabaseEntities.Organizations.Add(neptuneOrganization);
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 

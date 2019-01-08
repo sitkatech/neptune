@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyStatus]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanVerifyStatus;
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyStatus(this List<int> waterQualityManagementPlanVerifyStatusIDList)
+        public static void DeleteWaterQualityManagementPlanVerifyStatus(this IQueryable<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatuses, List<int> waterQualityManagementPlanVerifyStatusIDList)
         {
             if(waterQualityManagementPlanVerifyStatusIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyStatuses.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyStatuses.Where(x => waterQualityManagementPlanVerifyStatusIDList.Contains(x.WaterQualityManagementPlanVerifyStatusID)));
+                waterQualityManagementPlanVerifyStatuses.Where(x => waterQualityManagementPlanVerifyStatusIDList.Contains(x.WaterQualityManagementPlanVerifyStatusID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyStatus(this ICollection<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatusesToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyStatus(this IQueryable<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatuses, ICollection<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatusesToDelete)
         {
             if(waterQualityManagementPlanVerifyStatusesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyStatuses.RemoveRange(waterQualityManagementPlanVerifyStatusesToDelete);
+                var waterQualityManagementPlanVerifyStatusIDList = waterQualityManagementPlanVerifyStatusesToDelete.Select(x => x.WaterQualityManagementPlanVerifyStatusID).ToList();
+                waterQualityManagementPlanVerifyStatuses.Where(x => waterQualityManagementPlanVerifyStatusIDList.Contains(x.WaterQualityManagementPlanVerifyStatusID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyStatus(this int waterQualityManagementPlanVerifyStatusID)
+        public static void DeleteWaterQualityManagementPlanVerifyStatus(this IQueryable<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatuses, int waterQualityManagementPlanVerifyStatusID)
         {
-            DeleteWaterQualityManagementPlanVerifyStatus(new List<int> { waterQualityManagementPlanVerifyStatusID });
+            DeleteWaterQualityManagementPlanVerifyStatus(waterQualityManagementPlanVerifyStatuses, new List<int> { waterQualityManagementPlanVerifyStatusID });
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyStatus(this WaterQualityManagementPlanVerifyStatus waterQualityManagementPlanVerifyStatusToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyStatus(this IQueryable<WaterQualityManagementPlanVerifyStatus> waterQualityManagementPlanVerifyStatuses, WaterQualityManagementPlanVerifyStatus waterQualityManagementPlanVerifyStatusToDelete)
         {
-            DeleteWaterQualityManagementPlanVerifyStatus(new List<WaterQualityManagementPlanVerifyStatus> { waterQualityManagementPlanVerifyStatusToDelete });
+            DeleteWaterQualityManagementPlanVerifyStatus(waterQualityManagementPlanVerifyStatuses, new List<WaterQualityManagementPlanVerifyStatus> { waterQualityManagementPlanVerifyStatusToDelete });
         }
     }
 }

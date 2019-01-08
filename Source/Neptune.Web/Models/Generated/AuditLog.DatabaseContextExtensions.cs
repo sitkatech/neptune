@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[AuditLog]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return auditLog;
         }
 
-        public static void DeleteAuditLog(this List<int> auditLogIDList)
+        public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, List<int> auditLogIDList)
         {
             if(auditLogIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllAuditLogs.RemoveRange(HttpRequestStorage.DatabaseEntities.AuditLogs.Where(x => auditLogIDList.Contains(x.AuditLogID)));
+                auditLogs.Where(x => auditLogIDList.Contains(x.AuditLogID)).Delete();
             }
         }
 
-        public static void DeleteAuditLog(this ICollection<AuditLog> auditLogsToDelete)
+        public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, ICollection<AuditLog> auditLogsToDelete)
         {
             if(auditLogsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllAuditLogs.RemoveRange(auditLogsToDelete);
+                var auditLogIDList = auditLogsToDelete.Select(x => x.AuditLogID).ToList();
+                auditLogs.Where(x => auditLogIDList.Contains(x.AuditLogID)).Delete();
             }
         }
 
-        public static void DeleteAuditLog(this int auditLogID)
+        public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, int auditLogID)
         {
-            DeleteAuditLog(new List<int> { auditLogID });
+            DeleteAuditLog(auditLogs, new List<int> { auditLogID });
         }
 
-        public static void DeleteAuditLog(this AuditLog auditLogToDelete)
+        public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, AuditLog auditLogToDelete)
         {
-            DeleteAuditLog(new List<AuditLog> { auditLogToDelete });
+            DeleteAuditLog(auditLogs, new List<AuditLog> { auditLogToDelete });
         }
     }
 }

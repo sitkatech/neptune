@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[CustomAttributeValue]")]
-    public partial class CustomAttributeValue : IHavePrimaryKey, IHaveATenantID
+    public partial class CustomAttributeValue : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected CustomAttributeValue()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -90,27 +89,17 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllCustomAttributeValues.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.CustomAttributeValues.Remove(this);
         }
 
         [Key]
         public int CustomAttributeValueID { get; set; }
-        public int TenantID { get; private set; }
         public int CustomAttributeID { get; set; }
         public string AttributeValue { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return CustomAttributeValueID; } set { CustomAttributeValueID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual CustomAttribute CustomAttribute { get; set; }
 
         public static class FieldLengths

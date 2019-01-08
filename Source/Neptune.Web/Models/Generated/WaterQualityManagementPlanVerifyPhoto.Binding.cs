@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlanVerifyPhoto]")]
-    public partial class WaterQualityManagementPlanVerifyPhoto : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlanVerifyPhoto : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlanVerifyPhoto()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -92,27 +91,17 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlanVerifyPhotos.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.WaterQualityManagementPlanVerifyPhotos.Remove(this);
         }
 
         [Key]
         public int WaterQualityManagementPlanVerifyPhotoID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanVerifyID { get; set; }
         public int WaterQualityManagementPlanPhotoID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifyPhotoID; } set { WaterQualityManagementPlanVerifyPhotoID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
         public virtual WaterQualityManagementPlanPhoto WaterQualityManagementPlanPhoto { get; set; }
 

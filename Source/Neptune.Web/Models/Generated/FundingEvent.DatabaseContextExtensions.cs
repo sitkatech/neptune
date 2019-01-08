@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[FundingEvent]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return fundingEvent;
         }
 
-        public static void DeleteFundingEvent(this List<int> fundingEventIDList)
+        public static void DeleteFundingEvent(this IQueryable<FundingEvent> fundingEvents, List<int> fundingEventIDList)
         {
             if(fundingEventIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFundingEvents.RemoveRange(HttpRequestStorage.DatabaseEntities.FundingEvents.Where(x => fundingEventIDList.Contains(x.FundingEventID)));
+                fundingEvents.Where(x => fundingEventIDList.Contains(x.FundingEventID)).Delete();
             }
         }
 
-        public static void DeleteFundingEvent(this ICollection<FundingEvent> fundingEventsToDelete)
+        public static void DeleteFundingEvent(this IQueryable<FundingEvent> fundingEvents, ICollection<FundingEvent> fundingEventsToDelete)
         {
             if(fundingEventsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFundingEvents.RemoveRange(fundingEventsToDelete);
+                var fundingEventIDList = fundingEventsToDelete.Select(x => x.FundingEventID).ToList();
+                fundingEvents.Where(x => fundingEventIDList.Contains(x.FundingEventID)).Delete();
             }
         }
 
-        public static void DeleteFundingEvent(this int fundingEventID)
+        public static void DeleteFundingEvent(this IQueryable<FundingEvent> fundingEvents, int fundingEventID)
         {
-            DeleteFundingEvent(new List<int> { fundingEventID });
+            DeleteFundingEvent(fundingEvents, new List<int> { fundingEventID });
         }
 
-        public static void DeleteFundingEvent(this FundingEvent fundingEventToDelete)
+        public static void DeleteFundingEvent(this IQueryable<FundingEvent> fundingEvents, FundingEvent fundingEventToDelete)
         {
-            DeleteFundingEvent(new List<FundingEvent> { fundingEventToDelete });
+            DeleteFundingEvent(fundingEvents, new List<FundingEvent> { fundingEventToDelete });
         }
     }
 }

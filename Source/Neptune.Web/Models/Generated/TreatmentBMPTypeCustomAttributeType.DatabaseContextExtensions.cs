@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPTypeCustomAttributeType]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPTypeCustomAttributeType;
         }
 
-        public static void DeleteTreatmentBMPTypeCustomAttributeType(this List<int> treatmentBMPTypeCustomAttributeTypeIDList)
+        public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, List<int> treatmentBMPTypeCustomAttributeTypeIDList)
         {
             if(treatmentBMPTypeCustomAttributeTypeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeCustomAttributeTypes.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeCustomAttributeTypes.Where(x => treatmentBMPTypeCustomAttributeTypeIDList.Contains(x.TreatmentBMPTypeCustomAttributeTypeID)));
+                treatmentBMPTypeCustomAttributeTypes.Where(x => treatmentBMPTypeCustomAttributeTypeIDList.Contains(x.TreatmentBMPTypeCustomAttributeTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPTypeCustomAttributeType(this ICollection<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypesToDelete)
+        public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, ICollection<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypesToDelete)
         {
             if(treatmentBMPTypeCustomAttributeTypesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeCustomAttributeTypes.RemoveRange(treatmentBMPTypeCustomAttributeTypesToDelete);
+                var treatmentBMPTypeCustomAttributeTypeIDList = treatmentBMPTypeCustomAttributeTypesToDelete.Select(x => x.TreatmentBMPTypeCustomAttributeTypeID).ToList();
+                treatmentBMPTypeCustomAttributeTypes.Where(x => treatmentBMPTypeCustomAttributeTypeIDList.Contains(x.TreatmentBMPTypeCustomAttributeTypeID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPTypeCustomAttributeType(this int treatmentBMPTypeCustomAttributeTypeID)
+        public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, int treatmentBMPTypeCustomAttributeTypeID)
         {
-            DeleteTreatmentBMPTypeCustomAttributeType(new List<int> { treatmentBMPTypeCustomAttributeTypeID });
+            DeleteTreatmentBMPTypeCustomAttributeType(treatmentBMPTypeCustomAttributeTypes, new List<int> { treatmentBMPTypeCustomAttributeTypeID });
         }
 
-        public static void DeleteTreatmentBMPTypeCustomAttributeType(this TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeTypeToDelete)
+        public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, TreatmentBMPTypeCustomAttributeType treatmentBMPTypeCustomAttributeTypeToDelete)
         {
-            DeleteTreatmentBMPTypeCustomAttributeType(new List<TreatmentBMPTypeCustomAttributeType> { treatmentBMPTypeCustomAttributeTypeToDelete });
+            DeleteTreatmentBMPTypeCustomAttributeType(treatmentBMPTypeCustomAttributeTypes, new List<TreatmentBMPTypeCustomAttributeType> { treatmentBMPTypeCustomAttributeTypeToDelete });
         }
     }
 }

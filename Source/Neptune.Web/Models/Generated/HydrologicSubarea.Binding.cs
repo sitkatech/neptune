@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[HydrologicSubarea]")]
-    public partial class HydrologicSubarea : IHavePrimaryKey, IHaveATenantID
+    public partial class HydrologicSubarea : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected HydrologicSubarea()
         {
             this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -76,10 +75,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllHydrologicSubareas.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.HydrologicSubareas.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -94,13 +92,11 @@ namespace Neptune.Web.Models
 
         [Key]
         public int HydrologicSubareaID { get; set; }
-        public int TenantID { get; private set; }
         public string HydrologicSubareaName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return HydrologicSubareaID; } set { HydrologicSubareaID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

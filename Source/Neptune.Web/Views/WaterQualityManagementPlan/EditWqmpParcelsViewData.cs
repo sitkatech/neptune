@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWqmpParcelsViewData(Person currentPerson,
             Models.WaterQualityManagementPlan waterQualityManagementPlan,
             MapInitJson mapInitJson,
-            TenantAttribute tenantAttribute)
+            SystemAttribute systemAttribute)
             : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
@@ -27,7 +27,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
             ViewDataForAngular = new EditWqmpParcelsViewDataForAngular(mapInitJson,
                 waterQualityManagementPlan.WaterQualityManagementPlanParcels.Select(x => x.Parcel).ToList(),
-                tenantAttribute);
+                systemAttribute);
         }
 
         public class EditWqmpParcelsViewDataForAngular
@@ -42,7 +42,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             public readonly string MapServiceUrl;
             public readonly string ParcelFieldDefinitionLabel;
 
-            public EditWqmpParcelsViewDataForAngular(MapInitJson mapInitJson, IEnumerable<Models.Parcel> parcelsInViewModel, TenantAttribute tenantAttribute)
+            public EditWqmpParcelsViewDataForAngular(MapInitJson mapInitJson, List<Models.Parcel> parcelsInViewModel, SystemAttribute systemAttribute)
             {
                 MapInitJson = mapInitJson;
                 FindParcelByNameUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(c => c.FindSimpleByAPN(null));
@@ -50,7 +50,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 TypeAheadInputId = "parcelSearch";
                 ParcelNumberByID = parcelsInViewModel.ToDictionary(x => x.ParcelID, x => x.ParcelNumber);
                 ParcelAddressByID = parcelsInViewModel.ToDictionary(x => x.ParcelID, x => x.ParcelAddress);
-                ParcelMapServiceLayerName = tenantAttribute.ParcelLayerName;
+                ParcelMapServiceLayerName = systemAttribute.ParcelLayerName;
                 MapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
                 ParcelFieldDefinitionLabel = Models.FieldDefinition.Parcel.GetFieldDefinitionLabel();
             }

@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType](
 	[TreatmentBMPTypeAssessmentObservationTypeID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[TreatmentBMPAssessmentObservationTypeID] [int] NOT NULL,
 	[AssessmentScoreWeight] [decimal](9, 6) NULL,
@@ -35,20 +34,10 @@ REFERENCES [dbo].[TreatmentBMPAssessmentObservationType] ([TreatmentBMPAssessmen
 GO
 ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType] CHECK CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID]
 GO
-ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID_Tenan] FOREIGN KEY([TreatmentBMPAssessmentObservationTypeID], [TenantID])
-REFERENCES [dbo].[TreatmentBMPAssessmentObservationType] ([TreatmentBMPAssessmentObservationTypeID], [TenantID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType] CHECK CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPAssessmentObservationType_TreatmentBMPAssessmentObservationTypeID_Tenan]
-GO
 ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType] CHECK CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID_TenantID] FOREIGN KEY([TreatmentBMPTypeID], [TenantID])
-REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID], [TenantID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType] CHECK CONSTRAINT [FK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPType_TreatmentBMPTypeID_TenantID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType]  WITH CHECK ADD  CONSTRAINT [CK_OverrideNotNullIfAssessmentScoreWeightNull] CHECK  (([AssessmentScoreWeight] IS NULL AND [OverrideAssessmentScoreIfFailing] IS NOT NULL OR [AssessmentScoreWeight] IS NOT NULL AND [OverrideAssessmentScoreIfFailing] IS NOT NULL))
 GO

@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MaintenanceRecordObservationValue](
 	[MaintenanceRecordObservationValueID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[MaintenanceRecordObservationID] [int] NOT NULL,
 	[ObservationValue] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_MaintenanceRecordObservationValue_MaintenanceRecordObservationValueID] PRIMARY KEY CLUSTERED 
@@ -18,8 +17,3 @@ ALTER TABLE [dbo].[MaintenanceRecordObservationValue]  WITH CHECK ADD  CONSTRAIN
 REFERENCES [dbo].[MaintenanceRecordObservation] ([MaintenanceRecordObservationID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecordObservationValue] CHECK CONSTRAINT [FK_MaintenanceRecordObservationValue_MaintenanceRecordObservation_MaintenanceRecordObservationID]
-GO
-ALTER TABLE [dbo].[MaintenanceRecordObservationValue]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservationValue_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[MaintenanceRecordObservationValue] CHECK CONSTRAINT [FK_MaintenanceRecordObservationValue_Tenant_TenantID]

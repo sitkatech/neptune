@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
             waterQualityManagementPlan.WaterQualityManagementPlanParcels.Merge(
                 newWaterQualityManagementPlanParcels,
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanParcels.Local,
+                HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Local,
                 (x, y) => x.WaterQualityManagementPlanParcelID == y.WaterQualityManagementPlanParcelID);
         }
     }

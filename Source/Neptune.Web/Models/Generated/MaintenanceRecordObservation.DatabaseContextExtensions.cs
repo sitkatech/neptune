@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[MaintenanceRecordObservation]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return maintenanceRecordObservation;
         }
 
-        public static void DeleteMaintenanceRecordObservation(this List<int> maintenanceRecordObservationIDList)
+        public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, List<int> maintenanceRecordObservationIDList)
         {
             if(maintenanceRecordObservationIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservations.RemoveRange(HttpRequestStorage.DatabaseEntities.MaintenanceRecordObservations.Where(x => maintenanceRecordObservationIDList.Contains(x.MaintenanceRecordObservationID)));
+                maintenanceRecordObservations.Where(x => maintenanceRecordObservationIDList.Contains(x.MaintenanceRecordObservationID)).Delete();
             }
         }
 
-        public static void DeleteMaintenanceRecordObservation(this ICollection<MaintenanceRecordObservation> maintenanceRecordObservationsToDelete)
+        public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, ICollection<MaintenanceRecordObservation> maintenanceRecordObservationsToDelete)
         {
             if(maintenanceRecordObservationsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllMaintenanceRecordObservations.RemoveRange(maintenanceRecordObservationsToDelete);
+                var maintenanceRecordObservationIDList = maintenanceRecordObservationsToDelete.Select(x => x.MaintenanceRecordObservationID).ToList();
+                maintenanceRecordObservations.Where(x => maintenanceRecordObservationIDList.Contains(x.MaintenanceRecordObservationID)).Delete();
             }
         }
 
-        public static void DeleteMaintenanceRecordObservation(this int maintenanceRecordObservationID)
+        public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, int maintenanceRecordObservationID)
         {
-            DeleteMaintenanceRecordObservation(new List<int> { maintenanceRecordObservationID });
+            DeleteMaintenanceRecordObservation(maintenanceRecordObservations, new List<int> { maintenanceRecordObservationID });
         }
 
-        public static void DeleteMaintenanceRecordObservation(this MaintenanceRecordObservation maintenanceRecordObservationToDelete)
+        public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, MaintenanceRecordObservation maintenanceRecordObservationToDelete)
         {
-            DeleteMaintenanceRecordObservation(new List<MaintenanceRecordObservation> { maintenanceRecordObservationToDelete });
+            DeleteMaintenanceRecordObservation(maintenanceRecordObservations, new List<MaintenanceRecordObservation> { maintenanceRecordObservationToDelete });
         }
     }
 }

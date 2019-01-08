@@ -139,7 +139,7 @@ namespace Neptune.Web
                     unknownOrganization.OrganizationID,
                     false,
                     keystoneUserClaims.LoginName);
-                HttpRequestStorage.DatabaseEntities.AllPeople.Add(person);
+                HttpRequestStorage.DatabaseEntities.People.Add(person);
                 sendNewUserNotification = true;
             }
             else
@@ -170,7 +170,7 @@ namespace Neptune.Web
                     var defaultOrganizationType =
                         HttpRequestStorage.DatabaseEntities.OrganizationTypes.GetDefaultOrganizationType();
                     organization = new Organization(keystoneUserClaims.OrganizationName, true, defaultOrganizationType);
-                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(organization);
+                    HttpRequestStorage.DatabaseEntities.Organizations.Add(organization);
                     sendNewOrganizationNotification = true;
                 }
 

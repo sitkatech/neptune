@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[MaintenanceRecordObservation]")]
-    public partial class MaintenanceRecordObservation : IHavePrimaryKey, IHaveATenantID
+    public partial class MaintenanceRecordObservation : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected MaintenanceRecordObservation()
         {
             this.MaintenanceRecordObservationValues = new HashSet<MaintenanceRecordObservationValue>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -102,10 +101,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllMaintenanceRecordObservations.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.MaintenanceRecordObservations.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -120,7 +118,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int MaintenanceRecordObservationID { get; set; }
-        public int TenantID { get; private set; }
         public int MaintenanceRecordID { get; set; }
         public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
@@ -129,7 +126,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return MaintenanceRecordObservationID; } set { MaintenanceRecordObservationID = value; } }
 
         public virtual ICollection<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual MaintenanceRecord MaintenanceRecord { get; set; }
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

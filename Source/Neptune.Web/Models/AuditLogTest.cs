@@ -69,7 +69,7 @@ namespace Neptune.Web.Models
             // Delete audit logging
             // --------------------
 
-            testOrganization.DeleteOrganization();
+            HttpRequestStorage.DatabaseEntities.Organizations.DeleteOrganization(testOrganization);
             HttpRequestStorage.DatabaseEntities.SaveChanges(neptuneUser);
             // Check that the audit log mentions this Organization name as deleted
             Check.Assert(

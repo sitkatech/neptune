@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[SourceControlBMPAttributeCategory]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return sourceControlBMPAttributeCategory;
         }
 
-        public static void DeleteSourceControlBMPAttributeCategory(this List<int> sourceControlBMPAttributeCategoryIDList)
+        public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, List<int> sourceControlBMPAttributeCategoryIDList)
         {
             if(sourceControlBMPAttributeCategoryIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPAttributeCategories.RemoveRange(HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributeCategories.Where(x => sourceControlBMPAttributeCategoryIDList.Contains(x.SourceControlBMPAttributeCategoryID)));
+                sourceControlBMPAttributeCategories.Where(x => sourceControlBMPAttributeCategoryIDList.Contains(x.SourceControlBMPAttributeCategoryID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMPAttributeCategory(this ICollection<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategoriesToDelete)
+        public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, ICollection<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategoriesToDelete)
         {
             if(sourceControlBMPAttributeCategoriesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPAttributeCategories.RemoveRange(sourceControlBMPAttributeCategoriesToDelete);
+                var sourceControlBMPAttributeCategoryIDList = sourceControlBMPAttributeCategoriesToDelete.Select(x => x.SourceControlBMPAttributeCategoryID).ToList();
+                sourceControlBMPAttributeCategories.Where(x => sourceControlBMPAttributeCategoryIDList.Contains(x.SourceControlBMPAttributeCategoryID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMPAttributeCategory(this int sourceControlBMPAttributeCategoryID)
+        public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, int sourceControlBMPAttributeCategoryID)
         {
-            DeleteSourceControlBMPAttributeCategory(new List<int> { sourceControlBMPAttributeCategoryID });
+            DeleteSourceControlBMPAttributeCategory(sourceControlBMPAttributeCategories, new List<int> { sourceControlBMPAttributeCategoryID });
         }
 
-        public static void DeleteSourceControlBMPAttributeCategory(this SourceControlBMPAttributeCategory sourceControlBMPAttributeCategoryToDelete)
+        public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, SourceControlBMPAttributeCategory sourceControlBMPAttributeCategoryToDelete)
         {
-            DeleteSourceControlBMPAttributeCategory(new List<SourceControlBMPAttributeCategory> { sourceControlBMPAttributeCategoryToDelete });
+            DeleteSourceControlBMPAttributeCategory(sourceControlBMPAttributeCategories, new List<SourceControlBMPAttributeCategory> { sourceControlBMPAttributeCategoryToDelete });
         }
     }
 }

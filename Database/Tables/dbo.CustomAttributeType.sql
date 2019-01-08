@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[CustomAttributeType](
 	[CustomAttributeTypeID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[CustomAttributeTypeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[CustomAttributeDataTypeID] [int] NOT NULL,
 	[MeasurementUnitTypeID] [int] NULL,
@@ -15,11 +14,6 @@ CREATE TABLE [dbo].[CustomAttributeType](
  CONSTRAINT [PK_CustomAttributeType_CustomAttributeTypeID] PRIMARY KEY CLUSTERED 
 (
 	[CustomAttributeTypeID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_CustomAttributeType_CustomAttributeTypeID_TenantID] UNIQUE NONCLUSTERED 
-(
-	[CustomAttributeTypeID] ASC,
-	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [AK_CustomAttributeType_CustomAttributeTypeName] UNIQUE NONCLUSTERED 
 (
@@ -42,11 +36,6 @@ ALTER TABLE [dbo].[CustomAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_CustomAt
 REFERENCES [dbo].[MeasurementUnitType] ([MeasurementUnitTypeID])
 GO
 ALTER TABLE [dbo].[CustomAttributeType] CHECK CONSTRAINT [FK_CustomAttributeType_MeasurementUnitType_MeasurementUnitTypeID]
-GO
-ALTER TABLE [dbo].[CustomAttributeType]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttributeType_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[CustomAttributeType] CHECK CONSTRAINT [FK_CustomAttributeType_Tenant_TenantID]
 GO
 ALTER TABLE [dbo].[CustomAttributeType]  WITH CHECK ADD  CONSTRAINT [CK_CustomAttributeType_PickListTypeOptionSchemaNotNull] CHECK  ((NOT ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NULL OR ([CustomAttributeDataTypeID]=(6) OR [CustomAttributeDataTypeID]=(5)) AND [CustomAttributeTypeOptionsSchema] IS NOT NULL))
 GO

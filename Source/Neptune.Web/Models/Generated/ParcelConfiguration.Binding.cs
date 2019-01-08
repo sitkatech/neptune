@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("Parcel", schema);
             HasKey(x => x.ParcelID);
             Property(x => x.ParcelID).HasColumnName(@"ParcelID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.ParcelNumber).HasColumnName(@"ParcelNumber").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(22);
             Property(x => x.ParcelGeometry).HasColumnName(@"ParcelGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.OwnerName).HasColumnName(@"OwnerName").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);

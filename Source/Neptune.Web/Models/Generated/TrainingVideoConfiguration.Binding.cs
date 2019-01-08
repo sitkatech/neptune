@@ -16,12 +16,9 @@ namespace Neptune.Web.Models
             ToTable("TrainingVideo", schema);
             HasKey(x => x.TrainingVideoID);
             Property(x => x.TrainingVideoID).HasColumnName(@"TrainingVideoID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.VideoName).HasColumnName(@"VideoName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.VideoDescription).HasColumnName(@"VideoDescription").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.VideoURL).HasColumnName(@"VideoURL").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
-
-            // Foreign keys
 
         }
     }

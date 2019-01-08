@@ -25,7 +25,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views.NeptuneHomePageImage;
 using Neptune.Web.Views.Shared;
-using LtInfo.Common;
 using LtInfo.Common.MvcResults;
 
 namespace Neptune.Web.Controllers
@@ -60,7 +59,7 @@ namespace Neptune.Web.Controllers
             }
             var neptuneHomePageImage = new NeptuneHomePageImage(-1, null, 0);
             viewModel.UpdateModel(neptuneHomePageImage, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllNeptuneHomePageImages.Add(neptuneHomePageImage);
+            HttpRequestStorage.DatabaseEntities.NeptuneHomePageImages.Add(neptuneHomePageImage);
             return new ModalDialogFormJsonResult();
         }
 
@@ -126,7 +125,8 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteNeptuneHomePageImage(neptuneHomePageImage, viewModel);
             }
-            neptuneHomePageImage.DeleteNeptuneHomePageImage();
+
+            HttpRequestStorage.DatabaseEntities.NeptuneHomePageImages.DeleteNeptuneHomePageImage(neptuneHomePageImage);
             return new ModalDialogFormJsonResult();
         }
       

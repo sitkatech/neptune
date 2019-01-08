@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[Person]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return person;
         }
 
-        public static void DeletePerson(this List<int> personIDList)
+        public static void DeletePerson(this IQueryable<Person> people, List<int> personIDList)
         {
             if(personIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllPeople.RemoveRange(HttpRequestStorage.DatabaseEntities.People.Where(x => personIDList.Contains(x.PersonID)));
+                people.Where(x => personIDList.Contains(x.PersonID)).Delete();
             }
         }
 
-        public static void DeletePerson(this ICollection<Person> peopleToDelete)
+        public static void DeletePerson(this IQueryable<Person> people, ICollection<Person> peopleToDelete)
         {
             if(peopleToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllPeople.RemoveRange(peopleToDelete);
+                var personIDList = peopleToDelete.Select(x => x.PersonID).ToList();
+                people.Where(x => personIDList.Contains(x.PersonID)).Delete();
             }
         }
 
-        public static void DeletePerson(this int personID)
+        public static void DeletePerson(this IQueryable<Person> people, int personID)
         {
-            DeletePerson(new List<int> { personID });
+            DeletePerson(people, new List<int> { personID });
         }
 
-        public static void DeletePerson(this Person personToDelete)
+        public static void DeletePerson(this IQueryable<Person> people, Person personToDelete)
         {
-            DeletePerson(new List<Person> { personToDelete });
+            DeletePerson(people, new List<Person> { personToDelete });
         }
     }
 }

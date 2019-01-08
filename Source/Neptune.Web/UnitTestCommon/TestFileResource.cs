@@ -48,13 +48,13 @@ namespace Neptune.Web.UnitTestCommon
                     new byte[2000],
                     LoginConstants.PersonID,
                     DateTime.Now);
-                dbContext.AllFileResources.Add(fileResource);
+                dbContext.FileResources.Add(fileResource);
                 return fileResource;
             }
 
             private static string MakeTestImagefileBaseName()
             {
-                return TestFramework.MakeTestName("SomeTestImageFile", FileResource.FieldLengths.OriginalBaseFilename);
+                return MakeTestName("SomeTestImageFile", FileResource.FieldLengths.OriginalBaseFilename);
             }
         }
     }

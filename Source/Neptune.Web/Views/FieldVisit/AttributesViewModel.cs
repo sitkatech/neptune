@@ -61,8 +61,8 @@ namespace Neptune.Web.Views.FieldVisit
                 }
             }
 
-            var customAttributesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributes.Local;
-            var customAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.AllCustomAttributeValues.Local;
+            var customAttributesInDatabase = HttpRequestStorage.DatabaseEntities.CustomAttributes.Local;
+            var customAttributeValuesInDatabase = HttpRequestStorage.DatabaseEntities.CustomAttributeValues.Local;
 
             var existingCustomAttributes = treatmentBMP.CustomAttributes.ToList();
 

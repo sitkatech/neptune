@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPAssessment]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPAssessment;
         }
 
-        public static void DeleteTreatmentBMPAssessment(this List<int> treatmentBMPAssessmentIDList)
+        public static void DeleteTreatmentBMPAssessment(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessments, List<int> treatmentBMPAssessmentIDList)
         {
             if(treatmentBMPAssessmentIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.Where(x => treatmentBMPAssessmentIDList.Contains(x.TreatmentBMPAssessmentID)));
+                treatmentBMPAssessments.Where(x => treatmentBMPAssessmentIDList.Contains(x.TreatmentBMPAssessmentID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessment(this ICollection<TreatmentBMPAssessment> treatmentBMPAssessmentsToDelete)
+        public static void DeleteTreatmentBMPAssessment(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessments, ICollection<TreatmentBMPAssessment> treatmentBMPAssessmentsToDelete)
         {
             if(treatmentBMPAssessmentsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessments.RemoveRange(treatmentBMPAssessmentsToDelete);
+                var treatmentBMPAssessmentIDList = treatmentBMPAssessmentsToDelete.Select(x => x.TreatmentBMPAssessmentID).ToList();
+                treatmentBMPAssessments.Where(x => treatmentBMPAssessmentIDList.Contains(x.TreatmentBMPAssessmentID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessment(this int treatmentBMPAssessmentID)
+        public static void DeleteTreatmentBMPAssessment(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessments, int treatmentBMPAssessmentID)
         {
-            DeleteTreatmentBMPAssessment(new List<int> { treatmentBMPAssessmentID });
+            DeleteTreatmentBMPAssessment(treatmentBMPAssessments, new List<int> { treatmentBMPAssessmentID });
         }
 
-        public static void DeleteTreatmentBMPAssessment(this TreatmentBMPAssessment treatmentBMPAssessmentToDelete)
+        public static void DeleteTreatmentBMPAssessment(this IQueryable<TreatmentBMPAssessment> treatmentBMPAssessments, TreatmentBMPAssessment treatmentBMPAssessmentToDelete)
         {
-            DeleteTreatmentBMPAssessment(new List<TreatmentBMPAssessment> { treatmentBMPAssessmentToDelete });
+            DeleteTreatmentBMPAssessment(treatmentBMPAssessments, new List<TreatmentBMPAssessment> { treatmentBMPAssessmentToDelete });
         }
     }
 }

@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FundingSource]")]
-    public partial class FundingSource : IHavePrimaryKey, IHaveATenantID
+    public partial class FundingSource : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected FundingSource()
         {
             this.FundingEventFundingSources = new HashSet<FundingEventFundingSource>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -94,10 +93,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFundingSources.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.FundingSources.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -112,7 +110,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int FundingSourceID { get; set; }
-        public int TenantID { get; private set; }
         public int OrganizationID { get; set; }
         public string FundingSourceName { get; set; }
         public bool IsActive { get; set; }
@@ -121,7 +118,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return FundingSourceID; } set { FundingSourceID = value; } }
 
         public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Organization Organization { get; set; }
 
         public static class FieldLengths

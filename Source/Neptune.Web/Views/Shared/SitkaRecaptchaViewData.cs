@@ -26,7 +26,7 @@ namespace Neptune.Web.Views.Shared
     {
         public SitkaRecaptchaViewData()
         {
-            RecaptchaPublicKey = MultiTenantHelpers.GetTenantRecaptchaPublicKey();
+            RecaptchaPublicKey = SystemAttributeHelpers.GetTenantRecaptchaPublicKey();
             Theme = "clean";
         }
 

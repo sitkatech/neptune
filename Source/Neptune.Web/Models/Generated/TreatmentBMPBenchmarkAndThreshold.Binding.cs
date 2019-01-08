@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPBenchmarkAndThreshold]")]
-    public partial class TreatmentBMPBenchmarkAndThreshold : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPBenchmarkAndThreshold : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected TreatmentBMPBenchmarkAndThreshold()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -108,21 +107,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPBenchmarkAndThresholds.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.TreatmentBMPBenchmarkAndThresholds.Remove(this);
         }
 
         [Key]
         public int TreatmentBMPBenchmarkAndThresholdID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
@@ -132,7 +122,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPBenchmarkAndThresholdID; } set { TreatmentBMPBenchmarkAndThresholdID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

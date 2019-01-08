@@ -167,7 +167,7 @@ namespace Neptune.Web.Controllers
             var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             var ppImage = new NeptunePageImage(neptunePage, fileResource);
-            HttpRequestStorage.DatabaseEntities.AllNeptunePageImages.Add(ppImage);
+            HttpRequestStorage.DatabaseEntities.NeptunePageImages.Add(ppImage);
             return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         }
 
@@ -193,7 +193,7 @@ namespace Neptune.Web.Controllers
             var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
             var neptunePage = neptunePagePrimaryKey.EntityObject;
             var ppImage = new NeptunePageImage(neptunePage, fileResource);
-            HttpRequestStorage.DatabaseEntities.AllNeptunePageImages.Add(ppImage);
+            HttpRequestStorage.DatabaseEntities.NeptunePageImages.Add(ppImage);
             return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         }
 
@@ -218,7 +218,7 @@ namespace Neptune.Web.Controllers
             var fileResource = FileResource.CreateNewFromHttpPostedFileAndSave(viewModel.upload, CurrentPerson);
             var fieldDefinition = fieldDefinitionPrimaryKey.EntityObject;
             var image = new FieldDefinitionDataImage(fieldDefinition.GetFieldDefinitionData().FieldDefinitionDataID, fileResource.FileResourceID);
-            HttpRequestStorage.DatabaseEntities.AllFieldDefinitionDataImages.Add(image);
+            HttpRequestStorage.DatabaseEntities.FieldDefinitionDataImages.Add(image);
             return Content(viewModel.GetCkEditorJavascriptContentToReturn(fileResource));
         }
 

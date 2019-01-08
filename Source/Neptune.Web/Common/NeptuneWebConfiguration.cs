@@ -25,7 +25,6 @@ using System.Linq;
 using System.Web.Configuration;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Common
 {
@@ -58,7 +57,7 @@ namespace Neptune.Web.Common
 
         public static readonly string CanonicalHostName = CanonicalHostNames.FirstOrDefault();
 
-        public static List<string> CanonicalHostNames => Tenant.All.OrderBy(x => x.TenantID).Select(x => NeptuneEnvironment.GetCanonicalHostNameForEnvironment(x)).ToList();
+        public static List<string> CanonicalHostNames => new List<string>(SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName"));
 
         public static string GetCanonicalHost(string hostName, bool useApproximateMatch)
         {

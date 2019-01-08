@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TreatmentBMPObservation](
 	[TreatmentBMPObservationID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[TreatmentBMPAssessmentID] [int] NOT NULL,
 	[TreatmentBMPTypeAssessmentObservationTypeID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
@@ -17,20 +16,10 @@ CREATE TABLE [dbo].[TreatmentBMPObservation](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_Tenant_TenantID]
-GO
 ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID] FOREIGN KEY([TreatmentBMPAssessmentID])
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID])
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID]
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TenantID] FOREIGN KEY([TreatmentBMPAssessmentID], [TenantID])
-REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TenantID])
-GO
-ALTER TABLE [dbo].[TreatmentBMPObservation] CHECK CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TenantID]
 GO
 ALTER TABLE [dbo].[TreatmentBMPObservation]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMPObservation_TreatmentBMPAssessment_TreatmentBMPAssessmentID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPAssessmentID], [TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPAssessment] ([TreatmentBMPAssessmentID], [TreatmentBMPTypeID])

@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("NeptunePage", schema);
             HasKey(x => x.NeptunePageID);
             Property(x => x.NeptunePageID).HasColumnName(@"NeptunePageID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.NeptunePageTypeID).HasColumnName(@"NeptunePageTypeID").HasColumnType("int").IsRequired();
             Property(x => x.NeptunePageContent).HasColumnName(@"NeptunePageContent").HasColumnType("varchar").IsOptional();
 

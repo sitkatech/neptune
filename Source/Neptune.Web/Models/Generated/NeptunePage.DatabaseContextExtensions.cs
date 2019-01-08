@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[NeptunePage]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return neptunePage;
         }
 
-        public static void DeleteNeptunePage(this List<int> neptunePageIDList)
+        public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, List<int> neptunePageIDList)
         {
             if(neptunePageIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllNeptunePages.RemoveRange(HttpRequestStorage.DatabaseEntities.NeptunePages.Where(x => neptunePageIDList.Contains(x.NeptunePageID)));
+                neptunePages.Where(x => neptunePageIDList.Contains(x.NeptunePageID)).Delete();
             }
         }
 
-        public static void DeleteNeptunePage(this ICollection<NeptunePage> neptunePagesToDelete)
+        public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, ICollection<NeptunePage> neptunePagesToDelete)
         {
             if(neptunePagesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllNeptunePages.RemoveRange(neptunePagesToDelete);
+                var neptunePageIDList = neptunePagesToDelete.Select(x => x.NeptunePageID).ToList();
+                neptunePages.Where(x => neptunePageIDList.Contains(x.NeptunePageID)).Delete();
             }
         }
 
-        public static void DeleteNeptunePage(this int neptunePageID)
+        public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, int neptunePageID)
         {
-            DeleteNeptunePage(new List<int> { neptunePageID });
+            DeleteNeptunePage(neptunePages, new List<int> { neptunePageID });
         }
 
-        public static void DeleteNeptunePage(this NeptunePage neptunePageToDelete)
+        public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, NeptunePage neptunePageToDelete)
         {
-            DeleteNeptunePage(new List<NeptunePage> { neptunePageToDelete });
+            DeleteNeptunePage(neptunePages, new List<NeptunePage> { neptunePageToDelete });
         }
     }
 }

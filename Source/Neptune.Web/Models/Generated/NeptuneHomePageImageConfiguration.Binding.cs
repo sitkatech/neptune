@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("NeptuneHomePageImage", schema);
             HasKey(x => x.NeptuneHomePageImageID);
             Property(x => x.NeptuneHomePageImageID).HasColumnName(@"NeptuneHomePageImageID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FileResourceID).HasColumnName(@"FileResourceID").HasColumnType("int").IsRequired();
             Property(x => x.Caption).HasColumnName(@"Caption").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(300);
             Property(x => x.SortOrder).HasColumnName(@"SortOrder").HasColumnType("int").IsRequired();

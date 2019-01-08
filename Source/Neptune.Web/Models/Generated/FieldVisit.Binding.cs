@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FieldVisit]")]
-    public partial class FieldVisit : IHavePrimaryKey, IHaveATenantID
+    public partial class FieldVisit : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         {
             this.MaintenanceRecords = new HashSet<MaintenanceRecord>();
             this.TreatmentBMPAssessments = new HashSet<TreatmentBMPAssessment>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -108,10 +107,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFieldVisits.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.FieldVisits.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -131,7 +129,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int FieldVisitID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int FieldVisitStatusID { get; set; }
         public int PerformedByPersonID { get; set; }
@@ -144,7 +141,6 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<MaintenanceRecord> MaintenanceRecords { get; set; }
         public virtual ICollection<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public FieldVisitStatus FieldVisitStatus { get { return FieldVisitStatus.AllLookupDictionary[FieldVisitStatusID]; } }
         public virtual Person PerformedByPerson { get; set; }

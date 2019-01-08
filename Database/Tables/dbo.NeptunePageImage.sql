@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[NeptunePageImage](
 	[NeptunePageImageID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[NeptunePageID] [int] NOT NULL,
 	[FileResourceID] [int] NOT NULL,
  CONSTRAINT [PK_NeptunePageImage_NeptunePageImageID] PRIMARY KEY CLUSTERED 
@@ -24,22 +23,7 @@ REFERENCES [dbo].[FileResource] ([FileResourceID])
 GO
 ALTER TABLE [dbo].[NeptunePageImage] CHECK CONSTRAINT [FK_NeptunePageImage_FileResource_FileResourceID]
 GO
-ALTER TABLE [dbo].[NeptunePageImage]  WITH CHECK ADD  CONSTRAINT [FK_NeptunePageImage_FileResource_FileResourceID_TenantID] FOREIGN KEY([FileResourceID], [TenantID])
-REFERENCES [dbo].[FileResource] ([FileResourceID], [TenantID])
-GO
-ALTER TABLE [dbo].[NeptunePageImage] CHECK CONSTRAINT [FK_NeptunePageImage_FileResource_FileResourceID_TenantID]
-GO
 ALTER TABLE [dbo].[NeptunePageImage]  WITH CHECK ADD  CONSTRAINT [FK_NeptunePageImage_NeptunePage_NeptunePageID] FOREIGN KEY([NeptunePageID])
 REFERENCES [dbo].[NeptunePage] ([NeptunePageID])
 GO
 ALTER TABLE [dbo].[NeptunePageImage] CHECK CONSTRAINT [FK_NeptunePageImage_NeptunePage_NeptunePageID]
-GO
-ALTER TABLE [dbo].[NeptunePageImage]  WITH CHECK ADD  CONSTRAINT [FK_NeptunePageImage_NeptunePage_NeptunePageID_TenantID] FOREIGN KEY([NeptunePageID], [TenantID])
-REFERENCES [dbo].[NeptunePage] ([NeptunePageID], [TenantID])
-GO
-ALTER TABLE [dbo].[NeptunePageImage] CHECK CONSTRAINT [FK_NeptunePageImage_NeptunePage_NeptunePageID_TenantID]
-GO
-ALTER TABLE [dbo].[NeptunePageImage]  WITH CHECK ADD  CONSTRAINT [FK_NeptunePageImage_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[NeptunePageImage] CHECK CONSTRAINT [FK_NeptunePageImage_Tenant_TenantID]

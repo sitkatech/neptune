@@ -19,16 +19,13 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
@@ -122,7 +119,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
                 viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPs.Add(treatmentBMP);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
             SetMessageForDisplay("Treatment BMP successfully created.");
@@ -287,7 +284,7 @@ namespace Neptune.Web.Controllers
             }
             if (treatmentBMP.TreatmentBMPBenchmarkAndThresholds.Any())
             {
-                treatmentBMP.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold();
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPBenchmarkAndThresholds.DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMP.TreatmentBMPBenchmarkAndThresholds);
             }
 
             treatmentBMP.DeleteFull(HttpRequestStorage.DatabaseEntities);

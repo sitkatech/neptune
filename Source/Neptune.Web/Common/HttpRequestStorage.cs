@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Web;
 using LtInfo.Common;
 using Neptune.Web.Models;
@@ -51,29 +52,6 @@ namespace Neptune.Web.Common
             set => SetValue(PersonKey, value);
         }
 
-        public static Tenant Tenant
-        {
-            get
-            {
-                return GetValueOrDefault(TenantKey,
-                    () =>
-                    {
-                        var httpContext = HttpContext.Current;
-                        if (httpContext != null)
-                        {
-                            var urlHost = httpContext.Request.Url.Host;
-                            var tenant = Tenant.All.SingleOrDefault(x => urlHost.Equals(NeptuneWebConfiguration.NeptuneEnvironment.GetCanonicalHostNameForEnvironment(x), StringComparison.InvariantCultureIgnoreCase));
-                            Check.RequireNotNull(tenant, $"Could not determine tenant from host {urlHost}");
-                            return tenant;
-                        }
-                        else
-                        {
-                            return Tenant.OCStormwater;
-                        }
-                    });
-            }
-        }
-
 
         public static DatabaseEntities DatabaseEntities => (DatabaseEntities) LtInfoEntityTypeLoader;
 
@@ -87,7 +65,6 @@ namespace Neptune.Web.Common
         public static void StartContextForTest()
         {
             var context = MakeNewContext(true);
-            SetValue(TenantKey, Tenant.OCStormwater);
             SetValue(DatabaseContextKey, context);
         }
 
@@ -109,11 +86,7 @@ namespace Neptune.Web.Common
             {
                 return;
             }
-            var tenant = BackingStore[TenantKey] as Tenant;
-            if (tenant != null)
-            {
-                BackingStore[TenantKey] = null;
-            }
+
             BackingStore.Remove(TenantKey);
 
             if (!BackingStore.Contains(PersonKey))

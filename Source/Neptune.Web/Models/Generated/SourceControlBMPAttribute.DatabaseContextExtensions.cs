@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[SourceControlBMPAttribute]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return sourceControlBMPAttribute;
         }
 
-        public static void DeleteSourceControlBMPAttribute(this List<int> sourceControlBMPAttributeIDList)
+        public static void DeleteSourceControlBMPAttribute(this IQueryable<SourceControlBMPAttribute> sourceControlBMPAttributes, List<int> sourceControlBMPAttributeIDList)
         {
             if(sourceControlBMPAttributeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPAttributes.RemoveRange(HttpRequestStorage.DatabaseEntities.SourceControlBMPAttributes.Where(x => sourceControlBMPAttributeIDList.Contains(x.SourceControlBMPAttributeID)));
+                sourceControlBMPAttributes.Where(x => sourceControlBMPAttributeIDList.Contains(x.SourceControlBMPAttributeID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMPAttribute(this ICollection<SourceControlBMPAttribute> sourceControlBMPAttributesToDelete)
+        public static void DeleteSourceControlBMPAttribute(this IQueryable<SourceControlBMPAttribute> sourceControlBMPAttributes, ICollection<SourceControlBMPAttribute> sourceControlBMPAttributesToDelete)
         {
             if(sourceControlBMPAttributesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPAttributes.RemoveRange(sourceControlBMPAttributesToDelete);
+                var sourceControlBMPAttributeIDList = sourceControlBMPAttributesToDelete.Select(x => x.SourceControlBMPAttributeID).ToList();
+                sourceControlBMPAttributes.Where(x => sourceControlBMPAttributeIDList.Contains(x.SourceControlBMPAttributeID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMPAttribute(this int sourceControlBMPAttributeID)
+        public static void DeleteSourceControlBMPAttribute(this IQueryable<SourceControlBMPAttribute> sourceControlBMPAttributes, int sourceControlBMPAttributeID)
         {
-            DeleteSourceControlBMPAttribute(new List<int> { sourceControlBMPAttributeID });
+            DeleteSourceControlBMPAttribute(sourceControlBMPAttributes, new List<int> { sourceControlBMPAttributeID });
         }
 
-        public static void DeleteSourceControlBMPAttribute(this SourceControlBMPAttribute sourceControlBMPAttributeToDelete)
+        public static void DeleteSourceControlBMPAttribute(this IQueryable<SourceControlBMPAttribute> sourceControlBMPAttributes, SourceControlBMPAttribute sourceControlBMPAttributeToDelete)
         {
-            DeleteSourceControlBMPAttribute(new List<SourceControlBMPAttribute> { sourceControlBMPAttributeToDelete });
+            DeleteSourceControlBMPAttribute(sourceControlBMPAttributes, new List<SourceControlBMPAttribute> { sourceControlBMPAttributeToDelete });
         }
     }
 }

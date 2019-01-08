@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[ModeledCatchmentGeometryStaging]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return modeledCatchmentGeometryStaging;
         }
 
-        public static void DeleteModeledCatchmentGeometryStaging(this List<int> modeledCatchmentGeometryStagingIDList)
+        public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, List<int> modeledCatchmentGeometryStagingIDList)
         {
             if(modeledCatchmentGeometryStagingIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllModeledCatchmentGeometryStagings.RemoveRange(HttpRequestStorage.DatabaseEntities.ModeledCatchmentGeometryStagings.Where(x => modeledCatchmentGeometryStagingIDList.Contains(x.ModeledCatchmentGeometryStagingID)));
+                modeledCatchmentGeometryStagings.Where(x => modeledCatchmentGeometryStagingIDList.Contains(x.ModeledCatchmentGeometryStagingID)).Delete();
             }
         }
 
-        public static void DeleteModeledCatchmentGeometryStaging(this ICollection<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagingsToDelete)
+        public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, ICollection<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagingsToDelete)
         {
             if(modeledCatchmentGeometryStagingsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllModeledCatchmentGeometryStagings.RemoveRange(modeledCatchmentGeometryStagingsToDelete);
+                var modeledCatchmentGeometryStagingIDList = modeledCatchmentGeometryStagingsToDelete.Select(x => x.ModeledCatchmentGeometryStagingID).ToList();
+                modeledCatchmentGeometryStagings.Where(x => modeledCatchmentGeometryStagingIDList.Contains(x.ModeledCatchmentGeometryStagingID)).Delete();
             }
         }
 
-        public static void DeleteModeledCatchmentGeometryStaging(this int modeledCatchmentGeometryStagingID)
+        public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, int modeledCatchmentGeometryStagingID)
         {
-            DeleteModeledCatchmentGeometryStaging(new List<int> { modeledCatchmentGeometryStagingID });
+            DeleteModeledCatchmentGeometryStaging(modeledCatchmentGeometryStagings, new List<int> { modeledCatchmentGeometryStagingID });
         }
 
-        public static void DeleteModeledCatchmentGeometryStaging(this ModeledCatchmentGeometryStaging modeledCatchmentGeometryStagingToDelete)
+        public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, ModeledCatchmentGeometryStaging modeledCatchmentGeometryStagingToDelete)
         {
-            DeleteModeledCatchmentGeometryStaging(new List<ModeledCatchmentGeometryStaging> { modeledCatchmentGeometryStagingToDelete });
+            DeleteModeledCatchmentGeometryStaging(modeledCatchmentGeometryStagings, new List<ModeledCatchmentGeometryStaging> { modeledCatchmentGeometryStagingToDelete });
         }
     }
 }

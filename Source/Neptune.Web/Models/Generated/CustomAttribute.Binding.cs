@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[CustomAttribute]")]
-    public partial class CustomAttribute : IHavePrimaryKey, IHaveATenantID
+    public partial class CustomAttribute : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected CustomAttribute()
         {
             this.CustomAttributeValues = new HashSet<CustomAttributeValue>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -102,10 +101,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllCustomAttributes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.CustomAttributes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -120,7 +118,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int CustomAttributeID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
@@ -129,7 +126,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return CustomAttributeID; } set { CustomAttributeID = value; } }
 
         public virtual ICollection<CustomAttributeValue> CustomAttributeValues { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPTypeCustomAttributeType TreatmentBMPTypeCustomAttributeType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

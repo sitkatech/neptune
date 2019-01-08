@@ -99,7 +99,7 @@ namespace Neptune.Web.Controllers
             }
             var treatmentBMPAssessmentObservationType = new TreatmentBMPAssessmentObservationType(String.Empty, ObservationTypeSpecification.PassFail_PassFail_None, String.Empty);
             viewModel.UpdateModel(treatmentBMPAssessmentObservationType, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentObservationTypes.Add(treatmentBMPAssessmentObservationType);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.Add(treatmentBMPAssessmentObservationType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay($"Observation Type {treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName} succesfully created.");
 

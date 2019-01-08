@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]")]
-    public partial class WaterQualityManagementPlanVerifyTreatmentBMP : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlanVerifyTreatmentBMP : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlanVerifyTreatmentBMP()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -94,21 +93,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlanVerifyTreatmentBMPs.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.WaterQualityManagementPlanVerifyTreatmentBMPs.Remove(this);
         }
 
         [Key]
         public int WaterQualityManagementPlanVerifyTreatmentBMPID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanVerifyID { get; set; }
         public int TreatmentBMPID { get; set; }
         public bool? IsAdequate { get; set; }
@@ -116,7 +106,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifyTreatmentBMPID; } set { WaterQualityManagementPlanVerifyTreatmentBMPID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
 

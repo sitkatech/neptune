@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[StormwaterJurisdiction]")]
-    public partial class StormwaterJurisdiction : IHavePrimaryKey, IHaveATenantID
+    public partial class StormwaterJurisdiction : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -27,7 +27,6 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -98,10 +97,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllStormwaterJurisdictions.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.StormwaterJurisdictions.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -131,7 +129,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int StormwaterJurisdictionID { get; set; }
-        public int TenantID { get; private set; }
         public int OrganizationID { get; set; }
         public DbGeometry StormwaterJurisdictionGeometry { get; set; }
         public int StateProvinceID { get; set; }
@@ -143,7 +140,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Organization Organization { get; set; }
         public virtual StateProvince StateProvince { get; set; }
 

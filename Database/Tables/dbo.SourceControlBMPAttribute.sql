@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[SourceControlBMPAttribute](
 	[SourceControlBMPAttributeID] [int] NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[SourceControlBMPAttributeCategoryID] [int] NOT NULL,
 	[SourceControlBMPAttributeName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_SourceControlBMPAttribute_SourceControlBMPAttributeID] PRIMARY KEY CLUSTERED 
@@ -18,8 +17,3 @@ ALTER TABLE [dbo].[SourceControlBMPAttribute]  WITH CHECK ADD  CONSTRAINT [FK_So
 REFERENCES [dbo].[SourceControlBMPAttributeCategory] ([SourceControlBMPAttributeCategoryID])
 GO
 ALTER TABLE [dbo].[SourceControlBMPAttribute] CHECK CONSTRAINT [FK_SourceControlBMPAttribute_SourceControlBMPAttributeCategory_SourceControlBMPAttributeCategoryID]
-GO
-ALTER TABLE [dbo].[SourceControlBMPAttribute]  WITH CHECK ADD  CONSTRAINT [FK_SourceControlBMPAttribute_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[SourceControlBMPAttribute] CHECK CONSTRAINT [FK_SourceControlBMPAttribute_Tenant_TenantID]

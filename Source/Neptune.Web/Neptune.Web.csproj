@@ -229,12 +229,10 @@
     <Compile Include="Models\Generated\SupportRequestLogPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestType.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestTypePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\Tenant.Binding.cs" />
-    <Compile Include="Models\Generated\TenantAttribute.Binding.cs" />
-    <Compile Include="Models\Generated\TenantAttribute.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\TenantAttributeConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\TenantAttributePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\TenantPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\SystemAttribute.Binding.cs" />
+    <Compile Include="Models\Generated\SystemAttribute.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\SystemAttributeConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\SystemAttributePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TrainingVideoConfiguration.Binding.cs" />
@@ -347,6 +345,10 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Areas\Trash\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Trash\Views\Home\Index.cs" />
+    <Compile Include="Areas\Trash\Views\Home\IndexViewData.cs" />
+    <Compile Include="Common\DomainRoute.cs" />
     <Compile Include="Common\ICanDeleteFull.cs" />
     <Compile Include="Common\MergeListHelper.cs" />
     <Compile Include="Models\IHaveATenantID.cs" />
@@ -744,7 +746,6 @@
     <Compile Include="Views\Shared\ViewGoogleChartViewData.cs" />
     <Compile Include="Models\LayerGeoJsonType.cs" />
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
-    <Compile Include="Controllers\TenantController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.js" />
@@ -986,6 +987,8 @@
     </Content>
     <Content Include="ScriptsCustom\SitkaFileExtensionsValidation.min.js.map" />
     <Content Include="Content\Bootstrap\neptune\base.theme.less" />
+    <Content Include="Areas\Trash\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Trash\Views\_ViewStart.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1085,7 +1088,6 @@
     <Content Include="Views\NeptunePage\NeptunePageDetails.cshtml" />
     <Compile Include="Models\NotificationType.cs" />
     <Compile Include="Models\OrganizationType.cs" />
-    <Compile Include="Models\Tenant.cs" />
     <Compile Include="Security\SitkaAdminFeature.cs" />
     <Compile Include="Service References\KeystoneDataService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -1099,7 +1101,7 @@
     <Compile Include="Views\Organization\PullOrganizationFromKeystone.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewData.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewModel.cs" />
-    <Compile Include="Common\MultiTenantHelpers.cs" />
+    <Compile Include="Common\SystemAttributeHelpers.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Security\NeptuneFeature.cs" />
     <Compile Include="Security\NeptuneFeatureWithContext.cs" />
@@ -1154,7 +1156,6 @@
     <Compile Include="Views\TreatmentBMP\NewViewModel.cs" />
     <Compile Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsViewData.cs" />
     <Compile Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsViewModel.cs" />
-    <Compile Include="Views\Tenant\Detail.cs" />
     <Compile Include="Views\Home\Index.cs" />
     <Compile Include="Views\Home\IndexViewData.cs" />
     <Compile Include="Models\LayerGeoJson.cs" />
@@ -1212,14 +1213,6 @@
     <Compile Include="Views\Shared\HtmlDiffSummary.cs" />
     <Compile Include="Views\Shared\HtmlDiffSummaryViewData.cs" />
     <Compile Include="Views\Shared\NavAndHeaderLayout.cs" />
-    <Compile Include="Views\Tenant\DetailViewData.cs" />
-    <Compile Include="Views\Tenant\EditBasics.cs" />
-    <Compile Include="Views\Tenant\EditBoundingBox.cs" />
-    <Compile Include="Views\Tenant\EditBoundingBoxViewData.cs" />
-    <Compile Include="Views\Tenant\EditBoundingBoxViewModel.cs" />
-    <Compile Include="Views\Tenant\EditBasicsViewData.cs" />
-    <Compile Include="Views\Tenant\EditBasicsViewModel.cs" />
-    <Compile Include="Views\Tenant\DetailGridSpec.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\Detail.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\DetailViewData.cs" />
     <Compile Include="Views\TreatmentBMPAssessment\Score.cs" />
@@ -1276,9 +1269,6 @@
     <Content Include="Views\TreatmentBMPType\EditTreatmentBMPTypeController.js" />
     <Content Include="Views\TreatmentBMP\TreatmentBMPMapController.js" />
     <Content Include="Views\Shared\UserJurisdictions\EditUserJurisdictionsController.js" />
-    <Content Include="Views\Tenant\Detail.cshtml" />
-    <Content Include="Views\Tenant\EditBasics.cshtml" />
-    <Content Include="Views\Tenant\EditBoundingBox.cshtml" />
     <Content Include="Views\Shared\ViewPageContent.cshtml" />
     <Content Include="Views\Shared\ViewGoogleChart.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MoneyWholeNumber.cshtml" />
@@ -1585,6 +1575,9 @@
     <Reference Include="XmlDiffPatch.View, Version=1.0.1493.40755, Culture=neutral">
       <HintPath>..\NuGetPackages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.View.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.8.21.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\Z.EntityFramework.Plus.EF6.1.8.21\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -2930,6 +2923,9 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Trash\Content\" />
+    <Folder Include="Areas\Trash\Models\" />
+    <Folder Include="Areas\Trash\Security\" />
     <Folder Include="Content\themes\base\minified\images\" />
   </ItemGroup>
   <ItemGroup>

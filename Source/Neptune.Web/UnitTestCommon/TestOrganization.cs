@@ -58,7 +58,7 @@ namespace Neptune.Web.UnitTestCommon
                 //testPersonPrimaryContact.Organization = testOrganization;
                 //HttpRequestStorage.DatabaseEntities.People.Add(testPersonPrimaryContact);
 
-                dbContext.AllOrganizations.Add(testOrganization);
+                dbContext.Organizations.Add(testOrganization);
                 return testOrganization;
             }
 

@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FundingEvent]")]
-    public partial class FundingEvent : IHavePrimaryKey, IHaveATenantID
+    public partial class FundingEvent : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected FundingEvent()
         {
             this.FundingEventFundingSources = new HashSet<FundingEventFundingSource>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -94,10 +93,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFundingEvents.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.FundingEvents.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -112,7 +110,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int FundingEventID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int FundingEventTypeID { get; set; }
         public int Year { get; set; }
@@ -121,7 +118,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return FundingEventID; } set { FundingEventID = value; } }
 
         public virtual ICollection<FundingEventFundingSource> FundingEventFundingSources { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public FundingEventType FundingEventType { get { return FundingEventType.AllLookupDictionary[FundingEventTypeID]; } }
 

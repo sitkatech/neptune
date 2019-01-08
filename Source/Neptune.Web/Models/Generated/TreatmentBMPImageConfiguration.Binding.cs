@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("TreatmentBMPImage", schema);
             HasKey(x => x.TreatmentBMPImageID);
             Property(x => x.TreatmentBMPImageID).HasColumnName(@"TreatmentBMPImageID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FileResourceID).HasColumnName(@"FileResourceID").HasColumnType("int").IsRequired();
             Property(x => x.TreatmentBMPID).HasColumnName(@"TreatmentBMPID").HasColumnType("int").IsRequired();
             Property(x => x.Caption).HasColumnName(@"Caption").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);

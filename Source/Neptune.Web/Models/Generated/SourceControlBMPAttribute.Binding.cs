@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[SourceControlBMPAttribute]")]
-    public partial class SourceControlBMPAttribute : IHavePrimaryKey, IHaveATenantID
+    public partial class SourceControlBMPAttribute : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected SourceControlBMPAttribute()
         {
             this.SourceControlBMPs = new HashSet<SourceControlBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -90,10 +89,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllSourceControlBMPAttributes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.SourceControlBMPAttributes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -108,14 +106,12 @@ namespace Neptune.Web.Models
 
         [Key]
         public int SourceControlBMPAttributeID { get; set; }
-        public int TenantID { get; private set; }
         public int SourceControlBMPAttributeCategoryID { get; set; }
         public string SourceControlBMPAttributeName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return SourceControlBMPAttributeID; } set { SourceControlBMPAttributeID = value; } }
 
         public virtual ICollection<SourceControlBMP> SourceControlBMPs { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual SourceControlBMPAttributeCategory SourceControlBMPAttributeCategory { get; set; }
 
         public static class FieldLengths

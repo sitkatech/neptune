@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[StormwaterJurisdictionPerson]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return stormwaterJurisdictionPerson;
         }
 
-        public static void DeleteStormwaterJurisdictionPerson(this List<int> stormwaterJurisdictionPersonIDList)
+        public static void DeleteStormwaterJurisdictionPerson(this IQueryable<StormwaterJurisdictionPerson> stormwaterJurisdictionPeople, List<int> stormwaterJurisdictionPersonIDList)
         {
             if(stormwaterJurisdictionPersonIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.RemoveRange(HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Where(x => stormwaterJurisdictionPersonIDList.Contains(x.StormwaterJurisdictionPersonID)));
+                stormwaterJurisdictionPeople.Where(x => stormwaterJurisdictionPersonIDList.Contains(x.StormwaterJurisdictionPersonID)).Delete();
             }
         }
 
-        public static void DeleteStormwaterJurisdictionPerson(this ICollection<StormwaterJurisdictionPerson> stormwaterJurisdictionPeopleToDelete)
+        public static void DeleteStormwaterJurisdictionPerson(this IQueryable<StormwaterJurisdictionPerson> stormwaterJurisdictionPeople, ICollection<StormwaterJurisdictionPerson> stormwaterJurisdictionPeopleToDelete)
         {
             if(stormwaterJurisdictionPeopleToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.RemoveRange(stormwaterJurisdictionPeopleToDelete);
+                var stormwaterJurisdictionPersonIDList = stormwaterJurisdictionPeopleToDelete.Select(x => x.StormwaterJurisdictionPersonID).ToList();
+                stormwaterJurisdictionPeople.Where(x => stormwaterJurisdictionPersonIDList.Contains(x.StormwaterJurisdictionPersonID)).Delete();
             }
         }
 
-        public static void DeleteStormwaterJurisdictionPerson(this int stormwaterJurisdictionPersonID)
+        public static void DeleteStormwaterJurisdictionPerson(this IQueryable<StormwaterJurisdictionPerson> stormwaterJurisdictionPeople, int stormwaterJurisdictionPersonID)
         {
-            DeleteStormwaterJurisdictionPerson(new List<int> { stormwaterJurisdictionPersonID });
+            DeleteStormwaterJurisdictionPerson(stormwaterJurisdictionPeople, new List<int> { stormwaterJurisdictionPersonID });
         }
 
-        public static void DeleteStormwaterJurisdictionPerson(this StormwaterJurisdictionPerson stormwaterJurisdictionPersonToDelete)
+        public static void DeleteStormwaterJurisdictionPerson(this IQueryable<StormwaterJurisdictionPerson> stormwaterJurisdictionPeople, StormwaterJurisdictionPerson stormwaterJurisdictionPersonToDelete)
         {
-            DeleteStormwaterJurisdictionPerson(new List<StormwaterJurisdictionPerson> { stormwaterJurisdictionPersonToDelete });
+            DeleteStormwaterJurisdictionPerson(stormwaterJurisdictionPeople, new List<StormwaterJurisdictionPerson> { stormwaterJurisdictionPersonToDelete });
         }
     }
 }

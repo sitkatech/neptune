@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPBenchmarkAndThreshold]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPBenchmarkAndThreshold;
         }
 
-        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this List<int> treatmentBMPBenchmarkAndThresholdIDList)
+        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<int> treatmentBMPBenchmarkAndThresholdIDList)
         {
             if(treatmentBMPBenchmarkAndThresholdIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPBenchmarkAndThresholds.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPBenchmarkAndThresholds.Where(x => treatmentBMPBenchmarkAndThresholdIDList.Contains(x.TreatmentBMPBenchmarkAndThresholdID)));
+                treatmentBMPBenchmarkAndThresholds.Where(x => treatmentBMPBenchmarkAndThresholdIDList.Contains(x.TreatmentBMPBenchmarkAndThresholdID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this ICollection<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholdsToDelete)
+        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, ICollection<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholdsToDelete)
         {
             if(treatmentBMPBenchmarkAndThresholdsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPBenchmarkAndThresholds.RemoveRange(treatmentBMPBenchmarkAndThresholdsToDelete);
+                var treatmentBMPBenchmarkAndThresholdIDList = treatmentBMPBenchmarkAndThresholdsToDelete.Select(x => x.TreatmentBMPBenchmarkAndThresholdID).ToList();
+                treatmentBMPBenchmarkAndThresholds.Where(x => treatmentBMPBenchmarkAndThresholdIDList.Contains(x.TreatmentBMPBenchmarkAndThresholdID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this int treatmentBMPBenchmarkAndThresholdID)
+        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, int treatmentBMPBenchmarkAndThresholdID)
         {
-            DeleteTreatmentBMPBenchmarkAndThreshold(new List<int> { treatmentBMPBenchmarkAndThresholdID });
+            DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPBenchmarkAndThresholds, new List<int> { treatmentBMPBenchmarkAndThresholdID });
         }
 
-        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this TreatmentBMPBenchmarkAndThreshold treatmentBMPBenchmarkAndThresholdToDelete)
+        public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, TreatmentBMPBenchmarkAndThreshold treatmentBMPBenchmarkAndThresholdToDelete)
         {
-            DeleteTreatmentBMPBenchmarkAndThreshold(new List<TreatmentBMPBenchmarkAndThreshold> { treatmentBMPBenchmarkAndThresholdToDelete });
+            DeleteTreatmentBMPBenchmarkAndThreshold(treatmentBMPBenchmarkAndThresholds, new List<TreatmentBMPBenchmarkAndThreshold> { treatmentBMPBenchmarkAndThresholdToDelete });
         }
     }
 }

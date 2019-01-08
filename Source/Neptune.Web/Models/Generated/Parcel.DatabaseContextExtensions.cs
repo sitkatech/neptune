@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[Parcel]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return parcel;
         }
 
-        public static void DeleteParcel(this List<int> parcelIDList)
+        public static void DeleteParcel(this IQueryable<Parcel> parcels, List<int> parcelIDList)
         {
             if(parcelIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllParcels.RemoveRange(HttpRequestStorage.DatabaseEntities.Parcels.Where(x => parcelIDList.Contains(x.ParcelID)));
+                parcels.Where(x => parcelIDList.Contains(x.ParcelID)).Delete();
             }
         }
 
-        public static void DeleteParcel(this ICollection<Parcel> parcelsToDelete)
+        public static void DeleteParcel(this IQueryable<Parcel> parcels, ICollection<Parcel> parcelsToDelete)
         {
             if(parcelsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllParcels.RemoveRange(parcelsToDelete);
+                var parcelIDList = parcelsToDelete.Select(x => x.ParcelID).ToList();
+                parcels.Where(x => parcelIDList.Contains(x.ParcelID)).Delete();
             }
         }
 
-        public static void DeleteParcel(this int parcelID)
+        public static void DeleteParcel(this IQueryable<Parcel> parcels, int parcelID)
         {
-            DeleteParcel(new List<int> { parcelID });
+            DeleteParcel(parcels, new List<int> { parcelID });
         }
 
-        public static void DeleteParcel(this Parcel parcelToDelete)
+        public static void DeleteParcel(this IQueryable<Parcel> parcels, Parcel parcelToDelete)
         {
-            DeleteParcel(new List<Parcel> { parcelToDelete });
+            DeleteParcel(parcels, new List<Parcel> { parcelToDelete });
         }
     }
 }

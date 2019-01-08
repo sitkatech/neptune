@@ -44,8 +44,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             waterQualityManagementPlan.TreatmentBMPs.ToList().ForEach(x => { x.WaterQualityManagementPlan = null; });
             TreatmentBmpIDs = TreatmentBmpIDs ?? new List<int>();
 
-            var quickBMPsInDatabase = HttpRequestStorage.DatabaseEntities.AllQuickBMPs.Local;
-            var quickBMPsToUpdate = quickBMPSimples != null ? quickBMPSimples.Select(x => new QuickBMP(x, waterQualityManagementPlan.TenantID, waterQualityManagementPlan.WaterQualityManagementPlanID)).ToList() : new List<QuickBMP>();
+            var quickBMPsInDatabase = HttpRequestStorage.DatabaseEntities.QuickBMPs.Local;
+            var quickBMPsToUpdate = quickBMPSimples != null ? quickBMPSimples.Select(x => new QuickBMP(x, waterQualityManagementPlan.WaterQualityManagementPlanID)).ToList() : new List<QuickBMP>();
 
 
             waterQualityManagementPlan.QuickBMPs.ToList().Merge(quickBMPsToUpdate, quickBMPsInDatabase,
@@ -58,9 +58,8 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
                 });
 
 
-            var sourceControlBMPsInDatabase = HttpRequestStorage.DatabaseEntities.AllSourceControlBMPs.Local;
-            var sourceControlBMPsToUpdate = sourceControlBMPSimple?.Select(x => new SourceControlBMP(x,
-                waterQualityManagementPlan.TenantID, waterQualityManagementPlan.WaterQualityManagementPlanID)).ToList();
+            var sourceControlBMPsInDatabase = HttpRequestStorage.DatabaseEntities.SourceControlBMPs.Local;
+            var sourceControlBMPsToUpdate = sourceControlBMPSimple?.Select(x => new SourceControlBMP(x, waterQualityManagementPlan.WaterQualityManagementPlanID)).ToList();
 
             waterQualityManagementPlan.SourceControlBMPs.ToList().Merge(sourceControlBMPsToUpdate, sourceControlBMPsInDatabase, (x, y) => x.SourceControlBMPID == y.SourceControlBMPID,
                 (x, y) =>

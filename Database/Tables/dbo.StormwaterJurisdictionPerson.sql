@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[StormwaterJurisdictionPerson](
 	[StormwaterJurisdictionPersonID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[PersonID] [int] NOT NULL,
  CONSTRAINT [PK_StormwaterJurisdictionPerson_StormwaterJurisdictionPersonID] PRIMARY KEY CLUSTERED 
@@ -19,22 +18,7 @@ REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[StormwaterJurisdictionPerson] CHECK CONSTRAINT [FK_StormwaterJurisdictionPerson_Person_PersonID]
 GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdictionPerson_Person_PersonID_TenantID] FOREIGN KEY([PersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson] CHECK CONSTRAINT [FK_StormwaterJurisdictionPerson_Person_PersonID_TenantID]
-GO
 ALTER TABLE [dbo].[StormwaterJurisdictionPerson]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[StormwaterJurisdictionPerson] CHECK CONSTRAINT [FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID]
-GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID] FOREIGN KEY([StormwaterJurisdictionID], [TenantID])
-REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID], [TenantID])
-GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson] CHECK CONSTRAINT [FK_StormwaterJurisdictionPerson_StormwaterJurisdiction_StormwaterJurisdictionID_TenantID]
-GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson]  WITH CHECK ADD  CONSTRAINT [FK_StormwaterJurisdictionPerson_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[StormwaterJurisdictionPerson] CHECK CONSTRAINT [FK_StormwaterJurisdictionPerson_Tenant_TenantID]

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanVerifyTreatmentBMP;
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this List<int> waterQualityManagementPlanVerifyTreatmentBMPIDList)
+        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs, List<int> waterQualityManagementPlanVerifyTreatmentBMPIDList)
         {
             if(waterQualityManagementPlanVerifyTreatmentBMPIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyTreatmentBMPs.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => waterQualityManagementPlanVerifyTreatmentBMPIDList.Contains(x.WaterQualityManagementPlanVerifyTreatmentBMPID)));
+                waterQualityManagementPlanVerifyTreatmentBMPs.Where(x => waterQualityManagementPlanVerifyTreatmentBMPIDList.Contains(x.WaterQualityManagementPlanVerifyTreatmentBMPID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPsToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs, ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPsToDelete)
         {
             if(waterQualityManagementPlanVerifyTreatmentBMPsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyTreatmentBMPs.RemoveRange(waterQualityManagementPlanVerifyTreatmentBMPsToDelete);
+                var waterQualityManagementPlanVerifyTreatmentBMPIDList = waterQualityManagementPlanVerifyTreatmentBMPsToDelete.Select(x => x.WaterQualityManagementPlanVerifyTreatmentBMPID).ToList();
+                waterQualityManagementPlanVerifyTreatmentBMPs.Where(x => waterQualityManagementPlanVerifyTreatmentBMPIDList.Contains(x.WaterQualityManagementPlanVerifyTreatmentBMPID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this int waterQualityManagementPlanVerifyTreatmentBMPID)
+        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs, int waterQualityManagementPlanVerifyTreatmentBMPID)
         {
-            DeleteWaterQualityManagementPlanVerifyTreatmentBMP(new List<int> { waterQualityManagementPlanVerifyTreatmentBMPID });
+            DeleteWaterQualityManagementPlanVerifyTreatmentBMP(waterQualityManagementPlanVerifyTreatmentBMPs, new List<int> { waterQualityManagementPlanVerifyTreatmentBMPID });
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMPToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyTreatmentBMP(this IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBMPs, WaterQualityManagementPlanVerifyTreatmentBMP waterQualityManagementPlanVerifyTreatmentBMPToDelete)
         {
-            DeleteWaterQualityManagementPlanVerifyTreatmentBMP(new List<WaterQualityManagementPlanVerifyTreatmentBMP> { waterQualityManagementPlanVerifyTreatmentBMPToDelete });
+            DeleteWaterQualityManagementPlanVerifyTreatmentBMP(waterQualityManagementPlanVerifyTreatmentBMPs, new List<WaterQualityManagementPlanVerifyTreatmentBMP> { waterQualityManagementPlanVerifyTreatmentBMPToDelete });
         }
     }
 }

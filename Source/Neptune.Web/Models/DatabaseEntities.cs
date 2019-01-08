@@ -27,8 +27,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Transactions;
 using Neptune.Web.Common;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
 using SitkaController = Neptune.Web.Common.SitkaController;
 
 namespace Neptune.Web.Models
@@ -45,7 +43,7 @@ namespace Neptune.Web.Models
         {
             using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions() { IsolationLevel = IsolationLevel.Snapshot }))
             {
-                return SaveChangesImpl(userPerson, HttpRequestStorage.Tenant, scope);
+                return SaveChangesImpl(userPerson, scope);
             }
         }
 
@@ -60,7 +58,7 @@ namespace Neptune.Web.Models
             return base.SaveChanges();
         }
 
-        private int SaveChangesImpl(Person person, Tenant tenant, TransactionScope scope)
+        private int SaveChangesImpl(Person person, TransactionScope scope)
         {
             ChangeTracker.DetectChanges();
 
@@ -69,24 +67,12 @@ namespace Neptune.Web.Models
             var modifiedEntries = dbEntityEntries.Where(e => e.State == EntityState.Deleted || e.State == EntityState.Modified).ToList();
             var objectContext = GetObjectContext();
 
-            var tenantID = tenant.TenantID;
-
-            /*
-             * This is an aggressive check to make sure we're not accidentally doing something like, e.g.,
-             * HttpRequestStorage.DatabaseEntities.AllProjectFundingSourceRequests.Load();
-             */
-            foreach (var entry in dbEntityEntries.Where(entry => entry.Entity is IHaveATenantID))
-            {
-                var haveATenantID = entry.Entity as IHaveATenantID;
-                var editingCurrentTenant = haveATenantID != null && haveATenantID.TenantID == tenantID;
-                Check.Assert(editingCurrentTenant, "Editing or accessing an entity across tenant boundaries: " + entry.Entity);
-            }
 
             foreach (var entry in modifiedEntries)
             {
                 // For each changed record, get the audit record entries and add them
                 var auditRecordsForChange = AuditLog.GetAuditLogRecordsForModifiedOrDeleted(entry, person, objectContext);
-                AllAuditLogs.AddRange(auditRecordsForChange);
+                AuditLogs.AddRange(auditRecordsForChange);
             }
 
             int changes;
@@ -110,7 +96,7 @@ namespace Neptune.Web.Models
 
                 throw new DbEntityValidationException(
                     "Entity Validation Failed - errors follow:\n" +
-                    sb.ToString(), ex
+                    sb, ex
                 ); // Add the original exception as the innerException
             }
 
@@ -118,7 +104,7 @@ namespace Neptune.Web.Models
             {
                 // For each added record, get the audit record entries and add them
                 var auditRecordsForChange = AuditLog.GetAuditLogRecordsForAdded(entry, person, objectContext);
-                AllAuditLogs.AddRange(auditRecordsForChange);
+                AuditLogs.AddRange(auditRecordsForChange);
             }
             // we need to save the audit log entries now
             base.SaveChanges();

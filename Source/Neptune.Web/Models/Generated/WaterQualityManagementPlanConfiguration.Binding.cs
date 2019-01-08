@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("WaterQualityManagementPlan", schema);
             HasKey(x => x.WaterQualityManagementPlanID);
             Property(x => x.WaterQualityManagementPlanID).HasColumnName(@"WaterQualityManagementPlanID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
             Property(x => x.WaterQualityManagementPlanLandUseID).HasColumnName(@"WaterQualityManagementPlanLandUseID").HasColumnType("int").IsOptional();
             Property(x => x.WaterQualityManagementPlanPriorityID).HasColumnName(@"WaterQualityManagementPlanPriorityID").HasColumnType("int").IsOptional();

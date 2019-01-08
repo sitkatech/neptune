@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[FileResource](
 	[FileResourceID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[FileResourceMimeTypeID] [int] NOT NULL,
 	[OriginalBaseFilename] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[OriginalFileExtension] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -19,11 +18,6 @@ CREATE TABLE [dbo].[FileResource](
  CONSTRAINT [AK_FileResource_FileResourceGUID] UNIQUE NONCLUSTERED 
 (
 	[FileResourceGUID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_FileResource_FileResourceID_TenantID] UNIQUE NONCLUSTERED 
-(
-	[FileResourceID] ASC,
-	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
@@ -37,13 +31,3 @@ ALTER TABLE [dbo].[FileResource]  WITH CHECK ADD  CONSTRAINT [FK_FileResource_Pe
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[FileResource] CHECK CONSTRAINT [FK_FileResource_Person_CreatePersonID_PersonID]
-GO
-ALTER TABLE [dbo].[FileResource]  WITH CHECK ADD  CONSTRAINT [FK_FileResource_Person_CreatePersonID_TenantID_PersonID_TenantID] FOREIGN KEY([CreatePersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[FileResource] CHECK CONSTRAINT [FK_FileResource_Person_CreatePersonID_TenantID_PersonID_TenantID]
-GO
-ALTER TABLE [dbo].[FileResource]  WITH CHECK ADD  CONSTRAINT [FK_FileResource_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[FileResource] CHECK CONSTRAINT [FK_FileResource_Tenant_TenantID]

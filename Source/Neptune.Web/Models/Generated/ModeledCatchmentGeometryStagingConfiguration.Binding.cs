@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("ModeledCatchmentGeometryStaging", schema);
             HasKey(x => x.ModeledCatchmentGeometryStagingID);
             Property(x => x.ModeledCatchmentGeometryStagingID).HasColumnName(@"ModeledCatchmentGeometryStagingID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.PersonID).HasColumnName(@"PersonID").HasColumnType("int").IsRequired();
             Property(x => x.FeatureClassName).HasColumnName(@"FeatureClassName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(255);
             Property(x => x.GeoJson).HasColumnName(@"GeoJson").HasColumnType("varchar").IsRequired();

@@ -32,7 +32,7 @@ namespace Neptune.Web.Controllers
     [ValidateInput(false)]
     public abstract class NeptuneBaseController : SitkaController
     {
-        public static ControllerContext ControllerContextStatic = null;
+        public static ControllerContext ControllerContextStatic;
 
         protected ILog Logger = LogManager.GetLogger(typeof(NeptuneBaseController));
 
@@ -70,7 +70,5 @@ namespace Neptune.Web.Controllers
         protected override ISitkaDbContext SitkaDbContext => HttpRequestStorage.DatabaseEntities;
 
         protected Person CurrentPerson => HttpRequestStorage.Person;
-
-        protected Tenant CurrentTenant => HttpRequestStorage.Tenant;
     }
 }

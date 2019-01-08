@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.Home
             List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
             JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(currentPerson, neptunePageHomePage)
         {
-            PageTitle = MultiTenantHelpers.GetToolDisplayName();
+            PageTitle = SystemAttributeHelpers.GetToolDisplayName();
 
             CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson);
             CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson);

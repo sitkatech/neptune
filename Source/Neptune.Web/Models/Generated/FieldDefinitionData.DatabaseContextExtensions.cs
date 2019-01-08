@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[FieldDefinitionData]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return fieldDefinitionData;
         }
 
-        public static void DeleteFieldDefinitionData(this List<int> fieldDefinitionDataIDList)
+        public static void DeleteFieldDefinitionData(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, List<int> fieldDefinitionDataIDList)
         {
             if(fieldDefinitionDataIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldDefinitionDatas.RemoveRange(HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.Where(x => fieldDefinitionDataIDList.Contains(x.FieldDefinitionDataID)));
+                fieldDefinitionDatas.Where(x => fieldDefinitionDataIDList.Contains(x.FieldDefinitionDataID)).Delete();
             }
         }
 
-        public static void DeleteFieldDefinitionData(this ICollection<FieldDefinitionData> fieldDefinitionDatasToDelete)
+        public static void DeleteFieldDefinitionData(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, ICollection<FieldDefinitionData> fieldDefinitionDatasToDelete)
         {
             if(fieldDefinitionDatasToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldDefinitionDatas.RemoveRange(fieldDefinitionDatasToDelete);
+                var fieldDefinitionDataIDList = fieldDefinitionDatasToDelete.Select(x => x.FieldDefinitionDataID).ToList();
+                fieldDefinitionDatas.Where(x => fieldDefinitionDataIDList.Contains(x.FieldDefinitionDataID)).Delete();
             }
         }
 
-        public static void DeleteFieldDefinitionData(this int fieldDefinitionDataID)
+        public static void DeleteFieldDefinitionData(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, int fieldDefinitionDataID)
         {
-            DeleteFieldDefinitionData(new List<int> { fieldDefinitionDataID });
+            DeleteFieldDefinitionData(fieldDefinitionDatas, new List<int> { fieldDefinitionDataID });
         }
 
-        public static void DeleteFieldDefinitionData(this FieldDefinitionData fieldDefinitionDataToDelete)
+        public static void DeleteFieldDefinitionData(this IQueryable<FieldDefinitionData> fieldDefinitionDatas, FieldDefinitionData fieldDefinitionDataToDelete)
         {
-            DeleteFieldDefinitionData(new List<FieldDefinitionData> { fieldDefinitionDataToDelete });
+            DeleteFieldDefinitionData(fieldDefinitionDatas, new List<FieldDefinitionData> { fieldDefinitionDataToDelete });
         }
     }
 }

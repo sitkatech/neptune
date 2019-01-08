@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[OrganizationType]")]
-    public partial class OrganizationType : IHavePrimaryKey, IHaveATenantID
+    public partial class OrganizationType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected OrganizationType()
         {
             this.Organizations = new HashSet<Organization>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -82,10 +81,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllOrganizationTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.OrganizationTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -100,7 +98,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int OrganizationTypeID { get; set; }
-        public int TenantID { get; private set; }
         public string OrganizationTypeName { get; set; }
         public string OrganizationTypeAbbreviation { get; set; }
         public string LegendColor { get; set; }
@@ -109,7 +106,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return OrganizationTypeID; } set { OrganizationTypeID = value; } }
 
         public virtual ICollection<Organization> Organizations { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

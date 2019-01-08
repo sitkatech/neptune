@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FileResource]")]
-    public partial class FileResource : IHavePrimaryKey, IHaveATenantID
+    public partial class FileResource : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -27,16 +27,15 @@ namespace Neptune.Web.Models
             this.NeptuneHomePageImages = new HashSet<NeptuneHomePageImage>();
             this.NeptunePageImages = new HashSet<NeptunePageImage>();
             this.OrganizationsWhereYouAreTheLogoFileResource = new HashSet<Organization>();
-            this.TenantAttributesWhereYouAreTheTenantBannerLogoFileResource = new HashSet<TenantAttribute>();
-            this.TenantAttributesWhereYouAreTheTenantSquareLogoFileResource = new HashSet<TenantAttribute>();
-            this.TenantAttributesWhereYouAreTheTenantStyleSheetFileResource = new HashSet<TenantAttribute>();
+            this.SystemAttributesWhereYouAreTheTenantBannerLogoFileResource = new HashSet<SystemAttribute>();
+            this.SystemAttributesWhereYouAreTheTenantSquareLogoFileResource = new HashSet<SystemAttribute>();
+            this.SystemAttributesWhereYouAreTheTenantStyleSheetFileResource = new HashSet<SystemAttribute>();
             this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
             this.WaterQualityManagementPlanDocuments = new HashSet<WaterQualityManagementPlanDocument>();
             this.WaterQualityManagementPlanPhotos = new HashSet<WaterQualityManagementPlanPhoto>();
             this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -103,13 +102,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FieldDefinitionDataImages.Any() || NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || TenantAttributesWhereYouAreTheTenantBannerLogoFileResource.Any() || TenantAttributesWhereYouAreTheTenantSquareLogoFileResource.Any() || TenantAttributesWhereYouAreTheTenantStyleSheetFileResource.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
+            return FieldDefinitionDataImages.Any() || NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantBannerLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantSquareLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantStyleSheetFileResource.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(Organization).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(Organization).Name, typeof(SystemAttribute).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -117,10 +116,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFileResources.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.FileResources.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -147,17 +145,17 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in TenantAttributesWhereYouAreTheTenantBannerLogoFileResource.ToList())
+            foreach(var x in SystemAttributesWhereYouAreTheTenantBannerLogoFileResource.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in TenantAttributesWhereYouAreTheTenantSquareLogoFileResource.ToList())
+            foreach(var x in SystemAttributesWhereYouAreTheTenantSquareLogoFileResource.ToList())
             {
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in TenantAttributesWhereYouAreTheTenantStyleSheetFileResource.ToList())
+            foreach(var x in SystemAttributesWhereYouAreTheTenantStyleSheetFileResource.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -195,7 +193,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int FileResourceID { get; set; }
-        public int TenantID { get; private set; }
         public int FileResourceMimeTypeID { get; set; }
         public string OriginalBaseFilename { get; set; }
         public string OriginalFileExtension { get; set; }
@@ -210,16 +207,15 @@ namespace Neptune.Web.Models
         public virtual ICollection<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual ICollection<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreTheLogoFileResource { get; set; }
-        public virtual ICollection<TenantAttribute> TenantAttributesWhereYouAreTheTenantBannerLogoFileResource { get; set; }
-        public virtual ICollection<TenantAttribute> TenantAttributesWhereYouAreTheTenantSquareLogoFileResource { get; set; }
-        public virtual ICollection<TenantAttribute> TenantAttributesWhereYouAreTheTenantStyleSheetFileResource { get; set; }
+        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantBannerLogoFileResource { get; set; }
+        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantSquareLogoFileResource { get; set; }
+        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantStyleSheetFileResource { get; set; }
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
         public virtual ICollection<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
         public virtual ICollection<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public FileResourceMimeType FileResourceMimeType { get { return FileResourceMimeType.AllLookupDictionary[FileResourceMimeTypeID]; } }
         public virtual Person CreatePerson { get; set; }
 

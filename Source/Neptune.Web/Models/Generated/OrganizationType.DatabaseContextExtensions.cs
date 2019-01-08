@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[OrganizationType]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return organizationType;
         }
 
-        public static void DeleteOrganizationType(this List<int> organizationTypeIDList)
+        public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, List<int> organizationTypeIDList)
         {
             if(organizationTypeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllOrganizationTypes.RemoveRange(HttpRequestStorage.DatabaseEntities.OrganizationTypes.Where(x => organizationTypeIDList.Contains(x.OrganizationTypeID)));
+                organizationTypes.Where(x => organizationTypeIDList.Contains(x.OrganizationTypeID)).Delete();
             }
         }
 
-        public static void DeleteOrganizationType(this ICollection<OrganizationType> organizationTypesToDelete)
+        public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, ICollection<OrganizationType> organizationTypesToDelete)
         {
             if(organizationTypesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllOrganizationTypes.RemoveRange(organizationTypesToDelete);
+                var organizationTypeIDList = organizationTypesToDelete.Select(x => x.OrganizationTypeID).ToList();
+                organizationTypes.Where(x => organizationTypeIDList.Contains(x.OrganizationTypeID)).Delete();
             }
         }
 
-        public static void DeleteOrganizationType(this int organizationTypeID)
+        public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, int organizationTypeID)
         {
-            DeleteOrganizationType(new List<int> { organizationTypeID });
+            DeleteOrganizationType(organizationTypes, new List<int> { organizationTypeID });
         }
 
-        public static void DeleteOrganizationType(this OrganizationType organizationTypeToDelete)
+        public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, OrganizationType organizationTypeToDelete)
         {
-            DeleteOrganizationType(new List<OrganizationType> { organizationTypeToDelete });
+            DeleteOrganizationType(organizationTypes, new List<OrganizationType> { organizationTypeToDelete });
         }
     }
 }

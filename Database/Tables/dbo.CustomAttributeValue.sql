@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[CustomAttributeValue](
 	[CustomAttributeValueID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[CustomAttributeID] [int] NOT NULL,
 	[AttributeValue] [varchar](1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
  CONSTRAINT [PK_CustomAttributeValue_CustomAttributeValueID] PRIMARY KEY CLUSTERED 
@@ -18,13 +17,3 @@ ALTER TABLE [dbo].[CustomAttributeValue]  WITH CHECK ADD  CONSTRAINT [FK_CustomA
 REFERENCES [dbo].[CustomAttribute] ([CustomAttributeID])
 GO
 ALTER TABLE [dbo].[CustomAttributeValue] CHECK CONSTRAINT [FK_CustomAttributeValue_CustomAttribute_CustomAttributeID]
-GO
-ALTER TABLE [dbo].[CustomAttributeValue]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttributeValue_CustomAttribute_CustomAttributeID_TenantID] FOREIGN KEY([CustomAttributeID], [TenantID])
-REFERENCES [dbo].[CustomAttribute] ([CustomAttributeID], [TenantID])
-GO
-ALTER TABLE [dbo].[CustomAttributeValue] CHECK CONSTRAINT [FK_CustomAttributeValue_CustomAttribute_CustomAttributeID_TenantID]
-GO
-ALTER TABLE [dbo].[CustomAttributeValue]  WITH CHECK ADD  CONSTRAINT [FK_CustomAttributeValue_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[CustomAttributeValue] CHECK CONSTRAINT [FK_CustomAttributeValue_Tenant_TenantID]

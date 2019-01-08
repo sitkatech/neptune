@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("WaterQualityManagementPlanVisitStatus", schema);
             HasKey(x => x.WaterQualityManagementPlanVisitStatusID);
             Property(x => x.WaterQualityManagementPlanVisitStatusID).HasColumnName(@"WaterQualityManagementPlanVisitStatusID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.WaterQualityManagementPlanVisitStatusName).HasColumnName(@"WaterQualityManagementPlanVisitStatusName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
 
             // Foreign keys

@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPTypeCustomAttributeType]")]
-    public partial class TreatmentBMPTypeCustomAttributeType : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPTypeCustomAttributeType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         {
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -94,10 +93,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPTypeCustomAttributeTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.TreatmentBMPTypeCustomAttributeTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -117,7 +115,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int TreatmentBMPTypeCustomAttributeTypeID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPTypeID { get; set; }
         public int CustomAttributeTypeID { get; set; }
         public int? SortOrder { get; set; }
@@ -126,7 +123,6 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual CustomAttributeType CustomAttributeType { get; set; }
 

@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("FundingEventFundingSource", schema);
             HasKey(x => x.FundingEventFundingSourceID);
             Property(x => x.FundingEventFundingSourceID).HasColumnName(@"FundingEventFundingSourceID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FundingSourceID).HasColumnName(@"FundingSourceID").HasColumnType("int").IsRequired();
             Property(x => x.FundingEventID).HasColumnName(@"FundingEventID").HasColumnType("int").IsRequired();
             Property(x => x.Amount).HasColumnName(@"Amount").HasColumnType("money").IsOptional().HasPrecision(19,4);

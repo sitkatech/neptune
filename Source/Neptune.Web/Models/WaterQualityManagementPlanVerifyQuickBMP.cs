@@ -5,10 +5,9 @@ namespace Neptune.Web.Models
     public partial class WaterQualityManagementPlanVerifyQuickBMP : IAuditableEntity
     {
 
-        public WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanVerifyQuickBMPSimple waterQualityManagementPlanVerifyQuickBMPSimple, int tenantId, int waterQualityManagementPlanVerifyID)
+        public WaterQualityManagementPlanVerifyQuickBMP(WaterQualityManagementPlanVerifyQuickBMPSimple waterQualityManagementPlanVerifyQuickBMPSimple, int waterQualityManagementPlanVerifyID)
         {
             WaterQualityManagementPlanVerifyQuickBMPID = waterQualityManagementPlanVerifyQuickBMPSimple.WaterQualityManagementPlanVerifyQuickBMPID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();;
-            TenantID = tenantId;
             WaterQualityManagementPlanVerifyID = waterQualityManagementPlanVerifyID;
             QuickBMPID = waterQualityManagementPlanVerifyQuickBMPSimple.QuickBMPID;
             IsAdequate = waterQualityManagementPlanVerifyQuickBMPSimple.IsAdequate;

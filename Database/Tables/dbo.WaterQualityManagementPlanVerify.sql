@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[WaterQualityManagementPlanVerify](
 	[WaterQualityManagementPlanVerifyID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[WaterQualityManagementPlanID] [int] NOT NULL,
 	[WaterQualityManagementPlanVerifyTypeID] [int] NOT NULL,
 	[WaterQualityManagementPlanVisitStatusID] [int] NOT NULL,
@@ -31,11 +30,6 @@ ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerify] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerify_Person_LastEditedByPersonID_PersonID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerify] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerify_Tenant_TenantID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerify]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerify_WaterQualityManagementPlan_WaterQualityManagementPlanID] FOREIGN KEY([WaterQualityManagementPlanID])
 REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])

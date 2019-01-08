@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[CustomAttributeType]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return customAttributeType;
         }
 
-        public static void DeleteCustomAttributeType(this List<int> customAttributeTypeIDList)
+        public static void DeleteCustomAttributeType(this IQueryable<CustomAttributeType> customAttributeTypes, List<int> customAttributeTypeIDList)
         {
             if(customAttributeTypeIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllCustomAttributeTypes.RemoveRange(HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => customAttributeTypeIDList.Contains(x.CustomAttributeTypeID)));
+                customAttributeTypes.Where(x => customAttributeTypeIDList.Contains(x.CustomAttributeTypeID)).Delete();
             }
         }
 
-        public static void DeleteCustomAttributeType(this ICollection<CustomAttributeType> customAttributeTypesToDelete)
+        public static void DeleteCustomAttributeType(this IQueryable<CustomAttributeType> customAttributeTypes, ICollection<CustomAttributeType> customAttributeTypesToDelete)
         {
             if(customAttributeTypesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllCustomAttributeTypes.RemoveRange(customAttributeTypesToDelete);
+                var customAttributeTypeIDList = customAttributeTypesToDelete.Select(x => x.CustomAttributeTypeID).ToList();
+                customAttributeTypes.Where(x => customAttributeTypeIDList.Contains(x.CustomAttributeTypeID)).Delete();
             }
         }
 
-        public static void DeleteCustomAttributeType(this int customAttributeTypeID)
+        public static void DeleteCustomAttributeType(this IQueryable<CustomAttributeType> customAttributeTypes, int customAttributeTypeID)
         {
-            DeleteCustomAttributeType(new List<int> { customAttributeTypeID });
+            DeleteCustomAttributeType(customAttributeTypes, new List<int> { customAttributeTypeID });
         }
 
-        public static void DeleteCustomAttributeType(this CustomAttributeType customAttributeTypeToDelete)
+        public static void DeleteCustomAttributeType(this IQueryable<CustomAttributeType> customAttributeTypes, CustomAttributeType customAttributeTypeToDelete)
         {
-            DeleteCustomAttributeType(new List<CustomAttributeType> { customAttributeTypeToDelete });
+            DeleteCustomAttributeType(customAttributeTypes, new List<CustomAttributeType> { customAttributeTypeToDelete });
         }
     }
 }

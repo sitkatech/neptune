@@ -21,7 +21,7 @@ namespace Neptune.Web.Models
             ModeledCatchmentGeometryStaging modeledCatchmentGeometryStaging,
             string selectedProperty)
         {
-            var existingModeledCatchments = HttpRequestStorage.DatabaseEntities.AllModeledCatchments.Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
+            var existingModeledCatchments = HttpRequestStorage.DatabaseEntities.ModeledCatchments.Where(x => x.StormwaterJurisdictionID == stormwaterJurisdiction.StormwaterJurisdictionID).ToList();
 
             var geoJsonFeatureCollection = modeledCatchmentGeometryStaging.ToGeoJsonFeatureCollection();
             var candidateModeledCatchmentNames = geoJsonFeatureCollection.Features.Select(x => x.Properties[selectedProperty].ToString()).Distinct().ToList();

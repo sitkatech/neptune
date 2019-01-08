@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("FundingSource", schema);
             HasKey(x => x.FundingSourceID);
             Property(x => x.FundingSourceID).HasColumnName(@"FundingSourceID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.OrganizationID).HasColumnName(@"OrganizationID").HasColumnType("int").IsRequired();
             Property(x => x.FundingSourceName).HasColumnName(@"FundingSourceName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(200);
             Property(x => x.IsActive).HasColumnName(@"IsActive").HasColumnType("bit").IsRequired();

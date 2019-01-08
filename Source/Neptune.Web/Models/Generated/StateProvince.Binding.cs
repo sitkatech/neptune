@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[StateProvince]")]
-    public partial class StateProvince : IHavePrimaryKey, IHaveATenantID
+    public partial class StateProvince : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         {
             this.Counties = new HashSet<County>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -82,10 +81,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllStateProvinces.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.StateProvinces.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -105,7 +103,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int StateProvinceID { get; set; }
-        public int TenantID { get; private set; }
         public string StateProvinceName { get; set; }
         public string StateProvinceAbbreviation { get; set; }
         public DbGeometry StateProvinceFeature { get; set; }
@@ -115,7 +112,6 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<County> Counties { get; set; }
         public virtual ICollection<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

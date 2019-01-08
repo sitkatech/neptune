@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[ModeledCatchmentGeometryStaging](
 	[ModeledCatchmentGeometryStagingID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[PersonID] [int] NOT NULL,
 	[FeatureClassName] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[GeoJson] [varchar](max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -21,13 +20,3 @@ ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging]  WITH CHECK ADD  CONSTRAINT 
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging] CHECK CONSTRAINT [FK_ModeledCatchmentGeometryStaging_Person_PersonID]
-GO
-ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging]  WITH CHECK ADD  CONSTRAINT [FK_ModeledCatchmentGeometryStaging_Person_PersonID_TenantID] FOREIGN KEY([PersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging] CHECK CONSTRAINT [FK_ModeledCatchmentGeometryStaging_Person_PersonID_TenantID]
-GO
-ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging]  WITH CHECK ADD  CONSTRAINT [FK_ModeledCatchmentGeometryStaging_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[ModeledCatchmentGeometryStaging] CHECK CONSTRAINT [FK_ModeledCatchmentGeometryStaging_Tenant_TenantID]

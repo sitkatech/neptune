@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("MaintenanceRecordObservationValue", schema);
             HasKey(x => x.MaintenanceRecordObservationValueID);
             Property(x => x.MaintenanceRecordObservationValueID).HasColumnName(@"MaintenanceRecordObservationValueID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.MaintenanceRecordObservationID).HasColumnName(@"MaintenanceRecordObservationID").HasColumnType("int").IsRequired();
             Property(x => x.ObservationValue).HasColumnName(@"ObservationValue").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(1000);
 

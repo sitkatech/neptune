@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlanVerifySourceControlBMP]")]
-    public partial class WaterQualityManagementPlanVerifySourceControlBMP : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlanVerifySourceControlBMP : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlanVerifySourceControlBMP()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -93,28 +92,18 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlanVerifySourceControlBMPs.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.WaterQualityManagementPlanVerifySourceControlBMPs.Remove(this);
         }
 
         [Key]
         public int WaterQualityManagementPlanVerifySourceControlBMPID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanVerifyID { get; set; }
         public int SourceControlBMPID { get; set; }
         public string WaterQualityManagementPlanSourceControlCondition { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifySourceControlBMPID; } set { WaterQualityManagementPlanVerifySourceControlBMPID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlanVerify WaterQualityManagementPlanVerify { get; set; }
         public virtual SourceControlBMP SourceControlBMP { get; set; }
 

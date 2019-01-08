@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TrainingVideo]")]
-    public partial class TrainingVideo : IHavePrimaryKey, IHaveATenantID
+    public partial class TrainingVideo : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected TrainingVideo()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -79,28 +78,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTrainingVideos.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.TrainingVideos.Remove(this);
         }
 
         [Key]
         public int TrainingVideoID { get; set; }
-        public int TenantID { get; private set; }
         public string VideoName { get; set; }
         public string VideoDescription { get; set; }
         public string VideoURL { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TrainingVideoID; } set { TrainingVideoID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
+
 
         public static class FieldLengths
         {

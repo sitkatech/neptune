@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[Notification]")]
-    public partial class Notification : IHavePrimaryKey, IHaveATenantID
+    public partial class Notification : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected Notification()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -93,28 +92,18 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllNotifications.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.Notifications.Remove(this);
         }
 
         [Key]
         public int NotificationID { get; set; }
-        public int TenantID { get; private set; }
         public int NotificationTypeID { get; set; }
         public int PersonID { get; set; }
         public DateTime NotificationDate { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NotificationID; } set { NotificationID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public NotificationType NotificationType { get { return NotificationType.AllLookupDictionary[NotificationTypeID]; } }
         public virtual Person Person { get; set; }
 

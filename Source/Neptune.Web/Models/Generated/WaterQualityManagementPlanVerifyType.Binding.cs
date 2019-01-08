@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[WaterQualityManagementPlanVerifyType]")]
-    public partial class WaterQualityManagementPlanVerifyType : IHavePrimaryKey, IHaveATenantID
+    public partial class WaterQualityManagementPlanVerifyType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected WaterQualityManagementPlanVerifyType()
         {
             this.WaterQualityManagementPlanVerifies = new HashSet<WaterQualityManagementPlanVerify>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -76,10 +75,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllWaterQualityManagementPlanVerifyTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.WaterQualityManagementPlanVerifyTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -94,13 +92,11 @@ namespace Neptune.Web.Models
 
         [Key]
         public int WaterQualityManagementPlanVerifyTypeID { get; set; }
-        public int TenantID { get; private set; }
         public string WaterQualityManagementPlanVerifyTypeName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanVerifyTypeID; } set { WaterQualityManagementPlanVerifyTypeID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

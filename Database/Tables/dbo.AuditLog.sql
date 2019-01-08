@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[AuditLog](
 	[AuditLogID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[PersonID] [int] NOT NULL,
 	[AuditLogDate] [datetime] NOT NULL,
 	[AuditLogEventTypeID] [int] NOT NULL,
@@ -30,13 +29,3 @@ ALTER TABLE [dbo].[AuditLog]  WITH CHECK ADD  CONSTRAINT [FK_AuditLog_Person_Per
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[AuditLog] CHECK CONSTRAINT [FK_AuditLog_Person_PersonID]
-GO
-ALTER TABLE [dbo].[AuditLog]  WITH CHECK ADD  CONSTRAINT [FK_AuditLog_Person_PersonID_TenantID] FOREIGN KEY([PersonID], [TenantID])
-REFERENCES [dbo].[Person] ([PersonID], [TenantID])
-GO
-ALTER TABLE [dbo].[AuditLog] CHECK CONSTRAINT [FK_AuditLog_Person_PersonID_TenantID]
-GO
-ALTER TABLE [dbo].[AuditLog]  WITH CHECK ADD  CONSTRAINT [FK_AuditLog_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[AuditLog] CHECK CONSTRAINT [FK_AuditLog_Tenant_TenantID]

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[StateProvince]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return stateProvince;
         }
 
-        public static void DeleteStateProvince(this List<int> stateProvinceIDList)
+        public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, List<int> stateProvinceIDList)
         {
             if(stateProvinceIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllStateProvinces.RemoveRange(HttpRequestStorage.DatabaseEntities.StateProvinces.Where(x => stateProvinceIDList.Contains(x.StateProvinceID)));
+                stateProvinces.Where(x => stateProvinceIDList.Contains(x.StateProvinceID)).Delete();
             }
         }
 
-        public static void DeleteStateProvince(this ICollection<StateProvince> stateProvincesToDelete)
+        public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, ICollection<StateProvince> stateProvincesToDelete)
         {
             if(stateProvincesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllStateProvinces.RemoveRange(stateProvincesToDelete);
+                var stateProvinceIDList = stateProvincesToDelete.Select(x => x.StateProvinceID).ToList();
+                stateProvinces.Where(x => stateProvinceIDList.Contains(x.StateProvinceID)).Delete();
             }
         }
 
-        public static void DeleteStateProvince(this int stateProvinceID)
+        public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, int stateProvinceID)
         {
-            DeleteStateProvince(new List<int> { stateProvinceID });
+            DeleteStateProvince(stateProvinces, new List<int> { stateProvinceID });
         }
 
-        public static void DeleteStateProvince(this StateProvince stateProvinceToDelete)
+        public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, StateProvince stateProvinceToDelete)
         {
-            DeleteStateProvince(new List<StateProvince> { stateProvinceToDelete });
+            DeleteStateProvince(stateProvinces, new List<StateProvince> { stateProvinceToDelete });
         }
     }
 }

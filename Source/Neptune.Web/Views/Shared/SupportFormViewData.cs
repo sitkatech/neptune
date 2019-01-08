@@ -38,7 +38,7 @@ namespace Neptune.Web.Views.Shared
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
             List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl, bool isStandalonePage) : base(currentPerson, neptunePage)
         {
-            EntityName = MultiTenantHelpers.GetTenantDisplayName();
+            EntityName = SystemAttributeHelpers.GetTenantDisplayName();
             PageTitle = "Request Support";
             SupportRequestTypeSimples = supportRequestTypeSimples;
             CancelUrl = cancelUrl;

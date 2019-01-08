@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPAssessmentPhoto]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPAssessmentPhoto;
         }
 
-        public static void DeleteTreatmentBMPAssessmentPhoto(this List<int> treatmentBMPAssessmentPhotoIDList)
+        public static void DeleteTreatmentBMPAssessmentPhoto(this IQueryable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos, List<int> treatmentBMPAssessmentPhotoIDList)
         {
             if(treatmentBMPAssessmentPhotoIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentPhotos.Where(x => treatmentBMPAssessmentPhotoIDList.Contains(x.TreatmentBMPAssessmentPhotoID)));
+                treatmentBMPAssessmentPhotos.Where(x => treatmentBMPAssessmentPhotoIDList.Contains(x.TreatmentBMPAssessmentPhotoID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessmentPhoto(this ICollection<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotosToDelete)
+        public static void DeleteTreatmentBMPAssessmentPhoto(this IQueryable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos, ICollection<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotosToDelete)
         {
             if(treatmentBMPAssessmentPhotosToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.RemoveRange(treatmentBMPAssessmentPhotosToDelete);
+                var treatmentBMPAssessmentPhotoIDList = treatmentBMPAssessmentPhotosToDelete.Select(x => x.TreatmentBMPAssessmentPhotoID).ToList();
+                treatmentBMPAssessmentPhotos.Where(x => treatmentBMPAssessmentPhotoIDList.Contains(x.TreatmentBMPAssessmentPhotoID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPAssessmentPhoto(this int treatmentBMPAssessmentPhotoID)
+        public static void DeleteTreatmentBMPAssessmentPhoto(this IQueryable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos, int treatmentBMPAssessmentPhotoID)
         {
-            DeleteTreatmentBMPAssessmentPhoto(new List<int> { treatmentBMPAssessmentPhotoID });
+            DeleteTreatmentBMPAssessmentPhoto(treatmentBMPAssessmentPhotos, new List<int> { treatmentBMPAssessmentPhotoID });
         }
 
-        public static void DeleteTreatmentBMPAssessmentPhoto(this TreatmentBMPAssessmentPhoto treatmentBMPAssessmentPhotoToDelete)
+        public static void DeleteTreatmentBMPAssessmentPhoto(this IQueryable<TreatmentBMPAssessmentPhoto> treatmentBMPAssessmentPhotos, TreatmentBMPAssessmentPhoto treatmentBMPAssessmentPhotoToDelete)
         {
-            DeleteTreatmentBMPAssessmentPhoto(new List<TreatmentBMPAssessmentPhoto> { treatmentBMPAssessmentPhotoToDelete });
+            DeleteTreatmentBMPAssessmentPhoto(treatmentBMPAssessmentPhotos, new List<TreatmentBMPAssessmentPhoto> { treatmentBMPAssessmentPhotoToDelete });
         }
     }
 }

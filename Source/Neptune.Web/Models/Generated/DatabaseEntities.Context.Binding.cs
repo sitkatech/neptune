@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
             modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
-            modelBuilder.Configurations.Add(new TenantAttributeConfiguration());
+            modelBuilder.Configurations.Add(new SystemAttributeConfiguration());
             modelBuilder.Configurations.Add(new TrainingVideoConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPAssessmentConfiguration());
@@ -92,124 +92,65 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVerifyTypeConfiguration());
             modelBuilder.Configurations.Add(new WaterQualityManagementPlanVisitStatusConfiguration());
         }
-        public virtual DbSet<AuditLog> AllAuditLogs { get; set; }
-        public virtual IQueryable<AuditLog> AuditLogs { get { return AllAuditLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<County> AllCounties { get; set; }
-        public virtual IQueryable<County> Counties { get { return AllCounties.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<CustomAttribute> AllCustomAttributes { get; set; }
-        public virtual IQueryable<CustomAttribute> CustomAttributes { get { return AllCustomAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<CustomAttributeType> AllCustomAttributeTypes { get; set; }
-        public virtual IQueryable<CustomAttributeType> CustomAttributeTypes { get { return AllCustomAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<CustomAttributeValue> AllCustomAttributeValues { get; set; }
-        public virtual IQueryable<CustomAttributeValue> CustomAttributeValues { get { return AllCustomAttributeValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FieldDefinitionDataImage> AllFieldDefinitionDataImages { get; set; }
-        public virtual IQueryable<FieldDefinitionDataImage> FieldDefinitionDataImages { get { return AllFieldDefinitionDataImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FieldDefinitionData> AllFieldDefinitionDatas { get; set; }
-        public virtual IQueryable<FieldDefinitionData> FieldDefinitionDatas { get { return AllFieldDefinitionDatas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FieldVisit> AllFieldVisits { get; set; }
-        public virtual IQueryable<FieldVisit> FieldVisits { get { return AllFieldVisits.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FileResource> AllFileResources { get; set; }
-        public virtual IQueryable<FileResource> FileResources { get { return AllFileResources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FundingEventFundingSource> AllFundingEventFundingSources { get; set; }
-        public virtual IQueryable<FundingEventFundingSource> FundingEventFundingSources { get { return AllFundingEventFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FundingEvent> AllFundingEvents { get; set; }
-        public virtual IQueryable<FundingEvent> FundingEvents { get { return AllFundingEvents.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<FundingSource> AllFundingSources { get; set; }
-        public virtual IQueryable<FundingSource> FundingSources { get { return AllFundingSources.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<HydrologicSubarea> AllHydrologicSubareas { get; set; }
-        public virtual IQueryable<HydrologicSubarea> HydrologicSubareas { get { return AllHydrologicSubareas.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<MaintenanceRecordObservation> AllMaintenanceRecordObservations { get; set; }
-        public virtual IQueryable<MaintenanceRecordObservation> MaintenanceRecordObservations { get { return AllMaintenanceRecordObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<MaintenanceRecordObservationValue> AllMaintenanceRecordObservationValues { get; set; }
-        public virtual IQueryable<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get { return AllMaintenanceRecordObservationValues.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<MaintenanceRecord> AllMaintenanceRecords { get; set; }
-        public virtual IQueryable<MaintenanceRecord> MaintenanceRecords { get { return AllMaintenanceRecords.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<ModeledCatchmentGeometryStaging> AllModeledCatchmentGeometryStagings { get; set; }
-        public virtual IQueryable<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get { return AllModeledCatchmentGeometryStagings.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<ModeledCatchment> AllModeledCatchments { get; set; }
-        public virtual IQueryable<ModeledCatchment> ModeledCatchments { get { return AllModeledCatchments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<NeptuneHomePageImage> AllNeptuneHomePageImages { get; set; }
-        public virtual IQueryable<NeptuneHomePageImage> NeptuneHomePageImages { get { return AllNeptuneHomePageImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<NeptunePageImage> AllNeptunePageImages { get; set; }
-        public virtual IQueryable<NeptunePageImage> NeptunePageImages { get { return AllNeptunePageImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<NeptunePage> AllNeptunePages { get; set; }
-        public virtual IQueryable<NeptunePage> NeptunePages { get { return AllNeptunePages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<Notification> AllNotifications { get; set; }
-        public virtual IQueryable<Notification> Notifications { get { return AllNotifications.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<Organization> AllOrganizations { get; set; }
-        public virtual IQueryable<Organization> Organizations { get { return AllOrganizations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<OrganizationType> AllOrganizationTypes { get; set; }
-        public virtual IQueryable<OrganizationType> OrganizationTypes { get { return AllOrganizationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<Parcel> AllParcels { get; set; }
-        public virtual IQueryable<Parcel> Parcels { get { return AllParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<Person> AllPeople { get; set; }
-        public virtual IQueryable<Person> People { get { return AllPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<QuickBMP> AllQuickBMPs { get; set; }
-        public virtual IQueryable<QuickBMP> QuickBMPs { get { return AllQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<SourceControlBMPAttributeCategory> AllSourceControlBMPAttributeCategories { get; set; }
-        public virtual IQueryable<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get { return AllSourceControlBMPAttributeCategories.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<SourceControlBMPAttribute> AllSourceControlBMPAttributes { get; set; }
-        public virtual IQueryable<SourceControlBMPAttribute> SourceControlBMPAttributes { get { return AllSourceControlBMPAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<SourceControlBMP> AllSourceControlBMPs { get; set; }
-        public virtual IQueryable<SourceControlBMP> SourceControlBMPs { get { return AllSourceControlBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<StateProvince> AllStateProvinces { get; set; }
-        public virtual IQueryable<StateProvince> StateProvinces { get { return AllStateProvinces.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<StormwaterJurisdictionPerson> AllStormwaterJurisdictionPeople { get; set; }
-        public virtual IQueryable<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get { return AllStormwaterJurisdictionPeople.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<StormwaterJurisdiction> AllStormwaterJurisdictions { get; set; }
-        public virtual IQueryable<StormwaterJurisdiction> StormwaterJurisdictions { get { return AllStormwaterJurisdictions.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<SupportRequestLog> AllSupportRequestLogs { get; set; }
-        public virtual IQueryable<SupportRequestLog> SupportRequestLogs { get { return AllSupportRequestLogs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TenantAttribute> AllTenantAttributes { get; set; }
-        public virtual IQueryable<TenantAttribute> TenantAttributes { get { return AllTenantAttributes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TrainingVideo> AllTrainingVideos { get; set; }
-        public virtual IQueryable<TrainingVideo> TrainingVideos { get { return AllTrainingVideos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAssessmentObservationType> AllTreatmentBMPAssessmentObservationTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get { return AllTreatmentBMPAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAssessmentPhoto> AllTreatmentBMPAssessmentPhotos { get; set; }
-        public virtual IQueryable<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get { return AllTreatmentBMPAssessmentPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPAssessment> AllTreatmentBMPAssessments { get; set; }
-        public virtual IQueryable<TreatmentBMPAssessment> TreatmentBMPAssessments { get { return AllTreatmentBMPAssessments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> AllTreatmentBMPBenchmarkAndThresholds { get; set; }
-        public virtual IQueryable<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get { return AllTreatmentBMPBenchmarkAndThresholds.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPDocument> AllTreatmentBMPDocuments { get; set; }
-        public virtual IQueryable<TreatmentBMPDocument> TreatmentBMPDocuments { get { return AllTreatmentBMPDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPImage> AllTreatmentBMPImages { get; set; }
-        public virtual IQueryable<TreatmentBMPImage> TreatmentBMPImages { get { return AllTreatmentBMPImages.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPObservation> AllTreatmentBMPObservations { get; set; }
-        public virtual IQueryable<TreatmentBMPObservation> TreatmentBMPObservations { get { return AllTreatmentBMPObservations.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMP> AllTreatmentBMPs { get; set; }
-        public virtual IQueryable<TreatmentBMP> TreatmentBMPs { get { return AllTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> AllTreatmentBMPTypeAssessmentObservationTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get { return AllTreatmentBMPTypeAssessmentObservationTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPTypeCustomAttributeType> AllTreatmentBMPTypeCustomAttributeTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get { return AllTreatmentBMPTypeCustomAttributeTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<TreatmentBMPType> AllTreatmentBMPTypes { get; set; }
-        public virtual IQueryable<TreatmentBMPType> TreatmentBMPTypes { get { return AllTreatmentBMPTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanDocument> AllWaterQualityManagementPlanDocuments { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get { return AllWaterQualityManagementPlanDocuments.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanParcel> AllWaterQualityManagementPlanParcels { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get { return AllWaterQualityManagementPlanParcels.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanPhoto> AllWaterQualityManagementPlanPhotos { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get { return AllWaterQualityManagementPlanPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlan> AllWaterQualityManagementPlans { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlan> WaterQualityManagementPlans { get { return AllWaterQualityManagementPlans.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerify> AllWaterQualityManagementPlanVerifies { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get { return AllWaterQualityManagementPlanVerifies.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifyPhoto> AllWaterQualityManagementPlanVerifyPhotos { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifyPhoto> WaterQualityManagementPlanVerifyPhotos { get { return AllWaterQualityManagementPlanVerifyPhotos.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifyQuickBMP> AllWaterQualityManagementPlanVerifyQuickBMPs { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get { return AllWaterQualityManagementPlanVerifyQuickBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifySourceControlBMP> AllWaterQualityManagementPlanVerifySourceControlBMPs { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifySourceControlBMP> WaterQualityManagementPlanVerifySourceControlBMPs { get { return AllWaterQualityManagementPlanVerifySourceControlBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifyStatus> AllWaterQualityManagementPlanVerifyStatuses { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifyStatus> WaterQualityManagementPlanVerifyStatuses { get { return AllWaterQualityManagementPlanVerifyStatuses.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> AllWaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get { return AllWaterQualityManagementPlanVerifyTreatmentBMPs.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVerifyType> AllWaterQualityManagementPlanVerifyTypes { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get { return AllWaterQualityManagementPlanVerifyTypes.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
-        public virtual DbSet<WaterQualityManagementPlanVisitStatus> AllWaterQualityManagementPlanVisitStatuses { get; set; }
-        public virtual IQueryable<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get { return AllWaterQualityManagementPlanVisitStatuses.Where(x => x.TenantID == HttpRequestStorage.Tenant.TenantID); } }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<County> Counties { get; set; }
+        public virtual DbSet<CustomAttribute> CustomAttributes { get; set; }
+        public virtual DbSet<CustomAttributeType> CustomAttributeTypes { get; set; }
+        public virtual DbSet<CustomAttributeValue> CustomAttributeValues { get; set; }
+        public virtual DbSet<FieldDefinitionDataImage> FieldDefinitionDataImages { get; set; }
+        public virtual DbSet<FieldDefinitionData> FieldDefinitionDatas { get; set; }
+        public virtual DbSet<FieldVisit> FieldVisits { get; set; }
+        public virtual DbSet<FileResource> FileResources { get; set; }
+        public virtual DbSet<FundingEventFundingSource> FundingEventFundingSources { get; set; }
+        public virtual DbSet<FundingEvent> FundingEvents { get; set; }
+        public virtual DbSet<FundingSource> FundingSources { get; set; }
+        public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
+        public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
+        public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
+        public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+        public virtual DbSet<ModeledCatchmentGeometryStaging> ModeledCatchmentGeometryStagings { get; set; }
+        public virtual DbSet<ModeledCatchment> ModeledCatchments { get; set; }
+        public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
+        public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
+        public virtual DbSet<NeptunePage> NeptunePages { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
+        public virtual DbSet<Parcel> Parcels { get; set; }
+        public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
+        public virtual DbSet<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get; set; }
+        public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
+        public virtual DbSet<SourceControlBMP> SourceControlBMPs { get; set; }
+        public virtual DbSet<StateProvince> StateProvinces { get; set; }
+        public virtual DbSet<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
+        public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
+        public virtual DbSet<SupportRequestLog> SupportRequestLogs { get; set; }
+        public virtual DbSet<SystemAttribute> SystemAttributes { get; set; }
+        public virtual DbSet<TrainingVideo> TrainingVideos { get; set; }
+        public virtual DbSet<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get; set; }
+        public virtual DbSet<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
+        public virtual DbSet<TreatmentBMPAssessment> TreatmentBMPAssessments { get; set; }
+        public virtual DbSet<TreatmentBMPBenchmarkAndThreshold> TreatmentBMPBenchmarkAndThresholds { get; set; }
+        public virtual DbSet<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
+        public virtual DbSet<TreatmentBMPImage> TreatmentBMPImages { get; set; }
+        public virtual DbSet<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
+        public virtual DbSet<TreatmentBMP> TreatmentBMPs { get; set; }
+        public virtual DbSet<TreatmentBMPTypeAssessmentObservationType> TreatmentBMPTypeAssessmentObservationTypes { get; set; }
+        public virtual DbSet<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
+        public virtual DbSet<TreatmentBMPType> TreatmentBMPTypes { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanDocument> WaterQualityManagementPlanDocuments { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanPhoto> WaterQualityManagementPlanPhotos { get; set; }
+        public virtual DbSet<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifies { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifyPhoto> WaterQualityManagementPlanVerifyPhotos { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifyQuickBMP> WaterQualityManagementPlanVerifyQuickBMPs { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifySourceControlBMP> WaterQualityManagementPlanVerifySourceControlBMPs { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifyStatus> WaterQualityManagementPlanVerifyStatuses { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVerifyType> WaterQualityManagementPlanVerifyTypes { get; set; }
+        public virtual DbSet<WaterQualityManagementPlanVisitStatus> WaterQualityManagementPlanVisitStatuses { get; set; }
 
         public object LoadType(Type type, int primaryKey)
         {
@@ -432,13 +373,8 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(supportRequestType, "SupportRequestType", primaryKey);
                     return supportRequestType;
 
-                case "TenantAttribute":
-                    return TenantAttributes.GetTenantAttribute(primaryKey);
-
-                case "Tenant":
-                    var tenant = Tenant.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(tenant, "Tenant", primaryKey);
-                    return tenant;
+                case "SystemAttribute":
+                    return SystemAttributes.GetSystemAttribute(primaryKey);
 
                 case "TrainingVideo":
                     return TrainingVideos.GetTrainingVideo(primaryKey);

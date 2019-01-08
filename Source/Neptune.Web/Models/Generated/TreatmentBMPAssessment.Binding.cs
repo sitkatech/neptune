@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPAssessment]")]
-    public partial class TreatmentBMPAssessment : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPAssessment : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -25,7 +25,6 @@ namespace Neptune.Web.Models
         {
             this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPObservations = new HashSet<TreatmentBMPObservation>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -102,10 +101,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPAssessments.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.TreatmentBMPAssessments.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -125,7 +123,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int TreatmentBMPAssessmentID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int FieldVisitID { get; set; }
@@ -136,7 +133,6 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPObservation> TreatmentBMPObservations { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual FieldVisit FieldVisit { get; set; }

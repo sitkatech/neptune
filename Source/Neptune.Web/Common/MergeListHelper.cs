@@ -29,12 +29,12 @@ namespace Neptune.Web.Common
         public delegate bool Match<in T>(T o1, T o2);
         public delegate void UpdateFunction<in T>(T o1, T o2);
 
-        public static void Merge<T>(this ICollection<T> existingList, ICollection<T> updatedList, ICollection<T> allInDatabase, Match<T> matchCriteria) where T : IHaveATenantID
+        public static void Merge<T>(this ICollection<T> existingList, ICollection<T> updatedList, ICollection<T> allInDatabase, Match<T> matchCriteria) where T : ICanDeleteFull
         {
             existingList.Merge(updatedList, allInDatabase, matchCriteria, null);
         }
 
-        public static void Merge<T>(this ICollection<T> existingList, ICollection<T> updatedList, ICollection<T> allInDatabase, Match<T> matchCriteria, UpdateFunction<T> updateFunction) where T : IHaveATenantID
+        public static void Merge<T>(this ICollection<T> existingList, ICollection<T> updatedList, ICollection<T> allInDatabase, Match<T> matchCriteria, UpdateFunction<T> updateFunction) where T : ICanDeleteFull
         {
             existingList.MergeNew(updatedList, matchCriteria, allInDatabase);
             if (updateFunction != null)
@@ -44,7 +44,7 @@ namespace Neptune.Web.Common
             existingList.MergeDelete(updatedList, matchCriteria);
         }
 
-        public static void MergeNew<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, ICollection<T> allInDatabase) where T : IHaveATenantID
+        public static void MergeNew<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, ICollection<T> allInDatabase) where T : ICanDeleteFull
         {
             // Inserting new records
             foreach (var currentRecordFromForm in updatedList)
@@ -58,7 +58,7 @@ namespace Neptune.Web.Common
             }
         }
 
-        public static void MergeUpdate<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, UpdateFunction<T> updateFunction) where T : IHaveATenantID
+        public static void MergeUpdate<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria, UpdateFunction<T> updateFunction) where T : ICanDeleteFull
         {
             foreach (var currentRecordFromForm in updatedList)
             {
@@ -70,7 +70,7 @@ namespace Neptune.Web.Common
             }
         }
 
-        private static void MergeDelete<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria) where T : IHaveATenantID
+        private static void MergeDelete<T>(this ICollection<T> existingList, IEnumerable<T> updatedList, Match<T> matchCriteria) where T : ICanDeleteFull
         {
             // Deleting records from existing that are no longer in fromForm
             var recordsToDelete = existingList.Where(existingRecord => Equals(updatedList.MatchRecord(existingRecord, matchCriteria), default(T))).ToList();

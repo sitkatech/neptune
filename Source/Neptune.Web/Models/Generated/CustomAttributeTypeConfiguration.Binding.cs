@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("CustomAttributeType", schema);
             HasKey(x => x.CustomAttributeTypeID);
             Property(x => x.CustomAttributeTypeID).HasColumnName(@"CustomAttributeTypeID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.CustomAttributeTypeName).HasColumnName(@"CustomAttributeTypeName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.CustomAttributeDataTypeID).HasColumnName(@"CustomAttributeDataTypeID").HasColumnType("int").IsRequired();
             Property(x => x.MeasurementUnitTypeID).HasColumnName(@"MeasurementUnitTypeID").HasColumnType("int").IsOptional();

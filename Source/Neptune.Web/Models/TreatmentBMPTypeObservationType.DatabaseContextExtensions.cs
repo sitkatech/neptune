@@ -44,7 +44,7 @@ namespace Neptune.Web.Models
 
         public static TreatmentBMPTypeAssessmentObservationType GetTreatmentBMPTypeObservationTypeOrDefault(this TreatmentBMPType treatmentBMPType, TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
         {
-            var TreatmentBMPTypeAssessmentObservationType = HttpRequestStorage.DatabaseEntities.AllTreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
+            var TreatmentBMPTypeAssessmentObservationType = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypeAssessmentObservationTypes.SingleOrDefault(
                 x => x.TreatmentBMPTypeID == treatmentBMPType.TreatmentBMPTypeID && x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID);
 
             return TreatmentBMPTypeAssessmentObservationType;

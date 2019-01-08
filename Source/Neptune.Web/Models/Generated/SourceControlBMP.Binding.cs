@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[SourceControlBMP]")]
-    public partial class SourceControlBMP : IHavePrimaryKey, IHaveATenantID
+    public partial class SourceControlBMP : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected SourceControlBMP()
         {
             this.WaterQualityManagementPlanVerifySourceControlBMPs = new HashSet<WaterQualityManagementPlanVerifySourceControlBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -94,10 +93,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllSourceControlBMPs.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.SourceControlBMPs.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -112,7 +110,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int SourceControlBMPID { get; set; }
-        public int TenantID { get; private set; }
         public int WaterQualityManagementPlanID { get; set; }
         public int SourceControlBMPAttributeID { get; set; }
         public bool? IsPresent { get; set; }
@@ -121,7 +118,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return SourceControlBMPID; } set { SourceControlBMPID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlanVerifySourceControlBMP> WaterQualityManagementPlanVerifySourceControlBMPs { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public virtual SourceControlBMPAttribute SourceControlBMPAttribute { get; set; }
 

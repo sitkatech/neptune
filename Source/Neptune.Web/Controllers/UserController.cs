@@ -131,7 +131,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDelete(person, viewModel);
             }
-            person.DeletePerson();
+            HttpRequestStorage.DatabaseEntities.People.DeletePerson(person);
             return new ModalDialogFormJsonResult();
         }
 
@@ -175,15 +175,10 @@ namespace Neptune.Web.Controllers
             if (person.IsActive)
             {
                 var isPrimaryContactForAnyOrganization = person.OrganizationsWhereYouAreThePrimaryContactPerson.Any();
-                if (isPrimaryContactForAnyOrganization)
-                {
-                    confirmMessage =
-                        $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>";
-                }
-                else
-                {
-                    confirmMessage = $"Are you sure you want to inactivate user '{person.GetFullNameFirstLast()}'?";
-                }
+                confirmMessage = 
+                    isPrimaryContactForAnyOrganization 
+                        ? $@"You cannot inactive user '{person.GetFullNameFirstLast()}' because {person.FirstName} is the {FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()} for the following organizations: <ul> {string.Join("\r\n", person.GetPrimaryContactOrganizations().Select(x =>$"<li>{x.OrganizationName}</li>"))}</ul>" 
+                        : $"Are you sure you want to inactivate user '{person.GetFullNameFirstLast()}'?";
                 var viewData = new ConfirmDialogFormViewData(confirmMessage, !isPrimaryContactForAnyOrganization);
                 return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
             }
@@ -241,16 +236,16 @@ namespace Neptune.Web.Controllers
                 return ViewEditJurisdiction(viewModel);
             }
 
-            HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Load();
-            viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictionPeople.Local);
+            HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Load();
+            viewModel.UpdateModel(person, HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.Local);
             SetMessageForDisplay($"Assigned {FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()} successfully changed for {person.GetFullNameFirstLastAndOrgAsUrl()}.");
             return new ModalDialogFormJsonResult();
         }
 
         private PartialViewResult ViewEditJurisdiction(EditUserJurisdictionsViewModel viewModel)
         {
-            var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList();
-            var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.AllStormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
+            var allStormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
+            var stormwaterJurisdictionsCurrentPersonCanManage = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList().Where(x => CurrentPerson.IsAssignedToStormwaterJurisdiction(x)).ToList();
 
             var viewData = new EditUserJurisdictionsViewData(CurrentPerson, allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage, true);
             return RazorPartialView<EditUserJurisdictions, EditUserJurisdictionsViewData, EditUserJurisdictionsViewModel>(viewData, viewModel);
@@ -277,7 +272,7 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         public ActionResult Invite(InviteViewModel viewModel)
         {
-            var toolDisplayName = MultiTenantHelpers.GetToolDisplayName();
+            var toolDisplayName = SystemAttributeHelpers.GetToolDisplayName();
             var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index());
             var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support());
             var inviteModel = new KeystoneService.KeystoneInviteModel
@@ -373,7 +368,7 @@ namespace Neptune.Web.Controllers
                             OrganizationShortName = keystoneOrganization.ShortName,
                             OrganizationUrl = keystoneOrganization.URL
                         };
-                    HttpRequestStorage.DatabaseEntities.AllOrganizations.Add(neptuneOrganization);
+                    HttpRequestStorage.DatabaseEntities.Organizations.Add(neptuneOrganization);
 
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
 
@@ -389,7 +384,7 @@ namespace Neptune.Web.Controllers
             var firmaPerson = new Person(keystoneUser.UserGuid, keystoneUser.FirstName, keystoneUser.LastName,
                 keystoneUser.Email, Role.Unassigned, DateTime.Now, true, organization, false,
                 keystoneUser.LoginName);
-            HttpRequestStorage.DatabaseEntities.AllPeople.Add(firmaPerson);
+            HttpRequestStorage.DatabaseEntities.People.Add(firmaPerson);
             return firmaPerson;
         }
 

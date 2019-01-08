@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[NeptunePageImage]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return neptunePageImage;
         }
 
-        public static void DeleteNeptunePageImage(this List<int> neptunePageImageIDList)
+        public static void DeleteNeptunePageImage(this IQueryable<NeptunePageImage> neptunePageImages, List<int> neptunePageImageIDList)
         {
             if(neptunePageImageIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllNeptunePageImages.RemoveRange(HttpRequestStorage.DatabaseEntities.NeptunePageImages.Where(x => neptunePageImageIDList.Contains(x.NeptunePageImageID)));
+                neptunePageImages.Where(x => neptunePageImageIDList.Contains(x.NeptunePageImageID)).Delete();
             }
         }
 
-        public static void DeleteNeptunePageImage(this ICollection<NeptunePageImage> neptunePageImagesToDelete)
+        public static void DeleteNeptunePageImage(this IQueryable<NeptunePageImage> neptunePageImages, ICollection<NeptunePageImage> neptunePageImagesToDelete)
         {
             if(neptunePageImagesToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllNeptunePageImages.RemoveRange(neptunePageImagesToDelete);
+                var neptunePageImageIDList = neptunePageImagesToDelete.Select(x => x.NeptunePageImageID).ToList();
+                neptunePageImages.Where(x => neptunePageImageIDList.Contains(x.NeptunePageImageID)).Delete();
             }
         }
 
-        public static void DeleteNeptunePageImage(this int neptunePageImageID)
+        public static void DeleteNeptunePageImage(this IQueryable<NeptunePageImage> neptunePageImages, int neptunePageImageID)
         {
-            DeleteNeptunePageImage(new List<int> { neptunePageImageID });
+            DeleteNeptunePageImage(neptunePageImages, new List<int> { neptunePageImageID });
         }
 
-        public static void DeleteNeptunePageImage(this NeptunePageImage neptunePageImageToDelete)
+        public static void DeleteNeptunePageImage(this IQueryable<NeptunePageImage> neptunePageImages, NeptunePageImage neptunePageImageToDelete)
         {
-            DeleteNeptunePageImage(new List<NeptunePageImage> { neptunePageImageToDelete });
+            DeleteNeptunePageImage(neptunePageImages, new List<NeptunePageImage> { neptunePageImageToDelete });
         }
     }
 }

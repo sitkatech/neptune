@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[ModeledCatchmentGeometryStaging]")]
-    public partial class ModeledCatchmentGeometryStaging : IHavePrimaryKey, IHaveATenantID
+    public partial class ModeledCatchmentGeometryStaging : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected ModeledCatchmentGeometryStaging()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -97,21 +96,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllModeledCatchmentGeometryStagings.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.ModeledCatchmentGeometryStagings.Remove(this);
         }
 
         [Key]
         public int ModeledCatchmentGeometryStagingID { get; set; }
-        public int TenantID { get; private set; }
         public int PersonID { get; set; }
         public string FeatureClassName { get; set; }
         public string GeoJson { get; set; }
@@ -120,7 +110,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return ModeledCatchmentGeometryStagingID; } set { ModeledCatchmentGeometryStagingID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person Person { get; set; }
 
         public static class FieldLengths

@@ -30,24 +30,24 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>@MultiTenantHelpers.GetTenantDisplayName()  @(!string.IsNullOrWhiteSpace(ViewDataTyped.HtmlPageTitle) ? string.Format(" | {0}", ViewDataTyped.HtmlPageTitle) : string.Empty)@ViewDataTyped.GetBreadCrumbTitle()</title>
+    <title>@SystemAttributeHelpers.GetTenantDisplayName()  @(!string.IsNullOrWhiteSpace(ViewDataTyped.HtmlPageTitle) ? string.Format(" | {0}", ViewDataTyped.HtmlPageTitle) : string.Empty)@ViewDataTyped.GetBreadCrumbTitle()</title>
 
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-57x57.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-60x60.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-72x72.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-76x76.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-114x114.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-120x120.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-32x32.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-96x96.png", MultiTenantHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-16x16.png", MultiTenantHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-57x57.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-60x60.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-72x72.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-76x76.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-114x114.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-120x120.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-32x32.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-96x96.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-16x16.png", SystemAttributeHelpers.GetTenantName())>
 
     @{ Html.RenderRazorSitkaPartial<NeptuneIncludes>(); }
 
 
 
     @*if there is a tenant style sheet, use that otherwise use the default. The tenant style sheet should import the default sheet so no need to load it twice*@
-    <link href="@Url.Content(MultiTenantHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content(SystemAttributeHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
     @*swich commented lines for testing purposes*@
     @*<link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />*@
 
@@ -76,8 +76,8 @@
     <div class="expandToFillScreen">
         <div class="header">
             <a href="@ViewDataTyped.NeptuneHomeUrl">
-                <img class="headerLogo" src="@MultiTenantHelpers.GetTenantBannerLogoUrl()" />
-                <span class="headerText">@MultiTenantHelpers.GetTenantDisplayName()</span>
+                <img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" />
+                <span class="headerText">@SystemAttributeHelpers.GetTenantDisplayName()</span>
             </a>
         </div>
         <div id="mainnavandcontent">

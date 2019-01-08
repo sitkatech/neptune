@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[Organization]")]
-    public partial class Organization : IHavePrimaryKey, IHaveATenantID
+    public partial class Organization : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -27,7 +27,6 @@ namespace Neptune.Web.Models
             this.People = new HashSet<Person>();
             this.StormwaterJurisdictions = new HashSet<StormwaterJurisdiction>();
             this.TreatmentBMPsWhereYouAreTheOwnerOrganization = new HashSet<TreatmentBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -101,10 +100,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllOrganizations.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.Organizations.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -134,7 +132,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int OrganizationID { get; set; }
-        public int TenantID { get; private set; }
         public Guid? OrganizationGuid { get; set; }
         public string OrganizationName { get; set; }
         public string OrganizationShortName { get; set; }
@@ -152,7 +149,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public StormwaterJurisdiction StormwaterJurisdiction { get { return StormwaterJurisdictions.SingleOrDefault(); } set { StormwaterJurisdictions = new List<StormwaterJurisdiction>{value};} }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheOwnerOrganization { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person PrimaryContactPerson { get; set; }
         public virtual FileResource LogoFileResource { get; set; }
         public virtual OrganizationType OrganizationType { get; set; }

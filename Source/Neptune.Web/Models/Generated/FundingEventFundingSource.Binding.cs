@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FundingEventFundingSource]")]
-    public partial class FundingEventFundingSource : IHavePrimaryKey, IHaveATenantID
+    public partial class FundingEventFundingSource : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected FundingEventFundingSource()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -93,28 +92,18 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFundingEventFundingSources.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.FundingEventFundingSources.Remove(this);
         }
 
         [Key]
         public int FundingEventFundingSourceID { get; set; }
-        public int TenantID { get; private set; }
         public int FundingSourceID { get; set; }
         public int FundingEventID { get; set; }
         public decimal? Amount { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return FundingEventFundingSourceID; } set { FundingEventFundingSourceID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FundingSource FundingSource { get; set; }
         public virtual FundingEvent FundingEvent { get; set; }
 

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[SupportRequestLog]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return supportRequestLog;
         }
 
-        public static void DeleteSupportRequestLog(this List<int> supportRequestLogIDList)
+        public static void DeleteSupportRequestLog(this IQueryable<SupportRequestLog> supportRequestLogs, List<int> supportRequestLogIDList)
         {
             if(supportRequestLogIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.RemoveRange(HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Where(x => supportRequestLogIDList.Contains(x.SupportRequestLogID)));
+                supportRequestLogs.Where(x => supportRequestLogIDList.Contains(x.SupportRequestLogID)).Delete();
             }
         }
 
-        public static void DeleteSupportRequestLog(this ICollection<SupportRequestLog> supportRequestLogsToDelete)
+        public static void DeleteSupportRequestLog(this IQueryable<SupportRequestLog> supportRequestLogs, ICollection<SupportRequestLog> supportRequestLogsToDelete)
         {
             if(supportRequestLogsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSupportRequestLogs.RemoveRange(supportRequestLogsToDelete);
+                var supportRequestLogIDList = supportRequestLogsToDelete.Select(x => x.SupportRequestLogID).ToList();
+                supportRequestLogs.Where(x => supportRequestLogIDList.Contains(x.SupportRequestLogID)).Delete();
             }
         }
 
-        public static void DeleteSupportRequestLog(this int supportRequestLogID)
+        public static void DeleteSupportRequestLog(this IQueryable<SupportRequestLog> supportRequestLogs, int supportRequestLogID)
         {
-            DeleteSupportRequestLog(new List<int> { supportRequestLogID });
+            DeleteSupportRequestLog(supportRequestLogs, new List<int> { supportRequestLogID });
         }
 
-        public static void DeleteSupportRequestLog(this SupportRequestLog supportRequestLogToDelete)
+        public static void DeleteSupportRequestLog(this IQueryable<SupportRequestLog> supportRequestLogs, SupportRequestLog supportRequestLogToDelete)
         {
-            DeleteSupportRequestLog(new List<SupportRequestLog> { supportRequestLogToDelete });
+            DeleteSupportRequestLog(supportRequestLogs, new List<SupportRequestLog> { supportRequestLogToDelete });
         }
     }
 }

@@ -78,11 +78,6 @@ namespace Neptune.Web.Security
                 genericMessage + " Change code so that there's only one of those parameters.");
 
             var primaryKeyForObject = ltInfoEntityPrimaryKeys.Single();
-            if (primaryKeyForObject.EntityObject is IHaveATenantID hasTenantIDEntity)
-            {
-                var tenant = HttpRequestStorage.Tenant;
-                Check.RequireThrowNotAuthorized(hasTenantIDEntity.TenantID == tenant.TenantID, $"TenantID mismatch (Expected {tenant.TenantID}, Was {hasTenantIDEntity.TenantID})!");
-            }
             return primaryKeyForObject;
         }
         protected static void SetInfoMessage(ActionExecutingContext filterContext, PermissionCheckResult permissionCheckResult)

@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TreatmentBMPObservation]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return treatmentBMPObservation;
         }
 
-        public static void DeleteTreatmentBMPObservation(this List<int> treatmentBMPObservationIDList)
+        public static void DeleteTreatmentBMPObservation(this IQueryable<TreatmentBMPObservation> treatmentBMPObservations, List<int> treatmentBMPObservationIDList)
         {
             if(treatmentBMPObservationIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPObservations.RemoveRange(HttpRequestStorage.DatabaseEntities.TreatmentBMPObservations.Where(x => treatmentBMPObservationIDList.Contains(x.TreatmentBMPObservationID)));
+                treatmentBMPObservations.Where(x => treatmentBMPObservationIDList.Contains(x.TreatmentBMPObservationID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPObservation(this ICollection<TreatmentBMPObservation> treatmentBMPObservationsToDelete)
+        public static void DeleteTreatmentBMPObservation(this IQueryable<TreatmentBMPObservation> treatmentBMPObservations, ICollection<TreatmentBMPObservation> treatmentBMPObservationsToDelete)
         {
             if(treatmentBMPObservationsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPObservations.RemoveRange(treatmentBMPObservationsToDelete);
+                var treatmentBMPObservationIDList = treatmentBMPObservationsToDelete.Select(x => x.TreatmentBMPObservationID).ToList();
+                treatmentBMPObservations.Where(x => treatmentBMPObservationIDList.Contains(x.TreatmentBMPObservationID)).Delete();
             }
         }
 
-        public static void DeleteTreatmentBMPObservation(this int treatmentBMPObservationID)
+        public static void DeleteTreatmentBMPObservation(this IQueryable<TreatmentBMPObservation> treatmentBMPObservations, int treatmentBMPObservationID)
         {
-            DeleteTreatmentBMPObservation(new List<int> { treatmentBMPObservationID });
+            DeleteTreatmentBMPObservation(treatmentBMPObservations, new List<int> { treatmentBMPObservationID });
         }
 
-        public static void DeleteTreatmentBMPObservation(this TreatmentBMPObservation treatmentBMPObservationToDelete)
+        public static void DeleteTreatmentBMPObservation(this IQueryable<TreatmentBMPObservation> treatmentBMPObservations, TreatmentBMPObservation treatmentBMPObservationToDelete)
         {
-            DeleteTreatmentBMPObservation(new List<TreatmentBMPObservation> { treatmentBMPObservationToDelete });
+            DeleteTreatmentBMPObservation(treatmentBMPObservations, new List<TreatmentBMPObservation> { treatmentBMPObservationToDelete });
         }
     }
 }

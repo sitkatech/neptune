@@ -48,7 +48,7 @@ namespace Neptune.Web.Views.FieldVisit
                 .Where(x => x != null)
                 .ToList();
             treatmentBMPAssessment.TreatmentBMPAssessmentPhotos.Merge(treatmentBMPAssessmentPhotosToUpdate,
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Local,
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentPhotos.Local,
                 (x, y) => x.TreatmentBMPAssessmentPhotoID == y.TreatmentBMPAssessmentPhotoID,
                 (x, y) => { x.Caption = y.Caption; });
 

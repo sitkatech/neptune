@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPObservation]")]
-    public partial class TreatmentBMPObservation : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPObservation : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected TreatmentBMPObservation()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -105,21 +104,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPObservations.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.TreatmentBMPObservations.Remove(this);
         }
 
         [Key]
         public int TreatmentBMPObservationID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPAssessmentID { get; set; }
         public int TreatmentBMPTypeAssessmentObservationTypeID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
@@ -128,7 +118,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPObservationID; } set { TreatmentBMPObservationID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPAssessment TreatmentBMPAssessment { get; set; }
         public virtual TreatmentBMPTypeAssessmentObservationType TreatmentBMPTypeAssessmentObservationType { get; set; }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }

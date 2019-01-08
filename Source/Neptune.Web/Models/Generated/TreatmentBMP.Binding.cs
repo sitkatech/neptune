@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMP]")]
-    public partial class TreatmentBMP : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMP : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -32,7 +32,6 @@ namespace Neptune.Web.Models
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
             this.WaterQualityManagementPlanVerifyTreatmentBMPs = new HashSet<WaterQualityManagementPlanVerifyTreatmentBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -124,10 +123,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPs.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.TreatmentBMPs.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -182,7 +180,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int TreatmentBMPID { get; set; }
-        public int TenantID { get; private set; }
         public string TreatmentBMPName { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public DbGeometry LocationPoint { get; set; }
@@ -213,7 +210,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual ModeledCatchment ModeledCatchment { get; set; }

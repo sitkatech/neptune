@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MaintenanceRecord](
 	[MaintenanceRecordID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[TreatmentBMPTypeID] [int] NOT NULL,
 	[FieldVisitID] [int] NOT NULL,
@@ -13,11 +12,6 @@ CREATE TABLE [dbo].[MaintenanceRecord](
  CONSTRAINT [PK_MaintenanceRecord_MaintenanceRecordID] PRIMARY KEY CLUSTERED 
 (
 	[MaintenanceRecordID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_MaintenanceRecord_MaintenanceRecordID_TenantID] UNIQUE NONCLUSTERED 
-(
-	[MaintenanceRecordID] ASC,
-	[TenantID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
  CONSTRAINT [AK_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPID] UNIQUE NONCLUSTERED 
 (
@@ -47,20 +41,10 @@ REFERENCES [dbo].[MaintenanceRecordType] ([MaintenanceRecordTypeID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_MaintenanceRecordType_MaintenanceRecordTypeID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_Tenant_TenantID]
-GO
 ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID]
-GO
-ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TenantID] FOREIGN KEY([TreatmentBMPID], [TenantID])
-REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TenantID])
-GO
-ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TenantID]
 GO
 ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPID], [TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])

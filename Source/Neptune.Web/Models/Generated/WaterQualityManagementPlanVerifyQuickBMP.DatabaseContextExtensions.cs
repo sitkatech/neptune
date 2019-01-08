@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanVerifyQuickBMP]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanVerifyQuickBMP;
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this List<int> waterQualityManagementPlanVerifyQuickBMPIDList)
+        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this IQueryable<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, List<int> waterQualityManagementPlanVerifyQuickBMPIDList)
         {
             if(waterQualityManagementPlanVerifyQuickBMPIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyQuickBMPs.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanVerifyQuickBMPs.Where(x => waterQualityManagementPlanVerifyQuickBMPIDList.Contains(x.WaterQualityManagementPlanVerifyQuickBMPID)));
+                waterQualityManagementPlanVerifyQuickBMPs.Where(x => waterQualityManagementPlanVerifyQuickBMPIDList.Contains(x.WaterQualityManagementPlanVerifyQuickBMPID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this ICollection<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPsToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this IQueryable<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, ICollection<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPsToDelete)
         {
             if(waterQualityManagementPlanVerifyQuickBMPsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanVerifyQuickBMPs.RemoveRange(waterQualityManagementPlanVerifyQuickBMPsToDelete);
+                var waterQualityManagementPlanVerifyQuickBMPIDList = waterQualityManagementPlanVerifyQuickBMPsToDelete.Select(x => x.WaterQualityManagementPlanVerifyQuickBMPID).ToList();
+                waterQualityManagementPlanVerifyQuickBMPs.Where(x => waterQualityManagementPlanVerifyQuickBMPIDList.Contains(x.WaterQualityManagementPlanVerifyQuickBMPID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this int waterQualityManagementPlanVerifyQuickBMPID)
+        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this IQueryable<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, int waterQualityManagementPlanVerifyQuickBMPID)
         {
-            DeleteWaterQualityManagementPlanVerifyQuickBMP(new List<int> { waterQualityManagementPlanVerifyQuickBMPID });
+            DeleteWaterQualityManagementPlanVerifyQuickBMP(waterQualityManagementPlanVerifyQuickBMPs, new List<int> { waterQualityManagementPlanVerifyQuickBMPID });
         }
 
-        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMPToDelete)
+        public static void DeleteWaterQualityManagementPlanVerifyQuickBMP(this IQueryable<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBMPs, WaterQualityManagementPlanVerifyQuickBMP waterQualityManagementPlanVerifyQuickBMPToDelete)
         {
-            DeleteWaterQualityManagementPlanVerifyQuickBMP(new List<WaterQualityManagementPlanVerifyQuickBMP> { waterQualityManagementPlanVerifyQuickBMPToDelete });
+            DeleteWaterQualityManagementPlanVerifyQuickBMP(waterQualityManagementPlanVerifyQuickBMPs, new List<WaterQualityManagementPlanVerifyQuickBMP> { waterQualityManagementPlanVerifyQuickBMPToDelete });
         }
     }
 }

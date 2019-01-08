@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.FieldVisit
                 .Where(x => x != null)
                 .ToList();
             treatmentBMP.TreatmentBMPImages.Merge(treatmentBMPAssessmentPhotosToUpdate,
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Local,
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPImages.Local,
                 (x, y) => x.TreatmentBMPImageID == y.TreatmentBMPImageID,
                 (x, y) => { x.Caption = y.Caption; });
 
@@ -54,7 +54,7 @@ namespace Neptune.Web.Views.FieldVisit
             if (Photo != null)
             {
                 var fileResource = FileResource.CreateNewFromHttpPostedFile(Photo, currentPerson);
-                HttpRequestStorage.DatabaseEntities.AllTreatmentBMPImages.Add(
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPImages.Add(
                     new Models.TreatmentBMPImage(fileResource, treatmentBMP, DateTime.Now) { Caption = Caption });
             }
         }

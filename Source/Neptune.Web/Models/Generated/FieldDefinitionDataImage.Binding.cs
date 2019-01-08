@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[FieldDefinitionDataImage]")]
-    public partial class FieldDefinitionDataImage : IHavePrimaryKey, IHaveATenantID
+    public partial class FieldDefinitionDataImage : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected FieldDefinitionDataImage()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -92,27 +91,17 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllFieldDefinitionDataImages.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.FieldDefinitionDataImages.Remove(this);
         }
 
         [Key]
         public int FieldDefinitionDataImageID { get; set; }
-        public int TenantID { get; private set; }
         public int FieldDefinitionDataID { get; set; }
         public int FileResourceID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return FieldDefinitionDataImageID; } set { FieldDefinitionDataImageID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FieldDefinitionData FieldDefinitionData { get; set; }
         public virtual FileResource FileResource { get; set; }
 

@@ -130,8 +130,8 @@ namespace Neptune.Web.Controllers
             }
 
             var treatmentBMPAssessmentPhoto = treatmentBMPAssessmentPhotoPrimaryKey.EntityObject;
-            HttpRequestStorage.DatabaseEntities.AllFileResources.Remove(treatmentBMPAssessmentPhoto.FileResource);
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPAssessmentPhotos.Remove(treatmentBMPAssessmentPhoto);
+            HttpRequestStorage.DatabaseEntities.FileResources.Remove(treatmentBMPAssessmentPhoto.FileResource);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentPhotos.Remove(treatmentBMPAssessmentPhoto);
 
             SetMessageForDisplay("Successfully deleted Treatment BMP Assessment Photo.");
 

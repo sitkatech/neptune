@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[Person]")]
-    public partial class Person : IHavePrimaryKey, IHaveATenantID
+    public partial class Person : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -31,10 +31,9 @@ namespace Neptune.Web.Models
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.SupportRequestLogsWhereYouAreTheRequestPerson = new HashSet<SupportRequestLog>();
-            this.TenantAttributesWhereYouAreThePrimaryContactPerson = new HashSet<TenantAttribute>();
+            this.SystemAttributesWhereYouAreThePrimaryContactPerson = new HashSet<SystemAttribute>();
             this.TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson = new HashSet<WaterQualityManagementPlanVerify>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -113,13 +112,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TenantAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
+            return AuditLogs.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || SystemAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TenantAttribute).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(SystemAttribute).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -127,10 +126,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllPeople.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.People.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -177,7 +175,7 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in TenantAttributesWhereYouAreThePrimaryContactPerson.ToList())
+            foreach(var x in SystemAttributesWhereYouAreThePrimaryContactPerson.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -195,7 +193,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int PersonID { get; set; }
-        public int TenantID { get; private set; }
         public Guid PersonGuid { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -220,10 +217,9 @@ namespace Neptune.Web.Models
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<SupportRequestLog> SupportRequestLogsWhereYouAreTheRequestPerson { get; set; }
-        public virtual ICollection<TenantAttribute> TenantAttributesWhereYouAreThePrimaryContactPerson { get; set; }
+        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreThePrimaryContactPerson { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public Role Role { get { return Role.AllLookupDictionary[RoleID]; } }
         public virtual Organization Organization { get; set; }
 

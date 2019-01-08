@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[SupportRequestLog]")]
-    public partial class SupportRequestLog : IHavePrimaryKey, IHaveATenantID
+    public partial class SupportRequestLog : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected SupportRequestLog()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -100,21 +99,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllSupportRequestLogs.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.SupportRequestLogs.Remove(this);
         }
 
         [Key]
         public int SupportRequestLogID { get; set; }
-        public int TenantID { get; private set; }
         public DateTime RequestDate { get; set; }
         public string RequestPersonName { get; set; }
         public string RequestPersonEmail { get; set; }
@@ -126,7 +116,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return SupportRequestLogID; } set { SupportRequestLogID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual Person RequestPerson { get; set; }
         public SupportRequestType SupportRequestType { get { return SupportRequestType.AllLookupDictionary[SupportRequestTypeID]; } }
 

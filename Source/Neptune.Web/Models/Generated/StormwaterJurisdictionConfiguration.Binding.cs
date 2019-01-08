@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("StormwaterJurisdiction", schema);
             HasKey(x => x.StormwaterJurisdictionID);
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.OrganizationID).HasColumnName(@"OrganizationID").HasColumnType("int").IsRequired();
             Property(x => x.StormwaterJurisdictionGeometry).HasColumnName(@"StormwaterJurisdictionGeometry").HasColumnType("geometry").IsOptional();
             Property(x => x.StateProvinceID).HasColumnName(@"StateProvinceID").HasColumnType("int").IsRequired();

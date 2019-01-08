@@ -135,7 +135,7 @@ namespace Neptune.Web.Controllers
             if (viewModel.Continue == null)
             {
                 fieldVisit = new FieldVisit(treatmentBMP, FieldVisitStatus.InProgress, CurrentPerson, DateTime.Now, false, fieldVisitType, false);
-                HttpRequestStorage.DatabaseEntities.AllFieldVisits.Add(fieldVisit);
+                HttpRequestStorage.DatabaseEntities.FieldVisits.Add(fieldVisit);
             }
             else if (viewModel.Continue == false)
             {

@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[FundingEventFundingSource](
 	[FundingEventFundingSourceID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[FundingSourceID] [int] NOT NULL,
 	[FundingEventID] [int] NOT NULL,
 	[Amount] [money] NULL,
@@ -25,22 +24,7 @@ REFERENCES [dbo].[FundingEvent] ([FundingEventID])
 GO
 ALTER TABLE [dbo].[FundingEventFundingSource] CHECK CONSTRAINT [FK_FundingEventFundingSource_FundingEvent_FundingEventID]
 GO
-ALTER TABLE [dbo].[FundingEventFundingSource]  WITH CHECK ADD  CONSTRAINT [FK_FundingEventFundingSource_FundingEvent_FundingEventID_TenantID] FOREIGN KEY([FundingEventID], [TenantID])
-REFERENCES [dbo].[FundingEvent] ([FundingEventID], [TenantID])
-GO
-ALTER TABLE [dbo].[FundingEventFundingSource] CHECK CONSTRAINT [FK_FundingEventFundingSource_FundingEvent_FundingEventID_TenantID]
-GO
 ALTER TABLE [dbo].[FundingEventFundingSource]  WITH CHECK ADD  CONSTRAINT [FK_FundingEventFundingSource_FundingSource_FundingSourceID] FOREIGN KEY([FundingSourceID])
 REFERENCES [dbo].[FundingSource] ([FundingSourceID])
 GO
 ALTER TABLE [dbo].[FundingEventFundingSource] CHECK CONSTRAINT [FK_FundingEventFundingSource_FundingSource_FundingSourceID]
-GO
-ALTER TABLE [dbo].[FundingEventFundingSource]  WITH CHECK ADD  CONSTRAINT [FK_FundingEventFundingSource_FundingSource_FundingSourceID_TenantID] FOREIGN KEY([FundingSourceID], [TenantID])
-REFERENCES [dbo].[FundingSource] ([FundingSourceID], [TenantID])
-GO
-ALTER TABLE [dbo].[FundingEventFundingSource] CHECK CONSTRAINT [FK_FundingEventFundingSource_FundingSource_FundingSourceID_TenantID]
-GO
-ALTER TABLE [dbo].[FundingEventFundingSource]  WITH CHECK ADD  CONSTRAINT [FK_FundingEventFundingSource_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[FundingEventFundingSource] CHECK CONSTRAINT [FK_FundingEventFundingSource_Tenant_TenantID]

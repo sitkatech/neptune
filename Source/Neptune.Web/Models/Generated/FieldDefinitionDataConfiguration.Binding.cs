@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("FieldDefinitionData", schema);
             HasKey(x => x.FieldDefinitionDataID);
             Property(x => x.FieldDefinitionDataID).HasColumnName(@"FieldDefinitionDataID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FieldDefinitionID).HasColumnName(@"FieldDefinitionID").HasColumnType("int").IsRequired();
             Property(x => x.FieldDefinitionDataValue).HasColumnName(@"FieldDefinitionDataValue").HasColumnType("varchar").IsOptional();
             Property(x => x.FieldDefinitionLabel).HasColumnName(@"FieldDefinitionLabel").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(300);

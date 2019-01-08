@@ -30,7 +30,7 @@ namespace Neptune.Web.Controllers
             }
             var treatmentBMPDocument = new TreatmentBMPDocument(treatmentBMP);
             viewModel.UpdateModel(treatmentBMPDocument, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPDocuments.Add(treatmentBMPDocument);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPDocuments.Add(treatmentBMPDocument);
             return new ModalDialogFormJsonResult();
         }
 
@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDelete(treatmentBMPDocument, viewModel);
             }
-            HttpRequestStorage.DatabaseEntities.AllTreatmentBMPDocuments.Remove(treatmentBMPDocument);
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPDocuments.Remove(treatmentBMPDocument);
             return new ModalDialogFormJsonResult();
         }
 

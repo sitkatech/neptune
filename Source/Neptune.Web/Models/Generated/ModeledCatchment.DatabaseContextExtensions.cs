@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[ModeledCatchment]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return modeledCatchment;
         }
 
-        public static void DeleteModeledCatchment(this List<int> modeledCatchmentIDList)
+        public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, List<int> modeledCatchmentIDList)
         {
             if(modeledCatchmentIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllModeledCatchments.RemoveRange(HttpRequestStorage.DatabaseEntities.ModeledCatchments.Where(x => modeledCatchmentIDList.Contains(x.ModeledCatchmentID)));
+                modeledCatchments.Where(x => modeledCatchmentIDList.Contains(x.ModeledCatchmentID)).Delete();
             }
         }
 
-        public static void DeleteModeledCatchment(this ICollection<ModeledCatchment> modeledCatchmentsToDelete)
+        public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, ICollection<ModeledCatchment> modeledCatchmentsToDelete)
         {
             if(modeledCatchmentsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllModeledCatchments.RemoveRange(modeledCatchmentsToDelete);
+                var modeledCatchmentIDList = modeledCatchmentsToDelete.Select(x => x.ModeledCatchmentID).ToList();
+                modeledCatchments.Where(x => modeledCatchmentIDList.Contains(x.ModeledCatchmentID)).Delete();
             }
         }
 
-        public static void DeleteModeledCatchment(this int modeledCatchmentID)
+        public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, int modeledCatchmentID)
         {
-            DeleteModeledCatchment(new List<int> { modeledCatchmentID });
+            DeleteModeledCatchment(modeledCatchments, new List<int> { modeledCatchmentID });
         }
 
-        public static void DeleteModeledCatchment(this ModeledCatchment modeledCatchmentToDelete)
+        public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, ModeledCatchment modeledCatchmentToDelete)
         {
-            DeleteModeledCatchment(new List<ModeledCatchment> { modeledCatchmentToDelete });
+            DeleteModeledCatchment(modeledCatchments, new List<ModeledCatchment> { modeledCatchmentToDelete });
         }
     }
 }

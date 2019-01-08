@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("AuditLog", schema);
             HasKey(x => x.AuditLogID);
             Property(x => x.AuditLogID).HasColumnName(@"AuditLogID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.PersonID).HasColumnName(@"PersonID").HasColumnType("int").IsRequired();
             Property(x => x.AuditLogDate).HasColumnName(@"AuditLogDate").HasColumnType("datetime").IsRequired();
             Property(x => x.AuditLogEventTypeID).HasColumnName(@"AuditLogEventTypeID").HasColumnType("int").IsRequired();

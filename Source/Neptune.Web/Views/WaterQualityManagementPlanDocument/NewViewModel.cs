@@ -52,19 +52,19 @@ namespace Neptune.Web.Views.WaterQualityManagementPlanDocument
         public void UpdateModel(Models.WaterQualityManagementPlan waterQualityManagementPlan, Person currentPerson)
         {
             var fileResource = FileResource.CreateNewFromHttpPostedFile(File, currentPerson);
-            HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            HttpRequestStorage.DatabaseEntities.FileResources.Add(fileResource);
             var waterQualityManagementPlanDocumentType = WaterQualityManagementPlanDocumentType.AllLookupDictionary[WaterQualityManagementPlanDocumentTypeID.GetValueOrDefault()]; // will never default due to RequiredAttribute
             var waterQualityManagementPlanDocument =
                 new Models.WaterQualityManagementPlanDocument(waterQualityManagementPlan, fileResource, DisplayName,
                     DateTime.Now, waterQualityManagementPlanDocumentType) {Description = Description};
-            HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanDocuments.Add(waterQualityManagementPlanDocument);
+            HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanDocuments.Add(waterQualityManagementPlanDocument);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var errors = new List<ValidationResult>();
 
-            if (HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanDocuments.Any(x =>
+            if (HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanDocuments.Any(x =>
                 x.WaterQualityManagementPlanID == WaterQualityManagementPlanID && x.DisplayName == DisplayName))
             {
                 errors.Add(new SitkaValidationResult<NewViewModel, string>(

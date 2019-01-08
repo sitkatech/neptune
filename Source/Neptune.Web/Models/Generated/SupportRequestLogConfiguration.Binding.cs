@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("SupportRequestLog", schema);
             HasKey(x => x.SupportRequestLogID);
             Property(x => x.SupportRequestLogID).HasColumnName(@"SupportRequestLogID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.RequestDate).HasColumnName(@"RequestDate").HasColumnType("datetime").IsRequired();
             Property(x => x.RequestPersonName).HasColumnName(@"RequestPersonName").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(200);
             Property(x => x.RequestPersonEmail).HasColumnName(@"RequestPersonEmail").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(256);

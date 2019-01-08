@@ -19,73 +19,74 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
 using System.Data.Entity.Infrastructure.Pluralization;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using Neptune.Web.Controllers;
-using Neptune.Web.Models;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Neptune.Web.Common
 {
-    public static class MultiTenantHelpers
+
+    // This was an ugly hack to spare some tedium during the process of dropping multitenancy. These attributes should all be eventually moved to the config file, but for now will continue to live in the DB.
+    public static class SystemAttributeHelpers
     {
         private static readonly EnglishPluralizationService PluralizationService = new EnglishPluralizationService();
         
         public static string GetTenantDisplayName()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().TenantDisplayName;
-        }
-
-        public static string GetTenantName()
-        {
-            return HttpRequestStorage.Tenant.TenantName;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantDisplayName;
         }
 
         public static string GetToolDisplayName()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().ToolDisplayName;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().ToolDisplayName;
         }
 
         public static string GetTenantSquareLogoUrl()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().TenantSquareLogoFileResource != null
-                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantSquareLogoFileResource.GetFileResourceUrl()
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantSquareLogoFileResource != null
+                ? HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantSquareLogoFileResource.GetFileResourceUrl()
                 : "/Content/img/Neptune_Logo_Square.png";
         }
 
         public static string GetTenantBannerLogoUrl()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().TenantBannerLogoFileResource != null
-                ? HttpRequestStorage.Tenant.GetTenantAttribute().TenantBannerLogoFileResource.GetFileResourceUrl()
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantBannerLogoFileResource != null
+                ? HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantBannerLogoFileResource.GetFileResourceUrl()
                 : "/Content/img/Neptune_Logo_2016_FNL.width-600.png";
         }
 
         public static string GetTenantStyleSheetUrl()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().TenantStyleSheetFileResource != null
-                ? new SitkaRoute<TenantController>(c => c.Style(HttpRequestStorage.Tenant.TenantName)).BuildUrlFromExpression()
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().TenantStyleSheetFileResource != null
+                ? new SitkaRoute<HomeController>(c=>c.Style()).BuildUrlFromExpression()
                 : "~/Content/Bootstrap/neptune/base.theme.min.css";
         }
         
         public static DbGeometry GetDefaultBoundingBox()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().DefaultBoundingBox;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().DefaultBoundingBox;
         }
 
         public static int GetMinimumYear()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().MinimumYear;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().MinimumYear;
         }
 
         public static string GetTenantRecaptchaPrivateKey()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().RecaptchaPrivateKey;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().RecaptchaPrivateKey;
         }
 
         public static string GetTenantRecaptchaPublicKey()
         {
-            return HttpRequestStorage.Tenant.GetTenantAttribute().RecaptchaPublicKey;
+            return HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault().RecaptchaPublicKey;
+        }
+
+        public static string GetTenantName()
+        {
+            return "OCStormwater";
         }
     }
 }

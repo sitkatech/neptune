@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.Web.Models;
 using LtInfo.Common.Models;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.User
 {
@@ -57,13 +58,14 @@ namespace Neptune.Web.Views.User
 
         public void UpdateModel(Person person, Person currentPerson)
         {
-            person.RoleID = RoleID.Value;
+            person.RoleID = RoleID.GetValueOrDefault(); // never null due to RequiredAttribute
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
 
             var assignedRole = Models.Role.AllLookupDictionary[RoleID.Value];
             if (assignedRole == Models.Role.Admin || assignedRole == Models.Role.SitkaAdmin)
             {
-                person.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson();
+                HttpRequestStorage.DatabaseEntities.StormwaterJurisdictionPeople.DeleteStormwaterJurisdictionPerson(
+                person.StormwaterJurisdictionPeople);
             }
 
             if (ModelObjectHelpers.IsRealPrimaryKeyValue(person.PersonID))

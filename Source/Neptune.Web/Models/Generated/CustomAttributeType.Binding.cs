@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[CustomAttributeType]")]
-    public partial class CustomAttributeType : IHavePrimaryKey, IHaveATenantID
+    public partial class CustomAttributeType : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -26,7 +26,6 @@ namespace Neptune.Web.Models
             this.CustomAttributes = new HashSet<CustomAttribute>();
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
             this.TreatmentBMPTypeCustomAttributeTypes = new HashSet<TreatmentBMPTypeCustomAttributeType>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -99,10 +98,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllCustomAttributeTypes.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.CustomAttributeTypes.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -127,7 +125,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int CustomAttributeTypeID { get; set; }
-        public int TenantID { get; private set; }
         public string CustomAttributeTypeName { get; set; }
         public int CustomAttributeDataTypeID { get; set; }
         public int? MeasurementUnitTypeID { get; set; }
@@ -141,7 +138,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<CustomAttribute> CustomAttributes { get; set; }
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual ICollection<TreatmentBMPTypeCustomAttributeType> TreatmentBMPTypeCustomAttributeTypes { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public CustomAttributeDataType CustomAttributeDataType { get { return CustomAttributeDataType.AllLookupDictionary[CustomAttributeDataTypeID]; } }
         public MeasurementUnitType MeasurementUnitType { get { return MeasurementUnitTypeID.HasValue ? MeasurementUnitType.AllLookupDictionary[MeasurementUnitTypeID.Value] : null; } }
         public CustomAttributeTypePurpose CustomAttributeTypePurpose { get { return CustomAttributeTypePurpose.AllLookupDictionary[CustomAttributeTypePurposeID]; } }

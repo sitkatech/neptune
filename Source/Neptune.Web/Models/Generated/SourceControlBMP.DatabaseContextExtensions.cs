@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[SourceControlBMP]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return sourceControlBMP;
         }
 
-        public static void DeleteSourceControlBMP(this List<int> sourceControlBMPIDList)
+        public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, List<int> sourceControlBMPIDList)
         {
             if(sourceControlBMPIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPs.RemoveRange(HttpRequestStorage.DatabaseEntities.SourceControlBMPs.Where(x => sourceControlBMPIDList.Contains(x.SourceControlBMPID)));
+                sourceControlBMPs.Where(x => sourceControlBMPIDList.Contains(x.SourceControlBMPID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMP(this ICollection<SourceControlBMP> sourceControlBMPsToDelete)
+        public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, ICollection<SourceControlBMP> sourceControlBMPsToDelete)
         {
             if(sourceControlBMPsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllSourceControlBMPs.RemoveRange(sourceControlBMPsToDelete);
+                var sourceControlBMPIDList = sourceControlBMPsToDelete.Select(x => x.SourceControlBMPID).ToList();
+                sourceControlBMPs.Where(x => sourceControlBMPIDList.Contains(x.SourceControlBMPID)).Delete();
             }
         }
 
-        public static void DeleteSourceControlBMP(this int sourceControlBMPID)
+        public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, int sourceControlBMPID)
         {
-            DeleteSourceControlBMP(new List<int> { sourceControlBMPID });
+            DeleteSourceControlBMP(sourceControlBMPs, new List<int> { sourceControlBMPID });
         }
 
-        public static void DeleteSourceControlBMP(this SourceControlBMP sourceControlBMPToDelete)
+        public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, SourceControlBMP sourceControlBMPToDelete)
         {
-            DeleteSourceControlBMP(new List<SourceControlBMP> { sourceControlBMPToDelete });
+            DeleteSourceControlBMP(sourceControlBMPs, new List<SourceControlBMP> { sourceControlBMPToDelete });
         }
     }
 }

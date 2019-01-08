@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlan]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlan;
         }
 
-        public static void DeleteWaterQualityManagementPlan(this List<int> waterQualityManagementPlanIDList)
+        public static void DeleteWaterQualityManagementPlan(this IQueryable<WaterQualityManagementPlan> waterQualityManagementPlans, List<int> waterQualityManagementPlanIDList)
         {
             if(waterQualityManagementPlanIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlans.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlans.Where(x => waterQualityManagementPlanIDList.Contains(x.WaterQualityManagementPlanID)));
+                waterQualityManagementPlans.Where(x => waterQualityManagementPlanIDList.Contains(x.WaterQualityManagementPlanID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlan(this ICollection<WaterQualityManagementPlan> waterQualityManagementPlansToDelete)
+        public static void DeleteWaterQualityManagementPlan(this IQueryable<WaterQualityManagementPlan> waterQualityManagementPlans, ICollection<WaterQualityManagementPlan> waterQualityManagementPlansToDelete)
         {
             if(waterQualityManagementPlansToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlans.RemoveRange(waterQualityManagementPlansToDelete);
+                var waterQualityManagementPlanIDList = waterQualityManagementPlansToDelete.Select(x => x.WaterQualityManagementPlanID).ToList();
+                waterQualityManagementPlans.Where(x => waterQualityManagementPlanIDList.Contains(x.WaterQualityManagementPlanID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlan(this int waterQualityManagementPlanID)
+        public static void DeleteWaterQualityManagementPlan(this IQueryable<WaterQualityManagementPlan> waterQualityManagementPlans, int waterQualityManagementPlanID)
         {
-            DeleteWaterQualityManagementPlan(new List<int> { waterQualityManagementPlanID });
+            DeleteWaterQualityManagementPlan(waterQualityManagementPlans, new List<int> { waterQualityManagementPlanID });
         }
 
-        public static void DeleteWaterQualityManagementPlan(this WaterQualityManagementPlan waterQualityManagementPlanToDelete)
+        public static void DeleteWaterQualityManagementPlan(this IQueryable<WaterQualityManagementPlan> waterQualityManagementPlans, WaterQualityManagementPlan waterQualityManagementPlanToDelete)
         {
-            DeleteWaterQualityManagementPlan(new List<WaterQualityManagementPlan> { waterQualityManagementPlanToDelete });
+            DeleteWaterQualityManagementPlan(waterQualityManagementPlans, new List<WaterQualityManagementPlan> { waterQualityManagementPlanToDelete });
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
                 Description = viewModel.FundingEvent.Description
             };
 
-            HttpRequestStorage.DatabaseEntities.AllFundingEvents.Add(fundingEvent);
+            HttpRequestStorage.DatabaseEntities.FundingEvents.Add(fundingEvent);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             SetMessageForDisplay($"{FieldDefinition.FundingEvent.GetFieldDefinitionLabel()} successfully added.");
@@ -87,7 +87,7 @@ namespace Neptune.Web.Controllers
         {
             HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Load();
             HttpRequestStorage.DatabaseEntities.FundingEvents.Load();
-            var allFundingEventFundingSources = HttpRequestStorage.DatabaseEntities.AllFundingEventFundingSources.Local;
+            var allFundingEventFundingSources = HttpRequestStorage.DatabaseEntities.FundingEventFundingSources.Local;
             
             viewModel.UpdateModel(currentFundingEvent, allFundingEventFundingSources);
             return new ModalDialogFormJsonResult();

@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[MaintenanceRecord]")]
-    public partial class MaintenanceRecord : IHavePrimaryKey, IHaveATenantID
+    public partial class MaintenanceRecord : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected MaintenanceRecord()
         {
             this.MaintenanceRecordObservations = new HashSet<MaintenanceRecordObservation>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -97,10 +96,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllMaintenanceRecords.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.MaintenanceRecords.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -115,7 +113,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int MaintenanceRecordID { get; set; }
-        public int TenantID { get; private set; }
         public int TreatmentBMPID { get; set; }
         public int TreatmentBMPTypeID { get; set; }
         public int FieldVisitID { get; set; }
@@ -125,7 +122,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return MaintenanceRecordID; } set { MaintenanceRecordID = value; } }
 
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
         public virtual FieldVisit FieldVisit { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null; } }

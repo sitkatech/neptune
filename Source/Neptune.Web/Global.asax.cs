@@ -20,6 +20,7 @@ namespace Neptune.Web
         public static Dictionary<string, string> AreasDictionary = new Dictionary<string, string>
         {
             {string.Empty, NeptuneWebConfiguration.CanonicalHostName}
+            ,{"Trash", "localhost-trash.ocstormwatertools.org"}
         };
 
         protected void Application_Start()

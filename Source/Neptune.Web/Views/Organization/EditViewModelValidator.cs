@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.Organization
         public Func<IList<Models.Organization>> Organizations = () =>
         {
             HttpRequestStorage.DatabaseEntities.Organizations.Load();
-            return HttpRequestStorage.DatabaseEntities.AllOrganizations.Local;
+            return HttpRequestStorage.DatabaseEntities.Organizations.Local;
         };
 
         public EditViewModelValidator(IList<Models.Organization> organizations) : this()

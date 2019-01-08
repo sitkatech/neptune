@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[NeptuneHomePageImage]")]
-    public partial class NeptuneHomePageImage : IHavePrimaryKey, IHaveATenantID
+    public partial class NeptuneHomePageImage : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected NeptuneHomePageImage()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -93,28 +92,18 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllNeptuneHomePageImages.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.NeptuneHomePageImages.Remove(this);
         }
 
         [Key]
         public int NeptuneHomePageImageID { get; set; }
-        public int TenantID { get; private set; }
         public int FileResourceID { get; set; }
         public string Caption { get; set; }
         public int SortOrder { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NeptuneHomePageImageID; } set { NeptuneHomePageImageID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FileResource FileResource { get; set; }
 
         public static class FieldLengths

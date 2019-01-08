@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[NeptunePage]")]
-    public partial class NeptunePage : IHavePrimaryKey, IHaveATenantID
+    public partial class NeptunePage : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected NeptunePage()
         {
             this.NeptunePageImages = new HashSet<NeptunePageImage>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -86,10 +85,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllNeptunePages.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.NeptunePages.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -104,7 +102,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int NeptunePageID { get; set; }
-        public int TenantID { get; private set; }
         public int NeptunePageTypeID { get; set; }
         public string NeptunePageContent { get; set; }
         [NotMapped]
@@ -117,7 +114,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return NeptunePageID; } set { NeptunePageID = value; } }
 
         public virtual ICollection<NeptunePageImage> NeptunePageImages { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public NeptunePageType NeptunePageType { get { return NeptunePageType.AllLookupDictionary[NeptunePageTypeID]; } }
 
         public static class FieldLengths

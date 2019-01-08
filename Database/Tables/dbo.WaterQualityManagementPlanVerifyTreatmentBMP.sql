@@ -4,7 +4,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP](
 	[WaterQualityManagementPlanVerifyTreatmentBMPID] [int] IDENTITY(1,1) NOT NULL,
-	[TenantID] [int] NOT NULL,
 	[WaterQualityManagementPlanVerifyID] [int] NOT NULL,
 	[TreatmentBMPID] [int] NOT NULL,
 	[IsAdequate] [bit] NULL,
@@ -25,11 +24,6 @@ ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerifyQuickBMP_TreatmentBMP_TreatmentBMPID]
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_Tenant_TenantID] FOREIGN KEY([TenantID])
-REFERENCES [dbo].[Tenant] ([TenantID])
-GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_Tenant_TenantID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID] FOREIGN KEY([WaterQualityManagementPlanVerifyID])
 REFERENCES [dbo].[WaterQualityManagementPlanVerify] ([WaterQualityManagementPlanVerifyID])

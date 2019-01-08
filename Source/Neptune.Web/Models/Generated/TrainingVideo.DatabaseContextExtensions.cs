@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[TrainingVideo]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return trainingVideo;
         }
 
-        public static void DeleteTrainingVideo(this List<int> trainingVideoIDList)
+        public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, List<int> trainingVideoIDList)
         {
             if(trainingVideoIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTrainingVideos.RemoveRange(HttpRequestStorage.DatabaseEntities.TrainingVideos.Where(x => trainingVideoIDList.Contains(x.TrainingVideoID)));
+                trainingVideos.Where(x => trainingVideoIDList.Contains(x.TrainingVideoID)).Delete();
             }
         }
 
-        public static void DeleteTrainingVideo(this ICollection<TrainingVideo> trainingVideosToDelete)
+        public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, ICollection<TrainingVideo> trainingVideosToDelete)
         {
             if(trainingVideosToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllTrainingVideos.RemoveRange(trainingVideosToDelete);
+                var trainingVideoIDList = trainingVideosToDelete.Select(x => x.TrainingVideoID).ToList();
+                trainingVideos.Where(x => trainingVideoIDList.Contains(x.TrainingVideoID)).Delete();
             }
         }
 
-        public static void DeleteTrainingVideo(this int trainingVideoID)
+        public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, int trainingVideoID)
         {
-            DeleteTrainingVideo(new List<int> { trainingVideoID });
+            DeleteTrainingVideo(trainingVideos, new List<int> { trainingVideoID });
         }
 
-        public static void DeleteTrainingVideo(this TrainingVideo trainingVideoToDelete)
+        public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, TrainingVideo trainingVideoToDelete)
         {
-            DeleteTrainingVideo(new List<TrainingVideo> { trainingVideoToDelete });
+            DeleteTrainingVideo(trainingVideos, new List<TrainingVideo> { trainingVideoToDelete });
         }
     }
 }

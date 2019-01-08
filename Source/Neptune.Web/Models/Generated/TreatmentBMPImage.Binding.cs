@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[TreatmentBMPImage]")]
-    public partial class TreatmentBMPImage : IHavePrimaryKey, IHaveATenantID
+    public partial class TreatmentBMPImage : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected TreatmentBMPImage()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -96,21 +95,12 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllTreatmentBMPImages.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.TreatmentBMPImages.Remove(this);
         }
 
         [Key]
         public int TreatmentBMPImageID { get; set; }
-        public int TenantID { get; private set; }
         public int FileResourceID { get; set; }
         public int TreatmentBMPID { get; set; }
         public string Caption { get; set; }
@@ -118,7 +108,6 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPImageID; } set { TreatmentBMPImageID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual FileResource FileResource { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
 

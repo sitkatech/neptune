@@ -70,7 +70,7 @@ namespace Neptune.Web.Controllers
 
             var customAttributeType = new CustomAttributeType(String.Empty, CustomAttributeDataType.String, false, customAttributeTypePurpose);
             viewModel.UpdateModel(customAttributeType, CurrentPerson);
-            HttpRequestStorage.DatabaseEntities.AllCustomAttributeTypes.Add(customAttributeType);
+            HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Add(customAttributeType);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             SetMessageForDisplay($"Custom Attribute Type {customAttributeType.CustomAttributeTypeName} succesfully created.");
 

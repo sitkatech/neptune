@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[FieldVisit]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return fieldVisit;
         }
 
-        public static void DeleteFieldVisit(this List<int> fieldVisitIDList)
+        public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, List<int> fieldVisitIDList)
         {
             if(fieldVisitIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldVisits.RemoveRange(HttpRequestStorage.DatabaseEntities.FieldVisits.Where(x => fieldVisitIDList.Contains(x.FieldVisitID)));
+                fieldVisits.Where(x => fieldVisitIDList.Contains(x.FieldVisitID)).Delete();
             }
         }
 
-        public static void DeleteFieldVisit(this ICollection<FieldVisit> fieldVisitsToDelete)
+        public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, ICollection<FieldVisit> fieldVisitsToDelete)
         {
             if(fieldVisitsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllFieldVisits.RemoveRange(fieldVisitsToDelete);
+                var fieldVisitIDList = fieldVisitsToDelete.Select(x => x.FieldVisitID).ToList();
+                fieldVisits.Where(x => fieldVisitIDList.Contains(x.FieldVisitID)).Delete();
             }
         }
 
-        public static void DeleteFieldVisit(this int fieldVisitID)
+        public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, int fieldVisitID)
         {
-            DeleteFieldVisit(new List<int> { fieldVisitID });
+            DeleteFieldVisit(fieldVisits, new List<int> { fieldVisitID });
         }
 
-        public static void DeleteFieldVisit(this FieldVisit fieldVisitToDelete)
+        public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, FieldVisit fieldVisitToDelete)
         {
-            DeleteFieldVisit(new List<FieldVisit> { fieldVisitToDelete });
+            DeleteFieldVisit(fieldVisits, new List<FieldVisit> { fieldVisitToDelete });
         }
     }
 }

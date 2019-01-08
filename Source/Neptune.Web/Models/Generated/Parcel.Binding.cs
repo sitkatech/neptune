@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[Parcel]")]
-    public partial class Parcel : IHavePrimaryKey, IHaveATenantID
+    public partial class Parcel : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected Parcel()
         {
             this.WaterQualityManagementPlanParcels = new HashSet<WaterQualityManagementPlanParcel>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -87,10 +86,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllParcels.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.Parcels.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -105,7 +103,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int ParcelID { get; set; }
-        public int TenantID { get; private set; }
         public string ParcelNumber { get; set; }
         public DbGeometry ParcelGeometry { get; set; }
         public string OwnerName { get; set; }
@@ -120,7 +117,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return ParcelID; } set { ParcelID = value; } }
 
         public virtual ICollection<WaterQualityManagementPlanParcel> WaterQualityManagementPlanParcels { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
 
         public static class FieldLengths
         {

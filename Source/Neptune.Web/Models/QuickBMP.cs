@@ -7,10 +7,9 @@ namespace Neptune.Web.Models
     public partial class QuickBMP : IAuditableEntity
     {
 
-        public QuickBMP(QuickBMPSimple quickBMPSimple, int tenantId, int waterQualityManagementPlanID)
+        public QuickBMP(QuickBMPSimple quickBMPSimple, int waterQualityManagementPlanID)
         {
             QuickBMPID = quickBMPSimple.QuickBMPID ?? ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            TenantID = tenantId;
             WaterQualityManagementPlanID = waterQualityManagementPlanID;
             QuickBMPName = quickBMPSimple.DisplayName;
             TreatmentBMPTypeID = quickBMPSimple.QuickTreatmentBMPTypeID;

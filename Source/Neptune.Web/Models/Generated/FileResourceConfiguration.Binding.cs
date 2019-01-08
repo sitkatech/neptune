@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("FileResource", schema);
             HasKey(x => x.FileResourceID);
             Property(x => x.FileResourceID).HasColumnName(@"FileResourceID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FileResourceMimeTypeID).HasColumnName(@"FileResourceMimeTypeID").HasColumnType("int").IsRequired();
             Property(x => x.OriginalBaseFilename).HasColumnName(@"OriginalBaseFilename").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(255);
             Property(x => x.OriginalFileExtension).HasColumnName(@"OriginalFileExtension").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(255);

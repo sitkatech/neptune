@@ -139,7 +139,7 @@ namespace Neptune.Web.Models
         public static FileResource CreateNewFromHttpPostedFileAndSave(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         {
             var fileResource = CreateNewFromHttpPostedFile(httpPostedFileBase, currentPerson);
-            HttpRequestStorage.DatabaseEntities.AllFileResources.Add(fileResource);
+            HttpRequestStorage.DatabaseEntities.FileResources.Add(fileResource);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             return fileResource;
         }

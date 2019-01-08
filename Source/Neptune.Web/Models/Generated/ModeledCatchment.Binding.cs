@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[ModeledCatchment]")]
-    public partial class ModeledCatchment : IHavePrimaryKey, IHaveATenantID
+    public partial class ModeledCatchment : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected ModeledCatchment()
         {
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -92,10 +91,9 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllModeledCatchments.Remove(this);
+            DeleteChildren(dbContext);
+            dbContext.ModeledCatchments.Remove(this);
         }
-
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
@@ -110,7 +108,6 @@ namespace Neptune.Web.Models
 
         [Key]
         public int ModeledCatchmentID { get; set; }
-        public int TenantID { get; private set; }
         public string ModeledCatchmentName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public string Notes { get; set; }
@@ -119,7 +116,6 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return ModeledCatchmentID; } set { ModeledCatchmentID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
 
         public static class FieldLengths

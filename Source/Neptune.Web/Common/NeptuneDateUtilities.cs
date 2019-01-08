@@ -30,7 +30,7 @@ namespace Neptune.Web.Common
     {
         public static int MinimumYear
         {
-            get { return MultiTenantHelpers.GetMinimumYear(); }
+            get { return SystemAttributeHelpers.GetMinimumYear(); }
         }
 
         public const int YearsBeyondPresentForMaximumYearForUserInput = 30;

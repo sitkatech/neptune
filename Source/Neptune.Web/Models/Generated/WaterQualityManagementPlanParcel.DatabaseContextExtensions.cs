@@ -4,6 +4,7 @@
 //  Source Table: [dbo].[WaterQualityManagementPlanParcel]
 using System.Collections.Generic;
 using System.Linq;
+using Z.EntityFramework.Plus;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
@@ -19,30 +20,31 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanParcel;
         }
 
-        public static void DeleteWaterQualityManagementPlanParcel(this List<int> waterQualityManagementPlanParcelIDList)
+        public static void DeleteWaterQualityManagementPlanParcel(this IQueryable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels, List<int> waterQualityManagementPlanParcelIDList)
         {
             if(waterQualityManagementPlanParcelIDList.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanParcels.RemoveRange(HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Where(x => waterQualityManagementPlanParcelIDList.Contains(x.WaterQualityManagementPlanParcelID)));
+                waterQualityManagementPlanParcels.Where(x => waterQualityManagementPlanParcelIDList.Contains(x.WaterQualityManagementPlanParcelID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanParcel(this ICollection<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcelsToDelete)
+        public static void DeleteWaterQualityManagementPlanParcel(this IQueryable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels, ICollection<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcelsToDelete)
         {
             if(waterQualityManagementPlanParcelsToDelete.Any())
             {
-                HttpRequestStorage.DatabaseEntities.AllWaterQualityManagementPlanParcels.RemoveRange(waterQualityManagementPlanParcelsToDelete);
+                var waterQualityManagementPlanParcelIDList = waterQualityManagementPlanParcelsToDelete.Select(x => x.WaterQualityManagementPlanParcelID).ToList();
+                waterQualityManagementPlanParcels.Where(x => waterQualityManagementPlanParcelIDList.Contains(x.WaterQualityManagementPlanParcelID)).Delete();
             }
         }
 
-        public static void DeleteWaterQualityManagementPlanParcel(this int waterQualityManagementPlanParcelID)
+        public static void DeleteWaterQualityManagementPlanParcel(this IQueryable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels, int waterQualityManagementPlanParcelID)
         {
-            DeleteWaterQualityManagementPlanParcel(new List<int> { waterQualityManagementPlanParcelID });
+            DeleteWaterQualityManagementPlanParcel(waterQualityManagementPlanParcels, new List<int> { waterQualityManagementPlanParcelID });
         }
 
-        public static void DeleteWaterQualityManagementPlanParcel(this WaterQualityManagementPlanParcel waterQualityManagementPlanParcelToDelete)
+        public static void DeleteWaterQualityManagementPlanParcel(this IQueryable<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels, WaterQualityManagementPlanParcel waterQualityManagementPlanParcelToDelete)
         {
-            DeleteWaterQualityManagementPlanParcel(new List<WaterQualityManagementPlanParcel> { waterQualityManagementPlanParcelToDelete });
+            DeleteWaterQualityManagementPlanParcel(waterQualityManagementPlanParcels, new List<WaterQualityManagementPlanParcel> { waterQualityManagementPlanParcelToDelete });
         }
     }
 }

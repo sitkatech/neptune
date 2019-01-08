@@ -16,7 +16,6 @@ namespace Neptune.Web.Models
             ToTable("FieldDefinitionDataImage", schema);
             HasKey(x => x.FieldDefinitionDataImageID);
             Property(x => x.FieldDefinitionDataImageID).HasColumnName(@"FieldDefinitionDataImageID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.TenantID).HasColumnName(@"TenantID").HasColumnType("int").IsRequired();
             Property(x => x.FieldDefinitionDataID).HasColumnName(@"FieldDefinitionDataID").HasColumnType("int").IsRequired();
             Property(x => x.FileResourceID).HasColumnName(@"FileResourceID").HasColumnType("int").IsRequired();
 

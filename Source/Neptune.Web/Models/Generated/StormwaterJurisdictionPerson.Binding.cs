@@ -16,7 +16,7 @@ using Neptune.Web.Common;
 namespace Neptune.Web.Models
 {
     [Table("[dbo].[StormwaterJurisdictionPerson]")]
-    public partial class StormwaterJurisdictionPerson : IHavePrimaryKey, IHaveATenantID
+    public partial class StormwaterJurisdictionPerson : IHavePrimaryKey, ICanDeleteFull
     {
         /// <summary>
         /// Default Constructor; only used by EF
@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         protected StormwaterJurisdictionPerson()
         {
 
-            this.TenantID = HttpRequestStorage.Tenant.TenantID;
         }
 
         /// <summary>
@@ -92,27 +91,17 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            DeleteChildren(HttpRequestStorage.DatabaseEntities);
-            dbContext.AllStormwaterJurisdictionPeople.Remove(this);
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
+            
+            dbContext.StormwaterJurisdictionPeople.Remove(this);
         }
 
         [Key]
         public int StormwaterJurisdictionPersonID { get; set; }
-        public int TenantID { get; private set; }
         public int StormwaterJurisdictionID { get; set; }
         public int PersonID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return StormwaterJurisdictionPersonID; } set { StormwaterJurisdictionPersonID = value; } }
 
-        public Tenant Tenant { get { return Tenant.AllLookupDictionary[TenantID]; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public virtual Person Person { get; set; }
 
