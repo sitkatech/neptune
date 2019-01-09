@@ -59,6 +59,10 @@ namespace Neptune.Web.Common
 
         public static readonly string CanonicalHostNameRoot =
             SitkaConfiguration.GetRequiredAppSetting("CanonicalHostNameRoot");
+        public static readonly string CanonicalHostNameTrash =
+            SitkaConfiguration.GetRequiredAppSetting("CanonicalHostNameTrash");
+        public static readonly string CanonicalHostNameModeling =
+            SitkaConfiguration.GetRequiredAppSetting("CanonicalHostNameModeling");
 
         public static List<string> CanonicalHostNames => new List<string>(SitkaConfiguration.GetRequiredAppSettingList("CanonicalHostName"));
 

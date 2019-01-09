@@ -15,6 +15,9 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
     <add key="CacheStaticContentTimeSpan" value="${cache-static-content-timespan}"/>
     <add key="CanonicalHostName" value="${canonical.host.name}"/>
+    <add key="CanonicalHostNameRoot" value="${canonical.host.name.root}"/>
+    <add key="CanonicalHostNameTrash" value="${canonical.host.name.trash}"/>
+    <add key="CanonicalHostNameModeling" value="${canonical.host.name.modeling}"/>
     <add key="UseMvcExtensionInUrl" value="false"/>
     <add key="SitkaEmailRedirect" value="${sitka-email-redirect}"/>
     <add key="IsEmailEnabled" value="true"/>

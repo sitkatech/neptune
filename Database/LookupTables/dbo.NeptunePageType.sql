@@ -33,4 +33,6 @@ values
 (28, 'ParcelList', 'Parcel List', 2),
 (29, 'Training', 'Training', 2),
 (30, 'ManagerDashboard', 'Manager Dashboard', 2),
-(31, 'WaterQualityMaintenancePlanOandMVerifications', 'Water Quality Maintenance Plan O&M Verifications', 2)
+(31, 'WaterQualityMaintenancePlanOandMVerifications', 'Water Quality Maintenance Plan O&M Verifications', 2),
+(32, 'ModelingHomePage', 'Modeling Home Page', 2),
+(33, 'TrashHomePage', 'Trash Home Page', 2)

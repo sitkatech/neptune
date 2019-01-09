@@ -275,6 +275,11 @@ namespace Neptune.Web.Models
                 case "ModeledCatchment":
                     return ModeledCatchments.GetModeledCatchment(primaryKey);
 
+                case "NeptuneArea":
+                    var neptuneArea = NeptuneArea.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(neptuneArea, "NeptuneArea", primaryKey);
+                    return neptuneArea;
+
                 case "NeptuneHomePageImage":
                     return NeptuneHomePageImages.GetNeptuneHomePageImage(primaryKey);
 

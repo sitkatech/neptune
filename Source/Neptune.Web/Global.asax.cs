@@ -10,6 +10,7 @@ using Neptune.Web.Controllers;
 using log4net.Config;
 using LtInfo.Common.LoggingFilters;
 using LtInfo.Common.Mvc;
+using Neptune.Web.Models;
 using SitkaController = Neptune.Web.Common.SitkaController;
 using SitkaRouteTableEntry = Neptune.Web.Common.SitkaRouteTableEntry;
 
@@ -19,8 +20,9 @@ namespace Neptune.Web
     {
         public static Dictionary<string, string> AreasDictionary = new Dictionary<string, string>
         {
-            {string.Empty, NeptuneWebConfiguration.CanonicalHostName}
-            ,{"Trash", "localhost-trash.ocstormwatertools.org"}
+            {string.Empty, NeptuneWebConfiguration.CanonicalHostNameRoot},
+            {NeptuneArea.Trash.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameTrash},
+            {NeptuneArea.Modeling.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameModeling}
         };
 
         protected void Application_Start()
