@@ -117,7 +117,7 @@ namespace Neptune.Web.Controllers
 
             var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
-                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified);
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified, TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);

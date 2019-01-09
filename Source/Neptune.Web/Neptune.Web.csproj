@@ -239,6 +239,8 @@
     <Compile Include="Models\Generated\TrainingVideo.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TrainingVideoConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideoPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TrashCaptureStatusType.Binding.cs" />
+    <Compile Include="Models\Generated\TrashCaptureStatusTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMP.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMP.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessment.Binding.cs" />

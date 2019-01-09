@@ -37,7 +37,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -58,12 +58,13 @@ namespace Neptune.Web.Models
             this.DateOfLastInventoryVerification = dateOfLastInventoryVerification;
             this.InventoryVerifiedByPersonID = inventoryVerifiedByPersonID;
             this.InventoryLastChangedDate = inventoryLastChangedDate;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID, bool inventoryIsVerified) : this()
+        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID, bool inventoryIsVerified, int trashCaptureStatusTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -73,12 +74,13 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OwnerOrganizationID = ownerOrganizationID;
             this.InventoryIsVerified = inventoryIsVerified;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, bool inventoryIsVerified) : this()
+        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, bool inventoryIsVerified, TrashCaptureStatusType trashCaptureStatusType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -93,14 +95,15 @@ namespace Neptune.Web.Models
             this.OwnerOrganization = ownerOrganization;
             ownerOrganization.TreatmentBMPsWhereYouAreTheOwnerOrganization.Add(this);
             this.InventoryIsVerified = inventoryIsVerified;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization)
+        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, TrashCaptureStatusType trashCaptureStatusType)
         {
-            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization, default(bool));
+            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization, default(bool), trashCaptureStatusType);
         }
 
         /// <summary>
@@ -198,6 +201,7 @@ namespace Neptune.Web.Models
         public DateTime? DateOfLastInventoryVerification { get; set; }
         public int? InventoryVerifiedByPersonID { get; set; }
         public DateTime? InventoryLastChangedDate { get; set; }
+        public int TrashCaptureStatusTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -217,6 +221,7 @@ namespace Neptune.Web.Models
         public virtual WaterQualityManagementPlan WaterQualityManagementPlan { get; set; }
         public TreatmentBMPLifespanType TreatmentBMPLifespanType { get { return TreatmentBMPLifespanTypeID.HasValue ? TreatmentBMPLifespanType.AllLookupDictionary[TreatmentBMPLifespanTypeID.Value] : null; } }
         public virtual Person InventoryVerifiedByPerson { get; set; }
+        public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
 
         public static class FieldLengths
         {

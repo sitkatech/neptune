@@ -384,6 +384,11 @@ namespace Neptune.Web.Models
                 case "TrainingVideo":
                     return TrainingVideos.GetTrainingVideo(primaryKey);
 
+                case "TrashCaptureStatusType":
+                    var trashCaptureStatusType = TrashCaptureStatusType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(trashCaptureStatusType, "TrashCaptureStatusType", primaryKey);
+                    return trashCaptureStatusType;
+
                 case "TreatmentBMPAssessmentObservationType":
                     return TreatmentBMPAssessmentObservationTypes.GetTreatmentBMPAssessmentObservationType(primaryKey);
 

@@ -34,6 +34,7 @@ namespace Neptune.Web.Models
             Property(x => x.DateOfLastInventoryVerification).HasColumnName(@"DateOfLastInventoryVerification").HasColumnType("datetime").IsOptional();
             Property(x => x.InventoryVerifiedByPersonID).HasColumnName(@"InventoryVerifiedByPersonID").HasColumnType("int").IsOptional();
             Property(x => x.InventoryLastChangedDate).HasColumnName(@"InventoryLastChangedDate").HasColumnType("datetime").IsOptional();
+            Property(x => x.TrashCaptureStatusTypeID).HasColumnName(@"TrashCaptureStatusTypeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMPType).WithMany(b => b.TreatmentBMPs).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID

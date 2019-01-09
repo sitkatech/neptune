@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[DateOfLastInventoryVerification] [datetime] NULL,
 	[InventoryVerifiedByPersonID] [int] NULL,
 	[InventoryLastChangedDate] [datetime] NULL,
+	[TrashCaptureStatusTypeID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -58,6 +59,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_St
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TrashCaptureStatusType_TrashCaptureStatusTypeID] FOREIGN KEY([TrashCaptureStatusTypeID])
+REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TrashCaptureStatusType_TrashCaptureStatusTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType] FOREIGN KEY([TreatmentBMPLifespanTypeID])
 REFERENCES [dbo].[TreatmentBMPLifespanType] ([TreatmentBMPLifespanTypeID])
