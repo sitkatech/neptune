@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
 {
     public static class StormwaterJurisdictionModelExtensions
     {
-        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));        
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<JurisdictionController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int), NeptuneWebConfiguration.CanonicalHostNameRoot));        
         public static string GetDetailUrl(this StormwaterJurisdiction stormwaterJurisdiction)
         {
             if (stormwaterJurisdiction == null) { return ""; }
