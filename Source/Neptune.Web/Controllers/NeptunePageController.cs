@@ -53,6 +53,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptunePageManageFeature]
+        [CrossAreaRoute]
         public PartialViewResult EditInDialog(NeptunePagePrimaryKey neptunePagePrimaryKey)
         {
             var neptunePage = neptunePagePrimaryKey.EntityObject;

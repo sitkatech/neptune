@@ -66,7 +66,7 @@ namespace Neptune.Web.Views
             NeptunePage = neptunePage;
 
             CurrentPerson = currentPerson;
-            NeptuneHomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Index());
+            NeptuneHomeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(c => c.Index(), NeptuneWebConfiguration.CanonicalHostNameRoot);
 
             LogInUrl = NeptuneHelpers.GenerateLogInUrlWithReturnUrl();
             LogOutUrl = NeptuneHelpers.GenerateLogOutUrlWithReturnUrl();
