@@ -1,25 +1,37 @@
-﻿using Neptune.Web.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
 using Neptune.Web.Views;
-using Neptune.Web.Views.Map;
-using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
 {
     public class IndexViewData : NeptuneViewData
     {
-        public JurisdictionsMapViewData JurisdictionsMapViewData { get; }
-        public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }
+        public ViewDataForAngularClass ViewDataForAngular { get; }
+        public MapInitJson MapInitJson { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson) : base(currentPerson, neptunePage)
         {
+            MapInitJson = mapInitJson;
+            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPs, TrashCaptureStatusType.All);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
         }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, JurisdictionsMapViewData jurisdictionsMapViewData, JurisdictionsMapInitJson jurisdictionsMapInitJson) : this(currentPerson, neptunePage)
+        public class ViewDataForAngularClass
         {
-            JurisdictionsMapViewData = jurisdictionsMapViewData;
-            JurisdictionsMapInitJson = jurisdictionsMapInitJson;
+            public MapInitJson MapInitJson { get; }
+            public List<TreatmentBMPSimple> TreatmentBMPs { get; }
+            public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
+
+            public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypeSimples)
+            {
+                MapInitJson = mapInitJson;
+                TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();
+                TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
+            }
         }
     }
 }

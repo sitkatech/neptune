@@ -7,6 +7,7 @@ using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Map;
+using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Areas.Trash.Controllers
@@ -17,19 +18,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public ViewResult Index()
         {
-            var layerGeoJsons = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetBoundaryLayerGeoJson(true)
-                .Where(x => x.LayerInitialVisibility == LayerInitialVisibility.Show)
-                .ToList();
-
-            var projectLocationsMapInitJson = new JurisdictionsMapInitJson("JurisdictionsMap")
-            {
-                AllowFullScreen = false,
-                Layers = layerGeoJsons
-            };
-            var projectLocationsMapViewData = new JurisdictionsMapViewData(projectLocationsMapInitJson.MapDivID);
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
+                .Where(x => x.CanView(CurrentPerson)).ToList();
+            var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
+                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
+            var jurisdictionLayerGeoJson =
+                mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
+            jurisdictionLayerGeoJson.LayerOpacity = 0;
+            jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, projectLocationsMapViewData, projectLocationsMapInitJson);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, mapInitJson);
+
             return RazorView<Index, IndexViewData>(viewData);
         }   
     }

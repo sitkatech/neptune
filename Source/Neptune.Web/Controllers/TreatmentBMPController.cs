@@ -43,7 +43,6 @@ namespace Neptune.Web.Controllers
     public class TreatmentBMPController : NeptuneBaseController
     {
         [NeptuneViewFeature]
-        // ReSharper disable once InconsistentNaming
         public ViewResult FindABMP()
         {
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
@@ -506,11 +505,5 @@ namespace Neptune.Web.Controllers
             ogr2OgrCommandLineRunner.ImportGeoJsonToFileGdb(JsonConvert.SerializeObject(featureCollection), outputPath,
                 outputShapefileName, update);
         }
-    }
-
-    public class FindABMPViewModel
-    {
-        public string SearchTerm { get; set; }
-        public List<int> TreatmentBMPTypeIDs { get; set; }
     }
 }

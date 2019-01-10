@@ -89,6 +89,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("MapSummaryUrl", x.GetMapSummaryUrl() );
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
+                feature.Properties.Add("TrashCaptureStatusTypeID", x.TrashCaptureStatusTypeID);
                 return feature;
             }));
             return featureCollection;

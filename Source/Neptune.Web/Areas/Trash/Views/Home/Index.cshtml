@@ -1,62 +1,66 @@
 ﻿@using Neptune.Web.Views.Shared
-@using Neptune.Web.Views.Shared.JurisdictionControls
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.Home.Index
 
-
-
-
 @section JavascriptAndStylesContent
 {
-    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners." />
+    <meta name="Description" content="Neptune provides public access to program information and details on watershed, habitat, stormwater, forestry, air quality, and projects implemented by Neptune partners."/>
 
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script type="text/javascript" src="@Url.Content("~/Views/TreatmentBMP/TreatmentBMPMapController.js")"></script>
+    <script type="text/javascript">
+        // <![CDATA[
+        angular.module("NeptuneApp")
+            .factory("angularModelAndViewData",
+                function() {
+                    return {
+                        AngularModel: null,
+                        AngularViewData:
+                            @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                    };
+                });
 
-    <style>
+        jQuery(document).ready(function() {
+            jQuery("#trashCaptureStatusTypeDropdown").selectpicker("selectAll");
+        });
+        // ]]>
+    </script>
+
+
+    @*<style>
         #@ViewDataTyped.JurisdictionsMapInitJson.MapDivID { height: 400px; }
-    </style>}
+    </style>*@
+
+}
 
 
-@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+    @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
 
-<div class="row">
-
-    <div class="col-md-12" style="margin-top: 20px;">
-        <div>
-            @{ JurisdictionsMap.RenderPartialView(Html, ViewDataTyped.JurisdictionsMapViewData); }
+    <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
+        <div class="row">
+            <div class="col-sm-4 col-md-3">
+                @*placeholder*@
+            </div>
+            <div class="col-sm-4 col-md-3">
+                @* placeholder *@
+            </div>
+            <div class="col-sm-4 col-md-6">
+                <span style="font-weight: bold">Filter by Trash Capture Status</span>
+                <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
+                        data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
+                    <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeName'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
+                        {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 20px;">
+                <div id="mapContainer">
+                    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        NeptuneMaps.Map.prototype.bindPopupToFeature = function(layer, feature) {
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(feature.properties["Short Name"])) {
-                layer.bindTooltip(feature.properties["Short Name"], { direction: "auto", sticky: "true" });
-
-                var originalFillOpacity = layer.options.fillOpacity;
-                layer.on("mouseover",
-                    function() {
-                        layer.setStyle({ fillOpacity: .6 }); // this is what looks the best.
-                    });
-                layer.on("mouseout",
-                    function() {
-                        layer.setStyle({ fillOpacity: originalFillOpacity });
-                    });
-            };
-
-            return layer;
-        };
-
-        var jurisdictionsMapJson =
-            @Html.Raw(JObject.FromObject(ViewDataTyped.JurisdictionsMapInitJson).ToString(Formatting.None));
-        var map = window.Sitka.map = new NeptuneMaps.Map(jurisdictionsMapJson);
-
-        map.initializeJurisdictions(jurisdictionsMapJson);
-        //map.disableUserInteraction();
-
-        jQuery('.leaflet-container').css('cursor', 'pointer');
-    })
-</script>
-
