@@ -39,13 +39,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IEnumerable<SelectListItem> OwnerOrganizationSelectListItems { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
+        public IEnumerable<SelectListItem>  TrashCaptureStatusTypes { get; }
 
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             IEnumerable<Models.Organization> organizations,
-            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes)
+            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
@@ -55,6 +56,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             SubEntityName = treatmentBMP?.TreatmentBMPName;
             SubEntityUrl = treatmentBMP?.GetDetailUrl();
             TreatmentBMP = treatmentBMP;
+            TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TrashCaptureStatusTypeDisplayName.ToString(CultureInfo.InvariantCulture));
 
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 

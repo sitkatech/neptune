@@ -149,10 +149,11 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
-                        @* placeholder space *@
+                        @Html.LabelWithSugarFor(m=>m.TrashCaptureStatusTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @* placeholder space *@
+                        @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
+                        @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
                     </div>
                     <div id="treatmentBMPLifespanEndDateContainer">
                         <div class="col-xs-12 col-sm-2 control-label">

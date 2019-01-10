@@ -73,6 +73,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionWaterQualityManagementPlanDocumentType WaterQualityManagementPlanDocumentType = FieldDefinitionWaterQualityManagementPlanDocumentType.Instance;
         public static readonly FieldDefinitionHasAllRequiredDocuments HasAllRequiredDocuments = FieldDefinitionHasAllRequiredDocuments.Instance;
         public static readonly FieldDefinitionDateOfLastInventoryChange DateOfLastInventoryChange = FieldDefinitionDateOfLastInventoryChange.Instance;
+        public static readonly FieldDefinitionTrashCaptureStatus TrashCaptureStatus = FieldDefinitionTrashCaptureStatus.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -82,7 +83,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -258,6 +259,8 @@ namespace Neptune.Web.Models
                     return RequiredPostStormFieldVisitsPerYear;
                 case FieldDefinitionEnum.RoleName:
                     return RoleName;
+                case FieldDefinitionEnum.TrashCaptureStatus:
+                    return TrashCaptureStatus;
                 case FieldDefinitionEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case FieldDefinitionEnum.TreatmentBMPAssessmentObservationType:
@@ -334,7 +337,8 @@ namespace Neptune.Web.Models
         RequiredPostStormFieldVisitsPerYear = 53,
         WaterQualityManagementPlanDocumentType = 54,
         HasAllRequiredDocuments = 55,
-        DateOfLastInventoryChange = 56
+        DateOfLastInventoryChange = 56,
+        TrashCaptureStatus = 57
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -665,5 +669,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionDateOfLastInventoryChange(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionDateOfLastInventoryChange Instance = new FieldDefinitionDateOfLastInventoryChange(56, @"DateOfLastInventoryChange", @"Date of Last Inventory Change", @"", true);
+    }
+
+    public partial class FieldDefinitionTrashCaptureStatus : FieldDefinition
+    {
+        private FieldDefinitionTrashCaptureStatus(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionTrashCaptureStatus Instance = new FieldDefinitionTrashCaptureStatus(57, @"TrashCaptureStatus", @"Trash Capture Status", @"Indicates the ability of this BMP to capture trash.", true);
     }
 }

@@ -117,7 +117,7 @@ namespace Neptune.Web.Controllers
 
             var inventoryIsVerified = false;
             var treatmentBMP = new TreatmentBMP(string.Empty, viewModel.TreatmentBMPTypeID,
-                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified, TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID);
+                viewModel.StormwaterJurisdictionID, CurrentPerson.OrganizationID, inventoryIsVerified, viewModel.TrashCaptureStatusTypeID.GetValueOrDefault()); // never null due to RequiredAttribute
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
             HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
@@ -162,7 +162,7 @@ namespace Neptune.Web.Controllers
             }
 
             var viewData = new NewViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
-                organizations, editLocationViewData, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
+                organizations, editLocationViewData, waterQualityManagementPlans, TreatmentBMPLifespanType.All, TrashCaptureStatusType.All);
             return RazorView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
@@ -221,7 +221,7 @@ namespace Neptune.Web.Controllers
             }
 
             var viewData = new EditViewData(CurrentPerson, treatmentBMP, stormwaterJurisdictions, treatmentBMPTypes,
-                organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All);
+                organizations, waterQualityManagementPlans, TreatmentBMPLifespanType.All, TrashCaptureStatusType.All);
             return RazorView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

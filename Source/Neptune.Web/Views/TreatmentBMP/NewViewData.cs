@@ -19,6 +19,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public Shared.Location.EditLocationViewData EditLocationViewData { get; }
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
+        public IEnumerable<SelectListItem> TrashCaptureStatusTypes { get; }
 
         public NewViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
@@ -27,7 +28,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             List<Models.Organization> organizations,
             Shared.Location.EditLocationViewData editLocationViewData,
             IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans,
-            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes)
+            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
             : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
         {
             EditLocationViewData = editLocationViewData;
@@ -41,6 +42,10 @@ namespace Neptune.Web.Views.TreatmentBMP
                 TreatmentBMP = treatmentBMP;
             }
             PageTitle = $"New {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
+
+            TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TrashCaptureStatusTypeDisplayName.ToString(CultureInfo.InvariantCulture));
 
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), y => y.GetOrganizationDisplayName());
             TreatmentBMPTypeSelectListItems = treatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture), y => y.TreatmentBMPTypeName);

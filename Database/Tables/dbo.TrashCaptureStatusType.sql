@@ -4,8 +4,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TrashCaptureStatusType](
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
-	[TrashCaptureStatusTypeName] [varchar](25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[TrashCaptureStatusTypeDisplayName] [varchar](25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[TrashCaptureStatusTypeName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[TrashCaptureStatusTypeDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TrashCaptureStatusTypeSortOrder] [int] NOT NULL,
  CONSTRAINT [PK_TrashCaptureStatusType_TrashCaptureStatusTypeID] PRIMARY KEY CLUSTERED 
 (

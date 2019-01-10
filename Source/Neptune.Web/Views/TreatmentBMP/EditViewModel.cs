@@ -81,6 +81,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         [Range(0, Int32.MaxValue, ErrorMessage = "Required Post Storm Field Visits Per Year cannot be negative")]
         public int? RequiredPostStormFieldVisitsPerYear { get; set; }
 
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
+        public int? TrashCaptureStatusTypeID { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -103,6 +107,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             TreatmentBMPLifespanEndDate = treatmentBMP.TreatmentBMPLifespanEndDate;
             RequiredFieldVisitsPerYear = treatmentBMP.RequiredFieldVisitsPerYear;
             RequiredPostStormFieldVisitsPerYear = treatmentBMP.RequiredPostStormFieldVisitsPerYear;
+            TrashCaptureStatusTypeID = treatmentBMP.TrashCaptureStatusTypeID;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -111,6 +116,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.Notes = Notes;
             treatmentBMP.RequiredFieldVisitsPerYear = RequiredFieldVisitsPerYear;
             treatmentBMP.RequiredPostStormFieldVisitsPerYear = RequiredPostStormFieldVisitsPerYear;
+            treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {

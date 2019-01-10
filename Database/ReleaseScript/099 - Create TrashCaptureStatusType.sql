@@ -1,7 +1,7 @@
 Create Table dbo.TrashCaptureStatusType(
 TrashCaptureStatusTypeID int not null constraint PK_TrashCaptureStatusType_TrashCaptureStatusTypeID primary key,
-TrashCaptureStatusTypeName varchar(25) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeName unique,
-TrashCaptureStatusTypeDisplayName varchar(25) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeDisplayName unique,
+TrashCaptureStatusTypeName varchar(50) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeName unique,
+TrashCaptureStatusTypeDisplayName varchar(50) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeDisplayName unique,
 TrashCaptureStatusTypeSortOrder int not null
 )
 

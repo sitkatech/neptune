@@ -134,13 +134,13 @@ namespace Neptune.Web.Models
     public partial class TrashCaptureStatusTypePartial : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypePartial(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder) {}
-        public static readonly TrashCaptureStatusTypePartial Instance = new TrashCaptureStatusTypePartial(2, @"Partial", @"Partial", 20);
+        public static readonly TrashCaptureStatusTypePartial Instance = new TrashCaptureStatusTypePartial(2, @"Partial", @"Partial (>5mm but less than full sizing)", 20);
     }
 
     public partial class TrashCaptureStatusTypeNone : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypeNone(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder) {}
-        public static readonly TrashCaptureStatusTypeNone Instance = new TrashCaptureStatusTypeNone(3, @"None", @"None", 30);
+        public static readonly TrashCaptureStatusTypeNone Instance = new TrashCaptureStatusTypeNone(3, @"None", @"Not a Trash Capture BMP", 30);
     }
 
     public partial class TrashCaptureStatusTypeNotProvided : TrashCaptureStatusType
