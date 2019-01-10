@@ -75,14 +75,11 @@
             });
         };
 
-        $scope.initializeTreatmentBMPClusteredLayer = function () {
+        $scope.initializeTreatmentBMPClusteredLayer = function (filterFunction) {
             $scope.searchableLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    filter: function (feature, layer) {
-                        return _.includes($scope.selectedTreatmentBMPTypeIDs,
-                            feature.properties.TreatmentBMPTypeID.toString());
-                    },
+                    filter: filterFunction,
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
                             icon: feature.properties.FeatureGlyph,
@@ -129,7 +126,21 @@
                 });
         };
 
-        $scope.initializeTreatmentBMPClusteredLayer();
+        $scope.bmpTypeFilter = function (feature, layer) {
+            return _.includes($scope.selectedTreatmentBMPTypeIDs,
+                feature.properties.TreatmentBMPTypeID.toString());
+        };
+
+        $scope.trashCaptureFilter = function (feature, layer) {
+            return _.includes($scope.selectedTrashCaptureStatusIDs,
+                feature.properties.TrashCaptureStatusTypeID.toString());
+        };
+
+        if ($scope.AngularViewData.filterByTrashCaptureStatus) {
+            $scope.initializeTreatmentBMPClusteredLayer($scope.trashCaptureFilter);
+        } else {
+            $scope.initializeTreatmentBMPClusteredLayer($scope.bmpTypeFilter);
+        }
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
@@ -185,7 +196,11 @@
         };
 
         $scope.filterMapByBmpType = function () {
-            $scope.initializeTreatmentBMPClusteredLayer();
+            $scope.initializeTreatmentBMPClusteredLayer($scope.bmpTypeFilter);
+        };
+
+        $scope.filterMapByTrashCaptureStatus = function () {
+            $scope.initializeTreatmentBMPClusteredLayer($scope.trashCaptureFilter);
         };
 
         $scope.setSelectedMarker = function(layer) {
