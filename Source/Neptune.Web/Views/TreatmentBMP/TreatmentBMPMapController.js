@@ -7,6 +7,10 @@
             return m.TreatmentBMPTypeID;
         });
 
+        $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes, function (m) {
+            return m.TrashCaptureStatusTypeID.toString();
+        });
+
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 

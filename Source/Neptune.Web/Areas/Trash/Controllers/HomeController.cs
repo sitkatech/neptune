@@ -21,7 +21,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
                 .Where(x => x.CanView(CurrentPerson)).ToList();
             var mapInitJson = new SearchMapInitJson("StormwaterIndexMap",
-                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(treatmentBmps, false, false));
+                StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJsonForTrashMap(treatmentBmps, false));
             var jurisdictionLayerGeoJson =
                 mapInitJson.Layers.Single(x => x.LayerName == MapInitJsonHelpers.CountyCityLayerName);
             jurisdictionLayerGeoJson.LayerOpacity = 0;

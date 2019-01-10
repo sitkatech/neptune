@@ -22,16 +22,11 @@
                 });
 
         jQuery(document).ready(function() {
-            jQuery("#trashCaptureStatusTypeDropdown").selectpicker("selectAll");
+            jQuery('.selectpicker').selectpicker("val", [1, 2]);
+            jQuery('#trashCaptureStatusTypeDropdown').change();
         });
         // ]]>
     </script>
-
-
-    @*<style>
-        #@ViewDataTyped.JurisdictionsMapInitJson.MapDivID { height: 400px; }
-    </style>*@
-
 }
 
 
@@ -49,18 +44,28 @@
                 <span style="font-weight: bold">Filter by Trash Capture Status</span>
                 <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
                         data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                    <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeName'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
+                    <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
                         {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
                     </option>
                 </select>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" style="margin-top: 20px;">
+            <div class="col-sm-12 col-md-2">
+                <h3>Selected asset</h3>
+                <div id="mapSummaryResults">
+                    <p class="systemText">No asset selected</p>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-8" style="margin-top: 20px;">
                 <div id="mapContainer">
                     <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12 col-md-2">
+                <h3>Legend</h3>
+                <p class="systemText">Coming soon!</p>
             </div>
         </div>
     </div>
