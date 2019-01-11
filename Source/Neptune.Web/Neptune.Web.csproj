@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,10 +46,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Areas\Trash\Controllers\TreatmentBMPController.cs" />
-    <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanel.cs" />
-    <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanelViewData.cs" />
-    <Compile Include="Views\TreatmentBMP\FindABMPViewModel.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -353,6 +349,10 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Areas\Trash\Controllers\TreatmentBMPController.cs" />
+    <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanel.cs" />
+    <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanelViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\FindABMPViewModel.cs" />
     <Compile Include="Areas\Modeling\Controllers\HomeController.cs" />
     <Compile Include="Areas\Modeling\Views\Home\Index.cs" />
     <Compile Include="Areas\Modeling\Views\Home\IndexViewData.cs" />

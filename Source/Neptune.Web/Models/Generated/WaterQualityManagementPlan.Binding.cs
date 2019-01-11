@@ -34,7 +34,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres) : this()
+        public WaterQualityManagementPlan(int waterQualityManagementPlanID, int stormwaterJurisdictionID, int? waterQualityManagementPlanLandUseID, int? waterQualityManagementPlanPriorityID, int? waterQualityManagementPlanStatusID, int? waterQualityManagementPlanDevelopmentTypeID, string waterQualityManagementPlanName, DateTime? approvalDate, string maintenanceContactName, string maintenanceContactOrganization, string maintenanceContactPhone, string maintenanceContactAddress1, string maintenanceContactAddress2, string maintenanceContactCity, string maintenanceContactState, string maintenanceContactZip, int? waterQualityManagementPlanPermitTermID, int? hydromodificationAppliesID, DateTime? dateOfContruction, int? hydrologicSubareaID, string recordNumber, decimal? recordedWQMPAreaInAcres, int trashCaptureStatusTypeID) : this()
         {
             this.WaterQualityManagementPlanID = waterQualityManagementPlanID;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
@@ -58,24 +58,26 @@ namespace Neptune.Web.Models
             this.HydrologicSubareaID = hydrologicSubareaID;
             this.RecordNumber = recordNumber;
             this.RecordedWQMPAreaInAcres = recordedWQMPAreaInAcres;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public WaterQualityManagementPlan(int stormwaterJurisdictionID, string waterQualityManagementPlanName) : this()
+        public WaterQualityManagementPlan(int stormwaterJurisdictionID, string waterQualityManagementPlanName, int trashCaptureStatusTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, string waterQualityManagementPlanName) : this()
+        public WaterQualityManagementPlan(StormwaterJurisdiction stormwaterJurisdiction, string waterQualityManagementPlanName, TrashCaptureStatusType trashCaptureStatusType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.WaterQualityManagementPlanID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -83,14 +85,15 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.WaterQualityManagementPlans.Add(this);
             this.WaterQualityManagementPlanName = waterQualityManagementPlanName;
+            this.TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction)
+        public static WaterQualityManagementPlan CreateNewBlank(StormwaterJurisdiction stormwaterJurisdiction, TrashCaptureStatusType trashCaptureStatusType)
         {
-            return new WaterQualityManagementPlan(stormwaterJurisdiction, default(string));
+            return new WaterQualityManagementPlan(stormwaterJurisdiction, default(string), trashCaptureStatusType);
         }
 
         /// <summary>
@@ -176,6 +179,7 @@ namespace Neptune.Web.Models
         public int? HydrologicSubareaID { get; set; }
         public string RecordNumber { get; set; }
         public decimal? RecordedWQMPAreaInAcres { get; set; }
+        public int TrashCaptureStatusTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return WaterQualityManagementPlanID; } set { WaterQualityManagementPlanID = value; } }
 
@@ -193,6 +197,7 @@ namespace Neptune.Web.Models
         public WaterQualityManagementPlanPermitTerm WaterQualityManagementPlanPermitTerm { get { return WaterQualityManagementPlanPermitTermID.HasValue ? WaterQualityManagementPlanPermitTerm.AllLookupDictionary[WaterQualityManagementPlanPermitTermID.Value] : null; } }
         public HydromodificationApplies HydromodificationApplies { get { return HydromodificationAppliesID.HasValue ? HydromodificationApplies.AllLookupDictionary[HydromodificationAppliesID.Value] : null; } }
         public virtual HydrologicSubarea HydrologicSubarea { get; set; }
+        public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
 
         public static class FieldLengths
         {

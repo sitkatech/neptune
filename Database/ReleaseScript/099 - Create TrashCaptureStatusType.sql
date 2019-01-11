@@ -21,3 +21,13 @@ set TrashCaptureStatusTypeID = 4
 
 Alter table dbo.TreatmentBMP
 alter column TrashCaptureStatusTypeID int not null
+
+Alter table dbo.WaterQualityManagementPlan			
+Add TrashCaptureStatusTypeID int null constraint FK_WaterQualityManagementPlan_TrashCaptureStatusType_TrashCaptureStatusTypeID foreign key references dbo.TrashCaptureStatusType(TrashCaptureStatusTypeID)
+go
+
+Update dbo.WaterQualityManagementPlan
+set TrashCaptureStatusTypeID = 4
+
+Alter table dbo.WaterQualityManagementPlan
+alter column TrashCaptureStatusTypeID int not null

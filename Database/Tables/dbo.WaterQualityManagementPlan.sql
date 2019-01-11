@@ -25,6 +25,7 @@ CREATE TABLE [dbo].[WaterQualityManagementPlan](
 	[HydrologicSubareaID] [int] NULL,
 	[RecordNumber] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[RecordedWQMPAreaInAcres] [decimal](5, 1) NULL,
+	[TrashCaptureStatusTypeID] [int] NOT NULL,
  CONSTRAINT [PK_WaterQualityManagementPlan_WaterQualityManagementPlanID] PRIMARY KEY CLUSTERED 
 (
 	[WaterQualityManagementPlanID] ASC
@@ -51,6 +52,11 @@ ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_W
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_StormwaterJurisdiction_StormwaterJurisdictionID]
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_TrashCaptureStatusType_TrashCaptureStatusTypeID] FOREIGN KEY([TrashCaptureStatusTypeID])
+REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID])
+GO
+ALTER TABLE [dbo].[WaterQualityManagementPlan] CHECK CONSTRAINT [FK_WaterQualityManagementPlan_TrashCaptureStatusType_TrashCaptureStatusTypeID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlan]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlan_WaterQualityManagementPlanDevelopmentType_WaterQualityManagementPlanDevelopmentTypeID] FOREIGN KEY([WaterQualityManagementPlanDevelopmentTypeID])
 REFERENCES [dbo].[WaterQualityManagementPlanDevelopmentType] ([WaterQualityManagementPlanDevelopmentTypeID])
