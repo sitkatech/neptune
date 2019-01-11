@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
@@ -16,10 +17,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public IEnumerable<SelectListItem> WaterQualityManagementPlanPermitTerms { get; }
         public IEnumerable<SelectListItem> HydrologicSubareas { get; }
         public IEnumerable<HydromodificationApplies> HydromodificationAppliesType { get; }
+        public IEnumerable<SelectListItem> TrashCaptureStatusTypes { get; }
 
         public EditViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
-            List<HydrologicSubarea> hydrologicSubareas)
+            List<HydrologicSubarea> hydrologicSubareas, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes)
         {
+
+            TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TrashCaptureStatusTypeDisplayName.ToString(CultureInfo.InvariantCulture));
             StormwaterJurisdictionSelectListItems = stormwaterJurisdictions.OrderBy(x => x.GetOrganizationDisplayName())
                 .ToSelectListWithEmptyFirstRow(x => x.StormwaterJurisdictionID.ToString(), x => x.GetOrganizationDisplayName());
             WaterQualityManagementPlanPriorities = WaterQualityManagementPlanPriority.All

@@ -28,7 +28,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             jurisdictionLayerGeoJson.LayerInitialVisibility = LayerInitialVisibility.Show;
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, mapInitJson);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, mapInitJson, HttpRequestStorage.DatabaseEntities.TreatmentBMPs, TrashCaptureStatusType.All);
 
             return RazorView<Index, IndexViewData>(viewData);
         }   

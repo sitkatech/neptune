@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -13,11 +14,11 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public MapInitJson MapInitJson { get; }
         public string AllBMPsUrl { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson) : base(currentPerson, neptunePage)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson, DbSet<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes) : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs, TrashCaptureStatusType.All);
+                treatmentBMPs, trashCaptureStatusTypes);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
             AllBMPsUrl =

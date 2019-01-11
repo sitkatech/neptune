@@ -166,6 +166,15 @@
                         @Html.ValidationMessageFor(m => m.RecordedWQMPAreaInAcres)
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.TrashCaptureStatusTypeID)
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
+                        @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
+                    </div>
+                </div>
             </fieldset>
                 <fielset>
                     <legend>Maintenance Contact</legend>

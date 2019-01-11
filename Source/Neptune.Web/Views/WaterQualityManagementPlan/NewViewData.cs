@@ -10,7 +10,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
     {
 
         public NewViewData(IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
-            List<HydrologicSubarea> hydrologicSubareas) : base(stormwaterJurisdictions, hydrologicSubareas)
+            List<HydrologicSubarea> hydrologicSubareas, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes) : base(stormwaterJurisdictions, hydrologicSubareas, trashCaptureStatusTypes)
         {
             
         }

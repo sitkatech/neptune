@@ -157,7 +157,7 @@ namespace Neptune.Web.Controllers
                 ? HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList()
                 : CurrentPerson.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction).ToList();
             var hydrologicSubareas = HttpRequestStorage.DatabaseEntities.HydrologicSubareas.ToList();
-            var viewData = new NewViewData(stormwaterJurisdictions, hydrologicSubareas);
+            var viewData = new NewViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<New, NewViewData, NewViewModel>(viewData, viewModel);
         }
 
@@ -192,7 +192,7 @@ namespace Neptune.Web.Controllers
         {
             var stormwaterJurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.ToList();
             var hydrologicSubareas = HttpRequestStorage.DatabaseEntities.HydrologicSubareas.ToList();
-            var viewData = new EditViewData(stormwaterJurisdictions, hydrologicSubareas);
+            var viewData = new EditViewData(stormwaterJurisdictions, hydrologicSubareas, TrashCaptureStatusType.All);
             return RazorPartialView<Edit, EditViewData, EditViewModel>(viewData, viewModel);
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using LtInfo.Common;
 using LtInfo.Common.Models;
 using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -82,6 +83,9 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         [DisplayName("Recorded WQMP Area (Acres)")]
         public decimal? RecordedWQMPAreaInAcres { get; set; }
 
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
+        public int? TrashCaptureStatusTypeID { get; set; }
 
 
         /// <summary>
@@ -114,10 +118,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             HydrologicSubareaID = waterQualityManagementPlan.HydrologicSubareaID;
             RecordNumber = waterQualityManagementPlan.RecordNumber;
             RecordedWQMPAreaInAcres = waterQualityManagementPlan.RecordedWQMPAreaInAcres;
+            TrashCaptureStatusTypeID = waterQualityManagementPlan.TrashCaptureStatusTypeID;
         }
 
         public virtual void UpdateModels(Models.WaterQualityManagementPlan waterQualityManagementPlan)
         {
+            waterQualityManagementPlan.TrashCaptureStatusTypeID = TrashCaptureStatusTypeID.GetValueOrDefault(); // never null due to RequiredAttribute
             waterQualityManagementPlan.WaterQualityManagementPlanName = WaterQualityManagementPlanName;
             waterQualityManagementPlan.WaterQualityManagementPlanPriorityID =
                 WaterQualityManagementPlanPriorityID ?? ModelObjectHelpers.NotYetAssignedID;
