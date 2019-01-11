@@ -34,13 +34,7 @@
 
     <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
         <div class="row">
-            <div class="col-sm-4 col-md-3">
-                @*placeholder*@
-            </div>
-            <div class="col-sm-4 col-md-3">
-                @* placeholder *@
-            </div>
-            <div class="col-sm-4 col-md-6">
+            <div class="col-sm-12 text-right" style="padding-right:0;">
                 <span style="font-weight: bold">Filter by Trash Capture Status</span>
                 <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
                         data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
