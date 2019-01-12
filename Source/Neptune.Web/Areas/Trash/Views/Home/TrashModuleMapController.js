@@ -3,10 +3,6 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-        $scope.selectedTreatmentBMPTypeIDs = _.map($scope.AngularViewData.TreatmentBMPTypes, function (m) {
-            return m.TreatmentBMPTypeID;
-        });
-
         $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes, function (m) {
             return m.TrashCaptureStatusTypeID.toString();
         });
@@ -14,76 +10,17 @@
         $scope.visibleBMPIDs = [];
         $scope.activeTreatmentBMP = {};
 
-        var selector = '#treatmentBMPFinder';
-        var selectorButton = '#treatmentBMPFinderButton';
-        var summaryUrl = $scope.AngularViewData.FindTreatmentBMPByNameUrl;
-
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        console.log($scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection);
+        
 
-        $scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
-            $scope.typeaheadSelector = typeaheadSelector;
-            var finder = jQuery(typeaheadSelector);
-            finder.typeahead({
-                highlight: true,
-                minLength: 3
-            },
-                {
-                    source: new Bloodhound({
-                        datumTokenizer: Bloodhound.tokenizers.whitespace,
-                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        remote: {
-                            cache: false,
-                            url: '/TreatmentBMP/FindByName#%QUERY',
-                            wildcard: '%QUERY',
-                            transport: function (opts, onSuccess, onError) {
-                                console.log($scope.selectedTreatmentBMPTypeIDs);
-                                var url = opts.url.split("#")[0];
-                                var query = opts.url.split("#")[1];
-                                $.ajax({
-                                    url: url,
-                                    data: {
-                                        SearchTerm: query,
-                                        TreatmentBMPTypeIDs: $scope.selectedTreatmentBMPTypeIDs
-                                    },
-                                    type: "POST",
-                                    success: onSuccess,
-                                    error: onError
-                                });
-                            }
-                        }
-                    }),
-                    display: 'Text',
-                    limit: Number.MAX_VALUE
-                });
-
-            finder.bind('typeahead:select',
-                function (ev, suggestion) {
-                    var summaryDataJson = JSON.parse(suggestion.Value);
-                    $scope.loadSummaryPanel(summaryDataJson.MapSummaryUrl);
-                    $scope.neptuneMap.map.setView(new L.LatLng(summaryDataJson.Latitude, summaryDataJson.Longitude), 13);
-                    $scope.neptuneMap.map.invalidateSize();
-                    setTimeout(function () {
-                            $scope.applyMap(L.GeoJSON.geometryToLayer(summaryDataJson.GeometryJson), summaryDataJson.EntityID);
-                        },
-                        500);
-                });
-
-            jQuery(typeaheadSelectorButton).click(function () { selectFirstSuggestionFunction(finder); });
-
-            finder.keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    selectFirstSuggestionFunction(this);
-                }
-            });
-        };
-
-        $scope.initializeTreatmentBMPClusteredLayer = function (filterFunction) {
+        $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.searchableLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    filter: filterFunction,
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedTrashCaptureStatusIDs,
+                            feature.properties.TrashCaptureStatusTypeID.toString());
+                    },
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
                             icon: feature.properties.FeatureGlyph,
@@ -130,16 +67,6 @@
                 });
         };
 
-        $scope.bmpTypeFilter = function (feature, layer) {
-            return _.includes($scope.selectedTreatmentBMPTypeIDs,
-                feature.properties.TreatmentBMPTypeID.toString());
-        };
-
-        $scope.trashCaptureFilter = function (feature, layer) {
-            return _.includes($scope.selectedTrashCaptureStatusIDs,
-                feature.properties.TrashCaptureStatusTypeID.toString());
-        };
-
         if ($scope.AngularViewData.filterByTrashCaptureStatus) {
             $scope.initializeTreatmentBMPClusteredLayer($scope.trashCaptureFilter);
         } else {
@@ -151,8 +78,6 @@
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
-        
-        $scope.typeaheadSearch(selector, selectorButton, summaryUrl);
         $scope.applyMap = function(marker, treatmentBMPID) {
             $scope.setSelectedMarker(marker);
             var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
@@ -199,12 +124,8 @@
             return orderedBMPs;
         };
 
-        $scope.filterMapByBmpType = function () {
-            $scope.initializeTreatmentBMPClusteredLayer($scope.bmpTypeFilter);
-        };
-
         $scope.filterMapByTrashCaptureStatus = function () {
-            $scope.initializeTreatmentBMPClusteredLayer($scope.trashCaptureFilter);
+            $scope.initializeTreatmentBMPClusteredLayer();
         };
 
         $scope.setSelectedMarker = function(layer) {
@@ -280,7 +201,6 @@
             }
 
             // multi-way binding
-            jQuery($scope.typeaheadSelector).typeahead('val', '');
             $scope.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.setSelectedMarker(layer);
             $scope.activeTreatmentBMP = treatmentBMP;
