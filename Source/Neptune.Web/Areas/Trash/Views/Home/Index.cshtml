@@ -27,6 +27,17 @@
         });
         // ]]>
     </script>
+    
+    <style>
+        #legend {
+            padding-left: 0;
+            list-style-type: none;
+        }
+        #legend img {
+            max-height: 50px;
+            
+        }
+    </style>
 }
 
 
@@ -51,15 +62,33 @@
                     <p class="systemText">No asset selected</p>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-8" style="margin-top: 20px;">
+            <div class="col-sm-12 col-md-7" style="margin-top: 20px;">
                 <div id="mapContainer">
                     <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-2">
+            <div class="col-sm-12 col-md-3">
                 <h3>Legend</h3>
-                <p class="systemText">Coming soon!</p>
+                <ul id="legend">
+
+                    <li>
+                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59.png"/> Full Trash Capture
+                    </li>
+
+                    <li>
+                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+0051ff.png"/> Partial Trash Capture
+                    </li>
+
+                    <li>
+                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+3d3d3e.png"/> No Trash Capture
+                    </li>
+
+                    <li>
+                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+878688.png"/> Trash Capture Status Not Provided
+                    </li>
+
+                </ul>
             </div>
         </div>
     </div>
