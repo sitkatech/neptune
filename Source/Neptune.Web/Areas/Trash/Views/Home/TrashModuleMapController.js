@@ -45,8 +45,9 @@
                     }
                 });
             if ($scope.markerClusterGroup) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.markerClusterGroup);
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
-            }
+            } 
             $scope.markerClusterGroup = L.markerClusterGroup({
                 maxClusterRadius: 40,
                 showCoverageOnHover: false,
@@ -65,13 +66,12 @@
                     $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
                     $scope.$apply();
                 });
+
+            $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
         };
 
-        if ($scope.AngularViewData.filterByTrashCaptureStatus) {
-            $scope.initializeTreatmentBMPClusteredLayer($scope.trashCaptureFilter);
-        } else {
-            $scope.initializeTreatmentBMPClusteredLayer($scope.bmpTypeFilter);
-        }
+        $scope.initializeTreatmentBMPClusteredLayer();
+
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
