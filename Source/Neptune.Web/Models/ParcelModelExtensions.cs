@@ -11,6 +11,11 @@ namespace Neptune.Web.Models
     {
         public const string ParcelColor = "#fb00be";
 
+        public static string GetTrashMapAssetUrl(this Parcel parcel)
+        {
+            return "";
+        }
+
         public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, SystemAttribute systemAttribute)
         {
             return new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
@@ -34,7 +39,8 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Number", x.ParcelNumber);
                 feature.Properties.Add("FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap());
                 feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
-                return feature;
+                feature.Properties.Add("ParcelID", x.ParcelID);
+                feature.Properties.Add("MapSummaryUrl", x.GetTrashMapAssetUrl());return feature;
             }));
             return featureCollection;
         }

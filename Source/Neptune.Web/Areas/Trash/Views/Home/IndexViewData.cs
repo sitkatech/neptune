@@ -14,30 +14,33 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public MapInitJson MapInitJson { get; }
         public string AllBMPsUrl { get; }
 
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson, DbSet<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes) : base(currentPerson, neptunePage)
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
+            IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
+            List<Parcel> parcels) : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
-                treatmentBMPs, trashCaptureStatusTypes);
+                treatmentBMPs, trashCaptureStatusTypes, parcels);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
             AllBMPsUrl =
                 SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(),
                     NeptuneWebConfiguration.CanonicalHostName);
-
-            ;
         }
 
         public class ViewDataForAngularClass
         {
             public MapInitJson MapInitJson { get; }
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
+            public List<ParcelSimple> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
 
-            public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypeSimples)
+            public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
+                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Parcel> parcels)
             {
                 MapInitJson = mapInitJson;
                 TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();
+                Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
             }
         }

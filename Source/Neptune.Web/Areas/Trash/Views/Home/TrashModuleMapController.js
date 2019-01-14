@@ -7,14 +7,10 @@
             return m.TrashCaptureStatusTypeID.toString();
         });
 
-        $scope.visibleBMPIDs = [];
-        $scope.activeTreatmentBMP = {};
-
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
-            $scope.searchableLayerGeoJson = L.geoJson(
+            $scope.treatmentBMPLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function (feature, layer) {
@@ -59,18 +55,51 @@
                     });
                 }
             });
-            $scope.searchableLayerGeoJson.addTo($scope.markerClusterGroup);
+            $scope.treatmentBMPLayerGeoJson.addTo($scope.markerClusterGroup);
             $scope.markerClusterGroup.addTo($scope.neptuneMap.map);
-            $scope.searchableLayerGeoJson.on('click',
+            $scope.treatmentBMPLayerGeoJson.on('click',
                 function (e) {
-                    $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
+                    $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
                     $scope.$apply();
                 });
 
             $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
         };
 
+        $scope.initializeParcelLayer = function () {
+            if ($scope.parcelLayerGeoJson) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.parcelLayerGeoJson);
+                $scope.neptuneMap.map.removeLayer($scope.parcelLayerGeoJson);
+            } 
+            $scope.parcelLayerGeoJson = L.geoJson(
+                $scope.AngularViewData.MapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return _.includes($scope.selectedTrashCaptureStatusIDs,
+                            feature.properties.TrashCaptureStatusTypeID.toString());
+                    },
+                    style: function (feature) {
+                        return {
+                            color: feature.properties.FeatureColor,
+                            weight: .5,
+                            fill: true, 
+                            fillOpacity: .15
+                        };
+                    }
+                });
+
+            $scope.parcelLayerGeoJson.addTo($scope.neptuneMap.map);
+            $scope.parcelLayerGeoJson.on('click',
+                function (e) {
+                    $scope.setActiveParcelByID(e.layer.feature.properties.ParcelID);
+                    $scope.$apply();
+                });
+
+            $scope.neptuneMap.layerControl.addOverlay($scope.parcelLayerGeoJson, "Parcels");
+        };
+
         $scope.initializeTreatmentBMPClusteredLayer();
+        $scope.initializeParcelLayer();
 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
@@ -112,20 +141,9 @@
             });
         });
 
-        $scope.visibleBMPs = function() {
-            var filteredBMPs = _.filter($scope.AngularViewData.TreatmentBMPs,
-                function(t) {
-                    return $scope.visibleBMPIDs.includes(t.TreatmentBMPID);
-                });
-            var orderedBMPs = _.sortBy(filteredBMPs,
-                function(t) {
-                    return (t.DisplayName);
-                });
-            return orderedBMPs;
-        };
-
         $scope.filterMapByTrashCaptureStatus = function () {
             $scope.initializeTreatmentBMPClusteredLayer();
+            $scope.initializeParcelLayer();
         };
 
         $scope.setSelectedMarker = function(layer) {
@@ -152,7 +170,7 @@
                         return {
                             fillColor: "#FFFF00",
                             fill: true,
-                            fillOpacity: 0.2,
+                            fillOpacity: 0.5,
                             color: "#FFFF00",
                             weight: 5,
                             stroke: true
@@ -177,39 +195,41 @@
             $scope.setSelectedMarker(e.layer);
             $scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
         };
-
-        // only used when selecting from the list 
-        $scope.setActive = function(treatmentBMP) {
-            var layer = _.find($scope.searchableLayerGeoJson._layers,
-                function(layer) { return treatmentBMP.TreatmentBMPID === layer.feature.properties.TreatmentBMPID; });
-            setActiveImpl(layer, treatmentBMP, false);
-        };
-
-        $scope.setActiveByID = function (treatmentBMPID) {
+        
+        $scope.setActiveBMPByID = function (treatmentBMPID) {
             var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
                 function(t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
-            var layer = _.find($scope.searchableLayerGeoJson._layers,
+            var layer = _.find($scope.treatmentBMPLayerGeoJson._layers,
                 function (layer) { return treatmentBMPID === layer.feature.properties.TreatmentBMPID; });
-            setActiveImpl(layer, treatmentBMP, true);
+            setActiveImpl(layer, true);
         };
 
-        function setActiveImpl(layer, treatmentBMP, updateMap) {
+        $scope.setActiveParcelByID = function(parcelID) {
+            var parcel = _.find($scope.AngularViewData.Parcels,
+                function(t) {
+                    return t.ParcelID == parcelID;
+                });
+            var layer = _.find($scope.parcelLayerGeoJson._layers,
+                function(layer) { return parcelID === layer.feature.properties.ParcelID; });
+            setActiveImpl(layer, true);
+        };
+
+        function setActiveImpl(layer, updateMap) {
             if (updateMap) {
-                $scope.neptuneMap.map.panTo(layer.getLatLng());
+                if (layer.getLatLng) {
+                    $scope.neptuneMap.map.panTo(layer.getLatLng());
+                } else {
+                    $scope.neptuneMap.map.panTo(layer.getCenter());
+                }
             }
 
             // multi-way binding
             $scope.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.setSelectedMarker(layer);
-            $scope.activeTreatmentBMP = treatmentBMP;
-        };
+        }
 
-        $scope.isActive = function(treatmentBMP) {
-            return $scope.activeTreatmentBMP &&
-                $scope.activeTreatmentBMP.TreatmentBMPID === treatmentBMP.TreatmentBMPID;
-        };
 
         $scope.visibleBMPCount = function() {
             return $scope.visibleBMPIDs.length;
