@@ -352,6 +352,8 @@
     <Compile Include="Areas\Trash\Controllers\TreatmentBMPController.cs" />
     <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanel.cs" />
     <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanelViewData.cs" />
+    <Compile Include="Models\TrashCaptureStatusType.cs" />
+    <Compile Include="Areas\Trash\Views\Home\TrashModuleMapInitJson.cs" />
     <Compile Include="Views\TreatmentBMP\FindABMPViewModel.cs" />
     <Compile Include="Areas\Modeling\Controllers\HomeController.cs" />
     <Compile Include="Areas\Modeling\Views\Home\Index.cs" />

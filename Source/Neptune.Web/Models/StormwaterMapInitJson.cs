@@ -49,14 +49,6 @@ namespace Neptune.Web.Models
             return treatmentBMPLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeTreatmentBMPLayerGeoJsonForTrashMap(IEnumerable<TreatmentBMP> treatmentBMPs, bool enablePopups)
-        {
-            var featureCollection = treatmentBMPs.ToGeoJsonFeatureCollectionForTrashMap();
-
-            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = enablePopups};
-            return treatmentBMPLayerGeoJson;
-        }
-
         public static LayerGeoJson MakeModeledCatchmentLayerGeoJson(IEnumerable<ModeledCatchment> modeledCatchments, bool isGeneric, bool enablePopups)
         {
             var featureCollection = isGeneric ? modeledCatchments.ToGeoJsonFeatureCollectionGeneric() : modeledCatchments.ToGeoJsonFeatureCollection();

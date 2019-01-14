@@ -15,7 +15,7 @@
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.searchableLayerGeoJson = L.geoJson(
-                $scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection,
+                $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function (feature, layer) {
                         return _.includes($scope.selectedTrashCaptureStatusIDs,

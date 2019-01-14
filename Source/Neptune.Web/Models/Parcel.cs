@@ -1,7 +1,4 @@
-﻿using System.Web;
-using LtInfo.Common;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
+﻿using System.Linq;
 
 namespace Neptune.Web.Models
 {
@@ -20,6 +17,13 @@ namespace Neptune.Web.Models
         public string GetAuditDescriptionString()
         {
             return ParcelNumber;
+        }
+
+        public TrashCaptureStatusType GetTrashCaptureStatusType()
+        {
+            return WaterQualityManagementPlanParcels.Select(x => x.WaterQualityManagementPlan.TrashCaptureStatusType)
+                       .Distinct().OrderBy(x => x.TrashCaptureStatusTypePriority).FirstOrDefault() ??
+                   TrashCaptureStatusType.NotProvided;
         }
     }
 }

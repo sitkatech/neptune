@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[TrashCaptureStatusType](
 	[TrashCaptureStatusTypeName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TrashCaptureStatusTypeDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[TrashCaptureStatusTypeSortOrder] [int] NOT NULL,
+	[TrashCaptureStatusTypePriority] [int] NOT NULL,
  CONSTRAINT [PK_TrashCaptureStatusType_TrashCaptureStatusTypeID] PRIMARY KEY CLUSTERED 
 (
 	[TrashCaptureStatusTypeID] ASC

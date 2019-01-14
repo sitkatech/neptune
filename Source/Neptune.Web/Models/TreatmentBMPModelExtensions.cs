@@ -108,41 +108,19 @@ namespace Neptune.Web.Models
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                var trashCaptureStatusType = x.TrashCaptureStatusType;
+                
                 feature.Properties.Add("Name", x.TreatmentBMPName);
-                feature.Properties.Add("FeatureColor", x.FeatureColorByTrashCaptureStatus());
+                feature.Properties.Add("FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap());
                 feature.Properties.Add("FeatureGlyph", "water");
                 feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("MapSummaryUrl", x.GetTrashMapAssetUrl() );
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID",x.TreatmentBMPTypeID);
-                feature.Properties.Add("TrashCaptureStatusTypeID", x.TrashCaptureStatusTypeID);
+                feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
                 return feature;
             }));
             return featureCollection;
-        }
-
-        public static string FeatureColorByTrashCaptureStatus(this TreatmentBMP x)
-        {
-            string featureColor;
-            switch (x.TrashCaptureStatusType.ToEnum)
-            {
-                case TrashCaptureStatusTypeEnum.Full:
-                    featureColor = "#935F59";
-                    break;
-                case TrashCaptureStatusTypeEnum.Partial:
-                    featureColor = "#0051ff";
-                    break;
-                case TrashCaptureStatusTypeEnum.None:
-                    featureColor = "#3d3d3e";
-                    break;
-                case TrashCaptureStatusTypeEnum.NotProvided:
-                    featureColor = "#878688";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return featureColor;
         }
 
         public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)

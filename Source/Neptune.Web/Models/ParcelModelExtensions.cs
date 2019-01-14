@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.GeoJson;
@@ -22,5 +23,20 @@ namespace Neptune.Web.Models
 
         public static Feature MakeFeatureWithRelevantProperties(this Parcel parcel) =>
             DbGeometryToGeoJsonHelper.FromDbGeometry(parcel.ParcelGeometry);
+
+        public static FeatureCollection ToGeoJsonFeatureCollectionForTrashMap(this IEnumerable<Parcel> parcels)
+        {
+            var featureCollection = new FeatureCollection();
+            featureCollection.Features.AddRange(parcels.Select(x =>
+            {
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.ParcelGeometry);
+                var trashCaptureStatusType = x.GetTrashCaptureStatusType();
+                feature.Properties.Add("Number", x.ParcelNumber);
+                feature.Properties.Add("FeatureColor", trashCaptureStatusType.FeatureColorOnTrashModuleMap());
+                feature.Properties.Add("TrashCaptureStatusTypeID", trashCaptureStatusType.TrashCaptureStatusTypeID);
+                return feature;
+            }));
+            return featureCollection;
+        }
     }
 }
