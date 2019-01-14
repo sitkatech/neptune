@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -16,7 +15,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
-            List<Parcel> parcels) : base(currentPerson, neptunePage)
+            List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
@@ -36,7 +35,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
 
             public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
-                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Parcel> parcels)
+                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels)
             {
                 MapInitJson = mapInitJson;
                 TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();

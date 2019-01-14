@@ -26,7 +26,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             return treatmentBMPLayerGeoJson;
         }
 
-        public static LayerGeoJson MakeParcelLayerGeoJsonForTrashMap(IEnumerable<Parcel> parcels, bool enablePopups)
+        public static LayerGeoJson MakeParcelLayerGeoJsonForTrashMap(IEnumerable<Models.Parcel> parcels, bool enablePopups)
         {
             var featureCollection = parcels.ToGeoJsonFeatureCollectionForTrashMap();
 

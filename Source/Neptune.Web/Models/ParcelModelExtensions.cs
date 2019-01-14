@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -13,7 +14,7 @@ namespace Neptune.Web.Models
 
         public static string GetTrashMapAssetUrl(this Parcel parcel)
         {
-            return "";
+            return SitkaRoute<ParcelController>.BuildUrlFromExpression(x=>x.TrashMapAssetPanel(parcel));
         }
 
         public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, SystemAttribute systemAttribute)

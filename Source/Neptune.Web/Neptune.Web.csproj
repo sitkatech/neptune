@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Trash\Controllers\ParcelController.cs" />
+    <Compile Include="Areas\Trash\Views\Parcel\TrashMapAssetPanel.cs" />
+    <Compile Include="Areas\Trash\Views\Parcel\TrashMapAssetPanelViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1008,6 +1011,7 @@
     <Content Include="Areas\Modeling\Views\Home\Index.cshtml" />
     <Content Include="Areas\Modeling\Views\web.config" />
     <Content Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanel.cshtml" />
+    <Content Include="Areas\Trash\Views\Parcel\TrashMapAssetPanel.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
