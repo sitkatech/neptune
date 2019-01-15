@@ -58,4 +58,5 @@ VALUES
 (54, N'WaterQualityManagementPlanDocumentType', N'WQMP Document Type', N'Specifies what type of supporting document this is. Some document types are required for a WQMP to be considered complete', 1),
 (55, N'HasAllRequiredDocuments', N'Has All Required Documents?', N'Indicates whether all required supporting documents are present for a WQMP', 1),
 (56, N'DateOfLastInventoryChange', N'Date of Last Inventory Change', '', 1),
-(57, N'TrashCaptureStatus', N'Trash Capture Status', N'Indicates the ability of this BMP to capture trash.', 1)
+(57, N'TrashCaptureStatus', N'Trash Capture Status', N'Indicates the ability of this BMP to capture trash.', 1),
+(58, 'OnlandVisualTrashAssessment', N'Onland Visual Trash Assessment', N'The assessing, visually, of trash on land.', 1)

@@ -1,0 +1,31 @@
+﻿
+@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+
+}
+
+@section RightOfPageTitle
+{
+   @* add an OVTA button *@
+}
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                OVTA Table
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:60px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>

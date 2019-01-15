@@ -54,6 +54,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
@@ -114,6 +115,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
@@ -327,11 +329,19 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
                     return observationTypeSpecification;
 
+                case "OnlandVisualTrashAssessment":
+                    return OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(primaryKey);
+
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);
 
                 case "OrganizationType":
                     return OrganizationTypes.GetOrganizationType(primaryKey);
+
+                case "OVTASection":
+                    var oVTASection = OVTASection.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(oVTASection, "OVTASection", primaryKey);
+                    return oVTASection;
 
                 case "Parcel":
                     return Parcels.GetParcel(primaryKey);
