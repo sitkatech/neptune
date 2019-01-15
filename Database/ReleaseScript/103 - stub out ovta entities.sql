@@ -17,11 +17,10 @@ go
 
 insert into dbo.OVTASection(OVTASectionID, OVTASectionName, OVTASectionDisplayName, SectionHeader, SortOrder)
 values
-(1, 'Inventory', 'Inventory', 'Review and Update Inventory?', 10),
-(2, 'Assessment', 'Assessment', 'Assessment', 20),
-(3, 'Maintenance', 'Maintenance', 'Maintenance', 30),
-(4, 'PostMaintenanceAssessment', 'Post-Maintenance Assessment', 'Post-Maintenance Assessment', 40),
-(5, 'VisitSummary', 'Visit Summary', 'Visit Summary', 50)
+(1, 'Instructions', 'Instructions', 'Instructions?', 10),
+(2, 'RecordObservations', 'Record Observations', 'Record Observations', 20),
+(3, 'VerifyOVTAArea', 'Verify OVTA Area', 'Verify OVTA Area', 30),
+(4, 'FinalizeOVTA', 'Finalize OVTA', 'Finalize OVTA', 40)
 
 insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
 values
@@ -52,3 +51,7 @@ OnlandVisualTrashAssessmentID int not null identity(1,1) constraint PK_OnlandVis
 CreatedByPersonID int not null constraint FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID foreign key references dbo.Person(PersonID),
 CreatedDate datetime not null
 )
+
+INSERT 
+dbo.StormwaterBreadCrumbEntity (StormwaterBreadCrumbEntityID, StormwaterBreadCrumbEntityName, StormwaterBreadCrumbEntityDisplayName, GlyphIconClass, ColorClass) VALUES
+ (10, 'OnlandVisualTrashAssessment', 'Onland Visual Trash Assessment', 'glyphicon-heart-empty', 'onlandVisualTrashAssessmentColor')

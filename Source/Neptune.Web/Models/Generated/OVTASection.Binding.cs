@@ -18,11 +18,10 @@ namespace Neptune.Web.Models
 {
     public abstract partial class OVTASection : IHavePrimaryKey
     {
-        public static readonly OVTASectionInventory Inventory = OVTASectionInventory.Instance;
-        public static readonly OVTASectionAssessment Assessment = OVTASectionAssessment.Instance;
-        public static readonly OVTASectionMaintenance Maintenance = OVTASectionMaintenance.Instance;
-        public static readonly OVTASectionPostMaintenanceAssessment PostMaintenanceAssessment = OVTASectionPostMaintenanceAssessment.Instance;
-        public static readonly OVTASectionVisitSummary VisitSummary = OVTASectionVisitSummary.Instance;
+        public static readonly OVTASectionInstructions Instructions = OVTASectionInstructions.Instance;
+        public static readonly OVTASectionRecordObservations RecordObservations = OVTASectionRecordObservations.Instance;
+        public static readonly OVTASectionVerifyOVTAArea VerifyOVTAArea = OVTASectionVerifyOVTAArea.Instance;
+        public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = OVTASectionFinalizeOVTA.Instance;
 
         public static readonly List<OVTASection> All;
         public static readonly ReadOnlyDictionary<int, OVTASection> AllLookupDictionary;
@@ -32,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static OVTASection()
         {
-            All = new List<OVTASection> { Inventory, Assessment, Maintenance, PostMaintenanceAssessment, VisitSummary };
+            All = new List<OVTASection> { Instructions, RecordObservations, VerifyOVTAArea, FinalizeOVTA };
             AllLookupDictionary = new ReadOnlyDictionary<int, OVTASection>(All.ToDictionary(x => x.OVTASectionID));
         }
 
@@ -106,16 +105,14 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
-                case OVTASectionEnum.Assessment:
-                    return Assessment;
-                case OVTASectionEnum.Inventory:
-                    return Inventory;
-                case OVTASectionEnum.Maintenance:
-                    return Maintenance;
-                case OVTASectionEnum.PostMaintenanceAssessment:
-                    return PostMaintenanceAssessment;
-                case OVTASectionEnum.VisitSummary:
-                    return VisitSummary;
+                case OVTASectionEnum.FinalizeOVTA:
+                    return FinalizeOVTA;
+                case OVTASectionEnum.Instructions:
+                    return Instructions;
+                case OVTASectionEnum.RecordObservations:
+                    return RecordObservations;
+                case OVTASectionEnum.VerifyOVTAArea:
+                    return VerifyOVTAArea;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -124,40 +121,33 @@ namespace Neptune.Web.Models
 
     public enum OVTASectionEnum
     {
-        Inventory = 1,
-        Assessment = 2,
-        Maintenance = 3,
-        PostMaintenanceAssessment = 4,
-        VisitSummary = 5
+        Instructions = 1,
+        RecordObservations = 2,
+        VerifyOVTAArea = 3,
+        FinalizeOVTA = 4
     }
 
-    public partial class OVTASectionInventory : OVTASection
+    public partial class OVTASectionInstructions : OVTASection
     {
-        private OVTASectionInventory(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionInventory Instance = new OVTASectionInventory(1, @"Inventory", @"Inventory", @"Review and Update Inventory?", 10);
+        private OVTASectionInstructions(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions?", 10);
     }
 
-    public partial class OVTASectionAssessment : OVTASection
+    public partial class OVTASectionRecordObservations : OVTASection
     {
-        private OVTASectionAssessment(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionAssessment Instance = new OVTASectionAssessment(2, @"Assessment", @"Assessment", @"Assessment", 20);
+        private OVTASectionRecordObservations(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(2, @"RecordObservations", @"Record Observations", @"Record Observations", 20);
     }
 
-    public partial class OVTASectionMaintenance : OVTASection
+    public partial class OVTASectionVerifyOVTAArea : OVTASection
     {
-        private OVTASectionMaintenance(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionMaintenance Instance = new OVTASectionMaintenance(3, @"Maintenance", @"Maintenance", @"Maintenance", 30);
+        private OVTASectionVerifyOVTAArea(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionVerifyOVTAArea Instance = new OVTASectionVerifyOVTAArea(3, @"VerifyOVTAArea", @"Verify OVTA Area", @"Verify OVTA Area", 30);
     }
 
-    public partial class OVTASectionPostMaintenanceAssessment : OVTASection
+    public partial class OVTASectionFinalizeOVTA : OVTASection
     {
-        private OVTASectionPostMaintenanceAssessment(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionPostMaintenanceAssessment Instance = new OVTASectionPostMaintenanceAssessment(4, @"PostMaintenanceAssessment", @"Post-Maintenance Assessment", @"Post-Maintenance Assessment", 40);
-    }
-
-    public partial class OVTASectionVisitSummary : OVTASection
-    {
-        private OVTASectionVisitSummary(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionVisitSummary Instance = new OVTASectionVisitSummary(5, @"VisitSummary", @"Visit Summary", @"Visit Summary", 50);
+        private OVTASectionFinalizeOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Finalize OVTA", @"Finalize OVTA", 40);
     }
 }

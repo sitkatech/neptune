@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Web;
+using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
@@ -16,13 +18,40 @@ namespace Neptune.Web.Models
             throw new NotImplementedException();
         }
 
-        public string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
+    }
+
+    public partial class OVTASectionInstructions
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return "lol you forgot to code the section urls";
+            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(ovta));
         }
     }
 
+    public partial class OVTASectionRecordObservations
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(ovta));
+        }
+    }
 
+    public partial class OVTASectionVerifyOVTAArea
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.VerifyOVTAArea(ovta));
+        }
+    }
+
+    public partial class OVTASectionFinalizeOVTA
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.FinalizeOVTA(ovta));
+        }
+    }
 
     public class OVTASubsectionData
     {

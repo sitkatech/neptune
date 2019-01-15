@@ -1,1 +1,5 @@
-﻿
+﻿@using Neptune.Web.Views.Shared
+@inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Instructions
+
+@{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
