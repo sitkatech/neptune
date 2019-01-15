@@ -208,6 +208,6 @@ namespace Neptune.Web.Models
     public partial class StormwaterBreadCrumbEntityOnlandVisualTrashAssessment : StormwaterBreadCrumbEntity
     {
         private StormwaterBreadCrumbEntityOnlandVisualTrashAssessment(int stormwaterBreadCrumbEntityID, string stormwaterBreadCrumbEntityName, string stormwaterBreadCrumbEntityDisplayName, string glyphIconClass, string colorClass) : base(stormwaterBreadCrumbEntityID, stormwaterBreadCrumbEntityName, stormwaterBreadCrumbEntityDisplayName, glyphIconClass, colorClass) {}
-        public static readonly StormwaterBreadCrumbEntityOnlandVisualTrashAssessment Instance = new StormwaterBreadCrumbEntityOnlandVisualTrashAssessment(10, @"OnlandVisualTrashAssessment", @"Onland Visual Trash Assessment", @"glyphicon-heart-empty", @"onlandVisualTrashAssessmentColor");
+        public static readonly StormwaterBreadCrumbEntityOnlandVisualTrashAssessment Instance = new StormwaterBreadCrumbEntityOnlandVisualTrashAssessment(10, @"OnlandVisualTrashAssessment", @"Onland Visual Trash Assessment", @"glyphicon-trash", @"onlandVisualTrashAssessmentColor");
     }
 }
