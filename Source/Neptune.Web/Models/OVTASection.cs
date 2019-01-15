@@ -19,6 +19,8 @@ namespace Neptune.Web.Models
         }
 
         public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
+
+        public abstract OVTASection GetNextSection();
     }
 
     public partial class OVTASectionInstructions
@@ -26,6 +28,11 @@ namespace Neptune.Web.Models
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
             return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(ovta));
+        }
+
+        public override OVTASection GetNextSection()
+        {
+            return RecordObservations;
         }
     }
 
@@ -35,6 +42,11 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(ovta));
         }
+
+        public override OVTASection GetNextSection()
+        {
+            return VerifyOVTAArea;
+        }
     }
 
     public partial class OVTASectionVerifyOVTAArea
@@ -43,6 +55,11 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.VerifyOVTAArea(ovta));
         }
+
+        public override OVTASection GetNextSection()
+        {
+            return FinalizeOVTA;
+        }
     }
 
     public partial class OVTASectionFinalizeOVTA
@@ -50,6 +67,11 @@ namespace Neptune.Web.Models
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
             return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.FinalizeOVTA(ovta));
+        }
+
+        public override OVTASection GetNextSection()
+        {
+            throw new NotImplementedException();
         }
     }
 
