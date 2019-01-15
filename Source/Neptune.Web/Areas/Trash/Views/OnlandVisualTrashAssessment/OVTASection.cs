@@ -14,31 +14,30 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
     public class OVTASectionViewData : NeptuneViewData
     {
-        public string SectionName { get; }
+        public string SectionName { get; private set; }
         public string SubsectionName { get; }
-        public Models.OnlandVisualTrashAssessment OVTA { get; }
-        public string SectionHeader { get; }
+        public Models.OnlandVisualTrashAssessment OVTA { get; private set; }
+        public string SectionHeader { get; private set; }
 
 
-        public OVTASectionViewData(Person currentPerson, NeptunePage neptunePage, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OVTASection ovtaSection) : base(currentPerson, stormwaterBreadCrumbEntity, neptunePage)
+        public OVTASectionViewData(Person currentPerson, NeptunePage neptunePage, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta) : base(currentPerson, stormwaterBreadCrumbEntity, neptunePage)
         {
-            EntityName = "Onland Visual Trash Assessment";
-            EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
-            
-            SectionName = ovtaSection.OVTASectionName;
-            PageTitle = ovtaSection.OVTASectionDisplayName;
-            OVTA = Models.OnlandVisualTrashAssessment.CreateNewBlank(currentPerson);
+            AssignParameters(currentPerson, ovtaSection, ovta);
         }
 
-        public OVTASectionViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OVTASection ovtaSection) : base(currentPerson, stormwaterBreadCrumbEntity)
+        public OVTASectionViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta) : base(currentPerson, stormwaterBreadCrumbEntity)
+        {
+            AssignParameters(currentPerson, ovtaSection, ovta);
+        }
+
+        private void AssignParameters(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta)
         {
             EntityName = "Onland Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
-            
+            OVTA = ovta;
             SectionName = ovtaSection.OVTASectionName;
+            SectionHeader = ovtaSection.SectionHeader;
             PageTitle = ovtaSection.OVTASectionDisplayName;
-            OVTA = Models.OnlandVisualTrashAssessment.CreateNewBlank(currentPerson);
-
         }
     }
 }

@@ -27,7 +27,20 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(ovta));
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(ovta.OnlandVisualTrashAssessmentID));
+        }
+
+        public override OVTASection GetNextSection()
+        {
+            return InitialOVTA;
+        }
+    }
+
+    public partial class OVTASectionInitialOVTA
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitialOVTA(ovta));
         }
 
         public override OVTASection GetNextSection()
@@ -40,20 +53,7 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(ovta));
-        }
-
-        public override OVTASection GetNextSection()
-        {
-            return VerifyOVTAArea;
-        }
-    }
-
-    public partial class OVTASectionVerifyOVTAArea
-    {
-        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
-        {
-            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.VerifyOVTAArea(ovta));
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(ovta));
         }
 
         public override OVTASection GetNextSection()
@@ -66,7 +66,7 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.FinalizeOVTA(ovta));
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.FinalizeOVTA(ovta));
         }
 
         public override OVTASection GetNextSection()

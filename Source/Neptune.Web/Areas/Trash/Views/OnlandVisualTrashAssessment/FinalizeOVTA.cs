@@ -2,7 +2,7 @@
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
-    public abstract class FinalizeOVTA : TypedWebViewPage<FinalizeOVTAViewData>
+    public abstract class FinalizeOVTA : TypedWebViewPage<FinalizeOVTAViewData, FinalizeOVTAViewModel>
     {
 
 

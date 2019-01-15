@@ -19,8 +19,8 @@ namespace Neptune.Web.Models
     public abstract partial class OVTASection : IHavePrimaryKey
     {
         public static readonly OVTASectionInstructions Instructions = OVTASectionInstructions.Instance;
+        public static readonly OVTASectionInitialOVTA InitialOVTA = OVTASectionInitialOVTA.Instance;
         public static readonly OVTASectionRecordObservations RecordObservations = OVTASectionRecordObservations.Instance;
-        public static readonly OVTASectionVerifyOVTAArea VerifyOVTAArea = OVTASectionVerifyOVTAArea.Instance;
         public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = OVTASectionFinalizeOVTA.Instance;
 
         public static readonly List<OVTASection> All;
@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static OVTASection()
         {
-            All = new List<OVTASection> { Instructions, RecordObservations, VerifyOVTAArea, FinalizeOVTA };
+            All = new List<OVTASection> { Instructions, InitialOVTA, RecordObservations, FinalizeOVTA };
             AllLookupDictionary = new ReadOnlyDictionary<int, OVTASection>(All.ToDictionary(x => x.OVTASectionID));
         }
 
@@ -107,12 +107,12 @@ namespace Neptune.Web.Models
             {
                 case OVTASectionEnum.FinalizeOVTA:
                     return FinalizeOVTA;
+                case OVTASectionEnum.InitialOVTA:
+                    return InitialOVTA;
                 case OVTASectionEnum.Instructions:
                     return Instructions;
                 case OVTASectionEnum.RecordObservations:
                     return RecordObservations;
-                case OVTASectionEnum.VerifyOVTAArea:
-                    return VerifyOVTAArea;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -122,32 +122,32 @@ namespace Neptune.Web.Models
     public enum OVTASectionEnum
     {
         Instructions = 1,
-        RecordObservations = 2,
-        VerifyOVTAArea = 3,
+        InitialOVTA = 2,
+        RecordObservations = 3,
         FinalizeOVTA = 4
     }
 
     public partial class OVTASectionInstructions : OVTASection
     {
         private OVTASectionInstructions(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions?", 10);
+        public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions", 10);
+    }
+
+    public partial class OVTASectionInitialOVTA : OVTASection
+    {
+        private OVTASectionInitialOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionInitialOVTA Instance = new OVTASectionInitialOVTA(2, @"InitialOVTA", @"Initial OVTA", @"Initial OVTA", 20);
     }
 
     public partial class OVTASectionRecordObservations : OVTASection
     {
         private OVTASectionRecordObservations(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(2, @"RecordObservations", @"Record Observations", @"Record Observations", 20);
-    }
-
-    public partial class OVTASectionVerifyOVTAArea : OVTASection
-    {
-        private OVTASectionVerifyOVTAArea(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionVerifyOVTAArea Instance = new OVTASectionVerifyOVTAArea(3, @"VerifyOVTAArea", @"Verify OVTA Area", @"Verify OVTA Area", 30);
+        public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(3, @"RecordObservations", @"Record Observations", @"Record Observations", 30);
     }
 
     public partial class OVTASectionFinalizeOVTA : OVTASection
     {
         private OVTASectionFinalizeOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Finalize OVTA", @"Finalize OVTA", 40);
+        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Review and Finalize OVTA", @"Finalize OVTA", 40);
     }
 }

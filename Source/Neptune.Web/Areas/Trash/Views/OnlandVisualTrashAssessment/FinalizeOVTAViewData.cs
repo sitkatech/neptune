@@ -6,8 +6,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
 
 
-        public FinalizeOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity)
-            : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.FinalizeOVTA)
+        public FinalizeOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta)
+            : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.FinalizeOVTA, ovta)
         {
 
         }

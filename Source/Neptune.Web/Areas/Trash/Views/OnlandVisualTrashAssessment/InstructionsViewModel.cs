@@ -2,6 +2,9 @@
 {
     public class InstructionsViewModel : OnlandVisualTrashAssessmentViewModel
     {
-
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public InstructionsViewModel() { }
     }
 }

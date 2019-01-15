@@ -30,6 +30,13 @@
     @RenderSection("JavascriptAndStylesContent", false)
 
     <style>
+        nav#wizardNav ul li a.disabledItem {
+            cursor: not-allowed;
+            font-style: italic;
+            color: #999;
+            background-color: transparent;
+        }
+
         nav#wizardNav ul li.activeGroup a,
         nav#wizardNav ul li.activeGroup span {
             color: #fff;
@@ -100,8 +107,8 @@
         }
 
         hr {
-             border-top: 1px solid #ddd;
-         }
+            border-top: 1px solid #ddd;
+        }
 
         .moreActionsToggle .open > .moreActionsToggle .dropdown-toggle {
             color: #3e72b0 !important;
@@ -136,7 +143,7 @@
                         var sectionIsActive = ViewDataTyped.SectionName == ovtaSection.OVTASectionName;
                         var topLevelIsActive = ViewDataTyped.SubsectionName == null;
                         <li class="@(sectionIsActive ? "activeGroup" : string.Empty)">
-                            <a class="@(topLevelIsActive ? "activeItem" : string.Empty)" href="@ovtaSection.GetSectionUrl(ViewDataTyped.OVTA)">
+                            <a class="@(topLevelIsActive ? "activeItem" : string.Empty) @(ViewDataTyped.OVTA == null ? "disabledItem" : string.Empty)" href="@ovtaSection.GetSectionUrl(ViewDataTyped.OVTA)">
                                 <span>@ovtaSection.OVTASectionDisplayName</span>
                             </a>
                             @if (sectionIsActive && (!topLevelIsActive || ovtaSection.ExpandMenu(ViewDataTyped.OVTA)))

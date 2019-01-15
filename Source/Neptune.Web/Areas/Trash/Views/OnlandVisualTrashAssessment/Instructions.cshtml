@@ -1,5 +1,24 @@
-﻿@using Neptune.Web.Views.Shared
+﻿@using LtInfo.Common.BootstrapWrappers
+@using Neptune.Web.Views.FieldVisit
+@using Neptune.Web.Views.Shared
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Instructions
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
+
+
+@using (Html.BeginForm())
+{
+    <hr />
+    <div class="row">
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+        @{
+            var continueButtonText = Model.OVTAID.HasValue ? "Continue OVTA" : "Begin OVTA";
+        }
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">@continueButtonText <i class="glyphicon glyphicon-chevron-right"></i></button>
+        </div>
+    </div>
+}

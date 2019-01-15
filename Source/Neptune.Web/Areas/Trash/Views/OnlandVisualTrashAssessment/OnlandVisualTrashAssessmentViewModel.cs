@@ -4,6 +4,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OnlandVisualTrashAssessmentViewModel : FormViewModel
     {
-        public bool Advance { get; set; }
+
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
+        public OnlandVisualTrashAssessmentViewModel()
+        {
+        }
+
+        public int? OVTAID { get; set; }
     }
 }
