@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[OVTASection](
 	[OVTASectionDisplayName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SectionHeader] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[SortOrder] [int] NOT NULL,
+	[HasCompletionStatus] [bit] NOT NULL,
  CONSTRAINT [PK_OVTASection_OVTASectionID] PRIMARY KEY CLUSTERED 
 (
 	[OVTASectionID] ASC

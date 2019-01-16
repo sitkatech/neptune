@@ -21,6 +21,9 @@ namespace Neptune.Web.Models
         public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
 
         public abstract OVTASection GetNextSection();
+
+        public abstract bool IsSectionComplete(OnlandVisualTrashAssessment ovta);
+
     }
 
     public partial class OVTASectionInstructions
@@ -33,6 +36,11 @@ namespace Neptune.Web.Models
         public override OVTASection GetNextSection()
         {
             return InitiateOVTA;
+        }
+
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            throw new InvalidOperationException("Instructions does not have a completness status");
         }
     }
 
@@ -47,6 +55,12 @@ namespace Neptune.Web.Models
         {
             return RecordObservations;
         }
+        
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            throw new InvalidOperationException("Initiate does not have a completness status");
+        }
+
     }
 
     public partial class OVTASectionRecordObservations
@@ -60,6 +74,11 @@ namespace Neptune.Web.Models
         {
             return FinalizeOVTA;
         }
+
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            return false;
+        }
     }
 
     public partial class OVTASectionFinalizeOVTA
@@ -72,6 +91,11 @@ namespace Neptune.Web.Models
         public override OVTASection GetNextSection()
         {
             throw new NotImplementedException();
+        }
+
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            throw new InvalidOperationException("Finalize does not have a completness status");
         }
     }
 

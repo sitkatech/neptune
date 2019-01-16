@@ -38,13 +38,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected OVTASection(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder)
+        protected OVTASection(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus)
         {
             OVTASectionID = oVTASectionID;
             OVTASectionName = oVTASectionName;
             OVTASectionDisplayName = oVTASectionDisplayName;
             SectionHeader = sectionHeader;
             SortOrder = sortOrder;
+            HasCompletionStatus = hasCompletionStatus;
         }
 
         [Key]
@@ -53,6 +54,7 @@ namespace Neptune.Web.Models
         public string OVTASectionDisplayName { get; private set; }
         public string SectionHeader { get; private set; }
         public int SortOrder { get; private set; }
+        public bool HasCompletionStatus { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return OVTASectionID; } }
 
@@ -129,25 +131,25 @@ namespace Neptune.Web.Models
 
     public partial class OVTASectionInstructions : OVTASection
     {
-        private OVTASectionInstructions(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions", 10);
+        private OVTASectionInstructions(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions", 10, false);
     }
 
     public partial class OVTASectionInitiateOVTA : OVTASection
     {
-        private OVTASectionInitiateOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionInitiateOVTA Instance = new OVTASectionInitiateOVTA(2, @"InitiateOVTA", @"Initiate OVTA", @"Initiate OVTA", 20);
+        private OVTASectionInitiateOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionInitiateOVTA Instance = new OVTASectionInitiateOVTA(2, @"InitiateOVTA", @"Initiate OVTA", @"Initiate OVTA", 20, true);
     }
 
     public partial class OVTASectionRecordObservations : OVTASection
     {
-        private OVTASectionRecordObservations(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(3, @"RecordObservations", @"Record Observations", @"Record Observations", 30);
+        private OVTASectionRecordObservations(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(3, @"RecordObservations", @"Record Observations", @"Record Observations", 30, false);
     }
 
     public partial class OVTASectionFinalizeOVTA : OVTASection
     {
-        private OVTASectionFinalizeOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Review and Finalize OVTA", @"Finalize OVTA", 40);
+        private OVTASectionFinalizeOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Review and Finalize OVTA", @"Finalize OVTA", 40, false);
     }
 }

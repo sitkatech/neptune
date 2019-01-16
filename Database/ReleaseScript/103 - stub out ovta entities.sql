@@ -1,26 +1,27 @@
-CREATE TABLE [dbo].[OVTASection](
-	[OVTASectionID] [int] NOT NULL,
-	[OVTASectionName] [varchar](50) NOT NULL,
-	[OVTASectionDisplayName] [varchar](50) NOT NULL,
-	[SectionHeader] [varchar](100) NOT NULL,
-	[SortOrder] [int] NOT NULL,
- CONSTRAINT [PK_OVTASection_OVTASectionID] PRIMARY KEY CLUSTERED 
+CREATE TABLE dbo.OVTASection(
+	OVTASectionID int NOT NULL,
+	OVTASectionName varchar(50) NOT NULL,
+	OVTASectionDisplayName varchar(50) NOT NULL,
+	SectionHeader varchar(100) NOT NULL,
+	SortOrder int NOT NULL,
+	HasCompletionStatus bit not null
+ CONSTRAINT PK_OVTASection_OVTASectionID PRIMARY KEY CLUSTERED 
 (
-	[OVTASectionID] ASC
+	OVTASectionID ASC
 ),
- CONSTRAINT [AK_OVTASection_OVTASectionName] UNIQUE NONCLUSTERED 
+ CONSTRAINT AK_OVTASection_OVTASectionName UNIQUE NONCLUSTERED 
 (
-	[OVTASectionName] ASC
+	OVTASectionName ASC
 )
 )
 go
 
-insert into dbo.OVTASection(OVTASectionID, OVTASectionName, OVTASectionDisplayName, SectionHeader, SortOrder)
+insert into dbo.OVTASection(OVTASectionID, OVTASectionName, OVTASectionDisplayName, SectionHeader, SortOrder, HasCompletionStatus)
 values
-(1, 'Instructions', 'Instructions', 'Instructions?', 10),
-(2, 'RecordObservations', 'Record Observations', 'Record Observations', 20),
-(3, 'VerifyOVTAArea', 'Verify OVTA Area', 'Verify OVTA Area', 30),
-(4, 'FinalizeOVTA', 'Finalize OVTA', 'Finalize OVTA', 40)
+(1, 'Instructions', 'Instructions', 'Instructions?', 10, 0),
+(2, 'RecordObservations', 'Record Observations', 'Record Observations', 20, 1),
+(3, 'VerifyOVTAArea', 'Verify OVTA Area', 'Verify OVTA Area', 30, 0),
+(4, 'FinalizeOVTA', 'Finalize OVTA', 'Finalize OVTA', 40, 0)
 
 insert into dbo.NeptunePageType(NeptunePageTypeID, NeptunePageTypeName, NeptunePageTypeDisplayName, NeptunePageRenderTypeID)
 values
@@ -38,7 +39,7 @@ insert into dbo.NeptunePage(NeptunePageTypeID, NeptunePageContent)
 values
 (35, null)
 
-INSERT [dbo].[FieldDefinition] ([FieldDefinitionID], [FieldDefinitionName], [FieldDefinitionDisplayName], [DefaultDefinition], CanCustomizeLabel) 
+INSERT dbo.FieldDefinition (FieldDefinitionID, FieldDefinitionName, FieldDefinitionDisplayName, DefaultDefinition, CanCustomizeLabel) 
 VALUES 
 (58, 'OnlandVisualTrashAssessment', N'Onland Visual Trash Assessment', N'The assessing, visually, of trash on land.', 1)
 
