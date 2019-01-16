@@ -40,7 +40,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            throw new InvalidOperationException("Instructions does not have a completness status");
+            throw new InvalidOperationException("Instructions does not have a completness status; cannot check completeness");
         }
     }
 
@@ -58,7 +58,7 @@ namespace Neptune.Web.Models
         
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            throw new InvalidOperationException("Initiate does not have a completness status");
+            throw new InvalidOperationException("Initiate does not have a completness status; cannot check completeness");
         }
 
     }
@@ -90,12 +90,12 @@ namespace Neptune.Web.Models
 
         public override OVTASection GetNextSection()
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("Finalize OVTA is the final step; cannot get next section");
         }
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            throw new InvalidOperationException("Finalize does not have a completness status");
+            throw new InvalidOperationException("Finalize does not have a completness status; cannot check completeness");
         }
     }
 

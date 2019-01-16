@@ -55,6 +55,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
@@ -115,6 +116,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
@@ -328,6 +330,9 @@ namespace Neptune.Web.Models
                     var observationTypeSpecification = ObservationTypeSpecification.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
                     return observationTypeSpecification;
+
+                case "OnlandVisualTrashAssessmentObservation":
+                    return OnlandVisualTrashAssessmentObservations.GetOnlandVisualTrashAssessmentObservation(primaryKey);
 
                 case "OnlandVisualTrashAssessment":
                     return OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(primaryKey);
