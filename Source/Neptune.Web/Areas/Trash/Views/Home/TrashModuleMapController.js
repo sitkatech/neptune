@@ -83,7 +83,7 @@
                             color: feature.properties.FeatureColor,
                             weight: .5,
                             fill: true, 
-                            fillOpacity: .15
+                            fillOpacity: .35
                         };
                     }
                 });
