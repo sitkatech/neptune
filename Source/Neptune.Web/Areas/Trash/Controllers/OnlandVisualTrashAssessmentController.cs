@@ -119,20 +119,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult InitialOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        public ViewResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
-            var viewData = new InitialOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-            return RazorView<InitialOVTA, InitialOVTAViewData, InitialOVTAViewModel>(viewData, new InitialOVTAViewModel());
+            var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
+            return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, new InitiateOVTAViewModel());
         }
 
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitialOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, InitialOVTAViewModel viewModel)
+        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, InitiateOVTAViewModel viewModel)
         {
 
 
-            return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitialOVTA, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
+            return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitiateOVTA, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
         }
 
         [HttpGet]

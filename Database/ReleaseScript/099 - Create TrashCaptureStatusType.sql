@@ -3,15 +3,16 @@ TrashCaptureStatusTypeID int not null constraint PK_TrashCaptureStatusType_Trash
 TrashCaptureStatusTypeName varchar(50) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeName unique,
 TrashCaptureStatusTypeDisplayName varchar(50) not null constraint AK_TrashCaptureStatusType_TrashCaptureStatusTypeDisplayName unique,
 TrashCaptureStatusTypeSortOrder int not null,
-TrashCaptureStatusTypePriority int not null
+TrashCaptureStatusTypePriority int not null,
+TrashCaptureStatusTypeColorCode varchar(6) not null
 )
 
-insert into dbo.TrashCaptureStatusType (TrashCaptureStatusTypeID, TrashCaptureStatusTypeName, TrashCaptureStatusTypeDisplayName, TrashCaptureStatusTypeSortOrder, TrashCaptureStatusTypePriority)
+insert into dbo.TrashCaptureStatusType (TrashCaptureStatusTypeID, TrashCaptureStatusTypeName, TrashCaptureStatusTypeDisplayName, TrashCaptureStatusTypeSortOrder, TrashCaptureStatusTypePriority, TrashCaptureStatusTypeColorCode)
 values
-(1, 'Full', 'Full', 10, 1),
-(2, 'Partial', 'Partial', 20, 2),
-(3, 'None', 'None', 30, 3),
-(4, 'NotProvided', 'Not Provided', 40, 4)
+(1, 'Full', 'Full', 10, 1,'e83521'),
+(2, 'Partial', 'Partial', 20, 2,'5289ff'),
+(3, 'None', 'None', 30, 3,'3d3d3e'),
+(4, 'NotProvided', 'Not Provided', 40, 4, '878688')
 
 Alter table dbo.TreatmentBMP			
 Add TrashCaptureStatusTypeID int null constraint FK_TreatmentBMP_TrashCaptureStatusType_TrashCaptureStatusTypeID foreign key references dbo.TrashCaptureStatusType(TrashCaptureStatusTypeID)

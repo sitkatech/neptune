@@ -1,4 +1,6 @@
-﻿@using Neptune.Web.Views.Shared
+﻿@using DocumentFormat.OpenXml.Drawing.Diagrams
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.Home.Index
@@ -71,21 +73,20 @@
             <div class="col-sm-12 col-md-3">
                 <h3>Legend</h3>
                 <ul id="legend">
+                       <li>
+                           <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()"/> Full Trash Capture
+                       </li>
 
                     <li>
-                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59.png"/> Full Trash Capture
+                        <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()"/> Partial Trash Capture
                     </li>
 
                     <li>
-                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+0051ff.png"/> Partial Trash Capture
+                        <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()"/> No Trash Capture
                     </li>
 
                     <li>
-                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+3d3d3e.png"/> No Trash Capture
-                    </li>
-
-                    <li>
-                        <img src="https://api.tiles.mapbox.com/v3/marker/pin-m-water+878688.png"/> Trash Capture Status Not Provided
+                        <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()"/> Trash Capture Status Not Provided
                     </li>
 
                 </ul>

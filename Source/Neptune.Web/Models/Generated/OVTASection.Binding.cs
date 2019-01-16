@@ -19,7 +19,7 @@ namespace Neptune.Web.Models
     public abstract partial class OVTASection : IHavePrimaryKey
     {
         public static readonly OVTASectionInstructions Instructions = OVTASectionInstructions.Instance;
-        public static readonly OVTASectionInitialOVTA InitialOVTA = OVTASectionInitialOVTA.Instance;
+        public static readonly OVTASectionInitiateOVTA InitiateOVTA = OVTASectionInitiateOVTA.Instance;
         public static readonly OVTASectionRecordObservations RecordObservations = OVTASectionRecordObservations.Instance;
         public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = OVTASectionFinalizeOVTA.Instance;
 
@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static OVTASection()
         {
-            All = new List<OVTASection> { Instructions, InitialOVTA, RecordObservations, FinalizeOVTA };
+            All = new List<OVTASection> { Instructions, InitiateOVTA, RecordObservations, FinalizeOVTA };
             AllLookupDictionary = new ReadOnlyDictionary<int, OVTASection>(All.ToDictionary(x => x.OVTASectionID));
         }
 
@@ -107,8 +107,8 @@ namespace Neptune.Web.Models
             {
                 case OVTASectionEnum.FinalizeOVTA:
                     return FinalizeOVTA;
-                case OVTASectionEnum.InitialOVTA:
-                    return InitialOVTA;
+                case OVTASectionEnum.InitiateOVTA:
+                    return InitiateOVTA;
                 case OVTASectionEnum.Instructions:
                     return Instructions;
                 case OVTASectionEnum.RecordObservations:
@@ -122,7 +122,7 @@ namespace Neptune.Web.Models
     public enum OVTASectionEnum
     {
         Instructions = 1,
-        InitialOVTA = 2,
+        InitiateOVTA = 2,
         RecordObservations = 3,
         FinalizeOVTA = 4
     }
@@ -133,10 +133,10 @@ namespace Neptune.Web.Models
         public static readonly OVTASectionInstructions Instance = new OVTASectionInstructions(1, @"Instructions", @"Instructions", @"Instructions", 10);
     }
 
-    public partial class OVTASectionInitialOVTA : OVTASection
+    public partial class OVTASectionInitiateOVTA : OVTASection
     {
-        private OVTASectionInitialOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
-        public static readonly OVTASectionInitialOVTA Instance = new OVTASectionInitialOVTA(2, @"InitialOVTA", @"Initial OVTA", @"Initial OVTA", 20);
+        private OVTASectionInitiateOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder) {}
+        public static readonly OVTASectionInitiateOVTA Instance = new OVTASectionInitiateOVTA(2, @"InitiateOVTA", @"Initiate OVTA", @"Initiate OVTA", 20);
     }
 
     public partial class OVTASectionRecordObservations : OVTASection

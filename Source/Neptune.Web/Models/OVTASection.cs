@@ -32,15 +32,15 @@ namespace Neptune.Web.Models
 
         public override OVTASection GetNextSection()
         {
-            return InitialOVTA;
+            return InitiateOVTA;
         }
     }
 
-    public partial class OVTASectionInitialOVTA
+    public partial class OVTASectionInitiateOVTA
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitialOVTA(ovta));
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitiateOVTA(ovta));
         }
 
         public override OVTASection GetNextSection()

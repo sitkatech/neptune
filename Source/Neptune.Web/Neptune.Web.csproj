@@ -367,9 +367,9 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RecordObservations.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RecordObservationsViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RecordObservationsViewModel.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitialOVTA.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitialOVTAViewData.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitialOVTAViewModel.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitiateOVTA.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitiateOVTAViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitiateOVTAViewModel.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTASection.cs" />
     <Compile Include="Areas\Trash\Controllers\ParcelController.cs" />
     <Compile Include="Areas\Trash\Views\Parcel\TrashMapAssetPanel.cs" />
@@ -1039,7 +1039,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Instructions.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\FinalizeOVTA.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RecordObservations.cshtml" />
-    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitialOVTA.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitiateOVTA.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Index.cshtml" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTAIndexGridSpec.cs" />
