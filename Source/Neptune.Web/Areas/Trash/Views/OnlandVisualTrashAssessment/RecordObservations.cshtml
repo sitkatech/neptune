@@ -1,54 +1,23 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.FieldVisit
 @using Neptune.Web.Views.Shared
-@using Newtonsoft.Json
-@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.RecordObservations
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 
-@section JavascriptAndStylesContent
+<p class="systemText">Content Under Development</p>
+
+@using (Html.BeginForm("Location", "FieldVisit", new {ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, new {@class = "field-visit-form"}))
 {
-    @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/ObservationsMapController.js")"></script>
-    <script type="text/javascript">
-        // <![CDATA[
-        angular.module("NeptuneApp")
-            .factory("angularModelAndViewData",
-                function() {
-                    return {
-                        AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
-                        AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
-                    };
-                });
-
-    </script>
-}
-
-<div ng-app="NeptuneApp" ng-controller="ObservationsMapController">
-    <p class="systemText">Content Under Development</p>
+    <hr/>
     <div class="row">
-        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-            <div id="mapContainer">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
-                </div>
-            </div>
+        <div class="col-xs-12 col-sm-2">
+            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        </div>
+
+        <div class="col-xs-12 col-sm-10" style="text-align: right">
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
     </div>
-
-
-    @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
-    {
-        <hr />
-        <div class="row">
-            <div class="col-xs-12 col-sm-2">
-                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-            </div>
-
-            <div class="col-xs-12 col-sm-10" style="text-align: right">
-                <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-                <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
-            </div>
-        </div>
-    }
-</div>
+}
