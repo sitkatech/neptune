@@ -39,13 +39,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList();
         }
 
-        // No-entity version for when we're creating a new guy
         [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Instructions(int? ovtaID)
         {
             var viewModel = new InstructionsViewModel();
-            return ViewInstructions(viewModel);
+
+            var onlandVisualTrashAssessment = ovtaID.HasValue
+                ? HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
+                    ovtaID.Value)
+                : null;
+
+            return ViewInstructions(viewModel, onlandVisualTrashAssessment);
         }
 
         [HttpPost]
@@ -70,11 +75,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RedirectToAppropriateStep(viewModel, Models.OVTASection.Instructions, onlandVisualTrashAssessment);
         }
 
-        private ViewResult ViewInstructions(InstructionsViewModel viewModel)
+        private ViewResult ViewInstructions(InstructionsViewModel viewModel, OnlandVisualTrashAssessment ovta)
         {
             var viewData = new InstructionsViewData(CurrentPerson,
                 NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAInstructions),
-                StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, null);
+                StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, ovta);
             return RazorView<Instructions, InstructionsViewData, InstructionsViewModel>(viewData, viewModel);
         }
 
