@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Neptune.Web.Models
 {
@@ -7,8 +8,11 @@ namespace Neptune.Web.Models
         public int OnlandVisualTrashAssessmentObservationID { get; set; }
         public int OnlandVisualTrashAssessmentID { get; set; }
         public string Note { get; set; }
+        [Required]
         public DateTime ObservationDatetime { get; set; }
+        [Required]
         public decimal? LocationX { get; set; }
+        [Required]
         public decimal? LocationY { get; set; }
 
         /// <summary>

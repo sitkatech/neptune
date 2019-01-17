@@ -103,7 +103,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public ViewResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
-            return ViewRecordObservations(onlandVisualTrashAssessmentPrimaryKey, new RecordObservationsViewModel());
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment);
+            return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
         }
 
         [HttpPost]
@@ -111,13 +113,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RecordObservationsViewModel viewModel)
         {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
+            }
             return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
         }
 
-        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RecordObservationsViewModel viewModel)
+        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
         {
             var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessmentPrimaryKey.EntityObject, new OVTAObservationsMapInitJson("observationsMap"));
+                onlandVisualTrashAssessment, new OVTAObservationsMapInitJson("observationsMap"));
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
                 viewModel);
         }

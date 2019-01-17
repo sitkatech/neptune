@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
@@ -90,7 +91,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            return false;
+            return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
         }
     }
 
