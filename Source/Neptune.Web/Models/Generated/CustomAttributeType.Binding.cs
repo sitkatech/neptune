@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[CustomAttributeType] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[CustomAttributeType]")]
     public partial class CustomAttributeType : IHavePrimaryKey, ICanDeleteFull
     {

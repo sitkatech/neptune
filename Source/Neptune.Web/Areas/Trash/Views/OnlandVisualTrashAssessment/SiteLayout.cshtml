@@ -44,6 +44,21 @@
             cursor: pointer;
         }
 
+        .field-validation-success {
+            color: #5cb85c; margin-right: 4px;
+            
+        }
+        .field-validation-error {
+            margin-right: 4px;
+        }
+
+        nav#wizardNav ul li a {
+            padding-left: 23px;
+        }
+        
+        nav#wizardNav ul li a.hasCompletionStatus {
+            padding-left: 5px;
+        }
 
         @@media (min-width: 769px) {
             nav#wizardNav ul li.activeGroup a.activeItem:after {
@@ -85,7 +100,8 @@
                         var sectionIsActive = ViewDataTyped.SectionName == ovtaSection.OVTASectionName;
                         var topLevelIsActive = ViewDataTyped.SubsectionName == null;
                         <li class="@(sectionIsActive ? "activeGroup" : string.Empty)">
-                            <a class="@(topLevelIsActive ? "activeItem" : string.Empty) @(ViewDataTyped.OVTA == null ? "disabledItem" : string.Empty)" href="@ovtaSection.GetSectionUrl(ViewDataTyped.OVTA)">
+                            <a class="@(topLevelIsActive ? "activeItem" : string.Empty) @(ViewDataTyped.OVTA == null ? "disabledItem" : string.Empty) @(ovtaSection.HasCompletionStatus ? "hasCompletionStatus" : string.Empty)" href="@ovtaSection.GetSectionUrl(ViewDataTyped.OVTA)">
+                                @ovtaSection.SectionCompletionStatusIndicator(ViewDataTyped.OVTA)
                                 <span>@ovtaSection.OVTASectionDisplayName</span>
                             </a>
                         </li>

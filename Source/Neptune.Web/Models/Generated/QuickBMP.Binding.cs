@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[QuickBMP] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[QuickBMP]")]
     public partial class QuickBMP : IHavePrimaryKey, ICanDeleteFull
     {

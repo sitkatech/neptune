@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[TreatmentBMPBenchmarkAndThreshold] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[TreatmentBMPBenchmarkAndThreshold]")]
     public partial class TreatmentBMPBenchmarkAndThreshold : IHavePrimaryKey, ICanDeleteFull
     {

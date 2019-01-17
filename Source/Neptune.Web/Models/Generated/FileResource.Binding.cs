@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[FileResource] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[FileResource]")]
     public partial class FileResource : IHavePrimaryKey, ICanDeleteFull
     {

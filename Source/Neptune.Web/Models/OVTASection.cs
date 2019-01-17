@@ -24,6 +24,19 @@ namespace Neptune.Web.Models
 
         public abstract bool IsSectionComplete(OnlandVisualTrashAssessment ovta);
 
+        public HtmlString SectionCompletionStatusIndicator(OnlandVisualTrashAssessment ovta)
+        {
+            if (!HasCompletionStatus || ovta == null) // all menu items are disabled if ovta hasn't been created yet, so don't display an indicator
+            {
+                return new HtmlString(string.Empty);
+            }
+
+            return IsSectionComplete(ovta)
+                ? new HtmlString(
+                    "<span class='glyphicon glyphicon-ok field-validation-success text-left'></span>")
+                : new HtmlString(
+                    "<span class='glyphicon glyphicon-exclamation-sign field-validation-warning text-left'></span>");
+        }
     }
 
     public partial class OVTASectionInstructions

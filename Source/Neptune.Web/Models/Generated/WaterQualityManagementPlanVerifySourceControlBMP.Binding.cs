@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[WaterQualityManagementPlanVerifySourceControlBMP] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[WaterQualityManagementPlanVerifySourceControlBMP]")]
     public partial class WaterQualityManagementPlanVerifySourceControlBMP : IHavePrimaryKey, ICanDeleteFull
     {
