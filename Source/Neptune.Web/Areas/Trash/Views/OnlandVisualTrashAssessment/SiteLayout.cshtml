@@ -44,29 +44,6 @@
             cursor: pointer;
         }
 
-        ul.ovtaTierTwoMenu {
-            border-left: 4px solid;
-            border-bottom: 4px solid;
-            border-color: #0099ab;
-        }
-
-        @@media (max-width: 768px) {
-            ul.ovtaTierTwoMenu {
-                border-right: 3px solid;
-                border-color: #0099ab;
-            }
-        }
-
-        nav#wizardNav ul.ovtaTierTwoMenu li a {
-            background-color: #fff;
-            color: #333;
-        }
-
-        nav#wizardNav ul.ovtaTierTwoMenu li a span {
-            color: #f0ad4e;
-            background-color: inherit;
-        }
-
 
         @@media (min-width: 769px) {
             nav#wizardNav ul li.activeGroup a.activeItem:after {
@@ -84,47 +61,12 @@
                 border-left: 8px solid #0099ab;
                 z-index: 900;
             }
-
-            nav#wizardNav ul.ovtaTierTwoMenu a.activeItem:after {
-                border-left: 8px solid #e49937 !important;
-            }
-        }
-
-        nav#wizardNav ul.ovtaTierTwoMenu a:hover {
-            background-color: #e9ad5d;
-            color: #fff;
-        }
-
-        nav#wizardNav ul.ovtaTierTwoMenu a.activeItem,
-        nav#wizardNav ul.ovtaTierTwoMenu a.activeItem span,
-        nav#wizardNav ul.ovtaTierTwoMenu a.activeItem:hover {
-            background-color: #e49937;
-            color: #fff;
-        }
-
-        nav#wizardNav ul.ovtaTierTwoMenu a:hover .glyphicon-exclamation-sign {
-            color: #fff;
         }
 
         hr {
             border-top: 1px solid #ddd;
         }
-
-        .moreActionsToggle .open > .moreActionsToggle .dropdown-toggle {
-            color: #3e72b0 !important;
-        }
-
-
-        .moreActionsToggle ul.dropdown-menu.moreActionsToggle li a,
-        .moreActionsToggle ul.dropdown-menu.moreActionsToggle li a:hover {
-            color: #3e72b0;
-        }
-
-        .moreActionsToggle .btn.dropdown-toggle {
-            border: none;
-            color: #3e72b0;
-        }
-
+        
         .glyphicon-chevron-down {
             margin-left: 7px;
             margin-top: 7px;
@@ -146,24 +88,6 @@
                             <a class="@(topLevelIsActive ? "activeItem" : string.Empty) @(ViewDataTyped.OVTA == null ? "disabledItem" : string.Empty)" href="@ovtaSection.GetSectionUrl(ViewDataTyped.OVTA)">
                                 <span>@ovtaSection.OVTASectionDisplayName</span>
                             </a>
-                            @if (sectionIsActive && (!topLevelIsActive || ovtaSection.ExpandMenu(ViewDataTyped.OVTA)))
-                            {
-                                <ul class="nav nav-stacked ovtaTierTwoMenu">
-                                    @foreach (var ovtaSubsection in ovtaSection.GetSubsections(ViewDataTyped.OVTA))
-                                    {
-                                        var subsectionIsActive = ViewDataTyped.SubsectionName == ovtaSubsection.SubsectionName;
-                                        <li>
-                                            <a class="@(subsectionIsActive ? "activeItem" : string.Empty)" href="@ovtaSubsection.SubsectionUrl">
-                                                @if (ovtaSubsection.SectionCompletionStatusIndicator != null)
-                                                {
-                                                    @ovtaSubsection.SectionCompletionStatusIndicator
-                                                }
-                                                @ovtaSubsection.SubsectionName
-                                            </a>
-                                        </li>
-                                    }
-                                </ul>
-                            }
                         </li>
                     }
                 </ul>
