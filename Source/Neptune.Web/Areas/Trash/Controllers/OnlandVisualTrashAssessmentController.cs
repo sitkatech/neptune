@@ -118,13 +118,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
             }
+
+            var allOnlandVisualTrashAssessmentObservations = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations;
+            viewModel.UpdateModel(onlandVisualTrashAssessment, allOnlandVisualTrashAssessmentObservations.Local);
+
             return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
         }
 
         private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
         {
             var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, new OVTAObservationsMapInitJson("observationsMap"));
+                onlandVisualTrashAssessment, new OVTAObservationsMapInitJson("observationsMap", OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations)));
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
                 viewModel);
         }

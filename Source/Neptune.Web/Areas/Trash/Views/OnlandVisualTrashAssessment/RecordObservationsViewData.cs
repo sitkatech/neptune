@@ -5,9 +5,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     public class RecordObservationsViewData : OVTASectionViewData
     {
         public ViewDataForAngularClass ViewDataForAngular { get; }
-        public MapInitJson MapInitJson { get; }
+        public OVTAObservationsMapInitJson MapInitJson { get; }
 
-        public RecordObservationsViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta, MapInitJson mapInitJson)
+        public RecordObservationsViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta, OVTAObservationsMapInitJson mapInitJson)
             : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.RecordObservations, ovta)
         {
             MapInitJson = mapInitJson;
@@ -16,12 +16,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public class ViewDataForAngularClass
         {
-            public ViewDataForAngularClass(MapInitJson mapInitJson)
+            public ViewDataForAngularClass(OVTAObservationsMapInitJson mapInitJson)
             {
                 MapInitJson = mapInitJson;
             }
 
-            public MapInitJson MapInitJson { get; }
+            public OVTAObservationsMapInitJson MapInitJson { get; }
         }
     }
 }

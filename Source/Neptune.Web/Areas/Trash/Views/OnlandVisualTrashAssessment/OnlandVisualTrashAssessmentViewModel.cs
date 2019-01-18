@@ -12,6 +12,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
         }
 
+        protected OnlandVisualTrashAssessmentViewModel(Models.OnlandVisualTrashAssessment ovta)
+        {
+            OVTAID = ovta.OnlandVisualTrashAssessmentID;
+        }
+
         public int? OVTAID { get; set; }
     }
 }

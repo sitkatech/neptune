@@ -42,21 +42,20 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentObservation(int onlandVisualTrashAssessmentID, DbGeometry locationPoint, string note, DateTime observationDatetime) : this()
+        public OnlandVisualTrashAssessmentObservation(int onlandVisualTrashAssessmentID, DbGeometry locationPoint, DateTime observationDatetime) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.LocationPoint = locationPoint;
-            this.Note = note;
             this.ObservationDatetime = observationDatetime;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public OnlandVisualTrashAssessmentObservation(OnlandVisualTrashAssessment onlandVisualTrashAssessment, DbGeometry locationPoint, string note, DateTime observationDatetime) : this()
+        public OnlandVisualTrashAssessmentObservation(OnlandVisualTrashAssessment onlandVisualTrashAssessment, DbGeometry locationPoint, DateTime observationDatetime) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentObservationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -64,7 +63,6 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessment = onlandVisualTrashAssessment;
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Add(this);
             this.LocationPoint = locationPoint;
-            this.Note = note;
             this.ObservationDatetime = observationDatetime;
         }
 
@@ -73,7 +71,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static OnlandVisualTrashAssessmentObservation CreateNewBlank(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            return new OnlandVisualTrashAssessmentObservation(onlandVisualTrashAssessment, default(DbGeometry), default(string), default(DateTime));
+            return new OnlandVisualTrashAssessmentObservation(onlandVisualTrashAssessment, default(DbGeometry), default(DateTime));
         }
 
         /// <summary>

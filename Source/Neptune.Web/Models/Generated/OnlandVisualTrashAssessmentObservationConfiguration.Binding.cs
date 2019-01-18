@@ -18,7 +18,7 @@ namespace Neptune.Web.Models
             Property(x => x.OnlandVisualTrashAssessmentObservationID).HasColumnName(@"OnlandVisualTrashAssessmentObservationID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.OnlandVisualTrashAssessmentID).HasColumnName(@"OnlandVisualTrashAssessmentID").HasColumnType("int").IsRequired();
             Property(x => x.LocationPoint).HasColumnName(@"LocationPoint").HasColumnType("geometry").IsRequired();
-            Property(x => x.Note).HasColumnName(@"Note").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(500);
+            Property(x => x.Note).HasColumnName(@"Note").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.ObservationDatetime).HasColumnName(@"ObservationDatetime").HasColumnType("datetime").IsRequired();
 
             // Foreign keys

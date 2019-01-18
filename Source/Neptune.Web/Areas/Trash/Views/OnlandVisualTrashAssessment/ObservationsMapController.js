@@ -11,10 +11,38 @@
         $scope.currentSelectedPoint = null;
 
         $scope.initializeMap = function() {
-            // todo: drop the markers for existing observations
-            // perhaps these are initialized as layers on the MapInitJson
-            // as suggested by the name "MapInitJson"
-            // but need to be able to interact with the model, too
+
+            // todo: rewrite this as appropriate of whatever
+            $scope.observationsLayerGeoJson = L.geoJson(
+                $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+                        return true;
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        var icon = L.MakiMarkers.icon({
+                            icon: feature.properties.FeatureGlyph,
+                            color: feature.properties.FeatureColor,
+                            size: "m"
+                        });
+
+                        return L.marker(latlng,
+                            {
+                                icon: icon,
+                                title: feature.properties.Name,
+                                alt: feature.properties.Name
+                            });
+                    },
+                    style: function (feature) {
+                        return {
+                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
+                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
+                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
+                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
+                        };
+                    }
+                });
+            $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
 
 
             $scope.neptuneMap.map.on("click", onMapClick);
@@ -39,10 +67,12 @@
                 });
 
             var observation = {
-                ObservationDateTime: new Date(Date.now()),
+                ObservationDateTime: (new Date()).toISOString(),
                 LocationX: L.Util.formatNum(latlng.lng),
                 LocationY: L.Util.formatNum(latlng.lat),
-                MapMarker: newMarker
+                MapMarker: newMarker,
+                OnlandVisualTrashAssessmentID: $scope.AngularModel.OVTAID,
+                OnlandVisualTrashAssessmentObservationID: -1
             };
             $scope.AngularModel.Observations.push(observation);
 
@@ -51,6 +81,10 @@
 
             $scope.neptuneMap.map.panTo(latlng);
         }
+
+        $scope.test = function(observation) { //todo: get rid
+            return observation.LocationX + ", " + observation.LocationY;
+        };
 
         // todo: may not need these 
         $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });

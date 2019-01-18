@@ -6,7 +6,7 @@ OnlandVisualTrashAssessmentID int not null
 	constraint FK_OnlandVisualTrashAssessmentObservation_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID
 		foreign key references dbo.OnlandVisualTrashAssessment(OnlandVisualTrashAssessmentID),
 LocationPoint geometry not null,
-Note varchar(500) not null,
+Note varchar(500) null,
 ObservationDatetime datetime not null,
 Constraint CK_LocationIsAPoint check (LocationPoint.STGeometryType() = 'Point')
 )

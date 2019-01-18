@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentObservation](
 	[OnlandVisualTrashAssessmentObservationID] [int] IDENTITY(1,1) NOT NULL,
 	[OnlandVisualTrashAssessmentID] [int] NOT NULL,
 	[LocationPoint] [geometry] NOT NULL,
-	[Note] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Note] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ObservationDatetime] [datetime] NOT NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentObservation_OnlandVisualTrashAssessmentObservationID] PRIMARY KEY CLUSTERED 
 (

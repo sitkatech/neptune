@@ -39,6 +39,14 @@
 
     @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
     {
+        <div ng-repeat="observation in AngularModel.Observations">
+            <input type="hidden" name="@Html.NameFor(x=>x.Observations[0].ObservationDateTime).ToString().Replace("0", "{{$index}}")" value="{{observation.ObservationDateTime}}"/>
+            <input type="hidden" name="@Html.NameFor(x=>x.Observations[0].LocationX).ToString().Replace("0", "{{$index}}")" value="{{observation.LocationX}}"/>
+            <input type="hidden" name="@Html.NameFor(x=>x.Observations[0].LocationY).ToString().Replace("0", "{{$index}}")" value="{{observation.LocationY}}"/>
+            <input type="hidden" name="@Html.NameFor(x=>x.Observations[0].OnlandVisualTrashAssessmentID).ToString().Replace("0", "{{$index}}")" value="{{observation.OnlandVisualTrashAssessmentID}}"/>
+            <input type="hidden" name="@Html.NameFor(x=>x.Observations[0].OnlandVisualTrashAssessmentObservationID).ToString().Replace("0", "{{$index}}")" value="{{observation.OnlandVisualTrashAssessmentObservationID}}"/>
+        </div>
+
         <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-2">
