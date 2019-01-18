@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[TreatmentBMPAssessmentObservationType] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[TreatmentBMPAssessmentObservationType]")]
     public partial class TreatmentBMPAssessmentObservationType : IHavePrimaryKey, ICanDeleteFull
     {

@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[FieldVisit] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[FieldVisit]")]
     public partial class FieldVisit : IHavePrimaryKey, ICanDeleteFull
     {

@@ -25,8 +25,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             GridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit)
             {
-                ObjectNameSingular = "Treatment BMP",
-                ObjectNamePlural = "Treatment BMPs",
+                ObjectNameSingular = "Assessment",
+                ObjectNamePlural = "Assessments",
                 SaveFiltersInCookie = true
             };
             GridName = "treatmentBMPsGrid";

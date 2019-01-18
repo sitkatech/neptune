@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[HydrologicSubarea] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[HydrologicSubarea]")]
     public partial class HydrologicSubarea : IHavePrimaryKey, ICanDeleteFull
     {

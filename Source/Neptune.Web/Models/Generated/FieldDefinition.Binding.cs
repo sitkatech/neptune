@@ -684,6 +684,6 @@ namespace Neptune.Web.Models
     public partial class FieldDefinitionOnlandVisualTrashAssessment : FieldDefinition
     {
         private FieldDefinitionOnlandVisualTrashAssessment(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionOnlandVisualTrashAssessment Instance = new FieldDefinitionOnlandVisualTrashAssessment(58, @"OnlandVisualTrashAssessment", @"Onland Visual Trash Assessment", @"The assessing, visually, of trash on land.", true);
+        public static readonly FieldDefinitionOnlandVisualTrashAssessment Instance = new FieldDefinitionOnlandVisualTrashAssessment(58, @"OnlandVisualTrashAssessment", @"On-land Visual Trash Assessment", @"The assessing, visually, of trash on land.", true);
     }
 }

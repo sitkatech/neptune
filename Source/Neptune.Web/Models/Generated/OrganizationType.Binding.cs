@@ -15,6 +15,7 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
+    // Table [dbo].[OrganizationType] is NOT multi-tenant, so is attributed as ICanDeleteFull
     [Table("[dbo].[OrganizationType]")]
     public partial class OrganizationType : IHavePrimaryKey, ICanDeleteFull
     {
