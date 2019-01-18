@@ -32,7 +32,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         private void AssignParameters(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta)
         {
-            EntityName = "Onland Visual Trash Assessment";
+            EntityName = "On-land Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
             OVTA = ovta;
             SectionName = ovtaSection.OVTASectionName;
