@@ -127,8 +127,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
         {
+            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson( onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson);
+
             var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, new OVTAObservationsMapInitJson("observationsMap", OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations)));
+                onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
                 viewModel);
         }

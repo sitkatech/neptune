@@ -172,7 +172,6 @@
             $scope.currentSelectedMarkerModel = null;
         };
 
-        // todo: might be good to remember about map.locate for the "set marker at my current location" buttom
         $scope.addObservationAtCurrentLocation = function () {
             $scope.neptuneMap.map.locate({setView:true});
         };

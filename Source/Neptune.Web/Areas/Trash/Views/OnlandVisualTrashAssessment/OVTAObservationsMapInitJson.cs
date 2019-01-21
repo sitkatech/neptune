@@ -10,11 +10,17 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
         
 
-        public OVTAObservationsMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson)
+        public OVTAObservationsMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, BoundingBox boundingBox)
             : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
-                BoundingBox.MakeNewDefaultBoundingBox())
+                boundingBox)
         {
             ObservationsLayerGeoJson = observationsLayerGeoJson;
+        }
+
+        public OVTAObservationsMapInitJson(string mapDivID,
+            LayerGeoJson observationsLayerGeoJson) : this(mapDivID, observationsLayerGeoJson, BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>{observationsLayerGeoJson}))
+        {
+
         }
 
         public static LayerGeoJson MakeObservationsLayerGeoJson(IEnumerable<OnlandVisualTrashAssessmentObservation> observations)
