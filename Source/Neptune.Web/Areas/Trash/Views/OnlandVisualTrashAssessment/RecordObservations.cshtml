@@ -42,13 +42,13 @@
     </div>
     <div class="row" ng-if="currentSelectedMarkerModel" style="margin-top: 10px;">
 
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-sm-push-6">
             <label>Notes</label>
             <textarea class="form-control" rows="5" ng-model="currentSelectedMarkerModel.Note"></textarea>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-6 col-sm-pull-6">
             <label>Upload a photo (under development)</label>
-            <img src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/placeholder_camera.jpg")" style="display: block;margin: auto;" height="125" alt="Placeholder Image"/>
+            <img src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/placeholder_camera.jpg")" style="display: block;margin: auto;" height="125" alt="Placeholder Image" />
         </div>
         <div class="col-sm-12 text-right">
             <button class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
