@@ -3,13 +3,10 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-        $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes, function (m) {
-            return m.TrashCaptureStatusTypeID.toString();
-        });
-
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         $scope.currentSelectedMarkerModel = null;
         $scope.currentFakeID = -1;
+        $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
         $scope.initializeMap = function() {
             $scope.observationsLayerGeoJson = L.geoJson(
@@ -120,14 +117,6 @@
             $scope.neptuneMap.map.panTo(latlng);
             $scope.currentFakeID--;
         }
-        
-        //// todo: may not need these 
-        //$scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
-        //$scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        //$scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
-        //$scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
-        $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
-
 
         $scope.setSelectedMarker = function (layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
@@ -184,8 +173,10 @@
         };
 
         // todo: might be good to remember about map.locate for the "set marker at my current location" buttom
-        $scope.zoomMapToCurrentLocation = function () {
-            $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
+        $scope.addObservationAtCurrentLocation = function () {
+            $scope.neptuneMap.map.locate({setView:true});
         };
+
+        $scope.neptuneMap.map.on("locationfound", onMapClick);
     });
 

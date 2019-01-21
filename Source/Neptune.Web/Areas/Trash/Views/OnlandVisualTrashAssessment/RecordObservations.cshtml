@@ -28,6 +28,11 @@
 <div ng-app="NeptuneApp" ng-controller="ObservationsMapController">
     <p class="systemText">Content Under Development</p>
     <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-sm btn-neptune" ng-click="addObservationAtCurrentLocation()"><span class="glyphicon glyphicon-plus"></span> Add Observation at Current Location</button>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
             <div id="mapContainer">
                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0">
