@@ -16,7 +16,15 @@
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function (feature, layer) {
+
                         return true;
+                    },
+                    onEachFeature: function(feature, layer) {
+                        var modelID = feature.properties.ObservationID;
+                        var observationModel = _($scope.AngularModel.Observations).find(function(f) {
+                            return f.OnlandVisualTrashAssessmentObservationID == modelID;
+                        });
+                        observationModel.MapMarker = layer;
                     },
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
@@ -112,19 +120,15 @@
             $scope.neptuneMap.map.panTo(latlng);
             $scope.currentFakeID--;
         }
-
-        $scope.test = function(observation) { //todo: get rid
-            return observation.LocationX + ", " + observation.LocationY;
-        };
-
-        // todo: may not need these 
-        $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
-        $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
         
-        // todo: will be used to interact with previously-placed markers
+        //// todo: may not need these 
+        //$scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
+        //$scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
+        //$scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
+        //$scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
+        $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
+
+
         $scope.setSelectedMarker = function (layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
@@ -168,6 +172,15 @@
         
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
+        };
+
+        $scope.deleteObservation = function() {
+            $scope.neptuneMap.map.removeLayer($scope.lastSelected);
+            $scope.lastSelected = null;
+            $scope.neptuneMap.map.removeLayer($scope.currentSelectedMarkerModel.MapMarker);
+            $scope.currentSelectedMarkerModel.MapMarker = null;
+            Sitka.Methods.removeFromJsonArray($scope.AngularModel.Observations, $scope.currentSelectedMarkerModel);
+            $scope.currentSelectedMarkerModel = null;
         };
 
         // todo: might be good to remember about map.locate for the "set marker at my current location" buttom
