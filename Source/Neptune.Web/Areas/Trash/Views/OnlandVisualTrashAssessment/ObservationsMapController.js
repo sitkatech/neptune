@@ -45,6 +45,7 @@
             $scope.observationsLayerGeoJson.on('click',
                 function (e) {
                     $scope.setSelectedMarker(e.layer.feature);
+                    $scope.$apply();
                 });
 
 
