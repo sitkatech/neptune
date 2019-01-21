@@ -8,11 +8,10 @@
         });
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        $scope.currentSelectedPoint = null;
+        $scope.currentSelectedMarkerModel = null;
+        $scope.currentFakeID = -1;
 
         $scope.initializeMap = function() {
-
-            // todo: rewrite this as appropriate of whatever
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
@@ -43,6 +42,10 @@
                     }
                 });
             $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
+            $scope.observationsLayerGeoJson.on('click',
+                function (e) {
+                    $scope.setSelectedMarker(e.layer.feature);
+                });
 
 
             $scope.neptuneMap.map.on("click", onMapClick);
@@ -57,29 +60,56 @@
         }
 
         function setPointOnMap(latlng) {
-            var newMarker = L.marker(latlng,
-                {
-                    icon: L.MakiMarkers.icon({
-                        icon: "marker",
-                        color: "#FF00FF",
-                        size: "m"
-                    })
-                });
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "ObservationID" : $scope.currentFakeID
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [latlng.lng, latlng.lat]
+                }
+            };
+
+            var featurePlaceholder;
+
+            var newMarkerLayer = L.geoJson(feature, {
+                filter: function (feature, layer) {
+                    return true;
+                },
+                pointToLayer: function (feature, latlng) {
+                    // this works because there's always only one feature here
+                    featurePlaceholder = feature;
+
+                    return L.marker(latlng,
+                        {
+                            icon: L.MakiMarkers.icon({
+                                icon: "marker",
+                                color: "#FF00FF",
+                                size: "m"
+                            })
+                        });
+                }
+            });
 
             var observation = {
                 ObservationDateTime: (new Date()).toISOString(),
                 LocationX: L.Util.formatNum(latlng.lng),
                 LocationY: L.Util.formatNum(latlng.lat),
-                MapMarker: newMarker,
+                MapMarker: newMarkerLayer,
                 OnlandVisualTrashAssessmentID: $scope.AngularModel.OVTAID,
-                OnlandVisualTrashAssessmentObservationID: -1
+                OnlandVisualTrashAssessmentObservationID: $scope.currentFakeID
             };
+
             $scope.AngularModel.Observations.push(observation);
 
-            $scope.currentSelectedPoint = newMarker;
-            $scope.neptuneMap.map.addLayer(newMarker);
+            $scope.currentSelectedMarkerModel = observation;
+
+            newMarkerLayer.addTo($scope.observationsLayerGeoJson);
+            $scope.setSelectedMarker(featurePlaceholder);
 
             $scope.neptuneMap.map.panTo(latlng);
+            $scope.currentFakeID--;
         }
 
         $scope.test = function(observation) { //todo: get rid
@@ -99,7 +129,13 @@
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             }
 
-            $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
+            if (layer.properties["ObservationID"]) {
+                $scope.currentSelectedMarkerModel = _($scope.AngularModel.Observations).find(function(f) {
+                    return f.OnlandVisualTrashAssessmentObservationID == layer.properties["ObservationID"];
+                });
+            }
+
+            $scope.lastSelected = L.geoJson(layer,
                 {
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
@@ -131,23 +167,7 @@
         
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
-            $scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
         };
-
-        // todo: will be used to interact with previously-placed markers
-        function setActiveImpl(layer, updateMap) {
-            if (updateMap) {
-                if (layer.getLatLng) {
-                    $scope.neptuneMap.map.panTo(layer.getLatLng());
-                } else {
-                    $scope.neptuneMap.map.panTo(layer.getCenter());
-                }
-            }
-
-            // multi-way binding
-            $scope.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
-            $scope.setSelectedMarker(layer);
-        }
 
         // todo: might be good to remember about map.locate for the "set marker at my current location" buttom
         $scope.zoomMapToCurrentLocation = function () {
