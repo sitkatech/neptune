@@ -17,9 +17,8 @@ namespace Neptune.Web.Controllers
         {
             var neptunePageHome = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ParcelList);
             var findParcelByAddressUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.FindByAddress(null));
-            // ReSharper disable once InconsistentNaming
             var findParcelByAPNUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.FindByAPN(null));
-            var lakeTahoeInfoMapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
+            var parcelMapServiceUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
             var parcelSummaryForMapUrl = SitkaRoute<ParcelController>.BuildUrlFromExpression(x => x.SummaryForMap(null));
             var mapInitJson = GetMapInitJson();
 
@@ -29,7 +28,7 @@ namespace Neptune.Web.Controllers
                 mapInitJson,
                 findParcelByAddressUrl,
                 findParcelByAPNUrl,
-                lakeTahoeInfoMapServiceUrl,
+                parcelMapServiceUrl,
                 parcelSummaryForMapUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
