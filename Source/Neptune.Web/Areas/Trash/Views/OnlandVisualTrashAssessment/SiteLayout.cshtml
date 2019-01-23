@@ -45,7 +45,7 @@
         }
 
         .field-validation-success {
-            color: #5cb85c; margin-right: 4px;
+            color: #5cb85c;
             
         }
         .field-validation-error {
@@ -59,6 +59,9 @@
         nav#wizardNav ul li a.hasCompletionStatus {
             padding-left: 5px;
         }
+            nav#wizardNav ul li a.hasCompletionStatus.disabledItem {
+                padding-left: 23px;
+            }
 
         @@media (min-width: 769px) {
             nav#wizardNav ul li.activeGroup a:after {
