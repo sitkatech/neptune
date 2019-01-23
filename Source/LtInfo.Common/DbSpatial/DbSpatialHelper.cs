@@ -102,5 +102,23 @@ namespace LtInfo.Common.DbSpatial
             var thresholdInDegrees = FeetToAverageLatLonDegree(geometries.First().DbGeometry, thresholdInFeet);
             geometries.ForEach(x => x.DbGeometry = x.SqlGeometry.Reduce(thresholdInDegrees).ToDbGeometry());
         }
+
+        public static DbGeometry UnionListGeometries(this IList<DbGeometry> geoms)
+        {
+            if (geoms.Count == 0)
+            {
+                return null;
+            }
+
+            DbGeometry union = geoms.First();
+
+            for (var i = 1; i < geoms.Count; i++)
+            {
+                var temp = union.Union(geoms[i]);
+                union = temp;
+            }
+
+            return union;
+        }
     }
 }

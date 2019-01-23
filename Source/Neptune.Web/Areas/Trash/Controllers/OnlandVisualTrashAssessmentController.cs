@@ -83,6 +83,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorView<Instructions, InstructionsViewData, InstructionsViewModel>(viewData, viewModel);
         }
 
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+
+            LayerGeoJson assmentAreaLayerGeoJson = OVTASummaryMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment);
+            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assmentAreaLayerGeoJson);
+
+            var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, new FinalizeOVTAViewModel());
+        }
+
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
@@ -152,14 +166,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
 
             return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitiateOVTA, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ViewResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
-        {
-            var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, new FinalizeOVTAViewModel());
         }
     }
 }
