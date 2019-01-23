@@ -45,6 +45,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new FundingEventFundingSourceConfiguration());
             modelBuilder.Configurations.Add(new FundingSourceConfiguration());
             modelBuilder.Configurations.Add(new HydrologicSubareaConfiguration());
+            modelBuilder.Configurations.Add(new LandUseBlockConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationConfiguration());
             modelBuilder.Configurations.Add(new MaintenanceRecordObservationValueConfiguration());
@@ -107,6 +108,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<FundingEvent> FundingEvents { get; set; }
         public virtual DbSet<FundingSource> FundingSources { get; set; }
         public virtual DbSet<HydrologicSubarea> HydrologicSubareas { get; set; }
+        public virtual DbSet<LandUseBlock> LandUseBlocks { get; set; }
         public virtual DbSet<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual DbSet<MaintenanceRecordObservationValue> MaintenanceRecordObservationValues { get; set; }
         public virtual DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
@@ -254,6 +256,9 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(hydromodificationApplies, "HydromodificationApplies", primaryKey);
                     return hydromodificationApplies;
 
+                case "LandUseBlock":
+                    return LandUseBlocks.GetLandUseBlock(primaryKey);
+
                 case "MaintenanceRecordObservation":
                     return MaintenanceRecordObservations.GetMaintenanceRecordObservation(primaryKey);
 
@@ -353,6 +358,11 @@ namespace Neptune.Web.Models
 
                 case "Person":
                     return People.GetPerson(primaryKey);
+
+                case "PriorityLandUseType":
+                    var priorityLandUseType = PriorityLandUseType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(priorityLandUseType, "PriorityLandUseType", primaryKey);
+                    return priorityLandUseType;
 
                 case "QuickBMP":
                     return QuickBMPs.GetQuickBMP(primaryKey);

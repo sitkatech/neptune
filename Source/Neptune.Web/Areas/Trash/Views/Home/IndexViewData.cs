@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -27,7 +28,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     NeptuneWebConfiguration.CanonicalHostName);
         }
 
-        public class ViewDataForAngularClass
+        public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
         {
             public MapInitJson MapInitJson { get; }
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
