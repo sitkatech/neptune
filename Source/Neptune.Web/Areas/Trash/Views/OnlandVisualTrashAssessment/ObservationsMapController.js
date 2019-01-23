@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("ObservationsMapController", function ($scope, angularModelAndViewData) {
+    .controller("ObservationsMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
@@ -7,12 +7,13 @@
         $scope.currentSelectedMarkerModel = null;
         $scope.currentFakeID = -1;
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
+        $scope.isClickToAddModeActive = false;
 
         $scope.initializeMap = function() {
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    filter: function (feature, layer) {
+                    filter: function(feature, layer) {
 
                         return true;
                     },
@@ -23,7 +24,7 @@
                         });
                         observationModel.MapMarker = layer;
                     },
-                    pointToLayer: function (feature, latlng) {
+                    pointToLayer: function(feature, latlng) {
                         var icon = L.MakiMarkers.icon({
                             icon: feature.properties.FeatureGlyph,
                             color: feature.properties.FeatureColor,
@@ -37,7 +38,7 @@
                                 alt: feature.properties.Name
                             });
                     },
-                    style: function (feature) {
+                    style: function(feature) {
                         return {
                             color: feature.properties.FeatureColor = feature.properties.FeatureColor,
                             weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
@@ -48,13 +49,21 @@
                 });
             $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
             $scope.observationsLayerGeoJson.on('click',
-                function (e) {
+                function(e) {
                     $scope.setSelectedMarker(e.layer.feature);
                     $scope.$apply();
+                    $scope.isClickToAddModeActive = false;
                 });
 
 
-            $scope.neptuneMap.map.on("click", onMapClick);
+            $scope.neptuneMap.map.on("click",
+                function(event) {
+                    if ($scope.isClickToAddModeActive) {
+                        onMapClick(event);
+                    }
+                }
+            )
+
         };
 
         $scope.initializeMap();
@@ -63,6 +72,11 @@
             var latlng = event.latlng;
             setPointOnMap(latlng);
             $scope.$apply();
+            $scope.isClickToAddModeActive = false;
+        }
+
+        $scope.activateClickToAddMode = function() {
+            $scope.isClickToAddModeActive = true;
         }
 
         function setPointOnMap(latlng) {
@@ -173,7 +187,7 @@
         };
 
         $scope.addObservationAtCurrentLocation = function () {
-            $scope.neptuneMap.map.locate({setView:true});
+            $scope.neptuneMap.map.locate({ setView: true });
         };
 
         $scope.neptuneMap.map.on("locationfound", onMapClick);
