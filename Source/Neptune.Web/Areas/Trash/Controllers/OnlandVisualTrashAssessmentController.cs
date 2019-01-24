@@ -88,15 +88,25 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ViewResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+            var viewModel = new FinalizeOVTAViewModel();
 
+            return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
+        }
+
+        private ViewResult ViewFinalizeOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
+            FinalizeOVTAViewModel viewModel)
+        {
+            var observationsLayerGeoJson =
+                OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentObservations);
             var parcels = onlandVisualTrashAssessment.GetParcelsViaTransect();
-
-            var assmentAreaLayerGeoJson = new LayerGeoJson("parcels", parcels.ToGeoJsonFeatureCollection(), "#ffff00", .5m, LayerInitialVisibility.Show);
-            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assmentAreaLayerGeoJson);
-
-            var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
-            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, new FinalizeOVTAViewModel());
+            var assmentAreaLayerGeoJson = new LayerGeoJson("parcels", parcels.ToGeoJsonFeatureCollection(), "#ffff00", .5m,
+                LayerInitialVisibility.Show);
+            var ovtaSummaryMapInitJson =
+                new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assmentAreaLayerGeoJson);
+            var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
@@ -104,6 +114,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, FinalizeOVTAViewModel viewModel)
         {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
+            }
+
+            var assessmentArea = onlandVisualTrashAssessment.GetAreaViaTransect();
+
+            var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
+                viewModel.StormwaterJurisdictionID,
+                assessmentArea);
+
+            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(onlandVisualTrashAssessmentArea);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
 
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }

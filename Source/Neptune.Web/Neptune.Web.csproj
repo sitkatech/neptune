@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -397,6 +397,7 @@
     <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanel.cs" />
     <Compile Include="Areas\Trash\Views\TreatmentBMP\TrashMapAssetPanelViewData.cs" />
     <Compile Include="Models\OnlandVisualTrashAssessment.cs" />
+    <Compile Include="Models\OnlandVisualTrashAssessmentArea.cs" />
     <Compile Include="Models\OnlandVisualTrashAssessmentObservation.cs" />
     <Compile Include="Models\OVTASection.cs" />
     <Compile Include="Models\TrashCaptureStatusType.cs" />
