@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected StormwaterJurisdiction()
         {
             this.ModeledCatchments = new HashSet<ModeledCatchment>();
+            this.OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
@@ -84,13 +85,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return ModeledCatchments.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
+            return ModeledCatchments.Any() || OnlandVisualTrashAssessmentAreas.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -108,6 +109,11 @@ namespace Neptune.Web.Models
         {
 
             foreach(var x in ModeledCatchments.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in OnlandVisualTrashAssessmentAreas.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -138,6 +144,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return StormwaterJurisdictionID; } set { StormwaterJurisdictionID = value; } }
 
         public virtual ICollection<ModeledCatchment> ModeledCatchments { get; set; }
+        public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }

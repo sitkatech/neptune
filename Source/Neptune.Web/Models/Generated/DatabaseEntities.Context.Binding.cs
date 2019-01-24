@@ -56,6 +56,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentAreaConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
@@ -118,6 +119,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
@@ -335,6 +337,9 @@ namespace Neptune.Web.Models
                     var observationTypeSpecification = ObservationTypeSpecification.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(observationTypeSpecification, "ObservationTypeSpecification", primaryKey);
                     return observationTypeSpecification;
+
+                case "OnlandVisualTrashAssessmentArea":
+                    return OnlandVisualTrashAssessmentAreas.GetOnlandVisualTrashAssessmentArea(primaryKey);
 
                 case "OnlandVisualTrashAssessmentObservation":
                     return OnlandVisualTrashAssessmentObservations.GetOnlandVisualTrashAssessmentObservation(primaryKey);

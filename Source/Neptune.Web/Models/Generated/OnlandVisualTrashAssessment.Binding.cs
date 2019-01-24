@@ -30,11 +30,12 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
             this.CreatedDate = createdDate;
+            this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
         }
 
         /// <summary>
@@ -109,11 +110,13 @@ namespace Neptune.Web.Models
         public int OnlandVisualTrashAssessmentID { get; set; }
         public int CreatedByPersonID { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int? OnlandVisualTrashAssessmentAreaID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual Person CreatedByPerson { get; set; }
+        public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
 
         public static class FieldLengths
         {
