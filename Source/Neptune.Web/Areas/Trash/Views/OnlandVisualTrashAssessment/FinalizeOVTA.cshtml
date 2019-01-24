@@ -35,15 +35,15 @@
                                 title: feature.properties.Name,
                                 alt: feature.properties.Name
                             });
-                    },
-                    style: function (feature) {
-                        return {
-                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
-                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
-                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
-                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
-                        };
-                    }
+                    }//,
+                    //style: function (feature) {
+                    //    return {
+                    //        color: feature.properties.FeatureColor = feature.properties.FeatureColor,
+                    //        weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
+                    //        fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
+                    //        fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
+                    //    };
+                    //}
                 });
             observationsLayerGeoJson.addTo(summaryMap.map);
             var areaLayerGeoJson = L.geoJson(
@@ -55,9 +55,9 @@
                     },
                     style: function (feature) {
                         return {
-                            color: "#ff0000",
+                            color: "#b2b2b2",
                             weight: .5,
-                            fill: "#ff0000",
+                            fillColor: "#ffff00",
                             fillOpacity: .5
                         };
                     }

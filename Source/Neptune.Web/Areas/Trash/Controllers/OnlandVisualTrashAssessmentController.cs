@@ -90,7 +90,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
 
-            LayerGeoJson assmentAreaLayerGeoJson = OVTASummaryMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment);
+            var parcels = onlandVisualTrashAssessment.GetParcelsViaTransect();
+
+            LayerGeoJson assmentAreaLayerGeoJson = new LayerGeoJson("parcels", parcels.ToGeoJsonFeatureCollection(), "#ffff00", .5m, LayerInitialVisibility.Show);
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assmentAreaLayerGeoJson);
 
             var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
