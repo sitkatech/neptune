@@ -1,12 +1,83 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.FinalizeOVTA
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    @* TODO: GEOSERVER MAP?? *@
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            var mapJson =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
+            var summaryMap = window.Sitka.map = new NeptuneMaps.Map(mapJson);
+            var observationsLayerGeoJson = L.geoJson(
+                mapJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    filter: function (feature, layer) {
+
+                        return true;
+                    },
+                    
+                    pointToLayer: function (feature, latlng) {
+                        var icon = L.MakiMarkers.icon({
+                            icon: feature.properties.FeatureGlyph,
+                            color: feature.properties.FeatureColor,
+                            size: "m"
+                        });
+
+                        return L.marker(latlng,
+                            {
+                                icon: icon,
+                                title: feature.properties.Name,
+                                alt: feature.properties.Name
+                            });
+                    },
+                    style: function (feature) {
+                        return {
+                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
+                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
+                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
+                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
+                        };
+                    }
+                });
+            observationsLayerGeoJson.addTo(summaryMap.map);
+            var areaLayerGeoJson = L.geoJson(
+                mapJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, 
+                {
+                    filter: function (feature, layer) {
+
+                        return true;
+                    },
+                    style: function (feature) {
+                        return {
+                            color: "#ff0000",
+                            weight: .5,
+                            fill: "#ff0000",
+                            fillOpacity: .5
+                        };
+                    }
+                });
+            areaLayerGeoJson.addTo(summaryMap.map);
+
+        });
+    </script>
+}
 
 <p class="systemText">Content Under Development</p>
 
-
+<div class="row">
+    <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+        <div id="mapContainer">
+            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
+            </div>
+        </div>
+    </div>
+</div>
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
 {
@@ -17,7 +88,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" >Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
     </div>
 }
