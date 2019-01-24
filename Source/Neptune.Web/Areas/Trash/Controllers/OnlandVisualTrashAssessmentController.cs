@@ -120,17 +120,22 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
-            var assessmentArea = onlandVisualTrashAssessment.GetAreaViaTransect();
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
+            {
+                var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
+                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(assessmentAreaGeometry);
 
-            var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
-                viewModel.StormwaterJurisdictionID,
-                assessmentArea);
-
-            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(onlandVisualTrashAssessmentArea);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
+                    onlandVisualTrashAssessmentArea);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+            }
+            else
+            {
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaGeometry =
+                    onlandVisualTrashAssessment.GetAreaViaTransect();
+            }
 
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }
