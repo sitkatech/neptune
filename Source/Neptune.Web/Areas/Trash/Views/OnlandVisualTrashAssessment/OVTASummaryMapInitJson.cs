@@ -7,16 +7,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public LayerGeoJson AssessmentAreaLayerGeoJson { get; }
 
-        public OVTASummaryMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) : base(mapDivID, observationsLayerGeoJson)
+        public OVTASummaryMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) :
+            base(mapDivID, observationsLayerGeoJson, BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>{assessmentAreaLayerGeoJson}))
         {
             AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
-        }
-
-        public static LayerGeoJson MakeObservationsLayerGeoJson(Models.OnlandVisualTrashAssessment ovta)
-        {
-            var featureCollection = ovta.GetAssessmentAreaFeatureCollection();
-            var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };
-            return observationsLayerGeoJson;
         }
     }
 }

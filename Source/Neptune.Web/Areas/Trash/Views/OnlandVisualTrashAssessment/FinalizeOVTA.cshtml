@@ -17,11 +17,6 @@
             var observationsLayerGeoJson = L.geoJson(
                 mapJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    filter: function (feature, layer) {
-
-                        return true;
-                    },
-                    
                     pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
                             icon: feature.properties.FeatureGlyph,
@@ -35,24 +30,12 @@
                                 title: feature.properties.Name,
                                 alt: feature.properties.Name
                             });
-                    }//,
-                    //style: function (feature) {
-                    //    return {
-                    //        color: feature.properties.FeatureColor = feature.properties.FeatureColor,
-                    //        weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
-                    //        fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
-                    //        fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
-                    //    };
-                    //}
+                    }
                 });
             observationsLayerGeoJson.addTo(summaryMap.map);
             var areaLayerGeoJson = L.geoJson(
                 mapJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, 
                 {
-                    filter: function (feature, layer) {
-
-                        return true;
-                    },
                     style: function (feature) {
                         return {
                             color: "#b2b2b2",
@@ -63,7 +46,6 @@
                     }
                 });
             areaLayerGeoJson.addTo(summaryMap.map);
-
         });
     </script>
 }
