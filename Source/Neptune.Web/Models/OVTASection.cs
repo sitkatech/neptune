@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -72,7 +73,8 @@ namespace Neptune.Web.Models
         
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            throw new InvalidOperationException("Initiate does not have a completness status; cannot check completeness");
+            var viewModel = new InitiateOVTAViewModel(ovta);
+            return !viewModel.GetValidationResults().Any();
         }
 
     }

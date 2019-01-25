@@ -30,12 +30,15 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
             this.CreatedDate = createdDate;
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
+            this.Notes = notes;
+            this.StormwaterJurisdictionID = stormwaterJurisdictionID;
+            this.AssessingNewArea = assessingNewArea;
         }
 
         /// <summary>
@@ -111,16 +114,20 @@ namespace Neptune.Web.Models
         public int CreatedByPersonID { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
+        public string Notes { get; set; }
+        public int? StormwaterJurisdictionID { get; set; }
+        public bool? AssessingNewArea { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual Person CreatedByPerson { get; set; }
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
+        public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
 
         public static class FieldLengths
         {
-
+            public const int Notes = 500;
         }
     }
 }

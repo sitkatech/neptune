@@ -7,6 +7,9 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[CreatedByPersonID] [int] NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[OnlandVisualTrashAssessmentAreaID] [int] NULL,
+	[Notes] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[StormwaterJurisdictionID] [int] NULL,
+	[AssessingNewArea] [bit] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC
@@ -23,3 +26,8 @@ ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessment_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
+REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessment_StormwaterJurisdiction_StormwaterJurisdictionID]

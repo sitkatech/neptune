@@ -138,7 +138,7 @@ namespace Neptune.Web.Models
     public partial class OVTASectionInitiateOVTA : OVTASection
     {
         private OVTASectionInitiateOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
-        public static readonly OVTASectionInitiateOVTA Instance = new OVTASectionInitiateOVTA(2, @"InitiateOVTA", @"Initiate OVTA", @"Initiate OVTA", 20, false);
+        public static readonly OVTASectionInitiateOVTA Instance = new OVTASectionInitiateOVTA(2, @"InitiateOVTA", @"Initiate OVTA", @"Initiate OVTA", 20, true);
     }
 
     public partial class OVTASectionRecordObservations : OVTASection
