@@ -132,5 +132,15 @@ namespace Neptune.Web.Models
         {
             return person.OrganizationsWhereYouAreThePrimaryContactPerson.OrderBy(x => x.OrganizationName).ToList();
         }
+
+        public static IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanEdit(this Person person)
+        {
+            if (person.Role == Role.SitkaAdmin || person.Role == Role.Admin)
+            {
+                return HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions;
+            }
+
+            return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
+        }
     }
 }

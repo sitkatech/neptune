@@ -114,15 +114,5 @@ namespace Neptune.Web.Models
             var abbreviationIfAvailable = Organization.GetAbbreviationIfAvailable();
             return $"{FirstName} {LastName} ({abbreviationIfAvailable})";
         }
-
-        public IEnumerable<StormwaterJurisdiction> GetStormwaterJurisdictionsPersonCanEdit()
-        {
-            if (Role == Role.SitkaAdmin || Role == Role.Admin)
-            {
-                return HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions;
-            }
-
-            return StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
-        }
     }
 }

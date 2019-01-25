@@ -3,6 +3,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 using static System.String;
 
@@ -44,6 +45,12 @@ namespace Neptune.Web.Models
 
             featureCollection.Features.Add(feature);
             return featureCollection;
+        }
+
+        public static string GetEditUrl(this OnlandVisualTrashAssessment ovta)
+        {
+            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
+                x.Instructions(ovta.OnlandVisualTrashAssessmentID));
         }
     }
 }
