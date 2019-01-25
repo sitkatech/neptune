@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Controllers;
@@ -85,6 +87,78 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
+        public ViewResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new InitiateOVTAViewModel();
+
+            return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
+        }
+
+        private ViewResult ViewInitiateOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
+            InitiateOVTAViewModel viewModel)
+        {
+            var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit()
+                .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
+                    j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
+            var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+                onlandVisualTrashAssessment, jurisdictions);
+            return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, InitiateOVTAViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
+            }
+
+            return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitiateOVTA, onlandVisualTrashAssessment);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment);
+            return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RecordObservationsViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
+            }
+
+            var allOnlandVisualTrashAssessmentObservations = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations;
+            viewModel.UpdateModel(onlandVisualTrashAssessment, allOnlandVisualTrashAssessmentObservations.Local);
+
+            return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
+        }
+
+        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
+        {
+            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson( onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson);
+
+            var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+                onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
+            return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
+                viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
         public ViewResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
@@ -145,61 +219,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return Redirect(viewModel.AutoAdvance
                 ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ViewResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
-        {
-            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment);
-            return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RecordObservationsViewModel viewModel)
-        {
-            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
-            }
-
-            var allOnlandVisualTrashAssessmentObservations = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations;
-            viewModel.UpdateModel(onlandVisualTrashAssessment, allOnlandVisualTrashAssessmentObservations.Local);
-
-            return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-        }
-
-        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
-        {
-            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson( onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
-            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson);
-
-            var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
-            return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
-                viewModel);
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ViewResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
-        {
-            var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-            return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, new InitiateOVTAViewModel());
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, InitiateOVTAViewModel viewModel)
-        {
-
-
-            return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitiateOVTA, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
         }
     }
 }

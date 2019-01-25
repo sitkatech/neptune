@@ -1452,6 +1452,7 @@
     <Content Include="Views\WaterQualityManagementPlan\EditWqmpVerify.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\NewWqmpVerify.cshtml" />
     <Content Include="Views\WaterQualityManagementPlan\WqmpVerify.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
