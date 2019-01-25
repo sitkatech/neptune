@@ -90,7 +90,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ViewResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            var viewModel = new InitiateOVTAViewModel();
+            var viewModel = new InitiateOVTAViewModel(onlandVisualTrashAssessment);
 
             return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
         }
@@ -116,6 +116,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
             }
+
+            viewModel.UpdateModel(onlandVisualTrashAssessment);
 
             return RedirectToAppropriateStep(viewModel, Models.OVTASection.InitiateOVTA, onlandVisualTrashAssessment);
         }
