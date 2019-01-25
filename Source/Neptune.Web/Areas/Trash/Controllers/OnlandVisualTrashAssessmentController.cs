@@ -101,8 +101,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit()
                 .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
+
+            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
+                .Where(x => x.StormwaterJurisdiction.todo);
+
+            var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", todo);
+
             var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, jurisdictions);
+                onlandVisualTrashAssessment, jurisdictions, mapInitJson);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
 

@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.ModeledCatchments = new HashSet<ModeledCatchment>();
             this.OnlandVisualTrashAssessments = new HashSet<OnlandVisualTrashAssessment>();
+            this.OnlandVisualTrashAssessmentAreas = new HashSet<OnlandVisualTrashAssessmentArea>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.TreatmentBMPs = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlans = new HashSet<WaterQualityManagementPlan>();
@@ -85,13 +86,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return ModeledCatchments.Any() || OnlandVisualTrashAssessments.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
+            return ModeledCatchments.Any() || OnlandVisualTrashAssessments.Any() || OnlandVisualTrashAssessmentAreas.Any() || StormwaterJurisdictionPeople.Any() || TreatmentBMPs.Any() || WaterQualityManagementPlans.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(StormwaterJurisdiction).Name, typeof(ModeledCatchment).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlan).Name};
 
 
         /// <summary>
@@ -114,6 +115,11 @@ namespace Neptune.Web.Models
             }
 
             foreach(var x in OnlandVisualTrashAssessments.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
+
+            foreach(var x in OnlandVisualTrashAssessmentAreas.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -145,6 +151,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<ModeledCatchment> ModeledCatchments { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
+        public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
         public virtual ICollection<WaterQualityManagementPlan> WaterQualityManagementPlans { get; set; }

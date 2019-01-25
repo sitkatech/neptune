@@ -6,15 +6,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class InitiateOVTAViewData : OVTASectionViewData
     {
+        public IEnumerable<SelectListItem> Jurisdictions { get; }
+        public SelectOVTAAreaMapInitJson MapInitJson { get; }
 
-
-        public InitiateOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta, IEnumerable<SelectListItem> jurisdictions)
+        public InitiateOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta, IEnumerable<SelectListItem> jurisdictions, SelectOVTAAreaMapInitJson mapInitJson)
             : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.InitiateOVTA, ovta)
         {
             Jurisdictions = jurisdictions;
+            MapInitJson = mapInitJson;
         }
-
-        public IEnumerable<SelectListItem> Jurisdictions { get; }
     }
 }
-
