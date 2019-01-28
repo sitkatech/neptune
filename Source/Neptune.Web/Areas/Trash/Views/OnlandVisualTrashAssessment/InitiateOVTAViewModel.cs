@@ -58,6 +58,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 yield return new SitkaValidationResult<InitiateOVTAViewModel,int?>("You must choose an area to assess or check the box at the bottom of the page.", m=>m.OnlandVisualTrashAssessmentAreaID);
             }
+
+            if (AssessingNewArea.GetValueOrDefault() && OnlandVisualTrashAssessmentAreaID.HasValue)
+            {
+                yield return new SitkaValidationResult<InitiateOVTAViewModel, bool?>(
+                    "You cannot be assessing a new area if you have selected an existing area to assess.",
+                    m => m.AssessingNewArea);
+            }
         }
     }
 }
