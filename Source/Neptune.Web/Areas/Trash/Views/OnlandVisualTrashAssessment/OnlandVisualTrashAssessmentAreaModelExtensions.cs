@@ -14,12 +14,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             featureCollection.Features.AddRange(areas.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.OnlandVisualTrashAssessmentAreaGeometry);
-                feature.Properties.Add("AreaID", x.OnlandVisualTrashAssessmentAreaID);
-                feature.Properties.Add("FeatureColor", "#FF00FF");
-                feature.Properties.Add("FeatureGlyph", "water"); // todo?????
-                feature.Properties.Add("FeatureWeight", .5);
-                feature.Properties.Add("FillPolygon", true);
-                feature.Properties.Add("FillOpacity", .5);
+                feature.Properties.Add("OnlandVisualTrashAssessmentAreaID", x.OnlandVisualTrashAssessmentAreaID);
                 return feature;
             }));
             return featureCollection;

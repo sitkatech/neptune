@@ -77,7 +77,7 @@
 
         $scope.activateClickToAddMode = function() {
             $scope.isClickToAddModeActive = true;
-        }
+        };
 
         function setPointOnMap(latlng) {
             var feature = {
