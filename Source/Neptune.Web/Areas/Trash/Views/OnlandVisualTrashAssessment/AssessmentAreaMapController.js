@@ -5,14 +5,20 @@
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         $scope.lastSelectedLayer = null;
-        $scope.AngularModel.lastSelectedID = null;
+        $scope.lastSelectedID = null;
 
         var selectAssessmentArea = function(event) {
-            $scope.setSelectedMarker(event.layer.feature);
+            $scope.setSelectedFeature(event.layer.feature);
             $scope.$apply();
         };
+        
+        $scope.setSelectedFeatureByID = function (areaID) {
+            var layer = _.find($scope.assessmentAreaLayerGeoJson._layers,
+                function (layer) { return areaID === layer.feature.properties["OnlandVisualTrashAssessmentAreaID"]; });
+            $scope.setSelectedFeature(layer.feature);
+        };
 
-        $scope.setSelectedMarker = function (featureLayer) {
+        $scope.setSelectedFeature = function (featureLayer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
             }
@@ -69,6 +75,10 @@
 
             $scope.assessmentAreaLayerGeoJson.addTo($scope.neptuneMap.map);
             $scope.assessmentAreaLayerGeoJson.on('click', selectAssessmentArea);
+
+            if ($scope.AngularModel.OnlandVisualTrashAssessmentAreaID) {
+                $scope.setSelectedFeatureByID($scope.AngularModel.OnlandVisualTrashAssessmentAreaID);
+            }
         };
 
         $scope.initializeMap();
