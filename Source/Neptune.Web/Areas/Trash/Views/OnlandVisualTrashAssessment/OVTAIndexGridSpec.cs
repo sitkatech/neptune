@@ -1,4 +1,5 @@
-﻿using LtInfo.Common;
+﻿using System.Web;
+using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
@@ -22,7 +23,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 90,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Created On", x => x.CreatedDate, 90,DhtmlxGridColumnFormatType.Date);
-            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 170);
+            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
         }
     }
 }

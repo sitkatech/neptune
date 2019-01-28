@@ -71,7 +71,7 @@ namespace Neptune.Web.Models
             return DeleteUrlTemplate.ParameterReplace(person.PersonID);
         }
 
-        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static readonly UrlTemplate<int> DetailUrlTemplate = new UrlTemplate<int>(SitkaRoute<UserController>.BuildAbsoluteUrlHttpsFromExpression(t => t.Detail(UrlTemplate.Parameter1Int), NeptuneWebConfiguration.CanonicalHostNameRoot));
         public static string GetDetailUrl(this Person person)
         {
             return DetailUrlTemplate.ParameterReplace(person.PersonID);
