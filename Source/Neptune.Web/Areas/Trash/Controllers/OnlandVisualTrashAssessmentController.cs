@@ -98,17 +98,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewInitiateOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             InitiateOVTAViewModel viewModel)
         {
-            var jurisdictions = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit()
+            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var jurisdictionsSelectList = stormwaterJurisdictionsPersonCanEdit
                 .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
 
-            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
-                .Where(x => x.StormwaterJurisdiction.todo);
+            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
+                .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdiction));
 
-            var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", todo);
+            var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
 
             var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, jurisdictions, mapInitJson);
+                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
 
@@ -205,7 +206,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
             {
                 var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
-                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(assessmentAreaGeometry);
+                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea("NAME LOL", onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry); // todo: user set name on form
 
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
                     onlandVisualTrashAssessmentArea);

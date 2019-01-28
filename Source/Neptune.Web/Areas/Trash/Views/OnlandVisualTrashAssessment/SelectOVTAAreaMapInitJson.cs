@@ -13,5 +13,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
         }
+
+        public static LayerGeoJson MakeAssessmentAreasLayerGeoJson(IEnumerable<OnlandVisualTrashAssessmentArea> observations)
+        {
+            var featureCollection = observations.ToGeoJsonFeatureCollection();
+            var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };
+            return observationsLayerGeoJson;
+        }
     }
 }
