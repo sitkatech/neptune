@@ -67,6 +67,18 @@
                         return true;
                     },
 
+                    onEachFeature: function(feature, layer) {
+                        feature.bindPopup("Content lol");
+                        feature.on('mouseover',
+                            function(e) {
+                                this.openPopup();
+                            });
+                        feature.on('mouseout',
+                            function(e) {
+                                this.closePopup();
+                            });
+                    },
+
                     style: function (feature) {
                         return {
                             color: "#b2b2b2",
