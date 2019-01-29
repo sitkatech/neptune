@@ -35,69 +35,83 @@
 
 
 <div ng-app="NeptuneApp" ng-controller="AssessmentAreaMapController">
-@using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
-{
-    <div class="formPage">
-        <div class="form-horizontal">
-            <div class="form-group row">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+    @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+    {
+        <div class="formPage">
+            <div class="form-horizontal">
+                <div class="form-group row">
+                    <div class="col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                <div class="form-group row">
+                    <div class="col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.Notes)
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                        @Html.ValidationMessageFor(m => m.Notes)
+                        <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.Notes)
+                <div class="row">
+                    <div class="col-sm-3 text-center">
+                        <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">Zoom to my location</button>
+                    </div>
+                    <div class="col-sm-9">
+                        <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 8), null, new List<string> { "form-control" })
-                    @Html.ValidationMessageFor(m => m.Notes)
-                    <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-9">
+                        <div class="input-group" style="margin-top: 5px;">
+                            <input type="text" id="assessmentAreaFinder" class="typeahead form-control" placeholder="Search by Assessment Area name" autocomplete="off" ng-value="lastSelectedName"/>
+                            <span class="input-group-btn">
+                                <a id="assessmentAreaFinderButton" class="btn btn-default">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3 text-center">
-                    <div class="row"><button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">Zoom to my location</button></div>
-                    <div class="row"><button type="button" class="btn btn-sm btn-neptune">Search</button></div>
-                </div>
-                <div class="col-sm-9">
-                    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
-                </div>
-            </div>
 
-            <hr />
-            <p class="systemText">If you are sure you are performing an area's first assessment, check this box to continue.</p>
+                <hr />
+                <p class="systemText">If you are sure you are performing an area's first assessment, check this box to continue.</p>
 
-            <div class="form-group">
-                <div class="col-sm-3 control-label">
-                    @Html.LabelWithSugarFor(m => m.AssessingNewArea)
-                </div>
-                <div class="col-sm-9">
-                    <label>
-                        @Html.EditorFor(m => m.AssessingNewArea) Yes, I want to assess a new area.
-                    </label>
-                    @Html.ValidationMessageFor(m => m.AssessingNewArea)
+                <div class="form-group">
+                    <div class="col-sm-3 control-label">
+                        @Html.LabelWithSugarFor(m => m.AssessingNewArea)
+                    </div>
+                    <div class="col-sm-9">
+                        <label>
+                            @Html.EditorFor(m => m.AssessingNewArea) Yes, I want to assess a new area.
+                        </label>
+                        @Html.ValidationMessageFor(m => m.AssessingNewArea)
+                    </div>
+                    @* TODO: Add name for new area enabled w/ jQuery *@
                 </div>
             </div>
         </div>
-    </div>
 
-    <div>
-        <input type="hidden" name="@Html.NameFor(m=>m.OnlandVisualTrashAssessmentAreaID)" id="@Html.IdFor(m=>m.OnlandVisualTrashAssessmentAreaID)" value="{{AngularModel.lastSelectedID}}"/>
-    </div>
-
-    <hr />
-    <div class="row">
-        <div class="col-xs-12 col-sm-3">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+        <div>
+            <input type="hidden" name="@Html.NameFor(m=>m.OnlandVisualTrashAssessmentAreaID)" id="@Html.IdFor(m=>m.OnlandVisualTrashAssessmentAreaID)" value="{{AngularModel.lastSelectedID}}"/>
         </div>
 
-        <div class="col-xs-12 col-sm-9" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+        <hr />
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9" style="text-align: right">
+                <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>

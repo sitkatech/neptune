@@ -9,7 +9,8 @@
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
         $scope.isClickToAddModeActive = false;
 
-        $scope.initializeMap = function() {
+        $scope.initializeMap = function () {
+            // todo: add the Assessment Area layer (which should exist on the view data)
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {

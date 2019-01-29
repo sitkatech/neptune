@@ -1071,6 +1071,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Index.cshtml" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTAIndexGridSpec.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AssessmentAreaMapController.js" />
+    <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentAreaController.cs" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

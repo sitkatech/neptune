@@ -9,6 +9,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
         
+        public LayerGeoJson AssessmentAreaLayerGeoJson { get; set; }
 
         public OVTAObservationsMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, BoundingBox boundingBox)
             : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),

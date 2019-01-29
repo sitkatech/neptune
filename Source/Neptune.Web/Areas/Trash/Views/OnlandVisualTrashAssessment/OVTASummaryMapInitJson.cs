@@ -5,7 +5,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OVTASummaryMapInitJson : OVTAObservationsMapInitJson
     {
-        public LayerGeoJson AssessmentAreaLayerGeoJson { get; }
 
         public OVTASummaryMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) :
             base(mapDivID, observationsLayerGeoJson, BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>{assessmentAreaLayerGeoJson}))

@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -64,6 +65,11 @@
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
 {
     <hr />
+
+    <div class="row">
+        <div class="col-sm-3">@Html.LabelWithSugarFor(m=>m.AssessmentAreaName)</div>
+        <div class="col-sm-9">@Html.TextBoxFor(m=>m.AssessmentAreaName, new {@class="form-control"})</div>
+    </div>
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
