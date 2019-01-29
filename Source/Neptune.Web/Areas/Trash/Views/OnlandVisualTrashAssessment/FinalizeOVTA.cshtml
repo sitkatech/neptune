@@ -35,7 +35,7 @@
                 });
             observationsLayerGeoJson.addTo(summaryMap.map);
             var areaLayerGeoJson = L.geoJson(
-                mapJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, 
+                mapJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     style: function (feature) {
                         return {
@@ -64,13 +64,15 @@
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
 {
+
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-sm-3">@Html.LabelWithSugarFor(m => m.AssessmentAreaName)</div>
+        <div class="col-sm-9">@Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })</div>
+    </div>
+
     <hr />
 
-    <div class="row">
-        <div class="col-sm-3">@Html.LabelWithSugarFor(m=>m.AssessmentAreaName)</div>
-        <div class="col-sm-9">@Html.TextBoxFor(m=>m.AssessmentAreaName, new {@class="form-control"})</div>
-    </div>
-    <div class="row">
+    <div class="row" >
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
         </div>

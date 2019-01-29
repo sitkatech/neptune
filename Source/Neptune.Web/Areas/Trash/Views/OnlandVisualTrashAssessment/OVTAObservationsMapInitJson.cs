@@ -19,9 +19,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         }
 
         public OVTAObservationsMapInitJson(string mapDivID,
-            LayerGeoJson observationsLayerGeoJson) : this(mapDivID, observationsLayerGeoJson, BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>{observationsLayerGeoJson}))
+            LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) : this(mapDivID, observationsLayerGeoJson, BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>{observationsLayerGeoJson, assessmentAreaLayerGeoJson}))
         {
-
+            AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
         }
 
         public static LayerGeoJson MakeObservationsLayerGeoJson(IEnumerable<OnlandVisualTrashAssessmentObservation> observations)

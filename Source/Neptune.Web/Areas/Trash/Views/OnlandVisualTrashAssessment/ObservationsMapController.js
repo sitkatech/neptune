@@ -10,7 +10,23 @@
         $scope.isClickToAddModeActive = false;
 
         $scope.initializeMap = function () {
-            // todo: add the Assessment Area layer (which should exist on the view data)
+            
+            $scope.areaGeoJson = L.geoJson($scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    style: function(feature) {
+                        return {
+                            fillColor: "#FFFF00",
+                            fill: true,
+                            fillOpacity: 0.5,
+                            color: "#FFFF00",
+                            weight: 5,
+                            stroke: true
+                        };
+                    }
+                });
+
+            $scope.areaGeoJson.addTo($scope.neptuneMap.map);
+
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
@@ -38,14 +54,6 @@
                                 title: feature.properties.Name,
                                 alt: feature.properties.Name
                             });
-                    },
-                    style: function(feature) {
-                        return {
-                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
-                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
-                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
-                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
-                        };
                     }
                 });
             $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);

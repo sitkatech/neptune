@@ -15,7 +15,7 @@
         
         $scope.setSelectedFeatureByID = function (areaID) {
             var layer = _.find($scope.assessmentAreaLayerGeoJson._layers,
-                // we WANT to coerce before comparing, don't use triple-equals here
+                // here we WANT to coerce before comparing; don't use triple-equals
                 function (layer) { return areaID == layer.feature.properties["OnlandVisualTrashAssessmentAreaID"]; });
             $scope.setSelectedFeature(layer.feature);
         };

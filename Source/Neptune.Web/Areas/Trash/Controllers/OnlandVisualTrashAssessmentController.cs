@@ -158,17 +158,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
         {
             var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
-            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson);
 
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
-            {
-                ovtaObservationsMapInitJson.AssessmentAreaLayerGeoJson =
-                    SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(
-                        new List<OnlandVisualTrashAssessmentArea>
-                        {
+            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null
+                ? SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(
+                    new List<OnlandVisualTrashAssessmentArea>
+                    {
                             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
-                        });
-            }
+                    })
+                : null;
+
+            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+
 
             var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
                 onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
@@ -204,7 +204,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             else
             {
                 var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
-                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", new List<OnlandVisualTrashAssessmentArea>{onlandVisualTrashAssessmentArea}.ToGeoJsonFeatureCollection(),
+                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }.ToGeoJsonFeatureCollection(),
                     "#ffff00", .5m,
                     LayerInitialVisibility.Show);
                 ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
