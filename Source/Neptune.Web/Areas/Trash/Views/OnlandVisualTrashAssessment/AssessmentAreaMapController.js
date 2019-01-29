@@ -18,7 +18,6 @@
                 // we WANT to coerce before comparing, don't use triple-equals here
                 function (layer) { return areaID == layer.feature.properties["OnlandVisualTrashAssessmentAreaID"]; });
             $scope.setSelectedFeature(layer.feature);
-            $scope.$apply();
         };
 
         $scope.setSelectedFeature = function (featureLayer) {
@@ -57,6 +56,7 @@
             $scope.lastSelectedLayer.addTo($scope.neptuneMap.map);
             $scope.lastSelectedID = featureLayer.properties["OnlandVisualTrashAssessmentAreaID"];
             $scope.lastSelectedName = featureLayer.properties["OnlandVisualTrashAssessmentAreaName"];
+            jQuery("#assessmentAreaFinder").val($scope.lastSelectedName);
         };
 
         $scope.initializeMap = function() {
