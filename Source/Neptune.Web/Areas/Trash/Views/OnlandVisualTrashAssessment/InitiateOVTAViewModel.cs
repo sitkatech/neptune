@@ -14,9 +14,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             FieldDefinitionEnum.Jurisdiction)]
         public int? StormwaterJurisdictionID { get; set; }
 
-        [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
-        public string Notes { get; set; }
-
+        [DisplayName("Assessment Area")]
         public int? OnlandVisualTrashAssessmentAreaID { get; set; }
 
         [Required]
@@ -34,7 +32,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
         {
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
-            Notes = ovta.Notes;
             OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             AssessingNewArea = ovta.AssessingNewArea;
         }
@@ -42,7 +39,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public void UpdateModel(Models.OnlandVisualTrashAssessment ovta)
         {
             ovta.StormwaterJurisdictionID = StormwaterJurisdictionID.GetValueOrDefault();
-            ovta.Notes = Notes;
             ovta.OnlandVisualTrashAssessmentAreaID = OnlandVisualTrashAssessmentAreaID;
             ovta.AssessingNewArea = AssessingNewArea;
         }
