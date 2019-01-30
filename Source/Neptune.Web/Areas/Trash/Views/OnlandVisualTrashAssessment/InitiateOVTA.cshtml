@@ -64,7 +64,7 @@
                         @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" ng-show="isMapEnabled">
                     <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 20px;">
+                <div class="row" style="margin-top: 20px;" ng-show="isMapEnabled">
                     <div class="col-sm-3 control-label">
                         <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">
                             <span class="glyphicon glyphicon-phone"></span>

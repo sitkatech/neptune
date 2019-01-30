@@ -6,6 +6,7 @@
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;
+        $scope.isMapEnabled = true;
         $scope.lastSelectedName = null;
 
         var selectAssessmentArea = function(event) {
@@ -163,17 +164,28 @@
                 }
             });
         };
-        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');        
+        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
 
         // assessing new area control
         jQuery("input[name='AssessingNewArea']").on('change',
             function() {
                 if (this.value == "True") {
-                    // todo: deselect map and disable
+                    $scope.isMapEnabled = false;
+                    $scope.deselectAll();
+                    $scope.$apply();
                     return;
                 } else {
-                    // todo: undisable map
-                    return;
+                    $scope.isMapEnabled = true;
+                    $scope.$apply();
                 }
+                $scope.$apply();
             });
+
+        $scope.deselectAll = function() {
+            if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
+                $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+            }
+            $scope.lastSelectedID = null;
+            $scope.lastSelectedName = null;
+        }
     });
