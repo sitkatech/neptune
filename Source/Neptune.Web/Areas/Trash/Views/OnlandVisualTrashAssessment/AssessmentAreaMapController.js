@@ -53,6 +53,16 @@
                     }
                 });
 
+            $scope.lastSelectedLayer.bindTooltip(featureLayer.properties["OnlandVisualTrashAssessmentAreaName"]);
+            $scope.lastSelectedLayer.on('mouseover',
+                function (e) {
+                    e.target.openPopup();
+                });
+            $scope.lastSelectedLayer.on('mouseout',
+                function (e) {
+                    e.target.closePopup();
+                });
+
             $scope.lastSelectedLayer.addTo($scope.neptuneMap.map);
             $scope.lastSelectedID = featureLayer.properties["OnlandVisualTrashAssessmentAreaID"];
             $scope.lastSelectedName = featureLayer.properties["OnlandVisualTrashAssessmentAreaName"];
@@ -67,15 +77,15 @@
                         return true;
                     },
 
-                    onEachFeature: function(feature, layer) {
-                        feature.bindPopup("Content lol");
-                        feature.on('mouseover',
-                            function(e) {
-                                this.openPopup();
+                    onEachFeature: function (feature, layer) {
+                        layer.bindTooltip(feature.properties["OnlandVisualTrashAssessmentAreaName"]);
+                        layer.on('mouseover',
+                            function (e) {
+                                e.target.openPopup();
                             });
-                        feature.on('mouseout',
-                            function(e) {
-                                this.closePopup();
+                        layer.on('mouseout',
+                            function (e) {
+                                e.target.closePopup();
                             });
                     },
 
