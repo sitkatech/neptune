@@ -96,6 +96,12 @@ namespace Neptune.Web.Controllers
                 roles = new List<Role>{Role.JurisdictionManager};
             }
 
+            // if the user being updated is a SitkaAdmin, only a SitkaAdmin can downgrade them
+            if (person.Role == Role.SitkaAdmin && CurrentPerson.Role != Role.SitkaAdmin)
+            {
+                roles = new List<Role> {Role.SitkaAdmin};
+            }
+
             var rolesAsSelectListItems = roles.ToSelectListWithEmptyFirstRow(x => x.RoleID.ToString(CultureInfo.InvariantCulture), x => x.RoleDisplayName);
             var viewData = new EditRolesViewData(rolesAsSelectListItems);
             return RazorPartialView<EditRoles, EditRolesViewData, EditRolesViewModel>(viewData, viewModel);

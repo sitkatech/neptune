@@ -58,8 +58,8 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult("You don't permissions to view user details. If you aren't logged in, do that and try again.");
             }
 
-            //Only SitkaAdmin users should be able to see other SitkaAdmin users
-            if (person.Role != Role.SitkaAdmin && contextModelObject.Role == Role.SitkaAdmin)
+            //Only Admin users should be able to see Sitka Admin users
+            if (contextModelObject.Role == Role.SitkaAdmin && !(person.Role == Role.SitkaAdmin || person.Role == Role.Admin ))
             {
                 return new PermissionCheckResult("You don\'t have permission to view this user.");
             }
