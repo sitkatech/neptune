@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Trash\Views\Shared\SiteLayout.cs" />
+    <Compile Include="Areas\Trash\Views\TrashModuleViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1077,6 +1079,7 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTAIndexGridSpec.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AssessmentAreaMapController.js" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentAreaController.cs" />
+    <Content Include="Areas\Trash\Views\Shared\SiteLayout.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

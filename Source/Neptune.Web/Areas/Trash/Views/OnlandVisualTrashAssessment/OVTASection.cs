@@ -12,7 +12,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         
     }
 
-    public class OVTASectionViewData : NeptuneViewData
+    public class OVTASectionViewData : TrashModuleViewData
     {
         public string SectionName { get; private set; }
         public Models.OnlandVisualTrashAssessment OVTA { get; private set; }
