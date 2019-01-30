@@ -164,4 +164,16 @@
             });
         };
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');        
+
+        // assessing new area control
+        jQuery("input[name='AssessingNewArea']").on('change',
+            function() {
+                if (this.value == "True") {
+                    // todo: deselect map and disable
+                    return;
+                } else {
+                    // todo: undisable map
+                    return;
+                }
+            });
     });

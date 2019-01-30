@@ -39,6 +39,22 @@
     {
         <div class="formPage">
             <div class="form-horizontal">
+
+                <p class="systemText">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</p>
+
+                <div class="form-group">
+                    <div class="col-sm-3 control-label">
+                    </div>
+                    <div class="col-sm-9">
+                        <label>
+                            @Html.RadioButtonFor(m => m.AssessingNewArea, false) Reassess existing area
+                        </label><br/>
+                        <label>
+                            @Html.RadioButtonFor(m => m.AssessingNewArea, true) Assess new area
+                        </label>
+                    </div>
+                </div>
+                <hr/>
                 <div class="form-group row">
                     <div class="col-sm-3 control-label">
                         @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
@@ -49,10 +65,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m=>m.OnlandVisualTrashAssessmentAreaID)</div>
+                    <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
                     <div class="col-sm-9">
                         <div class="input-group">
-                            <input type="text" id="assessmentAreaFinder" class="typeahead form-control" placeholder="Search by Assessment Area name" autocomplete="off" ng-value="lastSelectedName" style="border-top-left-radius: 4px; border-bottom-left-radius: 4px;"/>
+                            <input type="text" id="assessmentAreaFinder" class="typeahead form-control" placeholder="Search by Assessment Area name" autocomplete="off" ng-value="lastSelectedName" style="border-top-left-radius: 4px; border-bottom-left-radius: 4px;" />
                             <span class="input-group-btn">
                                 <a id="assessmentAreaFinderButton" class="btn btn-default">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -61,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row"  style="margin-top: 20px;">
+                <div class="row" style="margin-top: 20px;">
                     <div class="col-sm-3 control-label">
                         <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">
                             <span class="glyphicon glyphicon-phone"></span>
@@ -71,22 +87,6 @@
                     <div class="col-sm-9">
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
                     </div>
-                </div>
-
-                <hr />
-                <p class="systemText">If you are sure you are performing an area's first assessment, check this box to continue.</p>
-
-                <div class="form-group">
-                    <div class="col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.AssessingNewArea)
-                    </div>
-                    <div class="col-sm-9">
-                        <label>
-                            @Html.EditorFor(m => m.AssessingNewArea) Yes, I want to assess a new area.
-                        </label>
-                        @Html.ValidationMessageFor(m => m.AssessingNewArea)
-                    </div>
-                    @* TODO: Add name for new area enabled w/ jQuery *@
                 </div>
             </div>
         </div>

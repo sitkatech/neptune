@@ -33,7 +33,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
             OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
-            AssessingNewArea = ovta.AssessingNewArea;
+            AssessingNewArea = ovta.AssessingNewArea ?? false;
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment ovta)
