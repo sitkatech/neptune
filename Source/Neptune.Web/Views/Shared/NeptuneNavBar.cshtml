@@ -1,0 +1,104 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="NeptuneNavBar.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using Neptune.Web.Models
+@using Neptune.Web.Views.Shared
+@using LtInfo.Common.ModalDialog
+@inherits NeptuneNavBar
+
+<div style="margin-right: 15px;">
+    <style>
+
+        .siteNavLinks {
+            margin-top: 8px;
+        }
+
+        .siteNavLinks .list-inline li {
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        .siteNavLinks a {
+            color: rgb(0,153,171);
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "Open Sans", serif;
+            font-size: 14px;
+        }
+
+        .siteNavLinks .dropdown-menu {
+            border: none;
+            background-color: white;
+            border-radius: 0;
+            color: white;
+        }
+
+        .siteNavLinks .dropdown-menu li {
+            margin-left: 0px;
+        }
+
+        .siteNavLinks .dropdown-menu li a {
+            font-weight: 600;
+            color: black;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .siteNavLinks .dropdown-menu li a:hover {
+            background-color: rgb(98, 136, 175);
+        }
+
+        .laketahoeinfo-home p, .laketahoeinfo-home a {
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+
+    <div class="siteNavLinks">
+        <ul class="list-inline pull-right">
+            <li><a href="@ViewDataTyped.AboutUrl">About</a></li>
+            @if (Request.IsAuthenticated && ViewDataTyped.CurrentPerson != null)
+            {
+                <li class="dropdown">
+                    <a class="dropdown-toggle" type="button" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span>Welcome&nbsp;&nbsp;@ViewDataTyped.CurrentPerson.GetFullNameFirstLast()</span>
+                        <span class="glyphicon glyphicon-menu-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
+                        <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">Account</a></li>
+                        <li><a href="@ViewDataTyped.LogOutUrl">Log out</a></li>
+                    </ul>
+                </li>
+            }
+            @foreach (var topLevelMenu in ViewDataTyped.TopLevelLtInfoMenus)
+            {
+                @topLevelMenu.RenderMenu()
+            }
+            @if (!Request.IsAuthenticated || ViewDataTyped.CurrentPerson == null)
+            {
+                <li><a href="@ViewDataTyped.LogInUrl">Log in</a></li>
+            }
+        </ul>
+    </div>
+</div>

@@ -18,6 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -35,6 +37,7 @@ namespace Neptune.Web.Views
     {
         private const string Indent = "    ";
         public List<string> ExtraTopLevelMenuCssClasses = new List<string>();
+        public List<string> ExtraDropdownMenuCssClasses = new List<string>();
         public readonly string RawString;
 
         /// <summary>
@@ -144,8 +147,9 @@ namespace Neptune.Web.Views
         private string RenderMenuWithChildren(string indent)
         {
             var childMenuItems = new List<string>();
-            var childIndent = string.Format("{0}{1}", Indent, indent);
-            childMenuItems.Add(string.Format("{0}<ul class=\"dropdown-menu\" role=\"menu\">", childIndent));
+            var childIndent = $"{Indent}{indent}";
+            var classes = ExtraDropdownMenuCssClasses.Count != 0 ? $"dropdown-menu {String.Join(" ", ExtraDropdownMenuCssClasses)}" : "dropdown-menu";
+            childMenuItems.Add($"{childIndent}<ul class=\"{classes}\" role=\"menu\">");
 
             var menuGroups = ChildenMenuItemsAndDividersSecurityFiltered.GroupBy(x => x.MenuGroupName).ToList();
             var currentIndent = string.Format("{0}{1}", Indent, childIndent);
