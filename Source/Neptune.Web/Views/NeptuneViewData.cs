@@ -32,8 +32,6 @@ namespace Neptune.Web.Views
 {
     public abstract class NeptuneViewData
     {
-        public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
-
         public string PageTitle;
         public string HtmlPageTitle;
         public string BreadCrumbTitle;
@@ -52,6 +50,8 @@ namespace Neptune.Web.Views
         public LtInfoMenuItem HelpMenu { get; private set; }
         public NeptuneSiteExplorerViewData NeptuneSiteExplorerViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
+        public readonly bool ShowPageTitle;
+        public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
 
         /// <summary>
         /// Call for page without associated NeptunePage
@@ -63,7 +63,7 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page with associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage)
+        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage, bool isHomePage)
         {
             NeptunePage = neptunePage;
 
@@ -77,13 +77,20 @@ namespace Neptune.Web.Views
 
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
 
-            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, NeptuneArea.OCStormwaterTools); // todo: this should be passed from the constructor
-           NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
-
             MakeNeptuneMenu(currentPerson);
+            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, NeptuneArea.OCStormwaterTools, isHomePage); // todo: area should be passed from the constructor
+           NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
+
+        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage) : this(currentPerson,
+            neptunePage, false)
+        {
+
+        }
+
+
 
         protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
             Models.NeptunePage neptunePage) : this(currentPerson, neptunePage)
@@ -94,6 +101,7 @@ namespace Neptune.Web.Views
         {
         }
 
+
         private void MakeNeptuneMenu(Person currentPerson)
         {
             var aboutMenuItem = LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.About()), currentPerson, "About");
@@ -102,7 +110,8 @@ namespace Neptune.Web.Views
             {
                 BuildBMPInventoryMenu(currentPerson),
                 BuildProgramInfoMenu(currentPerson),
-                BuildDashboardMenu(currentPerson)
+                BuildDashboardMenu(currentPerson),
+                BuildManageMenu(CurrentPerson)
             };
 
             TopLevelLtInfoMenuItems.ForEach(x => x.ExtraTopLevelMenuCssClasses = new List<string> { "navigation-root-item" });
@@ -119,7 +128,6 @@ namespace Neptune.Web.Views
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.FindABMP()), currentPerson, "Find a BMP", "Group1"));
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.Index()), currentPerson, "View All BMPs", "Group1"));
             bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldVisitController>(c => c.Index()), currentPerson, "Field Records", "Group1"));
-
             if (new WaterQualityManagementPlanViewFeature().HasPermissionByPerson(currentPerson))
             {
                 bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<WaterQualityManagementPlanController>(c => c.Index()), currentPerson, Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized(), "Group1"));
@@ -135,23 +143,11 @@ namespace Neptune.Web.Views
 
         private LtInfoMenuItem BuildProgramInfoMenu(Person currentPerson)
         {
-            var programInfoMenu = new LtInfoMenuItem("Manage");
+            var programInfoMenu = new LtInfoMenuItem("Program Info");
 
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Index()), currentPerson, "Observation Types", "Group1"));
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Index()), currentPerson, "Treatment BMP Types", "Group1"));
-
             programInfoMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FundingSourceController>(c => c.Index()), currentPerson, Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized(), "Group1"));
-
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
-
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group2"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group2"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group3"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}", "Group3"));
-
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Manage()), currentPerson, "Observation Types", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Manage()), currentPerson, "Treatment BMP Types", "Group4"));
-            //manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(c => c.Manage()), currentPerson, "Custom Attributes", "Group4"));
 
             return programInfoMenu;
         }
@@ -162,6 +158,22 @@ namespace Neptune.Web.Views
             return new LtInfoMenuItem(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()), "Dashboard", currentPerson.IsManagerOrAdmin(), true, null);
         }
 
+        private LtInfoMenuItem BuildManageMenu(Person currentPerson)
+        {
+            var manageMenu = new LtInfoMenuItem("Manage");
+
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.ManageHomePageImages()), currentPerson, "Homepage Configuration", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<NeptunePageController>(c => c.Index()), currentPerson, "Page Content", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group1"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}", "Group1"));
+
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPAssessmentObservationTypeController>(c => c.Manage()), currentPerson, "Observation Types", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPTypeController>(c => c.Manage()), currentPerson, "Treatment BMP Types", "Group2"));
+            manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(c => c.Manage()), currentPerson, "Custom Attributes", "Group2"));
+
+            return manageMenu;
+        }
         public string IsActiveUrl(string currentUrlPathAndQuery, string urlToCompare)
         {
             return currentUrlPathAndQuery == urlToCompare ? " class=\"active\"" : string.Empty;

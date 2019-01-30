@@ -74,21 +74,9 @@
 </head>
 <body>
     <div class="expandToFillScreen">
-        @*<header>
+        <header class="neptuneHeader container-fluid">
             <div class="row">
-                <div class="col-xs-9">
-                    <a href="@ViewDataTyped.NeptuneHomeUrl">
-                        <img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" />
-                    </a>
-                </div>
-                <ul class="col-xs-3 navbar-right">
-                    @ViewDataTyped.HelpMenu.RenderMenu()
-                </ul>
-            </div>
-        </header>*@
-        <header class="ltinfoHeader container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-xs-12 col-sm-6" style="padding-left:0">
                     @{ Html.RenderRazorSitkaPartial<NeptuneSiteExplorer, NeptuneSiteExplorerViewData>(ViewDataTyped.NeptuneSiteExplorerViewData); }
                 </div>
                 <div class="col-xs-12 col-sm-6">
@@ -96,9 +84,6 @@
                         <div class="col-xs-12">
                             @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}
                         </div>
-                        @*<div class="col-xs-12">
-                            @{ Html.RenderRazorSitkaPartial<ParcelTrackerSearchBox, ParcelTrackerSearchBoxViewData>(ViewDataTyped.ParcelTrackerSearchBoxViewData); }
-                        </div>*@
                     </div>
                 </div>
             </div>

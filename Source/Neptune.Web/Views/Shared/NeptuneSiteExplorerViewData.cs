@@ -36,11 +36,11 @@ namespace Neptune.Web.Views.Shared
 
         public List<LtInfoMenuItem> TopLevelNeptuneMenus;
 
-        public NeptuneSiteExplorerViewData(Person currentPerson, NeptuneArea neptuneArea)
+        public NeptuneSiteExplorerViewData(Person currentPerson, NeptuneArea neptuneArea, bool isHomePage)
         {
             HomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
             NeptuneArea = neptuneArea;
-            ShowLinkToArea = neptuneArea != NeptuneArea.OCStormwaterTools;
+            ShowLinkToArea = !isHomePage;
 
             CurrentPerson = currentPerson;
             RequestSupportUrl = SitkaRoute<HelpController>.BuildUrlFromExpression(c => c.Support());
