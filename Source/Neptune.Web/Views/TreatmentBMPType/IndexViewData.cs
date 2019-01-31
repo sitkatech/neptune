@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             List<Models.TreatmentBMPType> treatmentBMPTypes)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = "All BMP Types";

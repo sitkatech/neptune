@@ -45,7 +45,7 @@ namespace Neptune.Web.Views.Home
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePageHomePage,
             Models.NeptunePage neptunePageAdditionalInfo, Models.NeptunePage neptunePageMapInfo,
             List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
-            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(currentPerson, neptunePageHomePage, true)
+            JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(currentPerson, neptunePageHomePage, true, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = SystemAttributeHelpers.GetToolDisplayName();
 

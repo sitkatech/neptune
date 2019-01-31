@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.Shared
     {
         public readonly ViewPageContentViewData ViewWholePageContentViewData;
 
-        public DisplayPageContentViewData(Person currentPerson, NeptunePageType neptunePageType) : base(currentPerson, Models.NeptunePage.GetNeptunePageByPageType(neptunePageType))
+        public DisplayPageContentViewData(Person currentPerson, NeptunePageType neptunePageType) : base(currentPerson, Models.NeptunePage.GetNeptunePageByPageType(neptunePageType), NeptuneArea.OCStormwaterTools)
         {
             EntityName = SystemAttributeHelpers.GetTenantDisplayName();
             PageTitle = neptunePageType.NeptunePageTypeDisplayName;

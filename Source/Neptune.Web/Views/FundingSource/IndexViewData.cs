@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.FundingSource
         public readonly string NewFundingSourceUrl;
         public readonly bool UserCanAddFundingSource;
 
-        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage)
+        public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = $"All {Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()}";
             EntityName = $"{Models.FieldDefinition.FundingSource.GetFieldDefinitionLabelPluralized()}";

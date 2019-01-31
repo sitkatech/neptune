@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public readonly string NewCustomAttributeTypeUrl;
 
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Attribute Type";
             PageTitle = "All Attribute Types";

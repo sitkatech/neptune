@@ -69,7 +69,7 @@ namespace Neptune.Web.Areas.Trash.Views
             return manageMenu;
         }
 
-        public TrashModuleViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage)
+        public TrashModuleViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.Trash)
         {
             MakeTrashModuleMenu();
         }

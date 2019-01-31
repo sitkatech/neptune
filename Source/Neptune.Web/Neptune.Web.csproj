@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cs" />
+    <Compile Include="Areas\Modeling\Views\Shared\SiteLayout.cs" />
+    <Compile Include="Areas\Modeling\Views\ModelingModuleViewData.cs" />
     <Compile Include="Areas\Trash\Views\Shared\NavAndHeaderLayout.cs" />
     <Compile Include="Areas\Trash\Views\Shared\SiteLayout.cs" />
     <Compile Include="Areas\Trash\Views\TrashModuleViewData.cs" />
@@ -1082,6 +1085,8 @@
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentAreaController.cs" />
     <Content Include="Areas\Trash\Views\Shared\SiteLayout.cshtml" />
     <Content Include="Areas\Trash\Views\Shared\NavAndHeaderLayout.cshtml" />
+    <Content Include="Areas\Modeling\Views\Shared\SiteLayout.cshtml" />
+    <Content Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

@@ -56,14 +56,15 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null, null)
+        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null, NeptuneArea.OCStormwaterTools)
         {
         }
      
         /// <summary>
         /// Call for page with associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage, bool isHomePage)
+        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage, bool isHomePage,
+            NeptuneArea neptuneArea)
         {
             NeptunePage = neptunePage;
 
@@ -78,14 +79,14 @@ namespace Neptune.Web.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, NeptuneArea.OCStormwaterTools, isHomePage); // todo: area should be passed from the constructor
+            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage); // todo: area should be passed from the constructor
            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
 
-        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage) : this(currentPerson,
-            neptunePage, false)
+        protected NeptuneViewData(Person currentPerson, Models.NeptunePage neptunePage, NeptuneArea neptuneArea) : this(currentPerson,
+            neptunePage, false, neptuneArea)
         {
 
         }
@@ -93,7 +94,7 @@ namespace Neptune.Web.Views
 
 
         protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
-            Models.NeptunePage neptunePage) : this(currentPerson, neptunePage)
+            Models.NeptunePage neptunePage) : this(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
         }
 

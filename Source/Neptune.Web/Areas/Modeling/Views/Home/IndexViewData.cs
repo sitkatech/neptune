@@ -5,7 +5,7 @@ using Neptune.Web.Views.Shared.JurisdictionControls;
 
 namespace Neptune.Web.Areas.Modeling.Views.Home
 {
-    public class IndexViewData : NeptuneViewData
+    public class IndexViewData : ModelingModuleViewData
     {
         public JurisdictionsMapViewData JurisdictionsMapViewData { get; }
         public JurisdictionsMapInitJson JurisdictionsMapInitJson { get; }

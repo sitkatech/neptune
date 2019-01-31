@@ -1,5 +1,5 @@
-﻿@*-----------------------------------------------------------------------
-<copyright file="_ViewStart.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+﻿/*-----------------------------------------------------------------------
+<copyright file="NavAndHeaderLayout.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
 Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
@@ -17,7 +17,12 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 
 Source code is available upon request via <support@sitkatech.com>.
 </license>
------------------------------------------------------------------------*@
-@{
-    Layout = "~/Areas/Modeling/Views/Shared/SiteLayout.cshtml";
+-----------------------------------------------------------------------*/
+
+
+namespace Neptune.Web.Areas.Modeling.Views.Shared
+{
+    public abstract class NavAndHeaderLayout : LtInfo.Common.Mvc.TypedWebViewPage<ModelingModuleViewData>
+    {
+    }
 }
