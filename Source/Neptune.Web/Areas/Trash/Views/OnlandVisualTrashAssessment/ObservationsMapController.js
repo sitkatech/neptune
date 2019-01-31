@@ -10,22 +10,26 @@
         $scope.isClickToAddModeActive = false;
 
         $scope.initializeMap = function () {
-            
-            $scope.areaGeoJson = L.geoJson($scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
-                {
-                    style: function(feature) {
-                        return {
-                            fillColor: "#FFFF00",
-                            fill: true,
-                            fillOpacity: 0.5,
-                            color: "#FFFF00",
-                            weight: 5,
-                            stroke: true
-                        };
-                    }
-                });
 
-            $scope.areaGeoJson.addTo($scope.neptuneMap.map);
+            if ($scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson) {
+
+                $scope.areaGeoJson = L.geoJson(
+                    $scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
+                    {
+                        style: function(feature) {
+                            return {
+                                fillColor: "#FFFF00",
+                                fill: true,
+                                fillOpacity: 0.5,
+                                color: "#FFFF00",
+                                weight: 5,
+                                stroke: true
+                            };
+                        }
+                    });
+
+                $scope.areaGeoJson.addTo($scope.neptuneMap.map);
+            }
 
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,

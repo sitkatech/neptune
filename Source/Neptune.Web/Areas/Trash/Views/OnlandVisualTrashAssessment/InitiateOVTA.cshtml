@@ -39,38 +39,51 @@
     {
         <div class="formPage">
             <div class="form-horizontal">
-                <div class="form-group row">
+
+                <p class="systemText">Are you reassessing a previously-assessed area, or assessing a new area for the first time?</p>
+
+                <div class="form-group">
                     <div class="col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
                     </div>
                     <div class="col-sm-9">
-                        @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                        <label>
+                            @Html.RadioButtonFor(m => m.AssessingNewArea, false) Reassess existing area
+                        </label><br />
+                        <label>
+                            @Html.RadioButtonFor(m => m.AssessingNewArea, true) Assess new area
+                        </label>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.Notes)
+                <hr />
+                @if (ViewDataTyped.DefaultJurisdiction == null)
+                {
+                    <div class="form-group row">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                        </div>
                     </div>
+                }
+                else
+                {
+                    <div class="form-group row">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.DefaultJurisdiction.GetOrganizationDisplayName()
+                            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdictionID)" value="@ViewDataTyped.DefaultJurisdiction.StormwaterJurisdictionID"/>
+                        </div>
+                    </div>
+                }
+                <div class="row" ng-show="isMapEnabled">
+                    <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
                     <div class="col-sm-9">
-                        @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-                        @Html.ValidationMessageFor(m => m.Notes)
-                        <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3 text-center">
-                        <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">Zoom to my location</button>
-                    </div>
-                    <div class="col-sm-9">
-                        <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-9">
-                        <div class="input-group" style="margin-top: 5px;">
-                            <input type="text" id="assessmentAreaFinder" class="typeahead form-control" placeholder="Search by Assessment Area name" autocomplete="off" ng-value="lastSelectedName"/>
+                        <div class="input-group">
+                            <input type="text" id="assessmentAreaFinder" class="typeahead form-control" placeholder="Search by Assessment Area name" autocomplete="off" ng-value="lastSelectedName" style="border-top-left-radius: 4px; border-bottom-left-radius: 4px;" />
                             <span class="input-group-btn">
                                 <a id="assessmentAreaFinderButton" class="btn btn-default">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -79,21 +92,16 @@
                         </div>
                     </div>
                 </div>
-
-                <hr />
-                <p class="systemText">If you are sure you are performing an area's first assessment, check this box to continue.</p>
-
-                <div class="form-group">
+                <div class="row" style="margin-top: 20px;" ng-show="isMapEnabled">
                     <div class="col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.AssessingNewArea)
+                        <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">
+                            <span class="glyphicon glyphicon-phone"></span>
+                            Zoom to my location
+                        </button>
                     </div>
                     <div class="col-sm-9">
-                        <label>
-                            @Html.EditorFor(m => m.AssessingNewArea) Yes, I want to assess a new area.
-                        </label>
-                        @Html.ValidationMessageFor(m => m.AssessingNewArea)
+                        <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
                     </div>
-                    @* TODO: Add name for new area enabled w/ jQuery *@
                 </div>
             </div>
         </div>

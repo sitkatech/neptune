@@ -42,11 +42,10 @@
     <div ng-app="NeptuneApp" ng-controller="ObservationsMapController">
         <p class="systemText">Content Under Development</p>
         <div class="row">
-            <div class="col-md-6 col-sm-12">
-                <button class="btn btn-sm btn-neptune" ng-click="addObservationAtCurrentLocation()"><span class="glyphicon glyphicon-plus"></span> Add Observation at Current Location</button>
-            </div>
-            <div class="col-md-6 col-sm-12 text-right">
-                <button class="btn btn-sm btn-neptune" ng-click="activateClickToAddMode()"><span class="glyphicon glyphicon-globe"></span> Click the map to add an Observation</button>
+            <div class="col-md-6">
+                <button class="btn btn-sm btn-neptune" ng-click="addObservationAtCurrentLocation()"><span class="glyphicon glyphicon-phone"></span> Record Observation at Current Location</button>
+                <br/>
+                <button class="btn btn-sm btn-neptune" ng-click="activateClickToAddMode()"><span class="glyphicon glyphicon-plus"></span> Add an Observation by Clicking the Map</button>
             </div>
         </div>
         <div class="row">

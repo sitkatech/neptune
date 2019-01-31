@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public readonly MapInitJson MapInitJson;
         public readonly bool CurrentPersonCanManage;
 
-        public DetailViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, MapInitJson mapInitJson) : base(currentPerson, StormwaterBreadCrumbEntity.ModeledCatchment)
+        public DetailViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, MapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ModeledCatchment = modeledCatchment;
             PageTitle = modeledCatchment.ModeledCatchmentName;

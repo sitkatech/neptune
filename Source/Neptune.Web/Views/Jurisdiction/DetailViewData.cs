@@ -19,17 +19,12 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using DocumentFormat.OpenXml.EMMA;
-using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
-using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Views.Jurisdiction
 {
@@ -48,7 +43,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly List<Person> UsersAssignedToJurisdiction;
 
 
-        public DetailViewData(Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(currentPerson, StormwaterBreadCrumbEntity.Jurisdiction) 
+        public DetailViewData(Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(currentPerson, NeptuneArea.OCStormwaterTools) 
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();

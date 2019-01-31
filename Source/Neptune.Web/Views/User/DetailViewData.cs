@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.User
             string userNotificationGridName,
             string userNotificationGridDataUrl,
             string activateInactivateUrl)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Person = personToView;
             PageTitle = personToView.GetFullNameFirstLast() + (!personToView.IsActive ? " (inactive)" : string.Empty);

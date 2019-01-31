@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Security;
 using Neptune.Web.Models;
@@ -37,6 +38,7 @@ namespace Neptune.Web.Controllers
     public class HomeController : NeptuneBaseController
     {
         [AnonymousUnclassifiedFeature]
+        [CrossAreaRoute]
         public FileResult ExportGridToExcel(string gridName, bool printFooter)
         {
             return ExportGridToExcelImpl(gridName, printFooter);

@@ -29,7 +29,6 @@ using LtInfo.Common.Views;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Views.TreatmentBMPAssessmentObservationType;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.CustomAttributeType
@@ -51,7 +50,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public EditViewData(Person currentPerson, List<MeasurementUnitType> measurementUnitTypes,
             List<CustomAttributeDataType> customAttributeDataTypes, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage customAttributeInstructionsNeptunePage,
-            Models.CustomAttributeType customAttributeType) : base(currentPerson)
+            Models.CustomAttributeType customAttributeType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Attribute Type";
             EntityUrl = SitkaRoute<CustomAttributeTypeController>.BuildUrlFromExpression(x => x.Manage());

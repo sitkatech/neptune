@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Shared.Location.EditLocationViewData editLocationViewData,
             IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans,
             IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EditLocationViewData = editLocationViewData;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

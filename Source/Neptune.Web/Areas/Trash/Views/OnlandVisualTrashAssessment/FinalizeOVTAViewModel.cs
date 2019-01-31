@@ -11,6 +11,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [DisplayName("Assessment Area Name")]
         public string AssessmentAreaName { get; set; }
 
+        [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
+        public string Notes { get; set; }
+
         public FinalizeOVTAViewModel()
         {
 

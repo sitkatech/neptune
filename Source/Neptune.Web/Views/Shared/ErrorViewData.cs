@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.Shared
     public class ErrorViewData : NeptuneViewData
     {
         public ErrorViewData(Person currentPerson)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             HtmlPageTitle = "Error Page";
             PageTitle = "Error Page";

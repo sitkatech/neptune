@@ -6,6 +6,7 @@
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;
+        $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
 
         var selectAssessmentArea = function(event) {
@@ -53,6 +54,16 @@
                     }
                 });
 
+            $scope.lastSelectedLayer.bindTooltip(featureLayer.properties["OnlandVisualTrashAssessmentAreaName"]);
+            $scope.lastSelectedLayer.on('mouseover',
+                function (e) {
+                    e.target.openPopup();
+                });
+            $scope.lastSelectedLayer.on('mouseout',
+                function (e) {
+                    e.target.closePopup();
+                });
+
             $scope.lastSelectedLayer.addTo($scope.neptuneMap.map);
             $scope.lastSelectedID = featureLayer.properties["OnlandVisualTrashAssessmentAreaID"];
             $scope.lastSelectedName = featureLayer.properties["OnlandVisualTrashAssessmentAreaName"];
@@ -65,6 +76,18 @@
                 {
                     filter: function(feature, layer) {
                         return true;
+                    },
+
+                    onEachFeature: function (feature, layer) {
+                        layer.bindTooltip(feature.properties["OnlandVisualTrashAssessmentAreaName"]);
+                        layer.on('mouseover',
+                            function (e) {
+                                e.target.openPopup();
+                            });
+                        layer.on('mouseout',
+                            function (e) {
+                                e.target.closePopup();
+                            });
                     },
 
                     style: function (feature) {
@@ -141,5 +164,35 @@
                 }
             });
         };
-        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');        
+        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
+
+        // disable the map according to what makes sense
+
+        $scope.handleMapVisibility = function() {
+            if (jQuery("input[name='AssessingNewArea']:checked").val() == "False" &&
+                (jQuery("select[name='StormwaterJurisdictionID']").val() || $scope.AngularViewData.UseDefaultJurisdiction) // don't attempt to check the jurisdiction drop-down if the user only has one jurisdiction
+                    ) {
+                $scope.isMapEnabled = true;
+            } else {
+                $scope.isMapEnabled = false;
+                $scope.deselectAll();
+            }
+            $scope.$apply();
+        };
+
+        jQuery("input[name='AssessingNewArea']").on('change', $scope.handleMapVisibility);
+
+        if (!$scope.AngularViewData.UseDefaultJurisdiction) {
+            jQuery("select[name='StormwaterJurisdictionID']").on('change', $scope.handleMapVisibility);
+        }
+
+        $scope.deselectAll = function() {
+            if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
+                $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+            }
+            $scope.lastSelectedID = null;
+            $scope.lastSelectedName = null;
+        };
+
+        $scope.handleMapVisibility();
     });

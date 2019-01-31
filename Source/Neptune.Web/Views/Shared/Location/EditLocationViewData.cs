@@ -34,8 +34,7 @@ namespace Neptune.Web.Views.Shared.Location
         public EditLocationViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
             MapInitJson mapInitJson,
-            string mapFormID) : base(currentPerson,
-            StormwaterBreadCrumbEntity.TreatmentBMP)
+            string mapFormID) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());

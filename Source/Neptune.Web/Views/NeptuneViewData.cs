@@ -18,45 +18,41 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Views
 {
     public abstract class NeptuneViewData
     {
-        public string PageTitle;
-        public string HtmlPageTitle;
-        public string BreadCrumbTitle;
-        public string EntityName;
-        public string EntityUrl;
-        public string SubEntityName;
-        public string SubEntityUrl;
-        public readonly Models.NeptunePage NeptunePage;
-        public readonly Person CurrentPerson;
-        public readonly string NeptuneHomeUrl;
-        public readonly string LogInUrl;
-        public readonly string LogOutUrl;
-        public readonly string RequestSupportUrl;
-        public readonly string LegalUrl;
-        public readonly ViewPageContentViewData ViewPageContentViewData;
-        public LtInfoMenuItem HelpMenu { get; private set; }
+        public string PageTitle { get; set; }
+        public string HtmlPageTitle { get; set; }
+        public string BreadCrumbTitle { get; set; }
+        public string EntityName { get; set; }
+        public string EntityUrl { get; set; }
+        public string SubEntityName { get; set; }
+        public string SubEntityUrl { get; set; }
+        public Models.NeptunePage NeptunePage { get; }
+        public Person CurrentPerson { get; }
+        public string NeptuneHomeUrl { get; }
+        public string LogInUrl { get; }
+        public string LogOutUrl { get; }
+        public string RequestSupportUrl { get; }
+        public string LegalUrl { get; }
+        public ViewPageContentViewData ViewPageContentViewData { get; }
         public NeptuneSiteExplorerViewData NeptuneSiteExplorerViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
-        public readonly bool ShowPageTitle;
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
 
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null, NeptuneArea.OCStormwaterTools)
+        protected NeptuneViewData(Person currentPerson, NeptuneArea neptuneArea) : this(currentPerson, null, neptuneArea)
         {
         }
      
@@ -79,7 +75,7 @@ namespace Neptune.Web.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage); // todo: area should be passed from the constructor
+            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage);
            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
@@ -90,18 +86,6 @@ namespace Neptune.Web.Views
         {
 
         }
-
-
-
-        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
-            Models.NeptunePage neptunePage) : this(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
-        {
-        }
-
-        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity) : this(currentPerson)
-        {
-        }
-
 
         private void MakeNeptuneMenu(Person currentPerson)
         {
@@ -173,10 +157,6 @@ namespace Neptune.Web.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(c => c.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
             return manageMenu;
-        }
-        public string IsActiveUrl(string currentUrlPathAndQuery, string urlToCompare)
-        {
-            return currentUrlPathAndQuery == urlToCompare ? " class=\"active\"" : string.Empty;
         }
 
         public string GetBreadCrumbTitle()

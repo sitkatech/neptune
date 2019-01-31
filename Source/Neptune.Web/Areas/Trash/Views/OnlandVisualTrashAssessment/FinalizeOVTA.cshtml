@@ -69,6 +69,21 @@
         <div class="col-sm-3">@Html.LabelWithSugarFor(m => m.AssessmentAreaName)</div>
         <div class="col-sm-9">@Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })</div>
     </div>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3 control-label">
+            @Html.LabelWithSugarFor(m => m.Notes)
+        </div>
+        <div class="col-sm-9">
+            @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+            @Html.ValidationMessageFor(m => m.Notes)
+        </div>
+    </div>
 
     <hr />
 

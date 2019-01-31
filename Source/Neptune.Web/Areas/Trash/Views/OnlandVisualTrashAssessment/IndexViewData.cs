@@ -29,7 +29,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 ObjectNamePlural = "Assessments",
                 SaveFiltersInCookie = true
             };
-            GridName = "treatmentBMPsGrid";
+            GridName = "onlandVisualTrashAssessmentsGrid";
             GridDataUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OVTAGridJsonData());
             NewUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(null));
