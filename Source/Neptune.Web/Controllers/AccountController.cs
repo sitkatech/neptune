@@ -37,7 +37,7 @@ namespace Neptune.Web.Controllers
 
         protected override string LoginUrl
         {
-            get { return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn()); }
+            get { return SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot); }
         }
 
         protected override ISitkaDbContext SitkaDbContext => HttpRequestStorage.DatabaseEntities;

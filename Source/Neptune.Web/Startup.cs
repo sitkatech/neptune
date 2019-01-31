@@ -44,7 +44,7 @@ namespace Neptune.Web
             {
                 ClientId = NeptuneWebConfiguration.KeystoneOpenIDClientId,
                 Authority = NeptuneWebConfiguration.KeystoneOpenIDUrl,
-                RedirectUri = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn()), // this has to match the keystone client redirect uri
+                RedirectUri = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot), // this has to match the keystone client redirect uri
                 PostLogoutRedirectUri = $"https://{NeptuneWebConfiguration.CanonicalHostNameRoot}/", // OpenID is super picky about this; url must match what Keystone has EXACTLY (Trailing slash and all)
                 ResponseType = "id_token token",
                 Scope = "openid all_claims keystone",

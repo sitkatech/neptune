@@ -52,7 +52,7 @@ namespace Neptune.Web.Common
 
         public static string GenerateLogInUrlWithReturnUrl()
         {
-            var logInUrl = SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c => c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot);
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn());
 
             var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
 

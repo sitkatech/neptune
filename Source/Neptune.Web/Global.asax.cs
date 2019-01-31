@@ -119,7 +119,8 @@ namespace Neptune.Web
             {
                 return;
             }
-            var canonicalHostName = NeptuneWebConfiguration.GetCanonicalHost(Request.Url.Host, true);
+
+            var canonicalHostName = NeptuneWebConfiguration.GetCanonicalHost(Request.Url.Host, true) ?? NeptuneWebConfiguration.CanonicalHostName;
 
             // Check for hostname match (deliberately case-insensitive, DNS is case-insensitive and so is SSL Cert for common name) against the canonical host name as specified in the configuration
             if (!String.Equals(Request.Url.Host, canonicalHostName, StringComparison.InvariantCultureIgnoreCase))

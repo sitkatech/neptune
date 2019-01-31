@@ -18,13 +18,11 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
-using Neptune.Web.Security;
-using LtInfo.Common;
 using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
+using Neptune.Web.Models;
+using System.Collections.Generic;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -33,13 +31,9 @@ namespace Neptune.Web.Views.Shared
         public Person CurrentPerson { get; }
         public string RequestSupportUrl { get; }
         public string AboutUrl { get; }
-        public string ProjectsUrl { get; }
-        public string FullProjectListUrl { get; }
-        public string AnnouncementsUrl { get; }
         public string LogInUrl { get; }
         public string LogOutUrl { get; }
         public List<LtInfoMenuItem> TopLevelLtInfoMenus { get; }
-        public bool UserCanViewProjectLaunchPad { get; }
 
         public NeptuneNavBarViewData(Person currentPerson, string logInUrl, string logOutUrl, string requestSupportUrl)
         {
@@ -51,26 +45,19 @@ namespace Neptune.Web.Views.Shared
 
             AboutUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(hc => hc.About());
             TopLevelLtInfoMenus = MakeFullNeptuneMenu(currentPerson);
-
-            //UserCanViewProjectLaunchPad = new ProjectUpdateViewAndCanProposeProjectFeature().HasPermissionByPerson(CurrentPerson);
         }
 
         private List<LtInfoMenuItem> MakeFullNeptuneMenu(Person currentPerson)
         {
-
-            // Manage Menu
-            // -----------
-            //manageMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
-            var HelpMenu = new LtInfoMenuItem("Help");
-            HelpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
+            var helpMenu = new LtInfoMenuItem("Help");
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
                 ModalDialogFormHelper.ModalDialogFormLink("Request Support", RequestSupportUrl, "Request Support", 800,
                     "Submit Request", "Cancel", new List<string>(), null, null).ToString(), "ToolHelp"));
-            HelpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
 
-            HelpMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
+            helpMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
 
-            // Build List of Menu Items
-            var topLevelLtInfoMenuItems = new List<LtInfoMenuItem> { HelpMenu };
+            var topLevelLtInfoMenuItems = new List<LtInfoMenuItem> { helpMenu };
 
             return topLevelLtInfoMenuItems;
         }
