@@ -29,7 +29,6 @@ namespace Neptune.Web.Security
                 return new PermissionCheckResult("The Person who you are requesting to edit doesn't exist.");
             }
             
-            //Only SitkaAdmin users should be able to see other SitkaAdmin users
             var currentPersonIsAdmin = person.Role == Role.SitkaAdmin || person.Role == Role.Admin;
             var currentPersonIsJurisdictionManager = person.Role == Role.JurisdictionManager;
             var personBeingEditedIsAdmin = contextModelObject.Role == Role.SitkaAdmin || contextModelObject.Role == Role.Admin;

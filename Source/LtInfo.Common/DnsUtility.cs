@@ -65,6 +65,12 @@ namespace LtInfo.Common
                 // So if you find yourself wondering about this code, you may need to widen the catch above to more (all?) exceptions.
                 returnString = ipAddress;
             }
+            catch (Exception ex)
+            {
+                // Had reports of user still getting the yellow-screen-of-death, so adding this so any future failures don't occur silently -- JHB 1/30/2019
+                SitkaLogger.Instance.LogDetailedErrorMessage(ex);
+                returnString = ipAddress;
+            }
             return returnString;
         }
     }
