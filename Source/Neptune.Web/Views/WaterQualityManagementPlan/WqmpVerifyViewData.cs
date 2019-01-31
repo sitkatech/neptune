@@ -12,7 +12,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
 
         public WqmpVerifyViewData(Person currentPerson, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = $"{waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName} Verification {waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}";
             SubEntityName = waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName;

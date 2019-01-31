@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public readonly string VerifiedUnverifiedUrl;
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             PageTitle = treatmentBMP.TreatmentBMPName;

@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.FieldDefinition
         public readonly string GridName;
         public readonly string GridDataUrl;
 
-        public IndexViewData(Person currentPerson) : base(currentPerson)
+        public IndexViewData(Person currentPerson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Field Definitions";
             PageTitle = "Manage Field Definitions";

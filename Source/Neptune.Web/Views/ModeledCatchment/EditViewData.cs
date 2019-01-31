@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public Models.ModeledCatchment ModeledCatchment { get; }
 
         public EditViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ModeledCatchment = modeledCatchment;
             SubEntityName = modeledCatchment.ModeledCatchmentName;

@@ -24,7 +24,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             IEnumerable<Models.CustomAttributeType> maintenanceAttributeTypes, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "All Field Records";
             EntityName = "Field Records";

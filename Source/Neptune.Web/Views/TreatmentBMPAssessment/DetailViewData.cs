@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public ImageCarouselViewData ImageCarouselViewData { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
             CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);

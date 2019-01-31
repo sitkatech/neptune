@@ -21,7 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyType>  waterQualityManagementPlanVerifyTypes, 
             List<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses,
             List<WaterQualityManagementPlanVerifyStatus>  waterQualityManagementPlanVerifyStatuses) 
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = "New Water Quality Management Plan O&M Verification";

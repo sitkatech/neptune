@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             Models.WaterQualityManagementPlan waterQualityManagementPlan,
             MapInitJson mapInitJson,
             SystemAttribute systemAttribute)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

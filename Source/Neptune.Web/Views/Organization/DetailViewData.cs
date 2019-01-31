@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.Organization
         public string NewFundingSourceUrl { get; }
         public string ManageFundingSourcesUrl { get; }
 
-        public DetailViewData(Person currentPerson, Models.Organization organization) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.Organization organization) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             Organization = organization;
             EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();

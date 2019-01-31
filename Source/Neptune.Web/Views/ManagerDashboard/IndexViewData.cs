@@ -23,7 +23,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string TreatmentBMPIndexUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";

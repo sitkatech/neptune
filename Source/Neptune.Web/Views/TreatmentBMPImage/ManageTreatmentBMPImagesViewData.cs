@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.TreatmentBMPImage
         public ManagePhotosWithPreviewViewData ManagePhotosWithPreviewViewData { get; }
 
         public ManageTreatmentBMPImagesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, ManagePhotosWithPreviewViewData managePhotosWithPreviewViewData)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

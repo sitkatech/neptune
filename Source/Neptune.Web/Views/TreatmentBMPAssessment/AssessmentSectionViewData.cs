@@ -15,7 +15,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public bool AssessmentInformationComplete { get; }
 
         public AssessmentSectionViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment, string sectionName)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
 

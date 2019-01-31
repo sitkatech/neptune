@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         public bool MissingRequiredAttributes { get; }
 
         public EditAttributesViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP,
-            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes) : base(currentPerson)
+            CustomAttributeTypePurpose customAttributeTypePurpose, bool isSubForm, bool missingRequiredAttributes) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             IsSubForm = isSubForm;
             MissingRequiredAttributes = missingRequiredAttributes;
@@ -56,7 +56,7 @@ namespace Neptune.Web.Views.Shared.EditAttributes
         }
 
         public EditAttributesViewData(Person currentPerson, Models.FieldVisit fieldVisit, bool isSubForm, bool missingRequiredAttributes) : base(
-            currentPerson)
+            currentPerson, NeptuneArea.OCStormwaterTools)
         {
             IsSubForm = isSubForm;
             MissingRequiredAttributes = missingRequiredAttributes;

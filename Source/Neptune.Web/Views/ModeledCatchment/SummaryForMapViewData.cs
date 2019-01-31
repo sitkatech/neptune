@@ -29,7 +29,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public readonly string DeleteModeledCatchmentUrl;
         public readonly bool CanDeleteCatchment;
 
-        public SummaryForMapViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, string deleteModeledCatchmentUrl, bool canDeleteCatchment) : base(currentPerson)
+        public SummaryForMapViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment, string deleteModeledCatchmentUrl, bool canDeleteCatchment) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ModeledCatchment = modeledCatchment;
             DeleteModeledCatchmentUrl = deleteModeledCatchmentUrl;

@@ -11,7 +11,7 @@ namespace Neptune.Web.Areas.Trash.Views
 {
     public class TrashModuleViewData : NeptuneViewData
     {
-        public TrashModuleViewData(Person currentPerson) : base(currentPerson)
+        public TrashModuleViewData(Person currentPerson) : base(currentPerson, NeptuneArea.Trash)
         {
             MakeTrashModuleMenu();
         }

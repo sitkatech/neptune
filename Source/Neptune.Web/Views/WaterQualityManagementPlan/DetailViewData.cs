@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
             List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
             List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = WaterQualityManagementPlan.WaterQualityManagementPlanName;
@@ -88,6 +88,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             var calculatedParcelAcres =
                 WaterQualityManagementPlan
                     .CalculateParcelAcreageTotal(); // This is 'calculated' by summing parcel recorded acres - not sure that's what's intended by calculated in this case
+
             // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
             CalculatedParcelArea = calculatedParcelAcres != 0
                 ? $"{Math.Round(calculatedParcelAcres, 1).ToString(CultureInfo.InvariantCulture)} acres"

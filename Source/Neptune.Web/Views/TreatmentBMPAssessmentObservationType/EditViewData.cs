@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
             List<ObservationTargetType> observationTargetTypes,
             List<ObservationTypeCollectionMethod> observationTypeCollectionMethods, string submitUrl,
             Models.NeptunePage instructionsNeptunePage, Models.NeptunePage observationInstructionsNeptunePage,
-            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
+            Models.NeptunePage labelAndUnitsInstructionsNeptunePage, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Observation Type";
             EntityUrl = SitkaRoute<TreatmentBMPAssessmentObservationTypeController>.BuildUrlFromExpression(x => x.Index());

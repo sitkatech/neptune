@@ -28,7 +28,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public DetailViewData(Person currentPerson, Models.FieldVisit fieldVisit,
             AssessmentDetailViewData initialAssessmentViewData,
-            AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson)
+            AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
             MaintenanceRecord = FieldVisit.GetMaintenanceRecord();

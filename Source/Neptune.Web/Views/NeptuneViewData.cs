@@ -26,26 +26,25 @@ using Neptune.Web.Views.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace Neptune.Web.Views
 {
     public abstract class NeptuneViewData
     {
-        public string PageTitle;
-        public string HtmlPageTitle;
-        public string BreadCrumbTitle;
-        public string EntityName;
-        public string EntityUrl;
-        public string SubEntityName;
-        public string SubEntityUrl;
-        public readonly Models.NeptunePage NeptunePage;
-        public readonly Person CurrentPerson;
-        public readonly string NeptuneHomeUrl;
-        public readonly string LogInUrl;
-        public readonly string LogOutUrl;
-        public readonly string RequestSupportUrl;
-        public readonly string LegalUrl;
-        public readonly ViewPageContentViewData ViewPageContentViewData;
+        public string PageTitle { get; set; }
+        public string HtmlPageTitle { get; set; }
+        public string BreadCrumbTitle { get; set; }
+        public string EntityName { get; set; }
+        public string EntityUrl { get; set; }
+        public string SubEntityName { get; set; }
+        public string SubEntityUrl { get; set; }
+        public Models.NeptunePage NeptunePage { get; }
+        public Person CurrentPerson { get; }
+        public string NeptuneHomeUrl { get; }
+        public string LogInUrl { get; }
+        public string LogOutUrl { get; }
+        public string RequestSupportUrl { get; }
+        public string LegalUrl { get; }
+        public ViewPageContentViewData ViewPageContentViewData { get; }
         public NeptuneSiteExplorerViewData NeptuneSiteExplorerViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
@@ -53,7 +52,7 @@ namespace Neptune.Web.Views
         /// <summary>
         /// Call for page without associated NeptunePage
         /// </summary>
-        protected NeptuneViewData(Person currentPerson) : this(currentPerson, null, NeptuneArea.OCStormwaterTools)
+        protected NeptuneViewData(Person currentPerson, NeptuneArea neptuneArea) : this(currentPerson, null, neptuneArea)
         {
         }
      
@@ -86,11 +85,6 @@ namespace Neptune.Web.Views
             neptunePage, false, neptuneArea)
         {
 
-        }
-
-        protected NeptuneViewData(Person currentPerson,
-            Models.NeptunePage neptunePage) : this(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
-        {
         }
 
         private void MakeNeptuneMenu(Person currentPerson)
@@ -163,10 +157,6 @@ namespace Neptune.Web.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<CustomAttributeTypeController>(c => c.Manage()), currentPerson, "Custom Attributes", "Group2"));
 
             return manageMenu;
-        }
-        public string IsActiveUrl(string currentUrlPathAndQuery, string urlToCompare)
-        {
-            return currentUrlPathAndQuery == urlToCompare ? " class=\"active\"" : string.Empty;
         }
 
         public string GetBreadCrumbTitle()

@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         public bool Standalone { get; }
 
         public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
             Standalone = standalone;

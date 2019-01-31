@@ -17,7 +17,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string DownloadBMPInventoryUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBmpsInExportCount = treatmentBmpsInExportCount;
             FeatureClassesInExportCount = featureClassesInExportCount;

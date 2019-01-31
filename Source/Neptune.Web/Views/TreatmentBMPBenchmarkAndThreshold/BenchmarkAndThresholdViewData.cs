@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         private BenchmarkAndThresholdViewData(Person currentPerson,  
             Models.TreatmentBMP treatmentBMP, 
             string sectionName)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
             InstructionsUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x => x.Instructions(treatmentBMP.TreatmentBMPID));
@@ -58,6 +58,4 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         {            
         }
     }
-
-  
 }

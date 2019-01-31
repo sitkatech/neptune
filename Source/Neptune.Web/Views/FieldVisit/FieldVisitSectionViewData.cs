@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.FieldVisit
 
 
         public FieldVisitSectionViewData(Person currentPerson, Models.FieldVisit fieldVisit, Models.FieldVisitSection fieldVisitSection)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FieldVisit = fieldVisit;
             SectionName = fieldVisitSection.FieldVisitSectionName;

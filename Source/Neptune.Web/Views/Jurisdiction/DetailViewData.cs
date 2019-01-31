@@ -43,7 +43,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly List<Person> UsersAssignedToJurisdiction;
 
 
-        public DetailViewData(Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(currentPerson) 
+        public DetailViewData(Person currentPerson, StormwaterJurisdiction stormwaterJurisdiction) : base(currentPerson, NeptuneArea.OCStormwaterTools) 
         {
             StormwaterJurisdiction = stormwaterJurisdiction;
             PageTitle = stormwaterJurisdiction.GetOrganizationDisplayName();
