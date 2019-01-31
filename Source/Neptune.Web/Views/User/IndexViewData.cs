@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.User
         public string InviteUserUrl { get; }
         public bool UserIsAdmin { get; }
 
-        public IndexViewData(Person currentPerson) : base(currentPerson)
+        public IndexViewData(Person currentPerson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "All Users";
             EntityName = "Users";

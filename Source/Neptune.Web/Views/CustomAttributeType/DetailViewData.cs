@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.CustomAttributeType
         public string TreatmentBMPTypeGridDataUrl { get; }
 
         public DetailViewData(Person currentPerson,
-            Models.CustomAttributeType customAttributeType) : base(currentPerson)
+            Models.CustomAttributeType customAttributeType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             CustomAttributeType = customAttributeType;
             EntityName = Models.FieldDefinition.CustomAttributeType.GetFieldDefinitionLabelPluralized();

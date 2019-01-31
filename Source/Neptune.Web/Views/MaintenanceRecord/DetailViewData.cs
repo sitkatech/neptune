@@ -16,7 +16,7 @@ namespace Neptune.Web.Views.MaintenanceRecord
         public bool BMPTypeHasObservationTypes { get; }
         public bool UserHasCustomAttributeTypeManagePermissions { get; }
 
-        public DetailViewData(Person currentPerson, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.MaintenanceRecord maintenanceRecord) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());

@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
 
 
         public DetailViewData(Person currentPerson,
-            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson)
+            Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessmentObservationType = treatmentBMPAssessmentObservationType;
             EntityName = "Observation Type";

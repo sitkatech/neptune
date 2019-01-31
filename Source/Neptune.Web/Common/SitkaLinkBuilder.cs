@@ -33,7 +33,7 @@ using Microsoft.Web.Mvc;
 namespace Neptune.Web.Common
 {
     /// <summary>
-    /// This is a replacement for <see cref="LinkBuilder.BuildUrlFromExpression{TController}"/> it calls <see cref="RouteCollectionExtensions.GetVirtualPathForArea(System.Web.Routing.RouteCollection,System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary)"/> which is too slow
+    /// This is a replacement for <see cref="LinkBuilder.BuildUrlFromExpression{TController}"/> it calls <see cref="System.Web.Mvc.RouteCollectionExtensions.GetVirtualPathForArea(System.Web.Routing.RouteCollection,System.Web.Routing.RequestContext,System.Web.Routing.RouteValueDictionary)"/> which is too slow
     /// </summary>
     public static class SitkaLinkBuilder
     {
@@ -67,7 +67,25 @@ namespace Neptune.Web.Common
                 return null;
             }
             
-            var routeUrl = vpd.VirtualPath;
+            var routeUrl = vpd.VirtualPath;// Check if we are using DomainRoutes; really, Armstrong is the only one that does not use this.  
+            // Corral/LTInfo should be going this route
+            if (routeCollection.Any(x => x is DomainRoute))
+            {                
+                var route =
+                    routeCollection.Where(x => x is DomainRoute).Cast<DomainRoute>()
+                        .FirstOrDefault(
+                            entry =>
+                                entry.SitkaRouteTableEntry.Namespace == controllerType.Namespace && entry.SitkaRouteTableEntry.Controller == controllerName &&
+                                entry.SitkaRouteTableEntry.Action == actionName);
+
+                Check.Require(route != null,
+                    $"Could not build a Url for Namespace \"{controllerType.Namespace}\", Controller \"{controllerName}\", Action \"{actionName}\" because no matching route was found");
+
+                if (!route.SitkaRouteTableEntry.IsCrossAreaRoute && !string.IsNullOrWhiteSpace(route.Domain))
+                {
+                    return $"https://{route.Domain}{routeUrl}";
+                }
+            }
             return routeUrl;
         }
 

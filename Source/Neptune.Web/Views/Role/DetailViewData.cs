@@ -18,30 +18,27 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using LtInfo.Common;
-using Neptune.Web.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Views.Role
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly PersonWithRoleGridSpec GridSpec;
-        public readonly string GridName;
-        public readonly string GridDataUrl;
+        public PersonWithRoleGridSpec GridSpec { get; }
+        public string GridName { get; }
+        public string GridDataUrl { get; }
 
-        public List<FeaturePermission> ApprovedFeatures;
-        public List<FeaturePermission> DeniedFeatures;
-        public List<Person> PeopleWithRole;
-        public readonly string RoleName;
-        public readonly string RoleDescription;
+        public List<FeaturePermission> ApprovedFeatures { get; }
+        public List<FeaturePermission> DeniedFeatures { get; }
+        public string RoleName { get; }
+        public string RoleDescription { get; }
 
         public DetailViewData(Person currentPerson, IRole role)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             var featurePermissions = role.GetFeaturePermissions();
             ApprovedFeatures = featurePermissions.Where(x => x.HasPermission).ToList();
@@ -50,11 +47,11 @@ namespace Neptune.Web.Views.Role
             RoleName = role.RoleDisplayName;
             RoleDescription = role.RoleDescription;
 
-            GridSpec = new PersonWithRoleGridSpec() {ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true};
+            GridSpec = new PersonWithRoleGridSpec() { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
             GridName = "PersonWithRoleGrid";
             GridDataUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(tc => tc.PersonWithRoleGridJsonData(role.RoleID));
 
-            PageTitle = String.Format("Role Summary for {0}", RoleName);
+            PageTitle = $"Role Summary for {RoleName}";
             EntityName = "Role Summary";
         }
     }

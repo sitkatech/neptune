@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.Home
         public List<TrainingVideo> TrainingVideos { get; }
 
         public TrainingViewData(Person currentPerson, Models.NeptunePage neptunePage,
-            List<TrainingVideo> trainingVideos) : base(currentPerson, neptunePage)
+            List<TrainingVideo> trainingVideos) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Training";
             EntityName = "Stormwater Tools";

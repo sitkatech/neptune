@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.FundingSource
         public readonly bool UserHasFundingSourceManagePermissions;
         public readonly string EditFundingSourceUrl;
 
-        public DetailViewData(Person currentPerson, Models.FundingSource fundingSource) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.FundingSource fundingSource) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             FundingSource = fundingSource;
             PageTitle = fundingSource.GetDisplayName();

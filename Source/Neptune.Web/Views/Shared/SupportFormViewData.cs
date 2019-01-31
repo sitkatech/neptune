@@ -36,7 +36,7 @@ namespace Neptune.Web.Views.Shared
 
         public SupportFormViewData(Person currentPerson, Models.NeptunePage neptunePage, string successMessage,
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
-            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl, bool isStandalonePage) : base(currentPerson, neptunePage)
+            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl, bool isStandalonePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = SystemAttributeHelpers.GetTenantDisplayName();
             PageTitle = "Request Support";

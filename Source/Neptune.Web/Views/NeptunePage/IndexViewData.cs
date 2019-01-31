@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.NeptunePage
         public readonly string GridDataUrl;
         public readonly string NeptunePageUrl;
 
-        public IndexViewData(Person currentPerson) : base(currentPerson, null, null)
+        public IndexViewData(Person currentPerson) : base(currentPerson, null, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Page Content";
             PageTitle = "Manage Page Content";

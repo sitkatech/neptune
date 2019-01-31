@@ -80,8 +80,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewInstructions(InstructionsViewModel viewModel, OnlandVisualTrashAssessment ovta)
         {
             var viewData = new InstructionsViewData(CurrentPerson,
-                NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAInstructions),
-                StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment, ovta);
+                NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAInstructions), ovta);
             return RazorView<Instructions, InstructionsViewData, InstructionsViewModel>(viewData, viewModel);
         }
 
@@ -108,7 +107,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
 
-            var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+            var viewData = new InitiateOVTAViewData(CurrentPerson,
                 onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
@@ -170,7 +169,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
 
-            var viewData = new RecordObservationsViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+            var viewData = new RecordObservationsViewData(CurrentPerson,
                 onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
                 viewModel);
@@ -210,7 +209,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
             }
 
-            var viewData = new FinalizeOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
+            var viewData = new FinalizeOVTAViewData(CurrentPerson,
                 onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
             return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }

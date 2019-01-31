@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             IEnumerable<Models.Organization> organizations,
             IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());

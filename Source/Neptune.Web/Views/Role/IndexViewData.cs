@@ -18,10 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
+using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using LtInfo.Common;
-using Neptune.Web.Common;
 
 namespace Neptune.Web.Views.Role
 {
@@ -31,7 +30,7 @@ namespace Neptune.Web.Views.Role
         public readonly string GridName;
         public readonly string GridDataUrl;
 
-        public IndexViewData(Person currentPerson) : base(currentPerson)
+        public IndexViewData(Person currentPerson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             GridSpec = new IndexGridSpec { ObjectNameSingular = "Role", ObjectNamePlural = "Roles", SaveFiltersInCookie = true };
             GridName = "RoleGrid";

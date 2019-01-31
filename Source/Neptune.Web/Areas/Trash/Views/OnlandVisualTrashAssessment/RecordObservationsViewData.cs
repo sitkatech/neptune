@@ -7,8 +7,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public ViewDataForAngularClass ViewDataForAngular { get; }
         public OVTAObservationsMapInitJson MapInitJson { get; }
 
-        public RecordObservationsViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, Models.OnlandVisualTrashAssessment ovta, OVTAObservationsMapInitJson mapInitJson)
-            : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.RecordObservations, ovta)
+        public RecordObservationsViewData(Person currentPerson, Models.OnlandVisualTrashAssessment ovta, OVTAObservationsMapInitJson mapInitJson)
+            : base(currentPerson, Models.OVTASection.RecordObservations, ovta)
         {
             MapInitJson = mapInitJson;
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson);

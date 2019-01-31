@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public readonly string NewTreatmentBMPTypeUrl;
 
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";
             PageTitle = $"Manage {Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized()}";

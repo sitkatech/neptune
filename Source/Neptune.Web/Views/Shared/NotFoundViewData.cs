@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.Shared
     public class NotFoundViewData : NeptuneViewData
     {
         public NotFoundViewData(Person currentPerson)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             HtmlPageTitle = "Page Not Found";
             PageTitle = "Page Not Found";

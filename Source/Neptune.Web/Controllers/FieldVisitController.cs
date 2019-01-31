@@ -100,7 +100,7 @@ namespace Neptune.Web.Controllers
             var fieldVisit = fieldVisitPrimaryKey.EntityObject;
             var initialAssessmentViewData = new AssessmentDetailViewData(CurrentPerson, fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.Initial), TreatmentBMPAssessmentTypeEnum.Initial);
             var postMaintenanceAssessmentViewData = new AssessmentDetailViewData(CurrentPerson, fieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance), TreatmentBMPAssessmentTypeEnum.PostMaintenance);
-            var viewData = new DetailViewData(CurrentPerson, StormwaterBreadCrumbEntity.FieldVisits, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData);
+            var viewData = new DetailViewData(CurrentPerson, fieldVisit, initialAssessmentViewData, postMaintenanceAssessmentViewData);
             return RazorView<Detail, DetailViewData>(viewData);
         }
 
@@ -408,6 +408,8 @@ namespace Neptune.Web.Controllers
             // if we don't already have one created now is the time
             if (fieldVisit.GetMaintenanceRecord() == null)
             {
+                // a little awkward, but newing up the object is sufficient to add it to the EF changeset since we're using the entity-consuming constructor
+                // ReSharper disable once ObjectCreationAsStatement
                 new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPTypeID, fieldVisit) { MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID };
             }
             
@@ -607,18 +609,13 @@ namespace Neptune.Web.Controllers
             // need this check to support deleting assessments from the edit page
             if (treatmentBMPAssessment == null)
             {
-                if (treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial)
-                {
-                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisitPrimaryKey)));
-                }
-                else
-                {
-                    return Redirect(SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.PostMaintenanceAssessment(fieldVisitPrimaryKey)));
-
-                }
+                return Redirect(treatmentBMPAssessmentTypeEnum == TreatmentBMPAssessmentTypeEnum.Initial
+                    ? SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.Assessment(fieldVisitPrimaryKey))
+                    : SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                        x.PostMaintenanceAssessment(fieldVisitPrimaryKey)));
             }
 
-            var existingObservations = treatmentBMPAssessment != null ? treatmentBMPAssessment.TreatmentBMPObservations.ToList() : new List<TreatmentBMPObservation>();
+            var existingObservations = treatmentBMPAssessment.TreatmentBMPObservations.ToList();
             var viewModel = new ObservationsViewModel(existingObservations);
             var viewData = new ObservationsViewData(fieldVisit, treatmentBMPAssessmentTypeEnum, CurrentPerson);
             return RazorView<Observations, ObservationsViewData, ObservationsViewModel>(viewData, viewModel);
@@ -648,6 +645,7 @@ namespace Neptune.Web.Controllers
 
             foreach (var collectionMethodSectionViewModel in viewModel.Observations)
             {
+                // TODO: there should probably be a null-check here
                 var treatmentBMPAssessmentObservationType =
                     HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes
                         .GetTreatmentBMPAssessmentObservationType(collectionMethodSectionViewModel

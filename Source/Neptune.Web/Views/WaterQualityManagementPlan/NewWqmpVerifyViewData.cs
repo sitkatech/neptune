@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -22,7 +21,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             List<WaterQualityManagementPlanVerifyType>  waterQualityManagementPlanVerifyTypes, 
             List<WaterQualityManagementPlanVisitStatus> waterQualityManagementPlanVisitStatuses,
             List<WaterQualityManagementPlanVerifyStatus>  waterQualityManagementPlanVerifyStatuses) 
-            : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = "New Water Quality Management Plan O&M Verification";

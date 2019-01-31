@@ -8,7 +8,7 @@ using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
 {
-    public class IndexViewData : NeptuneViewData
+    public class IndexViewData : TrashModuleViewData
     {
         public ViewDataForAngularClass ViewDataForAngular { get; }
         public MapInitJson MapInitJson { get; }

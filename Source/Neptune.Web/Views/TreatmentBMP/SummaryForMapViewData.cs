@@ -35,11 +35,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string FieldVisitUrl { get; }
         public bool UserHasFieldVisitPermissions { get; }
 
-        public SummaryForMapViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP) : base(currentPerson)
+        public SummaryForMapViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;
-            // todo: we don't have the concept of a keyphoto yet
-            //KeyPhoto = treatmentBMP.TreatmentBMPImages.SingleOrDefault(x => x.IsKeyPhoto);
+            // we don't have the concept of a keyphoto; just arbitrarily pick the first photo
             KeyPhoto = treatmentBMP.TreatmentBMPImages.FirstOrDefault();
             FieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.New(TreatmentBMP));
             UserHasFieldVisitPermissions = new FieldVisitCreateFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;

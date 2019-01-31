@@ -1,0 +1,129 @@
+﻿@*-----------------------------------------------------------------------
+    <copyright file="NavAndHeaderLayout.cshtml" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+    Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
+
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
+@using System.Diagnostics
+@using Neptune.Web.Common
+@using Neptune.Web.Models
+@using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Views.Shared
+@using NeptuneWebConfiguration = LtInfo.Common.SitkaWebConfiguration
+@inherits Neptune.Web.Areas.Modeling.Views.Shared.NavAndHeaderLayout
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@SystemAttributeHelpers.GetTenantDisplayName()  @(!string.IsNullOrWhiteSpace(ViewDataTyped.HtmlPageTitle) ? string.Format(" | {0}", ViewDataTyped.HtmlPageTitle) : string.Empty)@ViewDataTyped.GetBreadCrumbTitle()</title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-57x57.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-60x60.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-72x72.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-76x76.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-114x114.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-120x120.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-32x32.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-96x96.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-16x16.png", SystemAttributeHelpers.GetTenantName())>
+
+    @{ Html.RenderRazorSitkaPartial<NeptuneIncludes>(); }
+
+
+
+    @*if there is a tenant style sheet, use that otherwise use the default. The tenant style sheet should import the default sheet so no need to load it twice*@
+    <link href="@Url.Content(SystemAttributeHelpers.GetTenantStyleSheetUrl())" rel="stylesheet" type="text/css" />
+    @*swich commented lines for testing purposes*@
+    @*<link href="~/Content/Bootstrap/neptune/ocstormwater.theme.min.css" rel="stylesheet" type="text/css" />*@
+
+    @RenderSection("JavascriptAndStylesContent", false)
+    <script>
+        jQuery(function () {
+            jQuery(window).scroll(function () {
+                // this is fragile, the 10px buffer is for when the document height is just equal to the height of the view port + the height of the header
+                var outerHeight = jQuery(document).height();
+                var heightOfViewPort = jQuery(window).height();
+                var headerHeight = jQuery('.header')[0].offsetHeight;
+                
+                if (jQuery(window).scrollTop() > headerHeight && (outerHeight > (heightOfViewPort + headerHeight + 10))) {
+                    jQuery('.neptuneNavbar').addClass('navbar-fixed-top');
+                    jQuery("#mainnavandcontent").css("margin-top", jQuery("#neptune-collapse-navbar").css("height"));
+                }
+                if (jQuery(window).scrollTop() <= headerHeight) {
+                    jQuery('.neptuneNavbar').removeClass('navbar-fixed-top');
+                    jQuery("#mainnavandcontent").css("margin-top", "0");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="expandToFillScreen">
+        <header class="neptuneHeader container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6" style="padding-left:0">
+                    @{ Html.RenderRazorSitkaPartial<NeptuneSiteExplorer, NeptuneSiteExplorerViewData>(ViewDataTyped.NeptuneSiteExplorerViewData); }
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div id="mainnavandcontent">
+            <nav class="navbar neptuneNavbar">
+                <div>
+                    <!-- Brand and toggle get grouped for better mobile display -->
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="neptune-collapse-navbar">
+                        <ul class="nav navbar-nav navbar-left">
+                            @foreach (var topLevelMenu in ViewDataTyped.TopLevelLtInfoMenuItems)
+                            {
+                                @topLevelMenu.RenderMenu()
+                            }
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+            @RenderSection("BeforeBodyContainer", false)
+
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="container">
+            <p class="text-center">
+                This program is free software; you can redistribute it and/or modify it under the terms of the <a href="https://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public License</a> as published by the <a href="https://www.fsf.org/">Free Software Foundation</a>.
+                Disclaimers, copyright, and source code are available <a href="@ViewDataTyped.LegalUrl">here</a>.
+            </p>
+            <p class="text-center">
+                Version @NeptuneWebConfiguration.WebApplicationVersionInfo.Value.ApplicationVersion | Compiled @NeptuneWebConfiguration.WebApplicationVersionInfo.Value.DateCompiled.ToString("yyyy-MM-dd HH:mm:ss") | PID @Process.GetCurrentProcess().Id
+            </p>
+        </div>
+    </footer>
+
+    @{ Html.RenderRazorSitkaPartial<NeptuneLateLoadingIncludes>(); }
+
+</body>
+</html>

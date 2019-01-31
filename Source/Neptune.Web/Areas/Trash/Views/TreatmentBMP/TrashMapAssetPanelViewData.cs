@@ -24,7 +24,7 @@ using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.TreatmentBMP
 {
-    public class TrashMapAssetPanelViewData : NeptuneViewData
+    public class TrashMapAssetPanelViewData : TrashModuleViewData
     {
 
         public Models.TreatmentBMP TreatmentBMP{ get; }

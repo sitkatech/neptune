@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
@@ -24,7 +23,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string TreatmentBMPIndexUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount)
-            : base(currentPerson, StormwaterBreadCrumbEntity.FieldRecords, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "Manager Dashboard";
             EntityName = "Stormwater Tools";
