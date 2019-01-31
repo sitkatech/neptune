@@ -58,6 +58,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentAreaConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationPhotoConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
@@ -120,6 +121,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
+        public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
@@ -340,6 +342,9 @@ namespace Neptune.Web.Models
 
                 case "OnlandVisualTrashAssessmentArea":
                     return OnlandVisualTrashAssessmentAreas.GetOnlandVisualTrashAssessmentArea(primaryKey);
+
+                case "OnlandVisualTrashAssessmentObservationPhoto":
+                    return OnlandVisualTrashAssessmentObservationPhotos.GetOnlandVisualTrashAssessmentObservationPhoto(primaryKey);
 
                 case "OnlandVisualTrashAssessmentObservation":
                     return OnlandVisualTrashAssessmentObservations.GetOnlandVisualTrashAssessmentObservation(primaryKey);

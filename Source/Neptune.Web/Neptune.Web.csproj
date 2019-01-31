@@ -191,6 +191,10 @@
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservation.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservation.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhoto.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhoto.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhotoConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhotoPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Organization.Binding.cs" />

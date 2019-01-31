@@ -9,6 +9,17 @@
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
         $scope.isClickToAddModeActive = false;
 
+        $scope.activateClickToAddMode = function () {
+            $scope.isClickToAddModeActive = true;
+        };
+
+        function onMapClick(event) {
+            var latlng = event.latlng;
+            setPointOnMap(latlng);
+            $scope.$apply();
+            $scope.isClickToAddModeActive = false;
+        }
+
         $scope.initializeMap = function () {
 
             if ($scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson) {
@@ -60,6 +71,7 @@
                             });
                     }
                 });
+
             $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
             $scope.observationsLayerGeoJson.on('click',
                 function(e) {
@@ -68,29 +80,16 @@
                     $scope.isClickToAddModeActive = false;
                 });
 
-
             $scope.neptuneMap.map.on("click",
                 function(event) {
                     if ($scope.isClickToAddModeActive) {
                         onMapClick(event);
                     }
                 }
-            )
-
+            );
         };
 
         $scope.initializeMap();
-
-        function onMapClick(event) {
-            var latlng = event.latlng;
-            setPointOnMap(latlng);
-            $scope.$apply();
-            $scope.isClickToAddModeActive = false;
-        }
-
-        $scope.activateClickToAddMode = function() {
-            $scope.isClickToAddModeActive = true;
-        };
 
         function setPointOnMap(latlng) {
             var feature = {

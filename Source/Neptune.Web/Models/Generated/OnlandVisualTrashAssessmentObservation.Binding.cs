@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected OnlandVisualTrashAssessmentObservation()
         {
-
+            this.OnlandVisualTrashAssessmentObservationPhotos = new HashSet<OnlandVisualTrashAssessmentObservationPhoto>();
         }
 
         /// <summary>
@@ -80,13 +80,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return OnlandVisualTrashAssessmentObservationPhotos.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name};
 
 
         /// <summary>
@@ -94,8 +94,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             dbContext.OnlandVisualTrashAssessmentObservations.Remove(this);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in OnlandVisualTrashAssessmentObservationPhotos.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -107,6 +118,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentObservationID; } set { OnlandVisualTrashAssessmentObservationID = value; } }
 
+        public virtual ICollection<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual OnlandVisualTrashAssessment OnlandVisualTrashAssessment { get; set; }
 
         public static class FieldLengths
