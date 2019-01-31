@@ -6,7 +6,7 @@
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;
-        $scope.isMapEnabled = true;
+        $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
 
         var selectAssessmentArea = function(event) {
@@ -166,20 +166,22 @@
         };
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
 
-        // assessing new area control
-        jQuery("input[name='AssessingNewArea']").on('change',
-            function() {
-                if (this.value == "True") {
-                    $scope.isMapEnabled = false;
-                    $scope.deselectAll();
-                    $scope.$apply();
-                    return;
-                } else {
-                    $scope.isMapEnabled = true;
-                    $scope.$apply();
-                }
-                $scope.$apply();
-            });
+        // disable the map according to what makes sense
+
+        $scope.handleMapVisibility = function() {
+            if (jQuery("input[name='AssessingNewArea']:checked").val() == "False" &&
+                jQuery("select[name='StormwaterJurisdictionID']").val()) {
+                $scope.isMapEnabled = true;
+            } else {
+                $scope.isMapEnabled = false;
+                $scope.deselectAll();
+            }
+            $scope.$apply();
+        };
+
+        jQuery("input[name='AssessingNewArea']").on('change', $scope.handleMapVisibility);
+
+        jQuery("select[name='StormwaterJurisdictionID']").on('change', $scope.handleMapVisibility);
 
         $scope.deselectAll = function() {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
@@ -187,5 +189,7 @@
             }
             $scope.lastSelectedID = null;
             $scope.lastSelectedName = null;
-        }
+        };
+
+        $scope.handleMapVisibility();
     });
