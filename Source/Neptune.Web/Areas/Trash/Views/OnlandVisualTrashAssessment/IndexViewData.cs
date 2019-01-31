@@ -7,7 +7,7 @@ using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
-    public class IndexViewData : NeptuneViewData
+    public class IndexViewData : TrashModuleViewData
     {
         public OVTAIndexGridSpec GridSpec { get; }
         public string GridName { get; }

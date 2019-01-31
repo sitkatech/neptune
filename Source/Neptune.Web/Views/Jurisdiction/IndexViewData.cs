@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.Jurisdiction
         public readonly string GridDataUrl;
       
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, StormwaterBreadCrumbEntity.Jurisdiction, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = "All Jurisdictions";
             EntityName = $"{Models.FieldDefinition.Jurisdiction.GetFieldDefinitionLabelPluralized()}";

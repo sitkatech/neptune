@@ -1,9 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
@@ -14,7 +12,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
 
         public WqmpVerifyViewData(Person currentPerson, WaterQualityManagementPlanVerify waterQualityManagementPlanVerify, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
-            : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             PageTitle = $"{waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName} Verification {waterQualityManagementPlanVerify.LastEditedDate.ToShortDateString()}";
             SubEntityName = waterQualityManagementPlanVerify.WaterQualityManagementPlan.WaterQualityManagementPlanName;

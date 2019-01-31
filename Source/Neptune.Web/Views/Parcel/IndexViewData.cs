@@ -40,7 +40,7 @@ namespace Neptune.Web.Views.Parcel
             string findParcelByAddressUrl,
             string findParcelByApnUrl,
             string geoserverUrl,
-            string parcelSummaryForMapUrl) : base(currentPerson, neptunePage)
+            string parcelSummaryForMapUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             IntroNarrativeContent = introNarrativeContent;
             EntityName = "Parcels";

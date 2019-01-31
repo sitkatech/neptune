@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using log4net.Util;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
@@ -13,12 +12,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public StormwaterJurisdiction DefaultJurisdiction { get; }
         public ViewDataForAngularClass ViewDataForAngular { get; }
 
-        public InitiateOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
+        public InitiateOVTAViewData(Person currentPerson,
             Models.OnlandVisualTrashAssessment ovta, IEnumerable<SelectListItem> jurisdictions,
             SelectOVTAAreaMapInitJson mapInitJson,
             IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
             StormwaterJurisdiction defaultJurisdiction)
-            : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.InitiateOVTA, ovta)
+            : base(currentPerson, Models.OVTASection.InitiateOVTA, ovta)
         {
             Jurisdictions = jurisdictions;
             MapInitJson = mapInitJson;

@@ -11,7 +11,7 @@ namespace Neptune.Web.Views.FieldVisit
     {
         public Models.FieldVisit FieldVisit { get; }
         public bool UserCanDeleteMaintenanceRecord { get; }
-        public bool UserHasCustomAttributeTypeManagePermissions { get;  }
+        public bool UserHasCustomAttributeTypeManagePermissions { get; }
         public IOrderedEnumerable<MaintenanceRecordObservation> SortedMaintenanceRecordObservations { get; }
         public AssessmentDetailViewData InitialAssessmentViewData { get; }
         public AssessmentDetailViewData PostMaintenanceAssessmentViewData { get; }
@@ -26,10 +26,11 @@ namespace Neptune.Web.Views.FieldVisit
         public string ReturnToEditUrl { get; }
         public bool CanEditStormwaterJurisdiction { get; }
 
-        public DetailViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
-            Models.FieldVisit fieldVisit, AssessmentDetailViewData initialAssessmentViewData, AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, stormwaterBreadCrumbEntity)
+        public DetailViewData(Person currentPerson, Models.FieldVisit fieldVisit,
+            AssessmentDetailViewData initialAssessmentViewData,
+            AssessmentDetailViewData postMaintenanceAssessmentViewData) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
-            FieldVisit  = fieldVisit;
+            FieldVisit = fieldVisit;
             MaintenanceRecord = FieldVisit.GetMaintenanceRecord();
             InitialAssessmentViewData = initialAssessmentViewData;
             PostMaintenanceAssessmentViewData = postMaintenanceAssessmentViewData;
@@ -45,9 +46,9 @@ namespace Neptune.Web.Views.FieldVisit
                                                  .HasPermission;
             PostMaintenanceAssessment = FieldVisit.GetAssessmentByType(TreatmentBMPAssessmentTypeEnum.PostMaintenance);
             UserCanDeletePostMaintenanceAssessment = PostMaintenanceAssessment != null &&
-                                             new TreatmentBMPAssessmentManageFeature()
-                                                 .HasPermission(currentPerson, PostMaintenanceAssessment)
-                                                 .HasPermission;
+                                                     new TreatmentBMPAssessmentManageFeature()
+                                                         .HasPermission(currentPerson, PostMaintenanceAssessment)
+                                                         .HasPermission;
             UserCanDeleteMaintenanceRecord = MaintenanceRecord != null &&
                                              new MaintenanceRecordManageFeature()
                                                  .HasPermission(currentPerson, MaintenanceRecord)
@@ -55,14 +56,21 @@ namespace Neptune.Web.Views.FieldVisit
             SortedMaintenanceRecordObservations = MaintenanceRecord?.MaintenanceRecordObservations.ToList()
                 .OrderBy(x => x.TreatmentBMPTypeCustomAttributeType.SortOrder)
                 .ThenBy(x => x.TreatmentBMPTypeCustomAttributeType.GetDisplayName());
-            UserHasCustomAttributeTypeManagePermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
-            
-            CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
-            CanEditStormwaterJurisdiction = currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
-            VerifiedUnverifiedFieldVisitUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
-            MarkAsProvisionalUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.MarkProvisionalFieldVisit(FieldVisit.PrimaryKey));
-            ReturnToEditUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.ReturnFieldVisitToEdit(FieldVisit.PrimaryKey));
-        }
+            UserHasCustomAttributeTypeManagePermissions =
+                new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
+            CanManageStormwaterJurisdiction =
+                currentPerson.CanManageStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+            CanEditStormwaterJurisdiction =
+                currentPerson.CanEditStormwaterJurisdiction(fieldVisit.TreatmentBMP.StormwaterJurisdiction);
+            VerifiedUnverifiedFieldVisitUrl =
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x => x.VerifyFieldVisit(FieldVisit.PrimaryKey));
+            MarkAsProvisionalUrl =
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                    x.MarkProvisionalFieldVisit(FieldVisit.PrimaryKey));
+            ReturnToEditUrl =
+                SitkaRoute<FieldVisitController>.BuildUrlFromExpression(x =>
+                    x.ReturnFieldVisitToEdit(FieldVisit.PrimaryKey));
+        }
     }
 }

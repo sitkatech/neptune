@@ -34,7 +34,6 @@ namespace Neptune.Web.Controllers
     public class FieldDefinitionController : NeptuneBaseController
     {
         [FieldDefinitionViewListFeature]
-        [CrossAreaRoute]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson);
@@ -42,7 +41,6 @@ namespace Neptune.Web.Controllers
         }
 
         [FieldDefinitionViewListFeature]
-        [CrossAreaRoute]
         public GridJsonNetJObjectResult<FieldDefinition> IndexGridJsonData()
         {
             var actions = GetFieldDefinitionsAndGridSpec(out var gridSpec, CurrentPerson);
@@ -58,7 +56,6 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldDefinitionManageFeature]
-        [CrossAreaRoute]
         public ViewResult Edit(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey)
         {
             var fieldDefinitionData = HttpRequestStorage.DatabaseEntities.FieldDefinitionDatas.GetFieldDefinitionDataByFieldDefinition(fieldDefinitionPrimaryKey);            
@@ -69,7 +66,6 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [FieldDefinitionManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        [CrossAreaRoute]
         public ActionResult Edit(FieldDefinitionPrimaryKey fieldDefinitionPrimaryKey, EditViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -96,7 +92,6 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldDefinitionViewFeature]
-        [CrossAreaRoute]
         public PartialViewResult FieldDefinitionDetails(int fieldDefinitionID)
         {
             var fieldDefinition = FieldDefinition.AllLookupDictionary[fieldDefinitionID];

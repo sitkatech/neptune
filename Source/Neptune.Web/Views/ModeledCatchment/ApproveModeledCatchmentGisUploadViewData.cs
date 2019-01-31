@@ -25,7 +25,7 @@ namespace Neptune.Web.Views.ModeledCatchment
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             string uploadGisReportUrlTemplateTemplate,
             string modeledCatchmentIndexUrl)
-            : base(currentPerson)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             ModeledCatchmentGeometryFeatureClassNames = currentPerson.ModeledCatchmentGeometryStagings.ToDictionary(x => x.ModeledCatchmentGeometryStagingID, x => x.FeatureClassName);
             MapInitJson = mapInitJson;

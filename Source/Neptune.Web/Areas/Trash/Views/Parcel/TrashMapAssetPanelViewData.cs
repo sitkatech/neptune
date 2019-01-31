@@ -24,7 +24,7 @@ using Neptune.Web.Views;
 
 namespace Neptune.Web.Areas.Trash.Views.Parcel
 {
-    public class TrashMapAssetPanelViewData : NeptuneViewData
+    public class TrashMapAssetPanelViewData : TrashModuleViewData
     {
 
         public Models.Parcel Parcel{ get; }

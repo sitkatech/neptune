@@ -37,7 +37,7 @@ namespace Neptune.Web.Views.Organization
         public readonly bool UserCanAddOrganization;
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = Models.FieldDefinition.Organization.GetFieldDefinitionLabelPluralized();
             PageTitle = "All Organizations";

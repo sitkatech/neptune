@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -37,10 +36,8 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
         public string EditBenchmarkAndThresholdUrl { get; }
         public ImageCarouselViewData ImageCarouselViewData { get; }
 
-
-
         public DetailViewData(Person currentPerson, Models.TreatmentBMPAssessment treatmentBMPAssessment)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPAssessment = treatmentBMPAssessment;
             CurrentPersonCanManage = CurrentPerson.IsAssignedToStormwaterJurisdiction(treatmentBMPAssessment.TreatmentBMP.StormwaterJurisdiction);

@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessmentObservationType
         public readonly string NewObservationTypeUrl;
 
         public ManageViewData(Person currentPerson, Models.NeptunePage neptunePage)
-            : base(currentPerson, neptunePage)
+            : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Observation Type";
             PageTitle = "All Observation Types";

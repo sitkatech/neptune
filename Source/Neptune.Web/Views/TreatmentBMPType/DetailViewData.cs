@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.TreatmentBMPType
         public string ObservationTypeSortOrderUrl { get; set; }
 
         public DetailViewData(Person currentPerson,
-            Models.TreatmentBMPType treatmentBMPType) : base(currentPerson)
+            Models.TreatmentBMPType treatmentBMPType) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMPType = treatmentBMPType;
             EntityName = Models.FieldDefinition.TreatmentBMPType.GetFieldDefinitionLabelPluralized();
