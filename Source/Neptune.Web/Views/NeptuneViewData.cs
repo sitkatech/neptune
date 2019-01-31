@@ -104,7 +104,6 @@ namespace Neptune.Web.Views
 
         private void MakeNeptuneMenu(Person currentPerson)
         {
-            var aboutMenuItem = LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.About()), currentPerson, "About");
 
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
