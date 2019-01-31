@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         public FindABMPViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage,
             List<Models.TreatmentBMP> treatmentBMPs, List<TreatmentBMPTypeSimple> treatmentBMPTypeSimples)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
+            : base(currentPerson, neptunePage)
         {
             PageTitle = "Find a BMP";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";

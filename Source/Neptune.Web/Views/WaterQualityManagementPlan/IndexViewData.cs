@@ -19,7 +19,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public ViewPageContentViewData VerificationNeptunePage { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
-            WaterQualityManagementPlanIndexGridSpec indexGridSpec, Models.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan, neptunePage)
+            WaterQualityManagementPlanIndexGridSpec indexGridSpec, Models.NeptunePage secondaryNeptunePage, WaterQualityManagementPlanVerificationGridSpec verificationGridSpec) : base(currentPerson, neptunePage)
         {
             var waterQualityManagementPlanPluralized = Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized();
             PageTitle = $"All {waterQualityManagementPlanPluralized}";

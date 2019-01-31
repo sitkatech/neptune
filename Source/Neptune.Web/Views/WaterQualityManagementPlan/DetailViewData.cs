@@ -4,6 +4,7 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Neptune.Web.Views.WaterQualityManagementPlan
@@ -31,8 +32,12 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public List<WaterQualityManagementPlanVerifyTreatmentBMP> WaterQualityManagementPlanVerifyTreatmentBMPs { get; }
         public string CalculatedParcelArea {  get; }
 
-        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson, ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies, List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs, List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs, List<WaterQualityManagementPlanParcel> waterQualityManagementPlanParcels)
-            : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+        public DetailViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan,
+            WaterQualityManagementPlanVerify waterQualityManagementPlanVerifyDraft, MapInitJson mapInitJson,
+            ParcelGridSpec parcelGridSpec, List<WaterQualityManagementPlanVerify> waterQualityManagementPlanVerifies,
+            List<WaterQualityManagementPlanVerifyQuickBMP> waterQualityManagementPlanVerifyQuickBmPs,
+            List<WaterQualityManagementPlanVerifyTreatmentBMP> waterQualityManagementPlanVerifyTreatmentBmPs)
+            : base(currentPerson)
         {
             WaterQualityManagementPlan = waterQualityManagementPlan;
             PageTitle = WaterQualityManagementPlan.WaterQualityManagementPlanName;
@@ -58,21 +63,35 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
             ParcelGridDataUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
                 c.ParcelsForWaterQualityManagementPlanGridData(waterQualityManagementPlan));
 
-            HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null && waterQualityManagementPlanVerifyDraft.IsDraft;
-            BeginWqmpOMVerificationRecordUrl = HasSavedWqmpDraft ? SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-            c.EditWqmpVerifyModal(waterQualityManagementPlanVerifyDraft)) : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
-                c.NewWqmpVerify(waterQualityManagementPlan));
+            HasSavedWqmpDraft = waterQualityManagementPlanVerifyDraft != null &&
+                                waterQualityManagementPlanVerifyDraft.IsDraft;
+            BeginWqmpOMVerificationRecordUrl = HasSavedWqmpDraft
+                ? SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.EditWqmpVerifyModal(waterQualityManagementPlanVerifyDraft))
+                : SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(c =>
+                    c.NewWqmpVerify(waterQualityManagementPlan));
 
-            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.IsPresent == true || x.SourceControlBMPNote != null).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs
+                .Where(x => x.IsPresent == true || x.SourceControlBMPNote != null)
+                .OrderBy(x => x.SourceControlBMPAttributeID)
+                .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
             WaterQualityManagementPlanVerifies = waterQualityManagementPlanVerifies;
             WaterQualityManagementPlanVerifyQuickBMPs = waterQualityManagementPlanVerifyQuickBmPs;
             WaterQualityManagementPlanVerifyTreatmentBMPs = waterQualityManagementPlanVerifyTreatmentBmPs;
 
             TreatmentBMPs = waterQualityManagementPlan.TreatmentBMPs.OrderBy(x => x.TreatmentBMPName).ToList();
             QuickBMPs = waterQualityManagementPlan.QuickBMPs.OrderBy(x => x.QuickBMPName).ToList();
-            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs.Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true)).OrderBy(x => x.SourceControlBMPAttributeID).GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
-            var calculatedParcelAcres = WaterQualityManagementPlan.CalculateParcelAcreageTotal(); // This is 'calculated' by summing parcel recorded acres - not sure that's what's intended by calculated in this case
-            CalculatedParcelArea = calculatedParcelAcres != 0 ? string.Format("{0} acres", Math.Round(calculatedParcelAcres, 1).ToString()) : "No parcels have been associated with this WQMP";
+            SourceControlBMPs = waterQualityManagementPlan.SourceControlBMPs
+                .Where(x => x.SourceControlBMPNote != null || (x.IsPresent != null && x.IsPresent == true))
+                .OrderBy(x => x.SourceControlBMPAttributeID)
+                .GroupBy(x => x.SourceControlBMPAttribute.SourceControlBMPAttributeCategoryID);
+            var calculatedParcelAcres =
+                WaterQualityManagementPlan
+                    .CalculateParcelAcreageTotal(); // This is 'calculated' by summing parcel recorded acres - not sure that's what's intended by calculated in this case
+            // TODO: Never compare floating-point values to zero. We should establish an application-wide error tolerance and use that instead of the direct comparison
+            CalculatedParcelArea = calculatedParcelAcres != 0
+                ? $"{Math.Round(calculatedParcelAcres, 1).ToString(CultureInfo.InvariantCulture)} acres"
+                : "No parcels have been associated with this WQMP";
         }
     }
 }

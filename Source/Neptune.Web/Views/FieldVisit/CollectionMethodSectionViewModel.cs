@@ -34,7 +34,10 @@ namespace Neptune.Web.Views.FieldVisit
             var treatmentBMPAssessmentObservationType =
                 HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes.SingleOrDefault(x =>
                     x.TreatmentBMPAssessmentObservationTypeID == TreatmentBMPAssessmentObservationTypeID);
+
+            // TODO: There should probably be a null check here, or a required attribute on the TBMPAOTID field
             var observationTypeCollectionMethod = ObservationTypeCollectionMethod.AllLookupDictionary[treatmentBMPAssessmentObservationType.ObservationTypeSpecification.ObservationTypeCollectionMethodID];
+
             validationResults.AddRange(observationTypeCollectionMethod.ValidateObservationDataJson(treatmentBMPAssessmentObservationType, ObservationData));
 
             return validationResults;

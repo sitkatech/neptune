@@ -2,7 +2,6 @@
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -18,7 +17,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string DownloadBMPInventoryUrl { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int treatmentBmpsInExportCount, int featureClassesInExportCount)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP, neptunePage)
+            : base(currentPerson, neptunePage)
         {
             TreatmentBmpsInExportCount = treatmentBmpsInExportCount;
             FeatureClassesInExportCount = featureClassesInExportCount;

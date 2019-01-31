@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Areas.Trash.Controllers;
+﻿using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
-using Neptune.Web.Security;
 using Neptune.Web.Views;
+using System.Collections.Generic;
+using System.Linq;
 using HomeController = Neptune.Web.Areas.Trash.Controllers.HomeController;
 
 namespace Neptune.Web.Areas.Trash.Views
@@ -13,6 +12,11 @@ namespace Neptune.Web.Areas.Trash.Views
     public class TrashModuleViewData : NeptuneViewData
     {
         public TrashModuleViewData(Person currentPerson) : base(currentPerson)
+        {
+            MakeTrashModuleMenu();
+        }
+
+        public TrashModuleViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.Trash)
         {
             MakeTrashModuleMenu();
         }
@@ -34,23 +38,22 @@ namespace Neptune.Web.Areas.Trash.Views
 
         private static LtInfoMenuItem BuildTrashBMPsMenu(Person currentPerson)
         {
-            var TrashBMPsMenu = new LtInfoMenuItem("Trash BMPs");
+            var trashBMPsMenu = new LtInfoMenuItem("Trash BMPs");
 
-            TrashBMPsMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Index()), currentPerson, "Home", "Group1"));
+            trashBMPsMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Index()), currentPerson, "Home", "Group1"));
 
-            return TrashBMPsMenu;
+            return trashBMPsMenu;
         }
 
         private LtInfoMenuItem BuildOVTAMenu(Person currentPerson)
         {
-            var OVTAMenu = new LtInfoMenuItem("OVTA");
+            var ovtaMenu = new LtInfoMenuItem("OVTA");
 
-            OVTAMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OnlandVisualTrashAssessmentController>(c => c.Index()), currentPerson, "View All OVTAs", "Group1"));
+            ovtaMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OnlandVisualTrashAssessmentController>(c => c.Index()), currentPerson, "View All OVTAs", "Group1"));
  
 
-            return OVTAMenu;
+            return ovtaMenu;
         }
-
 
         private static LtInfoMenuItem BuildResultsMenu(Person currentPerson)
         {
@@ -66,22 +69,8 @@ namespace Neptune.Web.Areas.Trash.Views
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<FieldDefinitionController>(c => c.Index()), currentPerson, "Custom Labels & Definitions", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<UserController>(c => c.Index()), currentPerson, "Users", "Group1"));
             manageMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<OrganizationController>(c => c.Index()), currentPerson, $"{FieldDefinition.Organization.GetFieldDefinitionLabelPluralized()}", "Group1"));
+
             return manageMenu;
-        }
-
-        public TrashModuleViewData(Person currentPerson, NeptunePage neptunePage) : base(currentPerson, neptunePage, NeptuneArea.Trash)
-        {
-            MakeTrashModuleMenu();
-        }
-
-        public TrashModuleViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity, NeptunePage neptunePage) : base(currentPerson, stormwaterBreadCrumbEntity, neptunePage)
-        {
-            MakeTrashModuleMenu();
-        }
-
-        public TrashModuleViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity) : base(currentPerson, stormwaterBreadCrumbEntity)
-        {
-            MakeTrashModuleMenu();
         }
     }
 }

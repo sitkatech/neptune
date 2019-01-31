@@ -27,11 +27,9 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
 {
     public abstract class BenchmarkAndThresholdViewData : NeptuneViewData
     {
-        public Models.TreatmentBMP TreatmentBMP;
-        public string InstructionsUrl;
-        public string SectionName;
-
-       
+        public Models.TreatmentBMP TreatmentBMP { get; }
+        public string InstructionsUrl { get; }
+        public string SectionName { get; }
 
         protected BenchmarkAndThresholdViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP)
@@ -42,7 +40,7 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
         private BenchmarkAndThresholdViewData(Person currentPerson,  
             Models.TreatmentBMP treatmentBMP, 
             string sectionName)
-            : base(currentPerson, StormwaterBreadCrumbEntity.TreatmentBMP)
+            : base(currentPerson)
         {
             TreatmentBMP = treatmentBMP;
             InstructionsUrl = SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x => x.Instructions(treatmentBMP.TreatmentBMPID));
@@ -55,8 +53,8 @@ namespace Neptune.Web.Views.TreatmentBMPBenchmarkAndThreshold
             PageTitle = "Benchmark & Threshold";
         }
 
-        protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.TreatmentBMPAssessmentObservationType TreatmentBMPAssessmentObservationType)
-            : this(currentPerson, treatmentBMP, TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName)
+        protected BenchmarkAndThresholdViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, Models.TreatmentBMPAssessmentObservationType treatmentBMPAssessmentObservationType)
+            : this(currentPerson, treatmentBMP, treatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeName)
         {            
         }
     }

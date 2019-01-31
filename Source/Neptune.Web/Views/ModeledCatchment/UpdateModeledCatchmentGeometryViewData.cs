@@ -7,7 +7,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public readonly string NewGisUploadUrl;
         public readonly string ApprovedGisUploadUrl;
 
-        public UpdateModeledCatchmentGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl) : base(currentPerson, StormwaterBreadCrumbEntity.ModeledCatchment)
+        public UpdateModeledCatchmentGeometryViewData(Person currentPerson, string newGisUploadUrl, string approvedGisUploadUrl) : base(currentPerson)
         {
             NewGisUploadUrl = newGisUploadUrl;
             ApprovedGisUploadUrl = approvedGisUploadUrl;

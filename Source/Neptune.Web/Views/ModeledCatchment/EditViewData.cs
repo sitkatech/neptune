@@ -25,10 +25,10 @@ namespace Neptune.Web.Views.ModeledCatchment
 {
     public class EditViewData : NeptuneViewData
     {
-        public readonly Models.ModeledCatchment ModeledCatchment;
+        public Models.ModeledCatchment ModeledCatchment { get; }
 
         public EditViewData(Person currentPerson, Models.ModeledCatchment modeledCatchment)
-            : base(currentPerson, StormwaterBreadCrumbEntity.ModeledCatchment)
+            : base(currentPerson)
         {
             ModeledCatchment = modeledCatchment;
             SubEntityName = modeledCatchment.ModeledCatchmentName;

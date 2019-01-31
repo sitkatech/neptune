@@ -18,14 +18,13 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-using System.Collections.Generic;
-using System.Linq;
-using LtInfo.Common.ModalDialog;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Neptune.Web.Views
@@ -47,10 +46,8 @@ namespace Neptune.Web.Views
         public readonly string RequestSupportUrl;
         public readonly string LegalUrl;
         public readonly ViewPageContentViewData ViewPageContentViewData;
-        public LtInfoMenuItem HelpMenu { get; private set; }
         public NeptuneSiteExplorerViewData NeptuneSiteExplorerViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
-        public readonly bool ShowPageTitle;
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
 
         /// <summary>
@@ -79,7 +76,7 @@ namespace Neptune.Web.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage); // todo: area should be passed from the constructor
+            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage);
            NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
@@ -91,17 +88,10 @@ namespace Neptune.Web.Views
 
         }
 
-
-
-        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
+        protected NeptuneViewData(Person currentPerson,
             Models.NeptunePage neptunePage) : this(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
         }
-
-        protected NeptuneViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity) : this(currentPerson)
-        {
-        }
-
 
         private void MakeNeptuneMenu(Person currentPerson)
         {

@@ -35,7 +35,7 @@ namespace Neptune.Web.Views.ModeledCatchment
         public readonly string UpdateModeledCatchmentGeometryUrl;
 
         public IndexViewData(Person currentPerson, MapInitJson mapInitJson, Models.NeptunePage neptunePage, string updateModeledCatchmentGeometryUrl)
-            : base(currentPerson, StormwaterBreadCrumbEntity.ModeledCatchment, neptunePage)
+            : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
             PageTitle = "All Catchments";

@@ -6,9 +6,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public OVTASummaryMapInitJson OVTASummaryMapInitJson { get; }
 
-        public FinalizeOVTAViewData(Person currentPerson, StormwaterBreadCrumbEntity stormwaterBreadCrumbEntity,
+        public FinalizeOVTAViewData(Person currentPerson,
             Models.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson)
-            : base(currentPerson, stormwaterBreadCrumbEntity, Models.OVTASection.FinalizeOVTA, ovta)
+            : base(currentPerson, Models.OVTASection.FinalizeOVTA, ovta)
         {
             OVTASummaryMapInitJson = ovtaSummaryMapInitJson;
         }

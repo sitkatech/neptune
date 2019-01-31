@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Neptune.Web.Common;
+﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Assessment;
 using Neptune.Web.Views.MaintenanceRecord;
-using Neptune.Web.Views.Shared;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neptune.Web.Views.FieldVisit
 {
@@ -25,7 +24,7 @@ namespace Neptune.Web.Views.FieldVisit
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage,
             IEnumerable<Models.CustomAttributeType> maintenanceAttributeTypes, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
-            : base(currentPerson, StormwaterBreadCrumbEntity.FieldRecords, neptunePage)
+            : base(currentPerson, neptunePage)
         {
             PageTitle = "All Field Records";
             EntityName = "Field Records";

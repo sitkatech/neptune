@@ -4,8 +4,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 
-
-
 namespace Neptune.Web.Views.WaterQualityManagementPlan
 {
     public class EditWqmpBmpsViewData : NeptuneViewData
@@ -13,7 +11,7 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
         public EditWaterQualityManagementPlanTreatmentBmpsViewDataForAngular ViewDataForAngular { get; }
         public string WaterQualityManagementPlanDetailUrl { get; }
 
-        public EditWqmpBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes) : base(currentPerson, StormwaterBreadCrumbEntity.WaterQualityManagementPlan)
+        public EditWqmpBmpsViewData(Person currentPerson, Models.WaterQualityManagementPlan waterQualityManagementPlan, IEnumerable<TreatmentBMPTypeSimple> treatmentBMPTypes) : base(currentPerson)
         {
             EntityName = $"{Models.FieldDefinition.WaterQualityManagementPlan.GetFieldDefinitionLabelPluralized()}";
             EntityUrl = SitkaRoute<WaterQualityManagementPlanController>.BuildUrlFromExpression(x => x.Index());

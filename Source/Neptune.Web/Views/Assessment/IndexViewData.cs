@@ -33,7 +33,7 @@ namespace Neptune.Web.Views.Assessment
         public readonly string BMPAssessmentGridDataUrl;
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, IQueryable<Models.TreatmentBMPAssessmentObservationType> allObservationTypes)
-            : base(currentPerson, StormwaterBreadCrumbEntity.Assessments, neptunePage)
+            : base(currentPerson, neptunePage)
         {
             EntityName = "Treatment BMP Assessments";
             PageTitle = "All Assessments";

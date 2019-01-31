@@ -46,12 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cs" />
-    <Compile Include="Areas\Modeling\Views\Shared\SiteLayout.cs" />
-    <Compile Include="Areas\Modeling\Views\ModelingModuleViewData.cs" />
-    <Compile Include="Areas\Trash\Views\Shared\NavAndHeaderLayout.cs" />
-    <Compile Include="Areas\Trash\Views\Shared\SiteLayout.cs" />
-    <Compile Include="Areas\Trash\Views\TrashModuleViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTASectionViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -156,7 +151,7 @@
     <Compile Include="Models\Generated\ModeledCatchmentGeometryStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\ModeledCatchmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneArea.Binding.cs" />
-    <Compile Include="Models\Generated\NeptuneArea.cs" />
+    <Compile Include="Models\NeptuneArea.cs" />
     <Compile Include="Models\Generated\NeptuneAreaPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImage.Binding.cs" />
     <Compile Include="Models\Generated\NeptuneHomePageImage.DatabaseContextExtensions.cs" />
@@ -376,6 +371,12 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cs" />
+    <Compile Include="Areas\Modeling\Views\Shared\SiteLayout.cs" />
+    <Compile Include="Areas\Modeling\Views\ModelingModuleViewData.cs" />
+    <Compile Include="Areas\Trash\Views\Shared\NavAndHeaderLayout.cs" />
+    <Compile Include="Areas\Trash\Views\Shared\SiteLayout.cs" />
+    <Compile Include="Areas\Trash\Views\TrashModuleViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentAreaModelExtensions.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\SelectOVTAAreaMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTASummaryMapInitJson.cs" />

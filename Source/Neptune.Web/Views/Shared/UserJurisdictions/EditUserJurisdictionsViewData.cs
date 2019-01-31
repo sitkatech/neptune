@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.Shared.UserJurisdictions
 {
@@ -35,7 +33,7 @@ namespace Neptune.Web.Views.Shared.UserJurisdictions
         public bool Standalone { get; }
 
         public EditUserJurisdictionsViewData(Person currentPerson, List<StormwaterJurisdiction> allStormwaterJurisdictions, List<StormwaterJurisdiction> stormwaterJurisdictionsCurrentPersonCanManage, bool standalone)
-            : base(currentPerson, StormwaterBreadCrumbEntity.Users)
+            : base(currentPerson)
         {
             ViewDataForAngular = new EditViewDataForAngular(allStormwaterJurisdictions, stormwaterJurisdictionsCurrentPersonCanManage);
             Standalone = standalone;
