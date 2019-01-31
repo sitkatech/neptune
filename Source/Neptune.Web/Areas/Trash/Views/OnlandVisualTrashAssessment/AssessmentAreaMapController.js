@@ -170,7 +170,8 @@
 
         $scope.handleMapVisibility = function() {
             if (jQuery("input[name='AssessingNewArea']:checked").val() == "False" &&
-                jQuery("select[name='StormwaterJurisdictionID']").val()) {
+                (jQuery("select[name='StormwaterJurisdictionID']").val() || $scope.AngularViewData.UseDefaultJurisdiction) // don't attempt to check the jurisdiction drop-down if the user only has one jurisdiction
+                    ) {
                 $scope.isMapEnabled = true;
             } else {
                 $scope.isMapEnabled = false;
@@ -181,7 +182,9 @@
 
         jQuery("input[name='AssessingNewArea']").on('change', $scope.handleMapVisibility);
 
-        jQuery("select[name='StormwaterJurisdictionID']").on('change', $scope.handleMapVisibility);
+        if (!$scope.AngularViewData.UseDefaultJurisdiction) {
+            jQuery("select[name='StormwaterJurisdictionID']").on('change', $scope.handleMapVisibility);
+        }
 
         $scope.deselectAll = function() {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {

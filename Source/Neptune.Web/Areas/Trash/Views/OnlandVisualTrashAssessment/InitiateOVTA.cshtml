@@ -48,22 +48,37 @@
                     <div class="col-sm-9">
                         <label>
                             @Html.RadioButtonFor(m => m.AssessingNewArea, false) Reassess existing area
-                        </label><br/>
+                        </label><br />
                         <label>
                             @Html.RadioButtonFor(m => m.AssessingNewArea, true) Assess new area
                         </label>
                     </div>
                 </div>
-                <hr/>
-                <div class="form-group row">
-                    <div class="col-sm-3 control-label">
-                        @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                <hr />
+                @if (ViewDataTyped.DefaultJurisdiction == null)
+                {
+                    <div class="form-group row">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                        </div>
                     </div>
-                    <div class="col-sm-9">
-                        @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                }
+                else
+                {
+                    <div class="form-group row">
+                        <div class="col-sm-3 control-label">
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                        </div>
+                        <div class="col-sm-9">
+                            @ViewDataTyped.DefaultJurisdiction.GetOrganizationDisplayName()
+                            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdictionID)" value="@ViewDataTyped.DefaultJurisdiction.StormwaterJurisdictionID"/>
+                        </div>
                     </div>
-                </div>
+                }
                 <div class="row" ng-show="isMapEnabled">
                     <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
                     <div class="col-sm-9">

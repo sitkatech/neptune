@@ -99,6 +99,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             InitiateOVTAViewModel viewModel)
         {
             var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+
+            // do not offer a drop-down menu if the user can only edit one jurisdiction
+            var defaultJurisdiction = stormwaterJurisdictionsPersonCanEdit.Count == 1 ? stormwaterJurisdictionsPersonCanEdit.Single() : null;
+            
             var jurisdictionsSelectList = stormwaterJurisdictionsPersonCanEdit
                 .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
@@ -109,7 +113,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
 
             var viewData = new InitiateOVTAViewData(CurrentPerson, StormwaterBreadCrumbEntity.OnlandVisualTrashAssessment,
-                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas);
+                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas, defaultJurisdiction);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
 
