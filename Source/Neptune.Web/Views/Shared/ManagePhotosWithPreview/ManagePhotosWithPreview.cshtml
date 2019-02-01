@@ -1,35 +1,13 @@
-﻿@using LtInfo.Common.HtmlHelperExtensions
+﻿
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared.ManagePhotosWithPreview
 
 @inherits ManagePhotosWithPreview
-
+<script type="text/javascript" src="@Url.Content("~/ScriptsCustom/ManagePhotoWithPreview.js")"></script>
 
 <script type="text/javascript" language="javascript">
         // <![CDATA[
-        function onLoadFileReader(event) {
-            var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
-            fileResourcePhotoPreview.find("img").attr("src", event.target.result);
-            fileResourcePhotoPreview.show();
-
-            var newPhotoCaptionFormGroup = jQuery("#newPhotoCaptionFormGroup");
-            newPhotoCaptionFormGroup.show();
-        }
-        function onChangeFileInput(event) {
-            var file = event.target.files ? event.target.files[0] : null;
-            if (file) {
-                var fileReader = new FileReader();
-                fileReader.onload = onLoadFileReader;
-                fileReader.readAsDataURL(file);
-            } else {
-                var fileResourcePhotoPreview = jQuery("#fileResourcePhotoPreview");
-                fileResourcePhotoPreview.find("img").attr("src", "#");
-                fileResourcePhotoPreview.hide();
-
-                var newPhotoCaptionFormGroup = jQuery("#newPhotoCaptionFormGroup");
-                newPhotoCaptionFormGroup.find(":input").val("");
-                newPhotoCaptionFormGroup.hide();
-            }
-        }
+        
         jQuery(function() {
             jQuery("#@Html.IdFor(m => m.Photo)").on("change", onChangeFileInput);
             HookupCheckIfFormIsDirtyNoDisable();

@@ -203,5 +203,27 @@
         };
 
         $scope.neptuneMap.map.on("locationfound", onMapClick);
+
+
+        $scope.formo = function() {
+            var formi = new FormData();
+            jQuery.map($("form.ovta-observations-form :input"), function (n, i) { formi.append(n.name, n.value) });
+            formi.append('Observations[0].Photo', jQuery("#testing123")[0].files[0]);
+            $.ajax({
+                url: "/OnlandVisualTrashAssessment/RecordObservations/" + $scope.AngularViewData.ovtaID,
+                data: formi,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function(jq, ts, et) {
+                    console.log(ts);
+                    console.log(et);
+                }
+            });
+
+        };
     });
 

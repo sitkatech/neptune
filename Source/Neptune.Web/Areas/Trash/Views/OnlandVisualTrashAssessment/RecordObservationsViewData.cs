@@ -11,17 +11,19 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             : base(currentPerson, Models.OVTASection.RecordObservations, ovta)
         {
             MapInitJson = mapInitJson;
-            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson);
+            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, ovta);
         }
 
         public class ViewDataForAngularClass
         {
-            public ViewDataForAngularClass(OVTAObservationsMapInitJson mapInitJson)
+            public ViewDataForAngularClass(OVTAObservationsMapInitJson mapInitJson, Models.OnlandVisualTrashAssessment ovta)
             {
                 MapInitJson = mapInitJson;
+                ovtaID = ovta.OnlandVisualTrashAssessmentID;
             }
 
             public OVTAObservationsMapInitJson MapInitJson { get; }
+            public int ovtaID { get; }
         }
     }
 }
