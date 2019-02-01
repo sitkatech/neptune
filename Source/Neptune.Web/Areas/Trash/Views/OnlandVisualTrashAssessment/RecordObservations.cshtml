@@ -40,20 +40,6 @@
 
 @if (Neptune.Web.Models.OVTASection.InitiateOVTA.IsSectionComplete(ViewDataTyped.OVTA))
 {
-
-
-    <div class="row">
-        <div class="col-sm-6">
-            
-            <input type="file" id="testing123"/>
-
-        </div>
-        <div id="fileResourcePhotoPreview" class="col-xs-12 col-sm-6 text-center" style="display: none;">
-            <img src="#" alt="Preview of image to upload." class="col-xs-12 col-sm-6 imagePreview" style="width: 100%;" />
-            <div class="imagePreviewRibbon">Preview</div>
-        </div>
-    </div>
-
     <div ng-app="NeptuneApp" ng-controller="ObservationsMapController">
         <p class="systemText">Content Under Development</p>
         <div class="row">
@@ -116,14 +102,3 @@ else
 {
     <p class="systemText">You must complete the Initiate OVTA section before you can record observations.</p>
 }
-
-
-
-<script>
-    jQuery("#testing123").fileinput({ showUpload: false, showPreview: false, showRemove: false, defaultPreviewContent: "", allowedPreviewTypes: false, multiple: false, showCaption: true, browseClass: "btn btn-sm btn-neptune" });
-
-    
-    jQuery(function() {
-        jQuery("#testing123").on("change", onChangeFileInput);
-    });
-</script>
