@@ -75,20 +75,26 @@
                 <textarea class="form-control" rows="5" ng-model="currentSelectedMarkerModel.Note"></textarea>
             </div>
             <div class="col-sm-6 col-sm-pull-6">
-                <label>Photo</label>
-                <div id="photoUploadWrapper" ng-show="showUploader()">
-                    <input type="file" id="photoUpload" />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Photo</label>
+                        <div id="photoUploadWrapper" ng-show="showUploader()">
+                            <input type="file" id="photoUpload" />
+                        </div>
+                        <br />
+                        <img height="114" ng-src="{{currentPhotoUrl()}}" ng-show="!showUploader()" />
+                    </div>
                 </div>
-                <br />
-                <img height="114" ng-src="{{currentPhotoUrl()}}" ng-show="!showUploader()" />
-                <br />
-                <button type="button" class="btn btn-sm btn-neptune" ng-show="!showUploader()" ng-click="deletePhoto()">Delete photo</button>
+                <div class="row"  ng-show="!showUploader()">
+                    <div class="col-sm-12" style="padding-top: 10px;">
+                        <button type="button" class="btn btn-sm btn-neptune" ng-click="deletePhoto()">Delete photo</button>
+                    </div>
+                </div>
             </div>
 
-
             @*Todo: The delete observation icon looks like it means "delete note". Please fix that*@
-            <div class="col-sm-12 text-right">
-                <button type="button" class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
+            <div class="col-sm-12" style="padding-top: 10px;">
+                <button type="button" class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span> Delete entire observation</button>
             </div>
         </div>
 
