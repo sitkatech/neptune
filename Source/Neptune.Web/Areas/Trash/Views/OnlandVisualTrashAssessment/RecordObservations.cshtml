@@ -44,10 +44,10 @@
     <div class="row">
         <div class="col-sm-6">
 
-            
+
 
         </div>
-        
+
     </div>
 
 
@@ -76,14 +76,16 @@
             </div>
             <div class="col-sm-6 col-sm-pull-6">
                 <label>Photo</label>
-                <div id="photoUploadWrapper" ng-show="showUploader()"> 
+                <div id="photoUploadWrapper" ng-show="showUploader()">
                     <input type="file" id="photoUpload" />
                 </div>
-                <br/>
-                <img height="114" ng-src="{{currentPhotoUrl()}}"/>
+                <br />
+                <img height="114" ng-src="{{currentPhotoUrl()}}" ng-show="!showUploader()" />
+                <br />
+                <button type="button" ng-show="!showUploader()" ng-click="deletePhoto()">Delete photo</button>
             </div>
-            
-            
+
+
             @*Todo: The delete observation icon looks like it means "delete note". Please fix that*@
             <div class="col-sm-12 text-right">
                 <button class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
@@ -123,4 +125,3 @@ else
 <script>
     jQuery("#photoUpload").fileinput({ showUpload: false, showPreview: false, showRemove: false, defaultPreviewContent: "", allowedPreviewTypes: false, multiple: false, showCaption: true, browseClass: "btn btn-sm btn-neptune" });
 </script>
-

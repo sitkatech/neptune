@@ -212,8 +212,6 @@
             var formData = new FormData();
             formData.append("Photo", file);
 
-            
-
             $.ajax({
                 url: "/OnlandVisualTrashAssessment/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
                 data: formData,
@@ -224,19 +222,47 @@
                     $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
                     $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
                     $scope.$apply();
+                    jQuery("#photoUpload").fileinput('reset')
                 },
                 error: function(jq, ts, et) {
                     console.log(ts);
                     console.log(et);
                 }
             });
-            console.log($scope.currentSelectedMarkerModel);
         };
 
         jQuery("#photoUpload").on("change", $scope.stagePhoto);
 
-        $scope.deletePhoto = function() {
+        $scope.deletePhoto = function () {
 
+            var formData = new FormData();
+
+            if ($scope.currentSelectedMarkerModel.PhotoStagingID) {
+                formData.append("ID", $scope.currentSelectedMarkerModel.PhotoStagingID);
+                formData.append("IsStagedPhoto", true);
+            } else if ($scope.currentSelectedMarkerModel.PhotoID) {
+                formData.append("ID", $scope.currentSelectedMarkerModel.PhotoID);
+                formData.append("IsStagedPhoto", false);
+            } else {
+                console.error("You're asking me to delete a photo but I can't find a photo.");
+            }
+
+            $.ajax({
+                url: "/OnlandVisualTrashAssessment/DeleteObservationPhoto/",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function(data) {
+                    $scope.currentSelectedMarkerModel.PhotoUrl = null;
+                    $scope.currentSelectedMarkerModel.PhotoStagingID = null;
+                    $scope.$apply();
+                },
+                error: function(jq, ts, et) {
+                    console.log(ts);
+                    console.log(et);
+                }
+            });
         };
 
         $scope.currentPhotoUrl = function() {

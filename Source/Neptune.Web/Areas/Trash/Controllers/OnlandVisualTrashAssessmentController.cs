@@ -285,7 +285,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
             });
         }
 
-        [HttpDelete]
+
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ActionResult DeleteObservationPhoto()
+        {
+            return Content("");
+        }
+
+        [HttpPost]
         [NeptuneViewFeature]
         public ActionResult DeleteObservationPhoto(DeleteObservationPhotoSimple dopss)
         {
