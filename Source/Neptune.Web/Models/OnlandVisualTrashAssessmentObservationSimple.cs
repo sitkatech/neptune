@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Spatial;
 using System.Globalization;
+using System.Linq;
 using System.Web;
 using LtInfo.Common.DbSpatial;
 
@@ -21,7 +22,9 @@ namespace Neptune.Web.Models
         public double? LocationY { get; set; }
 
         public string PhotoUrl { get; set; }
-        public int PhotoStagingID { get; set; }
+
+        public int? PhotoStagingID { get; set; }
+        public int? PhotoID { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder
@@ -39,6 +42,12 @@ namespace Neptune.Web.Models
             ObservationDateTime = o.ObservationDatetime;
             LocationX = o.LocationPoint.XCoordinate.GetValueOrDefault();
             LocationY = o.LocationPoint.YCoordinate.GetValueOrDefault();
+
+            // todo: ensure there is a database constraint ensuring one photo per observo
+            var photo = o.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
+            PhotoID = photo
+                ?.OnlandVisualTrashAssessmentObservationPhotoID;
+            PhotoUrl = photo?.FileResource.GetFileResourceUrl();
         }
 
         public OnlandVisualTrashAssessmentObservation ToOnlandVisualTrashAssessmentObservation()

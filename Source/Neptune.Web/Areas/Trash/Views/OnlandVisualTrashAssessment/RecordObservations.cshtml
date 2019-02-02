@@ -99,6 +99,7 @@
                 <input type="hidden" name="@Html.NameFor(x => x.Observations[0].LocationX).ToString().Replace("0", "{{$index}}")" value="{{observation.LocationX}}" />
                 <input type="hidden" name="@Html.NameFor(x => x.Observations[0].LocationY).ToString().Replace("0", "{{$index}}")" value="{{observation.LocationY}}" />
                 <input type="hidden" name="@Html.NameFor(x => x.Observations[0].Note).ToString().Replace("0", "{{$index}}")" value="{{observation.Note}}" />
+                <input type="hidden" name="@Html.NameFor(x => x.Observations[0].PhotoStagingID).ToString().Replace("0", "{{$index}}")" value="{{observation.PhotoStagingID}}" />
                 <input type="hidden" name="@Html.NameFor(x => x.Observations[0].OnlandVisualTrashAssessmentID).ToString().Replace("0", "{{$index}}")" value="{{observation.OnlandVisualTrashAssessmentID}}" />
                 <input type="hidden" name="@Html.NameFor(x => x.Observations[0].OnlandVisualTrashAssessmentObservationID).ToString().Replace("0", "{{$index}}")" value="{{observation.OnlandVisualTrashAssessmentObservationID}}" />
             </div>
