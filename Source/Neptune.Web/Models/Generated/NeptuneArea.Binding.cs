@@ -126,18 +126,18 @@ namespace Neptune.Web.Models
     public partial class NeptuneAreaTrash : NeptuneArea
     {
         private NeptuneAreaTrash(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaTrash Instance = new NeptuneAreaTrash(1, @"Trash", @"Trash", 20, true);
+        public static readonly NeptuneAreaTrash Instance = new NeptuneAreaTrash(1, @"Trash", @"Trash Module", 20, true);
     }
 
     public partial class NeptuneAreaOCStormwaterTools : NeptuneArea
     {
         private NeptuneAreaOCStormwaterTools(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaOCStormwaterTools Instance = new NeptuneAreaOCStormwaterTools(2, @"OCStormwaterTools", @"OC Stormwater Tools", 10, true);
+        public static readonly NeptuneAreaOCStormwaterTools Instance = new NeptuneAreaOCStormwaterTools(2, @"OCStormwaterTools", @"Inventory Module", 10, true);
     }
 
     public partial class NeptuneAreaModeling : NeptuneArea
     {
         private NeptuneAreaModeling(int neptuneAreaID, string neptuneAreaName, string neptuneAreaDisplayName, int sortOrder, bool showOnPrimaryNavigation) : base(neptuneAreaID, neptuneAreaName, neptuneAreaDisplayName, sortOrder, showOnPrimaryNavigation) {}
-        public static readonly NeptuneAreaModeling Instance = new NeptuneAreaModeling(3, @"Modeling", @"Modeling", 10, true);
+        public static readonly NeptuneAreaModeling Instance = new NeptuneAreaModeling(3, @"Modeling", @"Modeling Module", 10, true);
     }
 }
