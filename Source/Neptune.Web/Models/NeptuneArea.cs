@@ -1,3 +1,4 @@
+
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -6,6 +7,7 @@ namespace Neptune.Web.Models
     {
         public abstract string GetHomeUrl();
         public abstract bool IsAreaVisibleToPerson(Person person);
+        public abstract string GetIconUrl();
     }
 
     public partial class NeptuneAreaTrash
@@ -19,18 +21,28 @@ namespace Neptune.Web.Models
         {
             return true;
         }
+
+        public override string GetIconUrl()
+        {
+            return "/Content/img/icons/trashIcon.png";
+        }
     }
 
     public partial class NeptuneAreaOCStormwaterTools
     {
         public override string GetHomeUrl()
         {
-            return SitkaRoute<Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index());
+            return SitkaRoute<Controllers.HomeController>.BuildUrlFromExpression(hc => hc.Index()) + "#welcome";
         }
 
         public override bool IsAreaVisibleToPerson(Person person)
         {
             return true;
+        }
+
+        public override string GetIconUrl()
+        {
+            return "/Content/img/icons/inventoryIcon.png";
         }
     }
 
@@ -44,6 +56,11 @@ namespace Neptune.Web.Models
         public override bool IsAreaVisibleToPerson(Person person)
         {
             return true;
+        }
+
+        public override string GetIconUrl()
+        {
+            return "/Content/img/icons/modelingIcon.png";
         }
     }
 }
