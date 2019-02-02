@@ -77,7 +77,10 @@
 
     <div class="siteNavLinks">
         <ul class="list-inline pull-right">
-            <li><a href="@ViewDataTyped.AboutUrl">About</a></li>
+            @if (!Request.IsAuthenticated || ViewDataTyped.CurrentPerson == null)
+            {
+                <li><a href="@ViewDataTyped.LogInUrl">Log in</a></li>
+            }
             @if (Request.IsAuthenticated && ViewDataTyped.CurrentPerson != null)
             {
                 <li class="dropdown">
@@ -91,13 +94,10 @@
                     </ul>
                 </li>
             }
+            <li><a href="@ViewDataTyped.AboutUrl">About</a></li>
             @foreach (var topLevelMenu in ViewDataTyped.TopLevelLtInfoMenus)
             {
                 @topLevelMenu.RenderMenu()
-            }
-            @if (!Request.IsAuthenticated || ViewDataTyped.CurrentPerson == null)
-            {
-                <li><a href="@ViewDataTyped.LogInUrl">Log in</a></li>
             }
         </ul>
     </div>
