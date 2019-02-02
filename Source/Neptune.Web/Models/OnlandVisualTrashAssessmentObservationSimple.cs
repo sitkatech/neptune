@@ -20,9 +20,8 @@ namespace Neptune.Web.Models
         [Required]
         public double? LocationY { get; set; }
 
-        public bool? DeletePhoto { get; set; }
-
-        public HttpPostedFileBase Photo { get; set; }
+        public string PhotoUrl { get; set; }
+        public int PhotoStagingID { get; set; }
 
         /// <summary>
         /// Needed by ModelBinder

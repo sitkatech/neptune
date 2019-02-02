@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
@@ -10,6 +12,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Newtonsoft.Json.Linq;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 
@@ -101,7 +104,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             // do not offer a drop-down menu if the user can only edit one jurisdiction
             var defaultJurisdiction = stormwaterJurisdictionsPersonCanEdit.Count == 1 ? stormwaterJurisdictionsPersonCanEdit.Single() : null;
-            
+
             var jurisdictionsSelectList = stormwaterJurisdictionsPersonCanEdit
                 .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
@@ -254,5 +257,67 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
         }
+
+        // photo handling
+        // todo: move this to a separate controller
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ContentResult StageObservationPhoto(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            return Content("");
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        public ActionResult StageObservationPhoto(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, ObservationPhotoStagingSimple opss)
+        {
+            var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
+
+            var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,
+                onlandVisualTrashAssessmentPrimaryKey.EntityObject);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            return Json(new
+            {
+                PhotoStagingID = staging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
+                PhotoStagingUrl = staging.FileResource.GetFileResourceUrl()
+            });
+        }
+
+        [HttpDelete]
+        [NeptuneViewFeature]
+        public ActionResult DeleteObservationPhoto(DeleteObservationPhotoSimple dopss)
+        {
+            if (dopss.IsStagedPhoto)
+            {
+                var onlandVisualTrashAssessmentObservationPhotoStaging =
+                    ((OnlandVisualTrashAssessmentObservationPhotoStagingPrimaryKey) dopss.ID).EntityObject;
+                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservationPhotoStagings
+                    .DeleteOnlandVisualTrashAssessmentObservationPhotoStaging(
+                        onlandVisualTrashAssessmentObservationPhotoStaging);
+            }
+            else
+            {
+                var onlandVisualTrashAssessmentObservationPhoto =
+                    ((OnlandVisualTrashAssessmentObservationPhotoPrimaryKey)dopss.ID).EntityObject;
+                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservationPhotos
+                    .DeleteOnlandVisualTrashAssessmentObservationPhoto(
+                        onlandVisualTrashAssessmentObservationPhoto);
+            }
+            return Content("");
+        }
+    }
+
+    public class DeleteObservationPhotoSimple
+    {
+        public int ID { get; set; }
+
+        public bool IsStagedPhoto { get; set; }
+    }
+
+    public class ObservationPhotoStagingSimple
+    {
+        public HttpPostedFileBase Photo { get; set; }
     }
 }

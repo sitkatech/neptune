@@ -203,4 +203,57 @@
         };
 
         $scope.neptuneMap.map.on("locationfound", onMapClick);
+
+
+        // photo handling
+
+        $scope.stagePhoto = function() {
+            var file = jQuery("#photoUpload")[0].files[0];
+            var formData = new FormData();
+            formData.append("Photo", file);
+
+            
+
+            $.ajax({
+                url: "/OnlandVisualTrashAssessment/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
+                    $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
+                    $scope.$apply();
+                },
+                error: function(jq, ts, et) {
+                    console.log(ts);
+                    console.log(et);
+                }
+            });
+            console.log($scope.currentSelectedMarkerModel);
+        };
+
+        jQuery("#photoUpload").on("change", $scope.stagePhoto);
+
+        $scope.deletePhoto = function() {
+
+        };
+
+        $scope.currentPhotoUrl = function() {
+            if ($scope.currentSelectedMarkerModel) {
+                return $scope.currentSelectedMarkerModel.PhotoUrl;
+            }
+            return null;
+        };
+
+        $scope.showUploader = function () {
+            if (!$scope.currentSelectedMarkerModel) {
+                return null;
+            }
+
+            if ($scope.currentSelectedMarkerModel.PhotoUrl) {
+                return false;
+            }
+            return true;
+        };
     });

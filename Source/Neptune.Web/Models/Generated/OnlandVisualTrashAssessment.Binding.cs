@@ -25,6 +25,7 @@ namespace Neptune.Web.Models
         protected OnlandVisualTrashAssessment()
         {
             this.OnlandVisualTrashAssessmentObservations = new HashSet<OnlandVisualTrashAssessmentObservation>();
+            this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
         }
 
         /// <summary>
@@ -80,13 +81,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessmentObservations.Any();
+            return OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name};
 
 
         /// <summary>
@@ -107,6 +108,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in OnlandVisualTrashAssessmentObservationPhotoStagings.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -121,6 +127,7 @@ namespace Neptune.Web.Models
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
+        public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual Person CreatedByPerson { get; set; }
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

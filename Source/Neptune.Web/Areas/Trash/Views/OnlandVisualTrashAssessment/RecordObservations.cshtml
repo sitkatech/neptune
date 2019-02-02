@@ -40,6 +40,17 @@
 
 @if (Neptune.Web.Models.OVTASection.InitiateOVTA.IsSectionComplete(ViewDataTyped.OVTA))
 {
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            
+
+        </div>
+        
+    </div>
+
+
     <div ng-app="NeptuneApp" ng-controller="ObservationsMapController">
         <p class="systemText">Content Under Development</p>
         <div class="row">
@@ -57,21 +68,28 @@
                 </div>
             </div>
         </div>
-        <div class="row" ng-if="currentSelectedMarkerModel" style="margin-top: 10px;">
+        <div class="row" ng-show="currentSelectedMarkerModel" style="margin-top: 10px;">
 
             <div class="col-sm-6 col-sm-push-6">
                 <label>Notes</label>
                 <textarea class="form-control" rows="5" ng-model="currentSelectedMarkerModel.Note"></textarea>
             </div>
             <div class="col-sm-6 col-sm-pull-6">
-                <label>Upload a photo (under development)</label>
-                <img src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/placeholder_camera.jpg")" style="display: block; margin: auto;" height="125" alt="Placeholder Image" />
+                <label>Photo</label>
+                <div id="photoUploadWrapper" ng-show="showUploader()"> 
+                    <input type="file" id="photoUpload" />
+                </div>
+                <br/>
+                <img height="114" ng-src="{{currentPhotoUrl()}}"/>
             </div>
+            
+            
+            @*Todo: The delete observation icon looks like it means "delete note". Please fix that*@
             <div class="col-sm-12 text-right">
                 <button class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
-        
+
         @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "ovta-observations-form" }))
         {
             <div ng-repeat="observation in AngularModel.Observations">
@@ -90,8 +108,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-10" style="text-align: right">
-                    @* todo *@
-                    <button type="button" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)" ng-click="formo()">Save</button>
+                    <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)" ng-click="formo()">Save</button>
                     <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
                 </div>
             </div>
@@ -102,3 +119,8 @@ else
 {
     <p class="systemText">You must complete the Initiate OVTA section before you can record observations.</p>
 }
+
+<script>
+    jQuery("#photoUpload").fileinput({ showUpload: false, showPreview: false, showRemove: false, defaultPreviewContent: "", allowedPreviewTypes: false, multiple: false, showCaption: true, browseClass: "btn btn-sm btn-neptune" });
+</script>
+
