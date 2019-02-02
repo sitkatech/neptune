@@ -51,7 +51,8 @@ namespace Neptune.Web.Models
             "MaintenanceRecord",
             "MaintenanceRecordObservation",
             "MaintenanceRecordObservationValue",
-            "FundingEventFundingSource"
+            "FundingEventFundingSource",
+            "OnlandVisualTrashAssessmentObservationPhoto"
         };
 
         public string GetAuditDescriptionDisplay()

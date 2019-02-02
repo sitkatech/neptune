@@ -189,7 +189,10 @@
             $scope.setSelectedMarker(e.layer);
         };
 
-        $scope.deleteObservation = function() {
+        $scope.deleteObservation = function () {
+            $scope.currentSelectedMarkerModel.PhotoStagingID = null;
+            $scope.currentSelectedMarkerModel.PhotoID = null;
+            $scope.currentSelectedMarkerModel.PhotoUrl = null;
             $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             $scope.lastSelected = null;
             $scope.neptuneMap.map.removeLayer($scope.currentSelectedMarkerModel.MapMarker);
@@ -245,6 +248,7 @@
                 formData.append("IsStagedPhoto", false);
             } else {
                 console.error("You're asking me to delete a photo but I can't find a photo.");
+                return;
             }
 
             $.ajax({

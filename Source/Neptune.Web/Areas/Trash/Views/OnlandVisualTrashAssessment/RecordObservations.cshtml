@@ -82,13 +82,13 @@
                 <br />
                 <img height="114" ng-src="{{currentPhotoUrl()}}" ng-show="!showUploader()" />
                 <br />
-                <button type="button" ng-show="!showUploader()" ng-click="deletePhoto()">Delete photo</button>
+                <button type="button" class="btn btn-sm btn-neptune" ng-show="!showUploader()" ng-click="deletePhoto()">Delete photo</button>
             </div>
 
 
             @*Todo: The delete observation icon looks like it means "delete note". Please fix that*@
             <div class="col-sm-12 text-right">
-                <button class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
+                <button type="button" class="btn btn-neptune" ng-click="deleteObservation()"><span class="glyphicon glyphicon-trash"></span></button>
             </div>
         </div>
 
