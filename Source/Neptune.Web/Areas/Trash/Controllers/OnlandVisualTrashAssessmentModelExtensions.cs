@@ -12,7 +12,7 @@ namespace Neptune.Web.Models
 
     public static class OnlandVisualTrashAssessmentModelExtensions
     {
-        public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
+        private static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
             var points = Join(",",
                 ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
@@ -25,7 +25,9 @@ namespace Neptune.Web.Models
 
         public static IQueryable<Parcel> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta)
         {
-            var transect = ovta.GetTransect();
+            var transect = ovta.OnlandVisualTrashAssessmentObservations.Count == 1
+                ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
+                : ovta.GetTransect();
 
             return HttpRequestStorage.DatabaseEntities.Parcels.Where(x=>x.ParcelGeometry.Intersects(transect));
         }

@@ -52,7 +52,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             if (!AssessingNewArea.GetValueOrDefault() && !OnlandVisualTrashAssessmentAreaID.HasValue)
             {
-                yield return new SitkaValidationResult<InitiateOVTAViewModel,int?>("You must choose an area to assess or check the box at the bottom of the page.", m=>m.OnlandVisualTrashAssessmentAreaID);
+                yield return new SitkaValidationResult<InitiateOVTAViewModel,int?>("You must choose an area to assess.", m=>m.OnlandVisualTrashAssessmentAreaID);
             }
 
             if (AssessingNewArea.GetValueOrDefault() && OnlandVisualTrashAssessmentAreaID.HasValue)

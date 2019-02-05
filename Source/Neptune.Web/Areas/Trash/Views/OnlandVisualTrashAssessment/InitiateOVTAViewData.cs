@@ -22,13 +22,25 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Jurisdictions = jurisdictions;
             MapInitJson = mapInitJson;
             DefaultJurisdiction = defaultJurisdiction;
+            var selectedOVTAArea = ovta.OnlandVisualTrashAssessmentArea != null
+                ? new OnlandVisualTrashAssessmentAreaSimple
+                {
+                    OnlandVisualTrashAssessmentAreaName =
+                        ovta.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
+                    OnlandVisualTrashAssessmentAreaID =
+                        ovta.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
+                    StormwaterJurisdictionID = ovta.OnlandVisualTrashAssessmentArea.StormwaterJurisdictionID
+                }
+                : null;
             var useDefaultJurisdiction = defaultJurisdiction != null;
-            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction);
+            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction, selectedOVTAArea);
         }
 
         public class ViewDataForAngularClass
         {
-            public ViewDataForAngularClass(SelectOVTAAreaMapInitJson mapInitJson, IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas, bool useDefaultJurisdiction)
+            public ViewDataForAngularClass(SelectOVTAAreaMapInitJson mapInitJson,
+                IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
+                bool useDefaultJurisdiction, OnlandVisualTrashAssessmentAreaSimple selectedOVTAArea)
             {
                 MapInitJson = mapInitJson;
                 UseDefaultJurisdiction = useDefaultJurisdiction;
@@ -36,13 +48,16 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     new OnlandVisualTrashAssessmentAreaSimple
                     {
                         OnlandVisualTrashAssessmentAreaName = x.OnlandVisualTrashAssessmentAreaName,
-                        OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID
+                        OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID,
+                        StormwaterJurisdictionID = x.StormwaterJurisdictionID
                     });
+                SelectedOnlandVisualTrashAssessmentArea = selectedOVTAArea;
             }
 
             public SelectOVTAAreaMapInitJson MapInitJson { get; }
             public bool UseDefaultJurisdiction { get; }
             public IEnumerable<OnlandVisualTrashAssessmentAreaSimple> OnlandVisualTrashAssessmentAreas { get; }
+            public OnlandVisualTrashAssessmentAreaSimple SelectedOnlandVisualTrashAssessmentArea { get; }
         }
     }
 
@@ -50,5 +65,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public string OnlandVisualTrashAssessmentAreaName { get; set; }
         public int OnlandVisualTrashAssessmentAreaID { get; set; }
+        public int StormwaterJurisdictionID { get; set; }
     }
 }

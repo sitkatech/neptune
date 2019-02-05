@@ -8,6 +8,9 @@
         $scope.lastSelectedID = null;
         $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
+        $scope.selectedJurisdictionID = null;
+
+        
 
         var selectAssessmentArea = function(event) {
             $scope.setSelectedFeature(event.layer.feature);
@@ -68,14 +71,24 @@
             $scope.lastSelectedID = featureLayer.properties["OnlandVisualTrashAssessmentAreaID"];
             $scope.lastSelectedName = featureLayer.properties["OnlandVisualTrashAssessmentAreaName"];
             jQuery("#assessmentAreaFinder").val($scope.lastSelectedName);
+
+            var bounds = $scope.lastSelectedLayer.getBounds();
+            $scope.neptuneMap.map.fitBounds(bounds);
         };
 
-        $scope.initializeMap = function() {
+        $scope.initializeMap = function (overrideJurisdictionFilterForSelectedArea) {
+            if ($scope.assessmentAreaLayerGeoJson) {
+                $scope.neptuneMap.map.removeLayer($scope.assessmentAreaLayerGeoJson);
+            }
+
             $scope.assessmentAreaLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function(feature, layer) {
-                        return true;
+                        return feature.properties["StormwaterJurisdictionID"] == $scope.selectedJurisdictionID ||
+                            (overrideJurisdictionFilterForSelectedArea && feature.properties["OnlandVisualTrashAssessmentAreaID"] ==
+                            $scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea
+                            .OnlandVisualTrashAssessmentAreaID);
                     },
 
                     onEachFeature: function (feature, layer) {
@@ -108,8 +121,6 @@
             }
         };
 
-        $scope.initializeMap();
-
         $scope.zoomToLocation = function () {
             $scope.neptuneMap.map.locate({ setView: true });
         };
@@ -138,6 +149,7 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
+                                        JurisdictionID: $scope.selectedJurisdictionID
                                     },
                                     type: "POST",
                                     success: onSuccess,
@@ -164,7 +176,23 @@
                 }
             });
         };
-        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
+
+        // hacky way to filter out areas based on stormwater jurisdiction id hack
+
+        jQuery("select[name='StormwaterJurisdictionID']").on('change',
+            function() {
+                $scope.selectedJurisdictionID = this.value;
+                $scope.lastSelectedID = null;
+                $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
+
+                $scope.initializeMap();
+                if ($scope.lastSelectedLayer) {
+                    $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+                    $scope.lastSelectedLayer = null;
+                }
+                $scope.$apply();
+            });
+
 
         // disable the map according to what makes sense
 
@@ -194,5 +222,16 @@
             $scope.lastSelectedName = null;
         };
 
+        // init
+
+        $scope.initializeMap(true);
         $scope.handleMapVisibility();
+        $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
+        if ($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea) {
+            $scope.selectedJurisdictionID =
+                $scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
+            $scope.initializeMap(true);
+            $scope.setSelectedFeatureByID($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea
+                .OnlandVisualTrashAssessmentAreaID);
+        }
     });

@@ -9,8 +9,10 @@
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    @* TODO: GEOSERVER MAP?? *@
-    <script type="text/javascript">
+    @* TODO: geoserver map *@
+    @if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
+    {
+        <script type="text/javascript">
         jQuery(document).ready(function() {
             var mapJson =
                 @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
@@ -48,52 +50,60 @@
                 });
             areaLayerGeoJson.addTo(summaryMap.map);
         });
-    </script>
+        </script>
+
+    }
 }
 
-<p class="systemText">Content Under Development</p>
 
-<div class="row">
-    <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-        <div id="mapContainer">
-            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
+@if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
+{
+    <div class="row">
+        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+            <div id="mapContainer">
+                <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+    using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+    {
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-sm-3">@Html.LabelWithSugarFor(m => m.AssessmentAreaName)</div>
+            <div class="col-sm-9">@Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.Notes)
+            </div>
+            <div class="col-sm-9">
+                @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                @Html.ValidationMessageFor(m => m.Notes)
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-10" style="text-align: right">
+                <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
+        </div>
+    }
+}
+else
 {
-
-    <div class="row" style="margin-top: 5px;">
-        <div class="col-sm-3">@Html.LabelWithSugarFor(m => m.AssessmentAreaName)</div>
-        <div class="col-sm-9">@Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })</div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9">
-            <p class="systemText">Enter the name of the assessors and any other notes about this OVTA</p>
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-3 control-label">
-            @Html.LabelWithSugarFor(m => m.Notes)
-        </div>
-        <div class="col-sm-9">
-            @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-            @Html.ValidationMessageFor(m => m.Notes)
-        </div>
-    </div>
-
-    <hr />
-
-    <div class="row" >
-        <div class="col-xs-12 col-sm-2">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-        </div>
-
-        <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
-        </div>
-    </div>
+    <p class="systemText">You must complete the Record Observations section before you can finalize the assessment.</p>
 }

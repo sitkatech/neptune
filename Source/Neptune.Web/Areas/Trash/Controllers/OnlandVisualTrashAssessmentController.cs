@@ -15,6 +15,7 @@ using Neptune.Web.Security;
 using Newtonsoft.Json.Linq;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
+using OVTASection = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.OVTASection;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -127,6 +128,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
+                viewModel.StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID;
                 return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
@@ -195,6 +197,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewFinalizeOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             FinalizeOVTAViewModel viewModel)
         {
+            var ovtaSummaryMapInitJson = GetOVTASummaryMapInitJson(onlandVisualTrashAssessment);
+
+            var viewData = new FinalizeOVTAViewData(CurrentPerson,
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
+        }
+
+        private static OVTASummaryMapInitJson GetOVTASummaryMapInitJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
+            if (!Models.OVTASection.RecordObservations.IsSectionComplete(onlandVisualTrashAssessment))
+            {
+                return null;
+            }
+
             OVTASummaryMapInitJson ovtaSummaryMapInitJson;
             var observationsLayerGeoJson =
                 OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment
@@ -205,20 +221,21 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", parcels.ToGeoJsonFeatureCollection(),
                     "#ffff00", .5m,
                     LayerInitialVisibility.Show);
-                ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+                ovtaSummaryMapInitJson =
+                    new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
             }
             else
             {
                 var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
-                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }.ToGeoJsonFeatureCollection(),
+                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels",
+                    new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessmentArea}.ToGeoJsonFeatureCollection(),
                     "#ffff00", .5m,
                     LayerInitialVisibility.Show);
-                ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+                ovtaSummaryMapInitJson =
+                    new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
             }
 
-            var viewData = new FinalizeOVTAViewData(CurrentPerson,
-                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
-            return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
+            return ovtaSummaryMapInitJson;
         }
 
         [HttpPost]
@@ -242,6 +259,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
                     onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+                onlandVisualTrashAssessment.AssessingNewArea = false;
             }
             else
             {
@@ -259,7 +277,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         // photo handling
-        // todo: move this to a separate controller
+        // todo: these api-like endpoints should belong to a separate controller
 
         [HttpGet]
         [NeptuneViewFeature]

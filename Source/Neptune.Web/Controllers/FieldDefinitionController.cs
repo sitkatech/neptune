@@ -92,6 +92,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [FieldDefinitionViewFeature]
+        [CrossAreaRoute]
         public PartialViewResult FieldDefinitionDetails(int fieldDefinitionID)
         {
             var fieldDefinition = FieldDefinition.AllLookupDictionary[fieldDefinitionID];

@@ -22,9 +22,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public JsonResult FindByName(FindAssessmentAreaByNameViewModel viewModel)
         {
             var searchString = viewModel.SearchTerm.Trim();
+            var jurisdictionID = viewModel.JurisdictionID;
             var allOnlandVisualTrashAssessmentAreasMatchingSearchString =
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Where(
-                    x => x.OnlandVisualTrashAssessmentAreaName.Contains(searchString)).ToList();
+                    x => x.StormwaterJurisdictionID == jurisdictionID && x.OnlandVisualTrashAssessmentAreaName.Contains(searchString)).ToList();
 
             var listItems = allOnlandVisualTrashAssessmentAreasMatchingSearchString.OrderBy(x => x.OnlandVisualTrashAssessmentAreaName).Take(20).Select(x =>
             {
@@ -39,5 +40,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
     public class FindAssessmentAreaByNameViewModel
     {
         public string SearchTerm { get; set; }
+        public int JurisdictionID { get; set; }
     }
 }

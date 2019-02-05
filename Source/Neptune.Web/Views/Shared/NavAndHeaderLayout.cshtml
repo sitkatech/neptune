@@ -58,7 +58,7 @@
                 // this is fragile, the 10px buffer is for when the document height is just equal to the height of the view port + the height of the header
                 var outerHeight = jQuery(document).height();
                 var heightOfViewPort = jQuery(window).height();
-                var headerHeight = jQuery('.header')[0].offsetHeight;
+                var headerHeight = jQuery('.neptuneHeader')[0].offsetHeight;
                 
                 if (jQuery(window).scrollTop() > headerHeight && (outerHeight > (heightOfViewPort + headerHeight + 10))) {
                     jQuery('.neptuneNavbar').addClass('navbar-fixed-top');
