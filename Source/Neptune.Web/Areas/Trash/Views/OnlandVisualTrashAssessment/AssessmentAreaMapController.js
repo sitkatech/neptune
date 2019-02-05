@@ -177,7 +177,7 @@
             });
         };
 
-        // hacky way to filter out areas based on stormwater jurisdiction id hack
+        // hacky way to filter out areas based on stormwater jurisdiction id
 
         jQuery("select[name='StormwaterJurisdictionID']").on('change',
             function() {
@@ -224,13 +224,13 @@
 
         // init
 
-        $scope.initializeMap(true);
+        $scope.initializeMap($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea !== null);
         $scope.handleMapVisibility();
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
         if ($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea) {
             $scope.selectedJurisdictionID =
                 $scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
-            $scope.initializeMap(true);
+            $scope.initializeMap($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea !== null);
             $scope.setSelectedFeatureByID($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea
                 .OnlandVisualTrashAssessmentAreaID);
         }
