@@ -177,10 +177,41 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
-
             var viewData = new RecordObservationsViewData(CurrentPerson,
                 onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
+                viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult AddOrRemoveParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+
+            var viewModel = new AddOrRemoveParcelsViewModel();
+            return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        public ActionResult AddOrRemoveParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, AddOrRemoveParcelsViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
+            }
+
+            return RedirectToAppropriateStep(viewModel, Models.OVTASection.AddOrRemoveParcels,
+                onlandVisualTrashAssessment);
+        }
+
+        private ViewResult ViewAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment, AddOrRemoveParcelsViewModel viewModel)
+        {
+            AddOrRemoveParcelsViewData viewData = new AddOrRemoveParcelsViewData(CurrentPerson, Models.OVTASection.AddOrRemoveParcels, onlandVisualTrashAssessment);
+            return RazorView<AddOrRemoveParcels, AddOrRemoveParcelsViewData, AddOrRemoveParcelsViewModel>(viewData,
                 viewModel);
         }
 
@@ -302,8 +333,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 PhotoStagingUrl = staging.FileResource.GetFileResourceUrl()
             });
         }
-
-
 
         [HttpGet]
         [NeptuneViewFeature]

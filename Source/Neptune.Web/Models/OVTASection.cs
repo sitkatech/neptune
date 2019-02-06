@@ -88,12 +88,50 @@ namespace Neptune.Web.Models
 
         public override OVTASection GetNextSection()
         {
-            return FinalizeOVTA;
+            return AddOrRemoveParcels;
         }
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
             return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
+        }
+    }
+
+    public partial class OVTASectionAddOrRemoveParcels
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.AddOrRemoveParcels(ovta));
+        }
+
+        public override OVTASection GetNextSection()
+        {
+            return RefineAssessmentArea;
+        }
+
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            return false; // todo
+        }
+    }
+
+    public partial class OVTASectionRefineAssessmentArea
+    {
+        public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            //todo return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RefineAssessmentArea(ovta));
+            return null;
+        }
+
+        public override OVTASection GetNextSection()
+        {
+            return FinalizeOVTA;
+        }
+
+        public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
+        {
+            // todo return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
+            return true;
         }
     }
 
