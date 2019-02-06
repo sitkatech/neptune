@@ -123,7 +123,7 @@
 </style>
 
 <div class="navbar-header">
-    <a href="@ViewDataTyped.HomeUrl"><img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" /> </a>
+    <a href="@ViewDataTyped.HomeUrl"><img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" style="width:318px" /> </a>
         <div class="navigatorSection btn-group neptuneSiteExplorer hidden-print">
             @if (ViewDataTyped.ShowLinkToArea)
             {
@@ -142,7 +142,7 @@
                     </a>
                 </li>
                 <li class="divider"></li>
-                @foreach (var neptuneArea in NeptuneArea.All/*.Except(new List<NeptuneArea> { NeptuneArea.OCStormwaterTools })*/.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaName))
+                @foreach (var neptuneArea in NeptuneArea.All/*.Except(new List<NeptuneArea> { NeptuneArea.OCStormwaterTools })*/.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName))
                 {
                     if (neptuneArea.IsAreaVisibleToPerson(ViewDataTyped.CurrentPerson))
                     {
