@@ -131,7 +131,7 @@ namespace Neptune.Web.Models
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
             // todo return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
-            return true;
+            return false;
         }
     }
 

@@ -1,23 +1,67 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.AddOrRemoveParcels
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
-@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
-
-
-@using (Html.BeginForm())
+@section JavascriptAndStylesContent
 {
-    <hr />
-    <div class="row">
-        <div class="col-xs-12 col-sm-2">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+
+    @if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
+    {
+        <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/AddOrRemoveParcelsController.js")"></script>
+        <script type="text/javascript">
+            // <![CDATA[
+            angular.module("NeptuneApp")
+                .factory("angularModelAndViewData",
+                    function() {
+                        return {
+                            AngularModel: @Html.Raw(JObject.FromObject(Model).ToString(Formatting.None)),
+                            AngularViewData: @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
+                        };
+                    });
+
+            jQuery(document).ready(function() {
+                HookupCheckIfFormIsDirtyNoDisable(undefined);
+            });
+
+        </script>
+    }
+}
+
+
+@if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
+{
+    <div ng-app="NeptuneApp" ng-controller="AddOrRemoveParcelsController">
+        <div class="row">
+            <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+                <div id="mapContainer">
+                    <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
+                    </div>
+                </div>
+            </div>
         </div>
-        @{
-            var continueButtonText = ViewDataTyped.OVTA != null ? "Continue OVTA" : "Begin OVTA";
+
+        @using (Html.BeginForm())
+        {
+        <hr />
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-10" style="text-align: right">
+                <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
+        </div>
         }
-        <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">@continueButtonText <i class="glyphicon glyphicon-chevron-right"></i></button>
-        </div>
     </div>
+}
+else
+{
+    <p class="systemText">You must complete the Record Observations section before you can finalize the assessment.</p>
 }

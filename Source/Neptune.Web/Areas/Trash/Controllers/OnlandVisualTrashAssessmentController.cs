@@ -210,7 +210,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         private ViewResult ViewAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment, AddOrRemoveParcelsViewModel viewModel)
         {
-            AddOrRemoveParcelsViewData viewData = new AddOrRemoveParcelsViewData(CurrentPerson, Models.OVTASection.AddOrRemoveParcels, onlandVisualTrashAssessment);
+            var ovtaSummaryMapInitJson = GetOVTASummaryMapInitJson(onlandVisualTrashAssessment);
+            var viewData = new AddOrRemoveParcelsViewData(CurrentPerson, Models.OVTASection.AddOrRemoveParcels, onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
             return RazorView<AddOrRemoveParcels, AddOrRemoveParcelsViewData, AddOrRemoveParcelsViewModel>(viewData,
                 viewModel);
         }

@@ -2,15 +2,13 @@
     .controller("AssessmentAreaMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
+
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;
         $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
         $scope.selectedJurisdictionID = null;
-
-        
 
         var selectAssessmentArea = function(event) {
             $scope.setSelectedFeature(event.layer.feature);
