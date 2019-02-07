@@ -47,6 +47,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentPhotoController.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentAreaViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentAreaViewModel.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcels.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsViewModel.cs" />

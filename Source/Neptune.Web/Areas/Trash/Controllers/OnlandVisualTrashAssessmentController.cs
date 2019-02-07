@@ -13,7 +13,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -458,23 +457,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return Redirect(viewModel.AutoAdvance
                 ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
-        }
-    }
-}
-namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
-{
-    public class RefineAssessmentAreaViewModel : OnlandVisualTrashAssessmentViewModel
-    {
-    }
-
-    public abstract class RefineAssessmentArea : TypedWebViewPage<RefineAssessmentAreaViewData, RefineAssessmentAreaViewModel>
-    {
-    }
-
-    public class RefineAssessmentAreaViewData : OVTASectionViewData
-    {
-        public RefineAssessmentAreaViewData(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta) : base(currentPerson, ovtaSection, ovta)
-        {
         }
     }
 }
