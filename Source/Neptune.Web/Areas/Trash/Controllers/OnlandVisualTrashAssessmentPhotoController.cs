@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -79,6 +80,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         public class ObservationPhotoStagingSimple
         {
+            [SitkaFileExtensions("jpg|jpeg|gif|png")]
             public HttpPostedFileBase Photo { get; set; }
         }
     }

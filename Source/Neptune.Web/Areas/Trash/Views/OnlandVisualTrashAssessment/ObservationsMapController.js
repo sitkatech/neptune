@@ -29,10 +29,10 @@
                     {
                         style: function(feature) {
                             return {
-                                fillColor: "#FFFF00",
+                                fillColor: NeptuneMaps.Constants.defaultPolyColor,
                                 fill: true,
                                 fillOpacity: 0.5,
-                                color: "#FFFF00",
+                                color: NeptuneMaps.Constants.defaultPolyColor,
                                 weight: 5,
                                 stroke: true
                             };
@@ -209,11 +209,19 @@
 
 
         // photo handling
+        $scope.photoFileTypeError = false;
 
-        $scope.stagePhoto = function() {
+        $scope.stagePhoto = function () {
             var file = jQuery("#photoUpload")[0].files[0];
             var formData = new FormData();
             formData.append("Photo", file);
+
+            if (file.type.split('/')[0] !== "image") {
+                $scope.photoFileTypeError = true;
+                $scope.$apply();
+                jQuery("#photoUpload").fileinput('reset');
+                return;
+            }
 
             $.ajax({
                 url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
@@ -222,10 +230,11 @@
                 contentType: false,
                 type: 'POST',
                 success: function (data) {
+                    $scope.photoFileTypeError = false;
                     $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
                     $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
                     $scope.$apply();
-                    jQuery("#photoUpload").fileinput('reset')
+                    jQuery("#photoUpload").fileinput('reset');
                 },
                 error: function(jq, ts, et) {
                     console.log(ts);
