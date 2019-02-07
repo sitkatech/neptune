@@ -13,8 +13,10 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
+using OVTASection = Neptune.Web.Models.OVTASection;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -236,7 +238,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
             {
-                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(Guid.NewGuid().ToString(), // todo: I'm only setting the name here so I don't have to consider/implement with the "AssessmentAreaStaging" strategy until later.
+                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(
+                    Guid.NewGuid()
+                        .ToString(), // todo: I'm only setting the name here so I don't have to consider/implement with the "AssessmentAreaStaging" strategy until later.
                     onlandVisualTrashAssessment.StormwaterJurisdiction, unionOfSelectedParcelGeometries);
 
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
@@ -244,7 +248,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
                     onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-                onlandVisualTrashAssessment.AssessingNewArea = false; // todo: it isn't quite accurate to say this is false
+                onlandVisualTrashAssessment.AssessingNewArea =
+                    false; // todo: it isn't quite accurate to say this is false
                 // todo: what we really need is an "AssessmentAreaStaging" to hold this assessment area until the OVTA is finalized.
             }
             else
@@ -266,6 +271,37 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
             return RazorView<AddOrRemoveParcels, AddOrRemoveParcelsViewData, AddOrRemoveParcelsViewModel>(viewData,
                 viewModel);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult RefineAssessmentArea(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new RefineAssessmentAreaViewModel();
+            return ViewRefineAssessmentArea(onlandVisualTrashAssessment, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult RefineAssessmentArea(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RefineAssessmentAreaViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewRefineAssessmentArea(onlandVisualTrashAssessment, viewModel);
+            }
+
+            return RedirectToAppropriateStep(viewModel, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment);
+        }
+
+        private ViewResult ViewRefineAssessmentArea(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RefineAssessmentAreaViewModel viewModel)
+        {
+            var viewData = new RefineAssessmentAreaViewData(CurrentPerson, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment);
+
+            return RazorView<RefineAssessmentArea, RefineAssessmentAreaViewData, RefineAssessmentAreaViewModel>(
+                viewData, viewModel);
         }
 
         [HttpGet]
@@ -323,7 +359,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public PartialViewResult RefreshParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        public PartialViewResult RefreshParcels(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var viewModel = new ConfirmDialogFormViewModel(onlandVisualTrashAssessmentPrimaryKey.PrimaryKeyValue);
 
@@ -342,10 +379,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RefreshParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel) //note that the viewModel is not actually used; we only need it to satisfy our opinionated routetablebuilder
+        public ActionResult RefreshParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            ConfirmDialogFormViewModel viewModel) //note that the viewModel is not actually used; we only need it to satisfy our opinionated routetablebuilder
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            Check.RequireNotNull(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea, "Cannot refresh Assessment Area: Assessment Area not yet created"); // todo: staging?
+            Check.RequireNotNull(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea,
+                "Cannot refresh Assessment Area: Assessment Area not yet created"); // todo: staging?
 
             if (!ModelState.IsValid)
             {
@@ -355,7 +394,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessmentAreaToDelete = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID = null;
             HttpRequestStorage.DatabaseEntities.SaveChanges();
-            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.DeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentAreaToDelete);
+            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.DeleteOnlandVisualTrashAssessmentArea(
+                onlandVisualTrashAssessmentAreaToDelete);
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
@@ -418,6 +458,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return Redirect(viewModel.AutoAdvance
                 ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
+        }
+    }
+}
+namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
+{
+    public class RefineAssessmentAreaViewModel : OnlandVisualTrashAssessmentViewModel
+    {
+    }
+
+    public abstract class RefineAssessmentArea : TypedWebViewPage<RefineAssessmentAreaViewData, RefineAssessmentAreaViewModel>
+    {
+    }
+
+    public class RefineAssessmentAreaViewData : OVTASectionViewData
+    {
+        public RefineAssessmentAreaViewData(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta) : base(currentPerson, ovtaSection, ovta)
+        {
         }
     }
 }

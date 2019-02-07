@@ -111,7 +111,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            return false; // todo
+            return false; // todo what's the completion status?
         }
     }
 
@@ -119,8 +119,7 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            //todo return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RefineAssessmentArea(ovta));
-            return null;
+            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RefineAssessmentArea(ovta));
         }
 
         public override OVTASection GetNextSection()
@@ -130,8 +129,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            // todo return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
-            return false;
+            return false; // todo what's the completion status?
         }
     }
 

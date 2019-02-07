@@ -1104,6 +1104,7 @@
     <Content Include="Areas\Modeling\Views\Shared\SiteLayout.cshtml" />
     <Content Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcels.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

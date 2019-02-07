@@ -41,35 +41,36 @@
 
 @if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
 {
-    <div ng-app="NeptuneApp" ng-controller="AddOrRemoveParcelsController">
-        <div class="row">
-            <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-                <div id="mapContainer">
-                    <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
-                    </div>
+<div ng-app="NeptuneApp" ng-controller="AddOrRemoveParcelsController">
+    <div class="row">
+        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+            <div id="mapContainer">
+                <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
                 </div>
             </div>
         </div>
-
-        @using (Html.BeginForm())
-        {
-            <div ng-repeat="parcelId in AngularModel.ParcelIDs">
-                <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}" />
-            </div>
-
-            <hr />
-
-            <div class="row">
-                <div class="col-xs-12 col-sm-2">
-                    <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-                </div>
-
-                <div class="col-xs-12 col-sm-10" style="text-align: right">
-                    <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
-                </div>
-            </div>
-        }
     </div>
+
+    @using (Html.BeginForm())
+    {
+        <div ng-repeat="parcelId in AngularModel.ParcelIDs">
+            <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}" />
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-3">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-9" style="text-align: right">
+                <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
+        </div>
+    }
+</div>
 }
 else
 {
