@@ -38,7 +38,7 @@
                 });
         }
 
-        $scope.toggleParcel = function (parcelId, callback) {
+        $scope.toggleParcel = function(parcelId, callback) {
             if (_.includes($scope.AngularModel.ParcelIDs, parcelId)) {
                 _.pull($scope.AngularModel.ParcelIDs, parcelId);
             } else {
@@ -50,7 +50,7 @@
             if (typeof callback === "function") {
                 callback.call();
             }
-        }
+        };
 
         function updateSelectedParcelLayer() {
 
@@ -90,8 +90,6 @@
                     function (response) {
                         if (response.features.length === 0)
                             return;
-
-                        //$scope.neptuneMap.map.fitBounds(new L.geoJSON(response).getBounds());
                         
                         $scope.$apply();
                     },
@@ -129,24 +127,8 @@
                 });
             $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
 
-            //// todo: initialize the selected parcels layer following the pattern from EWPC.js
-
-            //$scope.areaLayerGeoJson = L.geoJson(
-            //    $scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
-            //    {
-            //        style: function (feature) {
-            //            return {
-            //                color: "#b2b2b2",
-            //                weight: .5,
-            //                fillColor: NeptuneMaps.Constants.defaultSelectedFeatureColor,
-            //                fillOpacity: .5
-            //            };
-            //        }
-            //    });
-            //$scope.areaLayerGeoJson.addTo($scope.neptuneMap.map);
-
-
             updateSelectedParcelLayer();
         };
+
         $scope.initializeMap();
     });

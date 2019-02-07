@@ -1,5 +1,6 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -33,6 +34,10 @@
     }
 }
 
+<p>Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</p>
+
+@if (ViewDataTyped.OfferRefresh)
+{@ModalDialogFormHelper.ModalDialogFormLink("Refresh Assessment Area Based on Observations", ViewDataTyped.RefreshUrl, "Refresh Assessment Area", 500, "Refresh", "Cancel", new List<string> { "btn btn-neptune" }, null, null)}
 
 @if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
 {
@@ -48,6 +53,10 @@
 
         @using (Html.BeginForm())
         {
+            <div ng-repeat="parcelId in AngularModel.ParcelIDs">
+                <input type="hidden" name="@Html.NameFor(x => x.ParcelIDs)" value="{{parcelId}}" />
+            </div>
+
             <hr />
 
             <div class="row">
