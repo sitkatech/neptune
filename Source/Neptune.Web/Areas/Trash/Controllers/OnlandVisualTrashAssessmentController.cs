@@ -25,7 +25,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public ViewResult Index()
         {
-            var viewData = new IndexViewData(CurrentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAIndex));
+            var viewData = new IndexViewData(CurrentPerson,
+                NeptunePage.GetNeptunePageByPageType(NeptunePageType.OVTAIndex));
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -33,11 +34,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonData()
         {
             var treatmentBMPs = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson);
-            var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(treatmentBMPs, gridSpec);
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(treatmentBMPs, gridSpec);
             return gridJsonNetJObjectResult;
         }
 
-        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec, Person currentPerson)
+        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec,
+            Person currentPerson)
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
@@ -47,7 +50,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult Instructions(int? ovtaID) // route "overloaded" so we can handle revisiting and starting anew with the same route.
+        public ViewResult
+            Instructions(
+                int? ovtaID) // route "overloaded" so we can handle revisiting and starting anew with the same route.
         {
             var viewModel = new InstructionsViewModel();
 
@@ -104,26 +109,33 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
 
             // do not offer a drop-down menu if the user can only edit one jurisdiction
-            var defaultJurisdiction = stormwaterJurisdictionsPersonCanEdit.Count == 1 ? stormwaterJurisdictionsPersonCanEdit.Single() : null;
+            var defaultJurisdiction = stormwaterJurisdictionsPersonCanEdit.Count == 1
+                ? stormwaterJurisdictionsPersonCanEdit.Single()
+                : null;
 
             var jurisdictionsSelectList = stormwaterJurisdictionsPersonCanEdit
-                .ToSelectListWithDisabledEmptyFirstRow(j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
+                .ToSelectListWithDisabledEmptyFirstRow(
+                    j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
                     j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
 
-            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
+            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
+                .ToList()
                 .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdiction)).ToList();
 
-            var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap", SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
+            var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap",
+                SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
 
             var viewData = new InitiateOVTAViewData(CurrentPerson,
-                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas, defaultJurisdiction);
+                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas,
+                defaultJurisdiction);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
 
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, InitiateOVTAViewModel viewModel)
+        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            InitiateOVTAViewModel viewModel)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -139,7 +151,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        public ViewResult RecordObservations(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             var viewModel = new RecordObservationsViewModel(onlandVisualTrashAssessment);
@@ -149,7 +162,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult RecordObservations(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RecordObservationsViewModel viewModel)
+        public ActionResult RecordObservations(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            RecordObservationsViewModel viewModel)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -157,25 +172,31 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewRecordObservations(onlandVisualTrashAssessment, viewModel);
             }
 
-            var allOnlandVisualTrashAssessmentObservations = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations;
+            var allOnlandVisualTrashAssessmentObservations =
+                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations;
             viewModel.UpdateModel(onlandVisualTrashAssessment, allOnlandVisualTrashAssessmentObservations.Local);
 
-            return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations, onlandVisualTrashAssessmentPrimaryKey.EntityObject);
+            return RedirectToAppropriateStep(viewModel, Models.OVTASection.RecordObservations,
+                onlandVisualTrashAssessmentPrimaryKey.EntityObject);
         }
 
-        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RecordObservationsViewModel viewModel)
+        private ViewResult ViewRecordObservations(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
+            RecordObservationsViewModel viewModel)
         {
-            var observationsLayerGeoJson = OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations);
+            var observationsLayerGeoJson =
+                OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentObservations);
 
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null
                 ? SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(
                     new List<OnlandVisualTrashAssessmentArea>
                     {
-                            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
+                        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
                     })
                 : null;
 
-            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+            var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap",
+                observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
             var viewData = new RecordObservationsViewData(CurrentPerson,
                 onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
@@ -185,17 +206,22 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult AddOrRemoveParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        public ViewResult AddOrRemoveParcels(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
 
-            var viewModel = new AddOrRemoveParcelsViewModel();
+            var parcelIDs = onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x=>x.ParcelID).AsEnumerable();
+
+            var viewModel = new AddOrRemoveParcelsViewModel(parcelIDs);
             return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
         }
 
         [HttpPost]
         [NeptuneViewFeature]
-        public ActionResult AddOrRemoveParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, AddOrRemoveParcelsViewModel viewModel)
+        public ActionResult AddOrRemoveParcels(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            AddOrRemoveParcelsViewModel viewModel)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
 
@@ -208,10 +234,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment);
         }
 
-        private ViewResult ViewAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment, AddOrRemoveParcelsViewModel viewModel)
+        private ViewResult ViewAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
+            AddOrRemoveParcelsViewModel viewModel)
         {
             var ovtaSummaryMapInitJson = GetOVTASummaryMapInitJson(onlandVisualTrashAssessment);
-            var viewData = new AddOrRemoveParcelsViewData(CurrentPerson, Models.OVTASection.AddOrRemoveParcels, onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+            var viewData = new AddOrRemoveParcelsViewData(CurrentPerson, Models.OVTASection.AddOrRemoveParcels,
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
             return RazorView<AddOrRemoveParcels, AddOrRemoveParcelsViewData, AddOrRemoveParcelsViewModel>(viewData,
                 viewModel);
         }
@@ -236,7 +264,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }
 
-        private static OVTASummaryMapInitJson GetOVTASummaryMapInitJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        private static OVTASummaryMapInitJson GetOVTASummaryMapInitJson(
+            OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             if (!Models.OVTASection.RecordObservations.IsSectionComplete(onlandVisualTrashAssessment))
             {
@@ -260,7 +289,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
                 var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels",
-                    new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessmentArea}.ToGeoJsonFeatureCollection(),
+                    new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessmentArea}
+                        .ToGeoJsonFeatureCollection(),
                     "#ffff00", .5m,
                     LayerInitialVisibility.Show);
                 ovtaSummaryMapInitJson =
@@ -273,7 +303,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [HttpPost]
         [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, FinalizeOVTAViewModel viewModel)
+        public ActionResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            FinalizeOVTAViewModel viewModel)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
@@ -284,7 +315,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
             {
                 var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
-                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName, onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
+                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
+                    onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
 
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
                     onlandVisualTrashAssessmentArea);
@@ -301,80 +333,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }
 
-        private ActionResult RedirectToAppropriateStep(OnlandVisualTrashAssessmentViewModel viewModel, Models.OVTASection ovtaSection, OnlandVisualTrashAssessment ovta)
+        private ActionResult RedirectToAppropriateStep(OnlandVisualTrashAssessmentViewModel viewModel,
+            Models.OVTASection ovtaSection, OnlandVisualTrashAssessment ovta)
         {
             return Redirect(viewModel.AutoAdvance
                 ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
         }
-
-        // photo handling
-        // todo: these api-like endpoints should belong to a separate controller
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ContentResult StageObservationPhoto(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
-        {
-            return Content("");
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        public ActionResult StageObservationPhoto(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, ObservationPhotoStagingSimple opss)
-        {
-            var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
-
-            var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,
-                onlandVisualTrashAssessmentPrimaryKey.EntityObject);
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
-
-            return Json(new
-            {
-                PhotoStagingID = staging.OnlandVisualTrashAssessmentObservationPhotoStagingID,
-                PhotoStagingUrl = staging.FileResource.GetFileResourceUrl()
-            });
-        }
-
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ActionResult DeleteObservationPhoto()
-        {
-            return Content("");
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        public ActionResult DeleteObservationPhoto(DeleteObservationPhotoSimple dopss)
-        {
-            if (dopss.IsStagedPhoto)
-            {
-                var onlandVisualTrashAssessmentObservationPhotoStaging =
-                    ((OnlandVisualTrashAssessmentObservationPhotoStagingPrimaryKey) dopss.ID).EntityObject;
-                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservationPhotoStagings
-                    .DeleteOnlandVisualTrashAssessmentObservationPhotoStaging(
-                        onlandVisualTrashAssessmentObservationPhotoStaging);
-            }
-            else
-            {
-                var onlandVisualTrashAssessmentObservationPhoto =
-                    ((OnlandVisualTrashAssessmentObservationPhotoPrimaryKey)dopss.ID).EntityObject;
-                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservationPhotos
-                    .DeleteOnlandVisualTrashAssessmentObservationPhoto(
-                        onlandVisualTrashAssessmentObservationPhoto);
-            }
-            return Content("");
-        }
-    }
-
-    public class DeleteObservationPhotoSimple
-    {
-        public int ID { get; set; }
-
-        public bool IsStagedPhoto { get; set; }
-    }
-
-    public class ObservationPhotoStagingSimple
-    {
-        public HttpPostedFileBase Photo { get; set; }
     }
 }

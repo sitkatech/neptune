@@ -9,31 +9,6 @@
 
         $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson, "Terrain", $scope.AngularViewData.GeoServerUrl);
 
-        //function addWMSLayer(layerControlDisplayName) {
-        //    var wmsParams = createWmsParamsWithLayerName("PriorityLandUseAreas");
-        //    var wmsLayer = L.tileLayer.wms("https://localhost-mapserver.ocstormwatertools.org/geoserver/OCStormwater/ows", wmsParams).addTo($scope.neptuneMap.map);
-        //    $scope.neptuneMap.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
-        //    return wmsLayer;
-        //};
-
-        //function createWmsParamsWithLayerName(layerName) {
-        //    var customParams = {
-        //        layers: layerName
-        //    };
-
-        //    wmsParams = {
-        //        service: "WMS",
-        //        transparent: true,
-        //        version: "1.1.1",
-        //        format: "image/png",
-        //        info_format: "application/json",
-        //        tiled: true
-        //    };
-
-        //    var newWmsParams = L.Util.extend(wmsParams, customParams);
-        //    return newWmsParams;
-        //};
-
         $scope.neptuneMap.addWmsLayer("LandUseBlocks", "Land Use Blocks");
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {

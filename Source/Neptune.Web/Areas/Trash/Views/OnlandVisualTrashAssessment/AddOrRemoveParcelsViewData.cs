@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
@@ -15,7 +16,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public OVTASummaryMapInitJson OVTASummaryMapInitJson { get; }
         public ViewDataForAngularClass ViewDataForAngular { get; set; }
 
-        public class ViewDataForAngularClass
+        public class ViewDataForAngularClass: TrashModuleMapViewDataForAngularBaseClass
         {
             public ViewDataForAngularClass(OVTASummaryMapInitJson mapInitJson)
             {

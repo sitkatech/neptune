@@ -216,7 +216,7 @@
             formData.append("Photo", file);
 
             $.ajax({
-                url: "/OnlandVisualTrashAssessment/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
+                url: "/OnlandVisualTrashAssessmentPhoto/StageObservationPhoto/" + $scope.AngularViewData.ovtaID,
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -252,7 +252,7 @@
             }
 
             $.ajax({
-                url: "/OnlandVisualTrashAssessment/DeleteObservationPhoto/",
+                url: "/OnlandVisualTrashAssessmentPhoto/DeleteObservationPhoto/",
                 data: formData,
                 processData: false,
                 contentType: false,
