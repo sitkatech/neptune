@@ -158,13 +158,13 @@ namespace Neptune.Web.Models
     public partial class OVTASectionAddOrRemoveParcels : OVTASection
     {
         private OVTASectionAddOrRemoveParcels(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
-        public static readonly OVTASectionAddOrRemoveParcels Instance = new OVTASectionAddOrRemoveParcels(4, @"AddOrRemoveParcels", @"Add Or Remove Parcels", @"Add Or Remove Parcels", 40, true);
+        public static readonly OVTASectionAddOrRemoveParcels Instance = new OVTASectionAddOrRemoveParcels(4, @"AddOrRemoveParcels", @"Add Or Remove Parcels", @"Add Or Remove Parcels", 40, false);
     }
 
     public partial class OVTASectionRefineAssessmentArea : OVTASection
     {
         private OVTASectionRefineAssessmentArea(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
-        public static readonly OVTASectionRefineAssessmentArea Instance = new OVTASectionRefineAssessmentArea(5, @"RefineAssessmentArea", @"Refine Assessment Area", @"RefineAssessmentArea", 50, true);
+        public static readonly OVTASectionRefineAssessmentArea Instance = new OVTASectionRefineAssessmentArea(5, @"RefineAssessmentArea", @"Refine Assessment Area", @"Refine Assessment Area", 50, false);
     }
 
     public partial class OVTASectionFinalizeOVTA : OVTASection
