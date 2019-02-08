@@ -425,8 +425,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
             else
             {
                 var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
+                var featureCollection = new FeatureCollection();
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry);
+                featureCollection.Features.Add(feature);
                 var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels",
-                    ToGeoJsonFeatureCollection(draftGeometry),
+                    featureCollection,
                     "#ffff00", .5m,
                     LayerInitialVisibility.Show);
                 ovtaSummaryMapInitJson =
@@ -437,13 +440,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         // todo: put where goes
-        private static FeatureCollection ToGeoJsonFeatureCollection(DbGeometry geom)
-        {
-            var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(geom);
-            featureCollection.Features.Add(feature);
-            return featureCollection;
-        }
 
         private static IEnumerable<int> GetParcelIDsForAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
