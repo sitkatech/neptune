@@ -8,5 +8,9 @@ Alter Table dbo.OnlandVisualTrashAssessment
 Add OnlandVisualTrashAssessmentStatusID int not null constraint FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusID
 	Foreign Key references dbo.OnlandVisualTrashAssessmentStatus(OnlandVisualTrashAssessmentStatusID),
 	DraftGeometry geometry null
+go
+--todo: need all the constraints that are good.
 
---todo: need constraints that are good.
+Alter Table dbo.OnlandVisualTrashAssessment
+Add Constraint CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete
+check (DraftGeometry is null or OnlandVisualTrashAssessmentStatusID = 1)
