@@ -14,4 +14,8 @@ go
 
 Alter Table dbo.OnlandVisualTrashAssessment
 Add Constraint CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete
-check (DraftGeometry is null or OnlandVisualTrashAssessmentStatusID = 1)
+check (not (DraftGeometry is not null and OnlandVisualTrashAssessmentStatusID = 2)) 
+
+Alter Table dbo.OnlandVisualTrashAssessment
+Add Constraint CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryAndOfficialArea
+check (not (DraftGeometry is not null and OnlandVisualTrashAssessmentAreaID is not null)) 
