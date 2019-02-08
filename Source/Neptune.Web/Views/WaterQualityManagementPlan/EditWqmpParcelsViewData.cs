@@ -32,15 +32,15 @@ namespace Neptune.Web.Views.WaterQualityManagementPlan
 
         public class EditWqmpParcelsViewDataForAngular
         {
-            public readonly MapInitJson MapInitJson;
-            public readonly string FindParcelByNameUrl;
-            public readonly string FindParcelByAddress;
-            public readonly string TypeAheadInputId;
-            public IDictionary<int, string> ParcelNumberByID;
-            public IDictionary<int, string> ParcelAddressByID;
-            public readonly string ParcelMapServiceLayerName;
-            public readonly string MapServiceUrl;
-            public readonly string ParcelFieldDefinitionLabel;
+            public MapInitJson MapInitJson { get; }
+            public string FindParcelByNameUrl { get; }
+            public string FindParcelByAddress { get; }
+            public string TypeAheadInputId { get; }
+            public IDictionary<int, string> ParcelNumberByID { get; }
+            public IDictionary<int, string> ParcelAddressByID { get; }
+            public string ParcelMapServiceLayerName { get; }
+            public string MapServiceUrl { get; }
+            public string ParcelFieldDefinitionLabel { get; }
 
             public EditWqmpParcelsViewDataForAngular(MapInitJson mapInitJson, List<Models.Parcel> parcelsInViewModel, SystemAttribute systemAttribute)
             {

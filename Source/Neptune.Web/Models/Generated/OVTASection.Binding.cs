@@ -21,6 +21,8 @@ namespace Neptune.Web.Models
         public static readonly OVTASectionInstructions Instructions = OVTASectionInstructions.Instance;
         public static readonly OVTASectionInitiateOVTA InitiateOVTA = OVTASectionInitiateOVTA.Instance;
         public static readonly OVTASectionRecordObservations RecordObservations = OVTASectionRecordObservations.Instance;
+        public static readonly OVTASectionAddOrRemoveParcels AddOrRemoveParcels = OVTASectionAddOrRemoveParcels.Instance;
+        public static readonly OVTASectionRefineAssessmentArea RefineAssessmentArea = OVTASectionRefineAssessmentArea.Instance;
         public static readonly OVTASectionFinalizeOVTA FinalizeOVTA = OVTASectionFinalizeOVTA.Instance;
 
         public static readonly List<OVTASection> All;
@@ -31,7 +33,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static OVTASection()
         {
-            All = new List<OVTASection> { Instructions, InitiateOVTA, RecordObservations, FinalizeOVTA };
+            All = new List<OVTASection> { Instructions, InitiateOVTA, RecordObservations, AddOrRemoveParcels, RefineAssessmentArea, FinalizeOVTA };
             AllLookupDictionary = new ReadOnlyDictionary<int, OVTASection>(All.ToDictionary(x => x.OVTASectionID));
         }
 
@@ -107,6 +109,8 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
+                case OVTASectionEnum.AddOrRemoveParcels:
+                    return AddOrRemoveParcels;
                 case OVTASectionEnum.FinalizeOVTA:
                     return FinalizeOVTA;
                 case OVTASectionEnum.InitiateOVTA:
@@ -115,6 +119,8 @@ namespace Neptune.Web.Models
                     return Instructions;
                 case OVTASectionEnum.RecordObservations:
                     return RecordObservations;
+                case OVTASectionEnum.RefineAssessmentArea:
+                    return RefineAssessmentArea;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -126,7 +132,9 @@ namespace Neptune.Web.Models
         Instructions = 1,
         InitiateOVTA = 2,
         RecordObservations = 3,
-        FinalizeOVTA = 4
+        AddOrRemoveParcels = 4,
+        RefineAssessmentArea = 5,
+        FinalizeOVTA = 6
     }
 
     public partial class OVTASectionInstructions : OVTASection
@@ -147,9 +155,21 @@ namespace Neptune.Web.Models
         public static readonly OVTASectionRecordObservations Instance = new OVTASectionRecordObservations(3, @"RecordObservations", @"Record Observations", @"Record Observations", 30, true);
     }
 
+    public partial class OVTASectionAddOrRemoveParcels : OVTASection
+    {
+        private OVTASectionAddOrRemoveParcels(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionAddOrRemoveParcels Instance = new OVTASectionAddOrRemoveParcels(4, @"AddOrRemoveParcels", @"Add Or Remove Parcels", @"Add Or Remove Parcels", 40, false);
+    }
+
+    public partial class OVTASectionRefineAssessmentArea : OVTASection
+    {
+        private OVTASectionRefineAssessmentArea(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
+        public static readonly OVTASectionRefineAssessmentArea Instance = new OVTASectionRefineAssessmentArea(5, @"RefineAssessmentArea", @"Refine Assessment Area", @"Refine Assessment Area", 50, false);
+    }
+
     public partial class OVTASectionFinalizeOVTA : OVTASection
     {
         private OVTASectionFinalizeOVTA(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
-        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(4, @"FinalizeOVTA", @"Review and Finalize OVTA", @"Finalize OVTA", 40, false);
+        public static readonly OVTASectionFinalizeOVTA Instance = new OVTASectionFinalizeOVTA(6, @"FinalizeOVTA", @"Review and Finalize OVTA", @"Finalize OVTA", 60, false);
     }
 }

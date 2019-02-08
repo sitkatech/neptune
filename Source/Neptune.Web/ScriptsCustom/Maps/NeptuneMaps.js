@@ -360,5 +360,11 @@ NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup
     features.bindPopup(popup);
 
     this.addLayerToLayerControl(features, layerName);
-}
+};
 
+// constants for things like feature color that ought to be consistent across the site
+
+NeptuneMaps.Constants = {
+    defaultPolyColor: "#7070ff",
+    defaultSelectedFeatureColor: "#ffff00"
+};

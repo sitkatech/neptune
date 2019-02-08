@@ -83,12 +83,20 @@ namespace Neptune.Web.Models
 
 
         /// <summary>
-        /// Dependent type names of this entity
+        /// Delete just the entity 
+        /// </summary>
+        public void Delete(DatabaseEntities dbContext)
+        {
+            dbContext.FieldDefinitionDatas.Remove(this);
+        }
+        
+        /// <summary>
+        /// Delete entity plus all children
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
             DeleteChildren(dbContext);
-            dbContext.FieldDefinitionDatas.Remove(this);
+            Delete(dbContext);
         }
         /// <summary>
         /// Dependent type names of this entity

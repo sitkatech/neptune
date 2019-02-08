@@ -71,6 +71,7 @@
                             <input type="file" id="photoUpload" />
                         </div>
                         <br />
+                        <p ng-if="photoFileTypeError" class="text-danger">File must be an image</p>
                         <img height="114" ng-src="{{currentPhotoUrl()}}" ng-show="!showUploader()" />
                     </div>
                 </div>

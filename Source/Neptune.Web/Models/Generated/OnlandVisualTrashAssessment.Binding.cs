@@ -91,12 +91,20 @@ namespace Neptune.Web.Models
 
 
         /// <summary>
-        /// Dependent type names of this entity
+        /// Delete just the entity 
+        /// </summary>
+        public void Delete(DatabaseEntities dbContext)
+        {
+            dbContext.OnlandVisualTrashAssessments.Remove(this);
+        }
+        
+        /// <summary>
+        /// Delete entity plus all children
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
             DeleteChildren(dbContext);
-            dbContext.OnlandVisualTrashAssessments.Remove(this);
+            Delete(dbContext);
         }
         /// <summary>
         /// Dependent type names of this entity

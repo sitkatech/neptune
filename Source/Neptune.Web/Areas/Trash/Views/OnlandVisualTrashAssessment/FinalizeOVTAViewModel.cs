@@ -14,6 +14,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
         public string Notes { get; set; }
 
+        //todo: embetter
+        public string Score { get; set; }
+
         public FinalizeOVTAViewModel()
         {
 
