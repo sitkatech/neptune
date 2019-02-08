@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[AssessingNewArea] [bit] NULL,
 	[OnlandVisualTrashAssessmentStatusID] [int] NOT NULL,
 	[DraftGeometry] [geometry] NULL,
+	[IsDraftGeometryManuallyRefined] [bit] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC

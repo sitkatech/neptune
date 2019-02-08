@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -42,6 +42,7 @@ namespace Neptune.Web.Models
             this.AssessingNewArea = assessingNewArea;
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatusID;
             this.DraftGeometry = draftGeometry;
+            this.IsDraftGeometryManuallyRefined = isDraftGeometryManuallyRefined;
         }
 
         /// <summary>
@@ -137,6 +138,7 @@ namespace Neptune.Web.Models
         public bool? AssessingNewArea { get; set; }
         public int OnlandVisualTrashAssessmentStatusID { get; set; }
         public DbGeometry DraftGeometry { get; set; }
+        public bool? IsDraftGeometryManuallyRefined { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 

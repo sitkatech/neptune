@@ -7,7 +7,8 @@ OnlandVisualTrashAssessmentStatusDisplayName varchar(20) not null constraint AK_
 Alter Table dbo.OnlandVisualTrashAssessment
 Add OnlandVisualTrashAssessmentStatusID int not null constraint FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusID
 	Foreign Key references dbo.OnlandVisualTrashAssessmentStatus(OnlandVisualTrashAssessmentStatusID),
-	DraftGeometry geometry null
+	DraftGeometry geometry null,
+	IsDraftGeometryManuallyRefined bit null
 go
 --todo: need all the constraints that are good.
 
