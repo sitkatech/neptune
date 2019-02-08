@@ -22,6 +22,8 @@ namespace Neptune.Web.Models
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsOptional();
             Property(x => x.AssessingNewArea).HasColumnName(@"AssessingNewArea").HasColumnType("bit").IsOptional();
+            Property(x => x.OnlandVisualTrashAssessmentStatusID).HasColumnName(@"OnlandVisualTrashAssessmentStatusID").HasColumnType("int").IsRequired();
+            Property(x => x.DraftGeometry).HasColumnName(@"DraftGeometry").HasColumnType("geometry").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.CreatedByPerson).WithMany(b => b.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson).HasForeignKey(c => c.CreatedByPersonID).WillCascadeOnDelete(false); // FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID

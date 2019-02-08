@@ -1,0 +1,12 @@
+Create Table dbo.OnlandVisualTrashAssessmentStatus(
+OnlandVisualTrashAssessmentStatusID int not null constraint PK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusID primary key,
+OnlandVisualTrashAssessmentStatusName varchar(20) not null constraint AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusName unique,
+OnlandVisualTrashAssessmentStatusDisplayName varchar(20) not null constraint AK_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusDisplayName unique
+)
+
+Alter Table dbo.OnlandVisualTrashAssessment
+Add OnlandVisualTrashAssessmentStatusID int not null constraint FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusID
+	Foreign Key references dbo.OnlandVisualTrashAssessmentStatus(OnlandVisualTrashAssessmentStatusID),
+	DraftGeometry geometry null
+
+--todo: need constraints that are good.

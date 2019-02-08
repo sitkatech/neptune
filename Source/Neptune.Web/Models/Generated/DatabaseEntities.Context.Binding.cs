@@ -359,6 +359,11 @@ namespace Neptune.Web.Models
                 case "OnlandVisualTrashAssessment":
                     return OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(primaryKey);
 
+                case "OnlandVisualTrashAssessmentStatus":
+                    var onlandVisualTrashAssessmentStatus = OnlandVisualTrashAssessmentStatus.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(onlandVisualTrashAssessmentStatus, "OnlandVisualTrashAssessmentStatus", primaryKey);
+                    return onlandVisualTrashAssessmentStatus;
+
                 case "Organization":
                     return Organizations.GetOrganization(primaryKey);
 
