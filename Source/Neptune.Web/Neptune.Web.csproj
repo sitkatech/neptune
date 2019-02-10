@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -396,12 +396,12 @@
     <Compile Include="Areas\Trash\Views\Shared\SiteLayout.cs" />
     <Compile Include="Areas\Trash\Views\TrashModuleViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentAreaModelExtensions.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\SelectOVTAAreaMapInitJson.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTASummaryMapInitJson.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\SelectOVTAAreaMapInitJson.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\OVTASummaryMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\Shared\TrashModuleMapViewDataForAngularBaseClass.cs" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentModelExtensions.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentObservationModelExtensions.cs" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTAObservationsMapInitJson.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\OVTAObservationsMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\FinalizeOVTA.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\FinalizeOVTAViewData.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\FinalizeOVTAViewModel.cs" />

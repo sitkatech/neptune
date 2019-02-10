@@ -45,6 +45,14 @@ REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessment_StormwaterJurisdiction_StormwaterJurisdictionID]
 GO
-ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete] CHECK  (([DraftGeometry] IS NULL OR [OnlandVisualTrashAssessmentStatusID]=(1)))
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryAndOfficialArea] CHECK  ((NOT ([DraftGeometry] IS NOT NULL AND [OnlandVisualTrashAssessmentAreaID] IS NOT NULL)))
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryAndOfficialArea]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete] CHECK  ((NOT ([DraftGeometry] IS NOT NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete] CHECK  (([OnlandVisualTrashAssessmentAreaID] IS NOT NULL AND ([AssessingNewArea]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) OR [OnlandVisualTrashAssessmentAreaID] IS NULL AND [AssessingNewArea]=(1)))
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete]
