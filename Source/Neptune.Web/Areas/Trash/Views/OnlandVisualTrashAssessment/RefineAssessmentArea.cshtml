@@ -1,11 +1,22 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.FieldVisit
 @using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.RefineAssessmentArea
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 
+@section JavascriptAndStylesContent
+{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+}
+
 <p class="systemText">Content under development.</p>
+
+<div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
 
 @using (Html.BeginForm())
 {
@@ -21,3 +32,150 @@
         </div>
     </div>
 }
+
+
+<script type="text/javascript">
+
+    // todo: probably refactor this up to a prototype
+    getDrawOptions = function(editableFeatureGroup)
+    {
+        var myIcon = L.MakiMarkers.icon({
+            icon: "marker",
+            color: "#f357a1",
+            size: "m"
+        });
+
+        var options = {
+            position: 'topleft',
+            draw: {
+                polyline: {
+                    shapeOptions: {
+                        color: '#f357a1',
+                        weight: 10
+                    }
+                },
+                polygon: {
+                    allowIntersection: false, // Restricts shapes to simple polygons
+                    drawError: {
+                        color: '#e1e100', // Color the shape will turn when intersects
+                        message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
+                    },
+                    shapeOptions: {
+                        color: '#f357a1'
+                    }
+                },
+                circle: false, // Turns off this drawing tool
+                rectangle: {
+                    shapeOptions: {
+                        color: "#f357a1"
+                    }
+                },
+                marker: {
+                    icon: myIcon
+                }
+            },
+            edit: {
+                featureGroup: editableFeatureGroup, //REQUIRED!!
+                edit: {
+                    maintainColor: true,
+                    opacity: 0.3
+                },
+                remove: true
+            }
+        };
+        return options;
+    };
+
+    var assessmentAreaMap;
+    jQuery(document).ready(function()
+    {
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        var editableFeatureJsonObject = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson).ToString(Formatting.None));
+        assessmentAreaMap = new NeptuneMaps.Map(mapInitJson);
+
+        assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
+
+        // todo: Add observations markers
+
+        var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection, {
+            onEachFeature: function(feature, layer)
+            {
+                if (layer.getLayers)
+                {
+                    layer.getLayers().forEach(function(l) { assessmentAreaMap.editableFeatureGroup.addLayer(l); });
+                }
+                else
+                {
+                    assessmentAreaMap.editableFeatureGroup.addLayer(layer);
+                }
+            }
+        });
+
+        var drawOptions = getDrawOptions(assessmentAreaMap.editableFeatureGroup);
+        var drawControl = new L.Control.Draw(drawOptions);
+        assessmentAreaMap.map.addControl(drawControl);
+        assessmentAreaMap.map.addLayer(assessmentAreaMap.editableFeatureGroup);
+
+        assessmentAreaMap.map.on('draw:created', function(e)
+        {
+            var layer = e.layer;
+            assessmentAreaMap.editableFeatureGroup.addLayer(layer);
+            var leafletId = layer._leaflet_id;
+            assessmentAreaMap.editableFeatureGroup._layers[leafletId].feature = new Object();
+            assessmentAreaMap.editableFeatureGroup._layers[leafletId].feature.properties = new Object();
+            assessmentAreaMap.editableFeatureGroup._layers[leafletId].feature.type = "Feature";
+            var feature = assessmentAreaMap.editableFeatureGroup._layers[leafletId].feature;
+            updateFeatureCollectionJson();
+        });
+        assessmentAreaMap.map.on('draw:edited', function(e)
+        {
+            updateFeatureCollectionJson();
+        });
+
+        assessmentAreaMap.map.on('draw:deleted', function(e)
+        {
+            updateFeatureCollectionJson();
+        });
+
+        updateFeatureCollectionJson();
+
+        var saveButton = jQuery("#" + "@ModalDialogFormHelper.SaveButtonID");
+        if(!Sitka.Methods.isUndefinedNullOrEmpty(saveButton))
+        {
+            saveButton.text("Save");
+        }
+
+        var modalTitle = jQuery(".ui-dialog-title");
+        if(!Sitka.Methods.isUndefinedNullOrEmpty(modalTitle))
+        {
+            modalTitle.html("Edit ??? - Detail");
+        }
+    });
+
+    NeptuneMaps.Map.prototype.getTextAreaId = function(featureId) { return "textareaFor" + featureId; };
+
+
+    function savePopupAnnotationEditor(featureId)
+    {
+        var textBoxForPopup = jQuery("#" + assessmentAreaMap.getTextAreaId(featureId));
+        assessmentAreaMap.editableFeatureGroup._layers[featureId].feature.properties.Info = textBoxForPopup.val();
+        assessmentAreaMap.map.closePopup();
+        updateFeatureCollectionJson();
+    }
+
+    function updateFeatureCollectionJson()
+    {
+        var geoJson = assessmentAreaMap.editableFeatureGroup.toGeoJSON();
+        var mapForm = jQuery("#" + "@ViewDataTyped.MapFormID");
+        mapForm.html("");
+        var hiddens = [];
+        for(var i = 0; i < geoJson.features.length; ++i)
+        {
+            var currentWktName = "name=\"@Html.NameFor(x => x.WktAndAnnotations[0].Wkt)\"".replace("0", i);
+            var currentWktAnnotation = "name=\"@Html.NameFor(x => x.WktAndAnnotations[0].Annotation)\"".replace("0", i);
+            hiddens.push("<input type=\"hidden\" " + currentWktName + " value=\"" + Terraformer.WKT.convert(geoJson.features[i].geometry) + "\" />");
+            hiddens.push("<input type=\"hidden\" " + currentWktAnnotation + " value=\"" + Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) + "\" />");
+        }
+        mapForm.html(hiddens.join("\r\n"));
+    }
+</script>
