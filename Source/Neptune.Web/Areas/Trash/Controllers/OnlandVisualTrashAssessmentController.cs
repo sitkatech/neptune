@@ -190,12 +190,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
-            var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null
-                ? new List<OnlandVisualTrashAssessmentArea>
-                {
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
-                }.MakeAssessmentAreasLayerGeoJson()
-                : null;
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
 
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap",
                 observationsLayerGeoJson, assessmentAreaLayerGeoJson);
@@ -391,13 +386,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
             OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
 
+            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+
+            return ovtaSummaryMapInitJson;
+        }
+
+        // assumes that we are not looking for the parcels-via-transect area
+        private static LayerGeoJson GetAssessmentAreaLayerGeoJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
             FeatureCollection geoJsonFeatureCollection;
-
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
             {
-                geoJsonFeatureCollection = new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea }
-                    .ToGeoJsonFeatureCollection();
+                geoJsonFeatureCollection =
+                    new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea}
+                        .ToGeoJsonFeatureCollection();
             }
             else
             {
@@ -410,10 +415,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
                 "#ffff00", .5m,
                 LayerInitialVisibility.Show);
-
-            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
-
-            return ovtaSummaryMapInitJson;
+            return assessmentAreaLayerGeoJson;
         }
 
         private ActionResult RedirectToAppropriateStep(OnlandVisualTrashAssessmentViewModel viewModel,
