@@ -1,26 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.Feature;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
-    public class OVTAObservationsMapInitJson : MapInitJson
+    public class AddOrRemoveParcelsMapIntJson : MapInitJson
     {
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
 
-        public LayerGeoJson AssessmentAreaLayerGeoJson { get; set; }
-
-        public OVTAObservationsMapInitJson(string mapDivID,
-            LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) : base(mapDivID,
+        public AddOrRemoveParcelsMapIntJson(string mapDivID, LayerGeoJson observationsLayerGeoJson) : base(mapDivID,
             DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>
             {
-                observationsLayerGeoJson,
-                assessmentAreaLayerGeoJson
+                observationsLayerGeoJson
             }))
         {
-            AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
             ObservationsLayerGeoJson = observationsLayerGeoJson;
         }
     }

@@ -213,7 +213,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
 
-            var parcelIDs = GetParcelIDsForAddOrRemoveParcels(onlandVisualTrashAssessment);
+            var parcelIDs = onlandVisualTrashAssessment.GetParcelIDsForAddOrRemoveParcels();
 
             var viewModel = new AddOrRemoveParcelsViewModel(parcelIDs);
             return ViewAddOrRemoveParcels(onlandVisualTrashAssessment, viewModel);
@@ -245,10 +245,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             AddOrRemoveParcelsViewModel viewModel)
         {
-            // todo: don't need this MapInitJson
-            var ovtaSummaryMapInitJson = GetOVTASummaryMapInitJson(onlandVisualTrashAssessment);
+            var addOrRemoveParcelsMapIntJson = new AddOrRemoveParcelsMapIntJson("addOrRemoveParcelsMap",
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson());
+
             var viewData = new AddOrRemoveParcelsViewData(CurrentPerson, OVTASection.AddOrRemoveParcels,
-                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+                onlandVisualTrashAssessment, addOrRemoveParcelsMapIntJson);
             return RazorView<AddOrRemoveParcels, AddOrRemoveParcelsViewData, AddOrRemoveParcelsViewModel>(viewData,
                 viewModel);
         }
@@ -299,7 +300,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewFinalizeOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             FinalizeOVTAViewModel viewModel)
         {
-            // todo: this might be the only appropriate place to use this MapInitJson?
             var ovtaSummaryMapInitJson = GetOVTASummaryMapInitJson(onlandVisualTrashAssessment);
 
             var viewData = new FinalizeOVTAViewData(CurrentPerson,
@@ -387,66 +387,33 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         // helpers
 
-        // todo: asking too much of this method (and of this MapInitJson?)
         private static OVTASummaryMapInitJson GetOVTASummaryMapInitJson(
             OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            if (!OVTASection.RecordObservations.IsSectionComplete(onlandVisualTrashAssessment))
-            {
-                return null;
-            }
+            var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
-            OVTASummaryMapInitJson ovtaSummaryMapInitJson;
-            var observationsLayerGeoJson =
-                onlandVisualTrashAssessment
-                    .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            FeatureCollection geoJsonFeatureCollection;
 
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null && onlandVisualTrashAssessment.DraftGeometry == null)
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
             {
-                var parcels = onlandVisualTrashAssessment.GetParcelsViaTransect();
-                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", parcels.ToGeoJsonFeatureCollection(),
-                    "#ffff00", .5m,
-                    LayerInitialVisibility.Show);
-                ovtaSummaryMapInitJson =
-                    new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
-            }
-            else if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null) // either OVTA Area is not null or Draft Geometry is null, but not both
-            {
-                var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
-                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels",
-                    new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
-                        .ToGeoJsonFeatureCollection(),
-                    "#ffff00", .5m,
-                    LayerInitialVisibility.Show);
-                ovtaSummaryMapInitJson =
-                    new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+                geoJsonFeatureCollection = new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea }
+                    .ToGeoJsonFeatureCollection();
             }
             else
             {
                 var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
-                var featureCollection = new FeatureCollection();
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry);
-                featureCollection.Features.Add(feature);
-                var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels",
-                    featureCollection,
-                    "#ffff00", .5m,
-                    LayerInitialVisibility.Show);
-                ovtaSummaryMapInitJson =
-                    new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+                geoJsonFeatureCollection = new FeatureCollection();
+                geoJsonFeatureCollection.Features.Add(feature);
             }
 
+            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
+                "#ffff00", .5m,
+                LayerInitialVisibility.Show);
+
+            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+
             return ovtaSummaryMapInitJson;
-        }
-
-        // todo: put where goes
-
-        private static IEnumerable<int> GetParcelIDsForAddOrRemoveParcels(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
-        {
-            var parcelIDs = onlandVisualTrashAssessment.DraftGeometry == null
-                ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
-                : HttpRequestStorage.DatabaseEntities.Parcels
-                    .Where(x => onlandVisualTrashAssessment.DraftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
-            return parcelIDs.AsEnumerable();
         }
 
         private ActionResult RedirectToAppropriateStep(OnlandVisualTrashAssessmentViewModel viewModel,

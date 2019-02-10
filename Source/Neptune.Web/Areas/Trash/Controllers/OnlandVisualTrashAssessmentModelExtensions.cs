@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using GeoJSON.Net.Feature;
@@ -52,6 +53,15 @@ namespace Neptune.Web.Models
         {
             return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                 x.Instructions(ovta.OnlandVisualTrashAssessmentID));
+        }
+
+        public static IEnumerable<int> GetParcelIDsForAddOrRemoveParcels(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
+            var parcelIDs = onlandVisualTrashAssessment.DraftGeometry == null
+                ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
+                : HttpRequestStorage.DatabaseEntities.Parcels
+                    .Where(x => onlandVisualTrashAssessment.DraftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
+            return parcelIDs.AsEnumerable();
         }
     }
 }

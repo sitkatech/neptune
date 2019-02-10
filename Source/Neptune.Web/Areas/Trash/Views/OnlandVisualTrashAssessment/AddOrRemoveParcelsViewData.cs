@@ -9,12 +9,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class AddOrRemoveParcelsViewData: OVTASectionViewData
     {
-        public OVTASummaryMapInitJson OVTASummaryMapInitJson { get; }
+        public AddOrRemoveParcelsMapIntJson OVTASummaryMapInitJson { get; }
         public ViewDataForAngularClass ViewDataForAngular { get; set; }
         public string RefreshUrl { get; set; }
         public bool OfferRefresh { get; set; }
 
-        public AddOrRemoveParcelsViewData(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson) : base(currentPerson, ovtaSection, ovta)
+        public AddOrRemoveParcelsViewData(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta, AddOrRemoveParcelsMapIntJson ovtaSummaryMapInitJson) : base(currentPerson, ovtaSection, ovta)
         {
             OVTASummaryMapInitJson = ovtaSummaryMapInitJson;
             ViewDataForAngular = new ViewDataForAngularClass(ovtaSummaryMapInitJson);
@@ -26,12 +26,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public class ViewDataForAngularClass: TrashModuleMapViewDataForAngularBaseClass
         {
-            public ViewDataForAngularClass(OVTASummaryMapInitJson mapInitJson)
+            public ViewDataForAngularClass(AddOrRemoveParcelsMapIntJson mapInitJson)
             {
                 MapInitJson = mapInitJson;
             }
 
-            public OVTASummaryMapInitJson MapInitJson { get; }
+            public AddOrRemoveParcelsMapIntJson MapInitJson { get; }
         }
     }
 }
