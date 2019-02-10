@@ -43,10 +43,12 @@
                     </div>
                     <div class="col-sm-9">
                         <label>
-                            @Html.RadioButtonFor(m => m.AssessingNewArea, false) Reassess existing area
+                            <input type="radio" ng-model="AngularModel.AssessingNewArea" ng-value="false" name="@Html.NameFor(m=>m.AssessingNewArea)" />
+                            Reassess existing area
                         </label><br />
                         <label>
-                            @Html.RadioButtonFor(m => m.AssessingNewArea, true) Assess new area
+                            <input type="radio" ng-model="AngularModel.AssessingNewArea" ng-value="true" name="@Html.NameFor(m=>m.AssessingNewArea)" />
+                            Assess new area
                         </label>
                     </div>
                 </div>
@@ -55,11 +57,19 @@
                 {
                     <div class="form-group row">
                         <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdiction)
                         </div>
                         <div class="col-sm-9">
-                            @Html.DropDownListFor(m => m.StormwaterJurisdictionID, ViewDataTyped.Jurisdictions, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.StormwaterJurisdictionID)
+                            <select ng-model="AngularModel.StormwaterJurisdiction"
+                                    class="selectpicker"
+                                    data-live-search="true"
+                                    data-container="body"
+                                    data-width="100%" selectpicker
+                                    title="Select a Stormwater Jurisdiction"
+                                    ng-options="stormwaterJurisdiction as stormwaterJurisdiction.StormwaterJurisdictionDisplayName for stormwaterJurisdiction in AngularViewData.StormwaterJurisdictions track by stormwaterJurisdiction.StormwaterJurisdictionID">
+                                <option value="" disabled selected>Select a Stormwater Jurisdiction</option>
+                            </select>
+                            @Html.ValidationMessageFor(m => m.StormwaterJurisdiction)
                         </div>
                     </div>
                 }
@@ -67,15 +77,14 @@
                 {
                     <div class="form-group row">
                         <div class="col-sm-3 control-label">
-                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdictionID)
+                            @Html.LabelWithSugarFor(m => m.StormwaterJurisdiction)
                         </div>
                         <div class="col-sm-9">
                             @ViewDataTyped.DefaultJurisdiction.GetOrganizationDisplayName()
-                            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdictionID)" value="@ViewDataTyped.DefaultJurisdiction.StormwaterJurisdictionID"/>
                         </div>
                     </div>
                 }
-                <div class="row" ng-show="isMapEnabled">
+                <div class="row" ng-show="isMapEnabled()">
                     <div class="col-sm-3 control-label">@Html.LabelWithSugarFor(m => m.OnlandVisualTrashAssessmentAreaID)</div>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -88,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 20px;" ng-show="isMapEnabled">
+                <div class="row" style="margin-top: 20px;" ng-show="isMapEnabled()">
                     <div class="col-xs-12 col-sm-12 col-md-3 control-label">
                         <button type="button" class="btn btn-sm btn-neptune" ng-click="zoomToLocation()">
                             <span class="glyphicon glyphicon-phone"></span>
@@ -104,6 +113,8 @@
 
         <div>
             <input type="hidden" name="@Html.NameFor(m=>m.OnlandVisualTrashAssessmentAreaID)" id="@Html.IdFor(m=>m.OnlandVisualTrashAssessmentAreaID)" value="{{lastSelectedID}}"/>
+            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID"/>
+            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName" />
         </div>
 
         <hr />

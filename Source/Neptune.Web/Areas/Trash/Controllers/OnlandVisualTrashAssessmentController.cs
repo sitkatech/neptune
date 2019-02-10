@@ -1,5 +1,7 @@
-﻿using LtInfo.Common.DbSpatial;
-using LtInfo.Common.Mvc;
+﻿using GeoJSON.Net.Feature;
+using LtInfo.Common.DbSpatial;
+using LtInfo.Common.DesignByContract;
+using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
@@ -9,13 +11,8 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using GeoJSON.Net.Feature;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.GeoJson;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -116,11 +113,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ? stormwaterJurisdictionsPersonCanEdit.Single()
                 : null;
 
-            var jurisdictionsSelectList = stormwaterJurisdictionsPersonCanEdit
-                .ToSelectListWithDisabledEmptyFirstRow(
-                    j => j.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture),
-                    j => j.GetOrganizationDisplayName(), "Choose a Jurisdiction");
-
             var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
                 .ToList()
                 .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdiction)).ToList();
@@ -129,7 +121,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessmentAreas.MakeAssessmentAreasLayerGeoJson());
 
             var viewData = new InitiateOVTAViewData(CurrentPerson,
-                onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas,
+                onlandVisualTrashAssessment, stormwaterJurisdictionsPersonCanEdit, mapInitJson, onlandVisualTrashAssessmentAreas,
                 defaultJurisdiction);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
@@ -143,7 +135,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
-                viewModel.StormwaterJurisdictionID = onlandVisualTrashAssessment.StormwaterJurisdictionID;
+                viewModel.StormwaterJurisdiction = new StormwaterJurisdictionSimple(onlandVisualTrashAssessment.StormwaterJurisdiction);
                 return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
@@ -404,12 +396,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea}
                         .ToGeoJsonFeatureCollection();
             }
-            else
+            else if (onlandVisualTrashAssessment.DraftGeometry != null)
             {
                 var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry);
                 geoJsonFeatureCollection = new FeatureCollection();
                 geoJsonFeatureCollection.Features.Add(feature);
+            }
+            else
+            {
+                geoJsonFeatureCollection = new FeatureCollection();
             }
 
             var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,

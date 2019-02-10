@@ -8,6 +8,8 @@
         $scope.lastSelectedID = null;
         $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
+
+        //todo: anywhere this is used, use AngularModel.StormwaterJurisdictionID instead
         $scope.selectedJurisdictionID = null;
 
         var selectAssessmentArea = function(event) {
@@ -177,40 +179,24 @@
 
         // hacky way to filter out areas based on stormwater jurisdiction id
 
-        jQuery("select[name='StormwaterJurisdictionID']").on('change',
-            function() {
-                $scope.selectedJurisdictionID = this.value;
-                $scope.lastSelectedID = null;
-                $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
+        //jQuery("select[name='StormwaterJurisdictionID']").on('change',
+        //    function() {
+        //        $scope.selectedJurisdictionID = this.value;
+        //        $scope.lastSelectedID = null;
+        //        $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
 
-                $scope.initializeMap();
-                if ($scope.lastSelectedLayer) {
-                    $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
-                    $scope.lastSelectedLayer = null;
-                }
-                $scope.$apply();
-            });
+        //        $scope.initializeMap();
 
+        //        if ($scope.lastSelectedLayer) {
+        //            $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+        //            $scope.lastSelectedLayer = null;
+        //        }
+        //        $scope.$apply();
+        //    });
 
-        // disable the map according to what makes sense
-
-        $scope.handleMapVisibility = function() {
-            if (jQuery("input[name='AssessingNewArea']:checked").val() == "False" &&
-                (jQuery("select[name='StormwaterJurisdictionID']").val() || $scope.AngularViewData.UseDefaultJurisdiction) // don't attempt to check the jurisdiction drop-down if the user only has one jurisdiction
-                    ) {
-                $scope.isMapEnabled = true;
-            } else {
-                $scope.isMapEnabled = false;
-                $scope.deselectAll();
-            }
-            $scope.$apply();
+        $scope.isMapEnabled = function() {
+            return $scope.AngularModel.StormwaterJurisdiction && $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID && !$scope.AngularModel.AssessingNewArea;
         };
-
-        jQuery("input[name='AssessingNewArea']").on('change', $scope.handleMapVisibility);
-
-        if (!$scope.AngularViewData.UseDefaultJurisdiction) {
-            jQuery("select[name='StormwaterJurisdictionID']").on('change', $scope.handleMapVisibility);
-        }
 
         $scope.deselectAll = function() {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
@@ -222,8 +208,12 @@
 
         // init
 
+        if (!$scope.AngularModel.StormwaterJurisdiction) {
+            $scope.AngularModel.StormwaterJurisdiction = {};
+        }
+
         $scope.initializeMap($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea !== null);
-        $scope.handleMapVisibility();
+        
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
         if ($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea) {
             $scope.selectedJurisdictionID =
