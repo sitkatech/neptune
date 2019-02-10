@@ -9,15 +9,16 @@
         $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
 
-        //todo: anywhere this is used, use AngularModel.StormwaterJurisdictionID instead
-        $scope.selectedJurisdictionID = null;
-
         var selectAssessmentArea = function(event) {
             $scope.setSelectedFeature(event.layer.feature);
             $scope.$apply();
         };
         
         $scope.setSelectedFeatureByID = function (areaID) {
+            if (!areaID) {
+                return;
+            }
+
             var layer = _.find($scope.assessmentAreaLayerGeoJson._layers,
                 // here we WANT to coerce before comparing; don't use triple-equals
                 function (layer) { return areaID == layer.feature.properties["OnlandVisualTrashAssessmentAreaID"]; });
@@ -85,10 +86,9 @@
                 $scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function(feature, layer) {
-                        return feature.properties["StormwaterJurisdictionID"] == $scope.selectedJurisdictionID ||
+                        return feature.properties["StormwaterJurisdictionID"] == $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID ||
                             (overrideJurisdictionFilterForSelectedArea && feature.properties["OnlandVisualTrashAssessmentAreaID"] ==
-                            $scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea
-                            .OnlandVisualTrashAssessmentAreaID);
+                            $scope.AngularModel.OnlandVisualTrashAssessmentID);
                     },
 
                     onEachFeature: function (feature, layer) {
@@ -149,7 +149,7 @@
                                     url: url,
                                     data: {
                                         SearchTerm: query,
-                                        JurisdictionID: $scope.selectedJurisdictionID
+                                        JurisdictionID: $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID
                                     },
                                     type: "POST",
                                     success: onSuccess,
@@ -177,23 +177,6 @@
             });
         };
 
-        // hacky way to filter out areas based on stormwater jurisdiction id
-
-        //jQuery("select[name='StormwaterJurisdictionID']").on('change',
-        //    function() {
-        //        $scope.selectedJurisdictionID = this.value;
-        //        $scope.lastSelectedID = null;
-        //        $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
-
-        //        $scope.initializeMap();
-
-        //        if ($scope.lastSelectedLayer) {
-        //            $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
-        //            $scope.lastSelectedLayer = null;
-        //        }
-        //        $scope.$apply();
-        //    });
-
         $scope.isMapEnabled = function() {
             return $scope.AngularModel.StormwaterJurisdiction && $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID && !$scope.AngularModel.AssessingNewArea;
         };
@@ -211,15 +194,7 @@
         if (!$scope.AngularModel.StormwaterJurisdiction) {
             $scope.AngularModel.StormwaterJurisdiction = {};
         }
-
-        $scope.initializeMap($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea !== null);
-        
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
-        if ($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea) {
-            $scope.selectedJurisdictionID =
-                $scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
-            $scope.initializeMap($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea !== null);
-            $scope.setSelectedFeatureByID($scope.AngularViewData.SelectedOnlandVisualTrashAssessmentArea
-                .OnlandVisualTrashAssessmentAreaID);
-        }
+        $scope.initializeMap($scope.AngularModel.OnlandVisualTrashAssessmentID !== null);
+        $scope.setSelectedFeatureByID($scope.AngularModel.OnlandVisualTrashAssessmentAreaID);
     });

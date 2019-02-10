@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
@@ -22,25 +21,15 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Jurisdictions = jurisdictions;
             MapInitJson = mapInitJson;
             DefaultJurisdiction = defaultJurisdiction;
-            var selectedOVTAArea = ovta.OnlandVisualTrashAssessmentArea != null
-                ? new OnlandVisualTrashAssessmentAreaSimple
-                {
-                    OnlandVisualTrashAssessmentAreaName =
-                        ovta.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName,
-                    OnlandVisualTrashAssessmentAreaID =
-                        ovta.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
-                    StormwaterJurisdictionID = ovta.OnlandVisualTrashAssessmentArea.StormwaterJurisdictionID
-                }
-                : null;
             var useDefaultJurisdiction = defaultJurisdiction != null;
-            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction, selectedOVTAArea, jurisdictions);
+            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction, jurisdictions);
         }
 
         public class ViewDataForAngularClass
         {
             public ViewDataForAngularClass(SelectOVTAAreaMapInitJson mapInitJson,
                 IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
-                bool useDefaultJurisdiction, OnlandVisualTrashAssessmentAreaSimple selectedOVTAArea,
+                bool useDefaultJurisdiction,
                 List<StormwaterJurisdiction> jurisdictions)
             {
                 MapInitJson = mapInitJson;
@@ -52,14 +41,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                         OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID,
                         StormwaterJurisdictionID = x.StormwaterJurisdictionID
                     });
-                SelectedOnlandVisualTrashAssessmentArea = selectedOVTAArea;
                 StormwaterJurisdictions = jurisdictions.Select(x=> new StormwaterJurisdictionSimple(x)).ToList();
             }
 
             public SelectOVTAAreaMapInitJson MapInitJson { get; }
             public bool UseDefaultJurisdiction { get; }
             public IEnumerable<OnlandVisualTrashAssessmentAreaSimple> OnlandVisualTrashAssessmentAreas { get; }
-            public OnlandVisualTrashAssessmentAreaSimple SelectedOnlandVisualTrashAssessmentArea { get; }
             public List<StormwaterJurisdictionSimple> StormwaterJurisdictions { get; }
         }
     }
