@@ -126,7 +126,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 .Where(x => stormwaterJurisdictionsPersonCanEdit.Contains(x.StormwaterJurisdiction)).ToList();
 
             var mapInitJson = new SelectOVTAAreaMapInitJson("selectOVTAAreaMap",
-                SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(onlandVisualTrashAssessmentAreas));
+                onlandVisualTrashAssessmentAreas.MakeAssessmentAreasLayerGeoJson());
 
             var viewData = new InitiateOVTAViewData(CurrentPerson,
                 onlandVisualTrashAssessment, jurisdictionsSelectList, mapInitJson, onlandVisualTrashAssessmentAreas,
@@ -187,15 +187,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             RecordObservationsViewModel viewModel)
         {
             var observationsLayerGeoJson =
-                OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment
-                    .OnlandVisualTrashAssessmentObservations);
+                onlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
             var assessmentAreaLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null
-                ? SelectOVTAAreaMapInitJson.MakeAssessmentAreasLayerGeoJson(
-                    new List<OnlandVisualTrashAssessmentArea>
-                    {
-                        onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
-                    })
+                ? new List<OnlandVisualTrashAssessmentArea>
+                {
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
+                }.MakeAssessmentAreasLayerGeoJson()
                 : null;
 
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap",
@@ -399,8 +398,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             OVTASummaryMapInitJson ovtaSummaryMapInitJson;
             var observationsLayerGeoJson =
-                OVTAObservationsMapInitJson.MakeObservationsLayerGeoJson(onlandVisualTrashAssessment
-                    .OnlandVisualTrashAssessmentObservations);
+                onlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null && onlandVisualTrashAssessment.DraftGeometry == null)
             {

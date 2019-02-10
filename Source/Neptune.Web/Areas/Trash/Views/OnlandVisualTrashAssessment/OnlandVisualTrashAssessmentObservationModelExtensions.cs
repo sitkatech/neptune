@@ -19,4 +19,11 @@ public static class OnlandVisualTrashAssessmentObservationModelExtensions
         }));
         return featureCollection;
     }
+
+    public static LayerGeoJson MakeObservationsLayerGeoJson(this IEnumerable<OnlandVisualTrashAssessmentObservation> observations)
+    {
+        var featureCollection = observations.ToGeoJsonFeatureCollection();
+        var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };
+        return observationsLayerGeoJson;
+    }
 }

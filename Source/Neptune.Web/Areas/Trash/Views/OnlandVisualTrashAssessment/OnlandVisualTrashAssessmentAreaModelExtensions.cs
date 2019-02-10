@@ -21,5 +21,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             }));
             return featureCollection;
         }
+
+        public static LayerGeoJson MakeAssessmentAreasLayerGeoJson(this IEnumerable<OnlandVisualTrashAssessmentArea> assessmentArea)
+        {
+            var featureCollection = assessmentArea.ToGeoJsonFeatureCollection();
+            var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };
+            return observationsLayerGeoJson;
+        }
     }
 }
