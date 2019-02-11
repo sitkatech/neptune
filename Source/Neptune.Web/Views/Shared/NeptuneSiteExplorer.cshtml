@@ -25,137 +25,67 @@
 
 <style>
 
-    .neptuneSiteExplorer.dropdown-toggle:hover
-    {
-    background-color: rgb(98, 136, 175);
-}
-
-    #siteExplorerDropdownMenu
-    {
-       font-family: "Open Sans", serif;
-        background-color: transparent;
-        color: rgb(0,153,171);
-        border: none;
-        border-radius: 0;
-        padding: 10px 5px;
-        margin: 0;
-        min-height: 70px;
-    }
-
     #siteExplorerAreaLink {
         font-family: "Montserrat", serif;
         font-size: 20px;
         font-weight: bold;
         color: rgb(119,207,220);
-        border: none;
-        background-color: transparent;
-        border-radius: 0;
-        padding: 10px 0 0 10px;
-        margin: 0;
-        min-height: 70px;
-        white-space: normal;
-        text-align: left;
-        text-decoration: none;
-        width: 115px;
+        border-left: 2px solid rgb(0,143,170);
+        vertical-align: middle;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 10px;
+        width: 150px;
     }
 
-    #siteExplorerDropdownMenu:hover, #siteExplorerAreaLink:hover
-    {
-        /*box-shadow: 0 3px 5px rgba(0, 0, 0, .125);*/
+    #siteExplorerAreaLinkAnchor {
+        text-decoration: none;
     }
-    #siteExplorerDropdownMenu:active
-    {
+
+    /*#siteExplorerAreaLinkAnchor:active {
         box-shadow: 0 2px 2px 0 black;
+    }*/
+
+    #dropdownMenuIcon {
+        vertical-align: middle;
+        color: rgb(0,143,170);
     }
-
-
-    #siteExplorerAreaLink {
-        border-left: 2px solid rgb(0,153,171);
-        ;
-    }
-
-    .neptuneSiteExplorer {
-        margin-top: 8px;
-                  }
-
-     .neptuneSiteExplorer.list-inline li
-    {
-        margin-left: 10px;
-        margin-bottom: 10px;
-    }
-
-    .neptuneSiteExplorer a
-    {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        cursor: pointer;
-        font-family: "Open Sans", serif;
-        font-size: 14px;
-    }
-
-    .neptuneSiteExplorer a:hover {
-        text-decoration: none;
-        color: #fff;
-                          }
-
-    .neptuneSiteExplorer.dropdown-menu {
-        border: none;
-        background-color: rgb(77, 112, 150);
-        border-radius: 0;
-        color: white;
-                                 }
-
-    .neptuneSiteExplorer.dropdown-menu li
-{
-    margin-left: 0px;
-}
-    .neptuneSiteExplorer.dropdown-menu li a {
-        font-weight: 600;
-        color: #fff;
-        font-size: 14px;
-        margin-bottom: 5px;
-                                      }
-    .neptuneSiteExplorer.dropdown-menu li a:hover {
-        background-color: rgb(98, 136, 175);
-                                            }
 
 </style>
 
-<div class="navbar-header">
-    <a href="@ViewDataTyped.HomeUrl"><img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" style="width:318px" /> </a>
-        <div class="navigatorSection btn-group neptuneSiteExplorer hidden-print">
-            @if (ViewDataTyped.ShowLinkToArea)
-            {
-                <a class="btn" id="siteExplorerAreaLink" href="@ViewDataTyped.NeptuneArea.GetHomeUrl()">
-                    @ViewDataTyped.NeptuneArea.NeptuneAreaDisplayName
-                </a>
-            }
-
-            <button type="button" class="btn btn-default dropdown-toggle" id="siteExplorerDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="glyphicon glyphicon-menu-down"></span>
-            </button>
-            <ul class="dropdown-menu" style="width: 250px;">
-                <li class="">
-                    <a href="@NeptuneArea.OCStormwaterTools.GetHomeUrl()" title="">
-                        OC Stormwater Tools Home
-                    </a>
-                </li>
-                <li class="divider"></li>
-                @foreach (var neptuneArea in NeptuneArea.All/*.Except(new List<NeptuneArea> { NeptuneArea.OCStormwaterTools })*/.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName))
+<div class="container-fluid">
+    <div class="row">
+        <div class="navbar-header">
+            <div class="dropdown">
+            <a class="dropdown-toggle" id="siteExplorerAreaLinkAnchor" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <img class="headerLogo" src="@SystemAttributeHelpers.GetTenantBannerLogoUrl()" style="width: 318px; display: inline-block;"/>
+                @if (ViewDataTyped.ShowLinkToArea)
                 {
-                    if (neptuneArea.IsAreaVisibleToPerson(ViewDataTyped.CurrentPerson))
-                    {
-                        <li style="margin-bottom: 8px;">
-                            
-                            <a href="@neptuneArea.GetHomeUrl()" title="">
-                                <img src="@neptuneArea.GetIconUrl()" style="height: 35px; padding-right:15px"/>
-                                @neptuneArea.NeptuneAreaDisplayName
-                            </a>
-                        </li>
-                    }
+                    <div id="siteExplorerAreaLink" style="display: inline-block;">
+                        @ViewDataTyped.NeptuneArea.NeptuneAreaDisplayName
+                    </div>
+                    <div id="dropdownMenuIcon" style="display: inline-block;">
+                        <span class="glyphicon glyphicon-menu-down" style="padding-left: 10px"></span>
+                    </div>
                 }
 
-            </ul>
+            </a>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="siteExplorerAreaLink">
+                    @foreach (var neptuneArea in NeptuneArea.All.Where(x => x.ShowOnPrimaryNavigation).OrderBy(x => x.NeptuneAreaDisplayName))
+                    {
+                        if (neptuneArea.IsAreaVisibleToPerson(ViewDataTyped.CurrentPerson))
+                        {
+                            <li style="margin-bottom: 8px;">
+
+                                <a href="@neptuneArea.GetHomeUrl()" title="">
+                                    <img src="@neptuneArea.GetIconUrl()" style="height: 35px; padding-right: 15px"/>
+                                    @neptuneArea.NeptuneAreaDisplayName
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
         </div>
+    </div>
 </div>
