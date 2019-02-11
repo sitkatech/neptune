@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -43,6 +43,7 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatusID;
             this.DraftGeometry = draftGeometry;
             this.IsDraftGeometryManuallyRefined = isDraftGeometryManuallyRefined;
+            this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
         }
 
         /// <summary>
@@ -139,6 +140,7 @@ namespace Neptune.Web.Models
         public int OnlandVisualTrashAssessmentStatusID { get; set; }
         public DbGeometry DraftGeometry { get; set; }
         public bool? IsDraftGeometryManuallyRefined { get; set; }
+        public int? OnlandVisualTrashAssessmentScoreID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
@@ -148,6 +150,7 @@ namespace Neptune.Web.Models
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public OnlandVisualTrashAssessmentStatus OnlandVisualTrashAssessmentStatus { get { return OnlandVisualTrashAssessmentStatus.AllLookupDictionary[OnlandVisualTrashAssessmentStatusID]; } }
+        public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore { get { return OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null; } }
 
         public static class FieldLengths
         {

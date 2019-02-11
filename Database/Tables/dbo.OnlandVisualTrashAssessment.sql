@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[OnlandVisualTrashAssessmentStatusID] [int] NOT NULL,
 	[DraftGeometry] [geometry] NULL,
 	[IsDraftGeometryManuallyRefined] [bit] NULL,
+	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC
@@ -29,6 +30,11 @@ ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_
 REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID], [StormwaterJurisdictionID])
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID_StormwaterJurisdictionID]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID] FOREIGN KEY([OnlandVisualTrashAssessmentScoreID])
+REFERENCES [dbo].[OnlandVisualTrashAssessmentScore] ([OnlandVisualTrashAssessmentScoreID])
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentStatus_OnlandVisualTrashAssessmentStatusID] FOREIGN KEY([OnlandVisualTrashAssessmentStatusID])
 REFERENCES [dbo].[OnlandVisualTrashAssessmentStatus] ([OnlandVisualTrashAssessmentStatusID])
@@ -52,6 +58,10 @@ GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete] CHECK  ((NOT ([DraftGeometry] IS NOT NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveScore] CHECK  ((NOT ([OnlandVisualTrashAssessmentScoreID] IS NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveScore]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete] CHECK  (([OnlandVisualTrashAssessmentAreaID] IS NOT NULL AND ([AssessingNewArea]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) OR [OnlandVisualTrashAssessmentAreaID] IS NULL AND [AssessingNewArea]=(1)))
 GO
