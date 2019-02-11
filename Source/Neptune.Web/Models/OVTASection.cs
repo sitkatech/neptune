@@ -9,11 +9,6 @@ namespace Neptune.Web.Models
 {
     public abstract partial class OVTASection
     {
-        public bool ExpandMenu(OnlandVisualTrashAssessment ovta)
-        {
-            return false;
-        }
-
         public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
 
         public abstract OVTASection GetNextSection();
@@ -21,6 +16,8 @@ namespace Neptune.Web.Models
         public abstract bool IsSectionComplete(OnlandVisualTrashAssessment ovta);
 
         public abstract bool IsSectionEnabled(OnlandVisualTrashAssessment ovta);
+
+        public abstract bool IsSectionRelevant(OnlandVisualTrashAssessment ovta);
 
         public abstract string GetSectionDisabledMessage();
 
@@ -61,6 +58,11 @@ namespace Neptune.Web.Models
             return true;
         }
 
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return true;
+        }
+
         public override string GetSectionDisabledMessage()
         {
             throw new InvalidOperationException("Instructions should never be disabled.");
@@ -88,6 +90,11 @@ namespace Neptune.Web.Models
         public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
         {
             return ovta != null;
+        }
+
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return true;
         }
 
         public override string GetSectionDisabledMessage()
@@ -118,6 +125,11 @@ namespace Neptune.Web.Models
             return InitiateOVTA.IsSectionComplete(ovta);
         }
 
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return true;
+        }
+
         public override string GetSectionDisabledMessage()
         {
             return "You must complete the Initiate OVTA section before you can record observations.";
@@ -144,6 +156,11 @@ namespace Neptune.Web.Models
         public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
         {
             return RecordObservations.IsSectionComplete(ovta);
+        }
+
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return ovta?.AssessingNewArea.GetValueOrDefault() ?? false;
         }
 
         public override string GetSectionDisabledMessage()
@@ -175,6 +192,11 @@ namespace Neptune.Web.Models
             return AddOrRemoveParcels.IsSectionComplete(ovta);
         }
 
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return ovta?.AssessingNewArea.GetValueOrDefault() ?? false;
+        }
+
         public override string GetSectionDisabledMessage()
         {
             return "You must complete the Add or Remove Parcels section before you can refine the assessment area.";
@@ -201,6 +223,11 @@ namespace Neptune.Web.Models
         public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
         {
             return AddOrRemoveParcels.IsSectionComplete(ovta);
+        }
+
+        public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)
+        {
+            return true;
         }
 
         public override string GetSectionDisabledMessage()
