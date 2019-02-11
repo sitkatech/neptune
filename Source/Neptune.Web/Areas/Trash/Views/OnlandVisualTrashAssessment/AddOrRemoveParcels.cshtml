@@ -34,17 +34,20 @@
     }
 }
 
-<p>Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</p>
-
-@if (ViewDataTyped.OfferRefresh)
-{@ModalDialogFormHelper.ModalDialogFormLink("Refresh Assessment Area Based on Observations", ViewDataTyped.RefreshUrl, "Refresh Assessment Area", 500, "Refresh", "Cancel", new List<string> { "btn btn-neptune" }, null, null)}
-
-@if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
+@if (!ViewDataTyped.RequireRefresh)
 {
+    <p>Click the map to add or remove parcels from the Assessment Area. Note that it may be necessary to zoom the map to see APNs on the map.</p>
+}
+else
+{
+    <p class="systemText">The Assessment Area has been manually edited. You must recalculate the list of parcels from the observations to use the parcel editor.</p>
+    @ModalDialogFormHelper.ModalDialogFormLink("Refresh Assessment Area Based on Observations", ViewDataTyped.RefreshUrl, "Refresh Assessment Area", 500, "Refresh", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+}
+
 <div ng-app="NeptuneApp" ng-controller="AddOrRemoveParcelsController">
     <div class="row">
         <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-            <div id="mapContainer">
+            <div id="mapContainer" ng-show="!AngularViewData.IsDraftGeometryManuallyRefined">
                 <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
                 </div>
             </div>
@@ -71,8 +74,3 @@
         </div>
     }
 </div>
-}
-else
-{
-    <p class="systemText">You must complete the Record Observations section before you can finalize the assessment.</p>
-}

@@ -20,6 +20,10 @@
 
 @using (Html.BeginForm())
 {
+    <div id="@ViewDataTyped.MapFormID">
+
+    </div>
+
     <hr />
     <div class="row">
         <div class="col-xs-12 col-sm-3">
@@ -35,67 +39,57 @@
 
 
 <script type="text/javascript">
-
-    // todo: probably refactor this up to a prototype
     getDrawOptions = function(editableFeatureGroup)
     {
-        var myIcon = L.MakiMarkers.icon({
-            icon: "marker",
-            color: "#f357a1",
-            size: "m"
-        });
-
         var options = {
             position: 'topleft',
             draw: {
-                polyline: {
-                    shapeOptions: {
-                        color: '#f357a1',
-                        weight: 10
-                    }
-                },
-                polygon: {
-                    allowIntersection: false, // Restricts shapes to simple polygons
-                    drawError: {
-                        color: '#e1e100', // Color the shape will turn when intersects
-                        message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
-                    },
-                    shapeOptions: {
-                        color: '#f357a1'
-                    }
-                },
+                polyline: false,
+                polygon: false,
                 circle: false, // Turns off this drawing tool
-                rectangle: {
-                    shapeOptions: {
-                        color: "#f357a1"
-                    }
-                },
-                marker: {
-                    icon: myIcon
-                }
-            },
+                rectangle: false,
+                marker: false},
             edit: {
                 featureGroup: editableFeatureGroup, //REQUIRED!!
                 edit: {
                     maintainColor: true,
                     opacity: 0.3
                 },
-                remove: true
+                remove: false
             }
         };
         return options;
     };
 
     var assessmentAreaMap;
+    var drawControl;
     jQuery(document).ready(function()
     {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var editableFeatureJsonObject = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson).ToString(Formatting.None));
         assessmentAreaMap = new NeptuneMaps.Map(mapInitJson);
-
+        assessmentAreaMap.map.setMaxZoom(21);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
 
-        // todo: Add observations markers
+        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
+            {
+                pointToLayer: function(feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: feature.properties.FeatureGlyph,
+                        color: feature.properties.FeatureColor,
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            title: feature.properties.Name,
+                            alt: feature.properties.Name
+                        });
+                }
+            });
+
+        observationsLayer.addTo(assessmentAreaMap.map);
 
         var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection, {
             onEachFeature: function(feature, layer)
@@ -112,7 +106,7 @@
         });
 
         var drawOptions = getDrawOptions(assessmentAreaMap.editableFeatureGroup);
-        var drawControl = new L.Control.Draw(drawOptions);
+        drawControl = new L.Control.Draw(drawOptions);
         assessmentAreaMap.map.addControl(drawControl);
         assessmentAreaMap.map.addLayer(assessmentAreaMap.editableFeatureGroup);
 
@@ -132,6 +126,10 @@
             updateFeatureCollectionJson();
         });
 
+        assessmentAreaMap.map.on('draw:editvertex', function(e) {
+            updateFeatureCollectionJson();
+        })
+
         assessmentAreaMap.map.on('draw:deleted', function(e)
         {
             updateFeatureCollectionJson();
@@ -150,6 +148,8 @@
         {
             modalTitle.html("Edit ??? - Detail");
         }
+
+        HookupCheckIfFormIsDirtyNoDisable(undefined);
     });
 
     NeptuneMaps.Map.prototype.getTextAreaId = function(featureId) { return "textareaFor" + featureId; };

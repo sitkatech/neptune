@@ -13,7 +13,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>
             {
-                observationsLayerGeoJson
+                observationsLayerGeoJson,
+                assessmentAreaLayerGeoJson
             }))
         {
             ObservationsLayerGeoJson = observationsLayerGeoJson;

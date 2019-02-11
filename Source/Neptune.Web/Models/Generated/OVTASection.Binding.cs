@@ -158,7 +158,7 @@ namespace Neptune.Web.Models
     public partial class OVTASectionAddOrRemoveParcels : OVTASection
     {
         private OVTASectionAddOrRemoveParcels(int oVTASectionID, string oVTASectionName, string oVTASectionDisplayName, string sectionHeader, int sortOrder, bool hasCompletionStatus) : base(oVTASectionID, oVTASectionName, oVTASectionDisplayName, sectionHeader, sortOrder, hasCompletionStatus) {}
-        public static readonly OVTASectionAddOrRemoveParcels Instance = new OVTASectionAddOrRemoveParcels(4, @"AddOrRemoveParcels", @"Add Or Remove Parcels", @"Add Or Remove Parcels", 40, false);
+        public static readonly OVTASectionAddOrRemoveParcels Instance = new OVTASectionAddOrRemoveParcels(4, @"AddOrRemoveParcels", @"Add Or Remove Parcels", @"Add Or Remove Parcels", 40, true);
     }
 
     public partial class OVTASectionRefineAssessmentArea : OVTASection

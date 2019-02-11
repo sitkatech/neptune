@@ -9,6 +9,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string SectionName { get; private set; }
         public Models.OnlandVisualTrashAssessment OVTA { get; private set; }
         public string SectionHeader { get; private set; }
+        public Models.OVTASection OVTASection { get; private set; }
 
 
         public OVTASectionViewData(Person currentPerson, NeptunePage neptunePage, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta) : base(currentPerson, neptunePage)
@@ -26,6 +27,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             EntityName = "On-land Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
             OVTA = ovta;
+            OVTASection = ovtaSection;
             SectionName = ovtaSection.OVTASectionName;
             SectionHeader = ovtaSection.SectionHeader;
             PageTitle = ovtaSection.OVTASectionDisplayName;

@@ -113,8 +113,10 @@
 
         <div>
             <input type="hidden" name="@Html.NameFor(m=>m.OnlandVisualTrashAssessmentAreaID)" id="@Html.IdFor(m=>m.OnlandVisualTrashAssessmentAreaID)" value="{{lastSelectedID}}"/>
-            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID"/>
-            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName" />
+
+            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionID)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID" ng-if="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID"/>
+
+            <input type="hidden" name="@Html.NameFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" id="@Html.IdFor(m=>m.StormwaterJurisdiction.StormwaterJurisdictionDisplayName)" value ="{{AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName}}" ng-model="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName" ng-if="AngularModel.StormwaterJurisdiction.StormwaterJurisdictionDisplayName"/>
         </div>
 
         <hr />

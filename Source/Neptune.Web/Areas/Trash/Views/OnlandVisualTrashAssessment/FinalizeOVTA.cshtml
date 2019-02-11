@@ -8,12 +8,7 @@
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 
 <p class="systemText">Content under development</p>
-
-
-@if (Neptune.Web.Models.OVTASection.RefineAssessmentArea.IsSectionComplete(ViewDataTyped.OVTA))
-{
-
-    using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+    @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
     {
         <div class="row">
             <div class="col-sm-3"></div>
@@ -22,7 +17,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-3 control-label">
+            <div class="col-sm-3 control-label text-right">
                 @Html.LabelWithSugarFor(m => m.Notes)
             </div>
             <div class="col-sm-9">
@@ -31,11 +26,11 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-3 control-label">
+            <div class="col-sm-3 control-label text-right">
                 @Html.LabelWithSugarFor(m => m.Score)
             </div>
             <div class="col-sm-9">
-                @Html.DropDownListFor(m=>m.Score, ViewDataTyped.Scores)
+                @Html.DropDownListFor(m=>m.Score, ViewDataTyped.Scores, new {@class = "form-control", style="width:auto;"})
                 @Html.ValidationMessageFor(m => m.Notes)
             </div>
         </div>
@@ -52,8 +47,3 @@
             </div>
         </div>
     }
-}
-else
-{
-    <p class="systemText">You must complete the Refine Assessment section before you can finalize the assessment.</p>
-}

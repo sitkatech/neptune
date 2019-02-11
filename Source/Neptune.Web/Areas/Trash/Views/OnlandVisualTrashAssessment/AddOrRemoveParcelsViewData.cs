@@ -12,26 +12,29 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public AddOrRemoveParcelsMapIntJson OVTASummaryMapInitJson { get; }
         public ViewDataForAngularClass ViewDataForAngular { get; set; }
         public string RefreshUrl { get; set; }
-        public bool OfferRefresh { get; set; }
+        public bool RequireRefresh { get; set; }
 
         public AddOrRemoveParcelsViewData(Person currentPerson, Models.OVTASection ovtaSection, Models.OnlandVisualTrashAssessment ovta, AddOrRemoveParcelsMapIntJson ovtaSummaryMapInitJson) : base(currentPerson, ovtaSection, ovta)
         {
             OVTASummaryMapInitJson = ovtaSummaryMapInitJson;
-            ViewDataForAngular = new ViewDataForAngularClass(ovtaSummaryMapInitJson);
+            ViewDataForAngular = new ViewDataForAngularClass(ovtaSummaryMapInitJson, ovta.IsDraftGeometryManuallyRefined.GetValueOrDefault());
             RefreshUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(
                     x => x.RefreshParcels(ovta));
-            OfferRefresh = ovta.DraftGeometry != null;
+            RequireRefresh = ovta.IsDraftGeometryManuallyRefined.GetValueOrDefault();
         }
 
         public class ViewDataForAngularClass: TrashModuleMapViewDataForAngularBaseClass
         {
-            public ViewDataForAngularClass(AddOrRemoveParcelsMapIntJson mapInitJson)
+            public ViewDataForAngularClass(AddOrRemoveParcelsMapIntJson mapInitJson,
+                bool isDraftGeometryManuallyRefined)
             {
                 MapInitJson = mapInitJson;
+                IsDraftGeometryManuallyRefined = isDraftGeometryManuallyRefined;
             }
 
             public AddOrRemoveParcelsMapIntJson MapInitJson { get; }
+            public bool IsDraftGeometryManuallyRefined { get; }
         }
     }
 }

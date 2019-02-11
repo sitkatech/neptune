@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Neptune.Web.Areas.Trash.Controllers;
@@ -15,16 +14,15 @@ namespace Neptune.Web.Models
             return false;
         }
 
-        public IEnumerable<OVTASubsectionData> GetSubsections(OnlandVisualTrashAssessment ovta)
-        {
-            throw new NotImplementedException();
-        }
-
         public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
 
         public abstract OVTASection GetNextSection();
 
         public abstract bool IsSectionComplete(OnlandVisualTrashAssessment ovta);
+
+        public abstract bool IsSectionEnabled(OnlandVisualTrashAssessment ovta);
+
+        public abstract string GetSectionDisabledMessage();
 
         public HtmlString SectionCompletionStatusIndicator(OnlandVisualTrashAssessment ovta)
         {
@@ -57,6 +55,16 @@ namespace Neptune.Web.Models
         {
             throw new InvalidOperationException("Instructions does not have a completness status; cannot check completeness");
         }
+
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return true;
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            throw new InvalidOperationException("Instructions should never be disabled.");
+        }
     }
 
     public partial class OVTASectionInitiateOVTA
@@ -77,6 +85,15 @@ namespace Neptune.Web.Models
             return !viewModel.GetValidationResults().Any();
         }
 
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return ovta != null;
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            throw new InvalidOperationException("InitiateOVTA should never be disabled.");
+        }
     }
 
     public partial class OVTASectionRecordObservations
@@ -95,6 +112,16 @@ namespace Neptune.Web.Models
         {
             return ovta?.OnlandVisualTrashAssessmentObservations?.Any() ?? false;
         }
+
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return InitiateOVTA.IsSectionComplete(ovta);
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            return "You must complete the Initiate OVTA section before you can record observations.";
+        }
     }
 
     public partial class OVTASectionAddOrRemoveParcels
@@ -111,7 +138,17 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            return false; // todo what's the completion status?
+            return ovta.DraftGeometry != null || (ovta.AssessingNewArea.HasValue && !ovta.AssessingNewArea.Value);
+        }
+
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return RecordObservations.IsSectionComplete(ovta);
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            return "You must complete the Record Observations section before you can add or remove parcels.";
         }
     }
 
@@ -129,7 +166,18 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
         {
-            return false; // todo what's the completion status?
+            throw new InvalidOperationException(
+                "RefineAssessmentArea does not have a completness status; cannot check completeness");
+        }
+
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return AddOrRemoveParcels.IsSectionComplete(ovta);
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            return "You must complete the Add or Remove Parcels section before you can refine the assessment area.";
         }
     }
 
@@ -149,12 +197,15 @@ namespace Neptune.Web.Models
         {
             throw new InvalidOperationException("Finalize does not have a completness status; cannot check completeness");
         }
-    }
 
-    public class OVTASubsectionData
-    {
-        public string SubsectionName { get; set; }
-        public string SubsectionUrl { get; set; }
-        public HtmlString SectionCompletionStatusIndicator { get; set; }
+        public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
+        {
+            return AddOrRemoveParcels.IsSectionComplete(ovta);
+        }
+
+        public override string GetSectionDisabledMessage()
+        {
+            return "You must complete the Add or Remove Parcels section before you can finalize the OVTA";
+        }
     }
 }

@@ -121,7 +121,14 @@
             </div>
 
             <div class="wizardMain">
-                @RenderBody()
+                @if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
+                {
+                    <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
+                }
+                else
+                {
+                    @RenderBody()
+                }
             </div>
         </div>
     </div>
