@@ -24,9 +24,11 @@ namespace Neptune.Web.Models
             System.Data.Entity.Database.SetInitializer<DatabaseEntities>(null);
         }
 
+
         public DatabaseEntities()
             : base("name=DatabaseEntities")
         {
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

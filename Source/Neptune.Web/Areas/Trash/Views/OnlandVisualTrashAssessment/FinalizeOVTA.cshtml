@@ -6,74 +6,15 @@
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.FinalizeOVTA
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
-@section JavascriptAndStylesContent
+
+<p class="systemText">Content under development</p>
+
+
+@if (Neptune.Web.Models.OVTASection.RefineAssessmentArea.IsSectionComplete(ViewDataTyped.OVTA))
 {
-    @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    @* TODO: geoserver map *@
-    @if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
-    {
-        <script type="text/javascript">
-        jQuery(document).ready(function() {
-            var mapJson =
-                @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
-            var summaryMap = window.Sitka.map = new NeptuneMaps.Map(mapJson);
-            var observationsLayerGeoJson = L.geoJson(
-                mapJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
-                {
-                    pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
-
-                        return L.marker(latlng,
-                            {
-                                icon: icon,
-                                title: feature.properties.Name,
-                                alt: feature.properties.Name
-                            });
-                    }
-                });
-            observationsLayerGeoJson.addTo(summaryMap.map);
-            var areaLayerGeoJson = L.geoJson(
-                mapJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
-                {
-                    style: function (feature) {
-                        return {
-                            color: "#b2b2b2",
-                            weight: .5,
-                            fillColor: "#ffff00",
-                            fillOpacity: .5
-                        };
-                    }
-                });
-            areaLayerGeoJson.addTo(summaryMap.map);
-        });
-        </script>
-
-    }
-}
-
-
-@if (Neptune.Web.Models.OVTASection.RecordObservations.IsSectionComplete(ViewDataTyped.OVTA))
-{
-    <div class="row">
-        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-            <div id="mapContainer">
-                <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
-                </div>
-            </div>
-        </div>
-    </div>
 
     using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
     {
-
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-sm-3">@Html.LabelWithSugarFor(m => m.AssessmentAreaName)</div>
-            <div class="col-sm-9">@Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })</div>
-        </div>
         <div class="row">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
@@ -86,6 +27,15 @@
             </div>
             <div class="col-sm-9">
                 @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                @Html.ValidationMessageFor(m => m.Notes)
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-3 control-label">
+                @Html.LabelWithSugarFor(m => m.Score)
+            </div>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m=>m.Score, ViewDataTyped.Scores)
                 @Html.ValidationMessageFor(m => m.Notes)
             </div>
         </div>
@@ -105,5 +55,5 @@
 }
 else
 {
-    <p class="systemText">You must complete the Record Observations section before you can finalize the assessment.</p>
+    <p class="systemText">You must complete the Refine Assessment section before you can finalize the assessment.</p>
 }

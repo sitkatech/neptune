@@ -44,7 +44,6 @@ namespace Neptune.Web.Models
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(ovta.GetAreaViaTransect());
 
-
             featureCollection.Features.Add(feature);
             return featureCollection;
         }

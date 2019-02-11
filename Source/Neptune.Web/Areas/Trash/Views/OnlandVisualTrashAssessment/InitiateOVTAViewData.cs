@@ -60,11 +60,4 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             public OnlandVisualTrashAssessmentAreaSimple SelectedOnlandVisualTrashAssessmentArea { get; }
         }
     }
-
-    public class OnlandVisualTrashAssessmentAreaSimple
-    {
-        public string OnlandVisualTrashAssessmentAreaName { get; set; }
-        public int OnlandVisualTrashAssessmentAreaID { get; set; }
-        public int StormwaterJurisdictionID { get; set; }
-    }
 }
