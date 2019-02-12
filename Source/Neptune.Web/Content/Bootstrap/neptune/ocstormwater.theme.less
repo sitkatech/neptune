@@ -78,6 +78,35 @@
     }
 }
 
+#dropdownMenuIcon {
+    color: @neptune-navBackground-color;
+}
+nav.navbar-light {
+    background-color: white;
+
+    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
+        background-color: white;
+    }
+
+    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
+        box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+    }
+
+    .topRightMenu {
+        color: @neptune-navBackground-color !important;
+        font-weight: 600;
+
+        &:hover, &:focus, &:active {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+            background-color: white;
+        }
+    }
+
+    .headerImage {
+        padding: 0;
+    }
+}
+
 nav.navbar {
     border-bottom: none;
     margin-bottom: 0;

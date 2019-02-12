@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -942,35 +942,15 @@
     <Content Include="Content\Bootstrap\neptune\base.theme.min.css">
       <DependentUpon>base.theme.css</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css">
-      <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css.map">
-      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.min.css">
-      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css">
       <DependentUpon>bootstrap.neptune.base.less</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map">
-      <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.less" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css">
       <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
     </Content>
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css">
       <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map">
-      <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.less" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css">
       <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
     </Content>
@@ -1121,8 +1101,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.less" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css.map" />
@@ -1140,9 +1118,11 @@
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js.map" />
     <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
-    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
     <Content Include="Content\img\OCStormwater\manifest.json" />
     <Compile Include="Models\OnlandVisualTrashAssessmentObservationSimple.cs" />
+    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.less" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />

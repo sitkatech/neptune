@@ -74,19 +74,8 @@
 </head>
 <body>
     <div class="expandToFillScreen">
-        <header class="neptuneHeader container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6" style="padding-left:0">
-                    @{ Html.RenderRazorSitkaPartial<NeptuneSiteExplorer, NeptuneSiteExplorerViewData>(ViewDataTyped.NeptuneSiteExplorerViewData); }
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <header>
+            @{ Html.RenderRazorSitkaPartial<NeptuneNavBar, NeptuneNavBarViewData>(ViewDataTyped.NeptuneNavBarViewData);}
         </header>
         <nav class="navbar navbar-light neptuneNavbar">
             <div>

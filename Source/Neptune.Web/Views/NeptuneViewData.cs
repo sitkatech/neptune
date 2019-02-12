@@ -45,7 +45,6 @@ namespace Neptune.Web.Views
         public string RequestSupportUrl { get; }
         public string LegalUrl { get; }
         public ViewPageContentViewData ViewPageContentViewData { get; }
-        public NeptuneSiteExplorerViewData NeptuneSiteExplorerViewData { get; }
         public NeptuneNavBarViewData NeptuneNavBarViewData { get; }
         public List<LtInfoMenuItem> TopLevelLtInfoMenuItems;
 
@@ -75,8 +74,7 @@ namespace Neptune.Web.Views
             LegalUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(c => c.Legal());
 
             MakeNeptuneMenu(currentPerson);
-            NeptuneSiteExplorerViewData = new NeptuneSiteExplorerViewData(currentPerson, neptuneArea, isHomePage);
-           NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl);
+           NeptuneNavBarViewData = new NeptuneNavBarViewData(currentPerson, LogInUrl, LogOutUrl, RequestSupportUrl, neptuneArea, isHomePage);
 
             ViewPageContentViewData = neptunePage != null ? new ViewPageContentViewData(neptunePage, currentPerson) : null;
         }
