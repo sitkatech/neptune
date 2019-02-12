@@ -320,23 +320,25 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
-            {
-                var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
-                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
-                    onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
+            //// todo: rewrite this
 
-                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
-                    onlandVisualTrashAssessmentArea);
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-                onlandVisualTrashAssessment.AssessingNewArea = false;
-            }
-            else
-            {
-                viewModel.UpdateModel(onlandVisualTrashAssessment);
-            }
+            //if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
+            //{
+            //    var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
+            //    var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
+            //        onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
+
+            //    HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
+            //        onlandVisualTrashAssessmentArea);
+            //    HttpRequestStorage.DatabaseEntities.SaveChanges();
+            //    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+            //        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+            //    onlandVisualTrashAssessment.AssessingNewArea = false;
+            //}
+            //else
+            //{
+            //    viewModel.UpdateModel(onlandVisualTrashAssessment);
+            //}
 
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }
@@ -404,9 +406,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
             else if (onlandVisualTrashAssessment.DraftGeometry != null)
             {
                 var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry);
                 geoJsonFeatureCollection = new FeatureCollection();
-                geoJsonFeatureCollection.Features.Add(feature);
+
+                // Leaflet.Draw does not support multipolgyon editing because its dev team decided it wasn't necessary.
+                // Unless https://github.com/Leaflet/Leaflet.draw/issues/268 is resolved, we have to break into separate polys.
+                // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
+                for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
+                {
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry.ElementAt(i));
+                    geoJsonFeatureCollection.Features.Add(feature);
+                }
             }
             else
             {

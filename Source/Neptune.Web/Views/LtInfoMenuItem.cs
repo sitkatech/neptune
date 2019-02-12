@@ -38,6 +38,7 @@ namespace Neptune.Web.Views
         private const string Indent = "    ";
         public List<string> ExtraTopLevelMenuCssClasses = new List<string>();
         public List<string> ExtraDropdownMenuCssClasses = new List<string>();
+        public List<string> ExtraTopLevelListItemCssClasses = new List<string>();
         public readonly string RawString;
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace Neptune.Web.Views
 
             var extraCssClassesDictionary = ExtraTopLevelMenuCssClasses.Any() ? new Dictionary<string, string> {{"class", string.Join(" ", ExtraTopLevelMenuCssClasses)}} : null;
             var anchorTagString = UrlTemplate.MakeHrefString(UrlString, MenuItemName, extraCssClassesDictionary);
-            return string.Format("{0}<li class=\"\">{1}</li>", indent, anchorTagString);
+            return $"{indent}<li class=\"\">{anchorTagString}</li>";
         }
 
         private string RenderMenuWithChildren(string indent)
@@ -170,15 +171,21 @@ namespace Neptune.Web.Views
                 childMenuItemCssClasses += " " + string.Join(" ", ExtraTopLevelMenuCssClasses);
             }
 
+            var liClasses = ExtraTopLevelListItemCssClasses?.Any() ?? false
+                ? string.Join(" ", ExtraTopLevelListItemCssClasses)
+                : string.Empty;
+
+
             return string.Format(@"{0}<li {1}>
 {0}<a href=""#"" class=""{2}"" data-toggle=""dropdown"" role=""button"" aria-expanded=""false"">{3} <span class=""glyphicon glyphicon-menu-down""></span></a>
 {4}
-{0}</li>", indent, "class=\"dropdown\"", childMenuItemCssClasses, MenuItemName, string.Format("{0}\r\n{1}", string.Join("\r\n", childMenuItems), indent));
+{0}</li>", indent, $"class=\"dropdown {liClasses}\"", childMenuItemCssClasses, MenuItemName,
+                $"{string.Join("\r\n", childMenuItems)}\r\n{indent}");
         }
 
         private static string CreateDivider(string indent)
         {
-            return string.Format("{0}<li class=\"divider\"></li>", indent);
+            return $"{indent}<li class=\"divider\"></li>";
         }
 
         private LtInfoMenuItem(string menuItemName, string rawstring, string menuGroupName)

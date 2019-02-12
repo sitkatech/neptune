@@ -55,13 +55,18 @@ namespace Neptune.Web.Models
                 x.Instructions(ovta.OnlandVisualTrashAssessmentID));
         }
 
-        public static IEnumerable<int> GetParcelIDsForAddOrRemoveParcels(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        public static List<int> GetParcelIDsForAddOrRemoveParcels(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
+            if (onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined.GetValueOrDefault())
+            {
+                return new List<int>();
+            }
+
             var parcelIDs = onlandVisualTrashAssessment.DraftGeometry == null
                 ? onlandVisualTrashAssessment.GetParcelsViaTransect().Select(x => x.ParcelID)
                 : HttpRequestStorage.DatabaseEntities.Parcels
                     .Where(x => onlandVisualTrashAssessment.DraftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
-            return parcelIDs.AsEnumerable();
+            return parcelIDs.ToList();
         }
     }
 }

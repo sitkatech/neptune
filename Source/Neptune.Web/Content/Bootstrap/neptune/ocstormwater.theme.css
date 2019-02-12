@@ -1079,6 +1079,29 @@ nav#wizardNav ul li a.disabled {
 #dropdownMenuIcon {
   color: #0099ab;
 }
+@media only screen and (max-width: 330px) {
+  #dropdownMenuIcon {
+    display: none;
+  }
+}
+#siteExplorerAreaLink {
+  display: inline-block;
+  font-family: "Montserrat", serif;
+  font-size: 20px;
+  font-weight: bold;
+  color: #77cfdc;
+  border-left: 2px solid #008faa;
+  vertical-align: middle;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 10px;
+  width: 120px;
+}
+@media only screen and (max-width: 455px) {
+  #siteExplorerAreaLink {
+    display: none;
+  }
+}
 nav.navbar-light {
   background-color: white;
 }
@@ -1103,8 +1126,19 @@ nav.navbar-light .topRightMenu:active {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.125);
   background-color: white;
 }
+@media only screen and (max-width: 767px) {
+  nav.navbar-light .topRightMenuParent {
+    display: inline;
+  }
+  nav.navbar-light .topRightMenu {
+    display: inline-block;
+  }
+}
 nav.navbar-light .headerImage {
   padding: 0;
+}
+.navbar-nav .open .dropdown-menu {
+  position: absolute;
 }
 nav.navbar {
   border-bottom: none;

@@ -40,20 +40,22 @@
 }
 else
 {
-    <p class="systemText">The Assessment Area has been manually edited. You must recalculate the list of parcels from the observations to use the parcel editor.</p>
-    @ModalDialogFormHelper.ModalDialogFormLink("Refresh Assessment Area Based on Observations", ViewDataTyped.RefreshUrl, "Refresh Assessment Area", 500, "Refresh", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+    <p class="systemText">The Assessment Area has been manually edited. You must refresh the list of parcels from the observations to use the parcel editor.</p>
 }
 
 <div ng-app="NeptuneApp" ng-controller="AddOrRemoveParcelsController">
-    <div class="row">
+    <div class="row" ng-show="!AngularViewData.IsDraftGeometryManuallyRefined">
         <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
-            <div id="mapContainer" ng-show="!AngularViewData.IsDraftGeometryManuallyRefined">
+            <div id="mapContainer">
                 <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px; margin: 0">
                 </div>
             </div>
         </div>
+    </div><div class="row">
+        <div class="col-sm-12" style="margin-top:10px">
+            @ModalDialogFormHelper.ModalDialogFormLink("Refresh Assessment Area Based on Observations", ViewDataTyped.RefreshUrl, "Refresh Assessment Area", 500, "Refresh", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+        </div>
     </div>
-
     @using (Html.BeginForm())
     {
         <div ng-repeat="parcelId in AngularModel.ParcelIDs">

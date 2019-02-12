@@ -77,128 +77,162 @@
         display: none;
     }
 }
+    #dropdownMenuIcon {
+        color: @neptune-navBackground-color;
+        @media only screen and (max-width: 330px){
+            display:none;
+        }
+    }
 
-#dropdownMenuIcon {
-    color: @neptune-navBackground-color;
-}
-nav.navbar-light {
-    background-color: white;
+    #siteExplorerAreaLink {
+        display: inline-block;
+        font-family: "Montserrat", serif;
+        font-size: 20px;
+        font-weight: bold;
+        color: rgb(119,207,220);
+        border-left: 2px solid rgb(0,143,170);
+        vertical-align: middle;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 10px;
+        width: 120px;
 
-    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
+        @media only screen and (max-width: 455px) {
+            display: none;
+        }
+    }
+
+    nav.navbar-light {
         background-color: white;
-    }
 
-    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
-        box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
-    }
-
-    .topRightMenu {
-        color: @neptune-navBackground-color !important;
-        font-weight: 600;
-
-        &:hover, &:focus, &:active {
-            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
             background-color: white;
         }
-    }
 
-    .headerImage {
-        padding: 0;
-    }
-}
+        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+        }
 
-nav.navbar {
-    border-bottom: none;
-    margin-bottom: 0;
-    border: none;
+        .topRightMenu {
+            color: @neptune-navBackground-color !important;
+            font-weight: 600;
 
-    li {
-        font-weight: 400;
-        font-size: @neptune-text-fontSize;
-    }
-}
+            &:hover, &:focus, &:active {
+                box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+                background-color: white;
+            }
+        }
 
-nav.navbar-fixed-top {
-    padding-left: 15px;
-    padding-right: 15px;
-}
+        @media only screen and (max-width: @screen-xs-max) {
 
-.homepageCarouselFullWidthColumn {
-    .main-text {
-        text-align: center;
+            .topRightMenuParent{
+                display: inline;
+            }
 
-        h1 {
-            font-weight: 700;
-            font-family: 'Montserrat', 'Lato', sans-serif;
+             .topRightMenu {
+                 display: inline-block;
+             }
+        }
+
+        .headerImage {
+            padding: 0;
         }
     }
 
-    .glyphicon-chevron-left, .glyphicon-chevron-right {
-        color: @neptune-orange;
+    .navbar-nav .open .dropdown-menu {
+        position: absolute;
     }
 
-    .carousel-indicators li.active {
-        background-color: @neptune-orange;
-        border-color: @neptune-orange;
-    }
-}
+    nav.navbar {
+        border-bottom: none;
+        margin-bottom: 0;
+        border: none;
 
-#homepageCarousel .carousel-inner .item .carousel-caption {
-    bottom: 40px;
-
-    .captionBlock {
-        background-color: @neptune-navItemBackground-color-hover;
-        color: @neptune-navItemText-color-hover;
-        border-radius: 2px;
-
-        p {
-            text-shadow: none;
-            margin: 5px;
+        li {
+            font-weight: 400;
             font-size: @neptune-text-fontSize;
         }
     }
 
-}
-
-.panelNeptune .panelTitle{
-    font-size: @neptune-text-fontSize;
-    font-family: 'Open Sans', sans-serif;
-}
-
-/* Middle arrow */
-.middleArrow {
-    &.current {
-        background-color: @neptune-middle-arrow-color;
-        border-left-color: @neptune-middle-arrow-color;
-        color: @neptune-white;
+    nav.navbar-fixed-top {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
-    &.default {
-        background-color: @neptune-middle-arrow-color;
-        border-left-color: @neptune-middle-arrow-color;
-        color: @neptune-text-color;
+    .homepageCarouselFullWidthColumn {
+        .main-text {
+            text-align: center;
+
+            h1 {
+                font-weight: 700;
+                font-family: 'Montserrat', 'Lato', sans-serif;
+            }
+        }
+
+        .glyphicon-chevron-left, .glyphicon-chevron-right {
+            color: @neptune-orange;
+        }
+
+        .carousel-indicators li.active {
+            background-color: @neptune-orange;
+            border-color: @neptune-orange;
+        }
     }
-}
 
-.lastArrow {
-    &.current {
-        background-color: @neptune-active-arrow-color;
-        border-left-color: @neptune-active-arrow-color;
-        color: @neptune-contentBackground-color;
+    #homepageCarousel .carousel-inner .item .carousel-caption {
+        bottom: 40px;
+
+        .captionBlock {
+            background-color: @neptune-navItemBackground-color-hover;
+            color: @neptune-navItemText-color-hover;
+            border-radius: 2px;
+
+            p {
+                text-shadow: none;
+                margin: 5px;
+                font-size: @neptune-text-fontSize;
+            }
+        }
     }
 
-    &.default {
-        background-color: @neptune-inactive-arrow-color;
-        border-left-color: @neptune-inactive-arrow-color;
-        color: @neptune-dark-blue;
+    .panelNeptune .panelTitle {
+        font-size: @neptune-text-fontSize;
+        font-family: 'Open Sans', sans-serif;
     }
-}
+    /* Middle arrow */
+    .middleArrow {
+        &.current {
+            background-color: @neptune-middle-arrow-color;
+            border-left-color: @neptune-middle-arrow-color;
+            color: @neptune-white;
+        }
+
+        &.default {
+            background-color: @neptune-middle-arrow-color;
+            border-left-color: @neptune-middle-arrow-color;
+            color: @neptune-text-color;
+        }
+    }
+
+    .lastArrow {
+        &.current {
+            background-color: @neptune-active-arrow-color;
+            border-left-color: @neptune-active-arrow-color;
+            color: @neptune-contentBackground-color;
+        }
+
+        &.default {
+            background-color: @neptune-inactive-arrow-color;
+            border-left-color: @neptune-inactive-arrow-color;
+            color: @neptune-dark-blue;
+        }
+    }
 
 
-.btn-neptune, .neptune-modal-dialog .btn-neptune {
-    font-size: 15px;
-}
+    .btn-neptune, .neptune-modal-dialog .btn-neptune {
+        font-size: 15px;
+    }
 
-hr {
-    border-top-color: #ccc;
-}
+    hr {
+        border-top-color: #ccc;
+    }
