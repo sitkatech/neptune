@@ -64,9 +64,9 @@ namespace Neptune.Web.Views.Shared
                     "Submit Request", "Cancel", new List<string>(), null, null).ToString(), "ToolHelp"));
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
 
-            helpMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
-            helpMenu.ExtraTopLevelMenuCssClasses = new List<string> {"topRightMenu"};
-            helpMenu.ExtraTopLevelListItemCssClasses = new List<string>{"topRightMenuParent"};
+            helpMenu.ExtraDropdownMenuCssClasses = new List<string> { "dropdown-menu-right" };
+            helpMenu.ExtraTopLevelMenuCssClasses = new List<string> { "topRightMenu noHighlight" };
+            helpMenu.ExtraTopLevelListItemCssClasses = new List<string> { "topRightMenuParent" };
 
             var topLevelLtInfoMenuItems = new List<LtInfoMenuItem> { helpMenu };
 

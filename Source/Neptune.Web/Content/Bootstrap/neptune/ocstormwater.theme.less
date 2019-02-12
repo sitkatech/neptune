@@ -77,44 +77,71 @@
         display: none;
     }
 }
+    #dropdownMenuIcon {
+        color: @neptune-navBackground-color;
+        @media only screen and (max-width: 330px){
+            display:none;
+        }
+    }
 
-#dropdownMenuIcon {
-    color: @neptune-navBackground-color;
-}
-nav.navbar-light {
-    background-color: white;
+    #siteExplorerAreaLink {
+        display: inline-block;
+        font-family: "Montserrat", serif;
+        font-size: 20px;
+        font-weight: bold;
+        color: rgb(119,207,220);
+        border-left: 2px solid rgb(0,143,170);
+        vertical-align: middle;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 10px;
+        width: 120px;
 
-    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
+        @media only screen and (max-width: 455px) {
+            display: none;
+        }
+    }
+
+    nav.navbar-light {
         background-color: white;
-    }
 
-    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
-        box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
-    }
-
-    .topRightMenu {
-        color: @neptune-navBackground-color !important;
-        font-weight: 600;
-
-        &:hover, &:focus, &:active {
-            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
             background-color: white;
         }
-    }
 
-    @media only screen and (max-width: @screen-xs-max) {
-
-        .topRightMenuParent, .topRightMenu {
-            display: inline;
+        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
         }
 
+        .topRightMenu {
+            color: @neptune-navBackground-color !important;
+            font-weight: 600;
+
+            &:hover, &:focus, &:active {
+                box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+                background-color: white;
+            }
+        }
+
+        @media only screen and (max-width: @screen-xs-max) {
+
+            .topRightMenuParent{
+                display: inline;
+            }
+
+             .topRightMenu {
+                 display: inline-block;
+             }
+        }
+
+        .headerImage {
+            padding: 0;
+        }
     }
 
-
-    .headerImage {
-        padding: 0;
+    .navbar-nav .open .dropdown-menu {
+        position: absolute;
     }
-}
 
     nav.navbar {
         border-bottom: none;
