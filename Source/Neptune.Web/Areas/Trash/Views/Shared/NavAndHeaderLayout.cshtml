@@ -30,17 +30,17 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>@SystemAttributeHelpers.GetTenantDisplayName()  @(!string.IsNullOrWhiteSpace(ViewDataTyped.HtmlPageTitle) ? string.Format(" | {0}", ViewDataTyped.HtmlPageTitle) : string.Empty)@ViewDataTyped.GetBreadCrumbTitle()</title>
+    <title>@("Stormwater Tools") @(!string.IsNullOrWhiteSpace(ViewDataTyped.HtmlPageTitle) ? string.Format(" | {0}", ViewDataTyped.HtmlPageTitle) : string.Empty)@ViewDataTyped.GetBreadCrumbTitle()</title>
 
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-57x57.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-60x60.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-72x72.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-76x76.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-114x114.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="apple-touch-icon" sizes="57x57" href=@string.Format("/Content/img/{0}/apple-icon-120x120.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-32x32.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-96x96.png", SystemAttributeHelpers.GetTenantName())>
-    <link rel="icon" type="image/png" sizes="57x57" href=@string.Format("/Content/img/{0}/favicon-16x16.png", SystemAttributeHelpers.GetTenantName())>
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/Content/img/OCStormwater/apple-icon-120x120.png">
+    <link rel="icon" type="image/png" sizes="57x57" href="/Content/img/OCStormwater/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="57x57" href="/Content/img/OCStormwater/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="57x57" href="/Content/img/OCStormwater/favicon-16x16.png">
 
     @{ Html.RenderRazorSitkaPartial<NeptuneIncludes>(); }
 

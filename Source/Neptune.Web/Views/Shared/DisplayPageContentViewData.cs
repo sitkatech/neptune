@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.Shared
 
         public DisplayPageContentViewData(Person currentPerson, NeptunePageType neptunePageType) : base(currentPerson, Models.NeptunePage.GetNeptunePageByPageType(neptunePageType), NeptuneArea.OCStormwaterTools)
         {
-            EntityName = SystemAttributeHelpers.GetTenantDisplayName();
+            EntityName = "Stormwater Tools";
             PageTitle = neptunePageType.NeptunePageTypeDisplayName;
             var neptunePageByPageType = Models.NeptunePage.GetNeptunePageByPageType(neptunePageType);
 

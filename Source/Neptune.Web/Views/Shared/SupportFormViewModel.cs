@@ -109,7 +109,7 @@ namespace Neptune.Web.Views.Shared
                 if (
                     !RecaptchaValidator.IsValidResponse(gRecaptchaResponse,
                         ipAddress,
-                        SystemAttributeHelpers.GetTenantRecaptchaPrivateKey(),
+                        NeptuneWebConfiguration.RecaptchaPrivateKey,
                         NeptuneWebConfiguration.RecaptchaValidatorUrl,
                         SitkaLogger.Instance.LogDetailedErrorMessage))
                 {

@@ -998,6 +998,7 @@
     <Content Include="Content\img\OCStormwater\apple-icon-76x76.png" />
     <Content Include="Content\img\OCStormwater\apple-icon-precomposed.png" />
     <Content Include="Content\img\OCStormwater\apple-icon.png" />
+    <Content Include="Content\img\OCStormwater\banner_logo.png" />
     <Content Include="Content\img\OCStormwater\browserconfig.xml" />
     <Content Include="Content\img\OCStormwater\favicon-16x16.png" />
     <Content Include="Content\img\OCStormwater\favicon-32x32.png" />
@@ -1215,7 +1216,6 @@
     <Compile Include="Views\Organization\PullOrganizationFromKeystone.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewData.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewModel.cs" />
-    <Compile Include="Common\SystemAttributeHelpers.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Security\NeptuneFeature.cs" />
     <Compile Include="Security\NeptuneFeatureWithContext.cs" />

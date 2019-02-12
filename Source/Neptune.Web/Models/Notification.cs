@@ -61,7 +61,7 @@ namespace Neptune.Web.Models
 
         public static MailAddress DoNotReplyMailAddress()
         {
-            return new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail, SystemAttributeHelpers.GetToolDisplayName());
+            return new MailAddress(NeptuneWebConfiguration.DoNotReplyEmail, "Orange County Stormwater Tools");
         }
     }
 }
