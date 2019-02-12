@@ -403,9 +403,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
             else if (onlandVisualTrashAssessment.DraftGeometry != null)
             {
                 var draftGeometry = onlandVisualTrashAssessment.DraftGeometry;
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry);
                 geoJsonFeatureCollection = new FeatureCollection();
-                geoJsonFeatureCollection.Features.Add(feature);
+
+                // Leaflet.Draw does not support multipolgyon editing because its dev team decided it wasn't necessary.
+                // Unless https://github.com/Leaflet/Leaflet.draw/issues/268 is resolved, we have to break into separate polys.
+                // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
+                for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
+                {
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry.ElementAt(i));
+                    geoJsonFeatureCollection.Features.Add(feature);
+                }
             }
             else
             {
