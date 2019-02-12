@@ -89,7 +89,7 @@
     </style>
     <nav class="navbar navbar-light">
         <div class="container-fluid">
-            <div class="collapse navbar-collapse">
+            <div>
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle headerImage noHighlight" data-toggle="dropdown" role="button">
@@ -126,11 +126,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (!Request.IsAuthenticated || ViewDataTyped.CurrentPerson == null)
                     {
-                        <li><a class="topRightMenu" href="@ViewDataTyped.LogInUrl">Log in</a></li>
+                        <li class="topRightMenuParent"><a class="topRightMenu" href="@ViewDataTyped.LogInUrl">Log in</a></li>
                     }
                     @if (Request.IsAuthenticated && ViewDataTyped.CurrentPerson != null)
                     {
-                        <li class="dropdown">
+                        <li class="topRightMenuParent dropdown">
                             <a class="dropdown-toggle topRightMenu" id="dropdownMenuUser" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 Welcome&nbsp;&nbsp;@ViewDataTyped.CurrentPerson.GetFullNameFirstLast()
                                 <span class="glyphicon glyphicon-menu-down"></span>
@@ -141,7 +141,7 @@
                             </ul>
                         </li>
                     }
-                    <li><a class="topRightMenu" href="@ViewDataTyped.AboutUrl">About</a></li>
+                    <li class="topRightMenuParent"><a class="topRightMenu" href="@ViewDataTyped.AboutUrl">About</a></li>
                     @foreach (var topLevelMenu in ViewDataTyped.TopLevelNeptuneMenus)
                     {
                         @topLevelMenu.RenderMenu()

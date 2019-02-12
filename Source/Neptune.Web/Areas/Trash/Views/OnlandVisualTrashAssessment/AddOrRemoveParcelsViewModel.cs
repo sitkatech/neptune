@@ -7,7 +7,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     public class AddOrRemoveParcelsViewModel: OnlandVisualTrashAssessmentViewModel, IValidatableObject
     {
         [DisplayName("Parcels")]
-        public IEnumerable<int> ParcelIDs { get; set; }
+        public List<int> ParcelIDs { get; set; }
 
         /// <summary>
         /// needed by ModelBinder
@@ -16,7 +16,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
         }
 
-        public AddOrRemoveParcelsViewModel(IEnumerable<int> parcelIDs)
+        public AddOrRemoveParcelsViewModel(List<int> parcelIDs)
         {
             ParcelIDs = parcelIDs;
         }

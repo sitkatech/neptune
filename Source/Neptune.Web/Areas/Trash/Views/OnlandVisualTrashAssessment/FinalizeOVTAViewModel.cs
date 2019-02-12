@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using LtInfo.Common.DesignByContract;
 
@@ -17,6 +18,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         //todo: embetter
         public string Score { get; set; }
 
+        /// <summary>
+        /// Needed by ModelBinder
+        /// </summary>
         public FinalizeOVTAViewModel()
         {
 

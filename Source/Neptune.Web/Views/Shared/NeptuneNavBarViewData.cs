@@ -66,6 +66,7 @@ namespace Neptune.Web.Views.Shared
 
             helpMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
             helpMenu.ExtraTopLevelMenuCssClasses = new List<string> {"topRightMenu"};
+            helpMenu.ExtraTopLevelListItemCssClasses = new List<string>{"topRightMenuParent"};
 
             var topLevelLtInfoMenuItems = new List<LtInfoMenuItem> { helpMenu };
 
