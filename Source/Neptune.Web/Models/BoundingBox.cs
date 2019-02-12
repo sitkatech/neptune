@@ -36,7 +36,9 @@ namespace Neptune.Web.Models
     [ModelBinder(typeof(BoundingBoxModelBinder))] // ModelBinder is for Action parameter parsing
     public class BoundingBox
     {
-        // This is for the Lake Tahoe region
+
+        private static readonly Point DefaultSouthWestPoint = new Point(33.46459577300336, -118.09341430664051);
+        private static readonly Point DefaultNorthEastPoint = new Point(33.844679670212059, -117.5193786621095);
         private const decimal DefaultPadding = 1.0m;
 
         public Point Southwest { get; private set; }
@@ -61,43 +63,17 @@ namespace Neptune.Web.Models
         /// <param name="pointList"></param>
         public BoundingBox(List<Point> pointList)
         {
-            Point southwest;
-            Point northeast;
             if (pointList.Count == 1)
             {
                 var point = pointList.Single();
-                southwest= new Point(point.Latitude - DefaultPadding / 2, point.Longitude - DefaultPadding / 2);
-                northeast= new Point(point.Latitude + DefaultPadding / 2, point.Longitude + DefaultPadding / 2);
+                var sw = new Point(point.Latitude - DefaultPadding / 2, point.Longitude - DefaultPadding / 2);
+                var ne = new Point(point.Latitude + DefaultPadding / 2, point.Longitude + DefaultPadding / 2);
+
+                MakeFromPoint(sw, ne);
             }
-            else if (pointList.Any())
-            {
-                southwest = new Point(pointList.Min(point => point.Latitude), pointList.Min(point => point.Longitude));
-                northeast = new Point(pointList.Max(point => point.Latitude), pointList.Max(point => point.Longitude));
-                
-            }
-            else
-            {
-                DbGeometry geometry = SystemAttributeHelpers.GetDefaultBoundingBox();
-                var pointCount = geometry.Envelope.ElementAt(1).PointCount.Value;
-                var envelope = geometry.Envelope.ElementAt(1);
-                var pointList1 = new List<Point>();
+            var southwest = !pointList.Any() ? DefaultSouthWestPoint : new Point(pointList.Min(point => point.Latitude), pointList.Min(point => point.Longitude));
+            var northeast = !pointList.Any() ? DefaultNorthEastPoint : new Point(pointList.Max(point => point.Latitude), pointList.Max(point => point.Longitude));
 
-                for (var i = 1; i <= pointCount; i++)
-                {
-                    var dbGeometryPoint = envelope.PointAt(i);
-
-                    if (!dbGeometryPoint.XCoordinate.HasValue || !dbGeometryPoint.YCoordinate.HasValue)
-                    {
-                        continue;
-                    }
-
-                    pointList1.Add(new Point(envelope.PointAt(i).YCoordinate.Value, envelope.PointAt(i).XCoordinate.Value));
-                }
-                var defaultBoundingBoxPoints = pointList1;
-                southwest = new Point(defaultBoundingBoxPoints.Min(point => point.Latitude), defaultBoundingBoxPoints.Min(point => point.Longitude));
-                northeast = new Point(defaultBoundingBoxPoints.Max(point => point.Latitude), defaultBoundingBoxPoints.Max(point => point.Longitude));
-
-            }
             MakeFromPoint(southwest, northeast);
         }
 
@@ -158,7 +134,7 @@ namespace Neptune.Web.Models
 
         public static BoundingBox MakeNewDefaultBoundingBox()
         {
-            return new BoundingBox(SystemAttributeHelpers.GetDefaultBoundingBox());
+            return new BoundingBox(DefaultSouthWestPoint, DefaultNorthEastPoint);
         }
 
         public static List<Point> GetPointsFromDbGeometry(DbGeometry geometry)

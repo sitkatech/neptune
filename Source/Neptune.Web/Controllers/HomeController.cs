@@ -19,11 +19,9 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
 using Neptune.Web.Security;
 using Neptune.Web.Models;
 using Neptune.Web.Common;
@@ -187,19 +185,6 @@ namespace Neptune.Web.Controllers
             }
 
             return managerDashboardDescription;
-        }
-
-        [Route("Content/style.css")]
-        [AnonymousUnclassifiedFeature]
-        public ActionResult Style()
-        {
-            var tenantAttribute = HttpRequestStorage.DatabaseEntities.SystemAttributes.SingleOrDefault();
-            var fileResource = tenantAttribute?.TenantStyleSheetFileResource;
-
-            Check.Assert(fileResource != null, "System Attribute must have an associated System Style Sheet File Resource.");
-
-            // ReSharper disable once PossibleNullReferenceException -- Check.Assert above covers us here
-            return new FileStreamResult(new MemoryStream(fileResource.FileResourceData), fileResource.FileResourceMimeType.FileResourceMimeTypeContentTypeName);
         }
     }
 }

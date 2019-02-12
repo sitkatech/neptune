@@ -33,21 +33,30 @@ namespace Neptune.Web.Views.Shared
         public string AboutUrl { get; }
         public string LogInUrl { get; }
         public string LogOutUrl { get; }
-        public List<LtInfoMenuItem> TopLevelLtInfoMenus { get; }
+        public List<LtInfoMenuItem> TopLevelNeptuneMenus { get; }
+        public readonly string HomeUrl;
 
-        public NeptuneNavBarViewData(Person currentPerson, string logInUrl, string logOutUrl, string requestSupportUrl)
+        public readonly NeptuneArea NeptuneArea;
+        public readonly bool ShowLinkToArea;
+
+        public NeptuneNavBarViewData(Person currentPerson, string logInUrl, string logOutUrl, string requestSupportUrl, NeptuneArea neptuneArea, bool isHomePage)
         {
             CurrentPerson = currentPerson;
+
+            HomeUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(hc => hc.Index());
 
             LogInUrl = logInUrl;
             LogOutUrl = logOutUrl;
             RequestSupportUrl = requestSupportUrl;
 
             AboutUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(hc => hc.About());
-            TopLevelLtInfoMenus = MakeFullNeptuneMenu(currentPerson);
+            TopLevelNeptuneMenus = MakeNeptuneHelpMenu(currentPerson);
+
+            NeptuneArea = neptuneArea;
+            ShowLinkToArea = !isHomePage;
         }
 
-        private List<LtInfoMenuItem> MakeFullNeptuneMenu(Person currentPerson)
+        private List<LtInfoMenuItem> MakeNeptuneHelpMenu(Person currentPerson)
         {
             var helpMenu = new LtInfoMenuItem("Help");
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
@@ -56,6 +65,7 @@ namespace Neptune.Web.Views.Shared
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
 
             helpMenu.ExtraDropdownMenuCssClasses = new List<string> {"dropdown-menu-right"};
+            helpMenu.ExtraTopLevelMenuCssClasses = new List<string> {"topRightMenu"};
 
             var topLevelLtInfoMenuItems = new List<LtInfoMenuItem> { helpMenu };
 

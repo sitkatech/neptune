@@ -74,7 +74,6 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new StormwaterJurisdictionConfiguration());
             modelBuilder.Configurations.Add(new StormwaterJurisdictionPersonConfiguration());
             modelBuilder.Configurations.Add(new SupportRequestLogConfiguration());
-            modelBuilder.Configurations.Add(new SystemAttributeConfiguration());
             modelBuilder.Configurations.Add(new TrainingVideoConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPConfiguration());
             modelBuilder.Configurations.Add(new TreatmentBMPAssessmentConfiguration());
@@ -140,7 +139,6 @@ namespace Neptune.Web.Models
         public virtual DbSet<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual DbSet<StormwaterJurisdiction> StormwaterJurisdictions { get; set; }
         public virtual DbSet<SupportRequestLog> SupportRequestLogs { get; set; }
-        public virtual DbSet<SystemAttribute> SystemAttributes { get; set; }
         public virtual DbSet<TrainingVideo> TrainingVideos { get; set; }
         public virtual DbSet<TreatmentBMPAssessmentObservationType> TreatmentBMPAssessmentObservationTypes { get; set; }
         public virtual DbSet<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
@@ -429,9 +427,6 @@ namespace Neptune.Web.Models
                     var supportRequestType = SupportRequestType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(supportRequestType, "SupportRequestType", primaryKey);
                     return supportRequestType;
-
-                case "SystemAttribute":
-                    return SystemAttributes.GetSystemAttribute(primaryKey);
 
                 case "TrainingVideo":
                     return TrainingVideos.GetTrainingVideo(primaryKey);

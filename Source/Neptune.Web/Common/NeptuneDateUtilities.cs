@@ -28,11 +28,8 @@ namespace Neptune.Web.Common
 {
     public class NeptuneDateUtilities
     {
-        public static int MinimumYear
-        {
-            get { return SystemAttributeHelpers.GetMinimumYear(); }
-        }
-
+        // todo: these values should be set at the config file
+        public const int MinimumYear = 2017;
         public const int YearsBeyondPresentForMaximumYearForUserInput = 30;
 
         /// <summary>

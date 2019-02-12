@@ -30,9 +30,6 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentObservationPhotos = new HashSet<OnlandVisualTrashAssessmentObservationPhoto>();
             this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
             this.OrganizationsWhereYouAreTheLogoFileResource = new HashSet<Organization>();
-            this.SystemAttributesWhereYouAreTheTenantBannerLogoFileResource = new HashSet<SystemAttribute>();
-            this.SystemAttributesWhereYouAreTheTenantSquareLogoFileResource = new HashSet<SystemAttribute>();
-            this.SystemAttributesWhereYouAreTheTenantStyleSheetFileResource = new HashSet<SystemAttribute>();
             this.TreatmentBMPAssessmentPhotos = new HashSet<TreatmentBMPAssessmentPhoto>();
             this.TreatmentBMPDocuments = new HashSet<TreatmentBMPDocument>();
             this.TreatmentBMPImages = new HashSet<TreatmentBMPImage>();
@@ -105,13 +102,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return FieldDefinitionDataImages.Any() || NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OnlandVisualTrashAssessmentObservationPhotos.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantBannerLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantSquareLogoFileResource.Any() || SystemAttributesWhereYouAreTheTenantStyleSheetFileResource.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
+            return FieldDefinitionDataImages.Any() || NeptuneHomePageImages.Any() || NeptunePageImages.Any() || OnlandVisualTrashAssessmentObservationPhotos.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OrganizationsWhereYouAreTheLogoFileResource.Any() || TreatmentBMPAssessmentPhotos.Any() || TreatmentBMPDocuments.Any() || TreatmentBMPImages.Any() || WaterQualityManagementPlanDocuments.Any() || WaterQualityManagementPlanPhotos.Any() || WaterQualityManagementPlanVerifies.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(Organization).Name, typeof(SystemAttribute).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(FileResource).Name, typeof(FieldDefinitionDataImage).Name, typeof(NeptuneHomePageImage).Name, typeof(NeptunePageImage).Name, typeof(OnlandVisualTrashAssessmentObservationPhoto).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(Organization).Name, typeof(TreatmentBMPAssessmentPhoto).Name, typeof(TreatmentBMPDocument).Name, typeof(TreatmentBMPImage).Name, typeof(WaterQualityManagementPlanDocument).Name, typeof(WaterQualityManagementPlanPhoto).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -166,21 +163,6 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in SystemAttributesWhereYouAreTheTenantBannerLogoFileResource.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in SystemAttributesWhereYouAreTheTenantSquareLogoFileResource.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
-            foreach(var x in SystemAttributesWhereYouAreTheTenantStyleSheetFileResource.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
             foreach(var x in TreatmentBMPAssessmentPhotos.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -230,9 +212,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual ICollection<Organization> OrganizationsWhereYouAreTheLogoFileResource { get; set; }
-        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantBannerLogoFileResource { get; set; }
-        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantSquareLogoFileResource { get; set; }
-        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreTheTenantStyleSheetFileResource { get; set; }
         public virtual ICollection<TreatmentBMPAssessmentPhoto> TreatmentBMPAssessmentPhotos { get; set; }
         public virtual ICollection<TreatmentBMPDocument> TreatmentBMPDocuments { get; set; }
         public virtual ICollection<TreatmentBMPImage> TreatmentBMPImages { get; set; }

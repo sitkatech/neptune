@@ -263,10 +263,6 @@
     <Compile Include="Models\Generated\SupportRequestLogPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestType.Binding.cs" />
     <Compile Include="Models\Generated\SupportRequestTypePrimaryKey.Binding.cs" />
-    <Compile Include="Models\Generated\SystemAttribute.Binding.cs" />
-    <Compile Include="Models\Generated\SystemAttribute.DatabaseContextExtensions.cs" />
-    <Compile Include="Models\Generated\SystemAttributeConfiguration.Binding.cs" />
-    <Compile Include="Models\Generated\SystemAttributePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.Binding.cs" />
     <Compile Include="Models\Generated\TrainingVideo.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TrainingVideoConfiguration.Binding.cs" />
@@ -944,35 +940,15 @@
     <Content Include="Content\Bootstrap\neptune\base.theme.min.css">
       <DependentUpon>base.theme.css</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css">
-      <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.css.map">
-      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.ltinfo.variables.min.css">
-      <DependentUpon>bootstrap.ltinfo.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css">
       <DependentUpon>bootstrap.neptune.base.less</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map">
-      <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.less" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.min.css">
       <DependentUpon>bootstrap.neptune.base.css</DependentUpon>
     </Content>
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css">
       <DependentUpon>bootstrap.neptune.variables.less</DependentUpon>
     </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map">
-      <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
-    </Content>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.less" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css" />
     <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.min.css">
       <DependentUpon>bootstrap.neptune.variables.css</DependentUpon>
     </Content>
@@ -992,6 +968,9 @@
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js" />
     <Content Include="Content\esri-leaflet\esri-leaflet-debug.js" />
     <Content Include="Content\esri-leaflet\esri-leaflet.js" />
+    <Content Include="Content\img\icons\inventoryIcon.png" />
+    <Content Include="Content\img\icons\modelingIcon.png" />
+    <Content Include="Content\img\icons\trashIcon.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
@@ -1017,6 +996,7 @@
     <Content Include="Content\img\OCStormwater\apple-icon-76x76.png" />
     <Content Include="Content\img\OCStormwater\apple-icon-precomposed.png" />
     <Content Include="Content\img\OCStormwater\apple-icon.png" />
+    <Content Include="Content\img\OCStormwater\banner_logo.png" />
     <Content Include="Content\img\OCStormwater\browserconfig.xml" />
     <Content Include="Content\img\OCStormwater\favicon-16x16.png" />
     <Content Include="Content\img\OCStormwater\favicon-32x32.png" />
@@ -1080,6 +1060,13 @@
       <DependentUpon>NeptuneMaps.StormwaterSearch.js</DependentUpon>
     </Content>
     <Content Include="ScriptsCustom\ModalDialogForm.min.js.map" />
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.es5.js">
+      <DependentUpon>NeptuneFloatingRibbon.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.es5.min.js">
+      <DependentUpon>NeptuneFloatingRibbon.es5.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.js" />
     <Content Include="ScriptsCustom\qtippopuphelper.min.js.map" />
     <Content Include="ScriptsCustom\sitka.grid.min.js.map" />
     <Content Include="ScriptsCustom\sitka.min.js">
@@ -1123,8 +1110,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.css.map" />
-    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.css.map" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-filetypes.less" />
     <Content Include="Content\Bootstrap\neptune\glyphicons-regular.css.map" />
@@ -1142,9 +1127,11 @@
     <Content Include="Content\bootstrap-datepicker\css\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js.map" />
     <Content Include="Content\esri-leaflet\esri-leaflet.js.map" />
-    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
     <Content Include="Content\img\OCStormwater\manifest.json" />
     <Compile Include="Models\OnlandVisualTrashAssessmentObservationSimple.cs" />
+    <Content Include="Content\Bootstrap\neptune\ocstormwater.theme.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.variables.less" />
+    <Content Include="Content\Bootstrap\neptune\bootstrap.neptune.base.less" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
@@ -1227,7 +1214,6 @@
     <Compile Include="Views\Organization\PullOrganizationFromKeystone.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewData.cs" />
     <Compile Include="Views\Organization\PullOrganizationFromKeystoneViewModel.cs" />
-    <Compile Include="Common\SystemAttributeHelpers.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Security\NeptuneFeature.cs" />
     <Compile Include="Security\NeptuneFeatureWithContext.cs" />

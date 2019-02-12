@@ -33,7 +33,6 @@ namespace Neptune.Web.Models
             this.OrganizationsWhereYouAreThePrimaryContactPerson = new HashSet<Organization>();
             this.StormwaterJurisdictionPeople = new HashSet<StormwaterJurisdictionPerson>();
             this.SupportRequestLogsWhereYouAreTheRequestPerson = new HashSet<SupportRequestLog>();
-            this.SystemAttributesWhereYouAreThePrimaryContactPerson = new HashSet<SystemAttribute>();
             this.TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson = new HashSet<TreatmentBMP>();
             this.WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson = new HashSet<WaterQualityManagementPlanVerify>();
         }
@@ -114,13 +113,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return AuditLogs.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || SystemAttributesWhereYouAreThePrimaryContactPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
+            return AuditLogs.Any() || FieldVisitsWhereYouAreThePerformedByPerson.Any() || FileResourcesWhereYouAreTheCreatePerson.Any() || ModeledCatchmentGeometryStagings.Any() || Notifications.Any() || OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Any() || OrganizationsWhereYouAreThePrimaryContactPerson.Any() || StormwaterJurisdictionPeople.Any() || SupportRequestLogsWhereYouAreTheRequestPerson.Any() || TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.Any() || WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(SystemAttribute).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(Person).Name, typeof(AuditLog).Name, typeof(FieldVisit).Name, typeof(FileResource).Name, typeof(ModeledCatchmentGeometryStaging).Name, typeof(Notification).Name, typeof(OnlandVisualTrashAssessment).Name, typeof(Organization).Name, typeof(StormwaterJurisdictionPerson).Name, typeof(SupportRequestLog).Name, typeof(TreatmentBMP).Name, typeof(WaterQualityManagementPlanVerify).Name};
 
 
         /// <summary>
@@ -190,11 +189,6 @@ namespace Neptune.Web.Models
                 x.DeleteFull(dbContext);
             }
 
-            foreach(var x in SystemAttributesWhereYouAreThePrimaryContactPerson.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-
             foreach(var x in TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson.ToList())
             {
                 x.DeleteFull(dbContext);
@@ -233,7 +227,6 @@ namespace Neptune.Web.Models
         public virtual ICollection<Organization> OrganizationsWhereYouAreThePrimaryContactPerson { get; set; }
         public virtual ICollection<StormwaterJurisdictionPerson> StormwaterJurisdictionPeople { get; set; }
         public virtual ICollection<SupportRequestLog> SupportRequestLogsWhereYouAreTheRequestPerson { get; set; }
-        public virtual ICollection<SystemAttribute> SystemAttributesWhereYouAreThePrimaryContactPerson { get; set; }
         public virtual ICollection<TreatmentBMP> TreatmentBMPsWhereYouAreTheInventoryVerifiedByPerson { get; set; }
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson { get; set; }
         public Role Role { get { return Role.AllLookupDictionary[RoleID]; } }

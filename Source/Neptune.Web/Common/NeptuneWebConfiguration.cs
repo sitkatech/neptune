@@ -32,6 +32,8 @@ namespace Neptune.Web.Common
     {
         public static readonly int MaximumAllowedUploadFileSize = Int32.Parse(SitkaConfiguration.GetRequiredAppSetting("MaximumAllowedUploadFileSize"));
         public static readonly string DatabaseConnectionString = SitkaConfiguration.GetRequiredAppSetting("DatabaseConnectionString");
+        public static readonly string RecaptchaPublicKey = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaPublicKey");
+        public static readonly string RecaptchaPrivateKey = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaPrivateKey");
         public static readonly string RecaptchaValidatorUrl = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("RecaptchaValidatorUrl");
         public static readonly string SitkaSupportEmail = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("SitkaSupportEmail");
         public static readonly string DoNotReplyEmail = SitkaConfiguration.GetRequiredAppSettingNotNullNotEmptyNotWhitespace("DoNotReplyEmail");
@@ -50,6 +52,8 @@ namespace Neptune.Web.Common
         public static readonly string KeystoneOpenIDUrl = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDUrl");
         public static readonly string KeystoneOpenIDClientSecret = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDClientSecret");
         public static readonly string ParcelMapServiceUrl = SitkaConfiguration.GetRequiredAppSetting("ParcelMapServiceUrl");
+        public static readonly string ParcelLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameParcel");
+        public static readonly string LandUseBlockLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameLandUseBlock");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 

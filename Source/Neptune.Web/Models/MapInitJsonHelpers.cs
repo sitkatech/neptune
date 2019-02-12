@@ -17,12 +17,11 @@ namespace Neptune.Web.Models
             return layerGeoJsons;
         }
 
-        public static IEnumerable<LayerGeoJson> GetParcelMapLayers(SystemAttribute systemAttribute, LayerInitialVisibility layerInitialVisibility)
+        public static IEnumerable<LayerGeoJson> GetParcelMapLayers(LayerInitialVisibility layerInitialVisibility)
         {
             if (!string.IsNullOrWhiteSpace(NeptuneWebConfiguration.ParcelMapServiceUrl))
             {
-                yield return ParcelModelExtensions.GetParcelWmsLayerGeoJson("#dddddd", 0.1m, layerInitialVisibility,
-                    systemAttribute);
+                yield return ParcelModelExtensions.GetParcelWmsLayerGeoJson("#dddddd", 0.1m, layerInitialVisibility);
             }
             else
             {

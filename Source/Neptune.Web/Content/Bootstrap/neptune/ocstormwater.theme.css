@@ -1076,6 +1076,36 @@ nav#wizardNav ul li a.disabled {
 .header .headerText {
   display: none;
 }
+#dropdownMenuIcon {
+  color: #0099ab;
+}
+nav.navbar-light {
+  background-color: white;
+}
+nav.navbar-light a.dropdown-toggle:hover,
+nav.navbar-light a.dropdown-toggle:focus,
+nav.navbar-light a.dropdown-toggle:active,
+nav.navbar-light .dropdown.open .noHighlight {
+  background-color: white;
+}
+nav.navbar-light a.dropdown-toggle:hover,
+nav.navbar-light a.dropdown-toggle:focus,
+nav.navbar-light a.dropdown-toggle:active {
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+nav.navbar-light .topRightMenu {
+  color: #0099ab !important;
+  font-weight: 600;
+}
+nav.navbar-light .topRightMenu:hover,
+nav.navbar-light .topRightMenu:focus,
+nav.navbar-light .topRightMenu:active {
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.125);
+  background-color: white;
+}
+nav.navbar-light .headerImage {
+  padding: 0;
+}
 nav.navbar {
   border-bottom: none;
   margin-bottom: 0;

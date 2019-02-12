@@ -47,7 +47,7 @@ namespace Neptune.Web.Views.Home
             List<Models.NeptuneHomePageImage> neptuneHomePageImages, JurisdictionsMapViewData jurisdictionsMapViewData,
             JurisdictionsMapInitJson jurisdictionsMapInitJson, LaunchPadViewData launchPadViewData) : base(currentPerson, neptunePageHomePage, true, NeptuneArea.OCStormwaterTools)
         {
-            PageTitle = SystemAttributeHelpers.GetToolDisplayName();
+            PageTitle = "Orange County Stormwater Tools";
 
             CustomHomePageTextViewData = new ViewPageContentViewData(neptunePageHomePage, currentPerson);
             CustomHomePageAdditionalInfoTextViewData = new ViewPageContentViewData(neptunePageAdditionalInfo, currentPerson);
