@@ -970,6 +970,9 @@
     <Content Include="Content\esri-leaflet-renderers\esri-leaflet-renderers.js" />
     <Content Include="Content\esri-leaflet\esri-leaflet-debug.js" />
     <Content Include="Content\esri-leaflet\esri-leaflet.js" />
+    <Content Include="Content\img\icons\inventoryIcon.png" />
+    <Content Include="Content\img\icons\modelingIcon.png" />
+    <Content Include="Content\img\icons\trashIcon.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
@@ -1058,6 +1061,13 @@
       <DependentUpon>NeptuneMaps.StormwaterSearch.js</DependentUpon>
     </Content>
     <Content Include="ScriptsCustom\ModalDialogForm.min.js.map" />
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.es5.js">
+      <DependentUpon>NeptuneFloatingRibbon.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.es5.min.js">
+      <DependentUpon>NeptuneFloatingRibbon.es5.js</DependentUpon>
+    </Content>
+    <Content Include="ScriptsCustom\NeptuneFloatingRibbon.js" />
     <Content Include="ScriptsCustom\qtippopuphelper.min.js.map" />
     <Content Include="ScriptsCustom\sitka.grid.min.js.map" />
     <Content Include="ScriptsCustom\sitka.min.js">

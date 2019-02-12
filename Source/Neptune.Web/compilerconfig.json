@@ -34,5 +34,9 @@
   {
     "outputFile": "Content/Bootstrap/neptune/bootstrap.neptune.variables.css",
     "inputFile": "Content/Bootstrap/neptune/bootstrap.neptune.variables.less"
+  },
+  {
+    "outputFile": "ScriptsCustom/NeptuneFloatingRibbon.es5.js",
+    "inputFile": "ScriptsCustom/NeptuneFloatingRibbon.js"
   }
 ]
