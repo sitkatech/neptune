@@ -14,8 +14,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
         public string Notes { get; set; }
 
-        //todo: embetter
-        public string Score { get; set; }
+        [Required]
+        [DisplayName("Assessment Score")]
+        public int? ScoreID { get; set; }
 
         public FinalizeOVTAViewModel()
         {
@@ -29,11 +30,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            Check.Require(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null, "Cannot call FinalizeOVTAViewModel.UpdateModel() if Assessment Area is null.");
-
-            // ReSharper disable once PossibleNullReferenceException (there's no null-ref because we literally just checked)
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName =
-                AssessmentAreaName;
+            throw new NotImplementedException();
         }
     }
 }

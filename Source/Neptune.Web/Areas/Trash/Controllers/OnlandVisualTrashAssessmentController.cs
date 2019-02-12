@@ -12,8 +12,10 @@ using Neptune.Web.Views.Shared;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -261,8 +263,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewRefineAssessmentArea(onlandVisualTrashAssessment, viewModel);
             }
 
-            // todo: this is update model
-            var dbGeometrys = viewModel.WktAndAnnotations.Select(x=>DbGeometry.FromText(x.Wkt, 4326));
+            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, 4326));
             var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
 
             onlandVisualTrashAssessment.DraftGeometry = unionListGeometries;
@@ -300,8 +301,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
+            var scoresSelectList = OnlandVisualTrashAssessmentScore.All.ToSelectListWithDisabledEmptyFirstRow(x => x.OnlandVisualTrashAssessmentScoreID.ToString(CultureInfo.InvariantCulture), x => x.OnlandVisualTrashAssessmentScoreDisplayName.ToString(CultureInfo.InvariantCulture),
+                "Choose a score");
             var viewData = new FinalizeOVTAViewData(CurrentPerson,
-                onlandVisualTrashAssessment, ovtaSummaryMapInitJson);
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson, scoresSelectList);
             return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }
 
@@ -395,7 +398,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
             {
                 geoJsonFeatureCollection =
-                    new List<OnlandVisualTrashAssessmentArea> {onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea}
+                    new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea }
                         .ToGeoJsonFeatureCollection();
             }
             else if (onlandVisualTrashAssessment.DraftGeometry != null)
