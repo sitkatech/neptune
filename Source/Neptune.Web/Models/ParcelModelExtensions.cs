@@ -17,10 +17,10 @@ namespace Neptune.Web.Models
             return SitkaRoute<ParcelController>.BuildUrlFromExpression(x=>x.TrashMapAssetPanel(parcel));
         }
 
-        public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility, SystemAttribute systemAttribute)
+        public static LayerGeoJson GetParcelWmsLayerGeoJson(string layerColor, decimal layerOpacity, LayerInitialVisibility layerInitialVisibility)
         {
             return new LayerGeoJson(FieldDefinition.Parcel.GetFieldDefinitionLabelPluralized(),
-                NeptuneWebConfiguration.ParcelMapServiceUrl, systemAttribute.ParcelLayerName, "#", layerColor,
+                NeptuneWebConfiguration.ParcelMapServiceUrl, NeptuneWebConfiguration.ParcelLayerName, "#", layerColor,
                 layerOpacity, layerInitialVisibility);
         }
 

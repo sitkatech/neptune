@@ -300,11 +300,10 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewEditWqmpParcels(WaterQualityManagementPlan waterQualityManagementPlan, EditWqmpParcelsViewModel viewModel)
         {
-            var systemAttribute = HttpRequestStorage.DatabaseEntities.SystemAttributes.Single();
-            var layerGeoJsons = MapInitJsonHelpers.GetParcelMapLayers(systemAttribute, LayerInitialVisibility.Show)
+            var layerGeoJsons = MapInitJsonHelpers.GetParcelMapLayers(LayerInitialVisibility.Show)
                 .ToList();
             var mapInitJson = new MapInitJson("editWqmpParcelMap", 0, layerGeoJsons, BoundingBox.MakeNewDefaultBoundingBox());
-            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson, systemAttribute);
+            var viewData = new EditWqmpParcelsViewData(CurrentPerson, waterQualityManagementPlan, mapInitJson);
             return RazorView<EditWqmpParcels, EditWqmpParcelsViewData, EditWqmpParcelsViewModel>(viewData, viewModel);
         }
 
@@ -335,11 +334,6 @@ namespace Neptune.Web.Controllers
 
             return RazorView<WqmpVerify, WqmpVerifyViewData>(viewData);
         }
-
-
-
-
-
 
         [HttpGet]
         [WaterQualityManagementPlanManageFeature]

@@ -52,6 +52,8 @@ namespace Neptune.Web.Common
         public static readonly string KeystoneOpenIDUrl = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDUrl");
         public static readonly string KeystoneOpenIDClientSecret = SitkaConfiguration.GetRequiredAppSetting("KeystoneOpenIDClientSecret");
         public static readonly string ParcelMapServiceUrl = SitkaConfiguration.GetRequiredAppSetting("ParcelMapServiceUrl");
+        public static readonly string ParcelLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameParcel");
+        public static readonly string LandUseBlockLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameLandUseBlock");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 

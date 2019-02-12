@@ -46,6 +46,8 @@
     <add key="KeystoneOpenIDClientSecret" value="864888DF-1676-4960-BE72-06A4D16B0C5C" />
     <add key="DefaultModalDialogButtonCssClasses" value="btn-neptune,btn-xs"/>
     <add key="ParcelMapServiceUrl" value="${parcel-map-service-url}"/>
+    <add key="MapServiceLayerNameParcel" value="${map-service-layer-name-parcel}"/>
+    <add key="MapServiceLayerNameLandUseBlock" value="${map-service-layer-name-landuseblock}"/>
     <add key="aspnet:MaxJsonDeserializerMembers" value="150000" />
   </appSettings>
   <system.net>
