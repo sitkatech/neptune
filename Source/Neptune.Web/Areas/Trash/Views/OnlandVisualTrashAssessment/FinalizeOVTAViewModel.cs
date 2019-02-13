@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using LtInfo.Common.DesignByContract;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
@@ -13,6 +15,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string AssessmentAreaName { get; set; }
 
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.OnlandVisualTrashAssessmentNotes)]
         public string Notes { get; set; }
 
         [Required]

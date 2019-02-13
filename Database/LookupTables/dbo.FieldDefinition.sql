@@ -59,4 +59,5 @@ VALUES
 (55, N'HasAllRequiredDocuments', N'Has All Required Documents?', N'Indicates whether all required supporting documents are present for a WQMP', 1),
 (56, N'DateOfLastInventoryChange', N'Date of Last Inventory Change', '', 1),
 (57, N'TrashCaptureStatus', N'Trash Capture Status', N'Indicates the ability of this BMP to capture trash.', 1),
-(58, 'OnlandVisualTrashAssessment', N'On-land Visual Trash Assessment', N'The assessing, visually, of trash on land.', 1)
+(58, 'OnlandVisualTrashAssessment', N'On-land Visual Trash Assessment', N'The assessing, visually, of trash on land.', 1),
+(59, 'OnlandVisualTrashAssessmentNotes', 'Notes', 'Enter the name of all assessors and any other notes about the assessment.', 1)
