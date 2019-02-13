@@ -1,6 +1,7 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -64,14 +65,27 @@ else
 
         <hr />
 
+        if (!ViewDataTyped.RequireRefresh)
+         {
+             <div class="row">
+                 <div class="col-xs-12 col-sm-3">
+                     <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                 </div>
+
+                 <div class="col-xs-12 col-sm-9" style="text-align: right">
+                     <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                     <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+                 </div>
+             </div>
+         }
+    }
+    @if (ViewDataTyped.RequireRefresh)
+    {
         <div class="row">
             <div class="col-xs-12 col-sm-3">
-                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
             </div>
-
             <div class="col-xs-12 col-sm-9" style="text-align: right">
-                <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-                <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+                <a class="btn btn-neptune" href="@OVTASection.AddOrRemoveParcels.GetNextSectionUrl(ViewDataTyped.OVTA)">Continue <i class="glyphicon glyphicon-chevron-right"></i></a>
             </div>
         </div>
     }

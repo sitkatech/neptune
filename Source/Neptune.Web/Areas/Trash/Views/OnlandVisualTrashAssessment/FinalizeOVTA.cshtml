@@ -76,11 +76,43 @@
     </div>
 
     <hr/>
-
+    <h4>Map</h4>
     <div class="row">
         <div class="col-sm-12">
             <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px;"></div>
         </div>
+    </div>
+
+    <h4>Photos and Notes</h4>
+    <div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden; margin-top: 10px; padding-left: 2px;">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <label>Photo</label>
+            </div>
+            <div class="col-sm-6 col-xs-12">
+                <label>Notes</label>
+            </div>
+        </div>
+        @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
+        {
+            var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
+
+            <div class="row" id="observation_@observation.OnlandVisualTrashAssessmentObservationID" style="padding: 2px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 4px;">
+                <div class="col-sm-6 col-xs-12">
+                    @if (photo != null)
+                    {
+                        <img style="height: 100px" src="@photo.FileResource.GetFileResourceUrl()"/>
+                    }
+                    else
+                    {
+                        <p class="systemText">No photo provided</p>
+                    }
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    @observation.Note
+                </div>
+            </div>
+        }
     </div>
 
     <hr />
