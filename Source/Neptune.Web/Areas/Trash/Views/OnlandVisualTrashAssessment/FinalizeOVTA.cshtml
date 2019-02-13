@@ -9,6 +9,11 @@
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @section JavascriptAndStylesContent{
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <style>
+        .selectedObservation {
+            background-color: palegoldenrod;
+        }
+    </style>
 }
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
@@ -96,8 +101,8 @@
         @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
         {
             var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
-
-            <div class="row" id="observation_@observation.OnlandVisualTrashAssessmentObservationID" style="padding: 2px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 4px;">
+            var id = observation.OnlandVisualTrashAssessmentObservationID;
+            <div class="row" id="observation_@id" style="padding: 2px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 4px;" onclick="handleClickOnTable(@id)">
                 <div class="col-sm-6 col-xs-12">
                     @if (photo != null)
                     {
@@ -130,12 +135,14 @@
 
 <script>
     var summaryMap;
+    var lastSelected;
+    var observationsLayer
     jQuery(function() {
         // we're gonna do a business
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
         summaryMap = new NeptuneMaps.Map(mapInitJson);
 
-        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
+        observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
             pointToLayer: function (feature, latlng) {
                 var icon = L.MakiMarkers.icon({
                     icon: feature.properties.FeatureGlyph,
@@ -153,6 +160,17 @@
         });
         observationsLayer.addTo(summaryMap.map);
 
+        observationsLayer.on('click',
+            function(e) {
+                setSelectedMarker(e.layer.feature);
+                jQuery(".selectedObservation")
+                    .removeClass("selectedObservation");
+                jQuery("#observation_" + e.layer.feature.properties.ObservationID).addClass("selectedObservation");
+                location.href = "#";
+                location.href = "#observation_" + e.layer.feature.properties.ObservationID;
+
+            });
+
         var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
             style: function(feature) {
                 return {
@@ -167,4 +185,55 @@
         });
         assessmentAreaLayer.addTo(summaryMap.map);
     });
+
+    var handleClickOnMap = function() {
+        //todo
+    }
+
+    var handleClickOnTable = function(id) {
+        setActiveByID(id);
+        jQuery(".selectedObservation").removeClass("selectedObservation");
+        jQuery("#observation_" + id).addClass("selectedObservation");
+    }
+
+    var setSelectedMarker = function (layer) {
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(lastSelected)) {
+            summaryMap.map.removeLayer(lastSelected);
+        }
+
+        lastSelected = L.geoJson(layer,
+            {
+                pointToLayer: function (feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: "marker",
+                        color: "#FFFF00",
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            riseOnHover: true
+                        });
+                },
+                style: function (feature) {
+                    return {
+                        fillColor: "#FFFF00",
+                        fill: true,
+                        fillOpacity: 0.5,
+                        color: "#FFFF00",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+
+        lastSelected.addTo(summaryMap.map);
+    };
+
+    var setActiveByID = function (id) {
+        var layer = _.find(observationsLayer._layers,
+            function (layer) { return id === layer.feature.properties.ObservationID; });
+        setSelectedMarker(layer.feature);
+    };
 </script>

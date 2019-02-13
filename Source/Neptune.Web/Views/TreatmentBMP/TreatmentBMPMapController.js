@@ -15,7 +15,6 @@
         var summaryUrl = $scope.AngularViewData.FindTreatmentBMPByNameUrl;
 
         $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
-        console.log($scope.AngularViewData.MapInitJson.SearchableLayerGeoJson.GeoJsonFeatureCollection);
 
         $scope.typeaheadSearch = function (typeaheadSelector, typeaheadSelectorButton, summaryUrl) {
             $scope.typeaheadSelector = typeaheadSelector;
