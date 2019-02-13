@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
             Property(x => x.DraftGeometry).HasColumnName(@"DraftGeometry").HasColumnType("geometry").IsOptional();
             Property(x => x.IsDraftGeometryManuallyRefined).HasColumnName(@"IsDraftGeometryManuallyRefined").HasColumnType("bit").IsOptional();
             Property(x => x.OnlandVisualTrashAssessmentScoreID).HasColumnName(@"OnlandVisualTrashAssessmentScoreID").HasColumnType("int").IsOptional();
+            Property(x => x.CompletedDate).HasColumnName(@"CompletedDate").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.CreatedByPerson).WithMany(b => b.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson).HasForeignKey(c => c.CreatedByPersonID).WillCascadeOnDelete(false); // FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID

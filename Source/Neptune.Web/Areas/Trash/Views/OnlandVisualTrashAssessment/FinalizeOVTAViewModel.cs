@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
-    public class FinalizeOVTAViewModel : OnlandVisualTrashAssessmentViewModel
+    public class FinalizeOVTAViewModel : OnlandVisualTrashAssessmentViewModel, IValidatableObject
     {
         [Required]
         [StringLength(Models.OnlandVisualTrashAssessmentArea.FieldLengths.OnlandVisualTrashAssessmentAreaName)]
@@ -22,6 +25,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [DisplayName("Assessment Score")]
         public int? ScoreID { get; set; }
 
+        [Required]
+        public int? StormwaterJurisdictionID { get; set; }
+
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
@@ -33,12 +39,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public FinalizeOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
         {
             AssessmentAreaName = ovta.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName;
+            StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
             onlandVisualTrashAssessment.Notes = Notes;
+            onlandVisualTrashAssessment.CompletedDate = DateTime.Now;
 
             // create the assessment area
             if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
@@ -56,6 +64,16 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
                 OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;
 
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Any(x => x.OnlandVisualTrashAssessmentAreaName == AssessmentAreaName && x.StormwaterJurisdictionID == StormwaterJurisdictionID))
+            {
+                yield return new SitkaValidationResult<FinalizeOVTAViewModel, string>(
+                    "There is already an Assessment Area with this name in the selected jurisdiction. Please choose another name",
+                    m => m.AssessmentAreaName);
+            }
         }
     }
 }

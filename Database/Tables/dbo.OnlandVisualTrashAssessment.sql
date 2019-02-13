@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[DraftGeometry] [geometry] NULL,
 	[IsDraftGeometryManuallyRefined] [bit] NULL,
 	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
+	[CompletedDate] [datetime] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC
@@ -58,6 +59,10 @@ GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete] CHECK  ((NOT ([DraftGeometry] IS NOT NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_AssessmentCannotHaveDraftGeometryWhenComplete]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveCompletedDate] CHECK  ((NOT ([CompletedDate] IS NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveCompletedDate]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveScore] CHECK  ((NOT ([OnlandVisualTrashAssessmentScoreID] IS NULL AND [OnlandVisualTrashAssessmentStatusID]=(2))))
 GO

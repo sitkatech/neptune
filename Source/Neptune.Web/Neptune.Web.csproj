@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -846,6 +846,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ObservationsMapController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\placeholder_camera.jpg" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\SummaryMapController.js" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.js" />
     <Content Include="Content\angular\directives\ng-bootstrap-select.min.js" />
     <Content Include="Content\angular\directives\discreteValueCollectionMethod.html" />

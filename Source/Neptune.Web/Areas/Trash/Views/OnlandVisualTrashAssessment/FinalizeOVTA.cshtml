@@ -7,6 +7,9 @@
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.FinalizeOVTA
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
+@section JavascriptAndStylesContent{
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
+}
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
 {
@@ -72,8 +75,16 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px;"></div>
+        </div>
+    </div>
+
+    <hr />
+    @Html.HiddenFor(m=>m.StormwaterJurisdictionID)
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
@@ -84,3 +95,44 @@
         </div>
     </div>
 }
+
+<script>
+    var summaryMap;
+    jQuery(function() {
+        // we're gonna do a business
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
+        summaryMap = new NeptuneMaps.Map(mapInitJson);
+
+        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
+            pointToLayer: function (feature, latlng) {
+                var icon = L.MakiMarkers.icon({
+                    icon: feature.properties.FeatureGlyph,
+                    color: feature.properties.FeatureColor,
+                    size: "m"
+                });
+
+                return L.marker(latlng,
+                    {
+                        icon: icon,
+                        title: feature.properties.Name,
+                        alt: feature.properties.Name
+                    });
+            }
+        });
+        observationsLayer.addTo(summaryMap.map);
+
+        var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
+            style: function(feature) {
+                return {
+                    fillColor: NeptuneMaps.Constants.defaultPolyColor,
+                    fill: true,
+                    fillOpacity: 0.5,
+                    color: NeptuneMaps.Constants.defaultPolyColor,
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+        assessmentAreaLayer.addTo(summaryMap.map);
+    });
+</script>

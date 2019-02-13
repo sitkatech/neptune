@@ -14,3 +14,12 @@ go
 Alter Table dbo.OnlandVisualTrashAssessment
 Add Constraint CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveScore
 Check (not (OnlandVisualTrashAssessmentScoreID is null and OnlandVisualTrashAssessmentStatusID = 2))
+
+
+Alter Table dbo.OnlandVisualTrashAssessment
+Add CompletedDate datetime null
+Go
+
+Alter Table dbo.OnlandVisualTrashAssessment
+Add Constraint CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveCompletedDate
+check (not (CompletedDate is null and OnlandVisualTrashAssessmentStatusID = 2))
