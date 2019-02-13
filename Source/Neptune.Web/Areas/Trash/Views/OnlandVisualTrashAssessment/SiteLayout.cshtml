@@ -124,6 +124,7 @@
                 @if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
                 {
                     <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
+                    <div style="display:none">@RenderBody()</div>
                 }
                 else
                 {

@@ -62,6 +62,7 @@
                         <div class="col-sm-9">
                             <select ng-model="AngularModel.StormwaterJurisdiction"
                                     class="selectpicker"
+                                    ng-change="initializeMap()"
                                     data-live-search="true"
                                     data-container="body"
                                     data-width="100%" selectpicker

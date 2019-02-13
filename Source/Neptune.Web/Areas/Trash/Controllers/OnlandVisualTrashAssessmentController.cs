@@ -320,26 +320,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
-            //// todo: rewrite this
-
-            //if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
-            //{
-            //    var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
-            //    var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
-            //        onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
-
-            //    HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
-            //        onlandVisualTrashAssessmentArea);
-            //    HttpRequestStorage.DatabaseEntities.SaveChanges();
-            //    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-            //        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-            //    onlandVisualTrashAssessment.AssessingNewArea = false;
-            //}
-            //else
-            //{
-            //    viewModel.UpdateModel(onlandVisualTrashAssessment);
-            //}
-
+            viewModel.UpdateModel(onlandVisualTrashAssessment);
+            
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }
 
@@ -432,7 +414,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             OVTASection ovtaSection, OnlandVisualTrashAssessment ovta)
         {
             return Redirect(viewModel.AutoAdvance
-                ? ovtaSection.GetNextSection().GetSectionUrl(ovta)
+                ? ovtaSection.GetNextSectionUrl(ovta)
                 : ovtaSection.GetSectionUrl(ovta));
         }
     }

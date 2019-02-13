@@ -11,7 +11,12 @@ namespace Neptune.Web.Models
     {
         public abstract string GetSectionUrl(OnlandVisualTrashAssessment ovta);
 
-        public abstract OVTASection GetNextSection();
+        public abstract OVTASection GetNextSection(OnlandVisualTrashAssessment ovta);
+
+        public string GetNextSectionUrl(OnlandVisualTrashAssessment ovta)
+        {
+            return GetNextSection(ovta).GetSectionUrl(ovta);
+        }
 
         public abstract bool IsSectionComplete(OnlandVisualTrashAssessment ovta);
 
@@ -43,7 +48,7 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(ovta.OnlandVisualTrashAssessmentID));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
             return InitiateOVTA;
         }
@@ -76,7 +81,7 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitiateOVTA(ovta));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
             return RecordObservations;
         }
@@ -110,9 +115,11 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(ovta));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
-            return AddOrRemoveParcels;
+            return ovta.AssessingNewArea.GetValueOrDefault() ?
+                (OVTASection)AddOrRemoveParcels
+                : FinalizeOVTA;
         }
 
         public override bool IsSectionComplete(OnlandVisualTrashAssessment ovta)
@@ -143,7 +150,7 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.AddOrRemoveParcels(ovta));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
             return RefineAssessmentArea;
         }
@@ -176,7 +183,7 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RefineAssessmentArea(ovta));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
             return FinalizeOVTA;
         }
@@ -210,7 +217,7 @@ namespace Neptune.Web.Models
             return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.FinalizeOVTA(ovta));
         }
 
-        public override OVTASection GetNextSection()
+        public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
         {
             throw new InvalidOperationException("Finalize OVTA is the final step; cannot get next section");
         }

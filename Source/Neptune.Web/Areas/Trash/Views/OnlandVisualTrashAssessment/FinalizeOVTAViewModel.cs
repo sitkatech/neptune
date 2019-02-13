@@ -37,7 +37,25 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            throw new NotImplementedException();
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
+            onlandVisualTrashAssessment.Notes = Notes;
+
+            // create the assessment area
+            if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
+            {
+                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(AssessmentAreaName,
+                    onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessment.DraftGeometry);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+                onlandVisualTrashAssessment.DraftGeometry = null;
+            }
+
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
+                OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;
+
         }
     }
 }
