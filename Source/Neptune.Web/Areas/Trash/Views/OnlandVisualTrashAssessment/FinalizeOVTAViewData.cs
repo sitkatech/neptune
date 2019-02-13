@@ -9,9 +9,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     public class FinalizeOVTAViewData : OVTASectionViewData
     {
         public OVTASummaryMapInitJson OVTASummaryMapInitJson { get; }
-        public IEnumerable<SelectListItem> Scores { get; set; }
-        public Person ConductedByPerson { get; set; }
-        public StormwaterJurisdiction Jurisdiction { get; set; }
+        public IEnumerable<SelectListItem> Scores { get; }
+        public Person ConductedByPerson { get; }
+        public StormwaterJurisdiction Jurisdiction { get; }
+        public string CreatedDate { get; }
 
         public FinalizeOVTAViewData(Person currentPerson,
             Models.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson, IEnumerable<SelectListItem> scores)
@@ -21,6 +22,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Scores = scores;
             ConductedByPerson = ovta.CreatedByPerson;
             Jurisdiction = ovta.StormwaterJurisdiction;
+            CreatedDate = ovta.CreatedDate.ToShortDateString();
         }
     }
 }

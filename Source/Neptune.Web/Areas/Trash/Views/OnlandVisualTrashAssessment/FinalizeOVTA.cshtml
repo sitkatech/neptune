@@ -1,5 +1,6 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -42,15 +43,15 @@
             <label>Jurisdiction</label>
         </div>
         <div class="col-sm-8">
-
+            @ViewDataTyped.Jurisdiction.GetDisplayNameAsDetailUrl()
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-4 control-label text-right">
-            <label>Visit Name</label>
+            <label>Assessment Started On</label>
         </div>
         <div class="col-sm-8">
-
+            @ViewDataTyped.CreatedDate
         </div>
     </div>
     <div class="form-group row">
@@ -58,7 +59,7 @@
             <label>Conducted By</label>
         </div>
         <div class="col-sm-8">
-
+            @ViewDataTyped.ConductedByPerson.GetFullNameFirstLastAsUrl()
         </div>
     </div>
 
