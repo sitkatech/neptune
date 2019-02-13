@@ -24,7 +24,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Created On", x => x.CreatedDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Completed On", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
-            Add("Score", x => x.OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName, 60,
+            Add("Score", x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 60,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
             Add("Assessment Area Name", x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName ?? "Not Set", 170, DhtmlxGridColumnFilterType.SelectFilterStrict);
