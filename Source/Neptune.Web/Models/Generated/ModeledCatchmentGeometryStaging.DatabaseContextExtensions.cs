@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return modeledCatchmentGeometryStaging;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, List<int> modeledCatchmentGeometryStagingIDList)
         {
             if(modeledCatchmentGeometryStagingIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteModeledCatchmentGeometryStaging(this IQueryable<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagings, ICollection<ModeledCatchmentGeometryStaging> modeledCatchmentGeometryStagingsToDelete)
         {
             if(modeledCatchmentGeometryStagingsToDelete.Any())

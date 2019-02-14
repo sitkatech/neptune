@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return treatmentBMPDocument;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteTreatmentBMPDocument(this IQueryable<TreatmentBMPDocument> treatmentBMPDocuments, List<int> treatmentBMPDocumentIDList)
         {
             if(treatmentBMPDocumentIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteTreatmentBMPDocument(this IQueryable<TreatmentBMPDocument> treatmentBMPDocuments, ICollection<TreatmentBMPDocument> treatmentBMPDocumentsToDelete)
         {
             if(treatmentBMPDocumentsToDelete.Any())

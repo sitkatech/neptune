@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return sourceControlBMPAttributeCategory;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, List<int> sourceControlBMPAttributeCategoryIDList)
         {
             if(sourceControlBMPAttributeCategoryIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteSourceControlBMPAttributeCategory(this IQueryable<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategories, ICollection<SourceControlBMPAttributeCategory> sourceControlBMPAttributeCategoriesToDelete)
         {
             if(sourceControlBMPAttributeCategoriesToDelete.Any())

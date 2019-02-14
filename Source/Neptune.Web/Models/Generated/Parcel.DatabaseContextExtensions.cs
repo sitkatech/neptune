@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return parcel;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteParcel(this IQueryable<Parcel> parcels, List<int> parcelIDList)
         {
             if(parcelIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteParcel(this IQueryable<Parcel> parcels, ICollection<Parcel> parcelsToDelete)
         {
             if(parcelsToDelete.Any())

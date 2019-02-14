@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return treatmentBMPAssessmentObservationType;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, List<int> treatmentBMPAssessmentObservationTypeIDList)
         {
             if(treatmentBMPAssessmentObservationTypeIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteTreatmentBMPAssessmentObservationType(this IQueryable<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypes, ICollection<TreatmentBMPAssessmentObservationType> treatmentBMPAssessmentObservationTypesToDelete)
         {
             if(treatmentBMPAssessmentObservationTypesToDelete.Any())

@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return fundingSource;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteFundingSource(this IQueryable<FundingSource> fundingSources, List<int> fundingSourceIDList)
         {
             if(fundingSourceIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteFundingSource(this IQueryable<FundingSource> fundingSources, ICollection<FundingSource> fundingSourcesToDelete)
         {
             if(fundingSourcesToDelete.Any())

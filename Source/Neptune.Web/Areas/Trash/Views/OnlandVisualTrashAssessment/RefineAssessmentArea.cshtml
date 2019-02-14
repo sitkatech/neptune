@@ -14,12 +14,19 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
 }
 
+<p>You may click or tap the edit button (<span class="glyphicon glyphicon-edit"></span>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.</p>
+
 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
 
 @using (Html.BeginForm())
 {
     <div id="@ViewDataTyped.MapFormID">
 
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-neptune" onclick="resetZoom()">Reset Map Zoom.</button>
+        </div>
     </div>
 
     <hr />
@@ -66,7 +73,7 @@
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var editableFeatureJsonObject = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson).ToString(Formatting.None));
         assessmentAreaMap = new NeptuneMaps.Map(mapInitJson);
-        assessmentAreaMap.map.setMaxZoom(21);
+        assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
 
         var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
@@ -175,5 +182,9 @@
             hiddens.push("<input type=\"hidden\" " + currentWktAnnotation + " value=\"" + Sitka.Methods.htmlEncode(geoJson.features[i].properties.Info) + "\" />");
         }
         mapForm.html(hiddens.join("\r\n"));
+    }
+
+    function resetZoom() {
+        assessmentAreaMap.map.fitBounds(assessmentAreaMap.editableFeatureGroup.getBounds());
     }
 </script>

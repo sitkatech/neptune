@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return customAttribute;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteCustomAttribute(this IQueryable<CustomAttribute> customAttributes, List<int> customAttributeIDList)
         {
             if(customAttributeIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteCustomAttribute(this IQueryable<CustomAttribute> customAttributes, ICollection<CustomAttribute> customAttributesToDelete)
         {
             if(customAttributesToDelete.Any())

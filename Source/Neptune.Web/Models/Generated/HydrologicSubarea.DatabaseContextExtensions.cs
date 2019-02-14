@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return hydrologicSubarea;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, List<int> hydrologicSubareaIDList)
         {
             if(hydrologicSubareaIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteHydrologicSubarea(this IQueryable<HydrologicSubarea> hydrologicSubareas, ICollection<HydrologicSubarea> hydrologicSubareasToDelete)
         {
             if(hydrologicSubareasToDelete.Any())

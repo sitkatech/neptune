@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return landUseBlock;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteLandUseBlock(this IQueryable<LandUseBlock> landUseBlocks, List<int> landUseBlockIDList)
         {
             if(landUseBlockIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteLandUseBlock(this IQueryable<LandUseBlock> landUseBlocks, ICollection<LandUseBlock> landUseBlocksToDelete)
         {
             if(landUseBlocksToDelete.Any())

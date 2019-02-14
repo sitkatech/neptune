@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return sourceControlBMP;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, List<int> sourceControlBMPIDList)
         {
             if(sourceControlBMPIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteSourceControlBMP(this IQueryable<SourceControlBMP> sourceControlBMPs, ICollection<SourceControlBMP> sourceControlBMPsToDelete)
         {
             if(sourceControlBMPsToDelete.Any())

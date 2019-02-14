@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return auditLog;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, List<int> auditLogIDList)
         {
             if(auditLogIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteAuditLog(this IQueryable<AuditLog> auditLogs, ICollection<AuditLog> auditLogsToDelete)
         {
             if(auditLogsToDelete.Any())
