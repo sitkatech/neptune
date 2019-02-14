@@ -18,11 +18,15 @@
     Source code is available upon request via <support@sitkatech.com>.
     </license>
     -----------------------------------------------------------------------*@
+@using LtInfo.Common.DesignByContract
 @using Neptune.Web.Models
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.OVTASection
 @{
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
 }
+
+@{ Check.Require(ViewDataTyped.OVTA.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.InProgress, "Cannot edit Assessment because it has already been finalized.");}
+
 
 @section JavascriptAndStylesContent
 {

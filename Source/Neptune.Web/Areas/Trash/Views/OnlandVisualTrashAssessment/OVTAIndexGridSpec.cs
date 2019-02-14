@@ -17,7 +17,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             }
             if (showEdit)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), true), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), x.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.InProgress), 30, DhtmlxGridColumnFilterType.None);
             }
 
             Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 90,
