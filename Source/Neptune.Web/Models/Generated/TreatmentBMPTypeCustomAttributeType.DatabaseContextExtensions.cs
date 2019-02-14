@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return treatmentBMPTypeCustomAttributeType;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, List<int> treatmentBMPTypeCustomAttributeTypeIDList)
         {
             if(treatmentBMPTypeCustomAttributeTypeIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteTreatmentBMPTypeCustomAttributeType(this IQueryable<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypes, ICollection<TreatmentBMPTypeCustomAttributeType> treatmentBMPTypeCustomAttributeTypesToDelete)
         {
             if(treatmentBMPTypeCustomAttributeTypesToDelete.Any())

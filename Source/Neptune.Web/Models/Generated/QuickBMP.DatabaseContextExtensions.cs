@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return quickBMP;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, List<int> quickBMPIDList)
         {
             if(quickBMPIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteQuickBMP(this IQueryable<QuickBMP> quickBMPs, ICollection<QuickBMP> quickBMPsToDelete)
         {
             if(quickBMPsToDelete.Any())

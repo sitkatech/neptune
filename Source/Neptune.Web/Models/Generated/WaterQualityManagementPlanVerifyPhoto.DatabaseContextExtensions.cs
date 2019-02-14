@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return waterQualityManagementPlanVerifyPhoto;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteWaterQualityManagementPlanVerifyPhoto(this IQueryable<WaterQualityManagementPlanVerifyPhoto> waterQualityManagementPlanVerifyPhotos, List<int> waterQualityManagementPlanVerifyPhotoIDList)
         {
             if(waterQualityManagementPlanVerifyPhotoIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteWaterQualityManagementPlanVerifyPhoto(this IQueryable<WaterQualityManagementPlanVerifyPhoto> waterQualityManagementPlanVerifyPhotos, ICollection<WaterQualityManagementPlanVerifyPhoto> waterQualityManagementPlanVerifyPhotosToDelete)
         {
             if(waterQualityManagementPlanVerifyPhotosToDelete.Any())

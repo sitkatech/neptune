@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return neptunePage;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, List<int> neptunePageIDList)
         {
             if(neptunePageIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteNeptunePage(this IQueryable<NeptunePage> neptunePages, ICollection<NeptunePage> neptunePagesToDelete)
         {
             if(neptunePagesToDelete.Any())

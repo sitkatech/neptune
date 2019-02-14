@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return county;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteCounty(this IQueryable<County> counties, List<int> countyIDList)
         {
             if(countyIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteCounty(this IQueryable<County> counties, ICollection<County> countiesToDelete)
         {
             if(countiesToDelete.Any())

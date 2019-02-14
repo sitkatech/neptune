@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return stormwaterJurisdiction;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteStormwaterJurisdiction(this IQueryable<StormwaterJurisdiction> stormwaterJurisdictions, List<int> stormwaterJurisdictionIDList)
         {
             if(stormwaterJurisdictionIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteStormwaterJurisdiction(this IQueryable<StormwaterJurisdiction> stormwaterJurisdictions, ICollection<StormwaterJurisdiction> stormwaterJurisdictionsToDelete)
         {
             if(stormwaterJurisdictionsToDelete.Any())

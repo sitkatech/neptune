@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return fieldVisit;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, List<int> fieldVisitIDList)
         {
             if(fieldVisitIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteFieldVisit(this IQueryable<FieldVisit> fieldVisits, ICollection<FieldVisit> fieldVisitsToDelete)
         {
             if(fieldVisitsToDelete.Any())

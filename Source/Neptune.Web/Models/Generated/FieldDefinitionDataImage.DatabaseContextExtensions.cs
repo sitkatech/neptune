@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return fieldDefinitionDataImage;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, List<int> fieldDefinitionDataImageIDList)
         {
             if(fieldDefinitionDataImageIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteFieldDefinitionDataImage(this IQueryable<FieldDefinitionDataImage> fieldDefinitionDataImages, ICollection<FieldDefinitionDataImage> fieldDefinitionDataImagesToDelete)
         {
             if(fieldDefinitionDataImagesToDelete.Any())

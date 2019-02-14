@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return maintenanceRecordObservation;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, List<int> maintenanceRecordObservationIDList)
         {
             if(maintenanceRecordObservationIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteMaintenanceRecordObservation(this IQueryable<MaintenanceRecordObservation> maintenanceRecordObservations, ICollection<MaintenanceRecordObservation> maintenanceRecordObservationsToDelete)
         {
             if(maintenanceRecordObservationsToDelete.Any())

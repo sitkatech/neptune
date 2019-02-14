@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return fileResource;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteFileResource(this IQueryable<FileResource> fileResources, List<int> fileResourceIDList)
         {
             if(fileResourceIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteFileResource(this IQueryable<FileResource> fileResources, ICollection<FileResource> fileResourcesToDelete)
         {
             if(fileResourcesToDelete.Any())

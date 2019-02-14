@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return stateProvince;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, List<int> stateProvinceIDList)
         {
             if(stateProvinceIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteStateProvince(this IQueryable<StateProvince> stateProvinces, ICollection<StateProvince> stateProvincesToDelete)
         {
             if(stateProvincesToDelete.Any())

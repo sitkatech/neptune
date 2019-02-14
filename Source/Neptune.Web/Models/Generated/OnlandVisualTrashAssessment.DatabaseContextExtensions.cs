@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return onlandVisualTrashAssessment;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteOnlandVisualTrashAssessment(this IQueryable<OnlandVisualTrashAssessment> onlandVisualTrashAssessments, List<int> onlandVisualTrashAssessmentIDList)
         {
             if(onlandVisualTrashAssessmentIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteOnlandVisualTrashAssessment(this IQueryable<OnlandVisualTrashAssessment> onlandVisualTrashAssessments, ICollection<OnlandVisualTrashAssessment> onlandVisualTrashAssessmentsToDelete)
         {
             if(onlandVisualTrashAssessmentsToDelete.Any())

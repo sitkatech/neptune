@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return trainingVideo;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, List<int> trainingVideoIDList)
         {
             if(trainingVideoIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteTrainingVideo(this IQueryable<TrainingVideo> trainingVideos, ICollection<TrainingVideo> trainingVideosToDelete)
         {
             if(trainingVideosToDelete.Any())

@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return treatmentBMPBenchmarkAndThreshold;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, List<int> treatmentBMPBenchmarkAndThresholdIDList)
         {
             if(treatmentBMPBenchmarkAndThresholdIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteTreatmentBMPBenchmarkAndThreshold(this IQueryable<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholds, ICollection<TreatmentBMPBenchmarkAndThreshold> treatmentBMPBenchmarkAndThresholdsToDelete)
         {
             if(treatmentBMPBenchmarkAndThresholdsToDelete.Any())

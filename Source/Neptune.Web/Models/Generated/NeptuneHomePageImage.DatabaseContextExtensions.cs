@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return neptuneHomePageImage;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteNeptuneHomePageImage(this IQueryable<NeptuneHomePageImage> neptuneHomePageImages, List<int> neptuneHomePageImageIDList)
         {
             if(neptuneHomePageImageIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteNeptuneHomePageImage(this IQueryable<NeptuneHomePageImage> neptuneHomePageImages, ICollection<NeptuneHomePageImage> neptuneHomePageImagesToDelete)
         {
             if(neptuneHomePageImagesToDelete.Any())

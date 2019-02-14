@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return modeledCatchment;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, List<int> modeledCatchmentIDList)
         {
             if(modeledCatchmentIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteModeledCatchment(this IQueryable<ModeledCatchment> modeledCatchments, ICollection<ModeledCatchment> modeledCatchmentsToDelete)
         {
             if(modeledCatchmentsToDelete.Any())

@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return organizationType;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, List<int> organizationTypeIDList)
         {
             if(organizationTypeIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteOrganizationType(this IQueryable<OrganizationType> organizationTypes, ICollection<OrganizationType> organizationTypesToDelete)
         {
             if(organizationTypesToDelete.Any())

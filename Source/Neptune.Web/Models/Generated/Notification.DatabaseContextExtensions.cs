@@ -20,6 +20,7 @@ namespace Neptune.Web.Models
             return notification;
         }
 
+        // Delete using an IDList (Firma style)
         public static void DeleteNotification(this IQueryable<Notification> notifications, List<int> notificationIDList)
         {
             if(notificationIDList.Any())
@@ -28,6 +29,7 @@ namespace Neptune.Web.Models
             }
         }
 
+        // Delete using an object list (Firma style)
         public static void DeleteNotification(this IQueryable<Notification> notifications, ICollection<Notification> notificationsToDelete)
         {
             if(notificationsToDelete.Any())
