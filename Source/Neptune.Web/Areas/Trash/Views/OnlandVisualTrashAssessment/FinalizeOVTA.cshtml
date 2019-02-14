@@ -9,7 +9,7 @@
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @section JavascriptAndStylesContent{
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-<style>
+    <style>
         .selectedObservation {
             background-color: palegoldenrod;
         }
@@ -51,79 +51,81 @@
                 width: inherit;
             }
         }
-       
-</style>
+
+    </style>
 }
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
 {
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            @Html.LabelWithSugarFor(m => m.AssessmentAreaName)
+    <div class="form-horizontal">
+        <div class="form-group row">
+            <div class="col-sm-4 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.AssessmentAreaName)
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @if (ViewDataTyped.OVTA.AssessingNewArea.GetValueOrDefault())
+                {
+                    @Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.AssessmentAreaName)
+                }
+                else
+                {
+                    <span>@ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</span>
+                    @Html.HiddenFor(m => m.AssessmentAreaName)
+                }
+            </div>
         </div>
-        <div class="col-sm-8">
-            @if (ViewDataTyped.OVTA.AssessingNewArea.GetValueOrDefault())
-            {
-                @Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.AssessmentAreaName)
-            }
-            else
-            {
-                <span>@ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</span>
-                @Html.HiddenFor(m => m.AssessmentAreaName)
-            }
+        <div class="form-group row">
+            <div class="col-sm-4 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.ScoreID)
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @Html.DropDownListFor(m => m.ScoreID, ViewDataTyped.Scores, new { @class = "form-control", style = "width:auto;" })
+                @Html.ValidationMessageFor(m => m.Notes)
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            @Html.LabelWithSugarFor(m => m.ScoreID)
+
+        <div class="form-group row">
+            <div class="col-sm-4 control-label">
+                <label>Jurisdiction</label>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @ViewDataTyped.Jurisdiction.GetDisplayNameAsDetailUrl()
+            </div>
         </div>
-        <div class="col-sm-8">
-            @Html.DropDownListFor(m => m.ScoreID, ViewDataTyped.Scores, new { @class = "form-control", style = "width:auto;" })
-            @Html.ValidationMessageFor(m => m.Notes)
+        <div class="form-group row">
+            <div class="col-sm-4 control-label">
+                <label>Assessment Started On</label>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @ViewDataTyped.CreatedDate
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-4 col-xs-12 control-label">
+                <label>Conducted By</label>
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @ViewDataTyped.ConductedByPerson.GetFullNameFirstLastAsUrl()
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-4 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.Notes)
+            </div>
+            <div class="col-sm-8 col-xs-12">
+                @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                @Html.ValidationMessageFor(m => m.Notes)
+            </div>
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            <label>Jurisdiction</label>
-        </div>
-        <div class="col-sm-8">
-            @ViewDataTyped.Jurisdiction.GetDisplayNameAsDetailUrl()
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            <label>Assessment Started On</label>
-        </div>
-        <div class="col-sm-8">
-            @ViewDataTyped.CreatedDate
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            <label>Conducted By</label>
-        </div>
-        <div class="col-sm-8">
-            @ViewDataTyped.ConductedByPerson.GetFullNameFirstLastAsUrl()
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-sm-4 control-label text-right">
-            @Html.LabelWithSugarFor(m => m.Notes)
-        </div>
-        <div class="col-sm-8">
-            @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-            @Html.ValidationMessageFor(m => m.Notes)
-        </div>
-    </div>
-
-    <hr/>
+    <hr />
     <h4>Observations</h4>
     <div class="row">
         <div class="col-md-7 col-md-push-5 col-sm-12">
-            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" ></div>
+            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID"></div>
         </div>
         <div class="col-md-5 col-md-pull-7 col-sm-12">
             <div class="panel panelNeptune" id="observationsPanel" style="">
@@ -163,7 +165,7 @@
     </div>
 
     <hr />
-    @Html.HiddenFor(m=>m.StormwaterJurisdictionID)
+    @Html.HiddenFor(m => m.StormwaterJurisdictionID)
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
