@@ -182,7 +182,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
 
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap",
                 observationsLayerGeoJson, assessmentAreaLayerGeoJson);
@@ -275,7 +275,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private ViewResult ViewRefineAssessmentArea(OnlandVisualTrashAssessment onlandVisualTrashAssessment, RefineAssessmentAreaViewModel viewModel)
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, true);
             var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
             var viewData = new RefineAssessmentAreaViewData(CurrentPerson, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment, refineAssessmentAreaMapInitJson);
@@ -297,7 +297,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             FinalizeOVTAViewModel viewModel)
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
-            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment);
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
             var viewData = new FinalizeOVTAViewData(CurrentPerson,
@@ -316,27 +316,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
-
-            //// todo: rewrite this
-
-            //if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea == null)
-            //{
-            //    var assessmentAreaGeometry = onlandVisualTrashAssessment.GetAreaViaTransect();
-            //    var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(viewModel.AssessmentAreaName,
-            //        onlandVisualTrashAssessment.StormwaterJurisdiction, assessmentAreaGeometry);
-
-            //    HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Add(
-            //        onlandVisualTrashAssessmentArea);
-            //    HttpRequestStorage.DatabaseEntities.SaveChanges();
-            //    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-            //        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-            //    onlandVisualTrashAssessment.AssessingNewArea = false;
-            //}
-            //else
-            //{
-            //    viewModel.UpdateModel(onlandVisualTrashAssessment);
-            //}
-
+            
             return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
         }
 
@@ -373,15 +353,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewRefreshParcels(viewModel);
             }
-
-            //var onlandVisualTrashAssessmentAreaToDelete = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
-            //onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID = null;
             onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = false;
             onlandVisualTrashAssessment.DraftGeometry = null;
-
-            //HttpRequestStorage.DatabaseEntities.SaveChanges();
-            //HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.DeleteOnlandVisualTrashAssessmentArea(
-            //    onlandVisualTrashAssessmentAreaToDelete);
 
             return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
@@ -391,7 +364,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         // helpers
 
         // assumes that we are not looking for the parcels-via-transect area
-        private static LayerGeoJson GetAssessmentAreaLayerGeoJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        private static LayerGeoJson GetAssessmentAreaLayerGeoJson(OnlandVisualTrashAssessment onlandVisualTrashAssessment, bool reduce)
         {
             FeatureCollection geoJsonFeatureCollection;
             if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea != null)
@@ -410,7 +383,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 // On an unrelated note, DbGeometry.ElementAt is 1-indexed instead of 0-indexed, which is terrible.
                 for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
                 {
-                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(draftGeometry.ElementAt(i));
+                    var dbGeometry = draftGeometry.ElementAt(i);
+                    //todo: either uncomment this code or remove it, depending on testing feedback from #221
+                    //if (reduce)
+                    //{
+                    //    dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
+                    //}
+                    var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }
             }
