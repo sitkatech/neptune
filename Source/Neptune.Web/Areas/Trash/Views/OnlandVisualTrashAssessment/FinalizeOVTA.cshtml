@@ -9,7 +9,7 @@
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @section JavascriptAndStylesContent{
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <style>
+<style>
         .selectedObservation {
             background-color: palegoldenrod;
         }
@@ -20,7 +20,39 @@
             padding-left: 10px;
             direction: rtl;
         }
-    </style>
+        #@ViewDataTyped.OVTASummaryMapInitJson.MapDivID{
+            height: 400px;
+        }
+
+        @@media only screen and (max-width: 992px) {
+            #observationsPanel {
+                max-height: 330px;
+            }
+            #@ViewDataTyped.OVTASummaryMapInitJson.MapDivID{
+                height: 300px;
+            }
+        }
+
+        .observationPhoto {
+            width: 286px;
+        }
+        @@media only screen and (max-width: 1200px){
+            .observationPhoto {
+                width: 240px;
+            }
+        }
+        @@media only screen and (max-width: 992px){
+            .observationPhoto {
+                width: 482px;
+            }
+        }
+        @@media only screen and (max-width: 768px){
+            .observationPhoto {
+                width: inherit;
+            }
+        }
+       
+</style>
 }
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
@@ -91,7 +123,7 @@
     <h4>Observations</h4>
     <div class="row">
         <div class="col-md-7 col-md-push-5 col-sm-12">
-            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 400px;"></div>
+            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" ></div>
         </div>
         <div class="col-md-5 col-md-pull-7 col-sm-12">
             <div class="panel panelNeptune" id="observationsPanel" style="">
@@ -102,10 +134,11 @@
                         var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
                         var id = observation.OnlandVisualTrashAssessmentObservationID;
                         <div class="row" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
-                            <div class="col-xs-12" style="padding: 4px;">
+                            <div class="col-xs-12 observationPhotoContainer" style="padding: 4px;">
                                 @if (photo != null)
                                 {
-                                    <img style="width: 286px" src="@photo.FileResource.GetFileResourceUrl()" />
+                                    //todo: set the width as a style with media queries
+                                    <img class="observationPhoto" src="@photo.FileResource.GetFileResourceUrl()" />
                                 }
                                 else
                                 {
@@ -119,7 +152,7 @@
                                 }
                                 else
                                 {
-                                    <p>observation.Note</p>
+                                    <p>@observation.Note</p>
                                 }
                             </div>
                         </div>
