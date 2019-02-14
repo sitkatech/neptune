@@ -83,41 +83,33 @@
     <hr/>
     <h4>Map</h4>
     <div class="row">
-        <div class="col-sm-12">
-            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 350px;"></div>
+        <div class="col-md-7 col-md-push-5 col-sm-12">
+            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 400px;"></div>
         </div>
-    </div>
+        <div class="col-md-5 col-md-pull-7 col-sm-12">
+            <div class="panel panelNeptune" style="max-height: 400px; overflow-y: scroll; overflow-x: hidden; padding-left: 10px; direction: rtl;">
 
-    <h4>Photos and Notes</h4>
-    <div style="max-height: 350px; overflow-y: scroll; overflow-x: hidden; margin-top: 10px; padding-left: 2px;">
-        <div class="row">
-            <div class="col-sm-6 col-xs-12">
-                <label>Photo</label>
-            </div>
-            <div class="col-sm-6 col-xs-12">
-                <label>Notes</label>
+                <div class="panel-body">
+                    @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
+                    {
+                        var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
+                        var id = observation.OnlandVisualTrashAssessmentObservationID;
+                        <div class="row" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
+                            <div class="col-sm-6 col-xs-12">
+                                @if (photo != null)
+                                {
+                                    <img style="height: 200px" src="@photo.FileResource.GetFileResourceUrl()" />
+                                }
+                                else
+                                {
+                                    <p class="systemText">No photo provided</p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
-        @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
-        {
-            var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
-            var id = observation.OnlandVisualTrashAssessmentObservationID;
-            <div class="row" id="observation_@id" style="padding: 2px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 4px;" onclick="handleClickOnTable(@id)">
-                <div class="col-sm-6 col-xs-12">
-                    @if (photo != null)
-                    {
-                        <img style="height: 100px" src="@photo.FileResource.GetFileResourceUrl()"/>
-                    }
-                    else
-                    {
-                        <p class="systemText">No photo provided</p>
-                    }
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    @observation.Note
-                </div>
-            </div>
-        }
     </div>
 
     <hr />
@@ -136,7 +128,7 @@
 <script>
     var summaryMap;
     var lastSelected;
-    var observationsLayer
+    var observationsLayer;
     jQuery(function() {
         // we're gonna do a business
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
