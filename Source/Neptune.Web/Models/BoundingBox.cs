@@ -186,7 +186,7 @@ namespace Neptune.Web.Models
             var nonEmptyLayerGeoJsons = layerGeoJsons.Where(x => x?.GeoJsonFeatureCollection.Features.Any() ?? false).ToList();
             return !nonEmptyLayerGeoJsons.Any()
                 ? MakeNewDefaultBoundingBox()
-                : new BoundingBox(nonEmptyLayerGeoJsons.Select(x => MakeBoundingBoxFromGeoJson(x.ToGeoJsonString())).ToList());
+                : new BoundingBox(nonEmptyLayerGeoJsons.Select(x => MakeBoundingBoxFromGeoJson(x.GetGeoJsonFeatureCollectionAsJsonString())).ToList());
         }
 
         public static void DemandIsValid(Point southWestPoint, Point northEastPoint)

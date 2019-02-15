@@ -81,9 +81,9 @@ namespace Neptune.Web.Models
             LayerType = LayerGeoJsonType.Wms;
         }
 
-        public string ToGeoJsonString()
+        public string GetGeoJsonFeatureCollectionAsJsonString()
         {
-            return JsonTools.SerializeObject(this);
+            return JsonTools.SerializeObject(GeoJsonFeatureCollection);
         }
 
         private static string GetColorString(string colorName)
