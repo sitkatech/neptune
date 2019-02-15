@@ -294,8 +294,22 @@
                 }
             </div>
             <div class="panel-body" id="mapContainer">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;"></div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-xs-5 control-label text-right">
+                        @Html.LabelWithSugarFor(FieldDefinition.DelineationType)
+                    </div>
+                    <div class="col-xs-7">
+                        @ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()
+                    </div>
+                </div>
             </div>
+            
         </div>
 
     </div>

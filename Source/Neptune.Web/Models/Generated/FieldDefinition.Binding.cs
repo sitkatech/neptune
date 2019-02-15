@@ -76,6 +76,7 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionTrashCaptureStatus TrashCaptureStatus = FieldDefinitionTrashCaptureStatus.Instance;
         public static readonly FieldDefinitionOnlandVisualTrashAssessment OnlandVisualTrashAssessment = FieldDefinitionOnlandVisualTrashAssessment.Instance;
         public static readonly FieldDefinitionOnlandVisualTrashAssessmentNotes OnlandVisualTrashAssessmentNotes = FieldDefinitionOnlandVisualTrashAssessmentNotes.Instance;
+        public static readonly FieldDefinitionDelineationType DelineationType = FieldDefinitionDelineationType.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -85,7 +86,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -189,6 +190,8 @@ namespace Neptune.Web.Models
                     return DefaultBenchmarkValue;
                 case FieldDefinitionEnum.DefaultThresholdValue:
                     return DefaultThresholdValue;
+                case FieldDefinitionEnum.DelineationType:
+                    return DelineationType;
                 case FieldDefinitionEnum.ExternalLinks:
                     return ExternalLinks;
                 case FieldDefinitionEnum.FieldVisit:
@@ -346,7 +349,8 @@ namespace Neptune.Web.Models
         DateOfLastInventoryChange = 56,
         TrashCaptureStatus = 57,
         OnlandVisualTrashAssessment = 58,
-        OnlandVisualTrashAssessmentNotes = 59
+        OnlandVisualTrashAssessmentNotes = 59,
+        DelineationType = 60
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -695,5 +699,11 @@ namespace Neptune.Web.Models
     {
         private FieldDefinitionOnlandVisualTrashAssessmentNotes(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionOnlandVisualTrashAssessmentNotes Instance = new FieldDefinitionOnlandVisualTrashAssessmentNotes(59, @"OnlandVisualTrashAssessmentNotes", @"Notes", @"Enter the name of all assessors and any other notes about the assessment.", true);
+    }
+
+    public partial class FieldDefinitionDelineationType : FieldDefinition
+    {
+        private FieldDefinitionDelineationType(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionDelineationType Instance = new FieldDefinitionDelineationType(60, @"DelineationType", @"Delineation Type", @"Indicates whether the delineation is distributed or centralized.", true);
     }
 }

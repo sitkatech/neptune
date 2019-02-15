@@ -61,6 +61,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
             Add(Models.FieldDefinition.RequiredPostStormFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredPostStormFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
             Add(Models.FieldDefinition.TrashCaptureStatus.ToGridHeaderString(), x => x.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(Models.FieldDefinition.DelineationType.ToGridHeaderString(), x => x.GetDelineationTypeDisplay(), 130,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
         }
     }
 }

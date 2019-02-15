@@ -22,6 +22,9 @@ Source code is available upon request via <support@sitkatech.com>.
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using GeoJSON.Net.Feature;
+using LtInfo.Common.DesignByContract;
+using LtInfo.Common.GeoJson;
 
 namespace Neptune.Web.Models
 {
@@ -57,6 +60,16 @@ namespace Neptune.Web.Models
             return catchmentLayerGeoJson;
         }
 
-       
+
+        public static LayerGeoJson MakeTreatmentBMPDelineationLayerGeoJson(TreatmentBMP treatmentBMP)
+        {
+            Check.Require(treatmentBMP.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
+            var featureCollection = new FeatureCollection();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.DelineationGeometry);
+            featureCollection.Features.Add(feature);
+
+            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };
+            return treatmentBMPLayerGeoJson;
+        }
     }
 }

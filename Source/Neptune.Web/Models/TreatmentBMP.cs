@@ -21,6 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 
 using System;
 using System.Linq;
+using System.Web;
 using Neptune.Web.Security;
 
 namespace Neptune.Web.Models
@@ -161,6 +162,13 @@ namespace Neptune.Web.Models
             InventoryIsVerified = true;
             DateOfLastInventoryVerification = DateTime.Now;
             InventoryVerifiedByPersonID = currentPerson.PersonID;
+        }
+
+        public HtmlString GetDelineationTypeDisplay()
+        {
+            return DelineationType != null
+                ? new HtmlString(DelineationType.DelineationTypeDisplayName)
+                : new HtmlString("<p class='systemText'>No Delineation Provided</p>");
         }
     }
 }

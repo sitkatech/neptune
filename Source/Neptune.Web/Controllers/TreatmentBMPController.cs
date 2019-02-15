@@ -89,6 +89,10 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] { treatmentBMP }, false, true));
+            if (treatmentBMP.DelineationGeometry != null)
+            {
+                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(treatmentBMP));
+            }
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
             var verifiedUnverifiedUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.VerifyInventory(treatmentBMPPrimaryKey));

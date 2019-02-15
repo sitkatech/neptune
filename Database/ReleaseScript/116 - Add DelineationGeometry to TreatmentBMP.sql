@@ -16,3 +16,11 @@ Add DelineationGeometry geometry null,
 DelineationTypeID int null constraint FK_TreatmentBMP_DelineationType_DelineationTypeID foreign key references dbo.DelineationType(DelineationTypeID),
 constraint CK_TreatmentBMP_BMPWithDelineationMustHaveDelineationType check (DelineationTypeID is not null or DelineationGeometry is null)
 
+
+
+INSERT [dbo].[FieldDefinition] ([FieldDefinitionID], [FieldDefinitionName], [FieldDefinitionDisplayName], [DefaultDefinition], CanCustomizeLabel)
+values
+(60, 'DelineationType', 'Delineation Type', 'Indicates whether the delineation is distributed or centralized.', 1)
+
+Insert dbo.FieldDefinitionData (FieldDefinitionID)
+values (60)
