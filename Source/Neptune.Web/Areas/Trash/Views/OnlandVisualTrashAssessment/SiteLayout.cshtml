@@ -25,7 +25,7 @@
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
 }
 
-@{ Check.Require(ViewDataTyped.OVTA.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.InProgress, "Cannot edit Assessment because it has already been finalized.");}
+@{ Check.Require(ViewDataTyped.OVTA == null || ViewDataTyped.OVTA.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.InProgress, "Cannot edit Assessment because it has already been finalized.");}
 
 
 @section JavascriptAndStylesContent
