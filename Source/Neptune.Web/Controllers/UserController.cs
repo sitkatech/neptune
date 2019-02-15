@@ -279,8 +279,8 @@ namespace Neptune.Web.Controllers
         public ActionResult Invite(InviteViewModel viewModel)
         {
             var toolDisplayName = "Orange County Stormwater Tools";
-            var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index());
-            var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support());
+            var homeUrl = SitkaRoute<HomeController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(), NeptuneWebConfiguration.CanonicalHostNameRoot);
+            var supportUrl = SitkaRoute<HelpController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Support(), NeptuneWebConfiguration.CanonicalHostNameRoot);
             var inviteModel = new KeystoneService.KeystoneInviteModel
             {
                 FirstName = viewModel.FirstName,

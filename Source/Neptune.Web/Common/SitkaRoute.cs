@@ -119,6 +119,7 @@ namespace Neptune.Web.Common
                    SitkaRouteRandomizer.RandomGenerator.Next();
         }
 
+        // todo [Obsolete]
         public static string BuildAbsoluteUrlHttpsFromExpression(Expression<Action<T>> routeExpression)
         {
             return BuildAbsoluteUrlFromExpressionImpl(routeExpression, "https");
