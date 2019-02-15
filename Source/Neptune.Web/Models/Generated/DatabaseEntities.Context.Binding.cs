@@ -198,6 +198,11 @@ namespace Neptune.Web.Models
                 case "CustomAttributeValue":
                     return CustomAttributeValues.GetCustomAttributeValue(primaryKey);
 
+                case "DelineationType":
+                    var delineationType = DelineationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(delineationType, "DelineationType", primaryKey);
+                    return delineationType;
+
                 case "FieldDefinitionDataImage":
                     return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
 

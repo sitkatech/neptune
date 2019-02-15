@@ -23,6 +23,8 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[InventoryVerifiedByPersonID] [int] NULL,
 	[InventoryLastChangedDate] [datetime] NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
+	[DelineationGeometry] [geometry] NULL,
+	[DelineationTypeID] [int] NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -44,6 +46,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Pers
 REFERENCES [dbo].[Person] ([PersonID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_FieldVisit_Person_InventoryVerifiedByPersonID_PersonID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_DelineationType_DelineationTypeID] FOREIGN KEY([DelineationTypeID])
+REFERENCES [dbo].[DelineationType] ([DelineationTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_DelineationType_DelineationTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_ModeledCatchment_ModeledCatchmentID] FOREIGN KEY([ModeledCatchmentID])
 REFERENCES [dbo].[ModeledCatchment] ([ModeledCatchmentID])
@@ -79,6 +86,10 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Wa
 REFERENCES [dbo].[WaterQualityManagementPlan] ([WaterQualityManagementPlanID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_WaterQualityManagementPlan_WaterQualityManagementPlanID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMP_BMPWithDelineationMustHaveDelineationType] CHECK  (([DelineationTypeID] IS NOT NULL OR [DelineationGeometry] IS NULL))
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [CK_TreatmentBMP_BMPWithDelineationMustHaveDelineationType]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [CK_TreatmentBMP_LifespanEndDateMustBeSetIfLifespanTypeIsFixedEndDate] CHECK  (([TreatmentBMPLifespanTypeID]=(3) AND [TreatmentBMPLifespanEndDate] IS NOT NULL OR [TreatmentBMPLifespanTypeID]<>(3) AND [TreatmentBMPLifespanEndDate] IS NULL))
 GO
