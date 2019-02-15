@@ -56,6 +56,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new NeptuneHomePageImageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageConfiguration());
             modelBuilder.Configurations.Add(new NeptunePageImageConfiguration());
+            modelBuilder.Configurations.Add(new NetworkCatchmentConfiguration());
             modelBuilder.Configurations.Add(new NotificationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentAreaConfiguration());
@@ -121,6 +122,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<NeptuneHomePageImage> NeptuneHomePageImages { get; set; }
         public virtual DbSet<NeptunePageImage> NeptunePageImages { get; set; }
         public virtual DbSet<NeptunePage> NeptunePages { get; set; }
+        public virtual DbSet<NetworkCatchment> NetworkCatchments { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreas { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
@@ -318,6 +320,9 @@ namespace Neptune.Web.Models
                     var neptunePageType = NeptunePageType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(neptunePageType, "NeptunePageType", primaryKey);
                     return neptunePageType;
+
+                case "NetworkCatchment":
+                    return NetworkCatchments.GetNetworkCatchment(primaryKey);
 
                 case "Notification":
                     return Notifications.GetNotification(primaryKey);
