@@ -48,6 +48,13 @@
             margin: 0 5px 0 0;
             text-align: right;
         }
+        .treatmentBMPLocationLegend .glyphicon-stop {
+            margin-right: 5px;
+        }
+        #legend {
+            padding: 10px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+        }
     </style>
 }
 
@@ -299,6 +306,17 @@
                         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 500px;">
                         </div>
                     </div>
+                    
+                    <div id="legend" style="display: none;">
+                        <div class="treatmentBMPLocationLegend" style="margin-left: 10px">
+                            <div>
+                                <span class="glyphicon glyphicon-stop" style="color: #935F59"></span>Treatment BMP Location
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-stop" style="color: blue"></span>Delineation Area
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-xs-5 control-label text-right">
@@ -510,5 +528,17 @@
     jQuery(document).ready(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         map = new NeptuneMaps.Map(mapInitJson);
+
+        var legend = new L.Control.Legend({
+            position: 'topleft',
+            collapsed: false,
+            controlButton: {
+                title: "Legend"
+            }
+        });
+        map.map.addControl( legend );
+        jQuery(".legend-container").append( jQuery("#legend") );
+        jQuery(".legend-container").append( jQuery("#legend") );
+        jQuery("#legend").css("display", "");
     });
 </script>
