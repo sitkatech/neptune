@@ -30,25 +30,29 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string oCSurveyCatchmentID, string drainID, string watershed) : this()
+        public NetworkCatchment(int networkCatchmentID, string oCSurveyCatchmentID, string downstreamCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry) : this()
         {
             this.NetworkCatchmentID = networkCatchmentID;
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
+            this.DownstreamCatchmentID = downstreamCatchmentID;
             this.DrainID = drainID;
             this.Watershed = watershed;
+            this.CatchmentGeometry = catchmentGeometry;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(string oCSurveyCatchmentID, string drainID, string watershed) : this()
+        public NetworkCatchment(string oCSurveyCatchmentID, string downstreamCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.NetworkCatchmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.OCSurveyCatchmentID = oCSurveyCatchmentID;
+            this.DownstreamCatchmentID = downstreamCatchmentID;
             this.DrainID = drainID;
             this.Watershed = watershed;
+            this.CatchmentGeometry = catchmentGeometry;
         }
 
 
@@ -57,7 +61,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static NetworkCatchment CreateNewBlank()
         {
-            return new NetworkCatchment(default(string), default(string), default(string));
+            return new NetworkCatchment(default(string), default(string), default(string), default(string), default(DbGeometry));
         }
 
         /// <summary>
@@ -95,8 +99,10 @@ namespace Neptune.Web.Models
         [Key]
         public int NetworkCatchmentID { get; set; }
         public string OCSurveyCatchmentID { get; set; }
+        public string DownstreamCatchmentID { get; set; }
         public string DrainID { get; set; }
         public string Watershed { get; set; }
+        public DbGeometry CatchmentGeometry { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 
@@ -105,6 +111,7 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int OCSurveyCatchmentID = 10;
+            public const int DownstreamCatchmentID = 10;
             public const int DrainID = 10;
             public const int Watershed = 100;
         }
