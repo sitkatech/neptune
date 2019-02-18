@@ -54,6 +54,7 @@ namespace Neptune.Web.Common
         public static readonly string ParcelMapServiceUrl = SitkaConfiguration.GetRequiredAppSetting("ParcelMapServiceUrl");
         public static readonly string ParcelLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameParcel");
         public static readonly string LandUseBlockLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameLandUseBlock");
+        public static readonly string NetworkCatchmentLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameNetworkCatchment");
 
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 

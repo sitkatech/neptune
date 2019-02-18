@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Views\NetworkCatchment\Index.cs" />
+    <Compile Include="Views\NetworkCatchment\IndexViewData.cs" />
+    <Compile Include="Controllers\NetworkCatchmentController.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1494,6 +1497,7 @@
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\NeptuneSiteExplorer.cshtml" />
     <Content Include="Views\Shared\NeptuneNavBar.cshtml" />
+    <Content Include="Views\NetworkCatchment\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -3045,7 +3049,6 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Inventory\" />
     <Folder Include="Areas\Modeling\Content\" />
     <Folder Include="Areas\Modeling\Models\" />
     <Folder Include="Areas\Modeling\Security\" />

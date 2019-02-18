@@ -182,7 +182,6 @@
     var lastSelected;
     var observationsLayer;
     jQuery(function() {
-        // we're gonna do a business
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
         summaryMap = new NeptuneMaps.Map(mapInitJson);
 
@@ -229,10 +228,6 @@
         });
         assessmentAreaLayer.addTo(summaryMap.map);
     });
-
-    var handleClickOnMap = function() {
-        //todo
-    }
 
     var handleClickOnTable = function(id) {
         setActiveByID(id);
