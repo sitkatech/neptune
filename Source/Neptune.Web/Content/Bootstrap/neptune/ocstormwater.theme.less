@@ -69,6 +69,7 @@
 
 .header {
     padding: 0;
+
     img.headerLogo {
         height: 100px;
     }
@@ -77,172 +78,174 @@
         display: none;
     }
 }
-    #dropdownMenuIcon {
-        color: @neptune-navBackground-color;
-        @media only screen and (max-width: 330px){
-            display:none;
-        }
+
+#dropdownMenuIcon {
+    color: @neptune-navBackground-color;
+
+    @media only screen and (max-width: 330px) {
+        display: none;
     }
+}
 
-    #siteExplorerAreaLink {
-        display: inline-block;
-        font-family: "Montserrat", serif;
-        font-size: 20px;
-        font-weight: bold;
-        color: rgb(119,207,220);
-        border-left: 2px solid rgb(0,143,170);
-        vertical-align: middle;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin-top: 10px;
-        width: 120px;
+#siteExplorerAreaLink {
+    display: inline-block;
+    font-family: "Montserrat", serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(119,207,220);
+    border-left: 2px solid rgb(0,143,170);
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+    width: 120px;
 
-        @media only screen and (max-width: 455px) {
-            display: none;
-        }
+    @media only screen and (max-width: 455px) {
+        display: none;
     }
+}
 
-    nav.navbar-light {
+nav.navbar-light {
+    background-color: white;
+
+    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
         background-color: white;
+    }
 
-        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active, .dropdown.open .noHighlight {
+    a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
+        box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+    }
+
+    .topRightMenu {
+        color: @neptune-navBackground-color !important;
+        font-weight: 600;
+
+        &:hover, &:focus, &:active {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
             background-color: white;
         }
+    }
 
-        a.dropdown-toggle:hover, a.dropdown-toggle:focus, a.dropdown-toggle:active {
-            box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
+    @media only screen and (max-width: @screen-xs-max) {
+
+        .topRightMenuParent {
+            display: inline;
         }
 
         .topRightMenu {
-            color: @neptune-navBackground-color !important;
-            font-weight: 600;
-
-            &:hover, &:focus, &:active {
-                box-shadow: 0 3px 5px rgba(0, 0, 0, .125);
-                background-color: white;
-            }
-        }
-
-        @media only screen and (max-width: @screen-xs-max) {
-
-            .topRightMenuParent{
-                display: inline;
-            }
-
-             .topRightMenu {
-                 display: inline-block;
-             }
-        }
-
-        .headerImage {
-            padding: 0;
+            display: inline-block;
         }
     }
 
-    .navbar-nav .open .dropdown-menu {
-        position: absolute;
+    .headerImage {
+        padding: 0;
+    }
+}
+
+.navbar-nav .open .dropdown-menu {
+    position: absolute;
+}
+
+nav.navbar {
+    border-bottom: none;
+    margin-bottom: 0;
+    border: none;
+
+    li {
+        font-weight: 400;
+        font-size: @neptune-text-fontSize;
+    }
+}
+
+nav.navbar-fixed-top {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.homepageCarouselFullWidthColumn {
+    .main-text {
+        text-align: center;
+
+        h1 {
+            font-weight: 700;
+            font-family: 'Montserrat', 'Lato', sans-serif;
+        }
     }
 
-    nav.navbar {
-        border-bottom: none;
-        margin-bottom: 0;
-        border: none;
+    .glyphicon-chevron-left, .glyphicon-chevron-right {
+        color: @neptune-orange;
+    }
 
-        li {
-            font-weight: 400;
+    .carousel-indicators li.active {
+        background-color: @neptune-orange;
+        border-color: @neptune-orange;
+    }
+}
+
+#homepageCarousel .carousel-inner .item .carousel-caption {
+    bottom: 40px;
+
+    .captionBlock {
+        background-color: @neptune-navItemBackground-color-hover;
+        color: @neptune-navItemText-color-hover;
+        border-radius: 2px;
+
+        p {
+            text-shadow: none;
+            margin: 5px;
             font-size: @neptune-text-fontSize;
         }
     }
+}
 
-    nav.navbar-fixed-top {
-        padding-left: 15px;
-        padding-right: 15px;
+.panelNeptune .panelTitle {
+    font-size: @neptune-text-fontSize;
+    font-family: 'Open Sans', sans-serif;
+}
+/* Middle arrow */
+.middleArrow {
+    &.current {
+        background-color: @neptune-middle-arrow-color;
+        border-left-color: @neptune-middle-arrow-color;
+        color: @neptune-white;
     }
 
-    .homepageCarouselFullWidthColumn {
-        .main-text {
-            text-align: center;
+    &.default {
+        background-color: @neptune-middle-arrow-color;
+        border-left-color: @neptune-middle-arrow-color;
+        color: @neptune-text-color;
+    }
+}
 
-            h1 {
-                font-weight: 700;
-                font-family: 'Montserrat', 'Lato', sans-serif;
-            }
-        }
-
-        .glyphicon-chevron-left, .glyphicon-chevron-right {
-            color: @neptune-orange;
-        }
-
-        .carousel-indicators li.active {
-            background-color: @neptune-orange;
-            border-color: @neptune-orange;
-        }
+.lastArrow {
+    &.current {
+        background-color: @neptune-active-arrow-color;
+        border-left-color: @neptune-active-arrow-color;
+        color: @neptune-contentBackground-color;
     }
 
-    #homepageCarousel .carousel-inner .item .carousel-caption {
-        bottom: 40px;
-
-        .captionBlock {
-            background-color: @neptune-navItemBackground-color-hover;
-            color: @neptune-navItemText-color-hover;
-            border-radius: 2px;
-
-            p {
-                text-shadow: none;
-                margin: 5px;
-                font-size: @neptune-text-fontSize;
-            }
-        }
+    &.default {
+        background-color: @neptune-inactive-arrow-color;
+        border-left-color: @neptune-inactive-arrow-color;
+        color: @neptune-dark-blue;
     }
+}
 
-    .panelNeptune .panelTitle {
-        font-size: @neptune-text-fontSize;
-        font-family: 'Open Sans', sans-serif;
+
+.btn-neptune, .neptune-modal-dialog .btn-neptune {
+    font-size: 15px;
+}
+
+hr {
+    border-top-color: #ccc;
+}
+
+.form-horizontal .control-label {
+    @media only screen and (min-width: 768px) {
+        text-align: right;
     }
-    /* Middle arrow */
-    .middleArrow {
-        &.current {
-            background-color: @neptune-middle-arrow-color;
-            border-left-color: @neptune-middle-arrow-color;
-            color: @neptune-white;
-        }
-
-        &.default {
-            background-color: @neptune-middle-arrow-color;
-            border-left-color: @neptune-middle-arrow-color;
-            color: @neptune-text-color;
-        }
-    }
-
-    .lastArrow {
-        &.current {
-            background-color: @neptune-active-arrow-color;
-            border-left-color: @neptune-active-arrow-color;
-            color: @neptune-contentBackground-color;
-        }
-
-        &.default {
-            background-color: @neptune-inactive-arrow-color;
-            border-left-color: @neptune-inactive-arrow-color;
-            color: @neptune-dark-blue;
-        }
-    }
-
-
-    .btn-neptune, .neptune-modal-dialog .btn-neptune {
-        font-size: 15px;
-    }
-
-    hr {
-        border-top-color: #ccc;
-    }
-
-    .form-horizontal .control-label {
-        @media only screen and (min-width: 768px){
-            text-align:right;
-        }
-    }
+}
 
 .neptuneMap {
-    height:350px;
+    height: 350px;
 }
