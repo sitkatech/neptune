@@ -16,6 +16,8 @@
 
 <p>You may click or tap the edit button (<span class="glyphicon glyphicon-edit"></span>) on the map below to adjust the Assessment Area's vertices. You may drag vertices to move them, or click or tap vertices to delete them. Note that it may be necessary to zoom the map to see individual vertices that are close together (e.g. there may be many closely-placed vertices along curves). You may click the "Reset Map Zoom" button to zoom back out to the entire Assessment Area.</p>
 
+<p class="systemText">Note that the Assessment Area's edges should not intersect each other. If the area contains any edges that intersect each other, they will be split into separate shapes as necessary.</p>
+
 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
 
 @using (Html.BeginForm())

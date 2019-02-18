@@ -263,7 +263,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewRefineAssessmentArea(onlandVisualTrashAssessment, viewModel);
             }
 
-            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, 4326));
+            var dbGeometrys = viewModel.WktAndAnnotations.Select(x => DbGeometry.FromText(x.Wkt, 4326).ToSqlGeometry().MakeValid().ToDbGeometry());
             var unionListGeometries = dbGeometrys.ToList().UnionListGeometries();
 
             onlandVisualTrashAssessment.DraftGeometry = unionListGeometries;
