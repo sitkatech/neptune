@@ -65,7 +65,7 @@
                 <ul class="nav navbar-nav navbar-right" id="userActionsMenu" style="margin-left: 5px;">
                     @if (!Request.IsAuthenticated || ViewDataTyped.CurrentPerson == null)
                     {
-                        <li class="topRightMenuParent"><a class="topRightMenu" href="@ViewDataTyped.LogInUrl">Log in</a></li>
+                        <li class="topRightMenuParent"><a class="topRightMenu" href="@ViewDataTyped.LogInUrl">Log In</a></li>
                     }
                     @if (Request.IsAuthenticated && ViewDataTyped.CurrentPerson != null)
                     {
@@ -76,7 +76,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
                                 <li><a href="@ViewDataTyped.CurrentPerson.GetDetailUrl()">Account</a></li>
-                                <li><a href="@ViewDataTyped.LogOutUrl">Log out</a></li>
+                                <li><a href="@ViewDataTyped.LogOutUrl">Log Out</a></li>
                             </ul>
                         </li>
                     }
