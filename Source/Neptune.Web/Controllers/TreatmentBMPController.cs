@@ -80,9 +80,11 @@ namespace Neptune.Web.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit);
-            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.StormwaterJurisdiction)
+            return HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x => x.StormwaterJurisdiction).Include(x=>x.StormwaterJurisdiction.Organization)
                 .Include(x => x.MaintenanceRecords).Include(x => x.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x => x.TreatmentBMPType).Include(x => x.TreatmentBMPAssessments)
+                .Include(x => x.TreatmentBMPType)
+                .Include(x => x.TreatmentBMPAssessments)
+                .Include(x=>x.TreatmentBMPAssessments.Select(y=>y.TreatmentBMPObservations)).Include(x=>x.TreatmentBMPAssessments.Select(y=>y.FieldVisit))
                 .Include(x => x.WaterQualityManagementPlan).ToList().Where(x => x.CanView(CurrentPerson)).ToList();
         }
 
