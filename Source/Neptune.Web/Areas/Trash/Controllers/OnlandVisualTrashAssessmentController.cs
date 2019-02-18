@@ -389,11 +389,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 for (var i = 1; i <= draftGeometry.ElementCount.GetValueOrDefault(); i++)
                 {
                     var dbGeometry = draftGeometry.ElementAt(i);
-                    //todo: either uncomment this code or remove it, depending on testing feedback from #221
-                    //if (reduce)
-                    //{
-                    //    dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
-                    //}
+                    if (reduce)
+                    {
+                        dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
+                    }
                     var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
                     geoJsonFeatureCollection.Features.Add(feature);
                 }
