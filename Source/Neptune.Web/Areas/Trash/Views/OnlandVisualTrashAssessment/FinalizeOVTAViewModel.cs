@@ -28,6 +28,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
 
+        public int? AssessmentAreaID { get; set; }
+
         /// <summary>
         /// Needed by ModelBinder
         /// </summary>
@@ -40,6 +42,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             AssessmentAreaName = ovta.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName;
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
+            AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
@@ -68,7 +71,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Any(x => x.OnlandVisualTrashAssessmentAreaName == AssessmentAreaName && x.StormwaterJurisdictionID == StormwaterJurisdictionID))
+            var assessmentAreaID = AssessmentAreaID.GetValueOrDefault();
+
+            if (HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Where(x=>x.OnlandVisualTrashAssessmentAreaID != assessmentAreaID).Any(x => x.OnlandVisualTrashAssessmentAreaName == AssessmentAreaName && x.StormwaterJurisdictionID == StormwaterJurisdictionID))
             {
                 yield return new SitkaValidationResult<FinalizeOVTAViewModel, string>(
                     "There is already an Assessment Area with this name in the selected jurisdiction. Please choose another name",

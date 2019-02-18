@@ -866,9 +866,6 @@ select:-webkit-autofill {
 .systemText {
   font-style: italic;
 }
-.form-horizontal .control-label {
-  padding-top: 7px;
-}
 input[type=checkbox] {
   margin-top: 10px;
 }

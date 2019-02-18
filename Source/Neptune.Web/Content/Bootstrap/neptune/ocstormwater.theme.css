@@ -866,9 +866,6 @@ select:-webkit-autofill {
 .systemText {
   font-style: italic;
 }
-.form-horizontal .control-label {
-  padding-top: 7px;
-}
 input[type=checkbox] {
   margin-top: 10px;
 }
@@ -1217,6 +1214,9 @@ hr {
   .form-horizontal .control-label {
     text-align: right;
   }
+}
+.form-horizontal .form-control {
+  margin-top: -7px;
 }
 .neptuneMap {
   height: 350px;

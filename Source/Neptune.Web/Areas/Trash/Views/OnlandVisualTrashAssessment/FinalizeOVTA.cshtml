@@ -75,7 +75,7 @@
                 }
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row" style="margin-top:30px">
             <div class="col-sm-4 col-xs-12 control-label">
                 @Html.LabelWithSugarFor(m => m.ScoreID)
             </div>
@@ -166,6 +166,7 @@
 
     <hr />
     @Html.HiddenFor(m => m.StormwaterJurisdictionID)
+    @Html.HiddenFor(m=>m.AssessmentAreaID)
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
