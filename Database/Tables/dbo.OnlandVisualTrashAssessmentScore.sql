@@ -6,6 +6,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentScore](
 	[OnlandVisualTrashAssessmentScoreID] [int] NOT NULL,
 	[OnlandVisualTrashAssessmentScoreName] [varchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[OnlandVisualTrashAssessmentScoreDisplayName] [varchar](1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[NumericValue] [int] NOT NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentScoreID] ASC

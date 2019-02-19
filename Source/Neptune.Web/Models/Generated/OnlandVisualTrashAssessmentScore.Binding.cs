@@ -38,17 +38,19 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        protected OnlandVisualTrashAssessmentScore(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName)
+        protected OnlandVisualTrashAssessmentScore(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName, int numericValue)
         {
             OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
             OnlandVisualTrashAssessmentScoreName = onlandVisualTrashAssessmentScoreName;
             OnlandVisualTrashAssessmentScoreDisplayName = onlandVisualTrashAssessmentScoreDisplayName;
+            NumericValue = numericValue;
         }
 
         [Key]
         public int OnlandVisualTrashAssessmentScoreID { get; private set; }
         public string OnlandVisualTrashAssessmentScoreName { get; private set; }
         public string OnlandVisualTrashAssessmentScoreDisplayName { get; private set; }
+        public int NumericValue { get; private set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentScoreID; } }
 
@@ -125,25 +127,25 @@ namespace Neptune.Web.Models
 
     public partial class OnlandVisualTrashAssessmentScoreA : OnlandVisualTrashAssessmentScore
     {
-        private OnlandVisualTrashAssessmentScoreA(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName) {}
-        public static readonly OnlandVisualTrashAssessmentScoreA Instance = new OnlandVisualTrashAssessmentScoreA(1, @"A", @"A");
+        private OnlandVisualTrashAssessmentScoreA(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName, int numericValue) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName, numericValue) {}
+        public static readonly OnlandVisualTrashAssessmentScoreA Instance = new OnlandVisualTrashAssessmentScoreA(1, @"A", @"A", 1);
     }
 
     public partial class OnlandVisualTrashAssessmentScoreB : OnlandVisualTrashAssessmentScore
     {
-        private OnlandVisualTrashAssessmentScoreB(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName) {}
-        public static readonly OnlandVisualTrashAssessmentScoreB Instance = new OnlandVisualTrashAssessmentScoreB(2, @"B", @"B");
+        private OnlandVisualTrashAssessmentScoreB(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName, int numericValue) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName, numericValue) {}
+        public static readonly OnlandVisualTrashAssessmentScoreB Instance = new OnlandVisualTrashAssessmentScoreB(2, @"B", @"B", 2);
     }
 
     public partial class OnlandVisualTrashAssessmentScoreC : OnlandVisualTrashAssessmentScore
     {
-        private OnlandVisualTrashAssessmentScoreC(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName) {}
-        public static readonly OnlandVisualTrashAssessmentScoreC Instance = new OnlandVisualTrashAssessmentScoreC(3, @"C", @"C");
+        private OnlandVisualTrashAssessmentScoreC(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName, int numericValue) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName, numericValue) {}
+        public static readonly OnlandVisualTrashAssessmentScoreC Instance = new OnlandVisualTrashAssessmentScoreC(3, @"C", @"C", 3);
     }
 
     public partial class OnlandVisualTrashAssessmentScoreD : OnlandVisualTrashAssessmentScore
     {
-        private OnlandVisualTrashAssessmentScoreD(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName) {}
-        public static readonly OnlandVisualTrashAssessmentScoreD Instance = new OnlandVisualTrashAssessmentScoreD(4, @"D", @"D");
+        private OnlandVisualTrashAssessmentScoreD(int onlandVisualTrashAssessmentScoreID, string onlandVisualTrashAssessmentScoreName, string onlandVisualTrashAssessmentScoreDisplayName, int numericValue) : base(onlandVisualTrashAssessmentScoreID, onlandVisualTrashAssessmentScoreName, onlandVisualTrashAssessmentScoreDisplayName, numericValue) {}
+        public static readonly OnlandVisualTrashAssessmentScoreD Instance = new OnlandVisualTrashAssessmentScoreD(4, @"D", @"D", 4);
     }
 }
