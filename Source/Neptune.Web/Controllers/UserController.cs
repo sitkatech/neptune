@@ -53,7 +53,8 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<Person> IndexGridJsonData()
         {
             var gridSpec = new IndexGridSpec(CurrentPerson);
-            var persons = HttpRequestStorage.DatabaseEntities.People.ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission).OrderBy(x => x.GetFullNameLastFirst()).ToList();
+            var persons = HttpRequestStorage.DatabaseEntities.People.Include(x=>x.Organization).Include(x=>x.OrganizationsWhereYouAreThePrimaryContactPerson).Include(x=>x.StormwaterJurisdictionPeople).Include(x=>x.StormwaterJurisdictionPeople.Select(y=>y.StormwaterJurisdiction))
+                .ToList().Where(x => new UserViewFeature().HasPermission(CurrentPerson, x).HasPermission).OrderBy(x => x.GetFullNameLastFirst()).ToList();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(persons, gridSpec);
             return gridJsonNetJObjectResult;
         }
