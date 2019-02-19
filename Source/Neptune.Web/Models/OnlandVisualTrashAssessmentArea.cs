@@ -10,11 +10,16 @@ namespace Neptune.Web.Models
             return $"OVTA Area {OnlandVisualTrashAssessmentAreaID}";
         }
 
-        public int GetScore()
+        public OnlandVisualTrashAssessmentScore GetScore()
         {
-            OnlandVisualTrashAssessments.Sum(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
+            var average = OnlandVisualTrashAssessments
+                .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
+                            OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID)
+                .Average(x => x.OnlandVisualTrashAssessmentScore.NumericValue);
 
-            throw new NotImplementedException();
+            var round = (int) Math.Round(average);
+
+            return OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == round);
         }
     }
 }

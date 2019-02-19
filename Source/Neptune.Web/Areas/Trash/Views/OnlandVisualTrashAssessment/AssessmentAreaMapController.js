@@ -23,6 +23,7 @@
                 // here we WANT to coerce before comparing; don't use triple-equals
                 function (layer) { return areaID == layer.feature.properties["OnlandVisualTrashAssessmentAreaID"]; });
             $scope.setSelectedFeature(layer.feature);
+            $scope.lastSelectedID = areaID;
         };
 
         $scope.setSelectedFeature = function (featureLayer) {
@@ -165,6 +166,7 @@
             finder.bind('typeahead:select',
                 function (ev, suggestion) {
                     $scope.setSelectedFeatureByID(suggestion.Value);
+                    $scope.$apply();
                 });
 
             jQuery(typeaheadSelectorButton).click(function () { selectFirstSuggestionFunction(finder); });
