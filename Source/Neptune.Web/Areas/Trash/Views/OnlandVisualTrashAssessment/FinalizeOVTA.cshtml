@@ -57,7 +57,7 @@
 </style>
 }
 
-@using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
+@using (Html.BeginForm())
 {
     <div class="form-horizontal">
         <div class="form-group row">
@@ -175,8 +175,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(m=>m.Finalize)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(m=>m.Finalize)">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="false" id="@Html.IdFor(m=>m.Finalize)" name="@Html.NameFor(m=>m.Finalize)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" id="@Html.IdFor(m=>m.Finalize)" name="@Html.NameFor(m=>m.Finalize)">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
     </div>
 }

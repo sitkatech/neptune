@@ -12,7 +12,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class FinalizeOVTAViewModel : OnlandVisualTrashAssessmentViewModel, IValidatableObject
     {
-        public bool Finalize;
+        public bool? Finalize { get; set; }
 
         [Required]
         [StringLength(Models.OnlandVisualTrashAssessmentArea.FieldLengths.OnlandVisualTrashAssessmentAreaName)]
@@ -51,7 +51,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            if (Finalize)
+            if (Finalize.GetValueOrDefault())
             {
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
                 onlandVisualTrashAssessment.Notes = Notes;
@@ -68,7 +68,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                         onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
                     onlandVisualTrashAssessment.DraftGeometry = null;
                 }
-
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
                     OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;

@@ -322,7 +322,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             viewModel.UpdateModel(onlandVisualTrashAssessment);
 
-            if (viewModel.Finalize)
+            if (viewModel.Finalize.GetValueOrDefault())
             {
                 return Redirect(
                     SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
