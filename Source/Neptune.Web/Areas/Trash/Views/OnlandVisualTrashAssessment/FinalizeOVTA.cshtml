@@ -9,7 +9,7 @@
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @section JavascriptAndStylesContent{
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
-    <style>
+<style>
         .selectedObservation {
             background-color: palegoldenrod;
         }
@@ -18,7 +18,9 @@
             overflow-y: scroll;
             overflow-x: hidden;
             padding-left: 10px;
-            direction: rtl;
+            direction: rtl;}
+        .observation{
+            cursor: pointer;
         }
         #@ViewDataTyped.OVTASummaryMapInitJson.MapDivID{
             height: 400px;
@@ -52,7 +54,7 @@
             }
         }
 
-    </style>
+</style>
 }
 
 @using (Html.BeginForm("Location", "FieldVisit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "field-visit-form" }))
@@ -135,7 +137,7 @@
                     {
                         var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
                         var id = observation.OnlandVisualTrashAssessmentObservationID;
-                        <div class="row" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
+                        <div class="row observation" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
                             <div class="col-xs-12 observationPhotoContainer" style="padding: 4px;">
                                 @if (photo != null)
                                 {
@@ -173,7 +175,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(m=>m.Finalize)">Save</button>
+            <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(m=>m.Finalize)">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
         </div>
     </div>
 }

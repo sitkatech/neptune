@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -45,6 +45,7 @@ namespace Neptune.Web.Models
             this.IsDraftGeometryManuallyRefined = isDraftGeometryManuallyRefined;
             this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
             this.CompletedDate = completedDate;
+            this.DraftAreaName = draftAreaName;
         }
 
         /// <summary>
@@ -143,6 +144,7 @@ namespace Neptune.Web.Models
         public bool? IsDraftGeometryManuallyRefined { get; set; }
         public int? OnlandVisualTrashAssessmentScoreID { get; set; }
         public DateTime? CompletedDate { get; set; }
+        public string DraftAreaName { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
@@ -157,6 +159,7 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int Notes = 500;
+            public const int DraftAreaName = 100;
         }
     }
 }

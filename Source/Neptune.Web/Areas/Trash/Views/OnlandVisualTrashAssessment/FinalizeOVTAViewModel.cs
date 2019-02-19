@@ -12,6 +12,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class FinalizeOVTAViewModel : OnlandVisualTrashAssessmentViewModel, IValidatableObject
     {
+        public bool Finalize;
+
         [Required]
         [StringLength(Models.OnlandVisualTrashAssessmentArea.FieldLengths.OnlandVisualTrashAssessmentAreaName)]
         [DisplayName("Assessment Area Name")]
@@ -40,33 +42,43 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public FinalizeOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
         {
-            AssessmentAreaName = ovta.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName;
+            AssessmentAreaName = ovta.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName ?? ovta.DraftAreaName;
+            ScoreID = ovta.OnlandVisualTrashAssessmentScoreID;
+            Notes = ovta.Notes;
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
-            onlandVisualTrashAssessment.Notes = Notes;
-            onlandVisualTrashAssessment.CompletedDate = DateTime.Now;
-
-            // create the assessment area
-            if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
+            if (Finalize)
             {
-                var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(AssessmentAreaName,
-                    onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessment.DraftGeometry);
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
+                onlandVisualTrashAssessment.Notes = Notes;
+                onlandVisualTrashAssessment.CompletedDate = DateTime.Now;
 
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-                onlandVisualTrashAssessment.DraftGeometry = null;
+                // create the assessment area
+                if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
+                {
+                    var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(AssessmentAreaName,
+                        onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessment.DraftGeometry);
+                    HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+                        onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+                    onlandVisualTrashAssessment.DraftGeometry = null;
+                }
+
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
+                    OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;
             }
-
-
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
-                OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;
-
+            else
+            {
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
+                onlandVisualTrashAssessment.Notes = Notes;
+                onlandVisualTrashAssessment.DraftAreaName = AssessmentAreaName;
+            }
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

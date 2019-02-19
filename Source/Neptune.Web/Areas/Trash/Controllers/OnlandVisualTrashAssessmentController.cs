@@ -321,8 +321,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             viewModel.UpdateModel(onlandVisualTrashAssessment);
-            
-            return Redirect(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
+
+            if (viewModel.Finalize)
+            {
+                return Redirect(
+                    SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
+            }
+            else
+            {
+                return Redirect(
+                    SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
+                        x.FinalizeOVTA(onlandVisualTrashAssessment)));
+            }
         }
 
         [HttpGet]
@@ -337,7 +347,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         private PartialViewResult ViewRefreshParcels(ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = "Are you sure you want to reset the assessment area? This action cannot be undone.";
+            var confirmMessage =
+                "Are you sure you want to reset the Assessment Area? Any manual changes to the Assessment Area, including adding/removing Parcels or adjusting boundaries, will be discarded. The Assessment Area will be reset to just the parcels transacted by the observation points. This action cannot be undone.";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
@@ -351,8 +362,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             ConfirmDialogFormViewModel viewModel) //note that the viewModel is not actually used; we only need it to satisfy our opinionated routetablebuilder
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            Check.RequireNotNull(onlandVisualTrashAssessment.DraftGeometry,
-                "Cannot refresh Assessment Area: Assessment Area not yet created");
 
             if (!ModelState.IsValid)
             {

@@ -11,6 +11,7 @@
 
         $scope.activateClickToAddMode = function () {
             $scope.isClickToAddModeActive = true;
+            jQuery('.leaflet-container').css('cursor', 'pointer');
         };
 
         function onMapClick(event) {
@@ -18,6 +19,7 @@
             setPointOnMap(latlng);
             $scope.$apply();
             $scope.isClickToAddModeActive = false;
+            jQuery('.leaflet-container').css('cursor', '');
         }
 
         $scope.initializeMap = function () {
@@ -78,6 +80,7 @@
                     $scope.setSelectedMarker(e.layer.feature);
                     $scope.$apply();
                     $scope.isClickToAddModeActive = false;
+                    jQuery('.leaflet-container').css('cursor', '');
                 });
 
             $scope.neptuneMap.map.on("click",
