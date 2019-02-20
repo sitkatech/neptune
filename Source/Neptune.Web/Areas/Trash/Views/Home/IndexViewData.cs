@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Views;
+using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
 {
@@ -12,7 +13,11 @@ namespace Neptune.Web.Areas.Trash.Views.Home
     {
         public ViewDataForAngularClass ViewDataForAngular { get; }
         public MapInitJson MapInitJson { get; }
-        public string AllBMPsUrl { get; }
+        public string AllOVTAsUrl { get; }
+        public string FindBMPUrl { get; }
+        public string BeginOVTAUrl { get; }
+        public string AddBMPUrl { get; }
+
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
@@ -23,9 +28,17 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 treatmentBMPs, trashCaptureStatusTypes, parcels);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
-            AllBMPsUrl =
-                SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(),
+            AllOVTAsUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildAbsoluteUrlHttpsFromExpression(x => x.Index(),
                     NeptuneWebConfiguration.CanonicalHostName);
+            FindBMPUrl = SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.FindABMP(),
+                NeptuneWebConfiguration.CanonicalHostName);
+            BeginOVTAUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildAbsoluteUrlHttpsFromExpression(x =>
+                    x.Instructions(null),
+                    NeptuneWebConfiguration.CanonicalHostName);
+            AddBMPUrl = SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.New(),
+                NeptuneWebConfiguration.CanonicalHostName);
         }
 
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
