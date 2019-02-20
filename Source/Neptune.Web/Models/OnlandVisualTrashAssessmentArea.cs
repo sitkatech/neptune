@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Models
 {
@@ -20,6 +21,15 @@ namespace Neptune.Web.Models
             var round = (int) Math.Round(average);
 
             return OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == round);
+        }
+
+        public HtmlString GetMostRecentAssessmentDateAsHtmlString()
+        {
+            var shortDateString = OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatusID ==
+                                                                          OnlandVisualTrashAssessmentStatus.Complete
+                                                                              .OnlandVisualTrashAssessmentStatusID).Max(x => x.CompletedDate)
+                ?.ToShortDateString();
+            return shortDateString != null ? new HtmlString(shortDateString) : new HtmlString("<p class='systemText'>No assessment completed</p>");
         }
     }
 }

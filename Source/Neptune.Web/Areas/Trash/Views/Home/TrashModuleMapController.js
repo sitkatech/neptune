@@ -3,13 +3,106 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-        $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes, function (m) {
-            return m.TrashCaptureStatusTypeID.toString();
+        $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes,
+            function(m) {
+                return m.TrashCaptureStatusTypeID.toString();
+            });
+
+        $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson,
+            "Terrain",
+            $scope.AngularViewData.GeoServerUrl);
+
+        $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", "Land Use Blocks");
+        
+
+        $scope.ovtaLayers = {
+            1: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                "OVTA Areas; Score A",
+                {
+                    cql_filter: "Score='" + 1 + "'"
+                }),
+            2: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                "OVTA Areas; Score B",
+                {
+                    cql_filter: "Score='" + 2 + "'"
+                }),
+            3: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                "OVTA Areas; Score C",
+                {
+                    cql_filter: "Score='" + 3 + "'"
+                }),
+            4: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                "OVTA Areas; Score D",
+                {
+                    cql_filter: "Score='" + 4 + "'"
+                })
+        };
+
+        $scope.selectedOVTAScores = function() {
+            var scores = [];
+            for (var i = 1; i <= 5; i++) {
+                if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
+                    scores.push(i);
+                }
+            }
+            return scores;
+        };
+
+        $scope.buildSelectOVTAAreaParameters = function(latlng) {
+            var scores = $scope.selectedOVTAScores();
+            var scoresClause = "Score in (" + scores.join(',') + ")";
+
+            var intersectionClause = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + latlng.lat + " " + latlng.lng + "))";
+
+            return scoresClause + " and " + intersectionClause;
+        };
+
+        $scope.neptuneMap.map.on("click", function(event) {
+            var customParams = {
+                "cql_filter": $scope.buildSelectOVTAAreaParameters(event.latlng),
+                "typeName": "OnlandVisualTrashAssessmentAreas"
+            };
+
+            $scope.selectOVTAArea(customParams);
+
         });
 
-        $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson, "Terrain", $scope.AngularViewData.GeoServerUrl);
+        $scope.selectOVTAArea = function (customParams) {
+            if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
+                $scope.neptuneMap.map.removeLayer($scope.lastSelected);
+            }
 
-        $scope.neptuneMap.addWmsLayer("LandUseBlocks", "Land Use Blocks");
+            var parameters = L.Util.extend($scope.neptuneMap.wfsParams, customParams);
+
+
+            SitkaAjax.ajax({
+                url: $scope.neptuneMap.geoserverUrlOWS + L.Util.getParamString(parameters),
+                dataType: 'json',
+                jsonpCallback: 'getJson'
+            },
+                function (response) {
+                    $scope.lastSelected = L.geoJson(response, {
+                        style: function (feature) {
+                            return {
+                                stroke: true,
+                                strokeColor: "#ffff00",
+                                fillColor: '#ffff00',
+                                fillOpacity: 0
+                            };
+                        },
+                    }).addTo($scope.neptuneMap.map);
+
+                    var bounds = $scope.lastSelected.getBounds();
+                    if (bounds.isValid()) {
+                        $scope.neptuneMap.map.fitBounds(bounds);
+                    }
+
+                    var assessmentAreaID = response.features[0].properties["OnlandVisualTrashAssessmentAreaID"];
+                    var url = "/OnlandVisualTrashAssessmentArea/TrashMapAssetPanel/" + assessmentAreaID;
+                    $scope.loadSummaryPanel(url);
+                });
+        };
+        
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.treatmentBMPLayerGeoJson = L.geoJson(

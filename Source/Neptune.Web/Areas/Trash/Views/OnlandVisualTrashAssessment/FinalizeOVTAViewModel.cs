@@ -1,12 +1,11 @@
-﻿using System;
+﻿using LtInfo.Common;
+using Neptune.Web.Common;
+using Neptune.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
-using Neptune.Web.Common;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
@@ -60,7 +59,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
                 {
-                    var onlandVisualTrashAssessmentArea = new OnlandVisualTrashAssessmentArea(AssessmentAreaName,
+                    var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
                         onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessment.DraftGeometry);
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
 

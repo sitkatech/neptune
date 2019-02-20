@@ -8,7 +8,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public static class OnlandVisualTrashAssessmentAreaModelExtensions
     {
-        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<OnlandVisualTrashAssessmentArea> areas)
+        public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Models.OnlandVisualTrashAssessmentArea> areas)
         {
             var featureCollection = new FeatureCollection();
             featureCollection.Features.AddRange(areas.Select(x =>
@@ -22,7 +22,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return featureCollection;
         }
 
-        public static LayerGeoJson MakeAssessmentAreasLayerGeoJson(this IEnumerable<OnlandVisualTrashAssessmentArea> assessmentArea)
+        public static LayerGeoJson MakeAssessmentAreasLayerGeoJson(this IEnumerable<Models.OnlandVisualTrashAssessmentArea> assessmentArea)
         {
             var featureCollection = assessmentArea.ToGeoJsonFeatureCollection();
             var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };

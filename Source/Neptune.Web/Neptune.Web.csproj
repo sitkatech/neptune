@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\TrashMapAssetPanel.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\TrashMapAssetPanelViewData.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1049,6 +1051,9 @@
     <Content Include="ScriptsCustom\FancyboxReady.min.js.map" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js.map" />
     <Content Include="ScriptsCustom\ManagePhotoWithPreview.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js">
+      <DependentUpon>NeptuneMaps.GeoServerMap.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.min.js">
       <DependentUpon>NeptuneMaps.ParcelSearch.js</DependentUpon>
@@ -1058,7 +1063,6 @@
       <DependentUpon>NeptuneMaps.Stormwater.js</DependentUpon>
     </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.StormwaterSearch.js" />
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js.map" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
       <DependentUpon>NeptuneMaps.js</DependentUpon>
     </Content>
@@ -1111,6 +1115,7 @@
     <Content Include="Areas\Modeling\Views\Shared\NavAndHeaderLayout.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcels.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\RefineAssessmentArea.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\TrashMapAssetPanel.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1159,7 +1164,6 @@
     <Content Include="ScriptsCustom\GoogleAnalytics.js" />
     <Content Include="ScriptsCustom\GoogleAnalytics.min.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.js" />
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.js" />
     <Content Include="ScriptsCustom\ModalDialogForm.min.js">

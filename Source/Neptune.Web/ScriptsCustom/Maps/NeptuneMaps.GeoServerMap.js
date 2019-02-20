@@ -68,3 +68,13 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerContr
     this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
     return wmsLayer;
 };
+
+NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, layerControlDisplayName, params) {
+    var wmsParams = this.createWmsParamsWithLayerName(layerName);
+
+    wmsParams = L.Util.extend(wmsParams, params);
+
+    var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
+    this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
+    return wmsLayer;
+};

@@ -38,5 +38,13 @@
   {
     "outputFile": "ScriptsCustom/NeptuneFloatingRibbon.es5.js",
     "inputFile": "ScriptsCustom/NeptuneFloatingRibbon.js"
+  },
+  {
+    "outputFile": "ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js",
+    "inputFile": "ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js"
+  },
+  {
+    "outputFile": "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.es5.js",
+    "inputFile": "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
   }
 ]

@@ -14,7 +14,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public InitiateOVTAViewData(Person currentPerson,
             Models.OnlandVisualTrashAssessment ovta, List<StormwaterJurisdiction> jurisdictions,
             SelectOVTAAreaMapInitJson mapInitJson,
-            IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
+            IEnumerable<Models.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
             StormwaterJurisdiction defaultJurisdiction)
             : base(currentPerson, Models.OVTASection.InitiateOVTA, ovta)
         {
@@ -28,7 +28,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public class ViewDataForAngularClass
         {
             public ViewDataForAngularClass(SelectOVTAAreaMapInitJson mapInitJson,
-                IEnumerable<OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
+                IEnumerable<Models.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
                 bool useDefaultJurisdiction,
                 List<StormwaterJurisdiction> jurisdictions)
             {

@@ -94,5 +94,11 @@
     "inputFiles": [
       "ScriptsCustom/sitkaAjax.js"
     ]
+  },
+  {
+    "outputFileName": "ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js",
+    "inputFiles": [
+      "ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js"
+    ]
   }
 ]
