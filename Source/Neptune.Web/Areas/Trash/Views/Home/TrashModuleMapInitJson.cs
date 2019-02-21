@@ -10,9 +10,9 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public LayerGeoJson ParcelLayerGeoJson { get; }
 
         public TrashModuleMapInitJson(string mapDivID, LayerGeoJson treatmentBMPLayerGeoJson,
-            LayerGeoJson parcelLayerGeoJson)
+            LayerGeoJson parcelLayerGeoJson, BoundingBox boundingBox)
             : base(mapDivID, DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
-                BoundingBox.MakeNewDefaultBoundingBox())
+                boundingBox)
         {
             TreatmentBMPLayerGeoJson = treatmentBMPLayerGeoJson;
             ParcelLayerGeoJson = parcelLayerGeoJson;
