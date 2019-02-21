@@ -9,3 +9,6 @@ Go
 Alter Table dbo.OnlandVisualTrashAssessmentScore
 Alter Column NumericValue int not null
 Go
+
+Alter Table dbo.OnlandVisualTrashAssessmentArea
+Add OnlandVisualTrashAssessmentScoreID int null constraint FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID foreign key references dbo.OnlandVisualTrashAssessmentScore (OnlandVisualTrashAssessmentScoreID)

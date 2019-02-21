@@ -7,6 +7,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 	[OnlandVisualTrashAssessmentAreaName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[OnlandVisualTrashAssessmentAreaGeometry] [geometry] NOT NULL,
+	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentAreaID] ASC
@@ -23,6 +24,11 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID] FOREIGN KEY([OnlandVisualTrashAssessmentScoreID])
+REFERENCES [dbo].[OnlandVisualTrashAssessmentScore] ([OnlandVisualTrashAssessmentScoreID])
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])

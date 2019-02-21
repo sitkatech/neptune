@@ -70,6 +70,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
                     OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID;
+
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID =
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData()
+                        .OnlandVisualTrashAssessmentScoreID;
             }
             else
             {

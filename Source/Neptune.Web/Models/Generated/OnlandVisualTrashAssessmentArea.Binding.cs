@@ -30,12 +30,13 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry) : this()
+        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentScoreID) : this()
         {
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentAreaName;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessmentAreaGeometry;
+            this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
         }
 
         /// <summary>
@@ -121,11 +122,13 @@ namespace Neptune.Web.Models
         public string OnlandVisualTrashAssessmentAreaName { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public DbGeometry OnlandVisualTrashAssessmentAreaGeometry { get; set; }
+        public int? OnlandVisualTrashAssessmentScoreID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentAreaID; } set { OnlandVisualTrashAssessmentAreaID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
+        public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore { get { return OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null; } }
 
         public static class FieldLengths
         {

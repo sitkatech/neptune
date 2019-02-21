@@ -11,7 +11,7 @@ namespace Neptune.Web.Models
             return $"OVTA Area {OnlandVisualTrashAssessmentAreaID}";
         }
 
-        public OnlandVisualTrashAssessmentScore GetScore()
+        public OnlandVisualTrashAssessmentScore CalculateScoreFromBackingData()
         {
             var average = OnlandVisualTrashAssessments
                 .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
