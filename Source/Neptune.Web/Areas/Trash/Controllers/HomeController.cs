@@ -26,8 +26,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var parcelLayerGeoJson = TrashModuleMapInitJson.MakeParcelLayerGeoJsonForTrashMap(parcels, false);
 
 
-            var boundingBox = new BoundingBox(CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit()
-                .Select(x => x.StormwaterJurisdictionGeometry));
+            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any() ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
+                .Select(x => x.StormwaterJurisdictionGeometry)) : BoundingBox.MakeNewDefaultBoundingBox();
 
             var mapInitJson = new TrashModuleMapInitJson("StormwaterIndexMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox);
 
