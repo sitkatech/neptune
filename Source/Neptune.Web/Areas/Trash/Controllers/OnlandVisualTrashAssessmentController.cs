@@ -106,6 +106,23 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
         }
 
+        [HttpPost]
+        [NeptuneViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            InitiateOVTAViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
+            }
+
+            viewModel.UpdateModel(onlandVisualTrashAssessment);
+
+            return RedirectToAppropriateStep(viewModel, OVTASection.InitiateOVTA, onlandVisualTrashAssessment);
+        }
+
         private ViewResult ViewInitiateOVTA(OnlandVisualTrashAssessment onlandVisualTrashAssessment,
             InitiateOVTAViewModel viewModel)
         {
@@ -127,23 +144,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 onlandVisualTrashAssessment, stormwaterJurisdictionsPersonCanEdit, mapInitJson, onlandVisualTrashAssessmentAreas,
                 defaultJurisdiction);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
-        }
-
-        [HttpPost]
-        [NeptuneViewFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
-            InitiateOVTAViewModel viewModel)
-        {
-            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
-            if (!ModelState.IsValid)
-            {
-                return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
-            }
-
-            viewModel.UpdateModel(onlandVisualTrashAssessment);
-
-            return RedirectToAppropriateStep(viewModel, OVTASection.InitiateOVTA, onlandVisualTrashAssessment);
         }
 
         [HttpGet]

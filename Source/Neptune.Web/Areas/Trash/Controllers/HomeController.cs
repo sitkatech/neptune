@@ -25,6 +25,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 .AsEnumerable().DistinctBy(x => x.ParcelID).ToList();
             var parcelLayerGeoJson = TrashModuleMapInitJson.MakeParcelLayerGeoJsonForTrashMap(parcels, false);
 
+
+            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            // todo: create bounding box from stormwater jurisdictions
+
             var mapInitJson = new TrashModuleMapInitJson("StormwaterIndexMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson);
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
