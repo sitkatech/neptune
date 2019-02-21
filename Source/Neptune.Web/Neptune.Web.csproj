@@ -385,6 +385,7 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\OnlandVisualTrashAssessmentScore.cs" />
     <Compile Include="Views\NetworkCatchment\Index.cs" />
     <Compile Include="Views\NetworkCatchment\IndexViewData.cs" />
     <Compile Include="Controllers\NetworkCatchmentController.cs" />
@@ -852,6 +853,10 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Content\img\green.png" />
+    <Content Include="Areas\Trash\Content\img\orange.png" />
+    <Content Include="Areas\Trash\Content\img\red.png" />
+    <Content Include="Areas\Trash\Content\img\yellow.png" />
     <Content Include="Areas\Trash\ScriptsCustom\Maps\NeptuneMaps.TrashModuleMap.js" />
     <Content Include="Areas\Trash\Views\Home\TrashModuleMapController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsController.js" />
@@ -3056,7 +3061,6 @@
     <Folder Include="Areas\Modeling\Content\" />
     <Folder Include="Areas\Modeling\Models\" />
     <Folder Include="Areas\Modeling\Security\" />
-    <Folder Include="Areas\Trash\Content\" />
     <Folder Include="Areas\Trash\Models\" />
     <Folder Include="Areas\Trash\Security\" />
     <Folder Include="Content\themes\base\minified\images\" />

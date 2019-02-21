@@ -30,14 +30,26 @@
     </script>
 
     <style>
-        #legend {
+        #tcLegend, #ovtaAreaLegend {
             padding-left: 0;
             list-style-type: none;
         }
 
-            #legend img {
+            #tcLegend img {
                 max-height: 50px;
+                margin-right: 5px;
             }
+
+        #ovtaAreaLegend img {
+            max-height: 25px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+        }
+        #ovtaAreaLegend li {
+            padding-bottom: 10px;
+        }
+
+
     </style>
 }
 
@@ -147,7 +159,7 @@
                         </div>
                         <div class="col-sm-12 col-md-3">
                             <h3>Legend</h3>
-                            <ul id="legend">
+                            <ul id="tcLegend">
                                 <li>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" /> Full Trash Capture
                                 </li>
@@ -163,7 +175,13 @@
                                 <li>
                                     <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Trash Capture Status Not Provided
                                 </li>
-
+                            </ul>
+                            <label>OVTA Areas by Score</label>
+                            <ul id="ovtaAreaLegend">
+                                <li><img src="@OnlandVisualTrashAssessmentScore.A.LegendImgUrl()"/> A</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.B.LegendImgUrl()"/> B</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.C.LegendImgUrl()"/> C</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.D.LegendImgUrl()"/> D</li>
                             </ul>
                         </div>
                     </div>
