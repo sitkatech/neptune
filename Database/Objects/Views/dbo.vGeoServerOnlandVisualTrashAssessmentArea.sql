@@ -3,5 +3,5 @@ as select area.OnlandVisualTrashAssessmentAreaID,
 area.OnlandVisualTrashAssessmentAreaName,
 area.StormwaterJurisdictionID,
 area.OnlandVisualTrashAssessmentAreaGeometry,
-Score.OnlandVisualTrashAssessmentNumericValue as Score
+Score.NumericValue as Score
 from dbo.OnlandVisualTrashAssessmentArea area join dbo.OnlandVisualTrashAssessmentScore score on area.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID
