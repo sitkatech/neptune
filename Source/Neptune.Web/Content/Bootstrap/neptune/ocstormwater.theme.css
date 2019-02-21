@@ -1229,3 +1229,15 @@ hr {
 .launchPadActionButton {
   width: 100%;
 }
+.nav.nav-tabs li a {
+  color: #337ab7;
+}
+.nav.nav-tabs li a:focus {
+  color: #337ab7;
+}
+.nav.nav-tabs li a:hover {
+  color: #fff;
+}
+.nav.nav-tabs li.active a:hover {
+  color: #337ab7;
+}

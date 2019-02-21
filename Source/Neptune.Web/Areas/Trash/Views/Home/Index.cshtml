@@ -91,51 +91,85 @@
     </div>
 </div>
 
+
+
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
-    <div class="row">
-        <div class="col-sm-12 text-right" style="padding-right:0;">
-            <span style="font-weight: bold">Filter by Trash Capture Status</span>
-            <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
-                    data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
-                    {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
-                </option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 col-md-2">
-            <h3>Selected asset</h3>
-            <div id="mapSummaryResults">
-                <p class="systemText">No asset selected</p>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-7" style="margin-top: 20px;">
-            <div id="mapContainer">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 650px; margin: 0">
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-3">
-            <h3>Legend</h3>
-            <ul id="legend">
-                <li>
-                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" /> Full Trash Capture
-                </li>
 
+    <div class="container-fluid">
+        <div class="row">
+            <ul class="nav nav-tabs" id="organizationDetailsTabs" style="border-bottom: none;">
                 <li>
-                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" /> Partial Trash Capture
+                    <a href="#areaResults" aria-controls="areaResultsOverview" role="tab" data-toggle="tab" id="areaResultsTab">Area-Based Results</a>
                 </li>
-
                 <li>
-                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" /> No Trash Capture
+                    <a href="#loadResults" aria-controls="loadResultsOverview" role="tab" data-toggle="tab" id="loadResultsTab">Load-Based Results</a>
                 </li>
-
-                <li>
-                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Trash Capture Status Not Provided
+                <li class="active">
+                    <a href="#ovtaResults" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">OVTA Results</a>
                 </li>
-
             </ul>
         </div>
     </div>
-</div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane" id="areaResults">
+                    <p class="systemText">Content under development.</p>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="loadResults">
+                    <p class="systemText">Content under development.</p>
+                </div>
+                <div role="tabpanel" class="tab-pane active" id="ovtaResults">
+                    <div class="row">
+                        <div class="col-sm-12 text-right" style="padding-right: 0;">
+                            <span style="font-weight: bold">Filter by Trash Capture Status</span>
+                            <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
+                                    data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
+                                <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
+                                    {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-2">
+                            <h3>Selected asset</h3>
+                            <div id="mapSummaryResults">
+                                <p class="systemText">No asset selected</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7" style="margin-top: 20px;">
+                            <div id="mapContainer">
+                                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 650px; margin: 0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <h3>Legend</h3>
+                            <ul id="legend">
+                                <li>
+                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" /> Full Trash Capture
+                                </li>
+
+                                <li>
+                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" /> Partial Trash Capture
+                                </li>
+
+                                <li>
+                                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" /> No Trash Capture
+                                </li>
+
+                                <li>
+                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Trash Capture Status Not Provided
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div> @*NeptuneApp*@ 
