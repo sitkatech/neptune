@@ -206,7 +206,7 @@ namespace Neptune.Web.Models
 
         public override string GetSectionDisabledMessage()
         {
-            return "You must complete the Add or Remove Parcels section before you can refine the assessment area.";
+            return "You must complete the Record Observations section and the Add or Remove Parcels section before you can refine the assessment area.";
         }
     }
 
@@ -239,7 +239,7 @@ namespace Neptune.Web.Models
 
         public override string GetSectionDisabledMessage()
         {
-            return "You must complete the Add or Remove Parcels section before you can finalize the OVTA";
+            return "You must complete the Record Observations section and the Add or Remove Parcels section before you can finalize the OVTA";
         }
     }
 }
