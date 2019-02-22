@@ -1,0 +1,57 @@
+﻿@using LtInfo.Common.BootstrapWrappers
+@using LtInfo.Common.DhtmlWrappers
+@using Neptune.Web.Models
+@using Neptune.Web.Views
+@using Neptune.Web.Views.Shared
+@inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea.Detail
+
+@section JavascriptAndStylesContent
+{
+    @{ DhtmlxGridIncludes.RenderPartialView(Html); }
+
+}
+
+@section RightOfPageTitle
+{
+    <a class="btn btn-neptune" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Begin OVTA</a>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Details
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3 text-right"><label>Assessment Area Name</label></div>
+                    <div class="col-sm-9">@ViewDataTyped.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right"><label>Jurisdiction</label></div>
+                    <div class="col-sm-9">@ViewDataTyped.OnlandVisualTrashAssessmentArea.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right"><label>Last Assessment Date</label></div>
+                    <div class="col-sm-9">@ViewDataTyped.LastAssessmentDateHtmlString</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 text-right"><label>Area Score</label></div>
+                    <div class="col-sm-9">@ViewDataTyped.ScoreHtmlString</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assessments
+            </div>
+            <div class="panel-body">
+                @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+            </div>
+        </div>
+    </div>
+</div>

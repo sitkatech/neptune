@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Neptune.Web.Areas.Trash.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
@@ -12,6 +13,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class OnlandVisualTrashAssessmentAreaController : NeptuneBaseController
     {
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ViewResult Detail(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson,
+                onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject));
+        }
+
         [NeptuneViewFeature]
         [HttpGet]
         public ContentResult FindByName()
@@ -57,4 +66,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public string SearchTerm { get; set; }
         public int JurisdictionID { get; set; }
     }
+}
+
+namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
+{
 }
