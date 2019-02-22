@@ -18,6 +18,7 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea.TrashMapAssetPanel
 
 <div class="row">
@@ -25,7 +26,7 @@ Source code is available upon request via <support@sitkatech.com>.
         <div class="row">
             <div class="col-xs-12">
                 <h4>@ViewDataTyped.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</h4>
-            </div>            
+            </div>
         </div>
         <div class="row">
             <div class="col-xs-12">
@@ -37,6 +38,11 @@ Source code is available upon request via <support@sitkatech.com>.
                     <dt>Details</dt>
                     <dd><p class="systemText">Content under development</p></dd>
                 </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <a href="@ViewDataTyped.OnlandVisualTrashAssessmentArea.GetDetailUrl()" class="btn btn-neptune">View Details</a>
             </div>
         </div>
     </div>

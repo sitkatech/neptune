@@ -1,13 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using GeoJSON.Net.Feature;
+using LtInfo.Common;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public static class OnlandVisualTrashAssessmentAreaModelExtensions
     {
+        public static readonly UrlTemplate<int> DetailUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static string GetDetailUrl(this Models.OnlandVisualTrashAssessmentArea ovtaa)
+        {
+            return DetailUrlTemplate.ParameterReplace(ovtaa.OnlandVisualTrashAssessmentAreaID);
+        }
+
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Models.OnlandVisualTrashAssessmentArea> areas)
         {
             var featureCollection = new FeatureCollection();
