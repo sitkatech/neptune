@@ -5,6 +5,7 @@ using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Views;
+using Neptune.Web.Views.Shared;
 using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
@@ -17,6 +18,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string FindBMPUrl { get; }
         public string BeginOVTAUrl { get; }
         public string AddBMPUrl { get; }
+        public ViewPageContentViewData ProgramOverviewPageContentViewData { get; }
 
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
@@ -39,6 +41,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     NeptuneWebConfiguration.CanonicalHostName);
             AddBMPUrl = SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.New(),
                 NeptuneWebConfiguration.CanonicalHostName);
+
+            ProgramOverviewPageContentViewData = new ViewPageContentViewData(NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashModuleProgramOverview), currentPerson);
         }
 
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass

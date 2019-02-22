@@ -20,7 +20,9 @@
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.DesignByContract
 @using LtInfo.Common.ModalDialog
+@using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 @using Neptune.Web.Models
+@using OVTASection = Neptune.Web.Models.OVTASection
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.OVTASection
 @{
     @SetLayout("~/Views/Shared/SiteLayout.cshtml", ViewDataTyped)
@@ -103,19 +105,29 @@
 }
 @if (ViewDataTyped.OVTA != null)
 {
-    <div class="pull-right">
-        <div class="dropdown moreActionsToggle" style="display: inline;">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-                @if (ViewDataTyped.OVTA != null)
-                {
-                    <li>
-                        @ModalDialogFormHelper.MakeDeleteLink("Delete OVTA", ViewDataTyped.OVTA.GetDeleteUrl(), new List<string> { "" }, true)
-                    </li>
-                }
-            </ul>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <div class="dropdown moreActionsToggle" style="display: inline;">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                        @if (ViewDataTyped.OVTA != null)
+                        {
+                            if (ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea != null)
+                            {
+                                <li>
+                                    <a href="@ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea.GetDetailUrl()">View Assessment Area Details</a>
+                                </li>
+                            }
+                            <li>
+                                @ModalDialogFormHelper.MakeDeleteLink("Delete OVTA", ViewDataTyped.OVTA.GetDeleteUrl(), new List<string> { "" }, true)
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 }

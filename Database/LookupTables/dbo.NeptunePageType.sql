@@ -35,6 +35,7 @@ values
 (30, 'ManagerDashboard', 'Manager Dashboard', 2),
 (31, 'WaterQualityMaintenancePlanOandMVerifications', 'Water Quality Maintenance Plan O&M Verifications', 2),
 (32, 'ModelingHomePage', 'Modeling Home Page', 2),
-(33, 'TrashHomePage', 'Trash Home Page', 2),
+(33, 'TrashHomePage', 'Trash Module Home Page', 2),
 (34, 'OVTAInstructions', 'OVTA Instructions', 2),
-(35, 'OVTAIndex', 'OVTA Index', 2)
+(35, 'OVTAIndex', 'OVTA Index', 2),
+(36, 'TrashModuleProgramOverview', 'Trash Module Program Overview', 2)

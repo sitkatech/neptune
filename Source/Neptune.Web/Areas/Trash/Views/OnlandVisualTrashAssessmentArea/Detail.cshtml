@@ -1,44 +1,63 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @using Neptune.Web.Views
 @using Neptune.Web.Views.Shared
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea.Detail
 
 @section JavascriptAndStylesContent
 {
+    @{ MapJavascriptIncludes.RenderPartialView(Html); }
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 
 }
 
 @section RightOfPageTitle
 {
-    <a class="btn btn-neptune" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Begin OVTA</a>
+    @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+    {
+        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Begin OVTA", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.NewUrl, "Begin OVTA", 500, "Begin", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
+
+    }
 }
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6 col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 Details
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-3 text-right"><label>Assessment Area Name</label></div>
-                    <div class="col-sm-9">@ViewDataTyped.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</div>
+                    <div class="col-sm-5 text-right"><label>Assessment Area Name</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 text-right"><label>Jurisdiction</label></div>
-                    <div class="col-sm-9">@ViewDataTyped.OnlandVisualTrashAssessmentArea.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
+                    <div class="col-sm-5 text-right"><label>Jurisdiction</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.OnlandVisualTrashAssessmentArea.StormwaterJurisdiction.GetDisplayNameAsDetailUrl()</div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 text-right"><label>Last Assessment Date</label></div>
-                    <div class="col-sm-9">@ViewDataTyped.LastAssessmentDateHtmlString</div>
+                    <div class="col-sm-5 text-right"><label>Last Assessment Date</label></div>
+                    <div class="col-sm-7">@ViewDataTyped.LastAssessmentDateHtmlString</div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 text-right"><label>Area Score</label></div>
-                    <div class="col-sm-9">@ViewDataTyped.ScoreHtmlString</div>
+                    <div class="col-sm-5 text-right">@Html.LabelWithSugarFor(FieldDefinition.OVTAScore)</div>
+                    <div class="col-sm-7">@ViewDataTyped.ScoreHtmlString</div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xs-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Location
+            </div>
+            <div class="panel-body">
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 250px;"></div>
             </div>
         </div>
     </div>
@@ -55,3 +74,26 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var summaryMap;
+    var lastSelected;
+    var observationsLayer;
+    jQuery(function() {
+        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        summaryMap = new NeptuneMaps.Map(mapInitJson);
+        var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
+            style: function (feature) {
+                return {
+                    fillColor: NeptuneMaps.Constants.defaultPolyColor,
+                    fill: true,
+                    fillOpacity: 0.5,
+                    color: NeptuneMaps.Constants.defaultPolyColor,
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+        assessmentAreaLayer.addTo(summaryMap.map);
+    });
+</script>

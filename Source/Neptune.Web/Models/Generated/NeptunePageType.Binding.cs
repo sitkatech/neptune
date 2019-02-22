@@ -53,6 +53,7 @@ namespace Neptune.Web.Models
         public static readonly NeptunePageTypeTrashHomePage TrashHomePage = NeptunePageTypeTrashHomePage.Instance;
         public static readonly NeptunePageTypeOVTAInstructions OVTAInstructions = NeptunePageTypeOVTAInstructions.Instance;
         public static readonly NeptunePageTypeOVTAIndex OVTAIndex = NeptunePageTypeOVTAIndex.Instance;
+        public static readonly NeptunePageTypeTrashModuleProgramOverview TrashModuleProgramOverview = NeptunePageTypeTrashModuleProgramOverview.Instance;
 
         public static readonly List<NeptunePageType> All;
         public static readonly ReadOnlyDictionary<int, NeptunePageType> AllLookupDictionary;
@@ -62,7 +63,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static NeptunePageType()
         {
-            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex };
+            All = new List<NeptunePageType> { HomePage, About, OrganizationsList, HomeMapInfo, HomeAdditionalInfo, TreatmentBMP, TreatmentBMPType, ModeledCatchment, Jurisdiction, Assessment, ManageObservationTypesList, ManageTreatmentBMPTypesList, ManageObservationTypeInstructions, ManageObservationTypeObservationInstructions, ManageObservationTypeLabelsAndUnitsInstructions, ManageTreatmentBMPTypeInstructions, ManageCustomAttributeTypeInstructions, ManageCustomAttributeInstructions, ManageCustomAttributeTypesList, Legal, FundingSourcesList, FindABMP, LaunchPad, FieldRecords, RequestSupport, InviteUser, WaterQualityMaintenancePlan, ParcelList, Training, ManagerDashboard, WaterQualityMaintenancePlanOandMVerifications, ModelingHomePage, TrashHomePage, OVTAInstructions, OVTAIndex, TrashModuleProgramOverview };
             AllLookupDictionary = new ReadOnlyDictionary<int, NeptunePageType>(All.ToDictionary(x => x.NeptunePageTypeID));
         }
 
@@ -196,6 +197,8 @@ namespace Neptune.Web.Models
                     return Training;
                 case NeptunePageTypeEnum.TrashHomePage:
                     return TrashHomePage;
+                case NeptunePageTypeEnum.TrashModuleProgramOverview:
+                    return TrashModuleProgramOverview;
                 case NeptunePageTypeEnum.TreatmentBMP:
                     return TreatmentBMP;
                 case NeptunePageTypeEnum.TreatmentBMPType:
@@ -246,7 +249,8 @@ namespace Neptune.Web.Models
         ModelingHomePage = 32,
         TrashHomePage = 33,
         OVTAInstructions = 34,
-        OVTAIndex = 35
+        OVTAIndex = 35,
+        TrashModuleProgramOverview = 36
     }
 
     public partial class NeptunePageTypeHomePage : NeptunePageType
@@ -444,7 +448,7 @@ namespace Neptune.Web.Models
     public partial class NeptunePageTypeTrashHomePage : NeptunePageType
     {
         private NeptunePageTypeTrashHomePage(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
-        public static readonly NeptunePageTypeTrashHomePage Instance = new NeptunePageTypeTrashHomePage(33, @"TrashHomePage", @"Trash Home Page", 2);
+        public static readonly NeptunePageTypeTrashHomePage Instance = new NeptunePageTypeTrashHomePage(33, @"TrashHomePage", @"Trash Module Home Page", 2);
     }
 
     public partial class NeptunePageTypeOVTAInstructions : NeptunePageType
@@ -457,5 +461,11 @@ namespace Neptune.Web.Models
     {
         private NeptunePageTypeOVTAIndex(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
         public static readonly NeptunePageTypeOVTAIndex Instance = new NeptunePageTypeOVTAIndex(35, @"OVTAIndex", @"OVTA Index", 2);
+    }
+
+    public partial class NeptunePageTypeTrashModuleProgramOverview : NeptunePageType
+    {
+        private NeptunePageTypeTrashModuleProgramOverview(int neptunePageTypeID, string neptunePageTypeName, string neptunePageTypeDisplayName, int neptunePageRenderTypeID) : base(neptunePageTypeID, neptunePageTypeName, neptunePageTypeDisplayName, neptunePageRenderTypeID) {}
+        public static readonly NeptunePageTypeTrashModuleProgramOverview Instance = new NeptunePageTypeTrashModuleProgramOverview(36, @"TrashModuleProgramOverview", @"Trash Module Program Overview", 2);
     }
 }

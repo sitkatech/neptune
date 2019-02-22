@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -34,6 +35,16 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             StormwaterJurisdiction = ovta.StormwaterJurisdiction != null ? new StormwaterJurisdictionSimple(ovta.StormwaterJurisdiction) : null;
             OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             AssessingNewArea = ovta.AssessingNewArea ?? false;
+        }
+
+        public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta, Person currentPerson) : this(ovta)
+        {
+            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            if (stormwaterJurisdictionsPersonCanEdit.Count() == 1)
+            {
+                StormwaterJurisdiction =
+                    new StormwaterJurisdictionSimple(stormwaterJurisdictionsPersonCanEdit.Single());
+            }
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment ovta)

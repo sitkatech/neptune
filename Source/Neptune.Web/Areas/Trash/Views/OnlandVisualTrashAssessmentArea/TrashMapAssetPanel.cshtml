@@ -18,7 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
+@using Neptune.Web.Models
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea.TrashMapAssetPanel
 
 <div class="row">
@@ -33,7 +35,7 @@ Source code is available upon request via <support@sitkatech.com>.
                 <dl>
                     <dt>Assessment Date</dt>
                     <dd>@ViewDataTyped.OnlandVisualTrashAssessmentArea.GetMostRecentAssessmentDateAsHtmlString()</dd>
-                    <dt>Score</dt>
+                    <dt>@Html.LabelWithSugarFor(FieldDefinition.OVTAScore)</dt>
                     <dd>@ViewDataTyped.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData().OnlandVisualTrashAssessmentScoreDisplayName</dd>
                 </dl>
             </div>

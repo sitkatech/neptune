@@ -6,7 +6,6 @@
 
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;
-        $scope.isMapEnabled = false;
         $scope.lastSelectedName = null;
 
         var selectAssessmentArea = function(event) {
@@ -179,7 +178,8 @@
             });
         };
 
-        $scope.isMapEnabled = function() {
+        $scope.isMapEnabled = function () {
+            debugger;
             return $scope.AngularModel.StormwaterJurisdiction && $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID && !$scope.AngularModel.AssessingNewArea;
         };
 

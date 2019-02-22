@@ -1230,16 +1230,19 @@ hr {
   width: 100%;
 }
 .nav.nav-tabs li a {
-  color: #337ab7;
+  color: #77cfdc;
 }
 .nav.nav-tabs li a:focus {
-  color: #337ab7;
+  color: #77cfdc;
 }
 .nav.nav-tabs li a:hover {
   color: #fff;
 }
+.nav.nav-tabs li.active a {
+  color: #0099ab;
+}
 .nav.nav-tabs li.active a:hover {
-  color: #337ab7;
+  color: #0099ab;
 }
 .moreActionsToggle .open > .moreActionsToggle .dropdown-toggle {
   color: #3e72b0 !important;

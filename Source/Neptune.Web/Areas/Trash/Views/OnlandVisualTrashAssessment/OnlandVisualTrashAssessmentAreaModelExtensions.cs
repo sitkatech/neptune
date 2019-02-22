@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
@@ -38,6 +40,18 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             var featureCollection = assessmentArea.ToGeoJsonFeatureCollection();
             var observationsLayerGeoJson = new LayerGeoJson("Observations", featureCollection, "#FF00FF", 1, LayerInitialVisibility.Show) { EnablePopups = false };
             return observationsLayerGeoJson;
+        }
+
+        public static HtmlString GetDisplayNameAsDetailUrl(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, Person currentPerson)
+        {
+            if (!new OnlandVisualTrashAssessmentAreaViewFeature()
+                .HasPermission(currentPerson, onlandVisualTrashAssessmentArea).HasPermission)
+            {
+                return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName);
+            }
+
+            return new HtmlString(
+                $"<a href=\"{onlandVisualTrashAssessmentArea.GetDetailUrl()}\" alt=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" title=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" >{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}</a>");
         }
     }
 }

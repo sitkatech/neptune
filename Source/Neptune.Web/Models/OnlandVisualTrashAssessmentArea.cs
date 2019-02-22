@@ -13,7 +13,7 @@ namespace Neptune.Web.Models
 
         public OnlandVisualTrashAssessmentScore CalculateScoreFromBackingData()
         {
-            if (!OnlandVisualTrashAssessments.Any())
+            if (OnlandVisualTrashAssessments.All(x => x.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID))
             {
                 return null;
             }

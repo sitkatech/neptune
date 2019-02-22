@@ -1,25 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
     public class OnlandVisualTrashAssessmentAreaController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewFeature]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
         public ViewResult Detail(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
-            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson,
-                onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject));
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            var geoJsonFeatureCollection =
+                new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
+                    .ToGeoJsonFeatureCollection();
+
+            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
+                "#ffff00", .5m,
+                LayerInitialVisibility.Show);
+
+            var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson);
+            var viewData = new DetailViewData(CurrentPerson,
+                onlandVisualTrashAssessmentArea, mapInitJson);
+
+            return RazorView<Detail, DetailViewData>(viewData);
         }
 
         [NeptuneViewFeature]
@@ -61,24 +77,49 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return RazorPartialView<TrashMapAssetPanel, TrashMapAssetPanelViewData>(viewData);
         }
 
+
+
         [HttpGet]
-        [NeptuneViewFeature]
-        public ActionResult NewAssessment(
-            OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        public PartialViewResult NewAssessment(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
-            var
-                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress);
+            var viewModel = new ConfirmDialogFormViewModel(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
+            return ViewNewAssessment(onlandVisualTrashAssessmentArea, viewModel);
+        }
 
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
-            onlandVisualTrashAssessment.AssessingNewArea = false;
-            onlandVisualTrashAssessment.StormwaterJurisdictionID =
-                onlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
+        private PartialViewResult ViewNewAssessment(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"You are about to begin a new OVTA for Assessment Area: {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}. This will create a new Assessment record and allow you to start entering Assessment Observations on the next page.";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpPost]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        public ActionResult NewAssessment(
+            OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewNewAssessment(onlandVisualTrashAssessmentArea, viewModel);
+            }
+
+            var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now,
+                OnlandVisualTrashAssessmentStatus.InProgress)
+            {
+                OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
+                AssessingNewArea = false,
+                StormwaterJurisdictionID = onlandVisualTrashAssessmentArea.StormwaterJurisdictionID
+            };
+
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            return Redirect(
+            return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(onlandVisualTrashAssessment)));
         }
     }
@@ -88,8 +129,4 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public string SearchTerm { get; set; }
         public int JurisdictionID { get; set; }
     }
-}
-
-namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
-{
 }

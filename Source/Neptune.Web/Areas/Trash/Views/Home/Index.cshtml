@@ -1,4 +1,5 @@
 ﻿@using DocumentFormat.OpenXml.Drawing.Diagrams
+@using LtInfo.Common.HtmlHelperExtensions
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
@@ -40,16 +41,20 @@
                 margin-right: 5px;
             }
 
-        #ovtaAreaLegend img {
-            max-height: 25px;
-            margin-right: 5px;
-            border: 1px solid #ddd;
-        }
-        #ovtaAreaLegend li {
-            padding-bottom: 10px;
-        }
+            #ovtaAreaLegend img {
+                max-height: 25px;
+                margin-right: 5px;
+                border: 1px solid #ddd;
+            }
+
+            #ovtaAreaLegend li {
+                padding-bottom: 10px;
+            }
 
 
+        .bootstrap-select {
+            padding-left: 0;
+        }
     </style>
 }
 
@@ -57,7 +62,7 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <h4>Common Tasks</h4>
+        <h3>Common Tasks</h3>
     </div>
 
     <div class="col-xs-12 col-sm-6 launchPadAction">
@@ -103,6 +108,9 @@
     </div>
 </div>
 
+<h3>Program Overview</h3>
+
+@{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ProgramOverviewPageContentViewData); }
 
 
 <div ng-app="NeptuneApp" ng-controller="TreatmentBMPMapController">
@@ -134,19 +142,8 @@
                 </div>
                 <div role="tabpanel" class="tab-pane active" id="ovtaResults">
                     <div class="row">
-                        <div class="col-sm-12 text-right" style="padding-right: 0;">
-                            <span style="font-weight: bold">Filter by Trash Capture Status</span>
-                            <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="auto" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
-                                    data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                                <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
-                                    {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-12 col-md-2">
-                            <h3>Selected asset</h3>
+                            <h4>Selected Asset</h4>
                             <div id="mapSummaryResults">
                                 <p class="systemText">No asset selected</p>
                             </div>
@@ -158,7 +155,22 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">
-                            <h3>Legend</h3>
+                            <h4>Legend and Map Controls</h4>
+
+                            @Html.LabelWithSugarFor(FieldDefinition.OVTAScore, FieldDefinition.OVTAScore.GetFieldDefinitionLabelPluralized())
+                            <ul id="ovtaAreaLegend">
+                                <li><img src="@OnlandVisualTrashAssessmentScore.A.LegendImgUrl()" /> A</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.B.LegendImgUrl()" /> B</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.C.LegendImgUrl()" /> C</li>
+                                <li><img src="@OnlandVisualTrashAssessmentScore.D.LegendImgUrl()" /> D</li>
+                            </ul>
+                            @Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus, "Trash Capture BMPs and WQMPs")
+                            <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="100%" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
+                                    data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
+                                <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
+                                    {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
+                                </option>
+                            </select>
                             <ul id="tcLegend">
                                 <li>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" /> Full Trash Capture
@@ -173,15 +185,8 @@
                                 </li>
 
                                 <li>
-                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Trash Capture Status Not Provided
+                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Not Provided
                                 </li>
-                            </ul>
-                            <label>OVTA Areas by Score</label>
-                            <ul id="ovtaAreaLegend">
-                                <li><img src="@OnlandVisualTrashAssessmentScore.A.LegendImgUrl()"/> A</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.B.LegendImgUrl()"/> B</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.C.LegendImgUrl()"/> C</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.D.LegendImgUrl()"/> D</li>
                             </ul>
                         </div>
                     </div>
