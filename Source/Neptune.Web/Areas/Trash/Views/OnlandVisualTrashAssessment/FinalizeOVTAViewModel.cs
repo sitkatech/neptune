@@ -74,7 +74,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID =
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData()
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData()?
                         .OnlandVisualTrashAssessmentScoreID;
             }
             else

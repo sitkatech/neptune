@@ -13,6 +13,11 @@ namespace Neptune.Web.Models
 
         public OnlandVisualTrashAssessmentScore CalculateScoreFromBackingData()
         {
+            if (!OnlandVisualTrashAssessments.Any())
+            {
+                return null;
+            }
+
             var average = OnlandVisualTrashAssessments
                 .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
                             OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID)
@@ -20,7 +25,7 @@ namespace Neptune.Web.Models
 
             var round = (int) Math.Round(average);
 
-            return OnlandVisualTrashAssessmentScore.All.Single(x => x.NumericValue == round);
+            return OnlandVisualTrashAssessmentScore.All.SingleOrDefault(x => x.NumericValue == round);
         }
 
         public HtmlString GetMostRecentAssessmentDateAsHtmlString()

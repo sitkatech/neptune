@@ -15,6 +15,7 @@ using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using System.Xml.XPath;
 using LtInfo.Common.Mvc;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
@@ -373,6 +374,47 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                     x.AddOrRemoveParcels(onlandVisualTrashAssessment)));
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public PartialViewResult Delete(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID);
+            return ViewDeleteOnlandVisualTrashAssessment(onlandVisualTrashAssessment, viewModel);
+        }
+
+        [HttpPost]
+        [NeptuneViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteOnlandVisualTrashAssessment(onlandVisualTrashAssessment, viewModel);
+            }
+
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
+            onlandVisualTrashAssessment.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            if (onlandVisualTrashAssessmentArea != null)
+            {
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentArea
+                    .CalculateScoreFromBackingData()?.OnlandVisualTrashAssessmentScoreID;
+            }
+
+            SetMessageForDisplay("Successfully deleted the assessment.");
+            return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(c => c.Index()));
+        }
+
+        private PartialViewResult ViewDeleteOnlandVisualTrashAssessment(OnlandVisualTrashAssessment onlandVisualTrashAssessment, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to delete the assessment from {onlandVisualTrashAssessment.CreatedDate.ToShortDateString()}?";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
 
         // helpers

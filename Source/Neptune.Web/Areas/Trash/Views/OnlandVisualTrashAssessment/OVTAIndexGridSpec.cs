@@ -13,7 +13,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             if (showDelete)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap("", false, true), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), true, true), 30, DhtmlxGridColumnFilterType.None);
             }
             if (showEdit)
             {

@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using GeoJSON.Net.Feature;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using static System.String;
 
 namespace Neptune.Web.Models
@@ -13,6 +15,23 @@ namespace Neptune.Web.Models
 
     public static class OnlandVisualTrashAssessmentModelExtensions
     {
+        public static readonly UrlTemplate<int> EditUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Instructions(UrlTemplate.Parameter1Int)));
+        public static string GetEditUrl(this OnlandVisualTrashAssessment ovta)
+        {
+            return EditUrlTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
+        }
+
+        public static readonly UrlTemplate<int> DeleteUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
+        public static string GetDeleteUrl(this OnlandVisualTrashAssessment ovta)
+        {
+            return DeleteUrlTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
+        }
+
+
         private static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
             var points = Join(",",
@@ -47,12 +66,6 @@ namespace Neptune.Web.Models
 
             featureCollection.Features.Add(feature);
             return featureCollection;
-        }
-
-        public static string GetEditUrl(this OnlandVisualTrashAssessment ovta)
-        {
-            return SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
-                x.Instructions(ovta.OnlandVisualTrashAssessmentID));
         }
 
         public static List<int> GetParcelIDsForAddOrRemoveParcels(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
