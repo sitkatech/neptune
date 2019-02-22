@@ -19,6 +19,7 @@
     </license>
     -----------------------------------------------------------------------*@
 @using LtInfo.Common.DesignByContract
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Models
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.OVTASection
 @{
@@ -54,8 +55,8 @@
 
         .field-validation-success {
             color: #5cb85c;
-            
         }
+
         .field-validation-error {
             margin-right: 4px;
         }
@@ -63,13 +64,14 @@
         nav#wizardNav ul li a {
             padding-left: 23px;
         }
-        
-        nav#wizardNav ul li a.hasCompletionStatus {
-            padding-left: 5px;
-        }
-            nav#wizardNav ul li a.hasCompletionStatus.disabledItem {
-                padding-left: 23px;
+
+            nav#wizardNav ul li a.hasCompletionStatus {
+                padding-left: 5px;
             }
+
+                nav#wizardNav ul li a.hasCompletionStatus.disabledItem {
+                    padding-left: 23px;
+                }
 
         @@media (min-width: 769px) {
             nav#wizardNav ul li.activeGroup a:after {
@@ -92,21 +94,39 @@
         hr {
             border-top: 1px solid #ddd;
         }
-        
+
         .glyphicon-chevron-down {
             margin-left: 7px;
             margin-top: 7px;
         }
     </style>
 }
-    
+@if (ViewDataTyped.OVTA != null)
+{
+    <div class="pull-right">
+        <div class="dropdown moreActionsToggle" style="display: inline;">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                @if (ViewDataTyped.OVTA != null)
+                {
+                    <li>
+                        @ModalDialogFormHelper.MakeDeleteLink("Delete OVTA", ViewDataTyped.OVTA.GetDeleteUrl(), new List<string> { "" }, true)
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
 @Html.ValidationSummary()
 <div>
     <div class="row wizard">
         <div class="col-xs-12 col-sm-3">
             <nav id="wizardNav">
                 <ul class="nav nav-stacked">
-                    @foreach (var ovtaSection in OVTASection.All.Where(x=>x.IsSectionRelevant(ViewDataTyped.OVTA)))
+                    @foreach (var ovtaSection in OVTASection.All.Where(x => x.IsSectionRelevant(ViewDataTyped.OVTA)))
                     {
                         var sectionIsActive = ViewDataTyped.SectionName == ovtaSection.OVTASectionName;
                         <li class="@(sectionIsActive ? "activeGroup" : string.Empty)">
