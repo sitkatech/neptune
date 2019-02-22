@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
@@ -58,6 +59,27 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
             var viewData = new TrashMapAssetPanelViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
             return RazorPartialView<TrashMapAssetPanel, TrashMapAssetPanelViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ActionResult NewAssessment(
+            OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            var
+                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress);
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
+            onlandVisualTrashAssessment.AssessingNewArea = false;
+            onlandVisualTrashAssessment.StormwaterJurisdictionID =
+                onlandVisualTrashAssessmentArea.StormwaterJurisdictionID;
+            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            return Redirect(
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(onlandVisualTrashAssessment)));
         }
     }
 

@@ -57,7 +57,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit);
-            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x=>x.OnlandVisualTrashAssessmentArea == onlandVisualTrashAssessmentArea).ToList();
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x=>x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).ToList();
         }
 
         private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec,

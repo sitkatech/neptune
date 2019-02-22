@@ -31,7 +31,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
                 ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
-            NewUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(null));
+            NewUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
 
 
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
