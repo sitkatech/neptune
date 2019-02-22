@@ -66,7 +66,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, true);
-            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList();
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList().Where(x=>CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction)).ToList();
         }
 
         [HttpGet]

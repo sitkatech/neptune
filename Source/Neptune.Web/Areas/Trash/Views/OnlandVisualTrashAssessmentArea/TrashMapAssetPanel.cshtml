@@ -40,10 +40,13 @@ Source code is available upon request via <support@sitkatech.com>.
                 </dl>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <a href="@ViewDataTyped.OnlandVisualTrashAssessmentArea.GetDetailUrl()" class="btn btn-neptune">View Details</a>
+        @if (ViewDataTyped.UserHasViewDetailsPermission)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+                    <a href="@ViewDataTyped.OnlandVisualTrashAssessmentArea.GetDetailUrl()" class="btn btn-neptune">View Details</a>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
