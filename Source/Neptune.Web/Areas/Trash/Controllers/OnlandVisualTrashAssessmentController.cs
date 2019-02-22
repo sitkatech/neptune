@@ -37,10 +37,27 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonData()
         {
-            var treatmentBMPs = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson);
+            var onlandVisualTrashAssessments = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson);
             var gridJsonNetJObjectResult =
-                new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(treatmentBMPs, gridSpec);
+                new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(onlandVisualTrashAssessments, gridSpec);
             return gridJsonNetJObjectResult;
+        }
+
+        [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonDataForAreaDetails(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessments = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson, onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject);
+            var gridJsonNetJObjectResult =
+                new GridJsonNetJObjectResult<OnlandVisualTrashAssessment>(onlandVisualTrashAssessments, gridSpec);
+            return gridJsonNetJObjectResult;
+        }
+
+        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec, Person currentPerson, OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
+            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
+            gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit);
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x=>x.OnlandVisualTrashAssessmentArea == onlandVisualTrashAssessmentArea).ToList();
         }
 
         private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec,
