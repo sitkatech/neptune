@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -11,13 +12,16 @@ namespace Neptune.Web.Controllers
 {
     public class MaintenanceRecordController : NeptuneBaseController
     {
+        // todo: delefate the creation of the GJNJOR to a helper method
+        // todo: include before where
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<MaintenanceRecord> MaintenanceRecordsGridJsonData(
             TreatmentBMPPrimaryKey treatmentBmpPrimaryKey)
         {
             var treatmentBmp = treatmentBmpPrimaryKey.EntityObject;
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, treatmentBmp);
-            var bmpMaintenanceRecords = treatmentBmp.MaintenanceRecords.ToList()
+            var bmpMaintenanceRecords = treatmentBmp.MaintenanceRecords
+                .ToList()
                 .OrderByDescending(x => x.GetMaintenanceRecordDate()).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
@@ -28,7 +32,9 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<MaintenanceRecord> AllMaintenanceRecordsGridJsonData()
         {
             var customAttributeTypes = HttpRequestStorage.DatabaseEntities.CustomAttributeTypes.Where(x => x.CustomAttributeTypePurposeID == CustomAttributeTypePurpose.Maintenance.CustomAttributeTypePurposeID);
-            var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords.ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson)).ToList();
+            var bmpMaintenanceRecords = HttpRequestStorage.DatabaseEntities.MaintenanceRecords
+                .Include(x=>x.FieldVisit).Include(x=>x.FieldVisit.PerformedByPerson.Organization).Include(x=>x.TreatmentBMP).Include(x=>x.MaintenanceRecordObservations).Include(x=>x.MaintenanceRecordObservations.Select(y=>y.MaintenanceRecordObservationValues))
+                .ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson)).ToList();
             var gridSpec = new MaintenanceRecordGridSpec(CurrentPerson, customAttributeTypes);
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<MaintenanceRecord>(bmpMaintenanceRecords, gridSpec);
