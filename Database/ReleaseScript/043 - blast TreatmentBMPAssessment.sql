@@ -1,3 +1,0 @@
-delete from TreatmentBMPObservation
-delete from TreatmentBMPAssessment
-delete from FieldVisit

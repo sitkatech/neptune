@@ -1,4 +1,0 @@
-create unique nonclustered index AK_FieldVisit_InitialAssessmentID on dbo.FieldVisit(InitialAssessmentID) where InitialAssessmentID is not null
-create unique nonclustered index AK_FieldVisit_PostMaintenanceAssessmentID on dbo.FieldVisit(PostMaintenanceAssessmentID) where PostMaintenanceAssessmentID is not null
-create unique nonclustered index AK_FieldVisit_MaintenanceRecordID on dbo.FieldVisit(MaintenanceRecordID) where MaintenanceRecordID is not null
-alter table dbo.FieldVisit add constraint CK_InitialAssessmentMustBeDifferentFromPMAssessmentIfNotBothNull check (InitialAssessmentID <> PostMaintenanceAssessmentID OR (InitialAssessmentID is null AND PostMaintenanceAssessmentID is null))

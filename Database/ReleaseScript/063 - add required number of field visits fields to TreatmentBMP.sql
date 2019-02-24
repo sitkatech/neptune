@@ -1,5 +1,0 @@
-Alter Table TreatmentBMP
-Add RequiredFieldVisitsPerYear int null
-
-Alter Table TreatmentBMP
-Add RequiredPostStormFieldVisitsPerYear int null

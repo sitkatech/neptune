@@ -1,2 +1,0 @@
-alter table dbo.MaintenanceRecord
-alter column MaintenanceRecordTypeID int null
