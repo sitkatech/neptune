@@ -654,6 +654,8 @@ namespace Neptune.Web.Controllers
                 collectionMethodSectionViewModel.UpdateModel(treatmentBMPObservation);
             }
 
+            treatmentBMPAssessment.CalculateAssessmentScore();
+
             if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Assessment Information successfully saved.");
 
