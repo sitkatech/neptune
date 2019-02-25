@@ -59,9 +59,7 @@ namespace Neptune.Web.Views.Shared
         private List<LtInfoMenuItem> MakeNeptuneHelpMenu(Person currentPerson)
         {
             var helpMenu = new LtInfoMenuItem("Help");
-            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
-                ModalDialogFormHelper.ModalDialogFormLink("Request Support", RequestSupportUrl, "Request Support", 800,
-                    "Submit Request", "Cancel", new List<string>(), null, null).ToString(), "ToolHelp"));
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(c=>c.Support()), currentPerson, "Request Support", "ToolHelp"));
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
 
             helpMenu.ExtraDropdownMenuCssClasses = new List<string> { "dropdown-menu-right" };
