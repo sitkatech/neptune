@@ -21,7 +21,6 @@ namespace Neptune.Web.Models
             Property(x => x.FieldVisitID).HasColumnName(@"FieldVisitID").HasColumnType("int").IsRequired();
             Property(x => x.TreatmentBMPAssessmentTypeID).HasColumnName(@"TreatmentBMPAssessmentTypeID").HasColumnType("int").IsRequired();
             Property(x => x.Notes).HasColumnName(@"Notes").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(1000);
-            Property(x => x.AssessmentScore).HasColumnName(@"AssessmentScore").HasColumnType("float").IsOptional();
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.TreatmentBMPAssessments).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_TreatmentBMPAssessment_TreatmentBMP_TreatmentBMPID

@@ -31,7 +31,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, string notes, double? assessmentScore) : this()
+        public TreatmentBMPAssessment(int treatmentBMPAssessmentID, int treatmentBMPID, int treatmentBMPTypeID, int fieldVisitID, int treatmentBMPAssessmentTypeID, string notes) : this()
         {
             this.TreatmentBMPAssessmentID = treatmentBMPAssessmentID;
             this.TreatmentBMPID = treatmentBMPID;
@@ -39,7 +39,6 @@ namespace Neptune.Web.Models
             this.FieldVisitID = fieldVisitID;
             this.TreatmentBMPAssessmentTypeID = treatmentBMPAssessmentTypeID;
             this.Notes = notes;
-            this.AssessmentScore = assessmentScore;
         }
 
         /// <summary>
@@ -138,7 +137,6 @@ namespace Neptune.Web.Models
         public int FieldVisitID { get; set; }
         public int TreatmentBMPAssessmentTypeID { get; set; }
         public string Notes { get; set; }
-        public double? AssessmentScore { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPAssessmentID; } set { TreatmentBMPAssessmentID = value; } }
 

@@ -70,9 +70,59 @@ namespace Neptune.Web.Models
             return IsAssessmentComplete();
         }
 
+        public double? CalculateAssessmentScore()
+        {
+            if (!TreatmentBMP.IsBenchmarkAndThresholdsComplete())
+            {
+                return null;
+            }
+
+            if (!IsAssessmentComplete())
+            {
+                return null;
+            }           
+
+            //if any observations that override the score have a failing score, return 0
+            var observationTypesThatPotentiallyOverrideScore = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .Where(x => x.OverrideAssessmentScoreIfFailing)
+                .ToList().Select(x => x.TreatmentBMPAssessmentObservationType);
+
+            if (observationTypesThatPotentiallyOverrideScore.Any(x =>
+                {
+                    var treatmentBMPObservation = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType == x);
+                    return treatmentBMPObservation?.OverrideScoreForFailingObservation(x) ?? false;
+                }))
+            {
+                return 0;
+            }
+
+            //if all observations override the score and all are passing, return 5
+            if (TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .All(x => x.OverrideAssessmentScoreIfFailing))
+            {
+                return 5;
+            }
+
+            //otherwise calculate the score
+            var score = TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
+                .Where(x => !x.OverrideAssessmentScoreIfFailing)
+                .Select(x => x.TreatmentBMPAssessmentObservationType).ToList().Sum(x =>
+                {
+                    var observationScore = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).CalculateObservationScore();
+
+                    var treatmentBMPAssessmentObservationType = TreatmentBMPObservations.SingleOrDefault(y => y.TreatmentBMPAssessmentObservationType.TreatmentBMPAssessmentObservationTypeID == x.TreatmentBMPAssessmentObservationTypeID).TreatmentBMPAssessmentObservationType;
+                    var observationWeight = Convert.ToDouble(TreatmentBMP.TreatmentBMPType
+                        .GetTreatmentBMPTypeObservationType(treatmentBMPAssessmentObservationType).AssessmentScoreWeight
+                        .Value);
+                    return observationScore * observationWeight;
+                });
+
+            return Math.Round(score.Value, 1);
+        }
+
         public string FormattedScore()
         {
-            var score = this.CalculateAssessmentScore();
+            var score = CalculateAssessmentScore();
             return score?.ToString("0.0") ?? "-";
         }
 
