@@ -23,6 +23,8 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
+using System.Web.Mvc;
+using LtInfo.Common.BootstrapWrappers;
 
 namespace Neptune.Web.Views.Shared
 {
@@ -59,7 +61,10 @@ namespace Neptune.Web.Views.Shared
         private List<LtInfoMenuItem> MakeNeptuneHelpMenu(Person currentPerson)
         {
             var helpMenu = new LtInfoMenuItem("Help");
-            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(c=>c.Support()), currentPerson, "Request Support", "ToolHelp"));
+
+            helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem("Request Support",
+                $@"<a href='{RequestSupportUrl}' target='_blank'>Request Support<span class='glyphicon glyphicon-new-window'></span></a>", "ToolHelp"));
+
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
 
             helpMenu.ExtraDropdownMenuCssClasses = new List<string> { "dropdown-menu-right" };
