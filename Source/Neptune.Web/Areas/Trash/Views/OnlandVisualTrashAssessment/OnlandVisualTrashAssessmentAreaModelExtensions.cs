@@ -21,6 +21,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return DetailUrlTemplate.ParameterReplace(ovtaa.OnlandVisualTrashAssessmentAreaID);
         }
 
+        public static readonly UrlTemplate<int> BeginOVTAUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.NewAssessment(UrlTemplate.Parameter1Int)));
+        public static string GetBeginOVTAUrl(this Models.OnlandVisualTrashAssessmentArea ovtaa)
+        {
+            return BeginOVTAUrlTemplate.ParameterReplace(ovtaa.OnlandVisualTrashAssessmentAreaID);
+        }
+
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<Models.OnlandVisualTrashAssessmentArea> areas)
         {
             var featureCollection = new FeatureCollection();
