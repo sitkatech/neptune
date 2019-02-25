@@ -81,7 +81,7 @@ namespace Neptune.Web.Controllers
             viewModel.ReturnUrl = cancelUrl;
             var isStandalonePage = false;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
             return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
@@ -138,7 +138,7 @@ namespace Neptune.Web.Controllers
             viewModel.ReturnUrl = cancelUrl;
             var isStandalonePage = true;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
             return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 

@@ -32,17 +32,15 @@ namespace Neptune.Web.Views.Shared
         public readonly bool IsUserAnonymous;
         public readonly IEnumerable<SelectListItem> SupportRequestTypes;
         public string CancelUrl { get; }
-        public bool IsStandalonePage { get; }
 
         public SupportFormViewData(Person currentPerson, Models.NeptunePage neptunePage, string successMessage,
             bool isUserAnonymous, IEnumerable<SelectListItem> supportRequestTypes,
-            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl, bool isStandalonePage) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
+            List<SupportRequestTypeSimple> supportRequestTypeSimples, string cancelUrl) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             EntityName = "Stormwater Tools";
             PageTitle = "Request Support";
             SupportRequestTypeSimples = supportRequestTypeSimples;
             CancelUrl = cancelUrl;
-            IsStandalonePage = isStandalonePage;
             SuccessMessage = successMessage;
             IsUserAnonymous = isUserAnonymous;
             SupportRequestTypes = supportRequestTypes;
