@@ -24,11 +24,7 @@ using LtInfo.Common.HtmlHelperExtensions;
 
 namespace Neptune.Web.Views.Shared
 {
-    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebPartialViewPage<SupportFormViewData, SupportFormViewModel>
+    public abstract class SupportForm : LtInfo.Common.Mvc.TypedWebViewPage<SupportFormViewData, SupportFormViewModel>
     {
-        public static void RenderPartialView(HtmlHelper html, SupportFormViewData viewData, SupportFormViewModel viewModel)
-        {
-            html.RenderRazorSitkaPartial<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData,viewModel);
-        }
     }
 }

@@ -37,12 +37,12 @@ namespace Neptune.Web.Controllers
     {
         [AnonymousUnclassifiedFeature]
         [HttpGet]
-        public PartialViewResult Support()
+        public ViewResult Support()
         {
             return ViewSupport(null, "");
         }
         
-        private PartialViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
+        private ViewResult ViewSupport(SupportRequestTypeEnum? supportRequestTypeEnum, string optionalPrepopulatedDescription)
         {
             var currentPageUrl = string.Empty;
             if (Request.UrlReferrer != null)
@@ -69,7 +69,7 @@ namespace Neptune.Web.Controllers
             return ViewSupportImpl(viewModel, string.Empty);
         }
 
-        private PartialViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
+        private ViewResult ViewSupportImpl(SupportFormViewModel viewModel, string successMessage)
         {
             var allSupportRequestTypes = SupportRequestType.All.OrderBy(x => x.SupportRequestTypeSortOrder).ToList();
 
@@ -79,10 +79,9 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
-            var isStandalonePage = false;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
-            return RazorPartialView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, successMessage, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
+            return RazorView<SupportForm, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
         [AnonymousUnclassifiedFeature]
@@ -99,7 +98,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            return new ModalDialogFormJsonResult();
+            return Redirect(viewModel.ReturnUrl);
         }
 
         [LoggedInUnclassifiedFeature]
@@ -136,9 +135,8 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.RequestSupport);
             var cancelUrl = Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index());
             viewModel.ReturnUrl = cancelUrl;
-            var isStandalonePage = true;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl, isStandalonePage);
+            var viewData = new SupportFormViewData(CurrentPerson, neptunePage, string.Empty, IsCurrentUserAnonymous(), supportRequestTypes, allSupportRequestTypes.Select(x => new SupportRequestTypeSimple(x)).ToList(), cancelUrl);
             return RazorView<Views.Help.RequestOrganizationNameChange, SupportFormViewData, SupportFormViewModel>(viewData, viewModel);
         }
 
@@ -161,7 +159,7 @@ namespace Neptune.Web.Controllers
 
         [LoggedInUnclassifiedFeature]
         [HttpGet]
-        public PartialViewResult RequestToChangePrivileges()
+        public ViewResult RequestToChangePrivileges()
         {
             return ViewSupport(SupportRequestTypeEnum.RequestToChangeUserAccountPrivileges, string.Empty);
         }

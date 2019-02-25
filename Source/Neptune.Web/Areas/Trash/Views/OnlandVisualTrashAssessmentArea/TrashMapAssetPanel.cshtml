@@ -18,7 +18,9 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
+@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 @using Neptune.Web.Models
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea.TrashMapAssetPanel
@@ -45,6 +47,11 @@ Source code is available upon request via <support@sitkatech.com>.
             <div class="row">
                 <div class="col-xs-12">
                     <a href="@ViewDataTyped.OnlandVisualTrashAssessmentArea.GetDetailUrl()" class="btn btn-neptune">View Details</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0} Begin OVTA", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus")), ViewDataTyped.OnlandVisualTrashAssessmentArea.GetBeginOVTAUrl(), "Begin OVTA", 500, "Begin", "Cancel", new List<string> { "btn btn-neptune" }, null, null)
                 </div>
             </div>
         }

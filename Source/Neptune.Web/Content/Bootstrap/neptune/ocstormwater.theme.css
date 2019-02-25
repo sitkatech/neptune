@@ -1255,3 +1255,6 @@ hr {
   border: none;
   color: #3e72b0;
 }
+.glyphicon-new-window {
+  padding-left: 10px;
+}
