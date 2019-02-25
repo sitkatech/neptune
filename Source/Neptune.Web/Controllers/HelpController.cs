@@ -98,7 +98,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SupportRequestLogs.Add(supportRequestLog);
             supportRequestLog.SendMessage(Request.UserHostAddress, Request.UserAgent, viewModel.CurrentPageUrl, supportRequestLog.SupportRequestType);               
             SetMessageForDisplay("Support request sent.");
-            return new ModalDialogFormJsonResult();
+            return Redirect(viewModel.ReturnUrl);
         }
 
         [LoggedInUnclassifiedFeature]
