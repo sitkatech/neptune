@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
@@ -88,12 +87,7 @@ namespace Neptune.Web.Controllers
             TreatmentBMP treatmentBMP, bool detailPage)
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
-            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits
-                    // todo: determine which of these includes actually speed up the query
-                //.Include(x=>x.MaintenanceRecords).Include(x=>x.TreatmentBMPAssessments).Include(x=>x.TreatmentBMPAssessments.Select(y=>y.TreatmentBMPObservations))
-                //.Include(x=>x.PerformedByPerson)
-                //.Include(x=>x.TreatmentBMP).Include(x=>x.TreatmentBMP.TreatmentBMPType).Include(x=>x.TreatmentBMP.StormwaterJurisdiction).Include(x=>x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds).Include(x=>x.TreatmentBMP.CustomAttributes).Include(x=>x.TreatmentBMP.CustomAttributes.Select(y=>y.CustomAttributeValues))
-                .ToList().Where(x=> x.TreatmentBMP.CanView(currentPerson));
+            var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits.ToList().Where(x=> x.TreatmentBMP.CanView(currentPerson));
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
                 : fieldVisits).ToList();

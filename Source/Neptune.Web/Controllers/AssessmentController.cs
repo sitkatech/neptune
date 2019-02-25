@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -25,12 +24,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMPAssessment> TreatmentBMPAssessmentsGridJsonData()
         {
             var gridSpec = new TreatmentBMPAssessmentGridSpec(CurrentPerson, HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessmentObservationTypes);
-            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments
-                .Include(x=>x.FieldVisit.PerformedByPerson)
-                .Include(x=>x.TreatmentBMP).Include(x=>x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds)
-                .Include(x=>x.TreatmentBMPType).Include(x=>x.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes)
-                .Include(x=>x.TreatmentBMPObservations)
-                .ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson))
+            var bmpAssessments = HttpRequestStorage.DatabaseEntities.TreatmentBMPAssessments.ToList().Where(x=>x.TreatmentBMP.CanView(CurrentPerson))
                 .OrderByDescending(x => x.GetAssessmentDate()).ToList();
             var gridJsonNetJObjectResult =
                 new GridJsonNetJObjectResult<TreatmentBMPAssessment>(bmpAssessments, gridSpec);
