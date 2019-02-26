@@ -88,7 +88,7 @@ namespace Neptune.Web.Views.ManagerDashboard
                     var initialAssessment = x.GetInitialAssessment();
                     return initialAssessment != null
                         ? UrlTemplate.MakeHrefString(initialAssessment.GetDetailUrl(),
-                            initialAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
+                            initialAssessment.CalculateIsAssessmentComplete() ? "Complete" : "In Progress",
                             new Dictionary<string, string>())
                         : new HtmlString("Not Performed");
                 }, 95, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);
@@ -109,7 +109,7 @@ namespace Neptune.Web.Views.ManagerDashboard
                     var postMaintenanceAssessment = x.GetPostMaintenanceAssessment();
                     return postMaintenanceAssessment != null
                         ? UrlTemplate.MakeHrefString(postMaintenanceAssessment.GetDetailUrl(),
-                            postMaintenanceAssessment.IsAssessmentComplete() ? "Complete" : "In Progress",
+                            postMaintenanceAssessment.CalculateIsAssessmentComplete() ? "Complete" : "In Progress",
                             new Dictionary<string, string>())
                         : new HtmlString("Not Performed");
                 }, 120, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict, DhtmlxGridColumnAlignType.Center);

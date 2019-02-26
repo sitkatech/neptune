@@ -22,6 +22,7 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Views;
 
 namespace Neptune.Web.Models
@@ -49,25 +50,19 @@ namespace Neptune.Web.Models
         {
             return GetAssessmentDate().GetFiscalYear();
         }
-
-        public bool IsAssessmentComplete()
-        {
-            return TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(IsObservationComplete);
-        }
-
         public string AssessmentStatus()
         {
             var completedObservationCount =
                 TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count(IsObservationComplete);
             var totalObservationCount = TreatmentBMP.TreatmentBMPType.GetObservationTypes().Count;
-            return IsAssessmentComplete()
+            return this.CalculateIsAssessmentComplete()
                 ? "Complete"
                 : $"Incomplete ({completedObservationCount} of {totalObservationCount} observations complete)";
         }
 
         public bool HasCalculatedOrAlternateScore()
         {
-            return IsAssessmentComplete();
+            return this.CalculateIsAssessmentComplete();
         }
 
         public string FormattedScore()

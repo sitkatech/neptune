@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
@@ -57,7 +58,7 @@ namespace Neptune.Web.Controllers
         public GridJsonNetJObjectResult<TreatmentBMP> ProvisionalTreatmentBMPGridJsonData(string gridName)
         {
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
-            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson);
+            var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x=>x.TreatmentBMPBenchmarkAndThresholds).GetProvisionalTreatmentBMPs(CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
         }
     }

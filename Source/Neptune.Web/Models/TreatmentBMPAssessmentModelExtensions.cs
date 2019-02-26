@@ -60,7 +60,7 @@ namespace Neptune.Web.Models
                 return null;
             }
 
-            if (!treatmentBMPAssessment.IsAssessmentComplete())
+            if (!treatmentBMPAssessment.CalculateIsAssessmentComplete())
             {
                 return null;
             }
@@ -70,7 +70,7 @@ namespace Neptune.Web.Models
                 return Math.Round(treatmentBMPAssessment.AssessmentScore.Value, 1);
             }
 
-            
+
             //if any observations that override the score have a failing score, return 0
             var observationTypesThatPotentiallyOverrideScore = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeAssessmentObservationTypes
                 .Where(x => x.OverrideAssessmentScoreIfFailing)
@@ -113,6 +113,22 @@ namespace Neptune.Web.Models
             }
 
             return Math.Round(score.Value, 1);
+        }
+
+        // attempt to read the assessment's cached completeness status; otherwise calculate it, cache it, and return it
+        public static bool CalculateIsAssessmentComplete(this TreatmentBMPAssessment treatmentBMPAssessment)
+        {
+            if (treatmentBMPAssessment.IsAssessmentComplete.HasValue)
+            {
+                return treatmentBMPAssessment.IsAssessmentComplete.Value;
+            }
+
+            var isAssessmentComplete = treatmentBMPAssessment.TreatmentBMP.TreatmentBMPType.GetObservationTypes().All(treatmentBMPAssessment.IsObservationComplete);
+
+            treatmentBMPAssessment.IsAssessmentComplete = isAssessmentComplete;
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            return isAssessmentComplete;
         }
     }
 }

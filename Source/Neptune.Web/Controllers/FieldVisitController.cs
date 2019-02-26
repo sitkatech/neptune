@@ -37,6 +37,7 @@ using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.Shared.EditAttributes;
 using Neptune.Web.Views.Shared.Location;
 using Neptune.Web.Views.Shared.ManagePhotosWithPreview;
+using Z.EntityFramework.Plus;
 using FieldVisitSection = Neptune.Web.Models.FieldVisitSection;
 
 namespace Neptune.Web.Controllers
@@ -89,10 +90,8 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new FieldVisitGridSpec(currentPerson, detailPage);
             var fieldVisits = HttpRequestStorage.DatabaseEntities.FieldVisits
-                    // todo: determine which of these includes actually speed up the query
-                //.Include(x=>x.MaintenanceRecords).Include(x=>x.TreatmentBMPAssessments).Include(x=>x.TreatmentBMPAssessments.Select(y=>y.TreatmentBMPObservations))
-                //.Include(x=>x.PerformedByPerson)
-                //.Include(x=>x.TreatmentBMP).Include(x=>x.TreatmentBMP.TreatmentBMPType).Include(x=>x.TreatmentBMP.StormwaterJurisdiction).Include(x=>x.TreatmentBMP.TreatmentBMPBenchmarkAndThresholds).Include(x=>x.TreatmentBMP.CustomAttributes).Include(x=>x.TreatmentBMP.CustomAttributes.Select(y=>y.CustomAttributeValues))
+                .Include(x=>x.MaintenanceRecords)
+                .Include(x => x.TreatmentBMP).Include(x => x.TreatmentBMP.TreatmentBMPType).Include(x=>x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeCustomAttributeTypes).Include(x=>x.TreatmentBMP.CustomAttributes)
                 .ToList().Where(x=> x.TreatmentBMP.CanView(currentPerson));
             return (treatmentBMP != null
                 ? fieldVisits.Where(x => x.TreatmentBMPID == treatmentBMP.TreatmentBMPID)
@@ -660,7 +659,9 @@ namespace Neptune.Web.Controllers
                 collectionMethodSectionViewModel.UpdateModel(treatmentBMPObservation);
             }
 
+            // cache the score and the completeness status because they are difficult to calculate en masse later.
             treatmentBMPAssessment.CalculateAssessmentScore();
+            treatmentBMPAssessment.CalculateIsAssessmentComplete();
 
             if (FinalizeVisitIfNecessary(viewModel, fieldVisit)){return RedirectToAction(new SitkaRoute<FieldVisitController>(c => c.Detail(fieldVisit)));}
             SetMessageForDisplay("Assessment Information successfully saved.");

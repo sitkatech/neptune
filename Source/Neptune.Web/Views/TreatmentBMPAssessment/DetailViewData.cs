@@ -46,7 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMPAssessment
                 SitkaRoute<TreatmentBMPBenchmarkAndThresholdController>.BuildUrlFromExpression(x =>
                     x.Instructions(treatmentBMPAssessment.TreatmentBMP));
 
-            CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson) && !treatmentBMPAssessment.IsAssessmentComplete();
+            CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(CurrentPerson) && !treatmentBMPAssessment.CalculateIsAssessmentComplete();
 
             EntityName = "Treatment BMP Assessments";
             EntityUrl = SitkaRoute<AssessmentController>.BuildUrlFromExpression(x => x.Index());

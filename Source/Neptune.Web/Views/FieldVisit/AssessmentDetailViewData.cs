@@ -31,7 +31,7 @@ namespace Neptune.Web.Views.FieldVisit
                         x.Instructions(treatmentBMPAssessment.TreatmentBMP));
 
                 CanEdit = CurrentPersonCanManage && treatmentBMPAssessment.CanEdit(currentPerson) &&
-                          !treatmentBMPAssessment.IsAssessmentComplete();
+                          !treatmentBMPAssessment.CalculateIsAssessmentComplete();
 
                 var carouselImages = TreatmentBMPAssessment.TreatmentBMPAssessmentPhotos;
                 ImageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);
