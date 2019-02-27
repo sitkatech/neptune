@@ -166,8 +166,9 @@ namespace Neptune.Web.Models
 
         public HtmlString GetDelineationTypeDisplay()
         {
-            return DelineationType != null
-                ? new HtmlString(DelineationType.DelineationTypeDisplayName)
+            var delineationType = Delineation?.DelineationType;
+            return delineationType != null
+                ? new HtmlString(delineationType?.DelineationTypeDisplayName)
                 : new HtmlString("<p class='systemText'>No Delineation Provided</p>");
         }
     }

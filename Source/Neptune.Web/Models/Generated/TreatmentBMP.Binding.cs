@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, DbGeometry delineationGeometry, int? delineationTypeID) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -60,8 +60,7 @@ namespace Neptune.Web.Models
             this.InventoryVerifiedByPersonID = inventoryVerifiedByPersonID;
             this.InventoryLastChangedDate = inventoryLastChangedDate;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
-            this.DelineationGeometry = delineationGeometry;
-            this.DelineationTypeID = delineationTypeID;
+            this.DelineationID = delineationID;
         }
 
         /// <summary>
@@ -213,8 +212,7 @@ namespace Neptune.Web.Models
         public int? InventoryVerifiedByPersonID { get; set; }
         public DateTime? InventoryLastChangedDate { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
-        public DbGeometry DelineationGeometry { get; set; }
-        public int? DelineationTypeID { get; set; }
+        public int? DelineationID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -235,7 +233,7 @@ namespace Neptune.Web.Models
         public TreatmentBMPLifespanType TreatmentBMPLifespanType { get { return TreatmentBMPLifespanTypeID.HasValue ? TreatmentBMPLifespanType.AllLookupDictionary[TreatmentBMPLifespanTypeID.Value] : null; } }
         public virtual Person InventoryVerifiedByPerson { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
-        public DelineationType DelineationType { get { return DelineationTypeID.HasValue ? DelineationType.AllLookupDictionary[DelineationTypeID.Value] : null; } }
+        public virtual Delineation Delineation { get; set; }
 
         public static class FieldLengths
         {

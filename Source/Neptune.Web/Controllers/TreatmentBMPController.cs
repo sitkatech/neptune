@@ -97,7 +97,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] { treatmentBMP }, false, true));
-            if (treatmentBMP.DelineationGeometry != null)
+            if (treatmentBMP.Delineation.DelineationGeometry != null)
             {
                 mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(treatmentBMP));
             }

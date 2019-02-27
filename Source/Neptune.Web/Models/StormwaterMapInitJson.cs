@@ -63,9 +63,9 @@ namespace Neptune.Web.Models
 
         public static LayerGeoJson MakeTreatmentBMPDelineationLayerGeoJson(TreatmentBMP treatmentBMP)
         {
-            Check.Require(treatmentBMP.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
+            Check.Require(treatmentBMP.Delineation.DelineationGeometry != null, "Tried to build delineation layer when delineation was null");
             var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.DelineationGeometry);
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
             featureCollection.Features.Add(feature);
 
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };

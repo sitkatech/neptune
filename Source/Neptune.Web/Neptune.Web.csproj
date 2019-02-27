@@ -73,6 +73,10 @@
     <Compile Include="Models\Generated\CustomAttributeValueConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\CustomAttributeValuePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DatabaseEntities.Context.Binding.cs" />
+    <Compile Include="Models\Generated\Delineation.Binding.cs" />
+    <Compile Include="Models\Generated\Delineation.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\DelineationConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\DelineationPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\DelineationType.Binding.cs" />
     <Compile Include="Models\Generated\DelineationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\FieldDefinition.Binding.cs" />
