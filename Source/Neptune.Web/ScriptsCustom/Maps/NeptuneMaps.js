@@ -357,9 +357,20 @@ NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup
         }
     );
 
-    features.bindPopup(popup);
-
+    if (popup) {
+        features.bindPopup(popup);
+    }
     this.addLayerToLayerControl(features, layerName);
+};
+
+NeptuneMaps.Map.prototype.addEsriTileLayer = function(url, layerName) {
+    var tile = L.esri.dynamicMapLayer({
+            url: url
+        }
+    );
+
+    this.addLayerToLayerControl(tile, layerName);
+    tile.addTo(this.map);
 };
 
 // constants for things like feature color that ought to be consistent across the site
