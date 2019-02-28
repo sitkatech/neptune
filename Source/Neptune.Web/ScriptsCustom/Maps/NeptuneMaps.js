@@ -344,6 +344,16 @@ NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, callback) {
     }
 };
 
+NeptuneMaps.Map.prototype.deselect = function (callback) {
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
+        this.map.removeLayer(this.lastSelected);
+    }
+
+    if (callback) {
+        callback();
+    }
+};
+
 NeptuneMaps.Map.prototype.disableUserInteraction = function() {
     this.map.dragging.disable();
     this.map.touchZoom.disable();
