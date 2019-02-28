@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
@@ -36,7 +37,8 @@ namespace Neptune.Web.Controllers
     {
         public ViewResult DelineationMap()
         {
-            var viewData = new DelineationMapViewData(CurrentPerson, new StormwaterMapInitJson("delineationMap"));
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
+            var viewData = new DelineationMapViewData(CurrentPerson, delineationMapInitJson);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
     }
@@ -61,5 +63,15 @@ namespace Neptune.Web.Views.Delineation
     public abstract class DelineationMap : TypedWebViewPage<DelineationMapViewData>
     {
 
+    }
+
+    public class DelineationMapInitJson : StormwaterMapInitJson
+    {
+        public LayerGeoJson TreatmentBMPLayerGeoJson { get; set; }
+
+        public DelineationMapInitJson(string mapDivID, DbSet<Models.TreatmentBMP> databaseEntitiesTreatmentBMPs) : base(mapDivID)
+        {
+            TreatmentBMPLayerGeoJson = MakeTreatmentBMPLayerGeoJson(databaseEntitiesTreatmentBMPs, true, false);
+        }
     }
 }

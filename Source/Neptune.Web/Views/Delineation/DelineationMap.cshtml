@@ -22,18 +22,59 @@
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
 
+    console.log(mapInitJson.TreatmentBMPLayerGeoJson);
+
     NeptuneMaps.GeoServerMap.prototype.addVendorLayer = function(url) {
 
     }
 
     jQuery(function() {
-        
         mappo = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", geoserverUrl);
 
         var ocstormwaterParcels = "OCStormwater:Parcels";
-        mappo.addWmsLayer(ocstormwaterParcels, "All Parcels");
         mappo.addWmsLayer("OCStormwater:NetworkCatchments", "Network Catchments");
+        mappo.addWmsLayer(ocstormwaterParcels, "All Parcels");
         mappo.addEsriTileLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
             "Stormwater Network");
+        mappo.initializeTreatmentBMPClusteredLayer();
     });
+
+    NeptuneMaps.GeoServerMap.prototype.initializeTreatmentBMPClusteredLayer = function () {
+        this.treatmentBMPLayer = L.geoJson(
+            mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+            {
+                pointToLayer: function (feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: feature.properties.FeatureGlyph,
+                        color: feature.properties.FeatureColor,
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            title: feature.properties.Name,
+                            alt: feature.properties.Name
+                        });
+                }
+            });
+        if (this.markerClusterGroup) {
+            this.map.removeLayer(markerClusterGroup);
+        }
+        this.markerClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: 40,
+            showCoverageOnHover: false,
+            iconCreateFunction: function (cluster) {
+                return new L.DivIcon({
+                    html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+                    className: 'treatmentBMPCluster',
+                    iconSize: new L.Point(40, 40)
+                });
+            }
+        });
+        this.treatmentBMPLayer.addTo(this.markerClusterGroup);
+        this.markerClusterGroup.addTo(this.map);
+        // todo: need to /select/ the treatment bmp when clicko
+    };
+
 </script>
