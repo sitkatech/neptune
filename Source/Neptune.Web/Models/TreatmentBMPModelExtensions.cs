@@ -129,6 +129,7 @@ namespace Neptune.Web.Models
             featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
             {
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
+                feature.Properties.Add("Name", x.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
                 feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
