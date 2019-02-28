@@ -306,6 +306,44 @@ NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName) {
     this.layerControl.addOverlay(layer, layerName);
 };
 
+NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, callback) {
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
+        this.map.removeLayer(this.lastSelected);
+    }
+
+    this.lastSelected = L.geoJson(feature,
+        {
+            pointToLayer: function (feature, latlng) {
+                var icon = L.MakiMarkers.icon({
+                    icon: "marker",
+                    color: "#FFFF00",
+                    size: "m"
+                });
+
+                return L.marker(latlng,
+                    {
+                        icon: icon,
+                        riseOnHover: true
+                    });
+            },
+            style: function (feature) {
+                return {
+                    fillColor: "#FFFF00",
+                    fill: true,
+                    fillOpacity: 0.2,
+                    color: "#FFFF00",
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+
+    this.lastSelected.addTo(this.map);
+    if (callback) {
+        callback(feature);
+    }
+};
+
 NeptuneMaps.Map.prototype.disableUserInteraction = function() {
     this.map.dragging.disable();
     this.map.touchZoom.disable();
@@ -351,6 +389,8 @@ NeptuneMaps.Map.prototype.unblockMap = function() {
     jQuery("#" + this.MapDivId).unblock();
 };
 
+// helper functions for initializing layers
+
 NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup) {
     var features = L.esri.featureLayer({
             url: url
@@ -373,9 +413,45 @@ NeptuneMaps.Map.prototype.addEsriTileLayer = function(url, layerName) {
     tile.addTo(this.map);
 };
 
+NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
+    var markerClusterGroup = L.markerClusterGroup({
+        maxClusterRadius: 40,
+        showCoverageOnHover: false,
+        iconCreateFunction: function(cluster) {
+            return new L.DivIcon({
+                html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+                className: 'treatmentBMPCluster',
+                iconSize: new L.Point(40, 40)
+            });
+        }
+    });
+    layerToCluster.addTo(markerClusterGroup);
+    this.addLayerToLayerControl(markerClusterGroup, "Treatment BMPs");
+    markerClusterGroup.addTo(this.map);
+
+    return markerClusterGroup;
+};
+
 // constants for things like feature color that ought to be consistent across the site
 
 NeptuneMaps.Constants = {
     defaultPolyColor: "#7070ff",
     defaultSelectedFeatureColor: "#ffff00"
+};
+
+NeptuneMaps.DefaultOptions = {
+    pointToLayer: function(feature, latlng) {
+        var icon = L.MakiMarkers.icon({
+            icon: feature.properties.FeatureGlyph,
+            color: feature.properties.FeatureColor,
+            size: "m"
+        });
+
+        return L.marker(latlng,
+            {
+                icon: icon,
+                title: feature.properties.Name,
+                alt: feature.properties.Name
+            });
+    }
 };
