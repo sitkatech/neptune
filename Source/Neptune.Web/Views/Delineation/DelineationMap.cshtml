@@ -85,20 +85,26 @@
         L.Util.extend(delineationMap, mapMethods);
         delineationMap.treatmentBMPLayerLookup = new Map();
 
-        
+        // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
+        var wmsPane = delineationMap.map.createPane("wmsPane");
+        wmsPane.style.zIndex = 10000;
         
         window.stormwaterNetworkLayer = delineationMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
             "Stormwater Network");
 
-        window.networkCatchmentLayer = delineationMap.addWmsLayer("OCStormwater:NetworkCatchments", "Network Catchments");
+        window.networkCatchmentLayer = delineationMap.addWmsLayerWithParams("OCStormwater:NetworkCatchments", "Network Catchments",
+            {
+                pane: "wmsPane"
+            });
 
         delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
             "All Parcels",
             {
-                styles: "parcel_alt"
+                styles: "parcel_alt",
+                pane: "overlayPane"
             });
         delineationMap.initializeTreatmentBMPClusteredLayer(mapInitJson);
-
+        window.networkCatchmentLayer.bringToFront();
 
         L.control.watermark({ position: 'bottomleft' }).addTo(delineationMap.map);
         delineationMap.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
