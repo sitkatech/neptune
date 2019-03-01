@@ -40,10 +40,15 @@ namespace Neptune.Web.Controllers
     {
         [HttpGet]
         [NeptuneViewFeature]
-        public ViewResult DelineationMap()
+        public ViewResult DelineationMap(int? treatmentBMPID)
         {
+            var treatmentBMP = treatmentBMPID.HasValue
+                ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(
+                    treatmentBMPID.Value)
+                : null;     
+
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
-            var viewData = new DelineationMapViewData(CurrentPerson, delineationMapInitJson);
+            var viewData = new DelineationMapViewData(CurrentPerson, delineationMapInitJson, treatmentBMP);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 
@@ -70,15 +75,20 @@ namespace Neptune.Web.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(Person currentPerson, StormwaterMapInitJson mapInitJson) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public DelineationMapViewData(Person currentPerson, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP) : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             MapInitJson = mapInitJson;
+            IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
+            InitialTreatmentBMPID = initialTreatmentBMP?.TreatmentBMPID;
             EntityName = "Delineation";
             PageTitle = "Delineation Map";
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
         }
 
+        public int? InitialTreatmentBMPID { get; }
+
         public StormwaterMapInitJson MapInitJson { get; }
+        public bool IsInitialTreatmentBMPProvided { get; }
         public string GeoServerUrl { get; }
     }
 

@@ -1,6 +1,5 @@
-﻿var stopClickPropagation = function (el) {
-    L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
-};
+﻿// page-specific leaflet controls.
+// todo: the use of window.delineationMap to bac-reference the map object is a little brittle
 
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
@@ -193,7 +192,10 @@ var mapMethods = {
         this.treatmentBMPLayer = L.geoJson(
             mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
             {
-                pointToLayer: NeptuneMaps.DefaultOptions.pointToLayer
+                pointToLayer: NeptuneMaps.DefaultOptions.pointToLayer,
+                onEachFeature: function (feature, layer) {
+                    this.treatmentBMPLayerLookup.set(feature.properties["TreatmentBMPID"], layer);
+                }.bind(this)
             });
         if (this.markerClusterGroup) {
             this.map.removeLayer(markerClusterGroup);
@@ -260,7 +262,23 @@ var mapMethods = {
             this.map.removeLayer(this.selectedBMPDelineationLayer);
             this.selectedBMPDelineationLayer = null;
         }
+    },
+
+    preselectTreatmentBMP: function(treatmentBMPID) {
+        if (!treatmentBMPID) {
+            return; //misplaced call
+        }
+        var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
+        this.setSelectedMarker(layer.feature);
+        this.zoomAndPanToLayer(layer);
+        this.selectedAssetControl.update(layer.feature);
+        this.retrieveAndShowBMPDelineation(layer.feature);
     }
 };
 
+// helpers
+
 var delineationErrorAlert = function () { alert("There was an unexpected error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support."); }
+var stopClickPropagation = function (el) {
+    L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
+};

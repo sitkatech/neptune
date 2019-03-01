@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common
+@using Neptune.Web.Views.Delineation
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -20,7 +21,7 @@
             font-style: italic;
             margin-bottom: 0;
         }
-        
+
         .leaflet-bar hr {
             margin-top: 10px;
             margin-bottom: 10px;
@@ -40,6 +41,7 @@
             width: 375px;
             height: 340px;
         }
+
         label.group {
             margin-left: 20px;
             font-weight: normal;
@@ -52,16 +54,15 @@
         .leaflet-bar h4 {
             margin-top: 0;
         }
-
     </style>
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
     @* Todo: use a local copy instead of a CDN *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js" type="text/javascript"></script>
     <script>
-        
+
 
     </script>
-    
+
     <script type="text/javascript" src="@Url.Content("~/Views/Delineation/DelineationMap.js")"></script>
 }
 
@@ -75,14 +76,15 @@
     var delineationMap;
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
-
-    jQuery(function () {
+    var isInitialTreatmentBMPProvided = jQuery(function() {
         delineationMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", geoserverUrl);
         L.Util.extend(delineationMap, mapMethods);
+        delineationMap.treatmentBMPLayerLookup = new Map();
 
         var ocstormwaterParcels = "OCStormwater:Parcels";
         delineationMap.addWmsLayer("OCStormwater:NetworkCatchments", "Network Catchments");
-        delineationMap.addWmsLayerWithParams(ocstormwaterParcels, "All Parcels",
+        delineationMap.addWmsLayerWithParams(ocstormwaterParcels,
+            "All Parcels",
             {
                 styles: "parcel_alt"
             });
@@ -94,13 +96,20 @@
         delineationMap.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
         delineationMap.selectedAssetControl.addTo(delineationMap.map);
 
-        delineationMap.map.on('click', function(e) {
-            delineationMap.deselect(function () {
-                delineationMap.selectedAssetControl.reset.bind(delineationMap.selectedAssetControl)();
-                delineationMap.removeBMPDelineationLayer();
+        delineationMap.map.on('click',
+            function(e) {
+                delineationMap.deselect(function() {
+                    delineationMap.selectedAssetControl.reset.bind(delineationMap.selectedAssetControl)();
+                    delineationMap.removeBMPDelineationLayer();
+                });
             });
-        });
 
         window.delineationMap = delineationMap;
-    });
+
+        if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
+            @* ReSharper disable once PossibleNullReferenceException *@
+                delineationMap.preselectTreatmentBMP(@ViewDataTyped.InitialTreatmentBMPID);
+            }
+        });
+
 </script>

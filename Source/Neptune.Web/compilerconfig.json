@@ -46,5 +46,9 @@
   {
     "outputFile": "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.es5.js",
     "inputFile": "ScriptsCustom/Maps/NeptuneMaps.ParcelSearch.js"
+  },
+  {
+    "outputFile": "ScriptsCustom/Maps/NeptuneMaps.min.js",
+    "inputFile": "ScriptsCustom/Maps/NeptuneMaps.js"
   }
 ]
