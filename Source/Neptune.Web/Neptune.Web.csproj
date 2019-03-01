@@ -1066,7 +1066,9 @@
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.GeoServerMap.min.js">
       <DependentUpon>NeptuneMaps.GeoServerMap.js</DependentUpon>
     </Content>
-    <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js" />
+    <Content Include="ScriptsCustom\Maps\NeptuneMaps.min.js">
+      <DependentUpon>NeptuneMaps.js</DependentUpon>
+    </Content>
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.js" />
     <Content Include="ScriptsCustom\Maps\NeptuneMaps.ParcelSearch.min.js">
       <DependentUpon>NeptuneMaps.ParcelSearch.js</DependentUpon>

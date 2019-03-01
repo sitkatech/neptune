@@ -78,21 +78,27 @@
     var delineationMap;
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
-    var isInitialTreatmentBMPProvided = jQuery(function() {
+
+    // todo: this code is better thought-of as an initialization for delineation map
+    jQuery(function() {
         delineationMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", geoserverUrl);
         L.Util.extend(delineationMap, mapMethods);
         delineationMap.treatmentBMPLayerLookup = new Map();
 
-        var ocstormwaterParcels = "OCStormwater:Parcels";
-        delineationMap.addWmsLayer("OCStormwater:NetworkCatchments", "Network Catchments");
-        delineationMap.addWmsLayerWithParams(ocstormwaterParcels,
+        
+        
+        window.stormwaterNetworkLayer = delineationMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+            "Stormwater Network");
+
+        window.networkCatchmentLayer = delineationMap.addWmsLayer("OCStormwater:NetworkCatchments", "Network Catchments");
+
+        delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
             "All Parcels",
             {
                 styles: "parcel_alt"
             });
-        delineationMap.addEsriTileLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-            "Stormwater Network");
         delineationMap.initializeTreatmentBMPClusteredLayer(mapInitJson);
+
 
         L.control.watermark({ position: 'bottomleft' }).addTo(delineationMap.map);
         delineationMap.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });

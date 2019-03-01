@@ -424,14 +424,17 @@ NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup
     this.addLayerToLayerControl(features, layerName);
 };
 
-NeptuneMaps.Map.prototype.addEsriTileLayer = function(url, layerName) {
+NeptuneMaps.Map.prototype.addEsriDynamicLayer = function (url, layerName) {
+    var pane = this.map.createPane("esriPane");
+    pane.style.zIndex = 300;
+
     var tile = L.esri.dynamicMapLayer({
-            url: url
-        }
+        url: url}
     );
 
     this.addLayerToLayerControl(tile, layerName);
     tile.addTo(this.map);
+    return tile;
 };
 
 NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {

@@ -240,7 +240,6 @@ var mapMethods = {
     },
 
     addBMPDelineationLayer: function (geoJsonResponse) {
-        console.log(geoJsonResponse);
         this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
             {
                 style: function (feature) {
