@@ -86,15 +86,16 @@
         delineationMap.treatmentBMPLayerLookup = new Map();
 
         // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
-        var wmsPane = delineationMap.map.createPane("wmsPane");
-        wmsPane.style.zIndex = 10000;
+        var networkCatchmentPane = delineationMap.map.createPane("networkCatchmentPane");
+        networkCatchmentPane.style.zIndex = 10000;
+        delineationMap.map.getPane("markerPane").style.zIndex = 10001;
         
         window.stormwaterNetworkLayer = delineationMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
             "Stormwater Network");
 
         window.networkCatchmentLayer = delineationMap.addWmsLayerWithParams("OCStormwater:NetworkCatchments", "Network Catchments",
             {
-                pane: "wmsPane"
+                pane: "networkCatchmentPane"
             });
 
         delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
