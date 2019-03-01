@@ -306,7 +306,7 @@ NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName) {
     this.layerControl.addOverlay(layer, layerName);
 };
 
-NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, callback) {
+NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, recenter, callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
     }
@@ -339,10 +339,21 @@ NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, callback) {
         });
 
     this.lastSelected.addTo(this.map);
+
     if (callback) {
         callback(feature);
     }
 };
+
+NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer){
+    if (layer.getLatLng) {
+        this.map.panTo(layer.getLatLng());
+        this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
+    } else {
+        this.map.panTo(layer.getCenter());
+        this.map.fitbounds(layer.getBounds());
+    }
+}
 
 NeptuneMaps.Map.prototype.deselect = function (callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {

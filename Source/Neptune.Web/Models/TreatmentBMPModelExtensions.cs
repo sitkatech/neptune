@@ -78,6 +78,12 @@ namespace Neptune.Web.Models
             return EditBenchmarkAndThresholdsUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
         }
 
+        public static readonly UrlTemplate<int> DelineationUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(t => t.ForTreatmentBMP(UrlTemplate.Parameter1Int)));
+        public static string GetDelineationUrl(this TreatmentBMP treatmentBMP)
+        {
+            return DelineationUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
+        }
+
         public static HtmlString GetDisplayNameAsUrl(this TreatmentBMP treatmentBMP)
         {
             return treatmentBMP == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
@@ -135,6 +141,7 @@ namespace Neptune.Web.Models
                 feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
                 feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
                 feature.Properties.Add("TreatmentBMPTypeID", x.TreatmentBMPTypeID);
+                feature.Properties.Add("DelineationURL", x.GetDelineationUrl()); // todo: NOT generic :(
                 return feature;
             }));
             return featureCollection;

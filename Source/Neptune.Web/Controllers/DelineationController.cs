@@ -26,20 +26,42 @@ using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security.Shared;
 using System.Web;
+using LtInfo.Common.GeoJson;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Neptune.Web.Controllers
 {
     public class DelineationController : NeptuneBaseController
     {
+        [HttpGet]
+        [NeptuneViewFeature]
         public ViewResult DelineationMap()
         {
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
             var viewData = new DelineationMapViewData(CurrentPerson, delineationMapInitJson);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
+        public ContentResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+
+            if (treatmentBMP.Delineation == null)
+            {
+                // should be 400 tbh
+                return Content("{}");
+            }
+
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
+
+            return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
     }
 }

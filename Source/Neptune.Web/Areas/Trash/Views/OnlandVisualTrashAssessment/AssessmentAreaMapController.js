@@ -179,7 +179,6 @@
         };
 
         $scope.isMapEnabled = function () {
-            debugger;
             return $scope.AngularModel.StormwaterJurisdiction && $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID && !$scope.AngularModel.AssessingNewArea;
         };
 
