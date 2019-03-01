@@ -38,4 +38,5 @@ values
 (33, 'TrashHomePage', 'Trash Module Home Page', 2),
 (34, 'OVTAInstructions', 'OVTA Instructions', 2),
 (35, 'OVTAIndex', 'OVTA Index', 2),
-(36, 'TrashModuleProgramOverview', 'Trash Module Program Overview', 2)
+(36, 'TrashModuleProgramOverview', 'Trash Module Program Overview', 2),
+(37, 'DelineationMap', 'Delineation Map', 2)

@@ -45,10 +45,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPID.HasValue
                 ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(
                     treatmentBMPID.Value)
-                : null;     
+                : null;
+            var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
 
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
-            var viewData = new DelineationMapViewData(CurrentPerson, delineationMapInitJson, treatmentBMP);
+            var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 
@@ -75,7 +76,7 @@ namespace Neptune.Web.Views.Delineation
 {
     public class DelineationMapViewData : NeptuneViewData
     {
-        public DelineationMapViewData(Person currentPerson, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP) : base(currentPerson, NeptuneArea.OCStormwaterTools)
+        public DelineationMapViewData(Person currentPerson, Models.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
         {
             MapInitJson = mapInitJson;
             IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;

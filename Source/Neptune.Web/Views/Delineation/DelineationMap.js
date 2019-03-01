@@ -89,7 +89,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         }
         this._delinBtn.removeAttribute("disabled");
     }
-
 });
 
 L.control.delineationSelectedAsset = function (opts) {
@@ -172,12 +171,13 @@ L.control.beginDelineation = function (opts) {
 }
 
 var mapMethods = {
-    addBeginDelineationControl: function() {
+    addBeginDelineationControl: function () {
         this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" });
         this.beginDelineationControl.addTo(this.map);
+        this.map.off("click");
     },
 
-    removeBeginDelineationControl: function() {
+    removeBeginDelineationControl: function () {
         if (!this.beginDelineationControl) {
             return; //misplaced call
         }
@@ -186,9 +186,10 @@ var mapMethods = {
         this.beginDelineationControl = null;
 
         this.selectedAssetControl.enableDelineationButton();
+        this.hookupDeselectOnClick();
     },
 
-    initializeTreatmentBMPClusteredLayer: function(mapInitJson) {
+    initializeTreatmentBMPClusteredLayer: function (mapInitJson) {
         this.treatmentBMPLayer = L.geoJson(
             mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
             {
@@ -203,9 +204,9 @@ var mapMethods = {
 
         this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
         this.treatmentBMPLayer.on("click",
-            function(e) {
-                this.setSelectedMarker(e.layer.feature);
+            function (e) {
                 this.zoomAndPanToLayer(e.layer);
+                this.setSelectedMarker(e.layer.feature);
                 this.selectedAssetControl.update(e.layer.feature);
                 this.retrieveAndShowBMPDelineation(e.layer.feature);
             }.bind(this));
@@ -222,27 +223,27 @@ var mapMethods = {
 
         var url = bmpFeature.properties["DelineationURL"];
         SitkaAjax.ajax({
-                url: url,
-                dataType: "json",
-                jsonpCallback: "getJson"
-            },
-            function(response) {
+            url: url,
+            dataType: "json",
+            jsonpCallback: "getJson"
+        },
+            function (response) {
                 if (response.type !== "Feature") {
                     delineationErrorAlert();
                 }
                 this.addBMPDelineationLayer(response);
             }.bind(this),
-            function(error) {
+            function (error) {
                 delineationErrorAlert();
             }
         );
     },
 
-    addBMPDelineationLayer: function(geoJsonResponse) {
+    addBMPDelineationLayer: function (geoJsonResponse) {
         console.log(geoJsonResponse);
         this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
             {
-                style: function(feature) {
+                style: function (feature) {
                     return {
                         fillColor: "#FFFF00",
                         fill: true,
@@ -257,22 +258,32 @@ var mapMethods = {
         this.selectedBMPDelineationLayer.addTo(this.map);
     },
 
-    removeBMPDelineationLayer: function() {
+    removeBMPDelineationLayer: function () {
         if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
             this.map.removeLayer(this.selectedBMPDelineationLayer);
             this.selectedBMPDelineationLayer = null;
         }
     },
 
-    preselectTreatmentBMP: function(treatmentBMPID) {
+    preselectTreatmentBMP: function (treatmentBMPID) {
         if (!treatmentBMPID) {
             return; //misplaced call
         }
         var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
-        this.setSelectedMarker(layer.feature);
         this.zoomAndPanToLayer(layer);
+        this.setSelectedMarker(layer.feature);
         this.selectedAssetControl.update(layer.feature);
         this.retrieveAndShowBMPDelineation(layer.feature);
+    },
+
+    hookupDeselectOnClick: function() {
+        this.map.on('click',
+            function(e) {
+                this.deselect(function() {
+                    this.selectedAssetControl.reset.bind(this.selectedAssetControl)();
+                    this.removeBMPDelineationLayer();
+                }.bind(this));
+            }.bind(this));
     }
 };
 

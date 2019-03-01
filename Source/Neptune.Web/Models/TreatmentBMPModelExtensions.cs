@@ -84,6 +84,12 @@ namespace Neptune.Web.Models
             return DelineationUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
         }
 
+        public static readonly UrlTemplate<int> DelineationMapUrlTemplate = new UrlTemplate<int>(SitkaRoute<DelineationController>.BuildUrlFromExpression(t => t.DelineationMap(UrlTemplate.Parameter1Int)));
+        public static string GetDelineationMapUrl(this TreatmentBMP treatmentBMP)
+        {
+            return DelineationMapUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID);
+        }
+
         public static HtmlString GetDisplayNameAsUrl(this TreatmentBMP treatmentBMP)
         {
             return treatmentBMP == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);

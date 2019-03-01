@@ -323,7 +323,8 @@
                         @Html.LabelWithSugarFor(FieldDefinition.DelineationType)
                     </div>
                     <div class="col-xs-7">
-                        @ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()
+                        <a href="@ViewDataTyped.DelineationMapUrl">
+                            @ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay() <span class="glyphicon glyphicon-edit"></span></a>
                     </div>
                 </div>
             </div>

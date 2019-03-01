@@ -66,6 +66,8 @@
     <script type="text/javascript" src="@Url.Content("~/Views/Delineation/DelineationMap.js")"></script>
 }
 
+@{ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData);}
+
 <div class="row">
     <div class="col-sm-12">
         <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 700px;"></div>
@@ -96,13 +98,7 @@
         delineationMap.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
         delineationMap.selectedAssetControl.addTo(delineationMap.map);
 
-        delineationMap.map.on('click',
-            function(e) {
-                delineationMap.deselect(function() {
-                    delineationMap.selectedAssetControl.reset.bind(delineationMap.selectedAssetControl)();
-                    delineationMap.removeBMPDelineationLayer();
-                });
-            });
+        delineationMap.hookupDeselectOnClick();
 
         window.delineationMap = delineationMap;
 

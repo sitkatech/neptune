@@ -53,6 +53,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string EditTreatmentBMPOtherDesignAttributesUrl { get; }
         public string NewFieldVisitUrl { get; }
         public string LocationEditUrl { get; }
+        public string DelineationMapUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
         public readonly string VerifiedUnverifiedUrl;
 
@@ -88,6 +89,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.ManageTreatmentBMPImages(TreatmentBMP));
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
+
+            DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }
     }
 }
