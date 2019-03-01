@@ -129,19 +129,37 @@ namespace Neptune.Web.Models
             return featureCollection;
         }
 
+        /// <summary>
+        /// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
+        /// Adds some common properties (Name, Treatment BMP Type, ID, Type ID) to each feature.
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <returns></returns>
         public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs)
         {
+            return treatmentBMPs.ToGeoJsonFeatureCollectionGeneric(null);
+        }
+
+        /// <summary>
+        /// Creates a GeoJson FeatureCollection from an enumerable of TreatmentBMPs.
+        /// The onEachFeature Action parameter allows the caller to add additional properties to the features.
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <param name="onEachFeature"></param>
+        /// <returns></returns>
+        public static FeatureCollection ToGeoJsonFeatureCollectionGeneric(this IEnumerable<TreatmentBMP> treatmentBMPs, Action<Feature, TreatmentBMP> onEachFeature)
+        {
             var featureCollection = new FeatureCollection();
-            featureCollection.Features.AddRange(treatmentBMPs.Select(x =>
+            featureCollection.Features.AddRange(treatmentBMPs.Select(treatmentBMP =>
             {
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(x.LocationPoint);
-                feature.Properties.Add("Name", x.TreatmentBMPName);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.LocationPoint);
+                feature.Properties.Add("Name", treatmentBMP.TreatmentBMPName);
                 feature.Properties.Add("FeatureColor", "#935F59");
                 feature.Properties.Add("FeatureGlyph", "water"); // TODO: Need to be able to customize this per Treatment BMP Type
-                feature.Properties.Add("Info", x.TreatmentBMPType.TreatmentBMPTypeName);
-                feature.Properties.Add("TreatmentBMPID",x.TreatmentBMPID);
-                feature.Properties.Add("TreatmentBMPTypeID", x.TreatmentBMPTypeID);
-                feature.Properties.Add("DelineationURL", x.GetDelineationUrl()); // todo: NOT generic :(
+                feature.Properties.Add("Info", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
+                feature.Properties.Add("TreatmentBMPID",treatmentBMP.TreatmentBMPID);
+                feature.Properties.Add("TreatmentBMPTypeID", treatmentBMP.TreatmentBMPTypeID);
+                onEachFeature?.Invoke(feature, treatmentBMP);
                 return feature;
             }));
             return featureCollection;

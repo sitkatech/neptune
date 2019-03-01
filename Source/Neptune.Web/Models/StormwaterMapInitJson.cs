@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
@@ -48,6 +49,22 @@ namespace Neptune.Web.Models
         {
             var featureCollection = isGeneric ? treatmentBMPs.ToGeoJsonFeatureCollectionGeneric() : treatmentBMPs.ToGeoJsonFeatureCollection();
 
+            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = enablePopups};
+            return treatmentBMPLayerGeoJson;
+        }
+
+        /// <summary>
+        /// Creates a LayerGeoJson with features for each TreatmentBMP in treatmentBMPs.
+        /// The FeatureCollection of the resultant LayerGeoJson will have some common properties,
+        /// which can be extended with the onEachFeature parameter.
+        /// </summary>
+        /// <param name="treatmentBMPs"></param>
+        /// <param name="onEachFeature"></param>
+        /// <param name="enablePopups"></param>
+        /// <returns></returns>
+        public static LayerGeoJson MakeTreatmentBMPLayerGeoJson(IEnumerable<TreatmentBMP> treatmentBMPs, Action<Feature, TreatmentBMP> onEachFeature, bool enablePopups )
+        {
+            var featureCollection = treatmentBMPs.ToGeoJsonFeatureCollectionGeneric(onEachFeature);
             var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) {EnablePopups = enablePopups};
             return treatmentBMPLayerGeoJson;
         }

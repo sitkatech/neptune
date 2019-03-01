@@ -1216,6 +1216,7 @@
     <None Include="Service References\KeystoneDataService\KeystoneData2.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Delineation\DelineationMap.js" />
     <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodController.js" />
     <Content Include="Views\FieldVisit\ObservationsController.js" />
     <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateTagUrlHtmlTest.approved.txt" />
