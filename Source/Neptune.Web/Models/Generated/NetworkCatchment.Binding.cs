@@ -24,35 +24,34 @@ namespace Neptune.Web.Models
         /// </summary>
         protected NetworkCatchment()
         {
-
+            this.NetworkCatchmentsWhereYouAreTheNetworkCatchment = new HashSet<NetworkCatchment>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string oCSurveyCatchmentID, string downstreamCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry) : this()
+        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentIDN, int? oCSurveyDownstreamCatchmentIDN) : this()
         {
             this.NetworkCatchmentID = networkCatchmentID;
-            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
-            this.DownstreamCatchmentID = downstreamCatchmentID;
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
+            this.OCSurveyCatchmentIDN = oCSurveyCatchmentIDN;
+            this.OCSurveyDownstreamCatchmentIDN = oCSurveyDownstreamCatchmentIDN;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(string oCSurveyCatchmentID, string downstreamCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry) : this()
+        public NetworkCatchment(string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentIDN) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.NetworkCatchmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
-            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
-            this.DownstreamCatchmentID = downstreamCatchmentID;
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
+            this.OCSurveyCatchmentIDN = oCSurveyCatchmentIDN;
         }
 
 
@@ -61,7 +60,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static NetworkCatchment CreateNewBlank()
         {
-            return new NetworkCatchment(default(string), default(string), default(string), default(string), default(DbGeometry));
+            return new NetworkCatchment(default(string), default(string), default(DbGeometry), default(int));
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return NetworkCatchmentsWhereYouAreTheNetworkCatchment.Any();
         }
 
         /// <summary>
@@ -92,26 +91,36 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in NetworkCatchmentsWhereYouAreTheNetworkCatchment.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
         public int NetworkCatchmentID { get; set; }
-        public string OCSurveyCatchmentID { get; set; }
-        public string DownstreamCatchmentID { get; set; }
         public string DrainID { get; set; }
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
+        public int OCSurveyCatchmentIDN { get; set; }
+        public int? OCSurveyDownstreamCatchmentIDN { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 
-
+        public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheNetworkCatchment { get; set; }
+        public virtual NetworkCatchment NetworkCatchment { get; set; }
 
         public static class FieldLengths
         {
-            public const int OCSurveyCatchmentID = 10;
-            public const int DownstreamCatchmentID = 10;
             public const int DrainID = 10;
             public const int Watershed = 100;
         }

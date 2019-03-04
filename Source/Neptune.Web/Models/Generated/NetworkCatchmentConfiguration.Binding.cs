@@ -16,12 +16,14 @@ namespace Neptune.Web.Models
             ToTable("NetworkCatchment", schema);
             HasKey(x => x.NetworkCatchmentID);
             Property(x => x.NetworkCatchmentID).HasColumnName(@"NetworkCatchmentID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(x => x.OCSurveyCatchmentID).HasColumnName(@"OCSurveyCatchmentID").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(10);
-            Property(x => x.DownstreamCatchmentID).HasColumnName(@"DownstreamCatchmentID").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(10);
             Property(x => x.DrainID).HasColumnName(@"DrainID").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(10);
             Property(x => x.Watershed).HasColumnName(@"Watershed").HasColumnType("varchar").IsRequired().IsUnicode(false).HasMaxLength(100);
             Property(x => x.CatchmentGeometry).HasColumnName(@"CatchmentGeometry").HasColumnType("geometry").IsRequired();
+            Property(x => x.OCSurveyCatchmentIDN).HasColumnName(@"OCSurveyCatchmentIDN").HasColumnType("int").IsRequired();
+            Property(x => x.OCSurveyDownstreamCatchmentIDN).HasColumnName(@"OCSurveyDownstreamCatchmentIDN").HasColumnType("int").IsOptional();
 
+            // Foreign keys
+            HasOptional(a => a.NetworkCatchment).WithMany(b => b.NetworkCatchmentsWhereYouAreTheNetworkCatchment).HasForeignKey(c => c.OCSurveyDownstreamCatchmentIDN).WillCascadeOnDelete(false); // FK_NetworkCatchment_NetworkCatchment_OCSurveyDownstreamCatchmentIDN_OCSurveyCatchmentIDN
         }
     }
 }
