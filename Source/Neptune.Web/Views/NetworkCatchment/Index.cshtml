@@ -21,7 +21,10 @@
             networkCatchmentMap.wmsParams = networkCatchmentMap.createWmsParamsWithLayerName(networkCatchmentLayerName);
             networkCatchmentMap.wfsParams = networkCatchmentMap.createWfsParamsWithLayerName(networkCatchmentLayerName);
 
-            networkCatchmentMap.addWmsLayer(networkCatchmentLayerName, "Network Catchments");
+            networkCatchmentMap.addWmsLayerWithParams(networkCatchmentLayerName, "Network Catchments",
+                {
+                    styles: "network_catchment_wide"
+                });
             networkCatchmentMap.map.on('click', selectCatchment, this);
         });
 
@@ -55,11 +58,11 @@
                         var content = '<dl>' +
                             '<dt>Catchment ID</dt>' +
                             '<dd>' +
-                            properties.OCSurveyCatchmentID +
+                            properties.OCSurveyCatchmentIDN +
                             '</dd>' +
                             '<dt>Downstream Catchment ID</dt>' +
                             '<dd>' +
-                            properties.DownstreamCatchmentID +
+                            properties.OCSurveyDownstreamCatchmentIDN +
                             '</dd>' +
                             '<dt>Drain ID</dt>' +
                             '<dd>' +
