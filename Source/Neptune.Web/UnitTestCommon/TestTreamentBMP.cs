@@ -31,7 +31,7 @@ namespace Neptune.Web.UnitTestCommon
             public static TreatmentBMP Create(TreatmentBMPType treatmentBMPType)
             { 
                 var inventoryIsVerified = false;
-                var treatmentBMP = new TreatmentBMP(string.Empty, treatmentBMPType.TreatmentBMPTypeID, ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, inventoryIsVerified, TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID);
+                var treatmentBMP = new TreatmentBMP(string.Empty, treatmentBMPType.TreatmentBMPTypeID, ModelObjectHelpers.NotYetAssignedID, ModelObjectHelpers.NotYetAssignedID, inventoryIsVerified, TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID, SizingBasisType.NotProvided.SizingBasisTypeID);
                 return treatmentBMP;
             }
         }

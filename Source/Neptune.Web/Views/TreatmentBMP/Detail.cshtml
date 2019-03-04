@@ -144,6 +144,12 @@
                     </div>
                 </div>
                 <div class="row">
+                    <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.SizingBasis)</label>
+                    <div class="col-sm-7">
+                        @ViewDataTyped.TreatmentBMP.SizingBasisType.SizingBasisTypeDisplayName
+                    </div>
+                </div>
+                <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus)</label>
                     <div class="col-sm-7">
                         @ViewDataTyped.TreatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
@@ -219,7 +225,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                        @(ViewDataTyped.UserIsAdmin ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
                                         <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                     </td>
                                     <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
@@ -262,7 +268,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @(ViewDataTyped.UserHasCustomAttributeTypeManagePermissions ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
+                                        @(ViewDataTyped.UserIsAdmin ? treatmentBMPTypeAttributeType.CustomAttributeType.GetDisplayNameAsUrl() : new HtmlString(treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeName))
                                         <span class="help-block extra-small">@treatmentBMPTypeAttributeType.CustomAttributeType.CustomAttributeTypeDescription</span>
                                     </td>
                                     <td class="text-right" style="min-width: 150px">@ViewDataTyped.TreatmentBMP.GetCustomAttributeValueWithUnits(treatmentBMPTypeAttributeType)</td>
@@ -319,12 +325,17 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
-                    <div class="col-xs-5 control-label text-right">
-                        @Html.LabelWithSugarFor(FieldDefinition.DelineationType)
+                    <div class="col-xs-4 control-label text-center">
+                        <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.DelineationType)</p>
                     </div>
-                    <div class="col-xs-7">
-                        <a href="@ViewDataTyped.DelineationMapUrl">
-                            @ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay() <span class="glyphicon glyphicon-edit"></span></a>
+                    <div class="col-xs-4 text-center">
+                        <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        @if(ViewDataTyped.UserIsAdmin)
+                        {
+                            <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Delineate</a>
+                        }
                     </div>
                 </div>
             </div>

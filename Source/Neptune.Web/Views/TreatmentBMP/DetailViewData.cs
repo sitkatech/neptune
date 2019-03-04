@@ -30,7 +30,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class DetailViewData : NeptuneViewData
     {
-        public bool UserHasCustomAttributeTypeManagePermissions { get; }
+        public bool UserIsAdmin { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
         public MapInitJson MapInitJson { get; }
         public string AddBenchmarkAndThresholdUrl { get; }
@@ -70,8 +70,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
-            UserHasCustomAttributeTypeManagePermissions =
-                new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
+            UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
 

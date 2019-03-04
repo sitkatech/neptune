@@ -20,6 +20,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
         public IEnumerable<SelectListItem> TrashCaptureStatusTypes { get; }
+        public IEnumerable<SelectListItem> SizingBasisTypes { get; }
 
         public NewViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
@@ -28,10 +29,14 @@ namespace Neptune.Web.Views.TreatmentBMP
             List<Models.Organization> organizations,
             Shared.Location.EditLocationViewData editLocationViewData,
             IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans,
-            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
+            IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EditLocationViewData = editLocationViewData;
+            SizingBasisTypes = sizingBasisTypes.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.SizingBasisTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.SizingBasisTypeDisplayName.ToString(CultureInfo.InvariantCulture));
+
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
             var treatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindABMP());
             EntityUrl = treatmentBMPIndexUrl;

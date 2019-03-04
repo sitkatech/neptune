@@ -40,13 +40,14 @@ namespace Neptune.Web.Views.TreatmentBMP
         public IEnumerable<SelectListItem> WaterQualityManagementPlanSelectListItems { get; }
         public IEnumerable<SelectListItem> TreatmentBMPLifespanTypes { get; }
         public IEnumerable<SelectListItem>  TrashCaptureStatusTypes { get; }
+        public IEnumerable<SelectListItem> SizingBasisTypes { get; }
 
         public EditViewData(Person currentPerson,
             Models.TreatmentBMP treatmentBMP,
             IEnumerable<StormwaterJurisdiction> stormwaterJurisdictions,
             IEnumerable<Models.TreatmentBMPType> treatmentBMPTypes,
             IEnumerable<Models.Organization> organizations,
-            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, List<TrashCaptureStatusType> trashCaptureStatusTypes)
+            IEnumerable<Models.WaterQualityManagementPlan> waterQualityManagementPlans, IEnumerable<TreatmentBMPLifespanType> treatmentBMPLifespanTypes, IEnumerable<TrashCaptureStatusType> trashCaptureStatusTypes, IEnumerable<SizingBasisType> sizingBasisTypes)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
@@ -59,6 +60,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             TrashCaptureStatusTypes = trashCaptureStatusTypes.ToSelectListWithDisabledEmptyFirstRow(
                 x => x.TrashCaptureStatusTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.TrashCaptureStatusTypeDisplayName.ToString(CultureInfo.InvariantCulture));
+            SizingBasisTypes = sizingBasisTypes.ToSelectListWithDisabledEmptyFirstRow(
+                x => x.SizingBasisTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.SizingBasisTypeDisplayName.ToString(CultureInfo.InvariantCulture));
 
             PageTitle = $"Edit {Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabel()}";
 

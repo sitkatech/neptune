@@ -149,10 +149,10 @@
                 </div>
                 <div class="form-group">
                     <div class="col-xs-12 col-sm-2 control-label">
-                        @Html.LabelWithSugarFor(m=>m.TrashCaptureStatusTypeID)
+                        @Html.LabelWithSugarFor(m => m.SizingBasisTypeID)
                     </div>
                     <div class="col-xs-12 col-sm-4">
-                        @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
+                        @Html.SearchableDropDownListFor(m => m.SizingBasisTypeID, ViewDataTyped.SizingBasisTypes)
                         @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
                     </div>
                     <div id="treatmentBMPLifespanEndDateContainer">
@@ -163,6 +163,20 @@
                             @Html.EditorFor(m => m.TreatmentBMPLifespanEndDate)
                             @Html.ValidationMessageFor(m => m.TreatmentBMPLifespanEndDate)
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @Html.LabelWithSugarFor(m => m.TrashCaptureStatusTypeID)
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
+                        @Html.SearchableDropDownListFor(m => m.TrashCaptureStatusTypeID, ViewDataTyped.TrashCaptureStatusTypes)
+                        @Html.ValidationMessageFor(m => m.TrashCaptureStatusTypeID)
+                    </div>
+                    <div class="col-xs-12 col-sm-2 control-label">
+                        @*placeholder*@
+                    </div>
+                    <div class="col-xs-12 col-sm-4">
                     </div>
                 </div>
             </div>

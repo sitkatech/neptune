@@ -39,7 +39,7 @@ namespace Neptune.Web.Controllers
     public class DelineationController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneAdminFeature]
         public ViewResult DelineationMap(int? treatmentBMPID)
         {
             var treatmentBMP = treatmentBMPID.HasValue
@@ -54,7 +54,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneViewFeature]
+        [NeptuneAdminFeature]
         public ContentResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

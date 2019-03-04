@@ -85,6 +85,10 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
         public int? TrashCaptureStatusTypeID { get; set; }
 
+        [Required]
+        [FieldDefinitionDisplay(FieldDefinitionEnum.SizingBasis)]
+        public int? SizingBasisTypeID { get; set; }
+
         /// <summary>
         /// Needed by the ModelBinder
         /// </summary>
@@ -108,6 +112,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             RequiredFieldVisitsPerYear = treatmentBMP.RequiredFieldVisitsPerYear;
             RequiredPostStormFieldVisitsPerYear = treatmentBMP.RequiredPostStormFieldVisitsPerYear;
             TrashCaptureStatusTypeID = treatmentBMP.TrashCaptureStatusTypeID;
+            SizingBasisTypeID = treatmentBMP.SizingBasisTypeID;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -117,6 +122,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             treatmentBMP.RequiredFieldVisitsPerYear = RequiredFieldVisitsPerYear;
             treatmentBMP.RequiredPostStormFieldVisitsPerYear = RequiredPostStormFieldVisitsPerYear;
             treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
+            treatmentBMP.SizingBasisTypeID = SizingBasisTypeID.GetValueOrDefault(); // will never be null due to RequiredAttribute
 
             if (!ModelObjectHelpers.IsRealPrimaryKeyValue(treatmentBMP.TreatmentBMPID))
             {

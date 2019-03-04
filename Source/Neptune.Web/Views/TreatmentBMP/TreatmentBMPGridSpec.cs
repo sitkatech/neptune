@@ -60,6 +60,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             Add("Lifespan End Date (if Fixed End Date)", x => x.TreatmentBMPLifespanEndDate, 130, DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.RequiredFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
             Add(Models.FieldDefinition.RequiredPostStormFieldVisitsPerYear.ToGridHeaderString(), x => x.RequiredPostStormFieldVisitsPerYear, 130, DhtmlxGridColumnFormatType.Integer);
+            Add(Models.FieldDefinition.SizingBasis.ToGridHeaderString(), x => x.SizingBasisType.SizingBasisTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.TrashCaptureStatus.ToGridHeaderString(), x => x.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName, 130, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add(Models.FieldDefinition.DelineationType.ToGridHeaderString(), x => x.GetDelineationTypeDisplay(), 130,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
