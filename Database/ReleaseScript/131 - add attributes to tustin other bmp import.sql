@@ -296,22 +296,6 @@ GO
 INSERT dbo.TustinOtherTemp ([TreatmentBMPName], [TreatmentBMPTypeID], [Sizing_Basis], [OCTA_M2_Funded_], [Priority_Land_Use_], [Proprietary_Biotreatment_Device_Name_and_Manufacturer], [TreatmentBMPID]) VALUES (N'TUS-PB-ML-3', 26, N'Water Quality', NULL, N'YES', N'Filterra System - Contech', 6673)
 GO
 
--- Sizing Basis
-
-declare @SizingBasis int;
-select @SizingBasis = CustomAttributeTypeID from dbo.CustomAttributeType where CustomAttributeTypeName = 'Sizing Basis'
-
-Insert into dbo.CustomAttribute ([TreatmentBMPID], [TreatmentBMPTypeCustomAttributeTypeID], [TreatmentBMPTypeID], [CustomAttributeTypeID])
-select toa.TreatmentBMPID, tcat.TreatmentBMPTypeCustomAttributeTypeID, toa.TreatmentBMPTypeID, @SizingBasis
- from dbo.TustinOtherTemp toa inner join dbo.TreatmentBMPTypeCustomAttributeType tcat on toa.TreatmentBMPTypeID = tcat.TreatmentBMPTypeID
-where tcat.CustomAttributeTypeID = @SizingBasis
-
-Insert into dbo.CustomAttributeValue ([CustomAttributeID], [AttributeValue])
-select 
-ca.CustomAttributeID, toa.Sizing_Basis
-from dbo.TustinOtherTemp toa inner join dbo.CustomAttribute ca on toa.TreatmentBMPID = ca.TreatmentBMPID
-where ca.CustomAttributeTypeID = @SizingBasis
-
 -- Proprietary Biotreatment whatever
 
 declare @PropBio int = 27;
