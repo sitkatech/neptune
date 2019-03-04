@@ -49,14 +49,16 @@ namespace Neptune.Web.Common
             "#d3ffce",
             "#070a41"
         };
-
         public static string GenerateLogInUrlWithReturnUrl()
         {
-            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn());
-
             var returnUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+            return GenerateLogInUrlWithReturnUrl(returnUrl);
+        }
 
-            return OnErrorOrNotFoundPage(returnUrl) ? logInUrl : string.Format("{0}?returnUrl={1}", logInUrl, HttpUtility.UrlEncode(returnUrl));
+        public static string GenerateLogInUrlWithReturnUrl(string returnUrl)
+        {
+            var logInUrl = SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn());
+            return OnErrorOrNotFoundPage(returnUrl) ? logInUrl : $"{logInUrl}?returnUrl={HttpUtility.UrlEncode(returnUrl)}";
         }
 
         public static string GenerateLogOutUrlWithReturnUrl()

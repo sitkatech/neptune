@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
@@ -57,8 +58,15 @@ namespace Neptune.Web.Controllers
         [LoggedInUnclassifiedFeature]
         public ActionResult LogOn()
         {
-            var returnUrl = Request["returnUrl"];
-            return Redirect(!string.IsNullOrWhiteSpace(returnUrl) && returnUrl != "%2F" ? returnUrl : HomeUrl);
+            var returnUrl = Request.Cookies["NeptuneReturnURL"];
+            if (!string.IsNullOrWhiteSpace(returnUrl?.Value))
+            {
+                returnUrl.Expires = DateTime.Now.AddDays(-1d);
+                Response.Cookies.Add(returnUrl);
+
+                return Redirect(HttpUtility.UrlDecode(returnUrl.Value));
+            }
+            return Redirect(HomeUrl);
         }
 
         [AnonymousUnclassifiedFeature]

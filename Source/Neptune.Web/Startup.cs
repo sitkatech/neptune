@@ -102,11 +102,11 @@ namespace Neptune.Web
                         else if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
                         {
                             HttpContextBase context = (HttpContextBase)n.OwinContext.Environment["System.Web.HttpContextBase"];
-
                             var referrer = context.Request.UrlReferrer;
-                            if (referrer != null && referrer.Host == NeptuneWebConfiguration.CanonicalHostName)
+
+                            if (referrer != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(referrer.Host))
                             {
-                                n.Response.Cookies.Append("ReturnURL", referrer.PathAndQuery);
+                                n.Response.Cookies.Append("NeptuneReturnURL", referrer.ToString());
                             }
                         }
 
