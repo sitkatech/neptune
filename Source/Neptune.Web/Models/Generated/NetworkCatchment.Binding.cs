@@ -24,26 +24,26 @@ namespace Neptune.Web.Models
         /// </summary>
         protected NetworkCatchment()
         {
-            this.NetworkCatchmentsWhereYouAreTheNetworkCatchment = new HashSet<NetworkCatchment>();
+            this.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment = new HashSet<NetworkCatchment>();
         }
 
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentIDN, int? oCSurveyDownstreamCatchmentIDN) : this()
+        public NetworkCatchment(int networkCatchmentID, string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID, int? oCSurveyDownstreamCatchmentID) : this()
         {
             this.NetworkCatchmentID = networkCatchmentID;
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
-            this.OCSurveyCatchmentIDN = oCSurveyCatchmentIDN;
-            this.OCSurveyDownstreamCatchmentIDN = oCSurveyDownstreamCatchmentIDN;
+            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
+            this.OCSurveyDownstreamCatchmentID = oCSurveyDownstreamCatchmentID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public NetworkCatchment(string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentIDN) : this()
+        public NetworkCatchment(string drainID, string watershed, DbGeometry catchmentGeometry, int oCSurveyCatchmentID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.NetworkCatchmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -51,7 +51,7 @@ namespace Neptune.Web.Models
             this.DrainID = drainID;
             this.Watershed = watershed;
             this.CatchmentGeometry = catchmentGeometry;
-            this.OCSurveyCatchmentIDN = oCSurveyCatchmentIDN;
+            this.OCSurveyCatchmentID = oCSurveyCatchmentID;
         }
 
 
@@ -69,7 +69,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return NetworkCatchmentsWhereYouAreTheNetworkCatchment.Any();
+            return NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.Any();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Neptune.Web.Models
         public void DeleteChildren(DatabaseEntities dbContext)
         {
 
-            foreach(var x in NetworkCatchmentsWhereYouAreTheNetworkCatchment.ToList())
+            foreach(var x in NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment.ToList())
             {
                 x.DeleteFull(dbContext);
             }
@@ -111,13 +111,13 @@ namespace Neptune.Web.Models
         public string DrainID { get; set; }
         public string Watershed { get; set; }
         public DbGeometry CatchmentGeometry { get; set; }
-        public int OCSurveyCatchmentIDN { get; set; }
-        public int? OCSurveyDownstreamCatchmentIDN { get; set; }
+        public int OCSurveyCatchmentID { get; set; }
+        public int? OCSurveyDownstreamCatchmentID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return NetworkCatchmentID; } set { NetworkCatchmentID = value; } }
 
-        public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheNetworkCatchment { get; set; }
-        public virtual NetworkCatchment NetworkCatchment { get; set; }
+        public virtual ICollection<NetworkCatchment> NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment { get; set; }
+        public virtual NetworkCatchment OCSurveyDownstreamCatchment { get; set; }
 
         public static class FieldLengths
         {

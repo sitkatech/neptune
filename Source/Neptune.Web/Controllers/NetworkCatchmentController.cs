@@ -19,6 +19,14 @@ namespace Neptune.Web.Controllers
             var viewData = new IndexViewData(CurrentPerson, new NetworkCatchmentMapInitJson("networkCatchmentMap"), geoServerUrl, networkCatchmentLayerName);
             return RazorView<Index, IndexViewData>(viewData);
         }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public JsonResult Upstreamo(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        {
+            var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
+            return Json(new {ideos = networkCatchment.TraceUpstreamCatchmentsReturnIDList()});
+        }
     }
 
     public class NetworkCatchmentMapInitJson : MapInitJson

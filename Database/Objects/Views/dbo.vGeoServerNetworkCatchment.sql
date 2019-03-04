@@ -1,8 +1,8 @@
 Create View dbo.vGeoServerNetworkCatchment As
 Select
 	NetworkCatchmentID,
-	OCSurveyCatchmentIDN,
-	OCSurveyDownstreamCatchmentIDN,
+	OCSurveyCatchmentID,
+	OCSurveyDownstreamCatchmentID,
 	DrainID,
 	Watershed,
 	CatchmentGeometry
