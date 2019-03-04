@@ -38,7 +38,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID) : this()
+        public TreatmentBMP(int treatmentBMPID, string treatmentBMPName, int treatmentBMPTypeID, DbGeometry locationPoint, int stormwaterJurisdictionID, int? modeledCatchmentID, string notes, string systemOfRecordID, int? yearBuilt, int ownerOrganizationID, int? waterQualityManagementPlanID, int? treatmentBMPLifespanTypeID, DateTime? treatmentBMPLifespanEndDate, int? requiredFieldVisitsPerYear, int? requiredPostStormFieldVisitsPerYear, bool inventoryIsVerified, DateTime? dateOfLastInventoryVerification, int? inventoryVerifiedByPersonID, DateTime? inventoryLastChangedDate, int trashCaptureStatusTypeID, int? delineationID, int sizingBasisTypeID) : this()
         {
             this.TreatmentBMPID = treatmentBMPID;
             this.TreatmentBMPName = treatmentBMPName;
@@ -61,12 +61,13 @@ namespace Neptune.Web.Models
             this.InventoryLastChangedDate = inventoryLastChangedDate;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
             this.DelineationID = delineationID;
+            this.SizingBasisTypeID = sizingBasisTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID, bool inventoryIsVerified, int trashCaptureStatusTypeID) : this()
+        public TreatmentBMP(string treatmentBMPName, int treatmentBMPTypeID, int stormwaterJurisdictionID, int ownerOrganizationID, bool inventoryIsVerified, int trashCaptureStatusTypeID, int sizingBasisTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -77,12 +78,13 @@ namespace Neptune.Web.Models
             this.OwnerOrganizationID = ownerOrganizationID;
             this.InventoryIsVerified = inventoryIsVerified;
             this.TrashCaptureStatusTypeID = trashCaptureStatusTypeID;
+            this.SizingBasisTypeID = sizingBasisTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, bool inventoryIsVerified, TrashCaptureStatusType trashCaptureStatusType) : this()
+        public TreatmentBMP(string treatmentBMPName, TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, bool inventoryIsVerified, TrashCaptureStatusType trashCaptureStatusType, SizingBasisType sizingBasisType) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.TreatmentBMPID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -98,14 +100,15 @@ namespace Neptune.Web.Models
             ownerOrganization.TreatmentBMPsWhereYouAreTheOwnerOrganization.Add(this);
             this.InventoryIsVerified = inventoryIsVerified;
             this.TrashCaptureStatusTypeID = trashCaptureStatusType.TrashCaptureStatusTypeID;
+            this.SizingBasisTypeID = sizingBasisType.SizingBasisTypeID;
         }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, TrashCaptureStatusType trashCaptureStatusType)
+        public static TreatmentBMP CreateNewBlank(TreatmentBMPType treatmentBMPType, StormwaterJurisdiction stormwaterJurisdiction, Organization ownerOrganization, TrashCaptureStatusType trashCaptureStatusType, SizingBasisType sizingBasisType)
         {
-            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization, default(bool), trashCaptureStatusType);
+            return new TreatmentBMP(default(string), treatmentBMPType, stormwaterJurisdiction, ownerOrganization, default(bool), trashCaptureStatusType, sizingBasisType);
         }
 
         /// <summary>
@@ -213,6 +216,7 @@ namespace Neptune.Web.Models
         public DateTime? InventoryLastChangedDate { get; set; }
         public int TrashCaptureStatusTypeID { get; set; }
         public int? DelineationID { get; set; }
+        public int SizingBasisTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return TreatmentBMPID; } set { TreatmentBMPID = value; } }
 
@@ -234,6 +238,7 @@ namespace Neptune.Web.Models
         public virtual Person InventoryVerifiedByPerson { get; set; }
         public TrashCaptureStatusType TrashCaptureStatusType { get { return TrashCaptureStatusType.AllLookupDictionary[TrashCaptureStatusTypeID]; } }
         public virtual Delineation Delineation { get; set; }
+        public SizingBasisType SizingBasisType { get { return SizingBasisType.AllLookupDictionary[SizingBasisTypeID]; } }
 
         public static class FieldLengths
         {

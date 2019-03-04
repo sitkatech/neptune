@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 	[InventoryLastChangedDate] [datetime] NULL,
 	[TrashCaptureStatusTypeID] [int] NOT NULL,
 	[DelineationID] [int] NULL,
+	[SizingBasisTypeID] [int] NOT NULL,
  CONSTRAINT [PK_TreatmentBMP_TreatmentBMPID] PRIMARY KEY CLUSTERED 
 (
 	[TreatmentBMPID] ASC
@@ -60,6 +61,11 @@ ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Or
 REFERENCES [dbo].[Organization] ([OrganizationID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID]
+GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_SizingBasisType_SizingBasisTypeID] FOREIGN KEY([SizingBasisTypeID])
+REFERENCES [dbo].[SizingBasisType] ([SizingBasisTypeID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_SizingBasisType_SizingBasisTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
 REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])

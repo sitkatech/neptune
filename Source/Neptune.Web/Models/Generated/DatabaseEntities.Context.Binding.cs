@@ -412,6 +412,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(role, "Role", primaryKey);
                     return role;
 
+                case "SizingBasisType":
+                    var sizingBasisType = SizingBasisType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(sizingBasisType, "SizingBasisType", primaryKey);
+                    return sizingBasisType;
+
                 case "SourceControlBMPAttributeCategory":
                     return SourceControlBMPAttributeCategories.GetSourceControlBMPAttributeCategory(primaryKey);
 
