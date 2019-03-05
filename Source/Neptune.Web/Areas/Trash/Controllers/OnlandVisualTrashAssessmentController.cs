@@ -66,7 +66,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, true);
-            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList().Where(x=>CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction)).ToList();
+
+            // if Stormwater Jurisdiction is null, it means the OVTA workflow was started but no data was saved, so it's okay to allow the record to be visible/editable
+            // a future release will rearrange the OVTA workflow so records are not created in a jurisdiction-less state
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList().Where(x=>x.StormwaterJurisdiction == null || CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction)).ToList();
         }
 
         [HttpGet]
