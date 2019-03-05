@@ -23,6 +23,7 @@ NeptuneMaps.GeoServerMap = function (parcelLocationSummaryMapInitJson, initialBa
 
     this.geoserverUrlOWS = geoserverUrl;
 
+    // todo: rename to baseWmsParams to make intent explicit
     this.wmsParams = {
         service: "WMS",
         transparent: true,
@@ -33,6 +34,7 @@ NeptuneMaps.GeoServerMap = function (parcelLocationSummaryMapInitJson, initialBa
 //        tilesorigin: [this.map.getBounds().getSouthWest().lng, this.map.getBounds().getSouthWest().lat]
     };
 
+    // todo: rename to baseWfsParams to make intent explicit
     this.wfsParams = {
         service: "WFS",
         version: "2.0",
@@ -49,7 +51,11 @@ NeptuneMaps.GeoServerMap.prototype.createWmsParamsWithLayerName = function (laye
         layers: layerName
     };
 
-    var wmsParams = L.Util.extend(this.wmsParams, customParams);
+    // deep-copy the base params and extend them by the customParams;
+    // doing it this way ensures that the base params are left alone so future WMS layers aren't called with those params
+    var wmsParams = Object.assign({}, this.wmsParams);
+    L.Util.extend(wmsParams, customParams);
+
     return wmsParams;
 };
 
@@ -58,7 +64,8 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
         typeName: layerName
     };
 
-    var wfsParams = L.Util.extend(this.wfsParams, customParams);
+    var wfsParams = Object.assign({}, this.wfsParams);
+    L.Util.extend(wfsParams, customParams);
     return wfsParams;
 };
 
