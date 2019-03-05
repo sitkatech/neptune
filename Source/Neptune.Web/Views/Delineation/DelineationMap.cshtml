@@ -108,7 +108,8 @@
                         "OCStormwater:NetworkCatchments",
                         function(json) {
                             delineationMap.setSelectedFeature(json.features[0]);
-                            delineationMap.zoomAndPanToLayer(delineationMap.lastSelected);
+                            //delineationMap.zoomAndPanToLayer(delineationMap.lastSelected);
+                            delineationMap.selectedAssetControl.networkCatchment(json.features[0]);
                         });
                 }
             );

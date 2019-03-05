@@ -79,10 +79,10 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerContr
     var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
     this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
 
+
     if (click) {
         this.map.on("click", click);
     }
-
     this.wmsLayers[layerName] = { layer: wmsLayer, click: click };
 
     return wmsLayer;

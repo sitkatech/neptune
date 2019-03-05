@@ -69,6 +69,26 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._innerDiv.append(this._delinBtn);
     },
 
+    networkCatchment: function (networkCatchmentFeature) {
+        
+        this._innerDiv.innerHTML = "Catchment ID: " +
+            networkCatchmentFeature.properties["NetworkCatchmentID"] + "<br/>";
+
+        this._traverseBtn = L.DomUtil.create("button", "traverseBtn btn btn-sm btn-neptune");
+        this._traverseBtn.type = "button";
+        this._traverseBtn.innerHTML = "Show Upstream Catchments";
+
+        L.DomEvent.on(this._traverseBtn,
+            "click",
+            function (e) {
+                window.delineationMap.retrieveAndShowUpstreamos(networkCatchmentFeature);
+            });
+
+        this._innerDiv.append(this._traverseBtn);
+    },
+
+
+
     reset: function () {
         if (!this._innerDiv) {
             this._innerDiv = L.DomUtil.create("div", "selectedAssetInfo");
@@ -208,7 +228,8 @@ var mapMethods = {
         this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
         this.treatmentBMPLayer.on("click",
             function (e) {
-                this.zoomAndPanToLayer(e.layer);
+                //this.zoomAndPanToLayer(e.layer);
+                this.removeUpstreamoLayer();
                 this.setSelectedFeature(e.layer.feature);
                 this.selectedAssetControl.treatmentBMP(e.layer.feature);
                 this.retrieveAndShowBMPDelineation(e.layer.feature);
@@ -242,6 +263,61 @@ var mapMethods = {
         );
     },
 
+    // todo: this is so sloppy
+    retrieveAndShowUpstreamos: function(networkCatchmentFeature) {
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentLayer)) {
+            this.map.removeLayer(this.upstreamCatchmentLayer);
+        }
+
+        if (!networkCatchmentFeature.properties["NetworkCatchmentID"]) {
+            return;
+        }
+
+        var url = "/NetworkCatchment/Upstreamo/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
+
+        SitkaAjax.ajax({
+                url: url,
+                dataType: "json",
+                jsonpCallback: "getJson"
+            },
+            function (response) {
+                // make a call to wfs
+                if (response.ideos.length === 0) {
+                    return;
+                }
+                var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
+                    {
+                        cql_filter: "NetworkCatchmentID IN (" + response.ideos.toString() + ")"
+                    });
+                SitkaAjax.ajax({
+                        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+                        dataType: "json",
+                        jsonpCallback: "getJson"
+                    },
+                    function(response) {
+                        this.upstreamo = L.geoJSON(response,
+                            {
+                                style: function(feature) {
+                                    return {
+                                        fillColor: "#4782ff",
+                                        fill: true,
+                                        fillOpacity: 0.4,
+                                        color: "#4782ff",
+                                        weight: 5,
+                                        stroke: true
+                                    };
+                                }
+                            });
+                        this.upstreamo.addTo(this.map);
+                        //this.zoomAndPanToLayer(this.upstreamo);
+                    }.bind(this));
+            }.bind(this),
+            function (error) {
+                delineationErrorAlert();
+            }
+        );
+    },
+
     addBMPDelineationLayer: function (geoJsonResponse) {
         this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
             {
@@ -267,6 +343,13 @@ var mapMethods = {
         }
     },
 
+    removeUpstreamoLayer: function () {
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamo)) {
+            this.map.removeLayer(this.upstreamo);
+            this.upstreamo = null;
+        }
+    },
+
     preselectTreatmentBMP: function (treatmentBMPID) {
         if (!treatmentBMPID) {
             return; //misplaced call
@@ -284,6 +367,7 @@ var mapMethods = {
                 this.deselect(function() {
                     this.selectedAssetControl.reset.bind(this.selectedAssetControl)();
                     this.removeBMPDelineationLayer();
+                    this.removeUpstreamoLayer();
                 }.bind(this));
             }.bind(this));
     }
