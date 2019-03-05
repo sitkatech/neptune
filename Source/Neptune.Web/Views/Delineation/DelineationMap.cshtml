@@ -93,10 +93,15 @@
         window.stormwaterNetworkLayer = delineationMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
             "Stormwater Network");
 
-        window.networkCatchmentLayer = delineationMap.addWmsLayerWithParams("OCStormwater:NetworkCatchments", "Network Catchments",
-            {
-                pane: "networkCatchmentPane"
-            });
+        //window.networkCatchmentLayer = delineationMap.addWmsLayerWithParams("OCStormwater:NetworkCatchments", "Network Catchments",
+        //    {
+        //        pane: "networkCatchmentPane"
+        //    });
+
+        window.networkCatchmentLayer =
+            delineationMap.addWmsLayerWithSelectFeatureByWfs("OCStormwater:NetworkCatchments",
+                "Network Catchments",
+            { pane: "networkCatchmentPane" }, function (json) {console.log(json)});
 
         delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
             "All Parcels",

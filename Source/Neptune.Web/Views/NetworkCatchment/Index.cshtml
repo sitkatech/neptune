@@ -25,7 +25,7 @@
                 {
                     styles: "network_catchment_wide"
                 });
-            networkCatchmentMap.map.on('click', selectCatchment, this);
+            networkCatchmentMap.map.on('click', selectCatchment);
         });
 
         var selectCatchment = function(evt) {
@@ -40,7 +40,7 @@
                 networkCatchmentMap.map.removeLayer(selectedFeature);
                 networkCatchmentMap.layerControl.removeLayer(selectedFeature);
             }
-
+                
             var parameters = L.Util.extend(networkCatchmentMap.wfsParams, customParams);
             SitkaAjax.ajax({
                     url: networkCatchmentMap.geoserverUrlOWS + L.Util.getParamString(parameters),
@@ -58,11 +58,11 @@
                         var content = '<dl>' +
                             '<dt>Catchment ID</dt>' +
                             '<dd>' +
-                            properties.OCSurveyCatchmentIDN +
+                            properties.OCSurveyCatchmentID +
                             '</dd>' +
                             '<dt>Downstream Catchment ID</dt>' +
                             '<dd>' +
-                            properties.OCSurveyDownstreamCatchmentIDN +
+                            properties.OCSurveyDownstreamCatchmentID +
                             '</dd>' +
                             '<dt>Drain ID</dt>' +
                             '<dd>' +

@@ -85,3 +85,31 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, 
     this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
     return wmsLayer;
 };
+
+// Extremely basic abstraction of the process of adding a WMS layer and a click-handler that fetches a specific feature from the corresponding WFS
+// limitations: doesn't play nice if you add multiple layers this way. response does not maintain its lexical environment
+
+NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithSelectFeatureByWfs = function (layerName, displayName, params, response, error) {
+    var layer = this.addWmsLayerWithParams(layerName, displayName, params);
+    this.map.on("click",
+        function (evt) {
+            this.selectFeatureByWfs({
+                cql_filter: "intersects(CatchmentGeometry, POINT(" + evt.latlng.lat + " " + evt.latlng.lng + "))"
+            }, layerName, response, error);
+        }.bind(this));
+    return layer;
+};
+
+NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, layerName, response, error) {
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
+        this.map.removeLayer(this.lastSelected);
+        this.layerControl.removeLayer(this.lastSelected);
+    }
+
+    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
+    SitkaAjax.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        dataType: "json",
+        jsonpCallback: "getJson"
+    }, response, error);                
+};
