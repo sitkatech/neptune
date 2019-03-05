@@ -16,8 +16,8 @@ namespace Neptune.Web.Models
             {
                 var ints = lookingAt.Select(x => x.NetworkCatchmentID);
                 idList.AddRange(ints);
-                lookingAt = (ICollection<NetworkCatchment>) lookingAt.SelectMany(x =>
-                    x.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment);
+                lookingAt = lookingAt.SelectMany(x =>
+                    x.NetworkCatchmentsWhereYouAreTheOCSurveyDownstreamCatchment).ToList();
             }
 
             return idList;
