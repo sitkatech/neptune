@@ -37,10 +37,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         //perfunctory
     },
 
-    update: function (feature) {
+    treatmentBMP: function (treatmentBMPFeature) {
         var delineationText;
         var delineationButtonText;
-        if (feature.properties["DelineationURL"]) {
+        if (treatmentBMPFeature.properties["DelineationURL"]) {
             delineationText = "<p>This BMP's current recorded delineation is displayed in yellow on the map.</p>";
             delineationButtonText = "Redelineate Drainage Area";
         } else {
@@ -49,7 +49,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         }
 
         this._innerDiv.innerHTML = "BMP: " +
-            feature.properties["Name"] +
+            treatmentBMPFeature.properties["Name"] +
             "<hr/>" +
             "<strong>Drainage Area</strong></br>" +
             delineationText + "<br/>";
@@ -187,6 +187,9 @@ var mapMethods = {
 
         this.selectedAssetControl.enableDelineationButton();
         this.hookupDeselectOnClick();
+
+        // re-enable click to select network catchments
+        this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
     },
 
     initializeTreatmentBMPClusteredLayer: function (mapInitJson) {
@@ -206,8 +209,8 @@ var mapMethods = {
         this.treatmentBMPLayer.on("click",
             function (e) {
                 this.zoomAndPanToLayer(e.layer);
-                this.setSelectedMarker(e.layer.feature);
-                this.selectedAssetControl.update(e.layer.feature);
+                this.setSelectedFeature(e.layer.feature);
+                this.selectedAssetControl.treatmentBMP(e.layer.feature);
                 this.retrieveAndShowBMPDelineation(e.layer.feature);
             }.bind(this));
     },
@@ -271,7 +274,7 @@ var mapMethods = {
         var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
         this.zoomAndPanToLayer(layer);
         this.setSelectedMarker(layer.feature);
-        this.selectedAssetControl.update(layer.feature);
+        this.selectedAssetControl.treatmentBMP(layer.feature);
         this.retrieveAndShowBMPDelineation(layer.feature);
     },
 

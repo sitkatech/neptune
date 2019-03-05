@@ -23,6 +23,8 @@ NeptuneMaps.GeoServerMap = function (parcelLocationSummaryMapInitJson, initialBa
 
     this.geoserverUrlOWS = geoserverUrl;
 
+    this.wmsLayers = {};
+
     // todo: rename to baseWmsParams to make intent explicit
     this.wmsParams = {
         service: "WMS",
@@ -69,28 +71,33 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
     return wfsParams;
 };
 
-NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName) {
+NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName, params, click) {
     var wmsParams = this.createWmsParamsWithLayerName(layerName);
+
+    if (params) { L.Util.extend(wmsParams, params); }
+
     var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
     this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
+
+    if (click) {
+        this.map.on("click", click);
+    }
+
+    this.wmsLayers[layerName] = { layer: wmsLayer, click: click };
+
     return wmsLayer;
 };
 
+// DEPRECATED. Use addWmsLayer instead.
 NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, layerControlDisplayName, params) {
-    var wmsParams = this.createWmsParamsWithLayerName(layerName);
-
-    wmsParams = L.Util.extend(wmsParams, params);
-
-    var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
-    this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
-    return wmsLayer;
+    return this.addWmsLayer(layerName, layerControlDisplayName, params);
 };
 
 // Extremely basic abstraction of the process of adding a WMS layer and a click-handler that fetches a specific feature from the corresponding WFS
 // limitations: doesn't play nice if you add multiple layers this way. response does not maintain its lexical environment
 
 NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithSelectFeatureByWfs = function (layerName, displayName, params, response, error) {
-    var layer = this.addWmsLayerWithParams(layerName, displayName, params);
+    var layer = this.addWmsLayer(layerName, displayName, params);
     this.map.on("click",
         function (evt) {
             this.selectFeatureByWfs({
@@ -101,11 +108,6 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithSelectFeatureByWfs = function 
 };
 
 NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, layerName, response, error) {
-    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
-        this.map.removeLayer(this.lastSelected);
-        this.layerControl.removeLayer(this.lastSelected);
-    }
-
     var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
     SitkaAjax.ajax({
         url: this.geoserverUrlOWS + L.Util.getParamString(parameters),

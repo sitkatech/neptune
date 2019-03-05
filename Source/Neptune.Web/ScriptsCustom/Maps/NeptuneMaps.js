@@ -306,7 +306,7 @@ NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName) {
     this.layerControl.addOverlay(layer, layerName);
 };
 
-NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, recenter, callback) {
+NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
     }
@@ -330,7 +330,7 @@ NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, recenter, callb
                 return {
                     fillColor: "#FFFF00",
                     fill: true,
-                    fillOpacity: 0.2,
+                    fillOpacity: 0.4,
                     color: "#FFFF00",
                     weight: 5,
                     stroke: true
@@ -345,14 +345,19 @@ NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, recenter, callb
     }
 };
 
-NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer){
+NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
         this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
     } else {
-        this.map.panTo(layer.getCenter());
-        this.map.fitbounds(layer.getBounds());
+        this.map.panTo(layer.getBounds().getCenter());
+        this.map.fitBounds(layer.getBounds());
     }
+};
+
+NeptuneMaps.Map.prototype.zoomAndPan = function(latLng, bounds) {
+    this.map.panTo(latLng);
+    this.map.fitBounds(bounds);
 }
 
 NeptuneMaps.Map.prototype.deselect = function (callback) {
