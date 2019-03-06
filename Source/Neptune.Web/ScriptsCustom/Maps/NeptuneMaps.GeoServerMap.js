@@ -94,3 +94,13 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerContr
 NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, layerControlDisplayName, params) {
     return this.addWmsLayer(layerName, layerControlDisplayName, params);
 };
+
+
+NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, layerName, response, error) {
+    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
+    SitkaAjax.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        dataType: "json",
+        jsonpCallback: "getJson"
+    }, response, error);                
+};
