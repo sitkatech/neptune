@@ -81,7 +81,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         L.DomEvent.on(this._traverseBtn,
             "click",
             function (e) {
-                window.delineationMap.retrieveAndShowUpstreamos(networkCatchmentFeature);
+                window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
             });
 
         this._innerDiv.append(this._traverseBtn);
@@ -229,7 +229,7 @@ var mapMethods = {
         this.treatmentBMPLayer.on("click",
             function (e) {
                 //this.zoomAndPanToLayer(e.layer);
-                this.removeUpstreamoLayer();
+                this.removeUpstreamCatchmentsLayer();
                 this.setSelectedFeature(e.layer.feature);
                 this.selectedAssetControl.treatmentBMP(e.layer.feature);
                 this.retrieveAndShowBMPDelineation(e.layer.feature);
@@ -263,8 +263,7 @@ var mapMethods = {
         );
     },
 
-    // todo: this is so sloppy
-    retrieveAndShowUpstreamos: function(networkCatchmentFeature) {
+    retrieveAndShowUpstreamCatchments: function(networkCatchmentFeature) {
         if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentLayer)) {
             this.map.removeLayer(this.upstreamCatchmentLayer);
         }
@@ -273,49 +272,49 @@ var mapMethods = {
             return;
         }
 
-        var url = "/NetworkCatchment/Upstreamo/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
+        var url = "/NetworkCatchment/UpstreamCatchments/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
 
         SitkaAjax.ajax({
                 url: url,
                 dataType: "json",
                 jsonpCallback: "getJson"
-            },
-            function (response) {
-                // make a call to wfs
-                if (response.ideos.length === 0) {
-                    return;
-                }
-                var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
-                    {
-                        cql_filter: "NetworkCatchmentID IN (" + response.ideos.toString() + ")"
-                    });
-                SitkaAjax.ajax({
-                        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
-                        dataType: "json",
-                        jsonpCallback: "getJson"
-                    },
-                    function(response) {
-                        this.upstreamo = L.geoJSON(response,
-                            {
-                                style: function(feature) {
-                                    return {
-                                        fillColor: "#4782ff",
-                                        fill: true,
-                                        fillOpacity: 0.4,
-                                        color: "#4782ff",
-                                        weight: 5,
-                                        stroke: true
-                                    };
-                                }
-                            });
-                        this.upstreamo.addTo(this.map);
-                        //this.zoomAndPanToLayer(this.upstreamo);
-                    }.bind(this));
-            }.bind(this),
+            }, this.processUpstreamCatchmentIDResponse.bind(this),
             function (error) {
                 delineationErrorAlert();
             }
         );
+    },
+
+    processUpstreamCatchmentIDResponse: function (response) {
+        if (response.ideos.length === 0) {
+            return;
+        }
+        var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
+            {
+                cql_filter: "NetworkCatchmentID IN (" + response.ideos.toString() + ")"
+            });
+        SitkaAjax.ajax({
+            url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+            dataType: "json",
+            jsonpCallback: "getJson"
+        }, this.processUpstreamCatchmentGeoServerResponse.bind(this));
+    },
+
+    processUpstreamCatchmentGeoServerResponse: function (response) {
+        this.upstreamCatchmentsLayer = L.geoJSON(response,
+            {
+                style: function (feature) {
+                    return {
+                        fillColor: "#4782ff",
+                        fill: true,
+                        fillOpacity: 0.4,
+                        color: "#4782ff",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+        this.upstreamCatchmentsLayer.addTo(this.map);
     },
 
     addBMPDelineationLayer: function (geoJsonResponse) {
@@ -343,10 +342,10 @@ var mapMethods = {
         }
     },
 
-    removeUpstreamoLayer: function () {
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamo)) {
-            this.map.removeLayer(this.upstreamo);
-            this.upstreamo = null;
+    removeUpstreamCatchmentsLayer: function () {
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentsLayer)) {
+            this.map.removeLayer(this.upstreamCatchmentsLayer);
+            this.upstreamCatchmentsLayer = null;
         }
     },
 
@@ -356,7 +355,7 @@ var mapMethods = {
         }
         var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
         this.zoomAndPanToLayer(layer);
-        this.setSelectedMarker(layer.feature);
+        this.setSelectedFeature(layer.feature);
         this.selectedAssetControl.treatmentBMP(layer.feature);
         this.retrieveAndShowBMPDelineation(layer.feature);
     },
@@ -367,7 +366,7 @@ var mapMethods = {
                 this.deselect(function() {
                     this.selectedAssetControl.reset.bind(this.selectedAssetControl)();
                     this.removeBMPDelineationLayer();
-                    this.removeUpstreamoLayer();
+                    this.removeUpstreamCatchmentsLayer();
                 }.bind(this));
             }.bind(this));
     }
@@ -375,7 +374,11 @@ var mapMethods = {
 
 // helpers
 
-var delineationErrorAlert = function () { alert("There was an unexpected error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support."); }
+var delineationErrorAlert = function() {
+    alert(
+        "There was an unexpected error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support.");
+};
+
 var stopClickPropagation = function (el) {
     L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
 };

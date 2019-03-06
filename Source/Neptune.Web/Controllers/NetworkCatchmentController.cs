@@ -22,7 +22,7 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [NeptuneAdminFeature]
-        public JsonResult Upstreamo(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
+        public JsonResult UpstreamCatchments(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
             return Json(new {ideos = networkCatchment.TraceUpstreamCatchmentsReturnIDList()}, JsonRequestBehavior.AllowGet);
