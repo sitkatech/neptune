@@ -105,22 +105,7 @@ namespace Neptune.Web
                         {
                             HttpContextBase context = (HttpContextBase)n.OwinContext.Environment["System.Web.HttpContextBase"];
 
-                            Uri postLogonDestination;
-
-                            var logonAbsolutePath = new Uri( SitkaRoute<AccountController>.BuildUrlFromExpression(c=>c.LogOn())).AbsolutePath;
-                            if (logonAbsolutePath != context.Request.Url?.AbsolutePath.ToString())
-                            {
-                                postLogonDestination = context.Request.Url;
-                            }
-                            else
-                            {
-                                postLogonDestination = context.Request.UrlReferrer;
-                                if (postLogonDestination == null)
-                                {
-                                    // no longer the "referrer" but okay
-                                    postLogonDestination = context.Request.Url;
-                                }
-                            }
+                            var postLogonDestination = NeptuneHelpers.PostLogonDestination(context.Request);
 
                             if (postLogonDestination != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(postLogonDestination.Host))
                             {
