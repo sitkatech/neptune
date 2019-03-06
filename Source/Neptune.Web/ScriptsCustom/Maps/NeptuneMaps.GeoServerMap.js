@@ -71,6 +71,8 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
     return wfsParams;
 };
 
+// click is a function taking an event argument; it will be registered as a click handler for the map object and
+// stored in the wmsLayers object of this GeoServerMap. This allows the handler to be conveniently toggled on and off later
 NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName, params, click) {
     var wmsParams = this.createWmsParamsWithLayerName(layerName);
 
