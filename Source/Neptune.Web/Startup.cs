@@ -23,6 +23,8 @@ namespace Neptune.Web
 {
     public class Startup
     {
+        private const string CookieDomain = ".ocstormwatertools.org";
+
         /// <summary>
         /// Function required by <see cref="OwinStartupAttribute"/>
         /// </summary>
@@ -35,7 +37,7 @@ namespace Neptune.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
-                CookieDomain = ".ocstormwatertools.org",
+                CookieDomain = CookieDomain,
                 CookieManager = new Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager(),
                 CookieName = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_{NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType}"
             });
@@ -106,7 +108,7 @@ namespace Neptune.Web
 
                             if (referrer != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(referrer.Host))
                             {
-                                n.Response.Cookies.Append("NeptuneReturnURL", referrer.ToString());
+                                n.Response.Cookies.Append("NeptuneReturnURL", referrer.ToString(), new CookieOptions() { Domain = CookieDomain});
                             }
                         }
 
