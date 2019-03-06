@@ -61,8 +61,8 @@ namespace Neptune.Web.Controllers
             var returnUrl = Request.Cookies["NeptuneReturnURL"];
             if (!string.IsNullOrWhiteSpace(returnUrl?.Value))
             {
-                returnUrl.Expires = DateTime.Now.AddDays(-1d);
                 Response.Cookies.Add(returnUrl);
+                returnUrl.Expires = DateTime.Now.AddDays(-1d);
 
                 return Redirect(HttpUtility.UrlDecode(returnUrl.Value));
             }

@@ -104,12 +104,28 @@ namespace Neptune.Web
                         else if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
                         {
                             HttpContextBase context = (HttpContextBase)n.OwinContext.Environment["System.Web.HttpContextBase"];
-                            var referrer = context.Request.UrlReferrer;
 
-                            if (referrer != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(referrer.Host))
+                            Uri postLogonDestination;
+
+                            if (context.Request.Url?.ToString() != SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c=>c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot))
                             {
-                                n.Response.Cookies.Append("NeptuneReturnURL", referrer.ToString(), new CookieOptions() { Domain = CookieDomain});
+                                postLogonDestination = context.Request.Url;
                             }
+                            else
+                            {
+                                postLogonDestination = context.Request.UrlReferrer;
+                                if (postLogonDestination == null)
+                                {
+                                    // no longer the "referrer" but okay
+                                    postLogonDestination = context.Request.Url;
+                                }
+                            }
+
+                            if (postLogonDestination != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(postLogonDestination.Host))
+                            {
+                                n.Response.Cookies.Append("NeptuneReturnURL", postLogonDestination.ToString(), new CookieOptions() { Domain = CookieDomain});
+                            }
+
                         }
 
 
