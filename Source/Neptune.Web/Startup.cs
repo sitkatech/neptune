@@ -107,7 +107,8 @@ namespace Neptune.Web
 
                             Uri postLogonDestination;
 
-                            if (context.Request.Url?.ToString() != SitkaRoute<AccountController>.BuildAbsoluteUrlHttpsFromExpression(c=>c.LogOn(), NeptuneWebConfiguration.CanonicalHostNameRoot))
+                            var logonAbsolutePath = new Uri( SitkaRoute<AccountController>.BuildUrlFromExpression(c=>c.LogOn())).AbsolutePath;
+                            if (logonAbsolutePath != context.Request.Url?.AbsolutePath.ToString())
                             {
                                 postLogonDestination = context.Request.Url;
                             }
