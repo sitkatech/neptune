@@ -70,9 +70,12 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     networkCatchment: function (networkCatchmentFeature) {
-        
-        this._innerDiv.innerHTML = "Catchment ID: " +
-            networkCatchmentFeature.properties["NetworkCatchmentID"] + "<br/>";
+        this._innerDiv.innerHTML = "";
+
+        this._catchmentInfoDiv = L.DomUtil.create("div");
+
+        this._catchmentInfoDiv.innerHTML = "Catchment ID: " +
+            networkCatchmentFeature.properties["NetworkCatchmentID"] + "<hr/>";
 
         this._traverseBtn = L.DomUtil.create("button", "traverseBtn btn btn-sm btn-neptune");
         this._traverseBtn.type = "button";
@@ -84,10 +87,15 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
                 window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
             });
 
+        this._innerDiv.append(this._catchmentInfoDiv);
         this._innerDiv.append(this._traverseBtn);
     },
 
-
+    reportUpstreamCatchments: function (count) {
+        var br = L.DomUtil.create("br");
+        this._catchmentInfoDiv.append("Found " + count + " upstream catchments.");
+        this._catchmentInfoDiv.append(br);
+    },
 
     reset: function () {
         if (!this._innerDiv) {
@@ -282,8 +290,8 @@ var mapMethods = {
     retrieveAndShowUpstreamCatchments: function (networkCatchmentFeature) {
         window.blockMapInput = true;
         this.selectedAssetControl.disableUpstreamCatchmentsButton();
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentLayer)) {
-            this.map.removeLayer(this.upstreamCatchmentLayer);
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentsLayer)) {
+            this.map.removeLayer(this.upstreamCatchmentsLayer);
         }
 
         if (!networkCatchmentFeature.properties["NetworkCatchmentID"]) {
@@ -306,14 +314,16 @@ var mapMethods = {
     },
 
     processUpstreamCatchmentIDResponse: function (response) {
-        if (response.ideos.length === 0) {
+        this.selectedAssetControl.reportUpstreamCatchments(response.networkCatchmentIDs.length);
+
+        if (response.networkCatchmentIDs.length === 0) {
             window.blockMapInput = false;
             this.selectedAssetControl.enableUpstreamCatchmentsButton();
             return;
         }
         var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
             {
-                cql_filter: "NetworkCatchmentID IN (" + response.ideos.toString() + ")"
+                cql_filter: "NetworkCatchmentID IN (" + response.networkCatchmentIDs.toString() + ")"
             });
         SitkaAjax.ajax({
             url: this.geoserverUrlOWS + L.Util.getParamString(parameters),

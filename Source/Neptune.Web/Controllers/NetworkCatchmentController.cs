@@ -25,7 +25,7 @@ namespace Neptune.Web.Controllers
         public JsonResult UpstreamCatchments(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
-            return Json(new {ideos = networkCatchment.TraceUpstreamCatchmentsReturnIDList()}, JsonRequestBehavior.AllowGet);
+            return Json(new {networkCatchmentIDs = networkCatchment.TraceUpstreamCatchmentsReturnIDList()}, JsonRequestBehavior.AllowGet);
         }
     }
 
