@@ -108,6 +108,22 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
             return; //misplaced call
         }
         this._delinBtn.removeAttribute("disabled");
+    },
+
+    disableUpstreamCatchmentsButton() {
+        if (!this._traverseBtn) {
+            return; //misplaced call
+        }
+        this._traverseBtn.innerHTML = "Loading...";
+        this._traverseBtn.disabled = "disabled";
+    },
+
+    enableUpstreamCatchmentsButton() {
+        if (!this._traverseBtn) {
+            return; //misplaced call
+        }
+        this._traverseBtn.innerHTML = "Show Upstream Catchments";
+        this._traverseBtn.removeAttribute("disabled");
     }
 });
 
@@ -263,7 +279,9 @@ var mapMethods = {
         );
     },
 
-    retrieveAndShowUpstreamCatchments: function(networkCatchmentFeature) {
+    retrieveAndShowUpstreamCatchments: function (networkCatchmentFeature) {
+        window.blockMapInput = true;
+        this.selectedAssetControl.disableUpstreamCatchmentsButton();
         if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentLayer)) {
             this.map.removeLayer(this.upstreamCatchmentLayer);
         }
@@ -280,6 +298,8 @@ var mapMethods = {
                 jsonpCallback: "getJson"
             }, this.processUpstreamCatchmentIDResponse.bind(this),
             function (error) {
+                window.blockMapInput = false;
+                this.selectedAssetControl.enableUpstreamCatchmentsButton();
                 delineationErrorAlert();
             }
         );
@@ -287,6 +307,8 @@ var mapMethods = {
 
     processUpstreamCatchmentIDResponse: function (response) {
         if (response.ideos.length === 0) {
+            window.blockMapInput = false;
+            this.selectedAssetControl.enableUpstreamCatchmentsButton();
             return;
         }
         var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
@@ -297,10 +319,17 @@ var mapMethods = {
             url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
             dataType: "json",
             jsonpCallback: "getJson"
-        }, this.processUpstreamCatchmentGeoServerResponse.bind(this));
+        }, this.processUpstreamCatchmentGeoServerResponse.bind(this), function(error) {
+            window.blockMapInput = false;
+            this.selectedAssetControl.enableUpstreamCatchmentsButton();
+
+        });
     },
 
     processUpstreamCatchmentGeoServerResponse: function (response) {
+        window.blockMapInput = false;
+        this.selectedAssetControl.enableUpstreamCatchmentsButton();
+
         this.upstreamCatchmentsLayer = L.geoJSON(response,
             {
                 style: function (feature) {
@@ -381,4 +410,16 @@ var delineationErrorAlert = function() {
 
 var stopClickPropagation = function (el) {
     L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
+};
+
+
+window.blockMapInput = false;
+
+window.pauseable = function (handler) {
+    return function (event) {
+        if (window.blockMapInput) {
+            return;
+        }
+        return handler(event);
+    };
 };

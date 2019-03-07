@@ -96,7 +96,7 @@
         window.networkCatchmentLayer =
             delineationMap.addWmsLayer("OCStormwater:NetworkCatchments",
                 "Network Catchments",
-            { pane: "networkCatchmentPane" }, function (evt) {
+            { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
 
                 delineationMap.selectFeatureByWfs({
                             cql_filter: "intersects(CatchmentGeometry, POINT(" +
@@ -110,7 +110,7 @@
                             delineationMap.setSelectedFeature(json.features[0]);
                             delineationMap.selectedAssetControl.networkCatchment(json.features[0]);
                         });
-                }
+                })
             );
 
         delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
