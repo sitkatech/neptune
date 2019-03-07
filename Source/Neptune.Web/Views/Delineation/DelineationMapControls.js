@@ -78,12 +78,16 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
 
         this._catchmentInfoDiv = L.DomUtil.create("div");
 
-        this._catchmentInfoDiv.innerHTML = "Catchment ID: " +
+        this._catchmentInfoDiv.innerHTML = "Selected Catchment ID: " +
             networkCatchmentFeature.properties["NetworkCatchmentID"] + "<hr/>";
+
+        this._upstreamCatchmentInfoDiv = L.DomUtil.create("div");
+        this._catchmentInfoDiv.append(this._upstreamCatchmentInfoDiv);
+        //this._catchmentInfoDiv.append(L.DomUtil.create("br"));
 
         this._traverseBtn = L.DomUtil.create("button", "traverseBtn btn btn-sm btn-neptune");
         this._traverseBtn.type = "button";
-        this._traverseBtn.innerHTML = "Show Upstream Catchments";
+        this._traverseBtn.innerHTML = "Trace Upstream Catchments";
 
         L.DomEvent.on(this._traverseBtn,
             "click",
@@ -96,9 +100,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     reportUpstreamCatchments: function (count) {
-        var br = L.DomUtil.create("br");
-        this._catchmentInfoDiv.append("Found " + count + " upstream catchments.");
-        this._catchmentInfoDiv.append(br);
+        this._upstreamCatchmentInfoDiv.innerHTML = "<p>Found " + count + " upstream catchment(s)</p> <br/>";
     },
 
     reset: function () {
