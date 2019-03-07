@@ -26,9 +26,9 @@ L.control.watermark = function (opts) {
 
 L.Control.DelineationMapSelectedAsset = L.Control.extend({
     onAdd: function (map) {
-        this._div = L.DomUtil.create('div', 'selectedAssetControl leaflet-bar');
+        this._div = L.DomUtil.create("div", "selectedAssetControl leaflet-bar");
         stopClickPropagation(this._div);
-        this._div.innerHTML = '<h4>Selected Asset</h4>';
+        this._div.innerHTML = "<h4>Selected Asset</h4>";
 
         this.reset();
 

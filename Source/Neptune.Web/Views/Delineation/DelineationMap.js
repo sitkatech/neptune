@@ -1,5 +1,53 @@
 ﻿NeptuneMaps.DelineationMap = function(mapInitJson, initialBaseLayerShown, geoserverUrl) {
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
+
+    this.treatmentBMPLayerLookup = new Map();
+
+    // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
+    var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
+    networkCatchmentPane.style.zIndex = 10000;
+    this.map.getPane("markerPane").style.zIndex = 10001;
+
+    window.stormwaterNetworkLayer = this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+        "Stormwater Network");
+
+    window.networkCatchmentLayer =
+        this.addWmsLayer("OCStormwater:NetworkCatchments",
+            "Network Catchments",
+            { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
+
+                this.selectFeatureByWfs({
+                    cql_filter: "intersects(CatchmentGeometry, POINT(" +
+                        evt.latlng.lat +
+                        " " +
+                        evt.latlng.lng +
+                        "))"
+                },
+                    "OCStormwater:NetworkCatchments",
+                    function (json) {
+                        if (json.features[0]) {
+                            this.setSelectedFeature(json.features[0]);
+                            // ReSharper disable once MisuseOfOwnerFunctionThis
+                            this.selectedAssetControl.networkCatchment(json.features[0]);
+                        }
+                    }.bind(this));
+            }.bind(this))
+        );
+
+    this.addWmsLayerWithParams("OCStormwater:Parcels",
+        "All Parcels",
+        {
+            styles: "parcel_alt",
+            pane: "overlayPane"
+        });
+    this.initializeTreatmentBMPClusteredLayer(mapInitJson);
+    window.networkCatchmentLayer.bringToFront();
+
+    L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
+    this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
+    this.selectedAssetControl.addTo(this.map);
+
+    this.hookupDeselectOnClick();
 };
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);

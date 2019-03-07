@@ -74,65 +74,15 @@
 </div>
 
 <script>
-    var delineationMap;
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
 
-    // todo: this code is better thought-of as an initialization for delineation map
     jQuery(function() {
-        delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl);
-        delineationMap.treatmentBMPLayerLookup = new Map();
-
-        // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
-        var networkCatchmentPane = delineationMap.map.createPane("networkCatchmentPane");
-        networkCatchmentPane.style.zIndex = 10000;
-        delineationMap.map.getPane("markerPane").style.zIndex = 10001;
-
-        window.stormwaterNetworkLayer = delineationMap.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-            "Stormwater Network");
-
-        window.networkCatchmentLayer =
-            delineationMap.addWmsLayer("OCStormwater:NetworkCatchments",
-                "Network Catchments",
-                { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
-
-                    delineationMap.selectFeatureByWfs({
-                        cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                            evt.latlng.lat +
-                            " " +
-                            evt.latlng.lng +
-                            "))"
-                    },
-                        "OCStormwater:NetworkCatchments",
-                        function (json) {
-                            if (json.features[0]) {
-                                delineationMap.setSelectedFeature(json.features[0]);
-                                delineationMap.selectedAssetControl.networkCatchment(json.features[0]);
-                            }
-                        });
-                })
-            );
-
-        delineationMap.addWmsLayerWithParams("OCStormwater:Parcels",
-            "All Parcels",
-            {
-                styles: "parcel_alt",
-                pane: "overlayPane"
-            });
-        delineationMap.initializeTreatmentBMPClusteredLayer(mapInitJson);
-        window.networkCatchmentLayer.bringToFront();
-
-        L.control.watermark({ position: 'bottomleft' }).addTo(delineationMap.map);
-        delineationMap.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
-        delineationMap.selectedAssetControl.addTo(delineationMap.map);
-
-        delineationMap.hookupDeselectOnClick();
-
-        window.delineationMap = delineationMap;
+        window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl);
 
         if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
             @* ReSharper disable once PossibleNullReferenceException *@
-                delineationMap.preselectTreatmentBMP(@ViewDataTyped.InitialTreatmentBMPID);
+                window.delineationMap.preselectTreatmentBMP(@ViewDataTyped.InitialTreatmentBMPID);
             }
         });
 
