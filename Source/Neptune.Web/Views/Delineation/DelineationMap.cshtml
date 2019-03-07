@@ -80,8 +80,7 @@
 
     // todo: this code is better thought-of as an initialization for delineation map
     jQuery(function() {
-        delineationMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", geoserverUrl);
-        L.Util.extend(delineationMap, mapMethods);
+        delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl);
         delineationMap.treatmentBMPLayerLookup = new Map();
 
         // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
@@ -95,19 +94,21 @@
         window.networkCatchmentLayer =
             delineationMap.addWmsLayer("OCStormwater:NetworkCatchments",
                 "Network Catchments",
-            { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
+                { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
 
-                delineationMap.selectFeatureByWfs({
-                            cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                                evt.latlng.lat +
-                                " " +
-                                evt.latlng.lng +
-                                "))"
-                        },
+                    delineationMap.selectFeatureByWfs({
+                        cql_filter: "intersects(CatchmentGeometry, POINT(" +
+                            evt.latlng.lat +
+                            " " +
+                            evt.latlng.lng +
+                            "))"
+                    },
                         "OCStormwater:NetworkCatchments",
-                        function(json) {
-                            delineationMap.setSelectedFeature(json.features[0]);
-                            delineationMap.selectedAssetControl.networkCatchment(json.features[0]);
+                        function (json) {
+                            if (json.features[0]) {
+                                delineationMap.setSelectedFeature(json.features[0]);
+                                delineationMap.selectedAssetControl.networkCatchment(json.features[0]);
+                            }
                         });
                 })
             );

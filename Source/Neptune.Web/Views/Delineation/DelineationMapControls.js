@@ -1,5 +1,9 @@
 ﻿// page-specific leaflet controls.
-// todo: the use of window.delineationMap to bac-reference the map object is a little brittle
+// todo: the use of window.delineationMap throughout to back-reference the map object is a little brittle
+
+var stopClickPropagation = function (el) {
+    L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
+};
 
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
