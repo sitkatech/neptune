@@ -136,7 +136,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         if (!this._traverseBtn) {
             return; //misplaced call
         }
-        this._traverseBtn.innerHTML = "Show Upstream Catchments";
+        this._traverseBtn.innerHTML = "Trace Upstream Catchments";
         this._traverseBtn.removeAttribute("disabled");
     }
 });
