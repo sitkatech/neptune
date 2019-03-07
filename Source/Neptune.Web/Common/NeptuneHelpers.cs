@@ -29,7 +29,8 @@ namespace Neptune.Web.Common
 {
     public static class NeptuneHelpers
     {
-        public static readonly List<string> DefaultColorRange = new List<string> {
+        public static readonly List<string> DefaultColorRange = new List<string>
+        {
             "#1f77b4",
             "#ff7f0e",
             "#aec7e8",
@@ -111,6 +112,35 @@ namespace Neptune.Web.Common
             }
 
             return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+        }
+
+        public static Uri PostLogonDestination(HttpRequestBase httpRequestBase)
+        {
+            return PostLogonDestinationImpl(httpRequestBase.Url, httpRequestBase.UrlReferrer);
+        }
+
+        public static Uri PostLogonDestinationImpl(Uri requestUrl, Uri requestReferrer)
+        {
+            Uri postLogonDestination;
+
+            var logonAbsolutePath = new Uri(SitkaRoute<AccountController>.BuildUrlFromExpression(c => c.LogOn())).AbsolutePath;
+            if (logonAbsolutePath != requestUrl?.AbsolutePath)
+            {
+                postLogonDestination = requestUrl;
+            }
+            else
+            {
+                postLogonDestination = requestReferrer;
+                if (postLogonDestination == null)
+                {
+                    postLogonDestination = logonAbsolutePath != requestUrl.AbsolutePath
+                        ? requestUrl
+                        // default to prevent landing on the clean-up page
+                        : new Uri(SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.Index()));
+                }
+            }
+
+            return postLogonDestination;
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Neptune.Web
 {
     public class Startup
     {
+        private const string CookieDomain = ".ocstormwatertools.org";
+
         /// <summary>
         /// Function required by <see cref="OwinStartupAttribute"/>
         /// </summary>
@@ -35,7 +37,7 @@ namespace Neptune.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
-                CookieDomain = ".ocstormwatertools.org",
+                CookieDomain = CookieDomain,
                 CookieManager = new Microsoft.Owin.Host.SystemWeb.SystemWebChunkingCookieManager(),
                 CookieName = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_{NeptuneWebConfiguration.NeptuneEnvironment.NeptuneEnvironmentType}"
             });
@@ -102,12 +104,14 @@ namespace Neptune.Web
                         else if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.AuthenticationRequest)
                         {
                             HttpContextBase context = (HttpContextBase)n.OwinContext.Environment["System.Web.HttpContextBase"];
-                            var referrer = context.Request.UrlReferrer;
 
-                            if (referrer != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(referrer.Host))
+                            var postLogonDestination = NeptuneHelpers.PostLogonDestination(context.Request);
+
+                            if (postLogonDestination != null && NeptuneWebConfiguration.CanonicalHostNames.Contains(postLogonDestination.Host))
                             {
-                                n.Response.Cookies.Append("NeptuneReturnURL", referrer.ToString());
+                                n.Response.Cookies.Append("NeptuneReturnURL", postLogonDestination.ToString(), new CookieOptions() { Domain = CookieDomain});
                             }
+
                         }
 
 
