@@ -111,7 +111,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [TreatmentBMPAssessmentManageFeature]
+        [TreatmentBMPAssessmentPhotoManageFeature]
         public PartialViewResult DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey)
         {
             var treatmentBMPAssessmentPhoto = treatmentBMPAssessmentPhotoPrimaryKey.EntityObject;
@@ -120,7 +120,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [TreatmentBMPAssessmentManageFeature]
+        [TreatmentBMPAssessmentPhotoManageFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult DeletePhoto(TreatmentBMPAssessmentPhotoPrimaryKey treatmentBMPAssessmentPhotoPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {

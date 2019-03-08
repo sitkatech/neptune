@@ -30,6 +30,9 @@ namespace Neptune.Web.UnitTestCommon
             public static OrganizationType Create()
             {
                 var organizationType = OrganizationType.CreateNewBlank();
+                organizationType.OrganizationTypeName = "test org type";
+                organizationType.OrganizationTypeAbbreviation = "tot";
+                organizationType.LegendColor = "#ff00ff";
                 return organizationType;
             }
 

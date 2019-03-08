@@ -20,10 +20,10 @@ CREATE TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP](
 ) ON [PRIMARY]
 
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerifyQuickBMP_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
+ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_TreatmentBMP_TreatmentBMPID] FOREIGN KEY([TreatmentBMPID])
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID])
 GO
-ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerifyQuickBMP_TreatmentBMP_TreatmentBMPID]
+ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP] CHECK CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_TreatmentBMP_TreatmentBMPID]
 GO
 ALTER TABLE [dbo].[WaterQualityManagementPlanVerifyTreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_WaterQualityManagementPlanVerifyTreatmentBMP_WaterQualityManagementPlanVerify_WaterQualityManagementPlanVerifyID] FOREIGN KEY([WaterQualityManagementPlanVerifyID])
 REFERENCES [dbo].[WaterQualityManagementPlanVerify] ([WaterQualityManagementPlanVerifyID])

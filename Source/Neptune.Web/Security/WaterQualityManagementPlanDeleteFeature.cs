@@ -4,6 +4,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Allows deleting a WQMP if you are assigned to manage its jurisdiction")]
     public class WaterQualityManagementPlanDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<WaterQualityManagementPlan>
     {
         private readonly NeptuneFeatureWithContextImpl<WaterQualityManagementPlan> _lakeTahoeInfoFeatureWithContextImpl;

@@ -56,14 +56,16 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public MaintenanceRecord(TreatmentBMP treatmentBMP, int treatmentBMPTypeID, FieldVisit fieldVisit) : this()
+        public MaintenanceRecord(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.MaintenanceRecordID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.TreatmentBMPID = treatmentBMP.TreatmentBMPID;
             this.TreatmentBMP = treatmentBMP;
             treatmentBMP.MaintenanceRecords.Add(this);
-            this.TreatmentBMPTypeID = treatmentBMPTypeID;
+            this.TreatmentBMPTypeID = treatmentBMPType.TreatmentBMPTypeID;
+            this.TreatmentBMPType = treatmentBMPType;
+            treatmentBMPType.MaintenanceRecords.Add(this);
             this.FieldVisitID = fieldVisit.FieldVisitID;
             this.FieldVisit = fieldVisit;
             fieldVisit.MaintenanceRecords.Add(this);
@@ -72,9 +74,9 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, FieldVisit fieldVisit)
+        public static MaintenanceRecord CreateNewBlank(TreatmentBMP treatmentBMP, TreatmentBMPType treatmentBMPType, FieldVisit fieldVisit)
         {
-            return new MaintenanceRecord(treatmentBMP, default(int), fieldVisit);
+            return new MaintenanceRecord(treatmentBMP, treatmentBMPType, fieldVisit);
         }
 
         /// <summary>
@@ -132,6 +134,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<MaintenanceRecordObservation> MaintenanceRecordObservations { get; set; }
         public virtual TreatmentBMP TreatmentBMP { get; set; }
+        public virtual TreatmentBMPType TreatmentBMPType { get; set; }
         public virtual FieldVisit FieldVisit { get; set; }
         public MaintenanceRecordType MaintenanceRecordType { get { return MaintenanceRecordTypeID.HasValue ? MaintenanceRecordType.AllLookupDictionary[MaintenanceRecordTypeID.Value] : null; } }
 

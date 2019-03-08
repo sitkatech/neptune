@@ -415,7 +415,10 @@ namespace Neptune.Web.Controllers
             {
                 // a little awkward, but newing up the object is sufficient to add it to the EF changeset since we're using the entity-consuming constructor
                 // ReSharper disable once ObjectCreationAsStatement
-                new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPTypeID, fieldVisit) { MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID };
+                new MaintenanceRecord(fieldVisit.TreatmentBMP, fieldVisit.TreatmentBMP.TreatmentBMPType, fieldVisit)
+                {
+                    MaintenanceRecordTypeID = MaintenanceRecordType.Routine.MaintenanceRecordTypeID
+                };
             }
             
             return RedirectToAction(new SitkaRoute<FieldVisitController>(x => x.EditMaintenanceRecord(fieldVisitPrimaryKey)));

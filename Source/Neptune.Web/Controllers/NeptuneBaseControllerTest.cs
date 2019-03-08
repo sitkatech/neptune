@@ -51,6 +51,7 @@ namespace Neptune.Web.Controllers
                 "NeptunePageController.NeptunePageDetails",
                 "RoleController.Detail",
                 "RoleController.PersonWithRoleGridJsonData",
+                "TreatmentBMPTypeController.EditAttributeTypesSortOrder"
             };
             var missingHumanReadable = missing.Select(x => $"{x.ReflectedType.Name}.{x.Name}").Where(x => !exceptions.Contains(x)).ToList();
             Assert.That(missingHumanReadable,

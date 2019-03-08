@@ -15,13 +15,13 @@ CREATE TABLE [dbo].[TreatmentBMPTypeAssessmentObservationType](
 (
 	[TreatmentBMPTypeAssessmentObservationTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTypeID_ObservationTypeID] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeAssessmentObservationTypeID_TreatmentBMPTypeID_TreatmentBMPAssessme] UNIQUE NONCLUSTERED 
 (
 	[TreatmentBMPTypeAssessmentObservationTypeID] ASC,
 	[TreatmentBMPTypeID] ASC,
 	[TreatmentBMPAssessmentObservationTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_TreatmentBMPTypeAssessmentTreatmentBMPAssessmentObservationType_TreatmentBMPTypeID_TreatmentBMPAssessmentObservationTypeID] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_TreatmentBMPTypeAssessmentObservationType_TreatmentBMPTypeID_TreatmentBMPAssessmentObservationTypeID] UNIQUE NONCLUSTERED 
 (
 	[TreatmentBMPTypeID] ASC,
 	[TreatmentBMPAssessmentObservationTypeID] ASC

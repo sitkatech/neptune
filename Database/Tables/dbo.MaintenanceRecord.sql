@@ -50,3 +50,8 @@ ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_Maintenanc
 REFERENCES [dbo].[TreatmentBMP] ([TreatmentBMPID], [TreatmentBMPTypeID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID_TreatmentBMPTypeID]
+GO
+ALTER TABLE [dbo].[MaintenanceRecord]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecord_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
+REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])
+GO
+ALTER TABLE [dbo].[MaintenanceRecord] CHECK CONSTRAINT [FK_MaintenanceRecord_TreatmentBMPType_TreatmentBMPTypeID]

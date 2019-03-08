@@ -1,3 +1,6 @@
 ﻿TableName	ColumnName	ParentTableName	ChildTableName	ConstraintName	ParentColumnName	ChildColumnName
-AuditLog	ProjectID					
 AuditLog	RecordID					
+LEGAL_LOTS_ATTRIBUTES_4326	FabricOID					
+NetworkCatchment	DrainID					
+NetworkCatchment	OCSurveyCatchmentID					
+TreatmentBMP	SystemOfRecordID					

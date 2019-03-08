@@ -450,6 +450,7 @@ namespace Neptune.Web.Controllers
                     x.Detail(treatmentBMPPrimaryKey)));
         }
 
+        [NeptuneViewFeature]
         public ContentResult MapPopup(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;

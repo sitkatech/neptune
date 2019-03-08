@@ -3,6 +3,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Allows verifying a WQMP if you are assigned to its jurisdiction")]
     public class WaterQualityManagementPlanVerifyManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<WaterQualityManagementPlanVerify>
     {
         private readonly NeptuneFeatureWithContextImpl<WaterQualityManagementPlanVerify> _lakeTahoeInfoFeatureWithContextImpl;

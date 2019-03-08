@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
 
             // Foreign keys
             HasRequired(a => a.TreatmentBMP).WithMany(b => b.MaintenanceRecords).HasForeignKey(c => c.TreatmentBMPID).WillCascadeOnDelete(false); // FK_MaintenanceRecord_TreatmentBMP_TreatmentBMPID
+            HasRequired(a => a.TreatmentBMPType).WithMany(b => b.MaintenanceRecords).HasForeignKey(c => c.TreatmentBMPTypeID).WillCascadeOnDelete(false); // FK_MaintenanceRecord_TreatmentBMPType_TreatmentBMPTypeID
             HasRequired(a => a.FieldVisit).WithMany(b => b.MaintenanceRecords).HasForeignKey(c => c.FieldVisitID).WillCascadeOnDelete(false); // FK_MaintenanceRecord_FieldVisit_FieldVisitID
         }
     }

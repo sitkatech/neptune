@@ -398,6 +398,7 @@
     <Compile Include="Models\NetworkCatchmentModelExtensions.cs" />
     <Compile Include="Models\OnlandVisualTrashAssessmentScore.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaViewFeature.cs" />
+    <Compile Include="Security\TreatmentBMPAssessmentPhotoManageFeature.cs" />
     <Compile Include="Views\NetworkCatchment\Index.cs" />
     <Compile Include="Views\NetworkCatchment\IndexViewData.cs" />
     <Compile Include="Controllers\NetworkCatchmentController.cs" />

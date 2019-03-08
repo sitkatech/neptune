@@ -82,6 +82,7 @@ namespace Neptune.Web.Controllers
             return Redirect("/");
         }
 
+        [AnonymousUnclassifiedFeature]
         public ActionResult SignoutCleanup(string sid)
         {
             return Content(string.Empty);

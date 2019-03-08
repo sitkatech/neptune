@@ -2,5 +2,4 @@
 
 Feature Neptune.Web.Security.SitkaAdminFeature is not available to Administrators
 Feature Neptune.Web.Security.LoggedInUnclassifiedFeature is available to the Unassigned role
-Feature Neptune.Web.Security.WebServiceDocumentationViewFeature is available to the Unassigned role
 Feature Neptune.Web.Security.UserViewFeature is available to the Unassigned role

@@ -25,15 +25,15 @@ REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID])
 GO
 ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID]
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID1] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
 REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TreatmentBMPTypeID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID]
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID1]
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecordID_TreatmentBMPTypeID] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
+ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID2] FOREIGN KEY([MaintenanceRecordID], [TreatmentBMPTypeID])
 REFERENCES [dbo].[MaintenanceRecord] ([MaintenanceRecordID], [TreatmentBMPTypeID])
 GO
-ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecordID_TreatmentBMPTypeID]
+ALTER TABLE [dbo].[MaintenanceRecordObservation] CHECK CONSTRAINT [FK_MaintenanceRecordObservation_MaintenanceRecord_MaintenanceRecordID_TreatmentBMPTypeID2]
 GO
 ALTER TABLE [dbo].[MaintenanceRecordObservation]  WITH CHECK ADD  CONSTRAINT [FK_MaintenanceRecordObservation_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])

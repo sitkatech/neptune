@@ -29,7 +29,7 @@ CREATE TABLE [dbo].[TreatmentBMP](
 (
 	[TreatmentBMPID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [AK_TreatmentBMP_StormwaterJursidictionID_TreatmentBMPName] UNIQUE NONCLUSTERED 
+ CONSTRAINT [AK_TreatmentBMP_StormwaterJurisdictionID_TreatmentBMPName] UNIQUE NONCLUSTERED 
 (
 	[StormwaterJurisdictionID] ASC,
 	[TreatmentBMPName] ASC
@@ -41,11 +41,6 @@ CREATE TABLE [dbo].[TreatmentBMP](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_FieldVisit_Person_InventoryVerifiedByPersonID_PersonID] FOREIGN KEY([InventoryVerifiedByPersonID])
-REFERENCES [dbo].[Person] ([PersonID])
-GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_FieldVisit_Person_InventoryVerifiedByPersonID_PersonID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Delineation_DelineationID] FOREIGN KEY([DelineationID])
 REFERENCES [dbo].[Delineation] ([DelineationID])
@@ -62,6 +57,11 @@ REFERENCES [dbo].[Organization] ([OrganizationID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Organization_OwnerOrganizationID_OrganizationID]
 GO
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID] FOREIGN KEY([InventoryVerifiedByPersonID])
+REFERENCES [dbo].[Person] ([PersonID])
+GO
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_Person_InventoryVerifiedByPersonID_PersonID]
+GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_SizingBasisType_SizingBasisTypeID] FOREIGN KEY([SizingBasisTypeID])
 REFERENCES [dbo].[SizingBasisType] ([SizingBasisTypeID])
 GO
@@ -77,10 +77,10 @@ REFERENCES [dbo].[TrashCaptureStatusType] ([TrashCaptureStatusTypeID])
 GO
 ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TrashCaptureStatusType_TrashCaptureStatusTypeID]
 GO
-ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType] FOREIGN KEY([TreatmentBMPLifespanTypeID])
+ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeID] FOREIGN KEY([TreatmentBMPLifespanTypeID])
 REFERENCES [dbo].[TreatmentBMPLifespanType] ([TreatmentBMPLifespanTypeID])
 GO
-ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType]
+ALTER TABLE [dbo].[TreatmentBMP] CHECK CONSTRAINT [FK_TreatmentBMP_TreatmentBMPLifespanType_TreatmentBMPLifespanTypeID]
 GO
 ALTER TABLE [dbo].[TreatmentBMP]  WITH CHECK ADD  CONSTRAINT [FK_TreatmentBMP_TreatmentBMPType_TreatmentBMPTypeID] FOREIGN KEY([TreatmentBMPTypeID])
 REFERENCES [dbo].[TreatmentBMPType] ([TreatmentBMPTypeID])

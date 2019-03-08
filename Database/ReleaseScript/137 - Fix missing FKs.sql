@@ -1,0 +1,2 @@
+Alter Table MaintenanceRecord
+Add Constraint FK_MaintenanceRecord_TreatmentBMPType_TreatmentBMPTypeID foreign key (TreatmentBMPTypeID) references dbo.TreatmentBMPType(TreatmentBMPTypeID)

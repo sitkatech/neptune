@@ -22,3 +22,5 @@
 # /Source/Neptune.Web/
 /Source/Neptune.Web/*.user
 /Source/Neptune.Web/Web.config
+
+*.received.txt

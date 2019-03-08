@@ -4,6 +4,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
+    [SecurityFeatureDescription("Allows managing documents for a WQMP if you are assigned to its jurisdiction")]
     public class WaterQualityManagementPlanDocumentManageFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<WaterQualityManagementPlanDocument>
     {
         private readonly NeptuneFeatureWithContextImpl<WaterQualityManagementPlanDocument> _lakeTahoeInfoFeatureWithContextImpl;
