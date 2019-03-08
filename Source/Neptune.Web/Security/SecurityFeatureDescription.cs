@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System;
-using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
@@ -27,18 +26,6 @@ namespace Neptune.Web.Security
     {
         public string DescriptionMessage;
 
-        public SecurityFeatureDescription(string formatString, FieldDefinitionEnum fieldDefinitionEnum)
-        {
-            DescriptionMessage = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum).GetFieldDefinitionLabel());
-        }
-        public SecurityFeatureDescription(string formatString, FieldDefinitionEnum fieldDefinitionEnum1, FieldDefinitionEnum fieldDefinitionEnum2)
-        {
-            DescriptionMessage = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum1).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum2).GetFieldDefinitionLabel());
-        }
-        public SecurityFeatureDescription(string formatString, FieldDefinitionEnum fieldDefinitionEnum1, FieldDefinitionEnum fieldDefinitionEnum2, FieldDefinitionEnum fieldDefinitionEnum3)
-        {
-            DescriptionMessage = string.Format(formatString, FieldDefinition.ToType(fieldDefinitionEnum1).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum2).GetFieldDefinitionLabel(), FieldDefinition.ToType(fieldDefinitionEnum3).GetFieldDefinitionLabel());
-        }
         public SecurityFeatureDescription(string descriptionMessage)
         {
             DescriptionMessage = descriptionMessage;

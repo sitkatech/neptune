@@ -3,7 +3,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Edit {0}", FieldDefinitionEnum.FundingSource)]
+    [SecurityFeatureDescription("Edit Funding Source")]
     public class FundingSourceEditFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<FundingSource>
     {
         private readonly NeptuneFeatureWithContextImpl<FundingSource> _firmaFeatureWithContextImpl;

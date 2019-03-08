@@ -24,7 +24,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Create New {0}", FieldDefinitionEnum.FundingSource)]
+    [SecurityFeatureDescription("Create New Funding Source")]
     public class FundingSourceCreateFeature : NeptuneFeature
     {
         public FundingSourceCreateFeature() : base(new List<Role> { Role.Admin, Role.SitkaAdmin }) { }

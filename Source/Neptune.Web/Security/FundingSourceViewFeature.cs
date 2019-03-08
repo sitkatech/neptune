@@ -23,7 +23,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("View {0}", FieldDefinitionEnum.FundingSource)]
+    [SecurityFeatureDescription("View Funding Source")]
     public class FundingSourceViewFeature : NeptuneViewFeature
     {
     }
