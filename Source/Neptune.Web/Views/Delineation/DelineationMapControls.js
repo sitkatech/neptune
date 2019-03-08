@@ -26,15 +26,30 @@ L.control.watermark = function (opts) {
 
 L.Control.DelineationMapSelectedAsset = L.Control.extend({
     onAdd: function (map) {
-        this._div = L.DomUtil.create("div", "selectedAssetControl leaflet-bar");
-        stopClickPropagation(this._div);
-        this._div.innerHTML = "<h4>Selected Asset</h4>";
+        //this._div = L.DomUtil.create("div", "selectedAssetControl leaflet-bar");
+        //stopClickPropagation(this._div);
+        //this._div.innerHTML = "<h4>Selected Asset</h4>";
 
-        this.reset();
+        //this.reset();
 
-        this._div.append(this._innerDiv);
+        //this._div.append(this._innerDiv);
 
-        return this._div;
+        //return this._div;
+
+        var t = document.querySelector('#selectedAssetControlTemplate');
+        var clone = document.importNode(t.content, true).firstElementChild;
+
+        debugger;
+        this._noAssetSelected = clone.querySelector("#noAssetSelected");
+
+        this._selectedBmpInfo = clone.querySelector("#selectedBmpInfo");
+        this._selectedBmpName = clone.querySelector("#selectedBmpName");
+        this._delineationStatus = clone.querySelector("#delineationStatus");
+        this._delineationButton = clone.querySelector("#delineationButton");
+
+        this._selectedCatchmentInfo = clone.querySelector("#selectedCatchmentInfo");
+
+        return clone;
     },
 
     onRemove: function (map) {
@@ -42,35 +57,30 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
-        var delineationText;
-        var delineationButtonText;
+
+        this._selectedBmpName.innerHTML = "BMP: " +
+            treatmentBMPFeature.properties["Name"];
+
         if (treatmentBMPFeature.properties["DelineationURL"]) {
-            delineationText = "<p>This BMP's current recorded delineation is displayed in yellow on the map.</p>";
-            delineationButtonText = "Redelineate Drainage Area";
+            this._delineationStatus.innerHTML = "This BMP's current recorded delineation is displayed in yellow on the map.";
+            this._delineationButton.innerHTML = "Redelineate Drainage Area";
         } else {
-            delineationText = "<p>No catchment delineation has been performed for this BMP</p>";
-            delineationButtonText = "Delineate Drainage Area";
+            this._delineationStatus.innerHTML = "No catchment delineation has been performed for this BMP";
+            this._delineationButton.innerHTML = "Delineate Drainage Area";
         }
 
-        this._innerDiv.innerHTML = "BMP: " +
-            treatmentBMPFeature.properties["Name"] +
-            "<hr/>" +
-            "<strong>Drainage Area</strong></br>" +
-            delineationText + "<br/>";
+        this._selectedBmpInfo.classList.remove("hiddenControlElement");
+        this._noAssetSelected.classList.add("hiddenControlElement");
+        
 
-        this._delinBtn = L.DomUtil.create("button", "delinBtn btn btn-sm btn-neptune");
-        this._delinBtn.type = "button";
-        this._delinBtn.innerHTML = delineationButtonText;
 
-        L.DomEvent.on(this._delinBtn,
+        L.DomEvent.on(this._delineationButton,
             "click",
             function (e) {
                 window.delineationMap.addBeginDelineationControl();
                 this.disableDelineationButton();
                 e.stopPropagation();
             }.bind(this));
-
-        this._innerDiv.append(this._delinBtn);
     },
 
     networkCatchment: function (networkCatchmentFeature) {
@@ -111,17 +121,17 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     disableDelineationButton() {
-        if (!this._delinBtn) {
+        if (!this._delineationButton) {
             return; //misplaced call
         }
-        this._delinBtn.disabled = "disabled";
+        this._delineationButton.disabled = "disabled";
     },
 
     enableDelineationButton() {
-        if (!this._delinBtn) {
+        if (!this._delineationButton) {
             return; //misplaced call
         }
-        this._delinBtn.removeAttribute("disabled");
+        this._delineationButton.removeAttribute("disabled");
     },
 
     disableUpstreamCatchmentsButton() {

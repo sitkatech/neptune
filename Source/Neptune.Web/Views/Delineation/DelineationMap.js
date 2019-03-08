@@ -14,7 +14,7 @@
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "Network Catchments",
-            { pane: "networkCatchmentPane" }, window.pauseable(function (evt) {
+            { pane: "networkCatchmentPane" }, function (evt) {
 
                 this.selectFeatureByWfs({
                     cql_filter: "intersects(CatchmentGeometry, POINT(" +
@@ -31,7 +31,7 @@
                             this.selectedAssetControl.networkCatchment(json.features[0]);
                         }
                     }.bind(this));
-            }.bind(this))
+            }.bind(this)
         );
 
     this.addWmsLayerWithParams("OCStormwater:Parcels",
@@ -126,7 +126,6 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
 };
 
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function(networkCatchmentFeature) {
-    window.blockMapInput = true;
     this.selectedAssetControl.disableUpstreamCatchmentsButton();
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentsLayer)) {
         this.map.removeLayer(this.upstreamCatchmentsLayer);
@@ -145,10 +144,9 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = functio
         },
         this.processUpstreamCatchmentIDResponse.bind(this),
         function(error) {
-            window.blockMapInput = false;
             this.selectedAssetControl.enableUpstreamCatchmentsButton();
-            delineationErrorAlert();
-        }
+            upstreamCatchmentErrorAlert();
+        }.bind(this)
     );
 };
 
@@ -156,7 +154,6 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
     this.selectedAssetControl.reportUpstreamCatchments(response.networkCatchmentIDs.length);
 
     if (response.networkCatchmentIDs.length === 0) {
-        window.blockMapInput = false;
         this.selectedAssetControl.enableUpstreamCatchmentsButton();
         return;
     }
@@ -164,6 +161,7 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
         {
             cql_filter: "NetworkCatchmentID IN (" + response.networkCatchmentIDs.toString() + ")"
         });
+
     SitkaAjax.ajax({
             url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
             dataType: "json",
@@ -171,14 +169,12 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
         },
         this.processUpstreamCatchmentGeoServerResponse.bind(this),
         function(error) {
-            window.blockMapInput = false;
             this.selectedAssetControl.enableUpstreamCatchmentsButton();
-
-        });
+            upstreamCatchmentErrorAlert();
+        }.bind(this));
 };
 
 NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentGeoServerResponse = function(response) {
-    window.blockMapInput = false;
     this.selectedAssetControl.enableUpstreamCatchmentsButton();
 
     this.upstreamCatchmentsLayer = L.geoJSON(response,
@@ -256,17 +252,9 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function() {
 
 var delineationErrorAlert = function() {
     alert(
-        "There was an unexpected error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support.");
+        "There was an error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support.");
 };
 
-
-window.blockMapInput = false;
-
-window.pauseable = function (handler) {
-    return function (event) {
-        if (window.blockMapInput) {
-            return;
-        }
-        return handler(event);
-    };
-};
+var upstreamCatchmentErrorAlert = function() {
+    alert("There was an error retrieving the upstream catchments. Please try again. If the problem persists, please contact Support.")
+}
