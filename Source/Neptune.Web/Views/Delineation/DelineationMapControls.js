@@ -124,7 +124,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     reportUpstreamCatchments: function (count) {
-        debugger;
         this._upstreamCatchmentReportContainer.classList.remove("hiddenControlElement");
         this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
