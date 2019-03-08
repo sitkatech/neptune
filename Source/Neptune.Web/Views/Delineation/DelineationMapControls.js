@@ -1,16 +1,37 @@
 ﻿// page-specific leaflet controls.
 // todo: the use of window.delineationMap throughout to back-reference the map object is a little brittle
 
+L.Control.TemplatedControl = L.Control.extend({
+    templateID: null,
+
+    initializeControlInstance: function() {
+        // override this method to perform additional initialization during onAdd
+    },
+
+    getTrackedElement: function(id) {
+        // todo: might not be a bad idea to memoize
+        return this.parentElement.querySelector("#" + id);
+    },
+
+    onAdd: function(map) {
+        var template = document.querySelector("#" + this.templateID);
+        this.parentElement = document.importNode(template.content, true).firstElementChild;
+
+        this.initializeControlInstance(map);
+        return this.parentElement;
+    }
+});
+
 var stopClickPropagation = function (el) {
-    L.DomEvent.on(el, 'click', function (e) { e.stopPropagation(); });
+    L.DomEvent.on(el, "click", function (e) { e.stopPropagation(); });
 };
 
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
-        var img = L.DomUtil.create('img');
+        var img = L.DomUtil.create("img");
 
-        img.src = '/Content/img/OCStormwater/banner_logo.png';
-        img.style.width = '200px';
+        img.src = "/Content/img/OCStormwater/banner_logo.png";
+        img.style.width = "200px";
 
         return img;
     },
@@ -26,38 +47,32 @@ L.control.watermark = function (opts) {
 
 L.Control.DelineationMapSelectedAsset = L.Control.extend({
     onAdd: function (map) {
-        //this._div = L.DomUtil.create("div", "selectedAssetControl leaflet-bar");
-        //stopClickPropagation(this._div);
-        //this._div.innerHTML = "<h4>Selected Asset</h4>";
+        var t = document.querySelector("#selectedAssetControlTemplate");
+        this.parentElement = document.importNode(t.content, true).firstElementChild;
 
-        //this.reset();
+        stopClickPropagation(this.parentElement);
 
-        //this._div.append(this._innerDiv);
+        this._noAssetSelected = this.parentElement.querySelector("#noAssetSelected");
 
-        //return this._div;
+        this._selectedBmpInfo = this.parentElement.querySelector("#selectedBmpInfo");
+        this._selectedBmpName = this.parentElement.querySelector("#selectedBmpName");
+        this._delineationStatus = this.parentElement.querySelector("#delineationStatus");
+        this._delineationButton = this.parentElement.querySelector("#delineationButton");
 
-        var t = document.querySelector('#selectedAssetControlTemplate');
-        var clone = document.importNode(t.content, true).firstElementChild;
+        this._selectedCatchmentInfo = this.parentElement.querySelector("#selectedCatchmentInfo");
+        this._selectedCatchmentDetails = this.parentElement.querySelector("#selectedCatchmentDetails");
+        this._traverseCatchmentsButton = this.parentElement.querySelector("#traverseCatchmentsButton");
+        this._upstreamCatchmentReportContainer = this.parentElement.querySelector("#upstreamCatchmentReportContainer");
+        this._upstreamCatchmentReport = this.parentElement.querySelector("#upstreamCatchmentReport");
 
-        debugger;
-        this._noAssetSelected = clone.querySelector("#noAssetSelected");
-
-        this._selectedBmpInfo = clone.querySelector("#selectedBmpInfo");
-        this._selectedBmpName = clone.querySelector("#selectedBmpName");
-        this._delineationStatus = clone.querySelector("#delineationStatus");
-        this._delineationButton = clone.querySelector("#delineationButton");
-
-        this._selectedCatchmentInfo = clone.querySelector("#selectedCatchmentInfo");
-
-        return clone;
+        return this.parentElement;
     },
 
     onRemove: function (map) {
-        //perfunctory
+        jQuery(this.parentElement).remove();
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
-
         this._selectedBmpName.innerHTML = "BMP: " +
             treatmentBMPFeature.properties["Name"];
 
@@ -69,11 +84,11 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
             this._delineationButton.innerHTML = "Delineate Drainage Area";
         }
 
+        // todo: lines like these are going to proliferate and it should be possible to DRY it up
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
+        this._selectedCatchmentInfo.classList.add("hiddenControlElement");
         
-
-
         L.DomEvent.on(this._delineationButton,
             "click",
             function (e) {
@@ -84,40 +99,24 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     networkCatchment: function (networkCatchmentFeature) {
-        this._innerDiv.innerHTML = "";
 
-        this._catchmentInfoDiv = L.DomUtil.create("div");
+        this._selectedCatchmentDetails.innerHTML = "Selected Catchment ID: " + networkCatchmentFeature.properties["NetworkCatchmentID"];
 
-        this._catchmentInfoDiv.innerHTML = "Selected Catchment ID: " +
-            networkCatchmentFeature.properties["NetworkCatchmentID"] + "<hr/>";
+        this._selectedCatchmentInfo.classList.remove("hiddenControlElement");
+        this._selectedBmpInfo.classList.add("hiddenControlElement");
+        this._noAssetSelected.classList.add("hiddenControlElement");
+        this._upstreamCatchmentReportContainer.classList.add("hiddenControlElement");
 
-        this._upstreamCatchmentInfoDiv = L.DomUtil.create("div");
-        this._catchmentInfoDiv.append(this._upstreamCatchmentInfoDiv);
-        //this._catchmentInfoDiv.append(L.DomUtil.create("br"));
-
-        this._traverseBtn = L.DomUtil.create("button", "traverseBtn btn btn-sm btn-neptune");
-        this._traverseBtn.type = "button";
-        this._traverseBtn.innerHTML = "Trace Upstream Catchments";
-
-        L.DomEvent.on(this._traverseBtn,
+        L.DomEvent.on(this._traverseCatchmentsButton,
             "click",
             function (e) {
                 window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
             });
-
-        this._innerDiv.append(this._catchmentInfoDiv);
-        this._innerDiv.append(this._traverseBtn);
     },
 
     reportUpstreamCatchments: function (count) {
-        this._upstreamCatchmentInfoDiv.innerHTML = "<p>Found " + count + " upstream catchment(s)</p> <br/>";
-    },
-
-    reset: function () {
-        if (!this._innerDiv) {
-            this._innerDiv = L.DomUtil.create("div", "selectedAssetInfo");
-        }
-        this._innerDiv.innerHTML = "<p>Select a BMP on the map to see options.</p>";
+        this._upstreamCatchmentReportContainer.classList.remove("hiddenControlElement");
+        this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
 
     disableDelineationButton() {
@@ -135,19 +134,19 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     },
 
     disableUpstreamCatchmentsButton() {
-        if (!this._traverseBtn) {
+        if (!this._traverseCatchmentsButton) {
             return; //misplaced call
         }
-        this._traverseBtn.innerHTML = "Loading...";
-        this._traverseBtn.disabled = "disabled";
+        this._traverseCatchmentsButton.innerHTML = "Loading...";
+        this._traverseCatchmentsButton.disabled = "disabled";
     },
 
     enableUpstreamCatchmentsButton() {
-        if (!this._traverseBtn) {
+        if (!this._traverseCatchmentsButton) {
             return; //misplaced call
         }
-        this._traverseBtn.innerHTML = "Trace Upstream Catchments";
-        this._traverseBtn.removeAttribute("disabled");
+        this._traverseCatchmentsButton.innerHTML = "Trace Upstream Catchments";
+        this._traverseCatchmentsButton.removeAttribute("disabled");
     }
 });
 
