@@ -65,6 +65,14 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._upstreamCatchmentReportContainer = this.parentElement.querySelector("#upstreamCatchmentReportContainer");
         this._upstreamCatchmentReport = this.parentElement.querySelector("#upstreamCatchmentReport");
 
+        L.DomEvent.on(this._delineationButton,
+            "click",
+            function (e) {
+                window.delineationMap.addBeginDelineationControl();
+                this.disableDelineationButton();
+                e.stopPropagation();
+            }.bind(this));
+        
         return this.parentElement;
     },
 
@@ -88,17 +96,18 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._selectedCatchmentInfo.classList.add("hiddenControlElement");
-        
-        L.DomEvent.on(this._delineationButton,
-            "click",
-            function (e) {
-                window.delineationMap.addBeginDelineationControl();
-                this.disableDelineationButton();
-                e.stopPropagation();
-            }.bind(this));
     },
 
     networkCatchment: function (networkCatchmentFeature) {
+        // todo: I'm not sure I like this add/remove pattern but I'm not sure I can get around it. closures for the win?
+        if (this._traverseCatchmentsHandler) {
+            L.DomEvent.off(this._traverseCatchmentsButton, "click", this._traverseCatchmentsHandler);
+            this._traverseCatchmentsHandler = null;
+        }
+        this._traverseCatchmentsHandler = this.makeNetworkCatchmentHandler(networkCatchmentFeature);
+        L.DomEvent.on(this._traverseCatchmentsButton,
+            "click",
+            this._traverseCatchmentsHandler);
 
         this._selectedCatchmentDetails.innerHTML = "Selected Catchment ID: " + networkCatchmentFeature.properties["NetworkCatchmentID"];
 
@@ -106,15 +115,16 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._selectedBmpInfo.classList.add("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._upstreamCatchmentReportContainer.classList.add("hiddenControlElement");
+    },
 
-        L.DomEvent.on(this._traverseCatchmentsButton,
-            "click",
-            function (e) {
-                window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
-            });
+    makeNetworkCatchmentHandler: function(networkCatchmentFeature) {
+        return function(e) {
+            window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
+        };
     },
 
     reportUpstreamCatchments: function (count) {
+        debugger;
         this._upstreamCatchmentReportContainer.classList.remove("hiddenControlElement");
         this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
