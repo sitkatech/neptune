@@ -24,3 +24,4 @@ namespace Neptune.Web.Models
         }
     }
 }
+}
