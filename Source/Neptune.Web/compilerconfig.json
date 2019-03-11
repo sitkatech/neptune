@@ -50,5 +50,9 @@
   {
     "outputFile": "ScriptsCustom/Maps/NeptuneMaps.min.js",
     "inputFile": "ScriptsCustom/Maps/NeptuneMaps.js"
+  },
+  {
+    "outputFile": "Views/Delineation/DelineationMap.css",
+    "inputFile": "Views/Delineation/DelineationMap.less"
   }
 ]

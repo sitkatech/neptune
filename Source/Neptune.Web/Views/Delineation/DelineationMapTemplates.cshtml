@@ -1,0 +1,47 @@
+﻿@inherits Neptune.Web.Views.Delineation.DelineationMapTemplates
+
+<template id="selectedAssetControlTemplate">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="selectedAssetControl">
+        <h4>Selected Asset</h4>
+        <span id="noAssetSelected" class="systemText">Select an asset on the map to see options</span>
+        <div id="selectedBmpInfo" class="hiddenControlElement">
+            <span id="selectedBmpName"> </span>
+            <hr>
+            <strong>Drainage Area</strong>
+            <br>
+            <span id="delineationStatus" class="systemText">No catchment delineation has been performed for this BMP</span>
+            <br>
+            <button class="btn btn-sm btn-neptune" id="delineationButton" type="button">Delineate Drainage Area</button>
+        </div>
+        <div id="selectedCatchmentInfo" class="hiddenControlElement">
+            <span id="selectedCatchmentDetails"></span>
+            <hr />
+            <div id="upstreamCatchmentReportContainer" class="hiddenControlElement">
+                <span id="upstreamCatchmentReport" class="systemText"></span>
+                <br /><br />
+            </div>
+            <button id="traverseCatchmentsButton" class="btn btn-sm btn-neptune" type="button">Trace Upstream Catchments</button>
+        </div>
+    </div>
+</template>
+<template id="beginDelineationControlTemplate">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="beginDelineationControl">
+        <div class="row">
+            <div class="col-sm-10"><h4>Delineate Drainage Area</h4></div>
+            <div class="col-sm-2 text-right"><button class="btn btn-sm btn-neptune">x</button></div>
+        </div>
+        <div id="beginDelineationOptions">
+            <label>1. Select the type of flow this BMP will receive</label><br>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionDistributed" checked> Receives Local Surface Flow Only (Distributed)</label><br>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionCentralized" disabled> Receives Both Piped Flow and Local Surface Flow (Centralized)</label>
+            <hr>
+            <label>2. Choose a delineation option</label><br>
+            <label class="group"><input type="radio" name="delineationOption" id="delineationOptionDEM" disabled> Delineate Automatically from DEM</label><br>
+            <label class="group"><input type="radio" name="delineationOption" checked> <span id="delineationOptionDrawText"></span> </label><br>
+        </div>
+        <div class="text-right">
+            <button id="continueDelineationButton" class="btn btn-sm btn-neptune" type="button" disabled="">Delineate</button>
+            <button id="cancelDelineationButton" class="btn btn-sm btn-neptune" type="button">Cancel</button>
+        </div>
+    </div>
+</template>

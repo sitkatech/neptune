@@ -1,0 +1,42 @@
+﻿.neptune-leaflet-control {
+    background: white;
+    padding: 7px;
+    cursor: pointer;
+
+    #selectedAssetControl {
+        width: 240px;
+    }
+
+    #beginDelineationControl {
+        width: 375px;
+        height: 280px;
+    }
+}
+
+.leaflet-bar {
+    hr {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    h4 {
+        margin-top: 0;
+    }
+}
+
+label.group {
+    margin-left: 20px;
+    font-weight: normal;
+}
+
+.hiddenControlElement {
+    display: none;
+}
+
+
+/* weird gross hack to allow centered controls by overriding bottom-right control placement */
+.leaflet-bottom.leaflet-right {
+    right: 50%;
+    bottom: 50%;
+    transform: translate(50%, 50%);
+}

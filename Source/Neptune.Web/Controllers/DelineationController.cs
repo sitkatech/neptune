@@ -20,14 +20,12 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security.Shared;
 using System.Web;
 using LtInfo.Common.GeoJson;
-using LtInfo.Common.Mvc;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
@@ -68,50 +66,6 @@ namespace Neptune.Web.Controllers
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
-        }
-    }
-}
-
-namespace Neptune.Web.Views.Delineation
-{
-    public class DelineationMapViewData : NeptuneViewData
-    {
-        public DelineationMapViewData(Person currentPerson, Models.NeptunePage neptunePage, StormwaterMapInitJson mapInitJson, Models.TreatmentBMP initialTreatmentBMP) : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
-        {
-            MapInitJson = mapInitJson;
-            IsInitialTreatmentBMPProvided = initialTreatmentBMP != null;
-            InitialTreatmentBMPID = initialTreatmentBMP?.TreatmentBMPID;
-            EntityName = "Delineation";
-            PageTitle = "Delineation Map";
-            GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-        }
-
-        public int? InitialTreatmentBMPID { get; }
-
-        public StormwaterMapInitJson MapInitJson { get; }
-        public bool IsInitialTreatmentBMPProvided { get; }
-        public string GeoServerUrl { get; }
-    }
-
-    public abstract class DelineationMap : TypedWebViewPage<DelineationMapViewData>
-    {
-
-    }
-
-    public class DelineationMapInitJson : StormwaterMapInitJson
-    {
-        public LayerGeoJson TreatmentBMPLayerGeoJson { get; set; }
-
-        public DelineationMapInitJson(string mapDivID, DbSet<Models.TreatmentBMP> databaseEntitiesTreatmentBMPs) : base(mapDivID)
-        {
-            TreatmentBMPLayerGeoJson = MakeTreatmentBMPLayerGeoJson(databaseEntitiesTreatmentBMPs,
-                (feature, treatmentBMP) =>
-                {
-                    if (treatmentBMP.Delineation != null)
-                    {
-                        feature.Properties.Add("DelineationURL", treatmentBMP.GetDelineationUrl());
-                    }
-                }, false);
         }
     }
 }
