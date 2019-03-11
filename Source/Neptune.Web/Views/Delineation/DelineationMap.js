@@ -1,4 +1,9 @@
-﻿NeptuneMaps.DelineationMap = function(mapInitJson, initialBaseLayerShown, geoserverUrl) {
+﻿/* Extension of GeoServerMap with functionality for the Delineation Workflow
+ * Leaflet controls (JS) in DelineationMapControls.js
+ * Leaflet controls (HTML Templates) in DelineationMap.cshtml (TODO: move to DelineationMapTemplate)
+ */
+
+NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl) {
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
 
     this.treatmentBMPLayerLookup = new Map();
@@ -53,8 +58,8 @@
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
 
-NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function() {
-    this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" });
+NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function(treatmentBMPFeature) {
+    this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
     this.map.off("click");
 };
@@ -255,5 +260,6 @@ var delineationErrorAlert = function() {
 };
 
 var upstreamCatchmentErrorAlert = function() {
-    alert("There was an error retrieving the upstream catchments. Please try again. If the problem persists, please contact Support.")
-}
+    alert(
+        "There was an error retrieving the upstream catchments. Please try again. If the problem persists, please contact Support.");
+};

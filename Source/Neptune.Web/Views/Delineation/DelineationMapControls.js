@@ -1,9 +1,12 @@
-﻿// page-specific leaflet controls.
-// todo: the use of window.delineationMap throughout to back-reference the map object is a little brittle
+﻿/* Leaflet controls for the Delineation Workflow mpa.
+ * Main map code in DelineationMap.js
+ * HTML templates in DelineationMap.cshtml (TODO: move to DelineationMapTemplate)
+ */
 
 // WIP: base class for the html-template driven control pattern
+// todo: sufficiently general as to belong to its own js file
 L.Control.TemplatedControl = L.Control.extend({
-    templateID: null,
+    templateID: null, // must set this value when extending; else onAdd will not work.
 
     initializeControlInstance: function() {
         // override this method to perform additional initialization during onAdd
@@ -27,12 +30,10 @@ L.Control.TemplatedControl = L.Control.extend({
     }
 });
 
-var stopClickPropagation = function (el) {
-    L.DomEvent.on(el, "click", function (e) { e.stopPropagation(); });
-};
-
+// todo: watermark is sufficiently general as to belong to its own js file
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
+        
         var img = L.DomUtil.create("img");
 
         img.src = "/Content/img/OCStormwater/banner_logo.png";
@@ -46,17 +47,21 @@ L.Control.Watermark = L.Control.extend({
     }
 });
 
-L.control.watermark = function (opts) {
+L.control.watermark = function(opts) {
     return new L.Control.Watermark(opts);
-}
+};
 
-L.Control.DelineationMapSelectedAsset = L.Control.extend({
-    onAdd: function (map) {
-        var t = document.querySelector("#selectedAssetControlTemplate");
-        this.parentElement = document.importNode(t.content, true).firstElementChild;
+var stopClickPropagation = function (el) {
+    L.DomEvent.on(el, "click", function (e) { e.stopPropagation(); });
+};
 
+L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
+    templateID: "selectedAssetControlTemplate",
+
+    initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
 
+        // todo: there's no reason to set all of these to member variables; just use getTrackedElement()
         this._noAssetSelected = this.parentElement.querySelector("#noAssetSelected");
 
         this._selectedBmpInfo = this.parentElement.querySelector("#selectedBmpInfo");
@@ -69,23 +74,25 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._traverseCatchmentsButton = this.parentElement.querySelector("#traverseCatchmentsButton");
         this._upstreamCatchmentReportContainer = this.parentElement.querySelector("#upstreamCatchmentReportContainer");
         this._upstreamCatchmentReport = this.parentElement.querySelector("#upstreamCatchmentReport");
-
-        L.DomEvent.on(this._delineationButton,
-            "click",
-            function (e) {
-                window.delineationMap.addBeginDelineationControl();
-                this.disableDelineationButton();
-                e.stopPropagation();
-            }.bind(this));
-        
-        return this.parentElement;
-    },
-
-    onRemove: function (map) {
-        jQuery(this.parentElement).remove();
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
+        if (this._beginDelineationHandler) {
+            L.DomEvent.off(this._delineationButton, "click", this._beginDelineationHandler);
+            this._beginDelineationHandler = null;
+        }
+
+        this._beginDelineationHandler = function (e) {
+            // todo: the use of window.delineationMap throughout to back-reference the map object is a little brittle
+            window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
+            this.disableDelineationButton();
+            e.stopPropagation();
+        }.bind(this);
+
+        L.DomEvent.on(this._delineationButton,
+            "click", this._beginDelineationHandler
+        );
+
         this._selectedBmpName.innerHTML = "BMP: " +
             treatmentBMPFeature.properties["Name"];
 
@@ -109,7 +116,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
             L.DomEvent.off(this._traverseCatchmentsButton, "click", this._traverseCatchmentsHandler);
             this._traverseCatchmentsHandler = null;
         }
-        this._traverseCatchmentsHandler = this.makeNetworkCatchmentHandler(networkCatchmentFeature);
+        this._traverseCatchmentsHandler = function (e) {
+            window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
+        };
         L.DomEvent.on(this._traverseCatchmentsButton,
             "click",
             this._traverseCatchmentsHandler);
@@ -120,12 +129,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
         this._selectedBmpInfo.classList.add("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._upstreamCatchmentReportContainer.classList.add("hiddenControlElement");
-    },
-
-    makeNetworkCatchmentHandler: function(networkCatchmentFeature) {
-        return function(e) {
-            window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
-        };
     },
 
     reportUpstreamCatchments: function (count) {
@@ -164,32 +167,37 @@ L.Control.DelineationMapSelectedAsset = L.Control.extend({
     }
 });
 
-L.control.delineationSelectedAsset = function (opts) {
+L.control.delineationSelectedAsset = function(opts) {
     return new L.Control.DelineationMapSelectedAsset(opts);
-}
+};
 
-L.Control.BeginDelineation = L.Control.extend({
-    onAdd: function (map) {
+L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
+    templateID: "beginDelineationControlTemplate",
 
-        var t = document.querySelector("#beginDelineationControlTemplate");
-        this.parentElement = document.importNode(t.content, true).firstElementChild;
-
+    initializeControlInstance: function () {
         stopClickPropagation(this.parentElement);
-        var stopBtn = this.parentElement.querySelector("#cancelDelineationButton");
+        var stopBtn = this.getTrackedElement("cancelDelineationButton");
+
+        var drawOptionText = this.treatmentBMPFeature.properties.HasDelineation
+            ? "Revise the Catchment Area"
+            : "Draw the Catchment Area";
+        this.getTrackedElement("delineationOptionDrawText").innerHTML = drawOptionText;
+
         L.DomEvent.on(stopBtn,
             "click",
             function (e) {
                 window.delineationMap.removeBeginDelineationControl();
                 e.stopPropagation();
             });
-
-        return this.parentElement;
     },
-    onRemove: function () {
-        jQuery(this.parentElement).remove();
+
+    initialize: function(options, treatmentBMPFeature) {
+        this.treatmentBMPFeature = treatmentBMPFeature;
+        L.setOptions(this, options);
+        console.log(this.treatmentBMPFeature.properties);
     }
 });
 
-L.control.beginDelineation = function(opts) {
-    return new L.Control.BeginDelineation(opts);
+L.control.beginDelineation = function(opts, treatmentBMPFeature) {
+    return new L.Control.BeginDelineation(opts, treatmentBMPFeature);
 };

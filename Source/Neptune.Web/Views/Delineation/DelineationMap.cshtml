@@ -33,7 +33,7 @@
             padding: 7px;
             cursor: pointer;
             width: 375px;
-            height: 340px;
+            height: 240px;
         }
 
         label.group {
@@ -101,18 +101,15 @@
         </div>
         <div class="beginDelineationOptions">
             <label>1. Select the type of flow this BMP will receive</label><br>
-            <label class="group"><input type="radio" name="typeOfFlow"> Receives local surface flow only</label><br>
-            <label class="group"><input type="radio" name="typeOfFlow"> Receives piped flow only</label><br>
-            <label class="group"><input type="radio" name="typeOfFlow"> Receives both piped flow and surface flow</label>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionDistributed" checked> Receives Local Surface Flow Only (Distributed)</label><br>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionCentralized" disabled> Receives Both Piped Flow and Local Surface Flow (Centralized)</label>
             <hr>
             <label>2. Choose a delineation option</label><br>
-            <label class="group"><input type="radio" name="delineationOption"> Delineate Automatically from DEM</label><br>
-            <label class="group"><input type="radio" name="delineationOption"> Draw the Catchment Area</label><br>
-            <label class="group"><input type="radio" name="delineationOption"> Upload a GIS file</label>
-            <p>(Content under development)</p>
+            <label class="group"><input type="radio" name="delineationOption" id="delineationOptionDEM" disabled> Delineate Automatically from DEM</label><br>
+            <label class="group"><input type="radio" name="delineationOption" checked> <span id="delineationOptionDrawText"></span> </label><br>
         </div>
         <div class="text-right">
-            <button class="continueDelineate btn btn-sm btn-neptune" type="button" disabled="">Delineate</button>
+            <button class="continueDelineationButton btn btn-sm btn-neptune" type="button" disabled="">Delineate</button>
             <button id="cancelDelineationButton" class="btn btn-sm btn-neptune" type="button">Cancel</button>
         </div>
     </div>
