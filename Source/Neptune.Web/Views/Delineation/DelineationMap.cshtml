@@ -1,5 +1,4 @@
 ﻿@using LtInfo.Common
-@using Neptune.Web.Views.Delineation
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
@@ -29,7 +28,7 @@
             transform: translate(50%, 50%);
         }
 
-        .beginDelineationControl {
+        #beginDelineationControl {
             background: white;
             padding: 7px;
             cursor: pointer;
@@ -85,15 +84,40 @@
         </div>
         <div id="selectedCatchmentInfo" class="hiddenControlElement">
             <span id="selectedCatchmentDetails"></span>
-            <hr/>
+            <hr />
             <div id="upstreamCatchmentReportContainer" class="hiddenControlElement">
                 <span id="upstreamCatchmentReport" class="systemText"></span>
-                <br/><br/>
+                <br /><br />
             </div>
             <button id="traverseCatchmentsButton" class="btn btn-sm btn-neptune" type="button">Trace Upstream Catchments</button>
         </div>
     </div>
 </template>
+<template id="beginDelineationControlTemplate">
+    <div class="leaflet-bar leaflet-control" id="beginDelineationControl">
+        <div class="row">
+            <div class="col-sm-10"><h4>Delineate Drainage Area</h4></div>
+            <div class="col-sm-2 text-right"><button class="btn btn-sm btn-neptune">x</button></div>
+        </div>
+        <div class="beginDelineationOptions">
+            <label>1. Select the type of flow this BMP will receive</label><br>
+            <label class="group"><input type="radio" name="typeOfFlow"> Receives local surface flow only</label><br>
+            <label class="group"><input type="radio" name="typeOfFlow"> Receives piped flow only</label><br>
+            <label class="group"><input type="radio" name="typeOfFlow"> Receives both piped flow and surface flow</label>
+            <hr>
+            <label>2. Choose a delineation option</label><br>
+            <label class="group"><input type="radio" name="delineationOption"> Delineate Automatically from DEM</label><br>
+            <label class="group"><input type="radio" name="delineationOption"> Draw the Catchment Area</label><br>
+            <label class="group"><input type="radio" name="delineationOption"> Upload a GIS file</label>
+            <p>(Content under development)</p>
+        </div>
+        <div class="text-right">
+            <button class="continueDelineate btn btn-sm btn-neptune" type="button" disabled="">Delineate</button>
+            <button id="cancelDelineationButton" class="btn btn-sm btn-neptune" type="button">Cancel</button>
+        </div>
+    </div>
+</template>
+
 
 <script>
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
