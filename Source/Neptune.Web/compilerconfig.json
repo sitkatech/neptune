@@ -54,5 +54,13 @@
   {
     "outputFile": "Views/Delineation/DelineationMap.css",
     "inputFile": "Views/Delineation/DelineationMap.less"
+  },
+  {
+    "outputFile": "Views/Delineation/DelineationMapControls.min.js",
+    "inputFile": "Views/Delineation/DelineationMapControls.js"
+  },
+  {
+    "outputFile": "Views/Delineation/DelineationMap.min.js",
+    "inputFile": "Views/Delineation/DelineationMap.js"
   }
 ]

@@ -247,6 +247,7 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function() {
             this.deselect(function() {
                 this.removeBMPDelineationLayer();
                 this.removeUpstreamCatchmentsLayer();
+                this.selectedAssetControl.reset();
             }.bind(this));
         }.bind(this));
 };

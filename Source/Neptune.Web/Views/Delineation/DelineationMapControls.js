@@ -126,9 +126,16 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._selectedCatchmentDetails.innerHTML = "Selected Catchment ID: " + networkCatchmentFeature.properties["NetworkCatchmentID"];
 
         this._selectedCatchmentInfo.classList.remove("hiddenControlElement");
+
         this._selectedBmpInfo.classList.add("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._upstreamCatchmentReportContainer.classList.add("hiddenControlElement");
+    },
+
+    reset: function () {
+        this._selectedBmpInfo.classList.add("hiddenControlElement");
+        this._selectedCatchmentInfo.classList.add("hiddenControlElement");
+        this._noAssetSelected.classList.remove("hiddenControlElement");
     },
 
     reportUpstreamCatchments: function (count) {

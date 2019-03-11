@@ -1233,7 +1233,13 @@
     <Content Include="Views\Delineation\DelineationMap.min.css">
       <DependentUpon>DelineationMap.css</DependentUpon>
     </Content>
+    <Content Include="Views\Delineation\DelineationMap.min.js">
+      <DependentUpon>DelineationMap.js</DependentUpon>
+    </Content>
     <Content Include="Views\Delineation\DelineationMapControls.js" />
+    <Content Include="Views\Delineation\DelineationMapControls.min.js">
+      <DependentUpon>DelineationMapControls.js</DependentUpon>
+    </Content>
     <Content Include="Views\TreatmentBMPAssessmentObservationType\DiscreteCollectionMethodController.js" />
     <Content Include="Views\FieldVisit\ObservationsController.js" />
     <Content Include="Views\NeptuneDhtmlxGridHtmlHelpersTest.CreateTagUrlHtmlTest.approved.txt" />

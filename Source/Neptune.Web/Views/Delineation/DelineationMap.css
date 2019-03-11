@@ -3,10 +3,10 @@
   padding: 7px;
   cursor: pointer;
 }
-.neptune-leaflet-control #selectedAssetControl {
+.neptune-leaflet-control#selectedAssetControl {
   width: 240px;
 }
-.neptune-leaflet-control #beginDelineationControl {
+.neptune-leaflet-control#beginDelineationControl {
   width: 375px;
   height: 280px;
 }
