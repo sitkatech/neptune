@@ -84,62 +84,73 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
 };
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
-    // kill the begin delineation control
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
 
-    // display save and cancel in the selected asset control
     this.selectedAssetControl.launchDrawCatchmentMode();
 
-    // should already be no click handlers on the map but if there still are some kill 'em here
-
-    // "zoom tight"
     if (this.selectedBMPDelineationLayer) {
         this.zoomAndPanToLayer(this.selectedBMPDelineationLayer);
     } else {
         this.zoomAndPanToLayer(this.lastSelected);
     }
 
-    // enable the draw control
-    // this could use some serious clean-up
+    this.buildDrawControl();
+};
 
-    var editableFeatureGroup = new L.FeatureGroup();
-    L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature, {
-        onEachFeature: function (feature, layer) {
-            if (layer.getLayers) {
-                layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
-            }
-            else {
-                editableFeatureGroup.addLayer(layer);
-            }
-        }
+NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
+    this.editableFeatureGroup = new L.FeatureGroup();
+    var editableFeatureGroup = this.editableFeatureGroup; // eliminates need to .bind(this) later
 
-    });
+    // what is this doing and there is a better way to do it?
+    L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
+        {
+            onEachFeature: function(feature, layer) {
+                if (layer.getLayers) {
+                    layer.getLayers().forEach(function(l) { editableFeatureGroup.addLayer(l); });
+                } else {
+                    editableFeatureGroup.addLayer(layer);
+                }
+            }
+
+        });
 
     var drawOptions = getDrawOptions(editableFeatureGroup);
-    var drawControl = new L.Control.Draw(drawOptions);
-    this.map.addControl(drawControl);
+    this.drawControl = new L.Control.Draw(drawOptions);
+    this.map.addControl(this.drawControl);
 
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
-        this.selectedBMPDelineationLayer = null;
     }
-    this.map.addLayer(editableFeatureGroup);
-    this.map.on('draw:created', function (e) {
-        var layer = e.layer;
-        editableFeatureGroup.addLayer(layer);
-        var leafletId = layer._leaflet_id;
-        editableFeatureGroup._layers[leafletId].feature = new Object();
-        editableFeatureGroup._layers[leafletId].feature.properties = new Object();
-        editableFeatureGroup._layers[leafletId].feature.type = "Feature";
-        var feature = editableFeatureGroup._layers[leafletId].feature;
-    }.bind(this));
 
+    this.map.addLayer(this.editableFeatureGroup);
+    this.map.on('draw:created',
+        function(e) {
+            var layer = e.layer;
+            editableFeatureGroup.addLayer(layer);
+            var leafletId = layer._leaflet_id;
+            editableFeatureGroup._layers[leafletId].feature = new Object();
+            editableFeatureGroup._layers[leafletId].feature.properties = new Object();
+            editableFeatureGroup._layers[leafletId].feature.type = "Feature";
+            var feature = editableFeatureGroup._layers[leafletId].feature;
+        });
 };
 
-NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function() {
-    // todo: persist catchment and resolve back to appropriate state, including re-wiring handlers
-    alert("You have exited the DRAWING MODE mode (not really but imagine if you did)");
+NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
+    if (save) {
+        // todo: persist catchment and resolve back to appropriate state, including re-wiring handlers
+    }
+    this.drawControl.remove();
+    this.map.removeLayer(this.editableFeatureGroup);
+    this.drawControl = null;
+    this.editableFeatureGroup = null;
+
+    if (!save && this.selectedBMPDelineationLayer) {
+        this.map.addLayer(this.selectedBMPDelineationLayer);
+    }
+
+    this.hookupSelectTreatmentBMPOnClick();
+    this.hookupDeselectOnClick();
 };
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function(mapInitJson) {
@@ -157,17 +168,6 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
     this.hookupSelectTreatmentBMPOnClick();
-};
-
-NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function() {
-    this.treatmentBMPLayer.on("click",
-        function(e) {
-            //this.zoomAndPanToLayer(e.layer);
-            this.removeUpstreamCatchmentsLayer();
-            this.setSelectedFeature(e.layer.feature);
-            this.selectedAssetControl.treatmentBMP(e.layer.feature);
-            this.retrieveAndShowBMPDelineation(e.layer.feature);
-        }.bind(this));
 };
 
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
@@ -317,6 +317,17 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function() {
                 this.removeUpstreamCatchmentsLayer();
                 this.selectedAssetControl.reset();
             }.bind(this));
+        }.bind(this));
+};
+
+NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function () {
+    this.treatmentBMPLayer.on("click",
+        function (e) {
+            //this.zoomAndPanToLayer(e.layer);
+            this.removeUpstreamCatchmentsLayer();
+            this.setSelectedFeature(e.layer.feature);
+            this.selectedAssetControl.treatmentBMP(e.layer.feature);
+            this.retrieveAndShowBMPDelineation(e.layer.feature);
         }.bind(this));
 };
 
