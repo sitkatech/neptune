@@ -43,11 +43,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 Add("Assessment Area Name",
                     x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
-                    DhtmlxGridColumnFilterType.SelectFilterStrict);
+                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
 
-            Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 90,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 115,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Created On", x => x.CreatedDate, 120, DhtmlxGridColumnFormatType.Date);
         }
     }
