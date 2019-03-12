@@ -150,6 +150,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         }
     } else {
         this.persistDrawnCatchment();
+        // todo: it shouldn't be necessary to AJAX out for the updated delineation, but right now this is the cleanest way to display it and maintain state
         this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     }
 
@@ -160,27 +161,21 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 };
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
-    var geoJSON = this.editableFeatureGroup.toGeoJSON();
-
-    var wkt = Terraformer.WKT.convert(geoJSON.features[0].geometry);
-
-    var json = { "WellKnownText": wkt };
-
-    var id = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
+    // had better be only one feature
+    var wkt = Terraformer.WKT.convert(this.editableFeatureGroup.toGeoJSON().features[0].geometry);
 
     jQuery.ajax({
-        url: "/Delineation/ForTreatmentBMP/" + id,
-        data: json,
+        url: "/Delineation/ForTreatmentBMP/" + this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID,
+        data: { "WellKnownText": wkt },
         type: 'POST',
-        success: function(data) {
-            //alert("Congration. You done it.");
+        success: function (data) {
+            // nothing to do.
         },
         error: function(jq, ts, et) {
             alert(
                 "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
         }
     });
-
 };
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function(mapInitJson) {

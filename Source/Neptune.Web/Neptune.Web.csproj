@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Models\Delineation.cs" />
     <Compile Include="Views\Delineation\DelineationMap.cs" />
     <Compile Include="Views\Delineation\DelineationMapInitJson.cs" />
     <Compile Include="Views\Delineation\DelineationMapTemplates.cs" />

@@ -86,6 +86,7 @@ namespace Neptune.Web.Controllers
             else
             {
                 var delineation = new Delineation(geom, DelineationType.Distributed);
+                HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
