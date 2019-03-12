@@ -116,6 +116,8 @@
             $scope.assessmentAreaLayerGeoJson.addTo($scope.neptuneMap.map);
             $scope.assessmentAreaLayerGeoJson.on('click', selectAssessmentArea);
 
+            $scope.neptuneMap.zoomAndPanToLayer($scope.assessmentAreaLayerGeoJson);
+
             if ($scope.AngularModel.OnlandVisualTrashAssessmentAreaID) {
                 $scope.setSelectedFeatureByID($scope.AngularModel.OnlandVisualTrashAssessmentAreaID);
             }

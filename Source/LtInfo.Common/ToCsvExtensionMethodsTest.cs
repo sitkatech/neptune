@@ -84,9 +84,7 @@ namespace LtInfo.Common
         {
             var list = CreateTestList();
             var csvData = list.ToCsv(new[] { "TestName" });
-            const string expectedText = @"""TestName""
-""Five""
-""Ninety-nine""";
+            string expectedText = $@"""TestName""{Environment.NewLine}""Five""{Environment.NewLine}""Ninety-nine""";
             Assert.AreEqual(expectedText, csvData);
         }
 

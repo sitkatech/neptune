@@ -350,15 +350,11 @@ NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
         this.map.panTo(layer.getLatLng());
         this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
     } else {
-        this.map.panTo(layer.getBounds().getCenter());
-        this.map.fitBounds(layer.getBounds());
+        if (layer.getBounds().isValid()) {
+            this.map.fitBounds(layer.getBounds());
+        }
     }
 };
-
-NeptuneMaps.Map.prototype.zoomAndPan = function(latLng, bounds) {
-    this.map.panTo(latLng);
-    this.map.fitBounds(bounds);
-}
 
 NeptuneMaps.Map.prototype.deselect = function (callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
