@@ -12,6 +12,10 @@
             <span id="delineationStatus" class="systemText">No catchment delineation has been performed for this BMP</span>
             <br>
             <button class="btn btn-sm btn-neptune" id="delineationButton" type="button">Delineate Drainage Area</button>
+            <div class="hiddenControlElement" id="saveAndCancelButtonsWrapper">
+                <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save Delineation</button>
+                <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button">Cancel</button>
+            </div>
         </div>
         <div id="selectedCatchmentInfo" class="hiddenControlElement">
             <span id="selectedCatchmentDetails"></span>
@@ -31,16 +35,17 @@
             <div class="col-sm-2 text-right"><button class="btn btn-sm btn-neptune">x</button></div>
         </div>
         <div id="beginDelineationOptions">
+            @*The values of these radios must correspond to the values used in BeginDelineation.delineate*@
             <label>1. Select the type of flow this BMP will receive</label><br>
-            <label class="group"><input type="radio" name="flowOption" id="flowOptionDistributed" checked> Receives Local Surface Flow Only (Distributed)</label><br>
-            <label class="group"><input type="radio" name="flowOption" id="flowOptionCentralized" disabled> Receives Both Piped Flow and Local Surface Flow (Centralized)</label>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionDistributed" checked value="distributed"> Receives Local Surface Flow Only (Distributed)</label><br>
+            <label class="group"><input type="radio" name="flowOption" id="flowOptionCentralized" disabled value="centralized"> Receives Both Piped Flow and Local Surface Flow (Centralized)</label>
             <hr>
             <label>2. Choose a delineation option</label><br>
             <label class="group"><input type="radio" name="delineationOption" id="delineationOptionDEM" disabled> Delineate Automatically from DEM</label><br>
             <label class="group"><input type="radio" name="delineationOption" checked> <span id="delineationOptionDrawText"></span> </label><br>
         </div>
         <div class="text-right">
-            <button id="continueDelineationButton" class="btn btn-sm btn-neptune" type="button" disabled="">Delineate</button>
+            <button id="continueDelineationButton" class="btn btn-sm btn-neptune" type="button">Delineate</button>
             <button id="cancelDelineationButton" class="btn btn-sm btn-neptune" type="button">Cancel</button>
         </div>
     </div>

@@ -74,6 +74,12 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._traverseCatchmentsButton = this.parentElement.querySelector("#traverseCatchmentsButton");
         this._upstreamCatchmentReportContainer = this.parentElement.querySelector("#upstreamCatchmentReportContainer");
         this._upstreamCatchmentReport = this.parentElement.querySelector("#upstreamCatchmentReport");
+
+        L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
+            "click",
+            function(e) {
+                this.exitDrawCatchmentMode();
+            }.bind(this));
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -108,6 +114,19 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._selectedCatchmentInfo.classList.add("hiddenControlElement");
+    },
+
+    launchDrawCatchmentMode: function () {
+        this.getTrackedElement("saveAndCancelButtonsWrapper").classList.remove("hiddenControlElement");
+        this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
+    },
+
+    exitDrawCatchmentMode: function () {
+        this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
+        this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
+        this.enableDelineationButton();
+
+        window.delineationMap.exitDrawCatchmentMode();
     },
 
     networkCatchment: function (networkCatchmentFeature) {
@@ -183,25 +202,41 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
     initializeControlInstance: function () {
         stopClickPropagation(this.parentElement);
-        var stopBtn = this.getTrackedElement("cancelDelineationButton");
 
         var drawOptionText = this.treatmentBMPFeature.properties.HasDelineation
             ? "Revise the Catchment Area"
             : "Draw the Catchment Area";
         this.getTrackedElement("delineationOptionDrawText").innerHTML = drawOptionText;
 
+        var stopBtn = this.getTrackedElement("cancelDelineationButton");
         L.DomEvent.on(stopBtn,
             "click",
             function (e) {
                 window.delineationMap.removeBeginDelineationControl();
                 e.stopPropagation();
             });
+
+        var goBtn = this.getTrackedElement("continueDelineationButton");
+        L.DomEvent.on(goBtn,
+            "click",
+            function(e) {
+                this.delineate();
+            }.bind(this));
     },
 
     initialize: function(options, treatmentBMPFeature) {
         this.treatmentBMPFeature = treatmentBMPFeature;
         L.setOptions(this, options);
         console.log(this.treatmentBMPFeature.properties);
+    },
+
+    delineate: function() {
+        var flowOption = jQuery("input[name='flowOption']").val();
+        var delineationOption = jQuery("input[name='delineationOption']").val();
+
+        // todo (future story): condition on flowOption and delineationOption
+        // for now, just go to draw mode because that's the only thing we've built
+        window.delineationMap.launchDrawCatchmentMode();
     }
 });
 

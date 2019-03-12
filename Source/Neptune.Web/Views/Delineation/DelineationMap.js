@@ -79,6 +79,36 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
     this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
+NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
+    // kill the begin delineation control
+    this.beginDelineationControl.remove();
+    this.beginDelineationControl = null;
+
+    // display save and cancel in the selected asset control
+    this.selectedAssetControl.launchDrawCatchmentMode();
+
+    // should already be no click handlers on the map but if there still are some kill 'em here
+
+    // "zoom tight"
+    if (this.selectedBMPDelineationLayer) {
+        this.zoomAndPanToLayer(this.selectedBMPDelineationLayer);
+    } else {
+        this.zoomAndPanToLayer(this.lastSelected);
+    }
+
+    // enable the draw control
+    // nulls are handled by getDrawOptions
+    // todo: need to add the editable feature group to the map QUA editable feature group or this doesn't work. I think?
+    var drawOptions = getDrawOptions(this.selectedBMPDelineationLayer);
+    var drawControl = new L.Control.Draw(drawOptions);
+    this.map.addControl(drawControl);
+};
+
+NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function() {
+    // todo: persist catchment and resolve back to appropriate state, including re-wiring handlers
+    alert("You have exited the DRAWING MODE mode (not really but imagine if you did)");
+};
+
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function(mapInitJson) {
     this.treatmentBMPLayer = L.geoJson(
         mapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
@@ -106,6 +136,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
     }
 
     if (!bmpFeature.properties["DelineationURL"]) {
@@ -263,4 +294,41 @@ var delineationErrorAlert = function() {
 var upstreamCatchmentErrorAlert = function() {
     alert(
         "There was an error retrieving the upstream catchments. Please try again. If the problem persists, please contact Support.");
+};
+
+var getDrawOptions = function (editableFeatureGroup) {
+
+    if (!editableFeatureGroup) {
+        editableFeatureGroup = L.geoJSON({ type: "FeatureCollection", features: [] });
+    }
+
+
+    var options = {
+        position: 'topleft',
+        draw: {
+            polyline: false,
+            polygon: {
+                allowIntersection: false, // Restricts shapes to simple polygons
+                drawError: {
+                    color: '#e1e100', // Color the shape will turn when intersects
+                    message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
+                },
+                shapeOptions: {
+                    color: '#f357a1'
+                }
+            },
+            circle: false, // Turns off this drawing tool
+            rectangle: false,
+            marker: false
+        },
+        edit: {
+            featureGroup: editableFeatureGroup, //REQUIRED!!
+            edit: {
+                maintainColor: true,
+                opacity: 0.3
+            },
+            remove: true
+}
+    };
+    return options;
 };

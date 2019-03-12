@@ -46,8 +46,7 @@
 
 
 <script type="text/javascript">
-    getDrawOptions = function(editableFeatureGroup)
-    {
+    getDrawOptions = function(editableFeatureGroup) {
         var options = {
             position: 'topleft',
             draw: {
@@ -78,8 +77,7 @@
         assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
 
-        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
-            {
+        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
                 pointToLayer: function(feature, latlng) {
                     var icon = L.MakiMarkers.icon({
                         icon: feature.properties.FeatureGlyph,
