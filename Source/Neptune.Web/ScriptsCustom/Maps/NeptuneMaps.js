@@ -345,15 +345,16 @@ NeptuneMaps.Map.prototype.setSelectedMarker = function (feature, recenter, callb
     }
 };
 
-NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer){
+NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
         this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
     } else {
-        this.map.panTo(layer.getCenter());
-        this.map.fitbounds(layer.getBounds());
+        if (layer.getBounds().isValid()) {
+            this.map.fitBounds(layer.getBounds());
+        }
     }
-}
+};
 
 NeptuneMaps.Map.prototype.deselect = function (callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
