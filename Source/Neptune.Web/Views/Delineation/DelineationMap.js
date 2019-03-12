@@ -102,28 +102,29 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
     this.editableFeatureGroup = new L.FeatureGroup();
     var editableFeatureGroup = this.editableFeatureGroup; // eliminates need to .bind(this) later
 
-    // what is this doing and there is a better way to do it?
-    L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
-        {
-            onEachFeature: function(feature, layer) {
-                if (layer.getLayers) {
-                    layer.getLayers().forEach(function(l) { editableFeatureGroup.addLayer(l); });
-                } else {
-                    editableFeatureGroup.addLayer(layer);
-                }
-            }
-
-        });
-
     var drawOptions = getDrawOptions(editableFeatureGroup);
     this.drawControl = new L.Control.Draw(drawOptions);
     this.map.addControl(this.drawControl);
 
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+        // what is this doing and there is a better way to do it?
+        L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
+            {
+                onEachFeature: function (feature, layer) {
+                    if (layer.getLayers) {
+                        layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+                    } else {
+                        editableFeatureGroup.addLayer(layer);
+                    }
+                }
+
+            });
     }
 
     this.map.addLayer(this.editableFeatureGroup);
+
     this.map.on('draw:created',
         function(e) {
             var layer = e.layer;
@@ -132,25 +133,54 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
             editableFeatureGroup._layers[leafletId].feature = new Object();
             editableFeatureGroup._layers[leafletId].feature.properties = new Object();
             editableFeatureGroup._layers[leafletId].feature.type = "Feature";
-            var feature = editableFeatureGroup._layers[leafletId].feature;
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
-    if (save) {
-        // todo: persist catchment and resolve back to appropriate state, including re-wiring handlers
-    }
+NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function() {
     this.drawControl.remove();
     this.map.removeLayer(this.editableFeatureGroup);
     this.drawControl = null;
     this.editableFeatureGroup = null;
+};
 
-    if (!save && this.selectedBMPDelineationLayer) {
-        this.map.addLayer(this.selectedBMPDelineationLayer);
+NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
+    if (!save) {
+        if (this.selectedBMPDelineationLayer) {
+            this.map.addLayer(this.selectedBMPDelineationLayer);
+        }
+    } else {
+        this.persistDrawnCatchment();
+        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     }
+
+    this.tearDownDrawControl();
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
+};
+
+NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
+    var geoJSON = this.editableFeatureGroup.toGeoJSON();
+
+    var wkt = Terraformer.WKT.convert(geoJSON.features[0].geometry);
+
+    var json = { "WellKnownText": wkt };
+
+    var id = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
+
+    jQuery.ajax({
+        url: "/Delineation/ForTreatmentBMP/" + id,
+        data: json,
+        type: 'POST',
+        success: function(data) {
+            //alert("Congration. You done it.");
+        },
+        error: function(jq, ts, et) {
+            alert(
+                "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
+        }
+    });
+
 };
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function(mapInitJson) {
@@ -323,7 +353,6 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function() {
 NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function () {
     this.treatmentBMPLayer.on("click",
         function (e) {
-            //this.zoomAndPanToLayer(e.layer);
             this.removeUpstreamCatchmentsLayer();
             this.setSelectedFeature(e.layer.feature);
             this.selectedAssetControl.treatmentBMP(e.layer.feature);

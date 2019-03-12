@@ -78,7 +78,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
             "click",
             function(e) {
-                this.exitDrawCatchmentMode();
+                this.exitDrawCatchmentMode(false);
+            }.bind(this));
+
+        L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
+            "click",
+            function(e) {
+                this.exitDrawCatchmentMode(true);
             }.bind(this));
     },
 
@@ -121,12 +127,12 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
     },
 
-    exitDrawCatchmentMode: function () {
+    exitDrawCatchmentMode: function (save) {
         this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
 
-        window.delineationMap.exitDrawCatchmentMode();
+        window.delineationMap.exitDrawCatchmentMode(save);
     },
 
     networkCatchment: function (networkCatchmentFeature) {

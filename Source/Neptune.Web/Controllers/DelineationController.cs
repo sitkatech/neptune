@@ -20,11 +20,13 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
+using System.Data.Entity.Spatial;
 using System.Net;
 using System.Web.Mvc;
 using Neptune.Web.Common;
 using Neptune.Web.Security.Shared;
 using System.Web;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
@@ -67,5 +69,33 @@ namespace Neptune.Web.Controllers
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
+        {
+            var geom = DbGeometry.FromText(viewModel.WellKnownText, 4326).ToSqlGeometry().MakeValid().ToDbGeometry();
+
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            if (treatmentBMP.Delineation != null)
+            {
+                treatmentBMP.Delineation.DelineationGeometry = geom;
+                treatmentBMP.Delineation.DelineationTypeID = DelineationType.Distributed.DelineationTypeID;
+            }
+            else
+            {
+                var delineation = new Delineation(geom, DelineationType.Distributed);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+                treatmentBMP.DelineationID = delineation.DelineationID;
+            }
+
+            return Json(new {success = true});
+        }
+    }
+
+    public class ForTreatmentBMPViewModel
+    {
+        public string WellKnownText { get; set; }
     }
 }
