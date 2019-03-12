@@ -4,6 +4,7 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
 
         function onMapClick(event) {
+            debugger;
             var parcelMapSericeLayerName = $scope.AngularViewData.ParcelMapServiceLayerName,
                 mapServiceUrl = $scope.AngularViewData.GeoServerUrl;
 
@@ -63,13 +64,11 @@
                 $scope.neptuneMap.map.removeLayer($scope.neptuneMap.selectedParcelLayer);
             }
 
-            var wmsParameters = L.Util.extend(
-                {
-                    layers: $scope.AngularViewData.ParcelMapSericeLayerName,
+            var wmsParameters = L.Util.extend($scope.neptuneMap.wmsParams,{
+                    layers: $scope.AngularViewData.ParcelMapServiceLayerName,
                     cql_filter: "ParcelID in (" + $scope.AngularModel.ParcelIDs.join(",") + ")",
                     styles: "parcel_yellow"
-                },
-                $scope.neptuneMap.wmsParams);
+                });
 
             $scope.neptuneMap.selectedParcelLayer = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl, wmsParameters);
             $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel + "s");

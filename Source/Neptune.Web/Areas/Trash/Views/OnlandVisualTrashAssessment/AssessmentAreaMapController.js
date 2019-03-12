@@ -192,6 +192,17 @@
             $scope.lastSelectedName = null;
         };
 
+
+        $scope.$watch('AngularModel.AssessingNewArea', function (assessingNewArea) {
+            if (assessingNewArea) {
+                $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
+                $scope.lastSelectedID = null;
+                if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
+                    $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+                }
+            }
+        });
+
         // init
 
         if (!$scope.AngularModel.StormwaterJurisdiction) {
