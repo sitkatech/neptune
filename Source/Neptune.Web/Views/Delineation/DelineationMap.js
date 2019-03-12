@@ -61,6 +61,8 @@ NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.
 NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function(treatmentBMPFeature) {
     this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
+
+    this.treatmentBMPLayer.off("click");
     this.map.off("click");
 };
 
@@ -73,7 +75,9 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
     this.beginDelineationControl = null;
 
     this.selectedAssetControl.enableDelineationButton();
+
     this.hookupDeselectOnClick();
+    this.hookupSelectTreatmentBMPOnClick();
 
     // re-enable click to select network catchments
     this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
@@ -97,11 +101,40 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
     }
 
     // enable the draw control
-    // nulls are handled by getDrawOptions
-    // todo: need to add the editable feature group to the map QUA editable feature group or this doesn't work. I think?
-    var drawOptions = getDrawOptions(this.selectedBMPDelineationLayer);
+    // this could use some serious clean-up
+
+    var editableFeatureGroup = new L.FeatureGroup();
+    L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature, {
+        onEachFeature: function (feature, layer) {
+            if (layer.getLayers) {
+                layer.getLayers().forEach(function (l) { editableFeatureGroup.addLayer(l); });
+            }
+            else {
+                editableFeatureGroup.addLayer(layer);
+            }
+        }
+
+    });
+
+    var drawOptions = getDrawOptions(editableFeatureGroup);
     var drawControl = new L.Control.Draw(drawOptions);
     this.map.addControl(drawControl);
+
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
+    this.map.addLayer(editableFeatureGroup);
+    this.map.on('draw:created', function (e) {
+        var layer = e.layer;
+        editableFeatureGroup.addLayer(layer);
+        var leafletId = layer._leaflet_id;
+        editableFeatureGroup._layers[leafletId].feature = new Object();
+        editableFeatureGroup._layers[leafletId].feature.properties = new Object();
+        editableFeatureGroup._layers[leafletId].feature.type = "Feature";
+        var feature = editableFeatureGroup._layers[leafletId].feature;
+    }.bind(this));
+
 };
 
 NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function() {
@@ -123,6 +156,10 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
     }
 
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
+    this.hookupSelectTreatmentBMPOnClick();
+};
+
+NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function() {
     this.treatmentBMPLayer.on("click",
         function(e) {
             //this.zoomAndPanToLayer(e.layer);
@@ -297,12 +334,6 @@ var upstreamCatchmentErrorAlert = function() {
 };
 
 var getDrawOptions = function (editableFeatureGroup) {
-
-    if (!editableFeatureGroup) {
-        editableFeatureGroup = L.geoJSON({ type: "FeatureCollection", features: [] });
-    }
-
-
     var options = {
         position: 'topleft',
         draw: {
