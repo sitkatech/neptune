@@ -2,7 +2,7 @@
     .controller("AssessmentAreaMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
+        $scope.neptuneMap = new NeptuneMaps.TrashAssessmentMap($scope.AngularViewData.MapInitJson, "Terrain", $scope.AngularViewData.GeoServerUrl);
 
         $scope.lastSelectedLayer = null;
         $scope.lastSelectedID = null;

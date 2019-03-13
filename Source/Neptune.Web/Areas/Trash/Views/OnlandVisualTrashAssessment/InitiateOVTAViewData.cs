@@ -15,14 +15,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Models.OnlandVisualTrashAssessment ovta, List<StormwaterJurisdiction> jurisdictions,
             SelectOVTAAreaMapInitJson mapInitJson,
             IEnumerable<Models.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
-            StormwaterJurisdiction defaultJurisdiction)
+            StormwaterJurisdiction defaultJurisdiction, string geoServerUrl)
             : base(currentPerson, Models.OVTASection.InitiateOVTA, ovta)
         {
             Jurisdictions = jurisdictions;
             MapInitJson = mapInitJson;
             DefaultJurisdiction = defaultJurisdiction;
             var useDefaultJurisdiction = defaultJurisdiction != null;
-            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction, jurisdictions);
+            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson, onlandVisualTrashAssessmentAreas, useDefaultJurisdiction, jurisdictions, geoServerUrl);
         }
 
         public class ViewDataForAngularClass
@@ -30,10 +30,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             public ViewDataForAngularClass(SelectOVTAAreaMapInitJson mapInitJson,
                 IEnumerable<Models.OnlandVisualTrashAssessmentArea> onlandVisualTrashAssessmentAreas,
                 bool useDefaultJurisdiction,
-                List<StormwaterJurisdiction> jurisdictions)
+                List<StormwaterJurisdiction> jurisdictions, string geoServerUrl)
             {
                 MapInitJson = mapInitJson;
                 UseDefaultJurisdiction = useDefaultJurisdiction;
+                GeoServerUrl = geoServerUrl;
                 OnlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreas.Select(x =>
                     new OnlandVisualTrashAssessmentAreaSimple
                     {
@@ -48,6 +49,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             public bool UseDefaultJurisdiction { get; }
             public IEnumerable<OnlandVisualTrashAssessmentAreaSimple> OnlandVisualTrashAssessmentAreas { get; }
             public List<StormwaterJurisdictionSimple> StormwaterJurisdictions { get; }
+            public string GeoServerUrl { get; }
         }
     }
 }

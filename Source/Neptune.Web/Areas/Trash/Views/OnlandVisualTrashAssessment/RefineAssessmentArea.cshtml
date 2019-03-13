@@ -68,7 +68,7 @@
     {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         var editableFeatureJsonObject = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson.AssessmentAreaLayerGeoJson).ToString(Formatting.None));
-        assessmentAreaMap = new NeptuneMaps.Map(mapInitJson);
+        assessmentAreaMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
         assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
 

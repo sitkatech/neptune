@@ -70,7 +70,7 @@
                 });
 
             $scope.neptuneMap.selectedParcelLayer = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl, wmsParameters);
-            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel + "s");
+            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel);
             $scope.neptuneMap.map.addLayer($scope.neptuneMap.selectedParcelLayer);
 
             // Update map extent to selected parcels
@@ -98,12 +98,12 @@
         }
 
         $scope.initializeMap = function () {
-            $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson,
+            $scope.neptuneMap = new NeptuneMaps.TrashAssessmentMap($scope.AngularViewData.MapInitJson,
                 "Terrain",
                 $scope.AngularViewData.GeoServerUrl);
             $scope.neptuneMap.map.on("click", onMapClick);
 
-            $scope.neptuneMap.addWmsLayer("Parcels", "Parcels");
+            //$scope.neptuneMap.addWmsLayer("Parcels", "Parcels");
 
             $scope.observationsLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,

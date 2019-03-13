@@ -163,7 +163,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var viewData = new InitiateOVTAViewData(CurrentPerson,
                 onlandVisualTrashAssessment, stormwaterJurisdictionsPersonCanEdit, mapInitJson, onlandVisualTrashAssessmentAreas,
-                defaultJurisdiction);
+                defaultJurisdiction, NeptuneWebConfiguration.ParcelMapServiceUrl);
             return RazorView<InitiateOVTA, InitiateOVTAViewData, InitiateOVTAViewModel>(viewData, viewModel);
         }
 
@@ -300,7 +300,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, true);
             var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
-            var viewData = new RefineAssessmentAreaViewData(CurrentPerson, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment, refineAssessmentAreaMapInitJson);
+            var viewData = new RefineAssessmentAreaViewData(CurrentPerson, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment, refineAssessmentAreaMapInitJson, NeptuneWebConfiguration.ParcelMapServiceUrl);
             return RazorView<RefineAssessmentArea, RefineAssessmentAreaViewData, RefineAssessmentAreaViewModel>(
                 viewData, viewModel);
         }
