@@ -172,14 +172,14 @@ namespace Neptune.Web.Views
             }
 
             var liClasses = ExtraTopLevelListItemCssClasses?.Any() ?? false
-                ? string.Join(" ", ExtraTopLevelListItemCssClasses)
+                ? " " + string.Join(" ", ExtraTopLevelListItemCssClasses) // super pedantic, but front pad the space so we don't include it if it doesn't need to be there
                 : string.Empty;
 
 
             return string.Format(@"{0}<li {1}>
 {0}<a href=""#"" class=""{2}"" data-toggle=""dropdown"" role=""button"" aria-expanded=""false"">{3} <span class=""glyphicon glyphicon-menu-down""></span></a>
 {4}
-{0}</li>", indent, $"class=\"dropdown {liClasses}\"", childMenuItemCssClasses, MenuItemName,
+{0}</li>", indent, $"class=\"dropdown{liClasses}\"", childMenuItemCssClasses, MenuItemName,
                 $"{string.Join("\r\n", childMenuItems)}\r\n{indent}");
         }
 
