@@ -109,7 +109,6 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
 
-        // what is this doing and there is a better way to do it?
         L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
             {
                 onEachFeature: function (feature, layer) {
@@ -123,6 +122,9 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
             });
     }
 
+    // this is not the best way to prevent drawing multiple polygons, but the other options are:
+    // fork Leaflet.Draw and add the functionality or maintain two versions of the draw control that track the same feature group but with different options
+    // and the answer to both of those is "no"
     this.map.addLayer(this.editableFeatureGroup);
     if (this.editableFeatureGroup.getLayers().length > 0) {
         killPolygonDraw();
