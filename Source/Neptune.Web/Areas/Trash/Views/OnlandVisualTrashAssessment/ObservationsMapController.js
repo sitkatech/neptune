@@ -44,33 +44,15 @@
                 $scope.areaGeoJson.addTo($scope.neptuneMap.map);
             }
 
-            $scope.observationsLayerGeoJson = L.geoJson(
+            $scope.observationsLayerGeoJson = $scope.neptuneMap.CreateObservationsLayer(
                 $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
                 {
-                    filter: function(feature, layer) {
-
-                        return true;
-                    },
                     onEachFeature: function(feature, layer) {
                         var modelID = feature.properties.ObservationID;
                         var observationModel = _($scope.AngularModel.Observations).find(function(f) {
                             return f.OnlandVisualTrashAssessmentObservationID == modelID;
                         });
                         observationModel.MapMarker = layer;
-                    },
-                    pointToLayer: function(feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
-
-                        return L.marker(latlng,
-                            {
-                                icon: icon,
-                                title: feature.properties.Name,
-                                alt: feature.properties.Name
-                            });
                     }
                 });
 
