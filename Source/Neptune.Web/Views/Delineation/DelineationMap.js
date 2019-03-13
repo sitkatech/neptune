@@ -1,6 +1,6 @@
 ﻿/* Extension of GeoServerMap with functionality for the Delineation Workflow
  * Leaflet controls (JS) in DelineationMapControls.js
- * Leaflet controls (HTML Templates) in DelineationMap.cshtml (TODO: move to DelineationMapTemplate)
+ * Leaflet controls (HTML Templates) in DelineationMapTemplate.cshtml
  */
 
 NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl) {
