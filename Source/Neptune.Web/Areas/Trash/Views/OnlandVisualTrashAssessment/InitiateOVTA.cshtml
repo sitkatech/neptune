@@ -1,6 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
-@using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.InitiateOVTA
@@ -9,8 +8,6 @@
 
 @section JavascriptAndStylesContent
 {
-
-    @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/OnlandVisualTrashAssessment/AssessmentAreaMapController.js")"></script>
     <script type="text/javascript">
         // <![CDATA[

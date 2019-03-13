@@ -8,8 +8,7 @@
 
 @{ @SetLayout("SiteLayout.cshtml", ViewDataTyped) }
 @section JavascriptAndStylesContent{
-    @{ MapJavascriptIncludes.RenderPartialView(Html); }
-<style>
+    <style>
         .selectedObservation {
             background-color: palegoldenrod;
         }
@@ -54,7 +53,7 @@
             }
         }
 
-</style>
+    </style>
 }
 
 @using (Html.BeginForm())
@@ -168,7 +167,7 @@
 
     <hr />
     @Html.HiddenFor(m => m.StormwaterJurisdictionID)
-    @Html.HiddenFor(m=>m.AssessmentAreaID)
+    @Html.HiddenFor(m => m.AssessmentAreaID)
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>

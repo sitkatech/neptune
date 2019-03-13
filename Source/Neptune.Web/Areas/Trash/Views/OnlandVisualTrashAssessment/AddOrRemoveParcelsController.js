@@ -4,7 +4,6 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
 
         function onMapClick(event) {
-            debugger;
             var parcelMapSericeLayerName = $scope.AngularViewData.ParcelMapServiceLayerName,
                 mapServiceUrl = $scope.AngularViewData.GeoServerUrl;
 

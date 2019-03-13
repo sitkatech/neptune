@@ -3,7 +3,7 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
 
-        $scope.neptuneMap = new NeptuneMaps.Map($scope.AngularViewData.MapInitJson);
+        $scope.neptuneMap = new NeptuneMaps.TrashAssessmentMap($scope.AngularViewData.MapInitJson, "Terrain", $scope.AngularViewData.GeoServerUrl);
         $scope.currentSelectedMarkerModel = null;
         $scope.currentFakeID = -1;
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color

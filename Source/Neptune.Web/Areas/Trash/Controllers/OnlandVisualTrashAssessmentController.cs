@@ -211,7 +211,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 observationsLayerGeoJson, assessmentAreaLayerGeoJson);
 
             var viewData = new RecordObservationsViewData(CurrentPerson,
-                onlandVisualTrashAssessment, ovtaObservationsMapInitJson);
+                onlandVisualTrashAssessment, ovtaObservationsMapInitJson, NeptuneWebConfiguration.ParcelMapServiceUrl);
             return RazorView<RecordObservations, RecordObservationsViewData, RecordObservationsViewModel>(viewData,
                 viewModel);
         }

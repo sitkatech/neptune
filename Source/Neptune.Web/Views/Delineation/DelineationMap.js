@@ -42,8 +42,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.addWmsLayerWithParams("OCStormwater:Parcels",
         "All Parcels",
         {
-            styles: "parcel_alt",
-            pane: "overlayPane"
+            styles: "parcel_alt"
         });
     this.initializeTreatmentBMPClusteredLayer(mapInitJson);
     window.networkCatchmentLayer.bringToFront();
