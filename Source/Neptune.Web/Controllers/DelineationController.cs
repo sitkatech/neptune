@@ -62,7 +62,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMP.Delineation == null)
             {
                 // should be 400 tbh
-                return Content("{}");
+                return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
@@ -75,16 +75,31 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
         {
-            var geom = DbGeometry.FromText(viewModel.WellKnownText, 4326).ToSqlGeometry().MakeValid().ToDbGeometry();
+            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, 4326).ToSqlGeometry().MakeValid().ToDbGeometry();
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            if (treatmentBMP.Delineation != null)
+            var treatmentBMPDelineation = treatmentBMP.Delineation;
+            if (treatmentBMPDelineation != null)
             {
-                treatmentBMP.Delineation.DelineationGeometry = geom;
-                treatmentBMP.Delineation.DelineationTypeID = DelineationType.Distributed.DelineationTypeID;
+                if (geom != null)
+                {
+                    treatmentBMPDelineation.DelineationGeometry = geom;
+                    treatmentBMPDelineation.DelineationTypeID = DelineationType.Distributed.DelineationTypeID;
+                }
+                else
+                {
+                    treatmentBMP.DelineationID = null;
+                    HttpRequestStorage.DatabaseEntities.SaveChanges();
+                    HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
+                }
             }
             else
             {
+                if (geom == null)
+                {
+                    return Json(new {success = true});
+                }
+
                 var delineation = new Delineation(geom, DelineationType.Distributed);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();

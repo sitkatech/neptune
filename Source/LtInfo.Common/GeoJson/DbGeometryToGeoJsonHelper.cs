@@ -29,6 +29,8 @@ namespace LtInfo.Common.GeoJson
 {
     public static class DbGeometryToGeoJsonHelper
     {
+        public const string POLYGON_EMPTY = "POLYGON EMPTY";
+
         public static Feature FromDbGeometry(DbGeometry inp)
         {
             switch (inp.SpatialTypeName)

@@ -124,6 +124,11 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
     }
 
     this.map.addLayer(this.editableFeatureGroup);
+    if (this.editableFeatureGroup.getLayers().length > 0) {
+        killPolygonDraw();
+    } else {
+        unKillPolygonDraw();
+    }
 
     this.map.on('draw:created',
         function(e) {
@@ -133,6 +138,21 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
             editableFeatureGroup._layers[leafletId].feature = new Object();
             editableFeatureGroup._layers[leafletId].feature.properties = new Object();
             editableFeatureGroup._layers[leafletId].feature.type = "Feature";
+
+            if (editableFeatureGroup.getLayers().length > 0) {
+                killPolygonDraw();
+            } else {
+                unKillPolygonDraw();
+            }
+        });
+
+    this.map.on('draw:deleted',
+        function(e) {
+            if (editableFeatureGroup.getLayers().length > 0) {
+                killPolygonDraw();
+            } else {
+                unKillPolygonDraw();
+            }
         });
 };
 
@@ -150,8 +170,6 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         }
     } else {
         this.persistDrawnCatchment();
-        // todo: it shouldn't be necessary to AJAX out for the updated delineation, but right now this is the cleanest way to display it and maintain state
-        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     }
 
     this.tearDownDrawControl();
@@ -162,15 +180,26 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
     // had better be only one feature
-    var wkt = Terraformer.WKT.convert(this.editableFeatureGroup.toGeoJSON().features[0].geometry);
+    var editableFeatureJson = this.editableFeatureGroup.toGeoJSON();
 
+    var wkt;
+    if (editableFeatureJson.features.length == 1) {
+        wkt = Terraformer.WKT.convert(editableFeatureJson.features[0].geometry);
+    } else {
+        wkt = Terraformer.WKT.convert({ type: "Polygon" });
+    }
+
+    var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
+    var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
     jQuery.ajax({
-        url: "/Delineation/ForTreatmentBMP/" + this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID,
+        url: delineationUrl,
         data: { "WellKnownText": wkt },
         type: 'POST',
         success: function (data) {
-            // nothing to do.
-        },
+            this.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
+            // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
+            this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
+        }.bind(this),
         error: function(jq, ts, et) {
             alert(
                 "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
@@ -211,7 +240,10 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
             dataType: "json",
             jsonpCallback: "getJson"
         },
-        function(response) {
+        function (response) {
+            if (response.noDelineation) {
+                return;
+            }
             if (response.type !== "Feature") {
                 delineationErrorAlert();
             }
@@ -378,9 +410,6 @@ var getDrawOptions = function (editableFeatureGroup) {
                 drawError: {
                     color: '#e1e100', // Color the shape will turn when intersects
                     message: 'Self-intersecting polygons are not allowed.' // Message that will show when intersect
-                },
-                shapeOptions: {
-                    color: '#f357a1'
                 }
             },
             circle: false, // Turns off this drawing tool
@@ -398,3 +427,11 @@ var getDrawOptions = function (editableFeatureGroup) {
     };
     return options;
 };
+
+var killPolygonDraw = function() {
+    jQuery(".leaflet-draw-toolbar-top").hide();
+};
+
+var unKillPolygonDraw = function() {
+    jQuery(".leaflet-draw-toolbar-top").show();
+}
