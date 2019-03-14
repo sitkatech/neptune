@@ -42,6 +42,10 @@ namespace LtInfo.Common
 
         public static string GetRequestContent(HttpRequest request)
         {
+            // Clearing the cookies to prevent leaking an authentication token.
+            // If it turns out that we need to show some cookies then we can be more specific, but the main point is
+            // please don't send auth tokens over email
+            request.Cookies.Clear();
             var tempFile = new FileInfo(Path.GetTempFileName());
             request.SaveAs(tempFile.FullName, true);
             var requestContent = FileUtility.FileToString(tempFile);
