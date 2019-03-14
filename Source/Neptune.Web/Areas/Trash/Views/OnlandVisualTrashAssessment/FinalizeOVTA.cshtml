@@ -140,7 +140,6 @@
                             <div class="col-xs-12 observationPhotoContainer" style="padding: 4px;">
                                 @if (photo != null)
                                 {
-                                    //todo: set the width as a style with media queries
                                     <img class="observationPhoto" src="@photo.FileResource.GetFileResourceUrl()" />
                                 }
                                 else
@@ -182,33 +181,18 @@
 
 <script>
     var summaryMap;
-    var lastSelected;
     var observationsLayer;
     jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
-        summaryMap = new NeptuneMaps.Map(mapInitJson);
+        summaryMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
 
-        observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
-            pointToLayer: function (feature, latlng) {
-                var icon = L.MakiMarkers.icon({
-                    icon: feature.properties.FeatureGlyph,
-                    color: feature.properties.FeatureColor,
-                    size: "m"
-                });
-
-                return L.marker(latlng,
-                    {
-                        icon: icon,
-                        title: feature.properties.Name,
-                        alt: feature.properties.Name
-                    });
-            }
-        });
-        observationsLayer.addTo(summaryMap.map);
+        observationsLayer =
+            summaryMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson
+                .GeoJsonFeatureCollection);
 
         observationsLayer.on('click',
             function(e) {
-                setSelectedMarker(e.layer.feature);
+                summaryMap.setSelectedFeature(e.layer.feature);
                 jQuery(".selectedObservation")
                     .removeClass("selectedObservation");
                 jQuery("#observation_" + e.layer.feature.properties.ObservationID).addClass("selectedObservation");
@@ -233,49 +217,8 @@
     });
 
     var handleClickOnTable = function(id) {
-        setActiveByID(id);
+        summaryMap.SetActiveObservationByID(id);
         jQuery(".selectedObservation").removeClass("selectedObservation");
         jQuery("#observation_" + id).addClass("selectedObservation");
     }
-
-    var setSelectedMarker = function (layer) {
-        if (!Sitka.Methods.isUndefinedNullOrEmpty(lastSelected)) {
-            summaryMap.map.removeLayer(lastSelected);
-        }
-
-        lastSelected = L.geoJson(layer,
-            {
-                pointToLayer: function (feature, latlng) {
-                    var icon = L.MakiMarkers.icon({
-                        icon: "marker",
-                        color: "#FFFF00",
-                        size: "m"
-                    });
-
-                    return L.marker(latlng,
-                        {
-                            icon: icon,
-                            riseOnHover: true
-                        });
-                },
-                style: function (feature) {
-                    return {
-                        fillColor: "#FFFF00",
-                        fill: true,
-                        fillOpacity: 0.5,
-                        color: "#FFFF00",
-                        weight: 5,
-                        stroke: true
-                    };
-                }
-            });
-
-        lastSelected.addTo(summaryMap.map);
-    };
-
-    var setActiveByID = function (id) {
-        var layer = _.find(observationsLayer._layers,
-            function (layer) { return id === layer.feature.properties.ObservationID; });
-        setSelectedMarker(layer.feature);
-    };
 </script>

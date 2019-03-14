@@ -325,7 +325,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var scoresSelectList = OnlandVisualTrashAssessmentScore.All.ToSelectListWithDisabledEmptyFirstRow(x => x.OnlandVisualTrashAssessmentScoreID.ToString(CultureInfo.InvariantCulture), x => x.OnlandVisualTrashAssessmentScoreDisplayName.ToString(CultureInfo.InvariantCulture),
                 "Choose a score");
             var viewData = new FinalizeOVTAViewData(CurrentPerson,
-                onlandVisualTrashAssessment, ovtaSummaryMapInitJson, scoresSelectList);
+                onlandVisualTrashAssessment, ovtaSummaryMapInitJson, scoresSelectList, NeptuneWebConfiguration.ParcelMapServiceUrl);
             return RazorView<FinalizeOVTA, FinalizeOVTAViewData, FinalizeOVTAViewModel>(viewData, viewModel);
         }
 

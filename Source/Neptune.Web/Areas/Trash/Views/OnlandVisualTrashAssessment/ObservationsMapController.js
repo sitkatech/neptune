@@ -55,8 +55,7 @@
                         observationModel.MapMarker = layer;
                     }
                 });
-
-            $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
+            
             $scope.observationsLayerGeoJson.on('click',
                 function(e) {
                     $scope.setSelectedMarker(e.layer.feature);

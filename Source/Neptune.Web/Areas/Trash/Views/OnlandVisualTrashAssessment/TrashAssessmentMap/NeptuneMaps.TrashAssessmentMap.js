@@ -15,7 +15,10 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJ
     var layerOptions = Object.assign({}, NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions);
     L.Util.extend(layerOptions, options);
 
-    return L.geoJson(geoJsonFeatureCollection, layerOptions);
+    this.observationsLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
+    this.observationsLayer.addTo(this.map);
+
+    return this.observationsLayer;
 };
 
 
@@ -34,4 +37,14 @@ NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions = {
                 alt: feature.properties.Name
             });
     }
+};
+
+NeptuneMaps.TrashAssessmentMap.prototype.SetActiveObservationByID = function (observationID) {
+    if (!this.observationsLayer) {
+        console.error("Tried to set active observation before initializing observation layer")
+    }
+
+    var layer = _.find(this.observationsLayer._layers,
+        function (layer) { return observationID === layer.feature.properties.ObservationID; });
+    this.setSelectedFeature(layer.feature);
 };
