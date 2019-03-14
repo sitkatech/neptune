@@ -8,8 +8,10 @@ L.Control.WMSLegend = L.Control.extend({
             legendClassName = "wms-legend",
             stop = L.DomEvent.stopPropagation;
         this.container = L.DomUtil.create("div", controlClassName);
-        this.title = L.DomUtil.create("label", "leaflet-wms-legend-title", this.container);
-        this.title.innerHTML = this.options.title;
+        if (this.options.title) {
+            this.title = L.DomUtil.create("label", "leaflet-wms-legend-title", this.container);
+            this.title.innerHTML = this.options.title;
+        }
         this.br = L.DomUtil.create("br", "", this.container);
         this.img = L.DomUtil.create("img", legendClassName, this.container);
         this.toggle = L.DomUtil.create("span", "glyphicon glyphicon-menu-hamburger", this.container);
@@ -39,7 +41,9 @@ L.Control.WMSLegend = L.Control.extend({
             this.container.style.width = this.width + "px";
             this.img.style.display = this.displayStyle;
             this.toggle.style.display = "none";
-            this.title.style.display = this.displayStyle;
+            if (this.options.title) {
+                this.title.style.display = this.displayStyle;
+            }
             this.br.style.display = this.displayStyle;
         }
         else {
@@ -52,7 +56,9 @@ L.Control.WMSLegend = L.Control.extend({
             this.displayStyle = this.img.style.display;
             this.img.style.display = "none";
             this.toggle.style.display = this.displayStyle;
-            this.title.style.display = "none";
+            if (this.options.title) {
+                this.title.style.display = "none";
+            }
             this.br.style.display = "none";
             this.container.style.height = "20px";
             this.container.style.width = "20px";
@@ -61,7 +67,15 @@ L.Control.WMSLegend = L.Control.extend({
 });
 
 L.wmsLegend = function (title, serviceUrl, legendOptions, map) {
-    var queryString = L.Util.getParamString(legendOptions);
+    var baseLegendOptions = {
+        service: "WMS",
+        request: "GetLegendGraphic",
+        version: "1.0.0"
+    };
+
+    var fullLegendOptions = L.Util.extend(baseLegendOptions, legendOptions);
+
+    var queryString = L.Util.getParamString(fullLegendOptions);
     var uri = serviceUrl + queryString;
 
     var options = {
@@ -71,7 +85,6 @@ L.wmsLegend = function (title, serviceUrl, legendOptions, map) {
     };
 
     var wmsLegendControl = new L.Control.WMSLegend(options);
-    wmsLegendControl.options.uri = uri;
     map.addControl(wmsLegendControl);
     return wmsLegendControl;
 };
