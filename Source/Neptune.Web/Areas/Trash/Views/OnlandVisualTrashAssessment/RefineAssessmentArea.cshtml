@@ -71,25 +71,7 @@
         assessmentAreaMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
         assessmentAreaMap.map.setMaxZoom(24);
         assessmentAreaMap.editableFeatureGroup = new L.FeatureGroup();
-
-        var observationsLayer = L.geoJson(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection, {
-                pointToLayer: function(feature, latlng) {
-                    var icon = L.MakiMarkers.icon({
-                        icon: feature.properties.FeatureGlyph,
-                        color: feature.properties.FeatureColor,
-                        size: "m"
-                    });
-
-                    return L.marker(latlng,
-                        {
-                            icon: icon,
-                            title: feature.properties.Name,
-                            alt: feature.properties.Name
-                        });
-                }
-            });
-
-        observationsLayer.addTo(assessmentAreaMap.map);
+        assessmentAreaMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection);
 
         var layerGroup = L.geoJson(editableFeatureJsonObject.GeoJsonFeatureCollection, {
             onEachFeature: function(feature, layer)
@@ -153,15 +135,6 @@
     });
 
     NeptuneMaps.Map.prototype.getTextAreaId = function(featureId) { return "textareaFor" + featureId; };
-
-
-    function savePopupAnnotationEditor(featureId)
-    {
-        var textBoxForPopup = jQuery("#" + assessmentAreaMap.getTextAreaId(featureId));
-        assessmentAreaMap.editableFeatureGroup._layers[featureId].feature.properties.Info = textBoxForPopup.val();
-        assessmentAreaMap.map.closePopup();
-        updateFeatureCollectionJson();
-    }
 
     function updateFeatureCollectionJson()
     {
