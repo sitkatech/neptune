@@ -28,6 +28,8 @@
             });
 
         </script>
+
+        <link rel="stylesheet" href="@Url.Content("~/Content/leaflet/leaflet.wmslegend/leaflet.wmslegend.css")" />
     }
 }
 
@@ -62,18 +64,18 @@ else
         <hr />
 
         if (!ViewDataTyped.RequireRefresh)
-         {
-             <div class="row">
-                 <div class="col-xs-12 col-sm-3">
-                     <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-                 </div>
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+                </div>
 
-                 <div class="col-xs-12 col-sm-9" style="text-align: right">
-                     <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
-                     <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
-                 </div>
-             </div>
-         }
+                <div class="col-xs-12 col-sm-9" style="text-align: right">
+                    <button type="submit" class="btn btn-neptune" value="false" name="@Html.NameFor(x => x.AutoAdvance)">Save</button>
+                    <button type="submit" class="btn btn-neptune" value="true" name="@Html.NameFor(x => x.AutoAdvance)">Save &amp; Continue <i class="glyphicon glyphicon-chevron-right"></i></button>
+                </div>
+            </div>
+        }
     }
     @if (ViewDataTyped.RequireRefresh)
     {

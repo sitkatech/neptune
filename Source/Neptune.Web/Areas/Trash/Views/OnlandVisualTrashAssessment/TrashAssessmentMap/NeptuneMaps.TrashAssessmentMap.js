@@ -7,6 +7,17 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
         {
             styles: "parcel_alt"
         });
+
+    var legendOptions = {
+        service: "WMS",
+        request: "GetLegendGraphic",
+        version: "1.0.0",
+        layer: "OCStormwater:LandUseBlocks",
+        style: "",
+        legend_options: "forceLabels:on:fontAntiAliasing:true:dpi:200",
+        format: "image/png"
+    };
+    this.wmsLegend = L.wmsLegend("Land Use Types", geoserverUrl, legendOptions, this.map);
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
