@@ -228,6 +228,14 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             function(e) {
                 this.delineate();
             }.bind(this));
+
+        var dieBtn = this.getTrackedElement("closeBeginDelineationControlButton");
+        L.DomEvent.on(dieBtn,
+            "click",
+            function (e) {
+                window.delineationMap.removeBeginDelineationControl();
+                e.stopPropagation();
+            });
     },
 
     initialize: function(options, treatmentBMPFeature) {
