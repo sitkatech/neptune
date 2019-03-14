@@ -102,28 +102,8 @@
                 "Terrain",
                 $scope.AngularViewData.GeoServerUrl);
             $scope.neptuneMap.map.on("click", onMapClick);
-
-            //$scope.neptuneMap.addWmsLayer("Parcels", "Parcels");
-
-            $scope.observationsLayerGeoJson = L.geoJson(
-                $scope.AngularViewData.MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
-                {
-                    pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
-
-                        return L.marker(latlng,
-                            {
-                                icon: icon,
-                                title: feature.properties.Name,
-                                alt: feature.properties.Name
-                            });
-                    }
-                });
-            $scope.observationsLayerGeoJson.addTo($scope.neptuneMap.map);
+            $scope.observationsLayerGeoJson = $scope.neptuneMap.CreateObservationsLayer($scope.AngularViewData
+                .MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection);
 
             updateSelectedParcelLayer();
         };
