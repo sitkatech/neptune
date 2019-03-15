@@ -39,7 +39,7 @@ namespace LtInfo.Common
         /// <summary>
         /// Real constructor to be used in production code
         /// </summary>
-        public SitkaRequestInfo(Exception exception, HttpContext context)
+        public SitkaRequestInfo(Exception exception, HttpContext context, string cookiePrefixToExcludeFromEmailLogging)
         {
             OriginalException = exception;
             UrlReferrer = context.Request.UrlReferrer;
@@ -48,7 +48,7 @@ namespace LtInfo.Common
             StatusCode = context.Response.StatusCode;
             StatusDescription = context.Response.StatusDescription;
 
-            DebugInfo = new SitkaDebugInfo(context.Request);
+            DebugInfo = new SitkaDebugInfo(context.Request, cookiePrefixToExcludeFromEmailLogging);
             SessionInfo = SitkaLogger.Instance.GetUserAndSessionInformationForError(context);
         }
 
@@ -87,9 +87,10 @@ namespace LtInfo.Common
         public readonly Uri Uri;
         public readonly String RequestInfo;
 
-        public SitkaDebugInfo(HttpRequest request)
+        public SitkaDebugInfo(HttpRequest request, string cookiePrefixToExcludeFromEmailLogging)
         {
             var requestContent = HttpDebugInfo.GetRequestContent(request);
+            requestContent = SanitizeRequestContent(request, cookiePrefixToExcludeFromEmailLogging, requestContent);
 
             var hostnameByReverseDns = String.Empty;
             var whoisInfo = String.Empty;
@@ -106,6 +107,22 @@ namespace LtInfo.Common
             WhoIsInfo = whoisInfo ?? String.Empty;
             Uri = request.Url;
             RequestInfo = requestContent ?? String.Empty;
+        }
+
+        private static string SanitizeRequestContent(HttpRequest request, string cookiePrefixToExcludeFromEmailLogging,
+            string requestContent)
+        {
+            var keys = request.Cookies.AllKeys;
+            foreach (var key in keys)
+            {
+                if (key.StartsWith(cookiePrefixToExcludeFromEmailLogging))
+                {
+                    var oops = request.Cookies.Get(key).Value;
+                    requestContent = requestContent.Replace(oops, "redacted");
+                }
+            }
+
+            return requestContent;
         }
 
         /// <summary>
