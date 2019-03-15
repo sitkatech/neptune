@@ -47,6 +47,7 @@ namespace LtInfo.Common
         public const string CustomNotAuthorizedErrorMessageForTesting = "This is a custom not authorized that the user should be able to see!";
         public const string CustomNotFoundMessageReplaceToken = "CUSTOM NOT FOUND HERE";
         public const string TestValidatedRequestFormField = "JunkField";
+        public static string CookiePrefixToExcludeFromEmailLogging;
 
         public abstract string ErrorUrl { get; }
         public abstract string NotFoundUrl { get; }
@@ -219,7 +220,7 @@ namespace LtInfo.Common
             string errorPageHtml;
             var httpStatusCode = (int)HttpStatusCode.InternalServerError;
             var lastStoredError = Server.GetLastError();
-            var requestInfo = new SitkaRequestInfo(lastStoredError, HttpContext.Current);
+            var requestInfo = new SitkaRequestInfo(lastStoredError, HttpContext.Current, CookiePrefixToExcludeFromEmailLogging);
 
             try
             {
@@ -389,7 +390,7 @@ namespace LtInfo.Common
             // -------------------------------------
             if (HttpStatusCodesThatShouldBeLogged.Contains(responseStatusCode) && SitkaHttpRequestStorage.ShouldLogErrorFromApplicationEnd)
             {
-                var requestInfo = new SitkaRequestInfo(lastError, HttpContext.Current);
+                var requestInfo = new SitkaRequestInfo(lastError, HttpContext.Current, CookiePrefixToExcludeFromEmailLogging);
                 if (!IsRequestExemptedFromLogging(requestInfo))
                 {
                     if (lastError == null && IsWebServiceHttpRequest(Request))

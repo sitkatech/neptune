@@ -28,6 +28,7 @@ namespace Neptune.Web
         protected void Application_Start()
         {
             SitkaLogger.RegisterLogger(new NeptuneLogger());
+            CookiePrefixToExcludeFromEmailLogging = $"{NeptuneWebConfiguration.KeystoneOpenIDClientId}_";
 
             // this needs to match the Area Name declared in the Areas folder
 
