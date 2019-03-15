@@ -66,6 +66,11 @@ namespace Neptune.Web.Views.Shared
                 $@"<a href='{RequestSupportUrl}' target='_blank'>Request Support<span class='glyphicon glyphicon-new-window'></span></a>", "ToolHelp"));
 
             helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HomeController>(c => c.Training()), currentPerson, "Training", "ToolHelp"));
+            if (!currentPerson.IsAnonymousUser())
+            {
+                helpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<HelpController>(c => c.BulkUploadRequest()),
+                    currentPerson, "Bulk Upload Request", "ToolHelp"));
+            }
 
             helpMenu.ExtraDropdownMenuCssClasses = new List<string> { "dropdown-menu-right" };
             helpMenu.ExtraTopLevelMenuCssClasses = new List<string> { "topRightMenu noHighlight" };

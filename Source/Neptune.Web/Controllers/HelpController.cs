@@ -30,6 +30,7 @@ using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Security;
+using Neptune.Web.Views.Help;
 
 namespace Neptune.Web.Controllers
 {
@@ -171,6 +172,14 @@ namespace Neptune.Web.Controllers
         public ActionResult RequestToChangePrivileges(SupportFormViewModel viewModel)
         {
             return Support(viewModel);
+        }
+
+        [HttpGet]
+        [LoggedInUnclassifiedFeature]
+        public ViewResult BulkUploadRequest()
+        {
+            return RazorView<BulkUploadRequest, BulkUploadRequestViewData>(
+                new BulkUploadRequestViewData(CurrentPerson, NeptunePage.GetNeptunePageByPageType(NeptunePageType.BulkUploadRequest)));
         }
     }
 }
