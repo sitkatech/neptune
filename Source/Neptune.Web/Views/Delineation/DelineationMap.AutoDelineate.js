@@ -16,7 +16,7 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequest = func
         success: function (data) {
             self.PollDelineationStatus(data.jobId);
         },
-        error: multiLog
+        error: this.ErrorCallback
     });
 };
 
@@ -36,11 +36,11 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.PollDelineationStatus = funct
             } else if (data.jobStatus === "esriJobSucceeded") {
                 self.FetchDelineationResult(jobID);
             } else {
-                // this is a failure condition of some kind for sure
-                console.log(data);
+                // this is a failure condition
+                self.ErrorCallback();
             }
         },
-        error: multiLog
+        error: this.ErrorCallback
     });
 };
 
@@ -53,12 +53,11 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.FetchDelineationResult = func
             if (data.value && data.value.type === "FeatureCollection") {
                 self.SuccessCallback(data.value);
             } else {
-                // failure condition of some kind
-                
-                console.log(data);
+               //failure condition
+                self.ErrorCallback();
             }
         },
-        error: multiLog
+        error: this.ErrorCallback
     });
 };
 
@@ -91,12 +90,4 @@ var buildInputBatchPointParameter = function (latLng) {
         "Input_Catalog_Layer": "CatalogLayer",
         "Input_Delineation_Type": "Direct Surface Contribution Only"
     };
-};
-
-var multiLog = function (jq, ts, et) {
-    // ReSharper disable UseOfImplicitGlobalInFunctionScope
-    console.log(jq);
-    console.log(ts);
-    console.log(et);
-    // ReSharper restore UseOfImplicitGlobalInFunctionScope
 };

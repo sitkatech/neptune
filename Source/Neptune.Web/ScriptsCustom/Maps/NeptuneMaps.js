@@ -25,15 +25,18 @@ NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
 {
     var self = this;
     this.MapDivId = mapInitJson.MapDivID;
-
+    var tileOptions = {
+        maxNativeZoom: 18,
+        maxZoom:22
+    };
     var esriAerialUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-    var esriAerial = new L.TileLayer(esriAerialUrl, {});
+    var esriAerial = new L.TileLayer(esriAerialUrl, tileOptions);
 
     var esriStreetUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}';
-    var esriStreet = new L.TileLayer(esriStreetUrl, {});
+    var esriStreet = new L.TileLayer(esriStreetUrl, tileOptions);
 
     var esriTerrainUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
-    var esriTerrain = new L.TileLayer(esriTerrainUrl, {});
+    var esriTerrain = L.tileLayer.wms(esriTerrainUrl, tileOptions);
 
     var streetLabelsLayer = new L.TileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {});
 

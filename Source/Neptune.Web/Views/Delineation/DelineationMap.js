@@ -255,13 +255,15 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
     var autoDelineate = new NeptuneMaps.DelineationMap.AutoDelineate(this.config.AutoDelineateBaseUrl,
         function (featureCollection) {
             self.addBMPDelineationLayerFromDEM(featureCollection);
-            // todo: enter draw mode
+
             self.removeLoading();
             self.enableUserInteraction();
+
             self.launchDrawCatchmentMode();
         },
         function (error) {
-            window.alert(error);
+            console.log(error);
+            window.alert("There was an error retrieving the delineation from the remote service.");
 
             self.removeLoading();
             self.enableUserInteraction();
@@ -411,12 +413,21 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
     }
 
     // Justin's service is sending back a feature collection of multi polygons, instead of a polygon, which would be the appropriate thing to send.
-    var hacky = {
-        type: "Polygon",
-        coordinates: _
-            .find(geoJsonResponse.features, function (f) { return f.properties.WshdType === "Total Upstream"; }).geometry
-            .coordinates[1]
-    };
+    // they do always seem to be in a form that this code here can pull them from.
+    var hacky;
+    var totalUpstream = _.find(geoJsonResponse.features, function (f) { return f.properties.WshdType === "Total Upstream"; }).geometry;
+    if (totalUpstream.type === "Polygon") {
+        hacky = totalUpstream;
+    } else {
+
+        hacky = {
+            type: "Polygon",
+            coordinates: _
+                .find(geoJsonResponse.features, function(f) { return f.properties.WshdType === "Total Upstream"; })
+                .geometry
+                .coordinates[1]
+        };
+    }
 
     this.selectedBMPDelineationLayer = L.geoJson(hacky,
         {
