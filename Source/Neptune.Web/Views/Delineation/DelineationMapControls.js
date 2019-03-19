@@ -1,6 +1,6 @@
 ﻿/* Leaflet controls for the Delineation Workflow mpa.
  * Main map code in DelineationMap.js
- * HTML templates in DelineationMap.cshtml (TODO: move to DelineationMapTemplate)
+ * HTML templates in DelineationMapTemplates.cshtml 
  */
 
 // WIP: base class for the html-template driven control pattern
@@ -250,7 +250,12 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         // todo (future story): condition on flowOption and delineationOption
         // for now, just go to draw mode because that's the only thing we've built
-        window.delineationMap.launchDrawCatchmentMode();
+
+        if (delineationOption === "drawDelineate") {
+            window.delineationMap.launchDrawCatchmentMode();
+        } else if (delineationOption === "autoDelineate") {
+            window.delineationMap.launchAutoDelineateMode();
+        }
     }
 });
 

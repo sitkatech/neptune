@@ -30,10 +30,13 @@
 @{ DelineationMapTemplates.RenderPartialView(Html);}
 <script>
     var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+    var config = @Html.Raw(JObject.FromObject(ViewDataTyped.DelineationMapConfig).ToString(Formatting.None))
+
     var geoserverUrl = @Html.Raw(ViewDataTyped.GeoServerUrl.ToJS());
 
+
     jQuery(function() {
-        window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl);
+        window.delineationMap = new NeptuneMaps.DelineationMap(mapInitJson, "Terrain", geoserverUrl, config);
 
         if (@ViewDataTyped.IsInitialTreatmentBMPProvided.ToJS()) {
             @* ReSharper disable once PossibleNullReferenceException *@

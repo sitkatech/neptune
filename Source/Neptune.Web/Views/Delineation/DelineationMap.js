@@ -3,10 +3,11 @@
  * Leaflet controls (HTML Templates) in DelineationMapTemplate.cshtml
  */
 
-NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl) {
+NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, config) {
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
 
     this.treatmentBMPLayerLookup = new Map();
+    this.config = config;
 
     // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
     var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
@@ -81,6 +82,12 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
     // re-enable click to select network catchments
     this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
+
+/* "Draw Catchment Mode"
+ * When in this mode, the user is given access to a Leaflet.Draw control pointed at this.selectedBMPDelineationLayer.
+ * This mode is activated when the user chooses the draw option from the Begin Delineation Control or as the terminus
+ * of the AutoDelineate path.
+ */
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
     this.beginDelineationControl.remove();
@@ -206,6 +213,32 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
                 "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
         }
     });
+};
+
+/* "Auto-Delineate Mode"
+ * In this UI mode, the map is locked down to all user interactions while waiting for the DEM service to return.
+ * After a failed return, the failure is reported and the UI unblocked.
+ * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the auto-delineation.
+ */
+
+NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
+    this.beginDelineationControl.remove();
+    this.beginDelineationControl = null;
+
+    var latLng = this.lastSelected.getLayers()[0].getLatLng();
+
+    var self = this;
+    var autoDelineate = new NeptuneMaps.DelineationMap.AutoDelineate(this.config.AutoDelineateBaseUrl,
+        function (featureCollection) {
+            // 
+            self.setSelectedFeature(featureCollection);
+        },
+        function (error) {
+            // any error will end the request; at
+            console.log(error);
+        });
+
+    autoDelineate.MakeDelineationRequest(latLng);
 };
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function(mapInitJson) {

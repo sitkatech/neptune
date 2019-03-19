@@ -3,13 +3,12 @@
 NeptuneMaps.DelineationMap.AutoDelineate = function (delineationServiceUrl, successCallback, errorCallback) {
     this.DelineationServiceUrl = delineationServiceUrl;
     this.SuccessCallback = successCallback;
-    this.ErrorCallback = ErrorCallback;
+    this.ErrorCallback = errorCallback;
 };
 
 NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequest = function (latLng) {
     var url = this.DelineationServiceUrl + "submitJob?" + buildAutoDelineateParameterString(latLng);
     
-    //console.log(url);
     var self = this;
     jQuery.ajax({
         url: url,
@@ -23,6 +22,7 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequest = func
 
 NeptuneMaps.DelineationMap.AutoDelineate.prototype.PollDelineationStatus = function (jobID) {
     var url = this.DelineationServiceUrl + "jobs/" + jobID + "?f=json&returnMessages=true"; // todo: dojo.preventCache?
+
     var self = this;
     jQuery.ajax({
         url: url,
@@ -51,7 +51,6 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.FetchDelineationResult = func
         type: "GET",
         success: function (data) {
             if (data.value && data.value.type === "FeatureCollection") {
-                
                 self.SuccessCallback(data.value);
             } else {
                 // failure condition of some kind
@@ -82,7 +81,7 @@ var buildInputBatchPointParameter = function (latLng) {
         "features": [
             {
                 "geometry": {
-                    "x": latLng.long, //fixme: what"s the actual property name here?
+                    "x": latLng.lng, //fixme: what"s the actual property name here?
                     "y": latLng.lat, //fixme too probably
                     "spatialReference": { "wkid": NeptuneMaps.Constants.spatialReference }
                 }
