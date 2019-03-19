@@ -461,7 +461,8 @@ NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
 
 NeptuneMaps.Constants = {
     defaultPolyColor: "#7070ff",
-    defaultSelectedFeatureColor: "#ffff00"
+    defaultSelectedFeatureColor: "#ffff00",
+    spatialReference: 4326
 };
 
 NeptuneMaps.DefaultOptions = {
