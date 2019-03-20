@@ -11,6 +11,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class FinalizeOVTAViewModel : OnlandVisualTrashAssessmentViewModel, IValidatableObject
     {
+        [Required]
+        public int? OnlandVisualTrashAssessmentID { get; set; }
         public bool? Finalize { get; set; }
 
         [Required]
@@ -49,10 +51,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
+            OnlandVisualTrashAssessmentID = ovta.OnlandVisualTrashAssessmentID;
 
         }
 
-        public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment,
+            ICollection<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> allOnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes)
         {
             if (Finalize.GetValueOrDefault())
             {
@@ -87,6 +91,20 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 onlandVisualTrashAssessment.Notes = Notes;
                 onlandVisualTrashAssessment.DraftAreaName = AssessmentAreaName;
             }
+
+            var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate = PreliminarySourceIdentifications.Where(x => x.Has).Select(x =>
+                new OnlandVisualTrashAssessmentPreliminarySourceIdentificationType(
+                    OnlandVisualTrashAssessmentID.GetValueOrDefault(),
+                    x.PreliminarySourceIdentificationTypeID.GetValueOrDefault())
+                {
+                    ExplanationIfTypeIsOther = x.ExplanationIfTypeIsOther
+                }).ToList();
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Merge(onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate,
+                allOnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes,
+                (z,w)=>z.OnlandVisualTrashAssessmentID == w.OnlandVisualTrashAssessmentID && z.PreliminarySourceIdentificationTypeID == w.PreliminarySourceIdentificationTypeID,
+                (z,w) => z.ExplanationIfTypeIsOther = w.ExplanationIfTypeIsOther
+                );
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -104,6 +122,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
     public class PreliminarySourceIdentificationSimple
     {
+        /// <summary>
+        /// needed by Model Binder
+        /// </summary>
+        public PreliminarySourceIdentificationSimple()
+        {
+
+        }
         // create a simple from an answer provided on an OVTA
         public PreliminarySourceIdentificationSimple(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
         {

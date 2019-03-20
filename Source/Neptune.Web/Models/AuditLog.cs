@@ -36,27 +36,27 @@ namespace Neptune.Web.Models
     {
         private const string EntityContainerName = "DatabaseEntities";
         private const string PrimaryKeyName = "PrimaryKey";
-        private const string PropertyNameProjectStageID = "ProjectStageID";
-        private const string PropertyNameProjectImageTimingID = "ProjectImageTimingID";
-        private const string PropertyNameProjectLocationAreaID = "ProjectLocationAreaID";
-        private const string PropertyNameProjectID = "ProjectID";
 
         public static readonly List<string> IgnoredTables = new List<string>
         {
             "NeptunePage",
             "NeptunePageImage",
             "FileResource",
+            "FieldDefinitionData",
+            "FieldDefinitionDataImage",
             "Notification",
             "SupportRequestLog",
             "MaintenanceRecord",
             "MaintenanceRecordObservation",
             "MaintenanceRecordObservationValue",
             "FundingEventFundingSource",
-            "OnlandVisualTrashAssessmentObservationPhoto"
+            "OnlandVisualTrashAssessmentObservationPhoto",
+            "OnlandVisualTrashAssessmentPreliminarySourceIdentificationType"
         };
 
         public string GetAuditDescriptionDisplay()
         {
+            
             if (string.IsNullOrWhiteSpace(AuditDescription))
             {
                 return AuditLogEventType.GetAuditStringForOperationType(ColumnName, OriginalValue, NewValue);
@@ -74,7 +74,7 @@ namespace Neptune.Web.Models
                 switch (dbEntry.State)
                 {
                     case EntityState.Deleted:
-                        var newAuditLog = CreateAuditLogEntryForDeleted(objectContext, dbEntry, tableName, person, DateTime.Now, AuditLogEventType.Deleted);
+                        var newAuditLog = CreateAuditLogEntryForDeleted(dbEntry, tableName, person, DateTime.Now, AuditLogEventType.Deleted);
                         result.Add(newAuditLog);
                         break;
 
@@ -125,8 +125,7 @@ namespace Neptune.Web.Models
         /// Creates an audit log entry for a <see cref="DbEntityEntry"/> that has an <see cref="EntityState"/> of <see cref="EntityState.Deleted"/>
         /// Deleted log entries do not have columns/property names, so there will just be one record created
         /// </summary>
-        private static AuditLog CreateAuditLogEntryForDeleted(ObjectContext objectContext,
-            DbEntityEntry dbEntry,
+        private static AuditLog CreateAuditLogEntryForDeleted(DbEntityEntry dbEntry,
             string tableName,
             Person person,
             DateTime changeDate,
@@ -142,8 +141,7 @@ namespace Neptune.Web.Models
                 "*ALL",
                 AuditLogEventType.Deleted.AuditLogEventTypeDisplayName,
                 null,
-                optionalAuditDescriptionString,
-                objectContext);
+                optionalAuditDescriptionString);
             return auditLogEntry;
         }
 
@@ -160,7 +158,7 @@ namespace Neptune.Web.Models
             DbPropertyEntry modifiedProperty)
         {
             var propertyName = modifiedProperty.Name;
-            if (!string.Equals(propertyName, string.Format("{0}ID", tableName), StringComparison.InvariantCultureIgnoreCase) && !string.Equals(propertyName, "TenantID", StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(propertyName, $"{tableName}ID", StringComparison.InvariantCultureIgnoreCase) && !string.Equals(propertyName, "TenantID", StringComparison.InvariantCultureIgnoreCase))
             {
                 var optionalAuditDescriptionString = GetAuditDescriptionStringIfAnyForProperty(objectContext, dbEntry, propertyName, auditLogEventType);
                 var auditLogEntry = CreateAuditLogEntryImpl(dbEntry,
@@ -171,8 +169,7 @@ namespace Neptune.Web.Models
                     propertyName,
                     modifiedProperty.CurrentValue,
                     modifiedProperty.OriginalValue,
-                    optionalAuditDescriptionString,
-                    objectContext);
+                    optionalAuditDescriptionString);
                 return auditLogEntry;
             }
             return null;
@@ -186,14 +183,13 @@ namespace Neptune.Web.Models
             string propertyName,
             object newValue,
             object originalValue,
-            string optionalAuditDescriptionString,
-            ObjectContext objectContext)
+            string optionalAuditDescriptionString)
         {
             var recordID = (int) dbEntry.Property(PrimaryKeyName).CurrentValue;
             var newValueString = newValue != null ? newValue.ToString() : string.Empty;
             var auditLog = new AuditLog(person, changeDate, auditLogEventType, tableName, recordID, propertyName, newValueString)
             {
-                OriginalValue = originalValue != null ? originalValue.ToString() : null,
+                OriginalValue = originalValue?.ToString(),
                 AuditDescription = optionalAuditDescriptionString
             };
             return auditLog;
@@ -211,8 +207,7 @@ namespace Neptune.Web.Models
 
             foreach (var end in relatedEnds)
             {
-                var elementType = end.RelationshipSet.ElementType as AssociationType;
-                if (elementType == null || !elementType.IsForeignKey)
+                if (!(end.RelationshipSet.ElementType is AssociationType elementType) || !elementType.IsForeignKey)
                 {
                     continue;
                 }
@@ -324,39 +319,8 @@ namespace Neptune.Web.Models
         private static IAuditableEntity GetIAuditableEntityFromEntity(object entity, string tableName)
         {
             var auditableEntity = entity as IAuditableEntity;
-            Check.RequireNotNull(auditableEntity, string.Format("{0} needs to implement {1}", tableName, typeof(IAuditableEntity).Name));
+            Check.RequireNotNull(auditableEntity, $"{tableName} needs to implement {typeof(IAuditableEntity).Name}");
             return auditableEntity;
-        }
-
-        /// <summary>
-        /// TODO: should be able to refactor these convert enum to human readable string functions to one call
-        /// </summary>
-        private static string ConvertProjectLocationAreaEnumToHumanReadableString(ObjectStateEntry objectStateEntry, AuditLogEventType auditLogEventType)
-        {
-            string oldName;
-
-            var originalValue = objectStateEntry.OriginalValues[PropertyNameProjectLocationAreaID];
-            var currentValue = objectStateEntry.CurrentValues[PropertyNameProjectLocationAreaID];
-
-            if (originalValue is DBNull)
-            {
-                oldName = "";
-            }
-            else
-            {
-                oldName = string.Empty;// ProjectLocationArea.AllLookupDictionary[((int) originalValue)].ProjectLocationAreaDisplayName;
-            }
-
-            string newName;
-            if (currentValue is DBNull)
-            {
-                newName = "";
-            }
-            else
-            {
-                newName = string.Empty; //ProjectLocationArea.AllLookupDictionary[(int) currentValue].ProjectLocationAreaDisplayName;
-            }
-            return auditLogEventType.GetAuditStringForOperationType("Location", oldName, newName);
         }
     }
 }

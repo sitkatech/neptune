@@ -11,6 +11,7 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
@@ -341,7 +342,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 return ViewFinalizeOVTA(onlandVisualTrashAssessment, viewModel);
             }
 
-            viewModel.UpdateModel(onlandVisualTrashAssessment);
+            HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Load();
+            viewModel.UpdateModel(onlandVisualTrashAssessment, HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Local);
 
             if (viewModel.Finalize.GetValueOrDefault())
             {

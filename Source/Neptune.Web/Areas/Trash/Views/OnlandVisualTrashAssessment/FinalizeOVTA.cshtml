@@ -122,26 +122,40 @@
             </div>
         </div>
     </div>
-    <hr/>
+    <hr />
     <h4>Preliminary Source Identification</h4>
     <p>Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</p>
+    var br = true;
     foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Batch(2))
     {
         <div class="row">
             @foreach (var category in categoryRow)
             {
                 <div class="col-sm-6 col-xs-12">
+                    <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
                     @foreach (var type in category.PreliminarySourceIdentificationTypes)
                     {
                         // this is gonna straight up don't work. let'ss try it anyway
                         var preliminarySourceIdentificationSimple = Model.PreliminarySourceIdentifications.Single(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
                         var index = Model.PreliminarySourceIdentifications.IndexOf(preliminarySourceIdentificationSimple);
-                        @Html.CheckBoxFor(m=>m.PreliminarySourceIdentifications[index].Has)
-                        <label>@type.PreliminarySourceIdentificationTypeDisplayName</label>
+                        <label style="font-weight: normal;">
+                            @Html.CheckBoxFor(m => m.PreliminarySourceIdentifications[index].Has)
+                            @type.GetDisplayName()
+                        </label>
+                        if (type.IsOther())
+                         {
+                             @Html.TextBoxFor(m=>m.PreliminarySourceIdentifications[index].ExplanationIfTypeIsOther, new { @class = "form-control", style="width:50%; float:right;" })
+                         }
+                        @Html.HiddenFor(m => m.PreliminarySourceIdentifications[index].PreliminarySourceIdentificationTypeID)<br />
                     }
                 </div>
             }
         </div>
+        if (br)
+        {
+            <br />
+            br = false;
+        }
     }
 
     <hr />
@@ -189,6 +203,7 @@
     <hr />
     @Html.HiddenFor(m => m.StormwaterJurisdictionID)
     @Html.HiddenFor(m => m.AssessmentAreaID)
+    @Html.HiddenFor(m => m.OnlandVisualTrashAssessmentID)
     <div class="row">
         <div class="col-xs-12 col-sm-2">
             <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
