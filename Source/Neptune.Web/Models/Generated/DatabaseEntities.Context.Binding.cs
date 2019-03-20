@@ -64,6 +64,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationPhotoConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationPhotoStagingConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
