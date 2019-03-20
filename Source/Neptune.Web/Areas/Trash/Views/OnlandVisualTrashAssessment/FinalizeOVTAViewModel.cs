@@ -29,6 +29,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
 
+        public List<PreliminarySourceIdentificationSimple> PreliminarySourceIdentifications { get; set; }
+
         public int? AssessmentAreaID { get; set; }
 
         /// <summary>
@@ -46,6 +48,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Notes = ovta.Notes;
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
+            PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
+
         }
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
@@ -96,5 +100,34 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     m => m.AssessmentAreaName);
             }
         }
+    }
+
+    public class PreliminarySourceIdentificationSimple
+    {
+        // create a simple from an answer provided on an OVTA
+        public PreliminarySourceIdentificationSimple(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
+        {
+            Has = true;
+            PreliminarySourceIdentificationTypeID =
+                onlandVisualTrashAssessmentPreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID;
+            ExplanationIfTypeIsOther =
+                onlandVisualTrashAssessmentPreliminarySourceIdentificationType.ExplanationIfTypeIsOther;
+        }
+
+        // create a simple from the platonic form
+        public PreliminarySourceIdentificationSimple(PreliminarySourceIdentificationType onlandVisualTrashAssessmentPreliminarySourceIdentificationType)
+        {
+            Has = false;
+            PreliminarySourceIdentificationTypeID =
+                onlandVisualTrashAssessmentPreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeID;
+        }
+
+        public bool Has { get; set; }
+
+        [Required]
+        public int? PreliminarySourceIdentificationTypeID { get; set; }
+
+        [StringLength(Models.OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.FieldLengths.ExplanationIfTypeIsOther)]
+        public string ExplanationIfTypeIsOther { get; set; }
     }
 }

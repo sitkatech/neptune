@@ -1,5 +1,6 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using MoreLinq
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
@@ -121,6 +122,27 @@
             </div>
         </div>
     </div>
+    <hr/>
+    <h4>Preliminary Source Identification</h4>
+    <p>Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</p>
+    foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Batch(2))
+    {
+        <div class="row">
+            @foreach (var category in categoryRow)
+            {
+                <div class="col-sm-6 col-xs-12">
+                    @foreach (var type in category.PreliminarySourceIdentificationTypes)
+                    {
+                        // this is gonna straight up don't work. let'ss try it anyway
+                        var preliminarySourceIdentificationSimple = Model.PreliminarySourceIdentifications.Single(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
+                        var index = Model.PreliminarySourceIdentifications.IndexOf(preliminarySourceIdentificationSimple);
+                        @Html.CheckBoxFor(m=>m.PreliminarySourceIdentifications[index].Has)
+                        <label>@type.PreliminarySourceIdentificationTypeDisplayName</label>
+                    }
+                </div>
+            }
+        </div>
+    }
 
     <hr />
     <h4>Observations</h4>

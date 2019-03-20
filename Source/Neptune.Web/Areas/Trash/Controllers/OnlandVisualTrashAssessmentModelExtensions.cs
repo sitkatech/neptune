@@ -6,6 +6,7 @@ using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Areas.Trash.Controllers;
+using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using static System.String;
@@ -80,6 +81,19 @@ namespace Neptune.Web.Models
                 : HttpRequestStorage.DatabaseEntities.Parcels
                     .Where(x => onlandVisualTrashAssessment.DraftGeometry.Contains(x.ParcelGeometry)).Select(x => x.ParcelID);
             return parcelIDs.ToList();
+        }
+
+        public static List<PreliminarySourceIdentificationSimple> GetPreliminarySourceIdentificationSimples(
+            this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
+            var presentGuys = onlandVisualTrashAssessment
+                .OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.ToList()
+                .Select(x => new PreliminarySourceIdentificationSimple(x)).ToList();
+
+            var missingGuys = PreliminarySourceIdentificationType.All.Except(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x=>x.PreliminarySourceIdentificationType)).Select(x=>new PreliminarySourceIdentificationSimple(x));
+            presentGuys.AddRange(missingGuys);
+
+            return presentGuys;
         }
     }
 }
