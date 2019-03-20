@@ -270,7 +270,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     initializeControlInstance: function () {
         stopClickPropagation(this.parentElement);
 
-        var drawOptionText = this.treatmentBMPFeature.properties.HasDelineation
+        var drawOptionText = this.treatmentBMPFeature.properties.DelineationURL
             ? "Revise the Catchment Area"
             : "Draw the Catchment Area";
         this.getTrackedElement("delineationOptionDrawText").innerHTML = drawOptionText;
@@ -305,12 +305,10 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     },
 
     delineate: function() {
-        var flowOption = jQuery("input[name='flowOption']").val();
-        var delineationOption = jQuery("input[name='delineationOption']").val();
+        var flowOption = jQuery("input[name='flowOption']:checked").val();
+        var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
-        // todo (future story): condition on flowOption and delineationOption
-        // for now, just go to draw mode because that's the only thing we've built
-
+        // todo (future story): condition on flowOption. For now only Distributed delineations are supported    
         if (delineationOption === "drawDelineate") {
             window.delineationMap.launchDrawCatchmentMode();
         } else if (delineationOption === "autoDelineate") {
