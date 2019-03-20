@@ -25,15 +25,18 @@ NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
 {
     var self = this;
     this.MapDivId = mapInitJson.MapDivID;
-
+    var tileOptions = {
+        maxNativeZoom: 18,
+        maxZoom:22
+    };
     var esriAerialUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-    var esriAerial = new L.TileLayer(esriAerialUrl, {});
+    var esriAerial = new L.TileLayer(esriAerialUrl, tileOptions);
 
     var esriStreetUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}';
-    var esriStreet = new L.TileLayer(esriStreetUrl, {});
+    var esriStreet = new L.TileLayer(esriStreetUrl, tileOptions);
 
     var esriTerrainUrl = 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
-    var esriTerrain = new L.TileLayer(esriTerrainUrl, {});
+    var esriTerrain = L.tileLayer.wms(esriTerrainUrl, tileOptions);
 
     var streetLabelsLayer = new L.TileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}', {});
 
@@ -356,13 +359,9 @@ NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
     }
 };
 
-NeptuneMaps.Map.prototype.deselect = function (callback) {
+NeptuneMaps.Map.prototype.deselect = function () {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
-    }
-
-    if (callback) {
-        callback();
     }
 };
 
@@ -373,12 +372,15 @@ NeptuneMaps.Map.prototype.disableUserInteraction = function() {
     this.map.scrollWheelZoom.disable();
     this.map.boxZoom.disable();
     this.map.keyboard.disable();
-    this.map.attributionControl = false;
-    if (this.map.tap) this.map.tap.disable();
-    document.getElementById(this.MapDivId).style.cursor = 'default';
-    jQuery(".leaflet-control-zoom").css("visibility", "hidden");
-    jQuery(".leaflet-control-layers").css("visibility", "hidden");
-    this.removeClickEventHandler();
+};
+
+NeptuneMaps.Map.prototype.enableUserInteraction = function() {
+    this.map.dragging.enable();
+    this.map.touchZoom.enable();
+    this.map.doubleClickZoom.enable();
+    this.map.scrollWheelZoom.enable();
+    this.map.boxZoom.enable();
+    this.map.keyboard.enable();
 };
 
 NeptuneMaps.Map.prototype.blockMapImpl = function() {
@@ -461,7 +463,8 @@ NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
 
 NeptuneMaps.Constants = {
     defaultPolyColor: "#7070ff",
-    defaultSelectedFeatureColor: "#ffff00"
+    defaultSelectedFeatureColor: "#ffff00",
+    spatialReference: 4326
 };
 
 NeptuneMaps.DefaultOptions = {

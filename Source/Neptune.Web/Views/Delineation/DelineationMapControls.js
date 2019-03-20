@@ -1,6 +1,6 @@
 ﻿/* Leaflet controls for the Delineation Workflow mpa.
  * Main map code in DelineationMap.js
- * HTML templates in DelineationMap.cshtml (TODO: move to DelineationMapTemplate)
+ * HTML templates in DelineationMapTemplates.cshtml 
  */
 
 // WIP: base class for the html-template driven control pattern
@@ -27,6 +27,67 @@ L.Control.TemplatedControl = L.Control.extend({
 
     onRemove: function(map) {
         jQuery(this.parentElement).remove();
+    }
+});
+
+// todo: sufficiently general to pull out.
+var LeafletShades = L.Layer.extend({
+    includes: L.Evented ? L.Evented.prototype : L.Mixin.Events,
+
+    options: {
+        bounds: null
+    },
+
+    initialize: function(options) {
+        L.setOptions(this, options);
+    },
+
+    onAdd: function(map) {
+        this._map = map;
+        this._addEventListeners();
+
+        this._shadesContainer = L.DomUtil.create('div', 'frosted-overlay leaflet-zoom-hide');
+
+        map.getPanes().overlayPane.appendChild(this._shadesContainer);
+        if (this.options.bounds) this._updateShades(this.options.bounds);
+
+        var size = this._map.getSize();
+        var offset = this._getOffset();
+
+        this.setDimensions(this._shadesContainer,
+            {
+                width: size.x,
+                height: size.y,
+                top: offset.y,
+                left: offset.x
+            });
+    },
+    _addEventListeners: function () { },
+
+
+
+    _getOffset: function () {
+        // Getting the transformation value through style attributes
+        var transformation = this._map.getPanes().mapPane.style.transform
+        var startIndex = transformation.indexOf('(');
+        var endIndex = transformation.indexOf(')');
+        transformation = transformation.substring(startIndex + 1, endIndex).split(',');
+        var offset = {
+            x: parseInt(transformation[0], 10) * -1,
+            y: parseInt(transformation[1], 10) * -1
+        };
+        return offset;
+    },
+
+    setDimensions: function (element, dimensions) {
+        element.style.width = dimensions.width + 'px';
+        element.style.height = dimensions.height + 'px';
+        element.style.top = dimensions.top + 'px';
+        element.style.left = dimensions.left + 'px';
+    },
+
+    onRemove: function (map) {
+        map.getPanes().overlayPane.removeChild(this._shadesContainer);
     }
 });
 
@@ -241,7 +302,6 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     initialize: function(options, treatmentBMPFeature) {
         this.treatmentBMPFeature = treatmentBMPFeature;
         L.setOptions(this, options);
-        console.log(this.treatmentBMPFeature.properties);
     },
 
     delineate: function() {
@@ -250,7 +310,12 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         // todo (future story): condition on flowOption and delineationOption
         // for now, just go to draw mode because that's the only thing we've built
-        window.delineationMap.launchDrawCatchmentMode();
+
+        if (delineationOption === "drawDelineate") {
+            window.delineationMap.launchDrawCatchmentMode();
+        } else if (delineationOption === "autoDelineate") {
+            window.delineationMap.launchAutoDelineateMode();
+        }
     }
 });
 
