@@ -4,7 +4,7 @@
 
 L.Control.WMSLegend = L.Control.extend({
     onAdd: function () {
-        var controlClassName = "leaflet-control-wms-legend",
+        var controlClassName = "leaflet-control-wms-legend leaflet-bar",
             legendClassName = "wms-legend",
             stop = L.DomEvent.stopPropagation;
         this.container = L.DomUtil.create("div", controlClassName);
@@ -16,7 +16,7 @@ L.Control.WMSLegend = L.Control.extend({
         this.img = L.DomUtil.create("img", legendClassName, this.container);
         this.toggle = L.DomUtil.create("span", "glyphicon glyphicon-menu-hamburger", this.container);
         this.toggle.style.display = "none";
-        this.toggle.style.textalign = "center"
+        this.toggle.style.textalign = "center";
         this.img.src = this.options.uri;
         this.img.alt = "Legend";
 
