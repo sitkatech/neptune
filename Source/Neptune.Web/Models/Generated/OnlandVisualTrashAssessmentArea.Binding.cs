@@ -30,13 +30,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentScoreID) : this()
+        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentScoreID, string assessmentAreaDescription) : this()
         {
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentAreaName;
             this.StormwaterJurisdictionID = stormwaterJurisdictionID;
             this.OnlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessmentAreaGeometry;
             this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
+            this.AssessmentAreaDescription = assessmentAreaDescription;
         }
 
         /// <summary>
@@ -123,6 +124,7 @@ namespace Neptune.Web.Models
         public int StormwaterJurisdictionID { get; set; }
         public DbGeometry OnlandVisualTrashAssessmentAreaGeometry { get; set; }
         public int? OnlandVisualTrashAssessmentScoreID { get; set; }
+        public string AssessmentAreaDescription { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentAreaID; } set { OnlandVisualTrashAssessmentAreaID = value; } }
 
@@ -133,6 +135,7 @@ namespace Neptune.Web.Models
         public static class FieldLengths
         {
             public const int OnlandVisualTrashAssessmentAreaName = 100;
+            public const int AssessmentAreaDescription = 500;
         }
     }
 }

@@ -16,6 +16,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
 	[CompletedDate] [datetime] NULL,
 	[DraftAreaName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[DraftAreaDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC

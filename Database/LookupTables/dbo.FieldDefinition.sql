@@ -60,7 +60,7 @@ VALUES
 (56, N'DateOfLastInventoryChange', N'Date of Last Inventory Change', '', 1),
 (57, N'TrashCaptureStatus', N'Trash Capture Status', N'Indicates the ability of this BMP to capture trash.', 1),
 (58, 'OnlandVisualTrashAssessment', N'On-land Visual Trash Assessment', N'The assessing, visually, of trash on land.', 1),
-(59, 'OnlandVisualTrashAssessmentNotes', 'Notes', 'Enter the name of all assessors and any other notes about the assessment.', 1),
+(59, 'OnlandVisualTrashAssessmentNotes', 'Comments and Additional Information', 'Enter the name of all assessors and any other notes about the assessment.', 1),
 (60, 'DelineationType', 'Delineation Type', 'Indicates whether the delineation is distributed or centralized.', 1),
 (61, 'OVTAScore', 'OVTA Score', 'For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments'' scores.', 1),
 (62, 'SizingBasis', 'Sizing Basis', 'Indicates whether this BMP is sized for full trash capture, water quality improvement, or otherwise.', 1)

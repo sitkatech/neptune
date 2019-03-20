@@ -8,6 +8,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 	[StormwaterJurisdictionID] [int] NOT NULL,
 	[OnlandVisualTrashAssessmentAreaGeometry] [geometry] NOT NULL,
 	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
+	[AssessmentAreaDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentAreaID] ASC

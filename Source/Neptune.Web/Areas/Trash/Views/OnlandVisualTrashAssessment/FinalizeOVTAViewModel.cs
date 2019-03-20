@@ -20,6 +20,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [DisplayName("Assessment Area Name")]
         public string AssessmentAreaName { get; set; }
 
+        [StringLength(Models.OnlandVisualTrashAssessmentArea.FieldLengths.AssessmentAreaDescription)]
+        [DisplayName("Assessment Area Description")]
+        public string AssessmentAreaDescription { get; set; }
+
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
         [FieldDefinitionDisplay(FieldDefinitionEnum.OnlandVisualTrashAssessmentNotes)]
         public string Notes { get; set; }
@@ -46,6 +50,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public FinalizeOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
         {
             AssessmentAreaName = ovta.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName ?? ovta.DraftAreaName;
+            AssessmentAreaDescription = ovta.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription ??
+                                        ovta.DraftAreaDescription;
             ScoreID = ovta.OnlandVisualTrashAssessmentScoreID;
             Notes = ovta.Notes;
             StormwaterJurisdictionID = ovta.StormwaterJurisdictionID;
@@ -74,6 +80,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
                         onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID;
                     onlandVisualTrashAssessment.DraftGeometry = null;
+                    onlandVisualTrashAssessment.DraftAreaDescription = null;
                 }
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID =
@@ -81,6 +88,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
 
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription =
+                    AssessmentAreaDescription;
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID =
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData()?
                         .OnlandVisualTrashAssessmentScoreID;
@@ -90,6 +99,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
                 onlandVisualTrashAssessment.Notes = Notes;
                 onlandVisualTrashAssessment.DraftAreaName = AssessmentAreaName;
+                onlandVisualTrashAssessment.DraftAreaDescription = AssessmentAreaDescription;
             }
 
             var onlandVisualTrashAssessmentPreliminarySourceIdentificationTypesToUpdate = PreliminarySourceIdentifications.Where(x => x.Has).Select(x =>

@@ -32,7 +32,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName, string draftAreaDescription) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -47,6 +47,7 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
             this.CompletedDate = completedDate;
             this.DraftAreaName = draftAreaName;
+            this.DraftAreaDescription = draftAreaDescription;
         }
 
         /// <summary>
@@ -151,6 +152,7 @@ namespace Neptune.Web.Models
         public int? OnlandVisualTrashAssessmentScoreID { get; set; }
         public DateTime? CompletedDate { get; set; }
         public string DraftAreaName { get; set; }
+        public string DraftAreaDescription { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
@@ -167,6 +169,7 @@ namespace Neptune.Web.Models
         {
             public const int Notes = 500;
             public const int DraftAreaName = 100;
+            public const int DraftAreaDescription = 500;
         }
     }
 }
