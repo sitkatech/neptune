@@ -18,6 +18,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Xml.XPath;
 using LtInfo.Common.Mvc;
+using Neptune.Web.Areas.Trash.Views;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
 using OVTASection = Neptune.Web.Models.OVTASection;
@@ -437,6 +438,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        public PartialViewResult ScoreDescriptions()
+        {
+            var viewData = new TrashModuleViewData(CurrentPerson);
+            return RazorPartialView<ScoreDescriptions, TrashModuleViewData>(viewData);
         }
 
         // helpers

@@ -150,7 +150,10 @@ namespace LtInfo.Common.ModalDialog
             {
                 builder.Attributes.Add("data-save-button-id", saveButtonID);
             }
-            builder.Attributes.Add("data-save-button-text", saveButtonText);
+            if (!string.IsNullOrWhiteSpace(saveButtonText))
+            {
+                builder.Attributes.Add("data-save-button-text", saveButtonText);
+            }
             builder.Attributes.Add("data-cancel-button-text", cancelButtonText);
 
             

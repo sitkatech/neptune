@@ -93,6 +93,10 @@ function createBootstrapDialogForm(element, dialogDivID, dialogContentDivId, jav
         return true;
     });
 
+    if (!saveButtonText) {
+        saveButton.detach();
+    }
+
     dialogDiv.on("hide.bs.modal", function()
     {
         // Remove all qTip tooltips

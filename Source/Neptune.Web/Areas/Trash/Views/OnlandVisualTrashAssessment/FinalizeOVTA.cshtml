@@ -1,5 +1,6 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.HtmlHelperExtensions
+@using LtInfo.Common.ModalDialog
 @using MoreLinq
 @using Neptune.Web.Models
 @using Neptune.Web.Views.Shared
@@ -77,22 +78,25 @@
                 }
             </div>
         </div>
-        <div class="form-group row" style="margin-top:30px">
+        <div class="form-group row" style="margin-top: 30px">
             <div class="col-sm-4 col-xs-12 control-label">
                 @Html.LabelWithSugarFor(m => m.AssessmentAreaDescription)
             </div>
             <div class="col-sm-8 col-xs-12">
                 @Html.TextAreaWithMaxLengthFor(m => m.AssessmentAreaDescription, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-                        @Html.ValidationMessageFor(m => m.AssessmentAreaDescription)
-                    </div>
+                @Html.ValidationMessageFor(m => m.AssessmentAreaDescription)
+            </div>
         </div>
-        <div class="form-group row" style="margin-top:30px">
+        <div class="form-group row" style="margin-top: 30px">
             <div class="col-sm-4 col-xs-12 control-label">
                 @Html.LabelWithSugarFor(m => m.ScoreID)
             </div>
             <div class="col-sm-8 col-xs-12">
                 @Html.DropDownListFor(m => m.ScoreID, ViewDataTyped.Scores, new { @class = "form-control", style = "width:auto;" })
                 @Html.ValidationMessageFor(m => m.Notes)
+                <span style="float: right;">
+                    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score Definitions {0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-new-window")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { "systemText" }, null, null)
+                </span>
             </div>
         </div>
 
@@ -119,7 +123,6 @@
                     <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
                     @foreach (var type in category.PreliminarySourceIdentificationTypes)
                     {
-                        // this is gonna straight up don't work. let'ss try it anyway
                         var preliminarySourceIdentificationSimple = Model.PreliminarySourceIdentifications.Single(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
                         var index = Model.PreliminarySourceIdentifications.IndexOf(preliminarySourceIdentificationSimple);
                         <label style="font-weight: normal;">
