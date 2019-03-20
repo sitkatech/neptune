@@ -267,7 +267,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         function (error) {
             console.log(error);
             window.alert("There was an error retrieving the delineation from the remote service.");
-
+            self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
