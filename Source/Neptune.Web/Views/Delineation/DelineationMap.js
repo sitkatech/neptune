@@ -193,8 +193,11 @@ NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function() {
 
 NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     if (!save) {
-        if (this.selectedBMPDelineationLayer) {
+        if (this.selectedBMPDelineationLayer && !this.selectedBMPDelineationLayer.isUnsavedAutoDEM) {
             this.map.addLayer(this.selectedBMPDelineationLayer);
+        } else {
+            // either the selected BMP's delineation didn't exist or it should no longer
+            this.selectedBMPDelineationLayer = null;
         }
     } else {
         this.persistDrawnCatchment();
@@ -444,6 +447,7 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
         });
 
     this.selectedBMPDelineationLayer.addTo(this.map);
+    this.selectedBMPDelineationLayer.isUnsavedAutoDEM = true; // so we know to clear the auto-delineation if they cancel without saving later.
 };
 
 NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function() {
