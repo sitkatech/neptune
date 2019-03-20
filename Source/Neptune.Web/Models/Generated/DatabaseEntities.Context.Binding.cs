@@ -64,6 +64,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationPhotoConfiguration());
             modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentObservationPhotoStagingConfiguration());
+            modelBuilder.Configurations.Add(new OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeConfiguration());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
@@ -130,6 +131,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhoto> OnlandVisualTrashAssessmentObservationPhotos { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
+        public virtual DbSet<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes { get; set; }
         public virtual DbSet<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
@@ -369,6 +371,9 @@ namespace Neptune.Web.Models
                 case "OnlandVisualTrashAssessmentObservation":
                     return OnlandVisualTrashAssessmentObservations.GetOnlandVisualTrashAssessmentObservation(primaryKey);
 
+                case "OnlandVisualTrashAssessmentPreliminarySourceIdentificationType":
+                    return OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.GetOnlandVisualTrashAssessmentPreliminarySourceIdentificationType(primaryKey);
+
                 case "OnlandVisualTrashAssessment":
                     return OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(primaryKey);
 
@@ -398,6 +403,16 @@ namespace Neptune.Web.Models
 
                 case "Person":
                     return People.GetPerson(primaryKey);
+
+                case "PreliminarySourceIdentificationCategory":
+                    var preliminarySourceIdentificationCategory = PreliminarySourceIdentificationCategory.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(preliminarySourceIdentificationCategory, "PreliminarySourceIdentificationCategory", primaryKey);
+                    return preliminarySourceIdentificationCategory;
+
+                case "PreliminarySourceIdentificationType":
+                    var preliminarySourceIdentificationType = PreliminarySourceIdentificationType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(preliminarySourceIdentificationType, "PreliminarySourceIdentificationType", primaryKey);
+                    return preliminarySourceIdentificationType;
 
                 case "PriorityLandUseType":
                     var priorityLandUseType = PriorityLandUseType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);

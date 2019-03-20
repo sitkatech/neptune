@@ -26,6 +26,7 @@ namespace Neptune.Web.Models
         {
             this.OnlandVisualTrashAssessmentObservations = new HashSet<OnlandVisualTrashAssessmentObservation>();
             this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
+            this.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = new HashSet<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>();
         }
 
         /// <summary>
@@ -89,13 +90,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any();
+            return OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};
 
 
         /// <summary>
@@ -129,6 +130,11 @@ namespace Neptune.Web.Models
             {
                 x.DeleteFull(dbContext);
             }
+
+            foreach(var x in OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -150,6 +156,7 @@ namespace Neptune.Web.Models
 
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
+        public virtual ICollection<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes { get; set; }
         public virtual Person CreatedByPerson { get; set; }
         public virtual OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }

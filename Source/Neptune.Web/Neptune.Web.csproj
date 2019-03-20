@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -210,6 +210,10 @@
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhotoStagingConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPhotoStagingPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentObservationPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypeConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentScore.Binding.cs" />
     <Compile Include="Models\Generated\OnlandVisualTrashAssessmentScorePrimaryKey.Binding.cs" />
@@ -233,6 +237,10 @@
     <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PersonConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\PersonPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\PreliminarySourceIdentificationCategory.Binding.cs" />
+    <Compile Include="Models\Generated\PreliminarySourceIdentificationCategoryPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\PreliminarySourceIdentificationType.Binding.cs" />
+    <Compile Include="Models\Generated\PreliminarySourceIdentificationTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\PriorityLandUseType.Binding.cs" />
     <Compile Include="Models\Generated\PriorityLandUseTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\QuickBMP.Binding.cs" />
