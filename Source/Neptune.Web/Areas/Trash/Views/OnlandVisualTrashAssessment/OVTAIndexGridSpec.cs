@@ -33,18 +33,18 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     new List<string>(), null, null)
                 : new HtmlString("")), 30, DhtmlxGridColumnFilterType.None);
 
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Completed On", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
-            Add("Status", x => x.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
-
             if (showName)
             {
                 Add("Assessment Area Name",
                     x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
                     DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             }
+
+            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Completed On", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
+            Add("Status", x => x.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
 
             Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 115,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
