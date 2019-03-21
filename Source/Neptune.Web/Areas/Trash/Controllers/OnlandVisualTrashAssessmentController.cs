@@ -71,7 +71,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             // if Stormwater Jurisdiction is null, it means the OVTA workflow was started but no data was saved, so it's okay to allow the record to be visible/editable
             // a future release will rearrange the OVTA workflow so records are not created in a jurisdiction-less state
-            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList().Where(x=>x.StormwaterJurisdiction == null || CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction)).OrderByDescending(x => x.CompletedDate).ToList();
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.ToList()
+                .Where(x => x.StormwaterJurisdiction == null ||
+                            CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
+                .OrderByDescending(x => x.CompletedDate).ThenBy(x => x.OnlandVisualTrashAssessmentArea == null)
+                .ThenBy(x => x.OnlandVisualTrashAssessmentArea?.OnlandVisualTrashAssessmentAreaName).ToList();
         }
 
         [HttpGet]
