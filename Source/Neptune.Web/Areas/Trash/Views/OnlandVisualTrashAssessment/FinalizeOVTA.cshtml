@@ -58,191 +58,232 @@
     </style>
 }
 
-@using (Html.BeginForm())
+
+
+@if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
 {
-    <div class="form-horizontal">
-        <div class="form-group row">
-            <div class="col-sm-4 col-xs-12 control-label">
-                @Html.LabelWithSugarFor(m => m.AssessmentAreaName)
+    <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
+}
+else
+{
+
+    using (Html.BeginForm())
+    {
+        <div class="form-horizontal">
+            <div class="form-group row">
+                <div class="col-sm-4 col-xs-12 control-label">
+                    @Html.LabelWithSugarFor(m => m.AssessmentAreaName)
+                </div>
+                <div class="col-sm-8 col-xs-12">
+                    @if (ViewDataTyped.OVTA.AssessingNewArea.GetValueOrDefault())
+                    {
+                        @Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.AssessmentAreaName)
+                    }
+                    else
+                    {
+                        <span>@ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</span>
+                        @Html.HiddenFor(m => m.AssessmentAreaName)
+                    }
+                </div>
             </div>
-            <div class="col-sm-8 col-xs-12">
-                @if (ViewDataTyped.OVTA.AssessingNewArea.GetValueOrDefault())
-                {
-                    @Html.TextBoxFor(m => m.AssessmentAreaName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.AssessmentAreaName)
-                }
-                else
-                {
-                    <span>@ViewDataTyped.OVTA.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName</span>
-                    @Html.HiddenFor(m => m.AssessmentAreaName)
-                }
+            <div class="form-group row" style="margin-top: 30px">
+                <div class="col-sm-4 col-xs-12 control-label">
+                    @Html.LabelWithSugarFor(m => m.AssessmentAreaDescription)
+                </div>
+                <div class="col-sm-8 col-xs-12">
+                    @Html.TextAreaWithMaxLengthFor(m => m.AssessmentAreaDescription, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                    @Html.ValidationMessageFor(m => m.AssessmentAreaDescription)
+                </div>
+            </div>
+            <div class="form-group row" style="margin-top: 30px">
+                <div class="col-sm-4 col-xs-12 control-label">
+                    @Html.LabelWithSugarFor(m => m.ScoreID)
+                </div>
+                <div class="col-sm-8 col-xs-12">
+                    @Html.DropDownListFor(m => m.ScoreID, ViewDataTyped.Scores, new { @class = "form-control", style = "width:auto;" })
+                    @Html.ValidationMessageFor(m => m.Notes)
+                    <span style="float: right;">
+                        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score Definitions {0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-new-window")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { "systemText" }, null, null)
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-4 col-xs-12 control-label">
+                    @Html.LabelWithSugarFor(m => m.Notes)
+                </div>
+                <div class="col-sm-8 col-xs-12">
+                    @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
+                    @Html.ValidationMessageFor(m => m.Notes)
+                </div>
             </div>
         </div>
-        <div class="form-group row" style="margin-top: 30px">
-            <div class="col-sm-4 col-xs-12 control-label">
-                @Html.LabelWithSugarFor(m => m.AssessmentAreaDescription)
+        <hr />
+        <h4>Preliminary Source Identification</h4>
+        <p>Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</p>
+        var br = true;
+        foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Batch(2))
+        {
+            <div class="row">
+                @foreach (var category in categoryRow)
+                {
+                    <div class="col-sm-6 col-xs-12">
+                        <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
+                        @foreach (var type in category.PreliminarySourceIdentificationTypes)
+                        {
+                            var checkBoxId = type.IsOther() ? type.PreliminarySourceIdentificationTypeName + "CheckBox" : "";
+
+                            var preliminarySourceIdentificationSimple = Model.PreliminarySourceIdentifications.Single(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
+                            var index = Model.PreliminarySourceIdentifications.IndexOf(preliminarySourceIdentificationSimple);
+                            <label style="font-weight: normal;">
+                                @Html.CheckBoxFor(m => m.PreliminarySourceIdentifications[index].Has, new { id = checkBoxId })
+                                @type.GetDisplayName()
+                            </label>
+                            if (type.IsOther())
+                            {
+                                @Html.TextBoxFor(m => m.PreliminarySourceIdentifications[index].ExplanationIfTypeIsOther, new { @class = "form-control", style = "width:50%; margin-left:5px", placeholder = "Describe other source", id = type.PreliminarySourceIdentificationTypeName + "TextBox"})
+                            }
+                            @Html.HiddenFor(m => m.PreliminarySourceIdentifications[index].PreliminarySourceIdentificationTypeID)<br />
+                        }
+                    </div>
+                }
             </div>
-            <div class="col-sm-8 col-xs-12">
-                @Html.TextAreaWithMaxLengthFor(m => m.AssessmentAreaDescription, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-                @Html.ValidationMessageFor(m => m.AssessmentAreaDescription)
+            if (br)
+            {
+                <br />
+                br = false;
+            }
+        }
+
+        <hr />
+        <h4>Observations</h4>
+        <div class="row">
+            <div class="col-md-7 col-md-push-5 col-sm-12">
+                <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID"></div>
             </div>
-        </div>
-        <div class="form-group row" style="margin-top: 30px">
-            <div class="col-sm-4 col-xs-12 control-label">
-                @Html.LabelWithSugarFor(m => m.ScoreID)
-            </div>
-            <div class="col-sm-8 col-xs-12">
-                @Html.DropDownListFor(m => m.ScoreID, ViewDataTyped.Scores, new { @class = "form-control", style = "width:auto;" })
-                @Html.ValidationMessageFor(m => m.Notes)
-                <span style="float: right;">
-                    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score Definitions {0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-new-window")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { "systemText" }, null, null)
-                </span>
+            <div class="col-md-5 col-md-pull-7 col-sm-12">
+                <div class="panel panelNeptune" id="observationsPanel" style="">
+
+                    <div class="panel-body">
+                        @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
+                        {
+                            var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
+                            var id = observation.OnlandVisualTrashAssessmentObservationID;
+                            <div class="row observation" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
+                                <div class="col-xs-12 observationPhotoContainer" style="padding: 4px;">
+                                    @if (photo != null)
+                                    {
+                                        <img class="observationPhoto" src="@photo.FileResource.GetFileResourceUrl()" />
+                                    }
+                                    else
+                                    {
+                                        <p class="systemText">No photo provided</p>
+                                    }
+                                </div>
+                                <div class="col-xs-12" style="border-bottom: 1px solid #ddd;">
+                                    @if (observation.Note == null)
+                                    {
+                                        <p class="systemText">No note provided</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@observation.Note</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="form-group row">
-            <div class="col-sm-4 col-xs-12 control-label">
-                @Html.LabelWithSugarFor(m => m.Notes)
-            </div>
-            <div class="col-sm-8 col-xs-12">
-                @Html.TextAreaWithMaxLengthFor(m => m.Notes, new TextAreaForExtensions.TextAreaDimensions(null, 3), null, new List<string> { "form-control" })
-                @Html.ValidationMessageFor(m => m.Notes)
-            </div>
-        </div>
-    </div>
-    <hr />
-    <h4>Preliminary Source Identification</h4>
-    <p>Stormwater trash sources identified within the assessment area during assessments. Check all sources that apply.</p>
-    var br = true;
-    foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Batch(2))
-    {
+        <hr />
+        @Html.HiddenFor(m => m.StormwaterJurisdictionID)
+        @Html.HiddenFor(m => m.AssessmentAreaID)
+        @Html.HiddenFor(m => m.OnlandVisualTrashAssessmentID)
         <div class="row">
-            @foreach (var category in categoryRow)
-            {
-                <div class="col-sm-6 col-xs-12">
-                    <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
-                    @foreach (var type in category.PreliminarySourceIdentificationTypes)
-                    {
-                        var preliminarySourceIdentificationSimple = Model.PreliminarySourceIdentifications.Single(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
-                        var index = Model.PreliminarySourceIdentifications.IndexOf(preliminarySourceIdentificationSimple);
-                        <label style="font-weight: normal;">
-                            @Html.CheckBoxFor(m => m.PreliminarySourceIdentifications[index].Has)
-                            @type.GetDisplayName()
-                        </label>
-                        if (type.IsOther())
-                         {
-                             @Html.TextBoxFor(m=>m.PreliminarySourceIdentifications[index].ExplanationIfTypeIsOther, new { @class = "form-control", style="width:50%; margin-left:5px", placeholder = "Describe other source" })
-                         }
-                        @Html.HiddenFor(m => m.PreliminarySourceIdentifications[index].PreliminarySourceIdentificationTypeID)<br />
-                    }
-                </div>
-            }
+            <div class="col-xs-12 col-sm-2">
+                <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
+            </div>
+
+            <div class="col-xs-12 col-sm-10" style="text-align: right">
+                <button type="submit" class="btn btn-neptune" value="false" id="@Html.IdFor(m => m.Finalize)" name="@Html.NameFor(m => m.Finalize)">Save</button>
+                <button type="submit" class="btn btn-neptune" value="true" id="@Html.IdFor(m => m.Finalize)" name="@Html.NameFor(m => m.Finalize)">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
+            </div>
         </div>
-        if (br)
-        {
-            <br />
-            br = false;
-        }
     }
 
-    <hr />
-    <h4>Observations</h4>
-    <div class="row">
-        <div class="col-md-7 col-md-push-5 col-sm-12">
-            <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID"></div>
-        </div>
-        <div class="col-md-5 col-md-pull-7 col-sm-12">
-            <div class="panel panelNeptune" id="observationsPanel" style="">
+    <script>
+        var summaryMap;
+        var observationsLayer;
+        jQuery(function() {
+            var mapInitJson =
+                @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
+            summaryMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
 
-                <div class="panel-body">
-                    @foreach (var observation in ViewDataTyped.OVTA.OnlandVisualTrashAssessmentObservations)
-                    {
-                        var photo = observation.OnlandVisualTrashAssessmentObservationPhotos.SingleOrDefault();
-                        var id = observation.OnlandVisualTrashAssessmentObservationID;
-                        <div class="row observation" id="observation_@id" onclick="handleClickOnTable(@id)" style="direction: ltr">
-                            <div class="col-xs-12 observationPhotoContainer" style="padding: 4px;">
-                                @if (photo != null)
-                                {
-                                    <img class="observationPhoto" src="@photo.FileResource.GetFileResourceUrl()" />
-                                }
-                                else
-                                {
-                                    <p class="systemText">No photo provided</p>
-                                }
-                            </div>
-                            <div class="col-xs-12" style="border-bottom: 1px solid #ddd;">
-                                @if (observation.Note == null)
-                                {
-                                    <p class="systemText">No note provided</p>
-                                }
-                                else
-                                {
-                                    <p>@observation.Note</p>
-                                }
-                            </div>
-                        </div>
+            observationsLayer =
+                summaryMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson
+                    .GeoJsonFeatureCollection);
+
+            observationsLayer.on('click',
+                function(e) {
+                    summaryMap.setSelectedFeature(e.layer.feature);
+                    jQuery(".selectedObservation")
+                        .removeClass("selectedObservation");
+                    jQuery("#observation_" + e.layer.feature.properties.ObservationID).addClass("selectedObservation");
+                    location.href = "#";
+                    location.href = "#observation_" + e.layer.feature.properties.ObservationID;
+
+                });
+
+            var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection,
+                {
+                    style: function(feature) {
+                        return {
+                            fillColor: NeptuneMaps.Constants.defaultPolyColor,
+                            fill: true,
+                            fillOpacity: 0.5,
+                            color: NeptuneMaps.Constants.defaultPolyColor,
+                            weight: 5,
+                            stroke: true
+                        };
                     }
-                </div>
-            </div>
-        </div>
-    </div>
+                });
+            assessmentAreaLayer.addTo(summaryMap.map);
+        });
 
-    <hr />
-    @Html.HiddenFor(m => m.StormwaterJurisdictionID)
-    @Html.HiddenFor(m => m.AssessmentAreaID)
-    @Html.HiddenFor(m => m.OnlandVisualTrashAssessmentID)
-    <div class="row">
-        <div class="col-xs-12 col-sm-2">
-            <div><sup>@Html.Raw(BootstrapHtmlHelpers.RequiredIcon)</sup> Required Field</div>
-        </div>
+        var handleClickOnTable = function(id) {
+            summaryMap.SetActiveObservationByID(id);
+            jQuery(".selectedObservation").removeClass("selectedObservation");
+            jQuery("#observation_" + id).addClass("selectedObservation");
+        }
+    </script>
 
-        <div class="col-xs-12 col-sm-10" style="text-align: right">
-            <button type="submit" class="btn btn-neptune" value="false" id="@Html.IdFor(m=>m.Finalize)" name="@Html.NameFor(m=>m.Finalize)">Save</button>
-            <button type="submit" class="btn btn-neptune" value="true" id="@Html.IdFor(m=>m.Finalize)" name="@Html.NameFor(m=>m.Finalize)">Finalize <i class="glyphicon glyphicon-chevron-right"></i></button>
-        </div>
-    </div>
-}
-
-<script>
-    var summaryMap;
-    var observationsLayer;
-    jQuery(function() {
-        var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.OVTASummaryMapInitJson).ToString(Formatting.None));
-        summaryMap = new NeptuneMaps.TrashAssessmentMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
-
-        observationsLayer =
-            summaryMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson
-                .GeoJsonFeatureCollection);
-
-        observationsLayer.on('click',
-            function(e) {
-                summaryMap.setSelectedFeature(e.layer.feature);
-                jQuery(".selectedObservation")
-                    .removeClass("selectedObservation");
-                jQuery("#observation_" + e.layer.feature.properties.ObservationID).addClass("selectedObservation");
-                location.href = "#";
-                location.href = "#observation_" + e.layer.feature.properties.ObservationID;
-
+    <script type="text/javascript">
+        var hookUpConditionallyDisableSourceTextBoxes = function(checkBoxID, textBoxID) {
+            jQuery("#" + checkBoxID).change(function() {
+                jQuery("#" + textBoxID).prop('disabled', !this.checked);
             });
+        }
 
-        var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
-            style: function(feature) {
-                return {
-                    fillColor: NeptuneMaps.Constants.defaultPolyColor,
-                    fill: true,
-                    fillOpacity: 0.5,
-                    color: NeptuneMaps.Constants.defaultPolyColor,
-                    weight: 5,
-                    stroke: true
-                };
+        var initialDisable = function (checkBoxID, textBoxID) {
+            debugger;
+            if (!jQuery("#" + checkBoxID).attr("checked")) {
+                 jQuery("#" + textBoxID).prop('disabled', true);
+            }
+        }
+
+        jQuery(document).ready(function() {
+            @foreach (var type in ViewDataTyped.PreliminarySourceIdentificationTypeOthers)
+            {
+                <text>
+                    hookUpConditionallyDisableSourceTextBoxes("@(type.PreliminarySourceIdentificationTypeName)CheckBox",
+                        "@(type.PreliminarySourceIdentificationTypeName)TextBox");
+            initialDisable("@(type.PreliminarySourceIdentificationTypeName)CheckBox",
+                        "@(type.PreliminarySourceIdentificationTypeName)TextBox");
+                </text>
             }
         });
-        assessmentAreaLayer.addTo(summaryMap.map);
-    });
-
-    var handleClickOnTable = function(id) {
-        summaryMap.SetActiveObservationByID(id);
-        jQuery(".selectedObservation").removeClass("selectedObservation");
-        jQuery("#observation_" + id).addClass("selectedObservation");
-    }
-</script>
+    </script>
+}

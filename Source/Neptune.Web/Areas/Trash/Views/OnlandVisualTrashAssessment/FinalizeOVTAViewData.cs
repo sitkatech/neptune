@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
@@ -17,6 +18,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string CreatedDate { get; }
         public string GeoServerUrl { get; }
         public string ScoreDescriptionsUrl { get; }
+        public IEnumerable<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypeOthers { get; }
 
         public FinalizeOVTAViewData(Person currentPerson,
             Models.OnlandVisualTrashAssessment ovta, OVTASummaryMapInitJson ovtaSummaryMapInitJson, IEnumerable<SelectListItem> scores, string geoServerUrl)
@@ -30,6 +32,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             CreatedDate = ovta.CreatedDate.ToShortDateString();
             ScoreDescriptionsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.ScoreDescriptions());
+
+            PreliminarySourceIdentificationTypeOthers = PreliminarySourceIdentificationType.All.Where(x=>x.IsOther());
         }
     }
 }

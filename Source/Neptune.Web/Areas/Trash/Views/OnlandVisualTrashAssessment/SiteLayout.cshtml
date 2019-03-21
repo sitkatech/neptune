@@ -164,15 +164,7 @@
             </div>
 
             <div class="wizardMain">
-                @if (!ViewDataTyped.OVTASection.IsSectionEnabled(ViewDataTyped.OVTA))
-                {
-                    <p class="systemText">@ViewDataTyped.OVTASection.GetSectionDisabledMessage()</p>
-                    <div style="display:none">@RenderBody()</div>
-                }
-                else
-                {
                     @RenderBody()
-                }
             </div>
         </div>
     </div>

@@ -229,7 +229,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
         {
-            return RecordObservations.IsSectionComplete(ovta) && AddOrRemoveParcels.IsSectionComplete(ovta);
+            return InitiateOVTA.IsSectionComplete(ovta) && RecordObservations.IsSectionComplete(ovta) && AddOrRemoveParcels.IsSectionComplete(ovta);
         }
 
         public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)

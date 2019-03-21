@@ -130,7 +130,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         }
     }
 
-    public class PreliminarySourceIdentificationSimple
+    public class PreliminarySourceIdentificationSimple: IValidatableObject
     {
         /// <summary>
         /// needed by Model Binder
@@ -164,5 +164,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         [StringLength(Models.OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.FieldLengths.ExplanationIfTypeIsOther)]
         public string ExplanationIfTypeIsOther { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Has && string.IsNullOrWhiteSpace(ExplanationIfTypeIsOther))
+            {
+                yield return new ValidationResult("You must provide an explanation if choosing \"Other\" as a Preliminary Source Identification.");
+            }
+        }
     }
 }
