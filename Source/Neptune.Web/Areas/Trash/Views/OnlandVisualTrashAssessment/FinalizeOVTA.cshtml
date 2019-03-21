@@ -131,7 +131,7 @@
                         </label>
                         if (type.IsOther())
                          {
-                             @Html.TextBoxFor(m=>m.PreliminarySourceIdentifications[index].ExplanationIfTypeIsOther, new { @class = "form-control", style="width:50%; float:right;" })
+                             @Html.TextBoxFor(m=>m.PreliminarySourceIdentifications[index].ExplanationIfTypeIsOther, new { @class = "form-control", style="width:50%; margin-left:5px", placeholder = "Describe other source" })
                          }
                         @Html.HiddenFor(m => m.PreliminarySourceIdentifications[index].PreliminarySourceIdentificationTypeID)<br />
                     }
