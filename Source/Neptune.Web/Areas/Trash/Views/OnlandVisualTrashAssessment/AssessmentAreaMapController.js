@@ -134,7 +134,7 @@
             var finder = jQuery(typeaheadSelector);
             finder.typeahead({
                 highlight: true,
-                minLength: 3
+                minLength: 1
             },
                 {
                     source: new Bloodhound({

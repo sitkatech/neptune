@@ -13,34 +13,39 @@
             $scope.AngularViewData.GeoServerUrl);
 
         $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", "Land Use Blocks");
-        
+
 
         $scope.ovtaLayers = {
             4: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas; Score A",
+                "OVTA Areas - Score A",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
                 }),
             3: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas; Score B",
+                "OVTA Areas - Score B",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
                 }),
             2: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas; Score C",
+                "OVTA Areas - Score C",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
                 }),
             1: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas; Score D",
+                "OVTA Areas - Score D",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
+                }),
+            0: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+                "OVTA Areas - Not Yet Assessed",
+                {
+                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
                 })
-        };
+    };
 
         $scope.selectedOVTAScores = function() {
             var scores = [];
-            for (var i = 1; i <= 5; i++) {
+            for (var i = 0; i <= 5; i++) {
                 if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
                     scores.push(i);
                 }
@@ -81,6 +86,9 @@
                 jsonpCallback: 'getJson'
             },
                 function (response) {
+                    if (!response.features || !response.features[0]) {
+                        return;
+                    }
                     $scope.lastSelected = L.geoJson(response, {
                         style: function (feature) {
                             return {

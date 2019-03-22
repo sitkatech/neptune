@@ -1,4 +1,5 @@
-﻿using Neptune.Web.Models;
+﻿using System.Web;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
@@ -6,12 +7,17 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
     {
         public Models.OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; }
         public bool UserHasViewDetailsPermission { get; }
+        public HtmlString ScoreHtmlString { get; set; }
 
         public TrashMapAssetPanelViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             UserHasViewDetailsPermission =
                 currentPerson.CanEditStormwaterJurisdiction(onlandVisualTrashAssessmentArea.StormwaterJurisdiction);
+            ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
+                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+                    .OnlandVisualTrashAssessmentScoreDisplayName
+                : "<p class='systemText'>No completed assessments</p>");
         }
     }
 }

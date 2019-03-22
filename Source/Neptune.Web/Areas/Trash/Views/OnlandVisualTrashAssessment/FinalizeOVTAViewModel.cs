@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Spatial;
 using System.Linq;
+using LtInfo.Common.DbSpatial;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
@@ -73,8 +75,22 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
                 {
+                    // make sure the SRID is 4326 before we save
+                    var wkt = onlandVisualTrashAssessment.DraftGeometry.ToString();
+
+                    if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
+                    {
+                        wkt = wkt.Substring(wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
+                    }
+                    else
+                    {
+                        wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
+                    }
+
+                    var dbgeom = DbGeometry.FromText(wkt, 4326);
+
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
-                        onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessment.DraftGeometry);
+                        onlandVisualTrashAssessment.StormwaterJurisdiction, dbgeom);
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
 
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =
