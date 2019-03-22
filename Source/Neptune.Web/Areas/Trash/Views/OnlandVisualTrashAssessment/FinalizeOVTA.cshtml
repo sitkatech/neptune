@@ -252,6 +252,8 @@ else
                 });
             assessmentAreaLayer.addTo(summaryMap.map);
             summaryMap.map.setZoom(18);
+
+            HookupCheckIfFormIsDirtyNoDisable(undefined);
         });
 
         var handleClickOnTable = function(id) {
