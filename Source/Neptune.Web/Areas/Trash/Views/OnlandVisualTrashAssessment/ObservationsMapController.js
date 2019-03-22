@@ -71,7 +71,7 @@
                     }
                 }
             );
-            if ($scope.AngularViewModel.Observations.length > 0) {
+            if ($scope.AngularModel.Observations.length > 0) {
                 $scope.neptuneMap.map.setZoom(18);
             }
         };
