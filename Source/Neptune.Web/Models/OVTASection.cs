@@ -78,7 +78,7 @@ namespace Neptune.Web.Models
     {
         public override string GetSectionUrl(OnlandVisualTrashAssessment ovta)
         {
-            return ovta == null ? null : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitiateOVTA(ovta));
+            return ovta == null ? SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitiateOVTA(null)) : SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.InitiateOVTA(ovta.OnlandVisualTrashAssessmentID));
         }
 
         public override OVTASection GetNextSection(OnlandVisualTrashAssessment ovta)
@@ -94,7 +94,7 @@ namespace Neptune.Web.Models
 
         public override bool IsSectionEnabled(OnlandVisualTrashAssessment ovta)
         {
-            return ovta != null;
+            return true;
         }
 
         public override bool IsSectionRelevant(OnlandVisualTrashAssessment ovta)

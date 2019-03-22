@@ -71,7 +71,9 @@
                     }
                 }
             );
-            $scope.neptuneMap.map.setZoom(18);
+            if ($scope.AngularViewModel.Observations.length > 0) {
+                $scope.neptuneMap.map.setZoom(18);
+            }
         };
 
         $scope.initializeMap();

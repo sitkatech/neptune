@@ -32,9 +32,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta)
         {
-            StormwaterJurisdiction = ovta.StormwaterJurisdiction != null ? new StormwaterJurisdictionSimple(ovta.StormwaterJurisdiction) : null;
-            OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
-            AssessingNewArea = ovta.AssessingNewArea ?? false;
+            StormwaterJurisdiction = ovta?.StormwaterJurisdiction != null ? new StormwaterJurisdictionSimple(ovta.StormwaterJurisdiction) : null;
+            OnlandVisualTrashAssessmentAreaID = ovta?.OnlandVisualTrashAssessmentAreaID;
+            AssessingNewArea = ovta?.AssessingNewArea ?? false;
         }
 
         public InitiateOVTAViewModel(Models.OnlandVisualTrashAssessment ovta, Person currentPerson) : this(ovta)

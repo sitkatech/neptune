@@ -94,28 +94,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return ViewInstructions(viewModel, onlandVisualTrashAssessment);
         }
 
-        [HttpPost]
-        [NeptuneViewFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult Instructions(int? ovtaID, InstructionsViewModel viewModel)
-        {
-            OnlandVisualTrashAssessment onlandVisualTrashAssessment;
-            if (ovtaID.HasValue)
-            {
-                onlandVisualTrashAssessment =
-                    HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
-                        ovtaID.Value);
-            }
-            else
-            {
-                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress);
-                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
-                HttpRequestStorage.DatabaseEntities.SaveChanges();
-            }
-
-            return RedirectToAppropriateStep(viewModel, OVTASection.Instructions, onlandVisualTrashAssessment);
-        }
-
         private ViewResult ViewInstructions(InstructionsViewModel viewModel, OnlandVisualTrashAssessment ovta)
         {
             var viewData = new InstructionsViewData(CurrentPerson,
@@ -124,25 +102,38 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
-        public ViewResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        [NeptuneViewFeature]
+        public ViewResult InitiateOVTA(int? onlandVisualTrashAssessmentPrimaryKey)
         {
-            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.HasValue
+                ? HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
+                    onlandVisualTrashAssessmentPrimaryKey.Value)
+                : null;
             var viewModel = new InitiateOVTAViewModel(onlandVisualTrashAssessment, CurrentPerson);
 
             return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [NeptuneViewFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult InitiateOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+        public ActionResult InitiateOVTA(int? onlandVisualTrashAssessmentPrimaryKey,
             InitiateOVTAViewModel viewModel)
         {
-            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var onlandVisualTrashAssessment =  onlandVisualTrashAssessmentPrimaryKey.HasValue
+                ? HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
+                    onlandVisualTrashAssessmentPrimaryKey.Value)
+                : null;
             if (!ModelState.IsValid)
             {
                 return ViewInitiateOVTA(onlandVisualTrashAssessment, viewModel);
+            }
+
+            if (onlandVisualTrashAssessment == null)
+            {
+                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress);
+                HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
             }
 
             viewModel.UpdateModel(onlandVisualTrashAssessment);
