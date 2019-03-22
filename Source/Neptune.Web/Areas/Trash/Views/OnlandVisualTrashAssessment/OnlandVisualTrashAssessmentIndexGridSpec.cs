@@ -67,7 +67,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
             Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 150,
-                DhtmlxGridColumnFilterType.SelectFilterStrict);
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Number of Assessments Completed", x => x.OnlandVisualTrashAssessments.Count, 170,
                 DhtmlxGridColumnAggregationType.Total);
             Add("Last Assessment Date", x => x.GetLastAssessmentDate(), 120, DhtmlxGridColumnFormatType.Date);
