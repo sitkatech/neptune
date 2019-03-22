@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -60,6 +61,21 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
             return new HtmlString(
                 $"<a href=\"{onlandVisualTrashAssessmentArea.GetDetailUrl()}\" alt=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" title=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" >{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}</a>");
+        }
+
+        public static DateTime? GetLastAssessmentDate(
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Max(x => x.CompletedDate);
+        }
+
+        public static HtmlString GetScoreAsHtmlString(
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+                    .OnlandVisualTrashAssessmentScoreDisplayName
+                : "<p class='systemText'>No completed assessments</p>");
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public HtmlString LastAssessmentDateHtmlString { get; }
         public HtmlString ScoreHtmlString { get; }
         public string NewUrl { get; }
-        public OVTAIndexGridSpec GridSpec { get; }
+        public OnlandVisualTrashAssessmentIndexGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
         public bool UserHasAssessmentAreaManagePermission { get; }
@@ -42,7 +42,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, false)
+            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",

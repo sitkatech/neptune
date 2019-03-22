@@ -46,6 +46,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [NeptuneViewFeature]
+        public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
+        {
+            var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson);
+            var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
+                .Where(x => x.StormwaterJurisdiction == null ||
+                            CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
+                .OrderByDescending(x => x.GetLastAssessmentDate());
+            return new GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea>(onlandVisualTrashAssessmentAreas.ToList(), gridSpec);
+        }
+
+        [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessment> OVTAGridJsonDataForAreaDetails(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
         {
             var onlandVisualTrashAssessments = GetOVTAsAndGridSpec(out var gridSpec, CurrentPerson, onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject);
@@ -54,20 +65,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return gridJsonNetJObjectResult;
         }
 
-        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec, Person currentPerson, OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OnlandVisualTrashAssessmentIndexGridSpec gridSpec, Person currentPerson, OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, false);
+            gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false);
             return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x=>x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).OrderByDescending(x=>x.CompletedDate).ToList();
         }
 
-        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OVTAIndexGridSpec gridSpec,
+        private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OnlandVisualTrashAssessmentIndexGridSpec gridSpec,
             Person currentPerson)
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            gridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, true);
+            gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, true);
 
             // if Stormwater Jurisdiction is null, it means the OVTA workflow was started but no data was saved, so it's okay to allow the record to be visible/editable
             // a future release will rearrange the OVTA workflow so records are not created in a jurisdiction-less state

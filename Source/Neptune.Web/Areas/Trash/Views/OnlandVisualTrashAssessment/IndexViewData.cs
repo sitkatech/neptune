@@ -9,9 +9,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class IndexViewData : TrashModuleViewData
     {
-        public OVTAIndexGridSpec GridSpec { get; }
+        public OnlandVisualTrashAssessmentIndexGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
+        public OnlandVisualTrashAssessmentAreaIndexGridSpec AreaGridSpec { get; }
+        public string AreaGridName { get; }
+        public string AreaGridDataUrl { get; }
         public string NewUrl { get; }
         public bool HasManagePermissions { get; }
 
@@ -23,7 +26,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             EntityName = $"{FieldDefinition.OnlandVisualTrashAssessment.GetFieldDefinitionLabelPluralized()}";
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new OVTAIndexGridSpec(currentPerson, showDelete, showEdit, true)
+            GridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, true)
             {
                 ObjectNameSingular = "Assessment",
                 ObjectNamePlural = "Assessments",
@@ -32,6 +35,15 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             GridName = "onlandVisualTrashAssessmentsGrid";
             GridDataUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OVTAGridJsonData());
+            AreaGridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(currentPerson)
+            {
+                ObjectNameSingular = "Assessment",
+                ObjectNamePlural = "Assessments",
+                SaveFiltersInCookie = true
+            };
+            AreaGridName = "onlandVisualTrashAssessmentsAreaGrid";
+            AreaGridDataUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OnlandVisualTrashAssessmentAreaGridData());
             NewUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Instructions(null));
             HasManagePermissions = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
 

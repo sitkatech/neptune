@@ -1153,7 +1153,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\InitiateOVTA.cshtml" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentController.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Index.cshtml" />
-    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OVTAIndexGridSpec.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentIndexGridSpec.cs" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AssessmentAreaMapController.js" />
     <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentAreaController.cs" />
     <Content Include="Areas\Trash\Views\Shared\SiteLayout.cshtml" />
