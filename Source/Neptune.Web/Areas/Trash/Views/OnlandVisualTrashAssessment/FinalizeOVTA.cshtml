@@ -251,6 +251,7 @@ else
                     }
                 });
             assessmentAreaLayer.addTo(summaryMap.map);
+            summaryMap.map.setZoom(18);
         });
 
         var handleClickOnTable = function(id) {
@@ -268,7 +269,6 @@ else
         }
 
         var initialDisable = function (checkBoxID, textBoxID) {
-            debugger;
             if (!jQuery("#" + checkBoxID).attr("checked")) {
                  jQuery("#" + textBoxID).prop('disabled', true);
             }

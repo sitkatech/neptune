@@ -548,7 +548,8 @@
                 title: "Legend"
             }
         });
-        map.map.addControl( legend );
+        map.map.addControl(legend);
+        map.map.setZoom(18);
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery("#legend").css("display", "");

@@ -19,6 +19,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string BeginOVTAUrl { get; }
         public string AddBMPUrl { get; }
         public ViewPageContentViewData ProgramOverviewPageContentViewData { get; }
+        public string StormwaterJurisdictionCQLFilter { get; }
 
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
@@ -26,8 +27,10 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
+            StormwaterJurisdictionCQLFilter = currentPerson.IsAdministrator() ? "" :  $"StormwaterJurisdictionID IN ({string.Join(",", CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))}) AND ";
+
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
-                treatmentBMPs, trashCaptureStatusTypes, parcels);
+                treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
             AllOVTAsUrl =
@@ -43,6 +46,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 NeptuneWebConfiguration.CanonicalHostName);
 
             ProgramOverviewPageContentViewData = new ViewPageContentViewData(NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashModuleProgramOverview), currentPerson);
+
         }
 
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
@@ -51,14 +55,17 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
             public List<ParcelSimple> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
+            public string StormwaterJurisdictionCqlFilter { get; }
 
             public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
-                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels)
+                List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels,
+                string stormwaterJurisdictionCqlFilter)
             {
                 MapInitJson = mapInitJson;
                 TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();
                 Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
+                StormwaterJurisdictionCqlFilter = stormwaterJurisdictionCqlFilter;
             }
         }
     }

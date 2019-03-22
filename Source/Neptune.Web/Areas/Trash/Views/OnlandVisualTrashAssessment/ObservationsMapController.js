@@ -71,6 +71,7 @@
                     }
                 }
             );
+            $scope.neptuneMap.map.setZoom(18);
         };
 
         $scope.initializeMap();

@@ -140,6 +140,7 @@ else
             }
 
             HookupCheckIfFormIsDirtyNoDisable(undefined);
+            assessmentAreaMap.map.setZoom(18);
         });
 
         NeptuneMaps.Map.prototype.getTextAreaId = function(featureId) { return "textareaFor" + featureId; };
