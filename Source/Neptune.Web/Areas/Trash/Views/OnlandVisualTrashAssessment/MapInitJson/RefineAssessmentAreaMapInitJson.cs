@@ -8,8 +8,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
         public LayerGeoJson AssessmentAreaLayerGeoJson { get; set; }
+        public LayerGeoJson TransectLineLayerGeoJson { get; }
 
-        public RefineAssessmentAreaMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) : base(mapDivID,
+        public RefineAssessmentAreaMapInitJson(string mapDivID, LayerGeoJson observationsLayerGeoJson,
+            LayerGeoJson assessmentAreaLayerGeoJson, LayerGeoJson transectLineLayerGeoJson) : base(mapDivID,
             DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>
             {
@@ -19,6 +21,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             ObservationsLayerGeoJson = observationsLayerGeoJson;
             AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
+            TransectLineLayerGeoJson = transectLineLayerGeoJson;
         }
     }
 }

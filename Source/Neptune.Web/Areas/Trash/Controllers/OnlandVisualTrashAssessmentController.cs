@@ -255,7 +255,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             AddOrRemoveParcelsViewModel viewModel)
         {
             var addOrRemoveParcelsMapIntJson = new AddOrRemoveParcelsMapIntJson("addOrRemoveParcelsMap",
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson());
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson(), onlandVisualTrashAssessment.GetTransectLineLayerGeoJson());
 
             var viewData = new AddOrRemoveParcelsViewData(CurrentPerson, OVTASection.AddOrRemoveParcels,
                 onlandVisualTrashAssessment, addOrRemoveParcelsMapIntJson);
@@ -297,7 +297,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, true);
-            var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+            var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
+            var refineAssessmentAreaMapInitJson = new RefineAssessmentAreaMapInitJson("refineAssessmentAreaMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
 
             var viewData = new RefineAssessmentAreaViewData(CurrentPerson, OVTASection.RefineAssessmentArea, onlandVisualTrashAssessment, refineAssessmentAreaMapInitJson, NeptuneWebConfiguration.ParcelMapServiceUrl);
             return RazorView<RefineAssessmentArea, RefineAssessmentAreaViewData, RefineAssessmentAreaViewModel>(

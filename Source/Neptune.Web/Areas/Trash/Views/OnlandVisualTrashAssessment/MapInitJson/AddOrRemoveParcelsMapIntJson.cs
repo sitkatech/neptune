@@ -7,8 +7,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     public class AddOrRemoveParcelsMapIntJson : MapInitJson
     {
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
+        public LayerGeoJson TransectLineLayerGeoJson { get; }
 
-        public AddOrRemoveParcelsMapIntJson(string mapDivID, LayerGeoJson observationsLayerGeoJson) : base(mapDivID,
+        public AddOrRemoveParcelsMapIntJson(string mapDivID, LayerGeoJson observationsLayerGeoJson,
+            LayerGeoJson transectLineLayerGeoJson) : base(mapDivID,
             DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>
             {
@@ -16,6 +18,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             }))
         {
             ObservationsLayerGeoJson = observationsLayerGeoJson;
+            TransectLineLayerGeoJson = transectLineLayerGeoJson;
         }
     }
 }
