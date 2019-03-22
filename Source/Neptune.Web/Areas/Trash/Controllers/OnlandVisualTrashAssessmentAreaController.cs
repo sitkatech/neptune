@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using GeoJSON.Net.Feature;
+using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
@@ -13,6 +15,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using FeatureCollection = GeoJSON.Net.Feature.FeatureCollection;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -27,11 +30,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
                     .ToGeoJsonFeatureCollection();
 
-            var assessmentAreaLayerGeoJson = new LayerGeoJson("parcels", geoJsonFeatureCollection,
+            var assessmentAreaLayerGeoJson = new LayerGeoJson("assessmentArea", geoJsonFeatureCollection,
                 "#ffff00", .5m,
                 LayerInitialVisibility.Show);
 
-            var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson);
+            var featureCollection = new FeatureCollection();
+            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessmentArea.TransectLine);
+            featureCollection.Features.AddRange(new List<Feature>{feature});
+
+            LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000", 1,
+                LayerInitialVisibility.Show);
+            var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
             var viewData = new DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson);
 

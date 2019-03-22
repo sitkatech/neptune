@@ -33,7 +33,7 @@ namespace Neptune.Web.Models
         }
 
 
-        private static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
+        public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
             var points = Join(",",
                 ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)

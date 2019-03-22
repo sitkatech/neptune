@@ -1,0 +1,2 @@
+Alter Table dbo.OnlandVisualTrashAssessmentArea
+Add TransectLine geometry null
