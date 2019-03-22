@@ -48,7 +48,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             updatedDict.ForEach(x =>
             {
                 var dto = x.Key;
-                var entity = x.Value;
+                // have to do this weird lookup otherwise line 63 will create a brand new ovtao
+                var entityID = x.Value.OnlandVisualTrashAssessmentObservationID;
+                var actualEntity = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentObservations.Find(entityID);
                 if (!dto.PhotoStagingID.HasValue)
                 {
                     return; // no one cares
@@ -56,9 +58,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
                 var photoStaging = ((OnlandVisualTrashAssessmentObservationPhotoStagingPrimaryKey) dto.PhotoStagingID.Value).EntityObject;
 
-                // We don't care about OCAS because EF will add the created entity to our changeset regardless
+
                 // ReSharper disable once ObjectCreationAsStatement
-                new OnlandVisualTrashAssessmentObservationPhoto(photoStaging.FileResource, entity);
+                new OnlandVisualTrashAssessmentObservationPhoto(photoStaging.FileResource, actualEntity);
+                
             });
 
             HttpRequestStorage.DatabaseEntities.SaveChanges();
