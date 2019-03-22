@@ -29,6 +29,26 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJ
     return this.observationsLayer;
 };
 
+NeptuneMaps.TrashAssessmentMap.prototype.CreateTransectLineLayer = function(geoJsonFeatureCollection, options) {
+    var layerOptions = Object.assign({}, NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions);
+    L.Util.extend(layerOptions, options);
+
+    this.transectLineLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
+    this.transectLineLayer.addTo(this.map);
+
+    return this.transectLineLayer;
+};
+
+NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions = {
+    style: function (feature) {
+        return {
+            fillOpacity: 0.5,
+            color: "#303030",
+            weight: 2,
+            stroke: true
+        };
+    }
+}
 
 NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions = {
     pointToLayer: function(feature, latlng) {

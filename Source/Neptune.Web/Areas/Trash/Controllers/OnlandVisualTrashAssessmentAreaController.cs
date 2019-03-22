@@ -34,12 +34,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 "#ffff00", .5m,
                 LayerInitialVisibility.Show);
 
-            var featureCollection = new FeatureCollection();
-            var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessmentArea.TransectLine);
-            featureCollection.Features.AddRange(new List<Feature>{feature});
+            var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
 
-            LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000", 1,
-                LayerInitialVisibility.Show);
             var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
             var viewData = new DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson);

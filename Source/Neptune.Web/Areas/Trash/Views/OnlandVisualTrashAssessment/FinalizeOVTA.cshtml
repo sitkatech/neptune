@@ -226,6 +226,9 @@ else
                 summaryMap.CreateObservationsLayer(mapInitJson.ObservationsLayerGeoJson
                     .GeoJsonFeatureCollection);
 
+            transectLineLayer = summaryMap.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection);
+            
+
             observationsLayer.on('click',
                 function(e) {
                     summaryMap.setSelectedFeature(e.layer.feature);
@@ -251,7 +254,9 @@ else
                     }
                 });
             assessmentAreaLayer.addTo(summaryMap.map);
+            if (summaryMap.map.getZoom > 18){
             summaryMap.map.setZoom(18);
+            }
 
         });
 

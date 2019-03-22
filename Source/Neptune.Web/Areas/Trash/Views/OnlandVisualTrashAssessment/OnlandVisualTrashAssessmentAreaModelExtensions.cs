@@ -61,5 +61,22 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return new HtmlString(
                 $"<a href=\"{onlandVisualTrashAssessmentArea.GetDetailUrl()}\" alt=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" title=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" >{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}</a>");
         }
+
+        public static LayerGeoJson GetTransectLineLayerGeoJson(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            if (onlandVisualTrashAssessmentArea.TransectLine != null)
+            {
+                var featureCollection = new FeatureCollection();
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessmentArea.TransectLine);
+                featureCollection.Features.AddRange(new List<Feature> {feature});
+
+                LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
+                    1,
+                    LayerInitialVisibility.Show);
+                return transectLineLayerGeoJson;
+            }
+
+            return null;
+        }
     }
 }
