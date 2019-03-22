@@ -158,7 +158,7 @@ else
 
         <hr />
         <h4>Observations</h4>
-        <div class="row">
+        <div class="row ignoreSerialization">
             <div class="col-md-7 col-md-push-5 col-sm-12">
                 <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID"></div>
             </div>
@@ -253,7 +253,6 @@ else
             assessmentAreaLayer.addTo(summaryMap.map);
             summaryMap.map.setZoom(18);
 
-            HookupCheckIfFormIsDirtyNoDisable(undefined);
         });
 
         var handleClickOnTable = function(id) {
@@ -286,6 +285,8 @@ else
                         "@(type.PreliminarySourceIdentificationTypeName)TextBox");
                 </text>
             }
+
+            HookupCheckIfFormIsDirtyNoDisable(undefined);
         });
     </script>
 }
