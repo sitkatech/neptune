@@ -37,8 +37,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OVTAGridJsonData());
             AreaGridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(currentPerson)
             {
-                ObjectNameSingular = "Assessment",
-                ObjectNamePlural = "Assessments",
+                ObjectNameSingular = "Area",
+                ObjectNamePlural = "Areas",
                 SaveFiltersInCookie = true
             };
             AreaGridName = "onlandVisualTrashAssessmentsAreaGrid";

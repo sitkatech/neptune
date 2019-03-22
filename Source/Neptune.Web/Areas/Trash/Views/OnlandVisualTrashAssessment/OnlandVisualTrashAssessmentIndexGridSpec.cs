@@ -66,9 +66,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
                     DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
 
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 100,
+            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 150,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Completed On", x => x.GetLastAssessmentDate(), 120, DhtmlxGridColumnFormatType.Date);
+            Add("Number of Assessments Completed", x => x.OnlandVisualTrashAssessments.Count, 170,
+                DhtmlxGridColumnAggregationType.Total);
+            Add("Last Assessment Date", x => x.GetLastAssessmentDate(), 120, DhtmlxGridColumnFormatType.Date);
+            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
         }
     }
 }
