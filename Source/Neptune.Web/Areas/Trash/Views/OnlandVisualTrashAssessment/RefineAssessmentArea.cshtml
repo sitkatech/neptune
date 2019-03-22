@@ -140,7 +140,8 @@ else
             }
 
             HookupCheckIfFormIsDirtyNoDisable(undefined);
-            assessmentAreaMap.map.setZoom(18);
+            var zoom = Math.min(assessmentAreaMap.map.getZoom(),18);
+            assessmentAreaMap.map.setZoom(zoom);
         });
 
         NeptuneMaps.Map.prototype.getTextAreaId = function(featureId) { return "textareaFor" + featureId; };

@@ -106,7 +106,8 @@
                 .MapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection);
 
             updateSelectedParcelLayer();
-            $scope.neptuneMap.map.setZoom(18);
+            var zoom = Math.min($scope.neptuneMap.map.getZoom(), 18);
+            $scope.neptuneMap.map.setZoom(zoom);
         };
 
         $scope.initializeMap();

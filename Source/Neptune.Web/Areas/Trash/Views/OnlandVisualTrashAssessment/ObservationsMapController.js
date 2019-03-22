@@ -31,10 +31,10 @@
                     {
                         style: function(feature) {
                             return {
-                                fillColor: "#ff2929",
+                                fillColor: NeptuneMaps.Constants.defaultPolyColor,
                                 fill: true,
                                 fillOpacity: 0.5,
-                                color: "#ff2929",
+                                color: NeptuneMaps.Constants.defaultPolyColor,
                                 weight: 5,
                                 stroke: true
                             };
@@ -72,7 +72,8 @@
                 }
             );
             if ($scope.AngularModel.Observations.length > 0) {
-                $scope.neptuneMap.map.setZoom(18);
+                var zoom = Math.min($scope.neptuneMap.map.getZoom(),18);
+                $scope.neptuneMap.map.setZoom(zoom);
             }
         };
 
