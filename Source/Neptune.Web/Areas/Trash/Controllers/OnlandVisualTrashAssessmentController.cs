@@ -318,23 +318,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
 
-            LayerGeoJson transsectLineLayerGeoJson;
-
-            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine != null)
-            {
-                transsectLineLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
-                    .GetTransectLineLayerGeoJson();
-            }
-            else
-            {
-                var featureCollection = new FeatureCollection();
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessment.GetTransect());
-                featureCollection.Features.AddRange(new List<Feature> { feature });
-
-                transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
-                    1,
-                    LayerInitialVisibility.Show);
-            }
+            var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTranssectLineLayerGeoJson();
 
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transsectLineLayerGeoJson);
 

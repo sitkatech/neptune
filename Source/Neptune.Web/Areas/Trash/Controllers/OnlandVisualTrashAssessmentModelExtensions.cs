@@ -100,5 +100,28 @@ namespace Neptune.Web.Models
 
             return presentGuys;
         }
+
+        public static LayerGeoJson GetTranssectLineLayerGeoJson(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
+            LayerGeoJson transsectLineLayerGeoJson;
+
+            if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea?.TransectLine != null)
+            {
+                transsectLineLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea
+                    .GetTransectLineLayerGeoJson();
+            }
+            else
+            {
+                var featureCollection = new FeatureCollection();
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessment.GetTransect());
+                featureCollection.Features.AddRange(new List<Feature> {feature});
+
+                transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
+                    1,
+                    LayerInitialVisibility.Show);
+            }
+
+            return transsectLineLayerGeoJson;
+        }
     }
 }

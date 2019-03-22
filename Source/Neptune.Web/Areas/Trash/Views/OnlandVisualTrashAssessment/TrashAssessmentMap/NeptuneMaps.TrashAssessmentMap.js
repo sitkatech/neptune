@@ -15,6 +15,10 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
         format: "image/png"
     };
     this.wmsLegend = L.wmsLegend("Land Use Types", geoserverUrl, legendOptions, this.map);
+
+    if (mapInitJson.TransectLineLayerGeoJson) {
+        this.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {});
+    }
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
