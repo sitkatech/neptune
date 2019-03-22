@@ -46,6 +46,11 @@ namespace Neptune.Web.Models
 
         public static IQueryable<Parcel> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta)
         {
+            if (!ovta.OnlandVisualTrashAssessmentObservations.Any())
+            {
+                return new List<Parcel>().AsQueryable();
+            }
+
             var transect = ovta.OnlandVisualTrashAssessmentObservations.Count == 1
                 ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
                 : ovta.GetTransect();

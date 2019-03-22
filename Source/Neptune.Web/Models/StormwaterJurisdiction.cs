@@ -59,6 +59,7 @@ namespace Neptune.Web.Models
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(stormwaterJurisdiction.StormwaterJurisdictionGeometry);
             feature.Properties.Add("State", stormwaterJurisdiction.StateProvince.StateProvinceAbbreviation);
             feature.Properties.Add("County/City", stormwaterJurisdiction.Organization.OrganizationName);
+            feature.Properties.Add("StormwaterJurisdictionID", stormwaterJurisdiction.StormwaterJurisdictionID);
             return feature;
         }
 

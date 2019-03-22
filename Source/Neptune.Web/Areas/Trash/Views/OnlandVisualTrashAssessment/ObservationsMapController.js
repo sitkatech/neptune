@@ -72,8 +72,16 @@
                 }
             );
             if ($scope.AngularModel.Observations.length > 0) {
-                var zoom = Math.min($scope.neptuneMap.map.getZoom(),18);
+                var zoom = Math.min($scope.neptuneMap.map.getZoom(), 18);
                 $scope.neptuneMap.map.setZoom(zoom);
+            } else if (!$scope.AngularViewData.MapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection.features.length) {
+                var bounds = L
+                    .geoJson(_.find($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features,
+                        function(f) {
+                            return f.properties.StormwaterJurisdictionID ==
+                                $scope.AngularViewData.OVTAStormwaterJurisdictionID;
+                        })).getBounds();
+                $scope.neptuneMap.map.fitBounds(bounds);
             }
         };
 

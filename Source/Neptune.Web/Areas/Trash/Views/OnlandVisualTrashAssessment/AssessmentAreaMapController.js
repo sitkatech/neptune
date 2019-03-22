@@ -73,8 +73,7 @@
             $scope.lastSelectedName = featureLayer.properties["OnlandVisualTrashAssessmentAreaName"];
             jQuery("#assessmentAreaFinder").val($scope.lastSelectedName);
 
-            var bounds = $scope.lastSelectedLayer.getBounds();
-            $scope.neptuneMap.map.fitBounds(bounds);
+            $scope.neptuneMap.zoomAndPanToLayer($scope.lastSelectedLayer);
         };
 
         $scope.initializeMap = function (overrideJurisdictionFilterForSelectedArea) {
@@ -115,12 +114,6 @@
 
             $scope.assessmentAreaLayerGeoJson.addTo($scope.neptuneMap.map);
             $scope.assessmentAreaLayerGeoJson.on('click', selectAssessmentArea);
-
-            $scope.neptuneMap.zoomAndPanToLayer($scope.assessmentAreaLayerGeoJson);
-
-            if ($scope.AngularModel.OnlandVisualTrashAssessmentAreaID) {
-                $scope.setSelectedFeatureByID($scope.AngularModel.OnlandVisualTrashAssessmentAreaID);
-            }
         };
 
         $scope.zoomToLocation = function () {
@@ -197,6 +190,8 @@
             if (assessingNewArea) {
                 $scope.AngularModel.OnlandVisualTrashAssessmentAreaID = null;
                 $scope.lastSelectedID = null;
+                $scope.lastSelectedName = null;
+                jQuery("#assessmentAreaFinder").val("");
                 if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelectedLayer)) {
                     $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
                 }
@@ -210,5 +205,39 @@
         }
         $scope.typeaheadSearch('#assessmentAreaFinder', '#assessmentAreaFinderButton');
         $scope.initializeMap($scope.AngularModel.OnlandVisualTrashAssessmentID !== null);
+
         $scope.setSelectedFeatureByID($scope.AngularModel.OnlandVisualTrashAssessmentAreaID);
+
+        $scope.setZoomToAbsolutelyCorrectZoom = function() {
+            if ($scope.lastSelectedLayer) {
+                $scope.neptuneMap.zoomAndPanToLayer($scope.lastSelectedLayer);
+                return;
+            }
+
+            if ($scope.assessmentAreaLayerGeoJson.getLayers().length) {
+                $scope.neptuneMap.zoomAndPanToLayer($scope.assessmentAreaLayerGeoJson);
+                return;
+            }
+
+            var bounds = L
+                .geoJson(_.find($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features,
+                    function (f) {
+                        return f.properties.StormwaterJurisdictionID ==
+                            $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID;
+                    })).getBounds();
+            $scope.neptuneMap.map.fitBounds(bounds);
+        };
+
+        $scope.setZoomToAbsolutelyCorrectZoom();
+
+        $scope.jurisdictionChanged = function () {
+            if ($scope.lastSelectedLayer) {
+                $scope.lastSelectedName = null;
+                jQuery("#assessmentAreaFinder").val("");
+                $scope.neptuneMap.map.removeLayer($scope.lastSelectedLayer);
+                $scope.lastSelectedLayer = null;
+            }
+            $scope.initializeMap();
+            $scope.setZoomToAbsolutelyCorrectZoom();
+        }
     });
