@@ -219,7 +219,6 @@
                 return;
             }
 
-            debugger;
             var geoJson = L
                 .geoJson(_.find($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features,
                     function (f) {

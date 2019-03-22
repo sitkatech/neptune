@@ -35,13 +35,19 @@ namespace Neptune.Web.Models
 
         public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
-            var points = Join(",",
-                ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
-                    .Select(x => x.LocationPoint).ToList().Select(x => $"{x.XCoordinate} {x.YCoordinate}").ToList());
+            if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)
+            {
+                var points = Join(",",
+                    ovta.OnlandVisualTrashAssessmentObservations.OrderBy(x => x.ObservationDatetime)
+                        .Select(x => x.LocationPoint).ToList().Select(x => $"{x.XCoordinate} {x.YCoordinate}")
+                        .ToList());
 
-            var linestring = $"LINESTRING ({points})";
+                var linestring = $"LINESTRING ({points})";
 
-            return DbGeometry.LineFromText(linestring, 4326);
+                return DbGeometry.LineFromText(linestring, 4326);
+            }
+
+            return null;
         }
 
         public static IQueryable<Parcel> GetParcelsViaTransect(this OnlandVisualTrashAssessment ovta)
@@ -101,7 +107,7 @@ namespace Neptune.Web.Models
             return presentGuys;
         }
 
-        public static LayerGeoJson GetTranssectLineLayerGeoJson(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        public static LayerGeoJson GetTransectLineLayerGeoJson(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             LayerGeoJson transsectLineLayerGeoJson;
 
@@ -113,7 +119,14 @@ namespace Neptune.Web.Models
             else
             {
                 var featureCollection = new FeatureCollection();
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessment.GetTransect());
+                var dbGeometry = onlandVisualTrashAssessment.GetTransect();
+                if (dbGeometry == null)
+                {
+                    return null;
+                }
+
+
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
                 featureCollection.Features.AddRange(new List<Feature> {feature});
 
                 transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",

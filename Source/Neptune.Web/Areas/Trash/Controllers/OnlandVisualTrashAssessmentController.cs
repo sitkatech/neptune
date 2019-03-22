@@ -204,8 +204,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
 
+            var transectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
+
             var ovtaObservationsMapInitJson = new OVTAObservationsMapInitJson("observationsMap",
-                observationsLayerGeoJson, assessmentAreaLayerGeoJson);
+                observationsLayerGeoJson, assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
 
             var viewData = new RecordObservationsViewData(CurrentPerson,
                 onlandVisualTrashAssessment, ovtaObservationsMapInitJson, NeptuneWebConfiguration.ParcelMapServiceUrl);
@@ -318,7 +320,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
             var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
 
-            var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTranssectLineLayerGeoJson();
+            var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
 
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transsectLineLayerGeoJson);
 

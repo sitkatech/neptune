@@ -3,6 +3,7 @@ using System.Linq;
 using GeoJSON.Net.Feature;
 using Neptune.Web.Models;
 
+// ReSharper disable once CheckNamespace
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OVTAObservationsMapInitJson : MapInitJson
@@ -10,9 +11,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public LayerGeoJson ObservationsLayerGeoJson { get; set; }
 
         public LayerGeoJson AssessmentAreaLayerGeoJson { get; set; }
+        public LayerGeoJson TransectLineLayerGeoJson { get; }
 
         public OVTAObservationsMapInitJson(string mapDivID,
-            LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson) : base(mapDivID,
+            LayerGeoJson observationsLayerGeoJson, LayerGeoJson assessmentAreaLayerGeoJson,
+            LayerGeoJson transectLineLayerGeoJson) : base(mapDivID,
             DefaultZoomLevel, MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson>
             {
@@ -21,6 +24,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             }))
         {
             AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
+            TransectLineLayerGeoJson = transectLineLayerGeoJson;
             ObservationsLayerGeoJson = observationsLayerGeoJson;
         }
     }
