@@ -31,10 +31,10 @@
                     {
                         style: function(feature) {
                             return {
-                                fillColor: NeptuneMaps.Constants.defaultPolyColor,
+                                fillColor: "#ff2929",
                                 fill: true,
                                 fillOpacity: 0.5,
-                                color: NeptuneMaps.Constants.defaultPolyColor,
+                                color: "#ff2929",
                                 weight: 5,
                                 stroke: true
                             };

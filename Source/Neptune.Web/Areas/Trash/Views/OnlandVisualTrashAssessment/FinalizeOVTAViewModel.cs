@@ -185,7 +185,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
             if (Has && string.IsNullOrWhiteSpace(ExplanationIfTypeIsOther))
             {
-                yield return new ValidationResult("You must provide an explanation if choosing \"Other\" as a Preliminary Source Identification.");
+                if (PreliminarySourceIdentificationType.AllLookupDictionary[PreliminarySourceIdentificationTypeID.GetValueOrDefault()].IsOther())
+                {
+                    yield return new ValidationResult(
+                        "You must provide an explanation if choosing \"Other\" as a Preliminary Source Identification.");
+                }
             }
         }
     }
