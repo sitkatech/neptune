@@ -219,13 +219,17 @@
                 return;
             }
 
-            var bounds = L
+            debugger;
+            var geoJson = L
                 .geoJson(_.find($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features,
                     function (f) {
                         return f.properties.StormwaterJurisdictionID ==
                             $scope.AngularModel.StormwaterJurisdiction.StormwaterJurisdictionID;
-                    })).getBounds();
-            $scope.neptuneMap.map.fitBounds(bounds);
+                    }));
+            var bounds = geoJson.getBounds();
+            if (geoJson.getLayers().length) {
+                $scope.neptuneMap.map.fitBounds(bounds);
+            }
         };
 
         $scope.setZoomToAbsolutelyCorrectZoom();
