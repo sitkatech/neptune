@@ -47,6 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -1168,6 +1169,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\Detail.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
