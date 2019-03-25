@@ -14,11 +14,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showDelete, bool showEdit, bool showName)
         {
-            Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 45, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 40, DhtmlxGridColumnFilterType.None);
 
             if (showDelete)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 20, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 25, DhtmlxGridColumnFilterType.None);
             }
             if (showEdit)
             {
