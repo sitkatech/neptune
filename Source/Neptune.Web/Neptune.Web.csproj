@@ -47,6 +47,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\DetailViewData.cs" />
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentAreaIndexGridSpec.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />

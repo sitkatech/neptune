@@ -14,13 +14,15 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public OnlandVisualTrashAssessmentIndexGridSpec(Person currentPerson, bool showDelete, bool showEdit, bool showName)
         {
+            Add(string.Empty, x => x.GetDetailUrlForGrid(currentPerson), 45, DhtmlxGridColumnFilterType.None);
+
             if (showDelete)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 20, DhtmlxGridColumnFilterType.None);
             }
             if (showEdit)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), new OnlandVisualTrashAssessmentViewFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), new OnlandVisualTrashAssessmentEditFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
 
             }
 
@@ -49,29 +51,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             Add("Created By", x => x.CreatedByPerson.GetFullNameFirstLastAsUrl(), 115,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Created On", x => x.CreatedDate, 120, DhtmlxGridColumnFormatType.Date);
-        }
-    }
-    public class OnlandVisualTrashAssessmentAreaIndexGridSpec : GridSpec<Models.OnlandVisualTrashAssessmentArea>
-    {
-        public OnlandVisualTrashAssessmentAreaIndexGridSpec(Person currentPerson)
-        {
-            Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeModalDialogLink(
-                    BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area").ToString(),
-                    x.GetBeginOVTAUrl(), 500, "Begin OVTA",
-                    new OnlandVisualTrashAssessmentAreaViewFeature()
-                        .HasPermission(currentPerson, x).HasPermission, "Begin", "Cancel",
-                    new List<string>(), null, null), 30, DhtmlxGridColumnFilterType.None);
-
-                Add("Assessment Area Name",
-                    x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
-                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 150,
-                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Number of Assessments Completed", x => x.OnlandVisualTrashAssessments.Count, 170,
-                DhtmlxGridColumnAggregationType.Total);
-            Add("Last Assessment Date", x => x.GetLastAssessmentDate(), 120, DhtmlxGridColumnFormatType.Date);
-            Add(FieldDefinition.Jurisdiction.ToGridHeaderString("Jurisdiction"), x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString("Not Set"), 170);
         }
     }
 }

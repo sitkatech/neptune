@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace Neptune.Web.Models
 {
     public partial class OnlandVisualTrashAssessment : IAuditableEntity

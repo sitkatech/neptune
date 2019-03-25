@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -9,6 +10,7 @@ using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
+using Neptune.Web.Security;
 using static System.String;
 
 namespace Neptune.Web.Models
@@ -32,7 +34,21 @@ namespace Neptune.Web.Models
             return DeleteUrlTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
         }
 
+        public static readonly UrlTemplate<int> DetailUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
+        public static HtmlString GetDetailUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
+        {
+            if (new OnlandVisualTrashAssessmentViewFeature().HasPermission(currentPerson, onlandVisualTrashAssessment)
+                    .HasPermission && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
+                OnlandVisualTrashAssessmentStatus.Complete)
+            {
+                return new HtmlString(
+                    $"<a href='{DetailUrlTemplate.ParameterReplace(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)}'>View</a>");
+            }
 
+            return new HtmlString("");
+        }
         public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
             if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)
@@ -61,7 +77,7 @@ namespace Neptune.Web.Models
                 ? ovta.OnlandVisualTrashAssessmentObservations.Single().LocationPoint // don't attempt to calculate the transect
                 : ovta.GetTransect();
 
-            return HttpRequestStorage.DatabaseEntities.Parcels.Where(x=>x.ParcelGeometry.Intersects(transect));
+            return HttpRequestStorage.DatabaseEntities.Parcels.Where(x => x.ParcelGeometry.Intersects(transect));
         }
 
         public static DbGeometry GetAreaViaTransect(this OnlandVisualTrashAssessment ovta)
@@ -101,7 +117,7 @@ namespace Neptune.Web.Models
                 .OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.ToList()
                 .Select(x => new PreliminarySourceIdentificationSimple(x)).ToList();
 
-            var missingGuys = PreliminarySourceIdentificationType.All.Except(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x=>x.PreliminarySourceIdentificationType)).Select(x=>new PreliminarySourceIdentificationSimple(x));
+            var missingGuys = PreliminarySourceIdentificationType.All.Except(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Select(x => x.PreliminarySourceIdentificationType)).Select(x => new PreliminarySourceIdentificationSimple(x));
             presentGuys.AddRange(missingGuys);
 
             return presentGuys;
@@ -127,7 +143,7 @@ namespace Neptune.Web.Models
 
 
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
-                featureCollection.Features.AddRange(new List<Feature> {feature});
+                featureCollection.Features.AddRange(new List<Feature> { feature });
 
                 transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
                     1,

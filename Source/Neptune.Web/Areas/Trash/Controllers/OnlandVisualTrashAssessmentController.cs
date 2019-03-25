@@ -193,7 +193,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         public ViewResult RecordObservations(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
@@ -203,7 +203,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RecordObservations(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
@@ -244,7 +244,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         public ViewResult AddOrRemoveParcels(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
@@ -257,7 +257,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult AddOrRemoveParcels(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
@@ -292,7 +292,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         public ViewResult RefineAssessmentArea(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
@@ -301,7 +301,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RefineAssessmentArea(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey, RefineAssessmentAreaViewModel viewModel)
         {
@@ -334,7 +334,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         public ViewResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
@@ -361,7 +361,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult FinalizeOVTA(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             FinalizeOVTAViewModel viewModel)
@@ -378,7 +378,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             if (viewModel.Finalize.GetValueOrDefault())
             {
                 return Redirect(
-                    SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index()));
+                    SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Detail(onlandVisualTrashAssessment)));
             }
             else
             {
@@ -389,7 +389,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpGet]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         public PartialViewResult RefreshParcels(
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
         {
@@ -409,7 +409,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         }
 
         [HttpPost]
-        [OnlandVisualTrashAssessmentViewFeature]
+        [OnlandVisualTrashAssessmentEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult RefreshParcels(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ConfirmDialogFormViewModel viewModel) //note that the viewModel is not actually used; we only need it to satisfy our opinionated routetablebuilder
