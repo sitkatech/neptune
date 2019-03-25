@@ -1,0 +1,111 @@
+﻿@using MoreLinq
+@using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
+@using Neptune.Web.Models
+@inherits Detail
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Assessment Summary
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 control-label text-right">
+                        <label>Assessment Area</label>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        @ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.GetDisplayNameAsDetailUrl(ViewDataTyped.CurrentPerson)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 control-label text-right">
+                        <label>Assessment Date</label>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        @* ReSharper disable once PossibleInvalidOperationException *@
+                        @ViewDataTyped.OnlandVisualTrashAssessment.CompletedDate.Value.ToShortDateString()
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 control-label text-right">
+                        <label> Score</label>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        @ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 control-label text-right">
+                        <label>Notes</label>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        @ViewDataTyped.OnlandVisualTrashAssessment.Notes
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Preliminary Source Identification
+            </div>
+            <div class="panel-body">
+                @{
+                    var br = true;
+                    foreach (var categoryRow in PreliminarySourceIdentificationCategory.All.Batch(2))
+                    {
+                        <div class="row">
+                            @foreach (var category in categoryRow)
+                            {
+                                <div class="col-sm-6 col-xs-12">
+                                    <label>@category.PreliminarySourceIdentificationCategoryDisplayName</label><br />
+
+                                    @if (ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any(x => x.PreliminarySourceIdentificationType.PreliminarySourceIdentificationCategory == category))
+                                    {
+                                        foreach (var type in category.PreliminarySourceIdentificationTypes)
+                                        {
+
+                                            var preliminarySourceIdentificationSimple = ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.SingleOrDefault(x => x.PreliminarySourceIdentificationTypeID == type.PreliminarySourceIdentificationTypeID);
+                                            if (preliminarySourceIdentificationSimple != null)
+                                            {
+                                                <label style="font-weight: normal;">
+                                                    @preliminarySourceIdentificationSimple.GetDisplay()
+                                                </label>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="systemText">No Preliminary Sources identified for @category.PreliminarySourceIdentificationCategoryDisplayName</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        if (br)
+                        {
+                            <br />
+                            br = false;
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="panel panelNeptune">
+            <div class="panel-heading panelTitle">
+                Observations
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+</div>

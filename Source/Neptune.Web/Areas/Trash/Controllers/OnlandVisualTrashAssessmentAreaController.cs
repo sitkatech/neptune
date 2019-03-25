@@ -4,10 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using GeoJSON.Net.Feature;
-using LtInfo.Common.GeoJson;
 using LtInfo.Common.MvcResults;
-using Neptune.Web.Areas.Trash.Views;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
@@ -15,7 +12,6 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
-using FeatureCollection = GeoJSON.Net.Feature.FeatureCollection;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -37,10 +33,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
 
             var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
-            var viewData = new DetailViewData(CurrentPerson,
+            var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson);
 
-            return RazorView<Detail, DetailViewData>(viewData);
+            return RazorView<Views.OnlandVisualTrashAssessmentArea.Detail, Views.OnlandVisualTrashAssessmentArea.DetailViewData>(viewData);
         }
 
         [NeptuneViewFeature]

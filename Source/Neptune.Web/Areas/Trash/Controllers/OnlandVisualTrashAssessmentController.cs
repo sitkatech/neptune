@@ -29,6 +29,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
     {
         [HttpGet]
         [NeptuneViewFeature]
+        public ViewResult Detail(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            Check.Assert(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete, "No details are available for this assessment because it has not been completed.");
+
+            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment));
+        }
+
+        [HttpGet]
+        [NeptuneViewFeature]
         public ViewResult Index()
         {
             var viewData = new IndexViewData(CurrentPerson,

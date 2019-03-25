@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -398,6 +399,7 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cs" />
+    <Compile Include="Models\OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.cs" />
     <Compile Include="Models\PreliminarySourceIdentificationType.cs" />
     <Compile Include="Views\Help\BulkUploadRequest.cs" />
     <Compile Include="Views\Help\BulkUploadRequestViewData.cs" />
@@ -1165,6 +1167,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\TrashMapAssetPanel.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\Detail.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cshtml" />
+    <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
