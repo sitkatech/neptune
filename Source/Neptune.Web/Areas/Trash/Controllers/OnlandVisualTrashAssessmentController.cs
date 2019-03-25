@@ -34,7 +34,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
             Check.Assert(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete, "No details are available for this assessment because it has not been completed.");
 
-            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment));
+            var observationsLayerGeoJson = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            var assessmentAreaLayerGeoJson = GetAssessmentAreaLayerGeoJson(onlandVisualTrashAssessment, false);
+
+            var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
+
+            var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transsectLineLayerGeoJson);
+
+            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment, new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations, NeptuneWebConfiguration.ParcelMapServiceUrl)));
         }
 
         [HttpGet]
