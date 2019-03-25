@@ -98,18 +98,22 @@
                 };
             }
         });
-        var transectLineLayer = L.geoJson(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {
-            style: function (feature) {
-                return {
-                    fillOpacity: 0.5,
-                    color: "#000000",
-                    weight: 2,
-                    stroke: true
-                };
-            }
-        });
 
-        transectLineLayer.addTo(summaryMap.map);
+        if (mapInitJson.TransectLineLayerGeoJson) {
+
+            var transectLineLayer = L.geoJson(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {
+                style: function (feature) {
+                    return {
+                        fillOpacity: 0.5,
+                        color: "#000000",
+                        weight: 2,
+                        stroke: true
+                    };
+                }
+            });
+
+            transectLineLayer.addTo(summaryMap.map);
+        }
         assessmentAreaLayer.addTo(summaryMap.map);
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
     });
