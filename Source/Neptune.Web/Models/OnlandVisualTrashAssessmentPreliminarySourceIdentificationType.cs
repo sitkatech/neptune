@@ -8,7 +8,7 @@ namespace Neptune.Web.Models
         {
             if (PreliminarySourceIdentificationType.IsOther())
             {
-                return ExplanationIfTypeIsOther;
+                return $"Other: {ExplanationIfTypeIsOther}";
             }
 
             return PreliminarySourceIdentificationType.PreliminarySourceIdentificationTypeDisplayName;
