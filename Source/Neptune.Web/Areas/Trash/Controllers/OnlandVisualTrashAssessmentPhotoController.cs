@@ -28,14 +28,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ObservationPhotoStagingSimple opss)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new
-                {
-                    Error = "There was an error uploading the image. Please try again."
-                });
-            }
-
             var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
 
             var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,

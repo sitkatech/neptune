@@ -209,6 +209,11 @@
 
         $scope.stagePhoto = function () {
             var file = jQuery("#photoUpload")[0].files[0];
+            if (!file.name.trim()) {
+                var blob = file.slice(0, file.size, file.type);
+                var newFile = new File([blob], 'image.jpg', { type: file.type });
+                file = newFile;
+            }
             var formData = new FormData();
             formData.append("Photo", file);
 
