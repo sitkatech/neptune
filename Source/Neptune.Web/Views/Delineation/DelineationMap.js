@@ -278,6 +278,52 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
     autoDelineate.MakeDelineationRequest(latLng);
 };
 
+/* "Trace-Delineate Mode"
+ * Map is locked down while the ajax calls for the network catchment trace are run.
+ *
+ * After a failed return, the failure is reported and the UI unblocked.
+ * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the trace-delineation.
+ */
+
+NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
+
+    this.beginDelineationControl.remove();
+    this.beginDelineationControl = null;
+
+    var latLng = this.lastSelected.getLayers()[0].getLatLng();
+
+    this.disableUserInteraction();
+    this.treatmentBMPLayer.off("click");
+    this.displayLoading();
+
+    var self = this;
+    this.selectFeatureByWfs({
+        cql_filter: "intersects(CatchmentGeometry, POINT(" +
+            latLng.lat +
+            " " +
+            latLng.lng +
+            "))"
+    }, "OCStormwater:NetworkCatchments", function(json) {
+        var feature = L.geoJson(json);
+        self.retrieveAndShowUpstreamCatchments(feature.getLayers()[0].feature);
+    });
+
+    // todo: do the trace
+    // todo: display the trace result
+    // todo: move below code into callback from network catchment stuff
+
+    //window.setTimeout(function() {
+    //        self.selectedAssetControl.enableDelineationButton();
+    //        self.removeLoading();
+    //        self.enableUserInteraction();
+    //        self.hookupSelectTreatmentBMPOnClick();
+    //        self.hookupDeselectOnClick();
+    //        self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
+    //    },
+    //    3000);
+    // todo: pass control to draw mode
+};
+
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
@@ -307,17 +353,6 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
             delineationErrorAlert();
         }
     );
-};
-
-/* "Trace-Delineate Mode"
- * Map is locked down while the ajax calls for the network catchment trace are run.
- *
- * After a failed return, the failure is reported and the UI unblocked.
- * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the trace-delineation.
- */
-
-NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function() {
-    window.alert("You're (not actually) in trace mode right now! :)");
 };
 
 /* Catchment trace requires two ajax calls
