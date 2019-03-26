@@ -227,14 +227,20 @@
                 type: 'POST',
                 success: function (data) {
                     $scope.photoFileTypeError = false;
+
+                    if (data.Error) {
+                        window.alert(data.Error);
+                        return;
+                    }
+                    
                     $scope.currentSelectedMarkerModel.PhotoUrl = data.PhotoStagingUrl;
                     $scope.currentSelectedMarkerModel.PhotoStagingID = data.PhotoStagingID;
                     $scope.$apply();
                     jQuery("#photoUpload").fileinput('reset');
                 },
                 error: function(jq, ts, et) {
-                    console.log(ts);
-                    console.log(et);
+                    window.alert(
+                        "There was an error uploading the image. Please try again. If the issue persists, please contact Support.");
                 }
             });
         };
@@ -267,9 +273,9 @@
                     $scope.currentSelectedMarkerModel.PhotoStagingID = null;
                     $scope.$apply();
                 },
-                error: function(jq, ts, et) {
-                    console.log(ts);
-                    console.log(et);
+                error: function (jq, ts, et) {
+                    window.alert(
+                        "There was an error deleting the image. Please try again. If the issue persists, please contact Support.");
                 }
             });
         };
