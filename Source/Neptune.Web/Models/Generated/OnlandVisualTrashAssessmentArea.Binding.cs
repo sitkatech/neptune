@@ -30,7 +30,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentScoreID, string assessmentAreaDescription, DbGeometry transectLine) : this()
+        public OnlandVisualTrashAssessmentArea(int onlandVisualTrashAssessmentAreaID, string onlandVisualTrashAssessmentAreaName, int stormwaterJurisdictionID, DbGeometry onlandVisualTrashAssessmentAreaGeometry, int? onlandVisualTrashAssessmentScoreID, string assessmentAreaDescription, DbGeometry transectLine, int? transectBackingAssessmentID) : this()
         {
             this.OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentAreaID;
             this.OnlandVisualTrashAssessmentAreaName = onlandVisualTrashAssessmentAreaName;
@@ -39,6 +39,7 @@ namespace Neptune.Web.Models
             this.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentScoreID;
             this.AssessmentAreaDescription = assessmentAreaDescription;
             this.TransectLine = transectLine;
+            this.TransectBackingAssessmentID = transectBackingAssessmentID;
         }
 
         /// <summary>
@@ -127,12 +128,14 @@ namespace Neptune.Web.Models
         public int? OnlandVisualTrashAssessmentScoreID { get; set; }
         public string AssessmentAreaDescription { get; set; }
         public DbGeometry TransectLine { get; set; }
+        public int? TransectBackingAssessmentID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentAreaID; } set { OnlandVisualTrashAssessmentAreaID = value; } }
 
         public virtual ICollection<OnlandVisualTrashAssessment> OnlandVisualTrashAssessments { get; set; }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
         public OnlandVisualTrashAssessmentScore OnlandVisualTrashAssessmentScore { get { return OnlandVisualTrashAssessmentScoreID.HasValue ? OnlandVisualTrashAssessmentScore.AllLookupDictionary[OnlandVisualTrashAssessmentScoreID.Value] : null; } }
+        public virtual OnlandVisualTrashAssessment TransectBackingAssessment { get; set; }
 
         public static class FieldLengths
         {

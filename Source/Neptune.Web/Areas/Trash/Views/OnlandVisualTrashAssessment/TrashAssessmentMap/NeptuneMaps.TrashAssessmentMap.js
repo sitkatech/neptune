@@ -48,7 +48,7 @@ NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions = {
     style: function (feature) {
         return {
             fillOpacity: 0.5,
-            color: "#303030",
+            color: "#FF00FF",
             weight: 2,
             stroke: true
         };

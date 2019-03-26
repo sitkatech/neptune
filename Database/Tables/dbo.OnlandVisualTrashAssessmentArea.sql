@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 	[OnlandVisualTrashAssessmentScoreID] [int] NULL,
 	[AssessmentAreaDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[TransectLine] [geometry] NULL,
+	[TransectBackingAssessmentID] [int] NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentAreaID] ASC
@@ -26,6 +27,11 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessmentArea](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessment_TransectBackingAssessmentID_OnlandVisualTrashAssessmentID] FOREIGN KEY([TransectBackingAssessmentID])
+REFERENCES [dbo].[OnlandVisualTrashAssessment] ([OnlandVisualTrashAssessmentID])
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea] CHECK CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessment_TransectBackingAssessmentID_OnlandVisualTrashAssessmentID]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessmentArea]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentScore_OnlandVisualTrashAssessmentScoreID] FOREIGN KEY([OnlandVisualTrashAssessmentScoreID])
 REFERENCES [dbo].[OnlandVisualTrashAssessmentScore] ([OnlandVisualTrashAssessmentScoreID])

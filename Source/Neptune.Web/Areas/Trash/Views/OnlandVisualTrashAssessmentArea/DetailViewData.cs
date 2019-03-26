@@ -58,14 +58,17 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
     {
         public LayerGeoJson AssessmentAreaLayerGeoJson { get; set; }
         public LayerGeoJson TransectLineLayerGeoJson { get; set; }
+        public LayerGeoJson ObservationsLayerGeoJson { get; }
 
         public OVTAAreaMapInitJson(string mapDivID,
-            LayerGeoJson assessmentAreaLayerGeoJson, LayerGeoJson transectLineLayerGeoJson) : base(mapDivID, DefaultZoomLevel,
+            LayerGeoJson assessmentAreaLayerGeoJson, LayerGeoJson transectLineLayerGeoJson,
+            LayerGeoJson observationsLayerGeoJson) : base(mapDivID, DefaultZoomLevel,
             MapInitJsonHelpers.GetJurisdictionMapLayers().ToList(),
             BoundingBox.MakeBoundingBoxFromLayerGeoJsonList(new List<LayerGeoJson> { assessmentAreaLayerGeoJson }))
         {
             AssessmentAreaLayerGeoJson = assessmentAreaLayerGeoJson;
             TransectLineLayerGeoJson = transectLineLayerGeoJson;
+            ObservationsLayerGeoJson = observationsLayerGeoJson;
         }
     }
 }

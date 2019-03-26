@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using LtInfo.Common.MvcResults;
+using MoreLinq;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
@@ -26,13 +27,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 new List<OnlandVisualTrashAssessmentArea> { onlandVisualTrashAssessmentArea }
                     .ToGeoJsonFeatureCollection();
 
+            
+            var observationsLayerGeoJson = onlandVisualTrashAssessmentArea.TransectBackingAssessment?.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+
+
             var assessmentAreaLayerGeoJson = new LayerGeoJson("assessmentArea", geoJsonFeatureCollection,
                 "#ffff00", .5m,
                 LayerInitialVisibility.Show);
 
             var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
 
-            var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson);
+            var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson, observationsLayerGeoJson);
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
                 onlandVisualTrashAssessmentArea, mapInitJson);
 

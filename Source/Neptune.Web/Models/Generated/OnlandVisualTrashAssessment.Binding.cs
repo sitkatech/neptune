@@ -24,6 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected OnlandVisualTrashAssessment()
         {
+            this.OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment = new HashSet<OnlandVisualTrashAssessmentArea>();
             this.OnlandVisualTrashAssessmentObservations = new HashSet<OnlandVisualTrashAssessmentObservation>();
             this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
             this.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = new HashSet<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>();
@@ -91,13 +92,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any();
+            return OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment.Any() || OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};
 
 
         /// <summary>
@@ -121,6 +122,11 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
+
+            foreach(var x in OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
 
             foreach(var x in OnlandVisualTrashAssessmentObservations.ToList())
             {
@@ -156,6 +162,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
+        public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes { get; set; }
