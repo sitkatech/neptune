@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Common;
@@ -27,6 +28,14 @@ namespace Neptune.Web.Areas.Trash.Controllers
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ObservationPhotoStagingSimple opss)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new
+                {
+                    Error = "There was an error uploading the image. Please try again."
+                });
+            }
+
             var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
 
             var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,
@@ -81,6 +90,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public class ObservationPhotoStagingSimple
         {
             [SitkaFileExtensions("jpg|jpeg|gif|png")]
+            [Required]
             public HttpPostedFileBase Photo { get; set; }
         }
     }
