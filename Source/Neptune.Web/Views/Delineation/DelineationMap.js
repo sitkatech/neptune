@@ -309,6 +309,17 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
     );
 };
 
+/* "Trace-Delineate Mode"
+ * Map is locked down while the ajax calls for the network catchment trace are run.
+ *
+ * After a failed return, the failure is reported and the UI unblocked.
+ * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the trace-delineation.
+ */
+
+NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function() {
+    window.alert("You're (not actually) in trace mode right now! :)");
+};
+
 /* Catchment trace requires two ajax calls
  * The Neptune Application provides the list of upstream catchments
  * and GeoServer provides the actual geometry.

@@ -8,16 +8,16 @@
 L.Control.TemplatedControl = L.Control.extend({
     templateID: null, // must set this value when extending; else onAdd will not work.
 
-    initializeControlInstance: function() {
+    initializeControlInstance: function () {
         // override this method to perform additional initialization during onAdd
     },
 
-    getTrackedElement: function(id) {
+    getTrackedElement: function (id) {
         // todo: might not be a bad idea to memoize
         return this.parentElement.querySelector("#" + id);
     },
 
-    onAdd: function(map) {
+    onAdd: function (map) {
         var template = document.querySelector("#" + this.templateID);
         this.parentElement = document.importNode(template.content, true).firstElementChild;
 
@@ -25,7 +25,7 @@ L.Control.TemplatedControl = L.Control.extend({
         return this.parentElement;
     },
 
-    onRemove: function(map) {
+    onRemove: function (map) {
         jQuery(this.parentElement).remove();
     }
 });
@@ -38,11 +38,11 @@ var LeafletShades = L.Layer.extend({
         bounds: null
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
         L.setOptions(this, options);
     },
 
-    onAdd: function(map) {
+    onAdd: function (map) {
         this._map = map;
         this._addEventListeners();
 
@@ -94,7 +94,7 @@ var LeafletShades = L.Layer.extend({
 // todo: watermark is sufficiently general as to belong to its own js file
 L.Control.Watermark = L.Control.extend({
     onAdd: function (map) {
-        
+
         var img = L.DomUtil.create("img");
 
         img.src = "/Content/img/OCStormwater/banner_logo.png";
@@ -108,7 +108,7 @@ L.Control.Watermark = L.Control.extend({
     }
 });
 
-L.control.watermark = function(opts) {
+L.control.watermark = function (opts) {
     return new L.Control.Watermark(opts);
 };
 
@@ -138,13 +138,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
             "click",
-            function(e) {
+            function (e) {
                 this.exitDrawCatchmentMode(false);
             }.bind(this));
 
         L.DomEvent.on(this.getTrackedElement("saveDelineationButton"),
             "click",
-            function(e) {
+            function (e) {
                 this.exitDrawCatchmentMode(true);
             }.bind(this));
     },
@@ -260,7 +260,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     }
 });
 
-L.control.delineationSelectedAsset = function(opts) {
+L.control.delineationSelectedAsset = function (opts) {
     return new L.Control.DelineationMapSelectedAsset(opts);
 };
 
@@ -269,6 +269,13 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
     initializeControlInstance: function () {
         stopClickPropagation(this.parentElement);
+
+        this.getTrackedElement("delineationTypeOptions").hidden = true;
+
+        var self = this;
+        this.parentElement.querySelectorAll("[name='flowOption']").forEach(function(el) {
+            L.DomEvent.on(el, 'click', function() { self.displayDelineationOptionsForFlowOption(this.value); });
+        });
 
         var drawOptionText = this.treatmentBMPFeature.properties.DelineationURL
             ? "Revise the Catchment Area"
@@ -286,7 +293,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         var goBtn = this.getTrackedElement("continueDelineationButton");
         L.DomEvent.on(goBtn,
             "click",
-            function(e) {
+            function (e) {
                 this.delineate();
             }.bind(this));
 
@@ -299,24 +306,51 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             });
     },
 
-    initialize: function(options, treatmentBMPFeature) {
+    initialize: function (options, treatmentBMPFeature) {
         this.treatmentBMPFeature = treatmentBMPFeature;
         L.setOptions(this, options);
     },
 
-    delineate: function() {
+    displayDelineationOptionsForFlowOption: function (flowOption) {
+        
+        if (flowOption === "distributed") {
+            this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
+            this.getTrackedElement("delineationTypeOptions").hidden = false;
+
+            this.getTrackedElement("delineationOptionAuto").hidden = false;
+            this.getTrackedElement("delineationOptionDraw").hidden = false;
+
+            this.getTrackedElement("delineateOptionTrace").hidden = true;
+        } else if (flowOption === "centralized") {
+            this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
+            this.getTrackedElement("delineationTypeOptions").hidden = false;
+            
+            this.getTrackedElement("delineateOptionTrace").hidden = false;
+
+            this.getTrackedElement("delineationOptionAuto").hidden = true;
+            this.getTrackedElement("delineationOptionDraw").hidden = true;
+        }
+    },
+
+    delineate: function () {
         var flowOption = jQuery("input[name='flowOption']:checked").val();
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
         // todo (future story): condition on flowOption. For now only Distributed delineations are supported    
-        if (delineationOption === "drawDelineate") {
-            window.delineationMap.launchDrawCatchmentMode();
-        } else if (delineationOption === "autoDelineate") {
-            window.delineationMap.launchAutoDelineateMode();
+        if (flowOption === "distributed") {
+            if (delineationOption === "drawDelineate") {
+                window.delineationMap.launchDrawCatchmentMode();
+            } else if (delineationOption === "autoDelineate") {
+                window.delineationMap.launchAutoDelineateMode();
+            }
+        } else if (flowOption === "centralized") {
+            if (delineationOption === "traceDelineate") {
+                window.delineationMap.launchTraceDelineateMode();
+            }
         }
     }
 });
 
-L.control.beginDelineation = function(opts, treatmentBMPFeature) {
+L.control.beginDelineation = function (opts, treatmentBMPFeature) {
     return new L.Control.BeginDelineation(opts, treatmentBMPFeature);
 };

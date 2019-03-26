@@ -8,7 +8,7 @@
 }
 .neptune-leaflet-control#beginDelineationControl {
   width: 375px;
-  height: 280px;
+  min-height: 260px;
 }
 .leaflet-bar hr {
   margin-top: 10px;
