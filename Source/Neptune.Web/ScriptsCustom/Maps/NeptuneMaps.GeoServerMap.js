@@ -96,6 +96,7 @@ NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, 
 };
 
 
+// todo: merge these two methods because promises are not the future but the now.
 NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, layerName, response, error) {
     var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
     SitkaAjax.ajax({
@@ -103,4 +104,12 @@ NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, 
         dataType: "json",
         jsonpCallback: "getJson"
     }, response, error);                
+};
+
+NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfsReturnPromise = function( layerName, customParams) {
+    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
+    return jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        type: "GET"
+    });
 };

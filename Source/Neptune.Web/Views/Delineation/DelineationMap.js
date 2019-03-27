@@ -297,38 +297,31 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.displayLoading();
 
     var self = this;
-    this.selectFeatureByWfs({
-        cql_filter: "intersects(CatchmentGeometry, POINT(" +
-            latLng.lat +
-            " " +
-            latLng.lng +
-            "))"
-    }, "OCStormwater:NetworkCatchments", function(json) {
-        var feature = L.geoJson(json);
+    this.selectFeatureByWfsReturnPromise(
+        "OCStormwater:NetworkCatchments",
+        {
+            cql_filter: "intersects(CatchmentGeometry, POINT(" +
+                latLng.lat +
+                " " +
+                latLng.lng +
+                "))"
+        }).then(function(json) {
+        // fixme: don't actually need the overhead of creating a layer if RUCID can just take an ID instead
+        var layer = L.geoJson(json);
+        return self.retrieveUpstreamCatchmentIDs(layer.getLayers()[0].feature); // return promise
+    }).then(function(response) {
+        return self.retrieveUpstreamCatchmentGeometry(response);
+    }).then(function(response) {
+        self.addUpstreamCatchmentLayer(response);
+    }).always(function() {
 
-        
-        self.retrieveUpstreamCatchmentIDs(feature.getLayers()[0].feature).then(function (response) {
-        
-            self.retrieveUpstreamCatchmentGeometry(response);
-        }).fail(function (error) {
-        
-            this.selectedAssetControl.enableUpstreamCatchmentsButton();
-            upstreamCatchmentErrorAlert();
-        });
+        self.selectedAssetControl.enableDelineationButton();
+        self.removeLoading();
+        self.enableUserInteraction();
+        self.hookupSelectTreatmentBMPOnClick();
+        self.hookupDeselectOnClick();
+        self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
     });
-
-    // todo: move below code into callback from network catchment stuff
-
-    //window.setTimeout(function() {
-    //        self.selectedAssetControl.enableDelineationButton();
-    //        self.removeLoading();
-    //        self.enableUserInteraction();
-    //        self.hookupSelectTreatmentBMPOnClick();
-    //        self.hookupDeselectOnClick();
-    //        self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
-    //    },
-    //    3000);
-    // todo: pass control to draw mode
 };
 
 
@@ -374,6 +367,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function (networkCatchmentFeature) {
     var self = this;
 
+    
     var catchmentIDPromise = this.retrieveUpstreamCatchmentIDs(networkCatchmentFeature),
         geometryPromise = catchmentIDPromise.then(function (response) {
             return self.retrieveUpstreamCatchmentGeometry(response);
@@ -400,7 +394,6 @@ NeptuneMaps.DelineationMap.prototype.retrieveUpstreamCatchmentIDs = function(net
     }
 
     var url = "/NetworkCatchment/UpstreamCatchments/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
-    var self = this;
 
     return jQuery.ajax({
         url: url,
