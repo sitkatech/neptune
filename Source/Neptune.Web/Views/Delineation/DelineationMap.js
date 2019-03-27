@@ -367,17 +367,11 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function (networkCatchmentFeature) {
     var self = this;
 
-    
-    var catchmentIDPromise = this.retrieveUpstreamCatchmentIDs(networkCatchmentFeature),
-        geometryPromise = catchmentIDPromise.then(function (response) {
-            return self.retrieveUpstreamCatchmentGeometry(response);
-        });
-
-    geometryPromise.then(function(response) {
+    this.retrieveUpstreamCatchmentIDs(networkCatchmentFeature).then(function(response) {
+        return self.retrieveUpstreamCatchmentGeometry(response);
+    }).then(function(response) {
         self.addUpstreamCatchmentLayer(response);
-    });
-    
-    geometryPromise.fail(function (error) {
+    }).fail(function(error) {
         self.selectedAssetControl.enableUpstreamCatchmentsButton();
         upstreamCatchmentErrorAlert();
     });
