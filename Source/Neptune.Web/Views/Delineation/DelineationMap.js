@@ -286,6 +286,10 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
  */
 
 NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
 
     this.beginDelineationControl.remove();
     this.beginDelineationControl = null;
@@ -305,33 +309,57 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
                 " " +
                 latLng.lng +
                 "))"
-        }).then(function(json) {
-        // fixme: don't actually need the overhead of creating a layer if RUCID can just take an ID instead
-        var layer = L.geoJson(json);
-        return self.retrieveUpstreamCatchmentIDs(layer.getLayers()[0].feature); // return promise
-    }).then(function(response) {
-        return self.retrieveUpstreamCatchmentGeometry(response);
-    }).then(function(response) {
-        self.addUpstreamCatchmentLayer(response);
-    }).always(function() {
+        }).then(function (json) {
+            // fixme: don't actually need the overhead of creating a layer if RUCID can just take an ID instead
+            var layer = L.geoJson(json);
+            return self.retrieveUpstreamCatchmentIDs(layer.getLayers()[0].feature); // return promise
+        }).then(function (response) {
+            return self.retrieveUpstreamCatchmentGeometry(response);
+        }).then(function (response) {
+            self.showTraceDelineation(response);
+            self.removeLoading();
+            self.enableUserInteraction();
+            self.launchDrawCatchmentMode();
+        }).fail(function () {
+            self.selectedAssetControl.enableDelineationButton();
+            self.removeLoading();
+            self.enableUserInteraction();
+            self.hookupSelectTreatmentBMPOnClick();
+            self.hookupDeselectOnClick();
+            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
+            window.alert(
+                "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
+        });
+};
 
-        self.selectedAssetControl.enableDelineationButton();
-        self.removeLoading();
-        self.enableUserInteraction();
-        self.hookupSelectTreatmentBMPOnClick();
-        self.hookupDeselectOnClick();
-        self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
-    });
+NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (geoJson) {
+    if (this.selectedBMPDelineationLayer) {
+        this.selectedBMPDelineationLayer.remove();
+        this.selectedBMPDelineationLayer = null;
+    }
+
+    // todo: my layer will be a list of polygons; I need to union those badbois
+
+    this.selectedBMPDelineationLayer = L.geoJSON(geoJson,
+        {
+            style: function (feature) {
+                return {
+                    fillColor: "#4782ff",
+                    fill: true,
+                    fillOpacity: 0.4,
+                    color: "#4782ff",
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+    this.selectedBMPDelineationLayer.addTo(this.map);
 };
 
 
 /* For getting the BMP delineation from the Neptune DB
  */
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
-    if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-        this.map.removeLayer(this.selectedBMPDelineationLayer);
-        this.selectedBMPDelineationLayer = null;
-    }
 
     if (!bmpFeature.properties["DelineationURL"]) {
         return;
