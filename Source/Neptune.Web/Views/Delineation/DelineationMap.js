@@ -222,7 +222,7 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
 
     var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
     var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
-    debugger;
+    
     jQuery.ajax({
         url: delineationUrl,
         data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
@@ -371,24 +371,22 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     }
 
     var url = bmpFeature.properties["DelineationURL"];
-    SitkaAjax.ajax({
+    var self = this;
+    jQuery.ajax({
         url: url,
         dataType: "json",
-        jsonpCallback: "getJson"
-    },
-        function (response) {
+        jsonpCallback: "getJson",
+        success: function(response) {
             if (response.noDelineation) {
                 return;
             }
             if (response.type !== "Feature") {
                 delineationErrorAlert();
             }
-            this.addBMPDelineationLayer(response);
-        }.bind(this),
-        function (error) {
-            delineationErrorAlert();
-        }
-    );
+            self.addBMPDelineationLayer(response);
+        },
+        error: delineationErrorAlert
+    });
 };
 
 /* Catchment trace requires two ajax calls
@@ -474,6 +472,11 @@ NeptuneMaps.DelineationMap.prototype.removeUpstreamCatchmentsLayer = function ()
 };
 
 NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJsonResponse) {
+    if (this.selectedBMPDelineationLayer) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
+
 
     this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
         {

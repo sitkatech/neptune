@@ -276,6 +276,9 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         this.parentElement.querySelectorAll("[name='flowOption']").forEach(function(el) {
             L.DomEvent.on(el, 'click', function() { self.displayDelineationOptionsForFlowOption(this.value); });
         });
+        this.parentElement.querySelectorAll("[name='delineationOption']").forEach(function(el) {
+            L.DomEvent.on(el, 'click', function() { self.enableDelineationButton(); });
+        });
 
         var drawOptionText = this.treatmentBMPFeature.properties.DelineationURL
             ? "Revise the Catchment Area"
@@ -350,7 +353,11 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
                 window.delineationMap.launchTraceDelineateMode();
             }
         }
-    }
+    },
+
+    enableDelineationButton() {
+        this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
+    },
 });
 
 L.control.beginDelineation = function (opts, treatmentBMPFeature) {
