@@ -313,7 +313,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
     displayDelineationOptionsForFlowOption: function (flowOption) {
         
-        if (flowOption === "distributed") {
+        if (flowOption === "Distributed") {
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
 
@@ -321,7 +321,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationOptionDraw").hidden = false;
 
             this.getTrackedElement("delineateOptionTrace").hidden = true;
-        } else if (flowOption === "centralized") {
+        } else if (flowOption === "Centralized") {
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
             
@@ -334,16 +334,18 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
     delineate: function () {
         var flowOption = jQuery("input[name='flowOption']:checked").val();
+
+        window.delineationMap.delineationType = flowOption;
+
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
-        // todo (future story): condition on flowOption. For now only Distributed delineations are supported    
-        if (flowOption === "distributed") {
+        if (flowOption === "Distributed") {
             if (delineationOption === "drawDelineate") {
                 window.delineationMap.launchDrawCatchmentMode();
             } else if (delineationOption === "autoDelineate") {
                 window.delineationMap.launchAutoDelineateMode();
             }
-        } else if (flowOption === "centralized") {
+        } else if (flowOption === "Centralized") {
             if (delineationOption === "traceDelineate") {
                 window.delineationMap.launchTraceDelineateMode();
             }

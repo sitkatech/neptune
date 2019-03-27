@@ -76,15 +76,42 @@ namespace Neptune.Web.Controllers
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
         {
             var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, 4326).ToSqlGeometry().MakeValid().ToDbGeometry();
+            
+            if (geom != null)
+            {
+                // make sure the SRID is 4326 before we save
+                var wkt = geom.ToString();
+
+                if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
+                {
+                    wkt = wkt.Substring(wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
+                }
+                else
+                {
+                    wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
+                }
+
+                geom = DbGeometry.FromText(wkt, 4326);
+            }
+
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
+
+            if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
+            {
+                return Json(new {error = "Invalid Delineation Type"});
+            }
+
+            var delineationType = DelineationType.ToType(delineationTypeEnum);
+
             if (treatmentBMPDelineation != null)
             {
                 if (geom != null)
                 {
                     treatmentBMPDelineation.DelineationGeometry = geom;
-                    treatmentBMPDelineation.DelineationTypeID = DelineationType.Distributed.DelineationTypeID;
+                    treatmentBMPDelineation.DelineationTypeID =
+                        delineationType.DelineationTypeID;
                 }
                 else
                 {
@@ -100,11 +127,13 @@ namespace Neptune.Web.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom, DelineationType.Distributed);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
+
+            
 
             return Json(new {success = true});
         }
@@ -113,5 +142,6 @@ namespace Neptune.Web.Controllers
     public class ForTreatmentBMPViewModel
     {
         public string WellKnownText { get; set; }
+        public string DelineationType { get; set; }
     }
 }

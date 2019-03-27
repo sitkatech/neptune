@@ -222,9 +222,10 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
 
     var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
     var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
+    debugger;
     jQuery.ajax({
         url: delineationUrl,
-        data: { "WellKnownText": wkt },
+        data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
         type: 'POST',
         success: function (data) {
             this.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;

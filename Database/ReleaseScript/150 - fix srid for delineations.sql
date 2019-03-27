@@ -1,0 +1,1 @@
+update dbo.Delineation set DelineationGeometry.STSrid = 4326
