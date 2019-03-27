@@ -305,7 +305,16 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             "))"
     }, "OCStormwater:NetworkCatchments", function(json) {
         var feature = L.geoJson(json);
-        self.retrieveAndShowUpstreamCatchments(feature.getLayers()[0].feature);
+
+        
+        self.retrieveUpstreamCatchmentIDs(feature.getLayers()[0].feature).then(function (response) {
+        
+            self.retrieveUpstreamCatchmentGeometry(response);
+        }).fail(function (error) {
+        
+            this.selectedAssetControl.enableUpstreamCatchmentsButton();
+            upstreamCatchmentErrorAlert();
+        });
     });
 
     // todo: move below code into callback from network catchment stuff
@@ -362,37 +371,49 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
  * It would be ideal to rewrite these routine to use promises.
  */
 
-NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function(networkCatchmentFeature) {
+NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function (networkCatchmentFeature) {
+    var self = this;
+
+    var catchmentIDPromise = this.retrieveUpstreamCatchmentIDs(networkCatchmentFeature),
+        geometryPromise = catchmentIDPromise.then(function (response) {
+            return self.retrieveUpstreamCatchmentGeometry(response);
+        });
+
+    geometryPromise.then(function(response) {
+        self.addUpstreamCatchmentLayer(response);
+    });
+    
+    geometryPromise.fail(function (error) {
+        self.selectedAssetControl.enableUpstreamCatchmentsButton();
+        upstreamCatchmentErrorAlert();
+    });
+};
+
+NeptuneMaps.DelineationMap.prototype.retrieveUpstreamCatchmentIDs = function(networkCatchmentFeature) {
     this.selectedAssetControl.disableUpstreamCatchmentsButton();
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentsLayer)) {
         this.map.removeLayer(this.upstreamCatchmentsLayer);
     }
 
     if (!networkCatchmentFeature.properties["NetworkCatchmentID"]) {
-        return;
+        return jQuery.Deferred();
     }
 
     var url = "/NetworkCatchment/UpstreamCatchments/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
     var self = this;
-    jQuery.ajax({
+
+    return jQuery.ajax({
         url: url,
-        type: "GET",
-        success: function(response) {
-            self.processUpstreamCatchmentIDResponse(response);
-        },
-        error: function(error) {
-            this.selectedAssetControl.enableUpstreamCatchmentsButton();
-            upstreamCatchmentErrorAlert();
-        }
+        type: "GET"
     });
 };
 
-NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = function(response) {
+NeptuneMaps.DelineationMap.prototype.retrieveUpstreamCatchmentGeometry = function(response) {
     this.selectedAssetControl.reportUpstreamCatchments(response.networkCatchmentIDs.length);
 
     if (response.networkCatchmentIDs.length === 0) {
         this.selectedAssetControl.enableUpstreamCatchmentsButton();
-        return;
+        return jQuery.Deferred();
     }
     var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
         {
@@ -400,18 +421,9 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
         });
 
     var self = this;
-    jQuery.ajax({
+    return jQuery.ajax({
         url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
-        type: "GET",
-        success:
-            function(json) {
-                self.addUpstreamCatchmentLayer(json);
-            },
-        error:
-            function(error) {
-                self.selectedAssetControl.enableUpstreamCatchmentsButton();
-                upstreamCatchmentErrorAlert();
-            }
+        type: "GET"
     });
 };
 
