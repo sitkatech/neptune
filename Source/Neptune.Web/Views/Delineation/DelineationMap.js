@@ -322,6 +322,9 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     // todo: pass control to draw mode
 };
 
+
+/* For getting the BMP delineation from the Neptune DB
+ */
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
@@ -356,7 +359,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
 /* Catchment trace requires two ajax calls
  * The Neptune Application provides the list of upstream catchments
  * and GeoServer provides the actual geometry.
- * It would be ideal to rewrite this in a continuation-passing style.
+ * It would be ideal to rewrite these routine to use promises.
  */
 
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function(networkCatchmentFeature) {
@@ -370,18 +373,18 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = functio
     }
 
     var url = "/NetworkCatchment/UpstreamCatchments/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
-
-    SitkaAjax.ajax({
-            url: url,
-            dataType: "json",
-            jsonpCallback: "getJson"
+    var self = this;
+    jQuery.ajax({
+        url: url,
+        type: "GET",
+        success: function(response) {
+            self.processUpstreamCatchmentIDResponse(response);
         },
-        this.processUpstreamCatchmentIDResponse.bind(this),
-        function(error) {
+        error: function(error) {
             this.selectedAssetControl.enableUpstreamCatchmentsButton();
             upstreamCatchmentErrorAlert();
-        }.bind(this)
-    );
+        }
+    });
 };
 
 NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = function(response) {
@@ -395,19 +398,21 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
         {
             cql_filter: "NetworkCatchmentID IN (" + response.networkCatchmentIDs.toString() + ")"
         });
+
     var self = this;
-    SitkaAjax.ajax({
-            url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
-            dataType: "json",
-            jsonpCallback: "getJson"
-        },
-        function(json) {
-            self.addUpstreamCatchmentLayer(json);
-        },
-        function(error) {
-            self.selectedAssetControl.enableUpstreamCatchmentsButton();
-            upstreamCatchmentErrorAlert();
-        });
+    jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        type: "GET",
+        success:
+            function(json) {
+                self.addUpstreamCatchmentLayer(json);
+            },
+        error:
+            function(error) {
+                self.selectedAssetControl.enableUpstreamCatchmentsButton();
+                upstreamCatchmentErrorAlert();
+            }
+    });
 };
 
 NeptuneMaps.DelineationMap.prototype.addUpstreamCatchmentLayer = function(geoJson) {
