@@ -308,8 +308,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         self.retrieveAndShowUpstreamCatchments(feature.getLayers()[0].feature);
     });
 
-    // todo: do the trace
-    // todo: display the trace result
     // todo: move below code into callback from network catchment stuff
 
     //window.setTimeout(function() {
@@ -397,17 +395,19 @@ NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = functi
         {
             cql_filter: "NetworkCatchmentID IN (" + response.networkCatchmentIDs.toString() + ")"
         });
-
+    var self = this;
     SitkaAjax.ajax({
             url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
             dataType: "json",
             jsonpCallback: "getJson"
         },
-        this.processUpstreamCatchmentGeoServerResponse.bind(this),
+        function(json) {
+            self.addUpstreamCatchmentLayer(json);
+        },
         function(error) {
-            this.selectedAssetControl.enableUpstreamCatchmentsButton();
+            self.selectedAssetControl.enableUpstreamCatchmentsButton();
             upstreamCatchmentErrorAlert();
-        }.bind(this));
+        });
 };
 
 NeptuneMaps.DelineationMap.prototype.addUpstreamCatchmentLayer = function(geoJson) {
