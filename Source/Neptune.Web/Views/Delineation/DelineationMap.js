@@ -535,7 +535,6 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
     
-    this.setSelectedFeature(layer.feature);
     this.selectedAssetControl.treatmentBMP(layer.feature);
     this.retrieveAndShowBMPDelineation(layer.feature);
 
@@ -544,6 +543,8 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     } else {
         this.zoomAndPanToLayer(layer);
     }
+
+    this.setSelectedFeature(layer.feature);
 };
 
 /* helper methods to restore UI interactions after a blocking mode returns */
