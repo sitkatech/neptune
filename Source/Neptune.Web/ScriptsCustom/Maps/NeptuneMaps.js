@@ -351,10 +351,15 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
 NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
-        this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
+        this.map.fitBounds(L.latLngBounds([layer.getLatLng()]), {
+            maxZoom: 18
+        });
     } else {
         if (layer.getBounds().isValid()) {
-            this.map.fitBounds(layer.getBounds());
+            this.map.fitBounds(layer.getBounds(),
+            {
+                maxZoom:18
+            });
         }
     }
 };

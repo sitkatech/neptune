@@ -560,10 +560,16 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         return; //misplaced call
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
-    this.zoomAndPanToLayer(layer);
+    
     this.setSelectedFeature(layer.feature);
     this.selectedAssetControl.treatmentBMP(layer.feature);
     this.retrieveAndShowBMPDelineation(layer.feature);
+
+    if (this.selectedBMPDelineationLayer) {
+        this.map.fitBounds(selectedBMPDelineationLayer.getBounds());
+    } else {
+        this.zoomAndPanToLayer(layer);
+    }
 };
 
 /* helper methods to restore UI interactions after a blocking mode returns */
