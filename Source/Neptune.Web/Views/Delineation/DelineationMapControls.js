@@ -13,7 +13,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
 
-        // todo: there's no reason to set all of these to member variables; just use getTrackedElement()
         this._noAssetSelected = this.parentElement.querySelector("#noAssetSelected");
 
         this._selectedBmpInfo = this.parentElement.querySelector("#selectedBmpInfo");
@@ -47,7 +46,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         }
 
         this._beginDelineationHandler = function (e) {
-            // todo: the use of window.delineationMap throughout to back-reference the map object is a little brittle
             window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
             this.disableDelineationButton();
             e.stopPropagation();
@@ -68,7 +66,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this._delineationButton.innerHTML = "Delineate Drainage Area";
         }
 
-        // todo: lines like these are going to proliferate and it should be possible to DRY it up
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
         this._selectedCatchmentInfo.classList.add("hiddenControlElement");
@@ -80,6 +77,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     exitDrawCatchmentMode: function (save) {
+        debugger;
         this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
@@ -88,7 +86,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     networkCatchment: function (networkCatchmentFeature) {
-        // todo: I'm not sure I like this add/remove pattern but I'm not sure I can get around it. closures for the win?
         if (this._traverseCatchmentsHandler) {
             L.DomEvent.off(this._traverseCatchmentsButton, "click", this._traverseCatchmentsHandler);
             this._traverseCatchmentsHandler = null;
