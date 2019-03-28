@@ -3,33 +3,6 @@
  * HTML templates in DelineationMapTemplates.cshtml 
  */
 
-// WIP: base class for the html-template driven control pattern
-// todo: sufficiently general as to belong to its own js file
-L.Control.TemplatedControl = L.Control.extend({
-    templateID: null, // must set this value when extending; else onAdd will not work.
-
-    initializeControlInstance: function () {
-        // override this method to perform additional initialization during onAdd
-    },
-
-    getTrackedElement: function (id) {
-        // todo: might not be a bad idea to memoize
-        return this.parentElement.querySelector("#" + id);
-    },
-
-    onAdd: function (map) {
-        var template = document.querySelector("#" + this.templateID);
-        this.parentElement = document.importNode(template.content, true).firstElementChild;
-
-        this.initializeControlInstance(map);
-        return this.parentElement;
-    },
-
-    onRemove: function (map) {
-        jQuery(this.parentElement).remove();
-    }
-});
-
 // todo: sufficiently general to pull out.
 var LeafletShades = L.Layer.extend({
     includes: L.Evented ? L.Evented.prototype : L.Mixin.Events,
