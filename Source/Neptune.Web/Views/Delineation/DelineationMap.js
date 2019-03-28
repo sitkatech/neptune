@@ -178,6 +178,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
             // either the selected BMP's delineation didn't exist or it should no longer
             this.selectedBMPDelineationLayer = null;
         }
+        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     } else {
         this.persistDrawnCatchment();
     }
