@@ -300,6 +300,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.removeLoading();
             self.enableUserInteraction();
             self.launchDrawCatchmentMode();
+
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
@@ -312,8 +313,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
             self.enableUserInteraction();
-            self.hookupSelectTreatmentBMPOnClick();
-            self.hookupDeselectOnClick();
         });
 };
 
