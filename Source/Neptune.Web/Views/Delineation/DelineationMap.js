@@ -351,6 +351,10 @@ NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (
 /* For getting the BMP delineation from the Neptune DB
  */
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
+    if (this.selectedBMPDelineationLayer) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
 
     if (!bmpFeature.properties["DelineationURL"]) {
         return;
@@ -566,7 +570,7 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 
     this.treatmentBMPLayer.on("click",
         function (e) {
-            self.removeUpstreamCatchmentsLayer();
+
             self.setSelectedFeature(e.layer.feature);
             self.selectedAssetControl.treatmentBMP(e.layer.feature);
             self.retrieveAndShowBMPDelineation(e.layer.feature);

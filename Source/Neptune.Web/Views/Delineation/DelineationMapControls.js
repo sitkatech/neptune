@@ -70,7 +70,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     exitDrawCatchmentMode: function (save) {
-        debugger;
         this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
