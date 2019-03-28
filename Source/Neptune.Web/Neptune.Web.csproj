@@ -1079,6 +1079,8 @@
     <Content Include="Content\img\SitkaTechnologyGroup\favicon-96x96.png" />
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.css" />
     <Content Include="Content\leaflet\leaflet.groupedlayercontrol\leaflet.groupedlayercontrol.min.js" />
+    <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.css" />
+    <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.js" />
     <Content Include="Content\leaflet\leaflet.spin\leaflet.spin.min.js" />
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.js" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.css" />

@@ -592,14 +592,15 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 };
 
 NeptuneMaps.DelineationMap.prototype.displayLoading = function () {
-    this.frosty = new LeafletShades();
+    this.frosty = new L.LeafletLoading();
     this.frosty.addTo(this.map);
     this.map.spin(true);
 };
-
 NeptuneMaps.DelineationMap.prototype.removeLoading = function () {
-    this.frosty.remove();
-    this.frosty = null;
+    if (this.frosty) {
+        this.frosty.remove();
+        this.frosty = null;
+    }
     this.map.spin(false);
 };
 
