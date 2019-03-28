@@ -21,9 +21,10 @@
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                On-Land Visual Trash Assessment Table
+                On-Land Visual Trash Assessments
             </div>
             <div class="panel-body">
+                <p>This table can be used to search and view individual assessments.</p>
                 @Html.DhtmlxGrid(ViewDataTyped.GridSpec, ViewDataTyped.GridName, ViewDataTyped.GridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
@@ -34,9 +35,10 @@
     <div class="col-xs-12 col-sm-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
-                On-Land Visual Trash Assessment Areas Table
+                OVTA Areas
             </div>
             <div class="panel-body">
+                <p>All OVTAs are associated with an area. This table can be used to search and view the assessment areas.</p>
                 @Html.DhtmlxGrid(ViewDataTyped.AreaGridSpec, ViewDataTyped.AreaGridName, ViewDataTyped.AreaGridDataUrl, "height:400px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
             </div>
         </div>
