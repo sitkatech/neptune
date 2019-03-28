@@ -207,6 +207,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
+    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
@@ -302,7 +303,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.displayLoading();
 
     var self = this;
-    var homeCatchmentFeatureCollection;
     this.selectFeatureByWfsReturnPromise(
         "OCStormwater:NetworkCatchments",
         {
@@ -312,7 +312,11 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
                 latLng.lng +
                 "))"
         }).then(function (response) {
-            return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
+            if (response.features[0]) {
+                return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
+            } else {
+                return jQuery.Deferred();
+            }
         }).then(function (response) {
             var geoJson = JSON.parse(response);
             self.processAndShowTraceDelineation(geoJson);
@@ -329,6 +333,13 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
             window.alert(
                 "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
+        }).always(function () {
+            self.selectedAssetControl.enableDelineationButton();
+            self.removeLoading();
+            self.enableUserInteraction();
+            self.hookupSelectTreatmentBMPOnClick();
+            self.hookupDeselectOnClick();
+            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 };
 
