@@ -3,27 +3,6 @@
  * HTML templates in DelineationMapTemplates.cshtml 
  */
 
-// todo: watermark is sufficiently general as to belong to its own js file
-L.Control.Watermark = L.Control.extend({
-    onAdd: function (map) {
-
-        var img = L.DomUtil.create("img");
-
-        img.src = "/Content/img/OCStormwater/banner_logo.png";
-        img.style.width = "200px";
-
-        return img;
-    },
-
-    onRemove: function (map) {
-        jQuery(this.parentElement).remove();
-    }
-});
-
-L.control.watermark = function (opts) {
-    return new L.Control.Watermark(opts);
-};
-
 var stopClickPropagation = function (el) {
     L.DomEvent.on(el, "click", function (e) { e.stopPropagation(); });
 };
