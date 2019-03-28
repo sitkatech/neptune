@@ -65,7 +65,8 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
         {
-            var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson);
+            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
+            var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson,showDelete);
             var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
                 .Where(x => x.StormwaterJurisdiction == null ||
                             CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
