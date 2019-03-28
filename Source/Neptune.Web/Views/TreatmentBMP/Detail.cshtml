@@ -541,6 +541,15 @@
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
         map = new NeptuneMaps.Map(mapInitJson);
 
+
+        if (mapInitJson.DelineationLayer) {
+            var delineationLayer = L.geoJSON(mapInitJson.DelineationLayer.GeoJsonFeatureCollection);
+            delineationLayer.addTo(map.map);
+            map.map.fitBounds(delineationLayer.getBounds());
+        } else {
+            map.map.setZoom(18);
+        }
+
         var legend = new L.Control.Legend({
             position: 'topleft',
             collapsed: false,
@@ -549,7 +558,7 @@
             }
         });
         map.map.addControl(legend);
-        map.map.setZoom(18);
+        
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery("#legend").css("display", "");
