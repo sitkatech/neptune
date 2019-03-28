@@ -404,6 +404,10 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cs" />
     <Compile Include="Models\OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.cs" />
     <Compile Include="Models\PreliminarySourceIdentificationType.cs" />
+    <Compile Include="Security\OnlandVisualTrashAssessmentAreaDeleteFeature.cs" />
+    <Compile Include="Security\OnlandVisualTrashAssessmentDeleteFeature.cs" />
+    <Compile Include="Security\OnlandVisualTrashAssessmentEditFeature.cs" />
+    <Compile Include="Security\OnlandVisualTrashAssessmentViewFeature.cs" />
     <Compile Include="Views\Help\BulkUploadRequest.cs" />
     <Compile Include="Views\Help\BulkUploadRequestViewData.cs" />
     <Compile Include="Models\Delineation.cs" />
