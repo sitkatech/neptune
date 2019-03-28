@@ -20,25 +20,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "Network Catchments",
-            { pane: "networkCatchmentPane" }, function (evt) {
-
-                this.selectFeatureByWfs({
-                    cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                        evt.latlng.lat +
-                        " " +
-                        evt.latlng.lng +
-                        "))"
-                },
-                    "OCStormwater:NetworkCatchments",
-                    function (json) {
-                        if (json.features[0]) {
-                            this.setSelectedFeature(json.features[0]);
-                            // ReSharper disable once MisuseOfOwnerFunctionThis
-                            this.selectedAssetControl.networkCatchment(json.features[0]);
-                        }
-                    }.bind(this));
-            }.bind(this)
-        );
+            { pane: "networkCatchmentPane" });
 
     this.addWmsLayerWithParams("OCStormwater:Parcels",
         "All Parcels",
@@ -94,9 +76,6 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPOnClick();
-
-    // re-enable click to select network catchments
-    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 /* "Draw Catchment Mode"
@@ -207,7 +186,6 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
-    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
@@ -274,7 +252,6 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 
     autoDelineate.MakeDelineationRequest(latLng);
@@ -322,7 +299,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
-            self.enableUserInteraction();
             self.launchDrawCatchmentMode();
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
@@ -330,7 +306,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
             window.alert(
                 "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
         }).always(function () {
@@ -339,7 +314,6 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 };
 
