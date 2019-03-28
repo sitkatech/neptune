@@ -142,7 +142,7 @@ namespace Neptune.Web.Models
                 }
 
 
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
                 featureCollection.Features.AddRange(new List<Feature> { feature });
 
                 transsectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",

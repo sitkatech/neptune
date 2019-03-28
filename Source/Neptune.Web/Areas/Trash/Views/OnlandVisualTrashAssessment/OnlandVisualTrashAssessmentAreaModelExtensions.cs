@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
@@ -83,7 +84,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             if (onlandVisualTrashAssessmentArea.TransectLine != null)
             {
                 var featureCollection = new FeatureCollection();
-                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessmentArea.TransectLine);
+                var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(onlandVisualTrashAssessmentArea.TransectLine.ToSqlGeometry().MakeValid().ToDbGeometry());
                 featureCollection.Features.AddRange(new List<Feature> {feature});
 
                 LayerGeoJson transectLineLayerGeoJson = new LayerGeoJson("transectLine", featureCollection, "#000000",
