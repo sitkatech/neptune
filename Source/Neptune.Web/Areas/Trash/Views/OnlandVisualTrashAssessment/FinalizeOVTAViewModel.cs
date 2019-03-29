@@ -26,6 +26,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [DisplayName("Assessment Area Description")]
         public string AssessmentAreaDescription { get; set; }
 
+        [DisplayName("Assessment Date")]
+        public DateTime AssessmentDate { get; set; }
+
         [StringLength(Models.OnlandVisualTrashAssessment.FieldLengths.Notes)]
         [FieldDefinitionDisplay(FieldDefinitionEnum.OnlandVisualTrashAssessmentNotes)]
         public string Notes { get; set; }
@@ -60,6 +63,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
             OnlandVisualTrashAssessmentID = ovta.OnlandVisualTrashAssessmentID;
+            AssessmentDate = DateTime.Now;
 
         }
 
@@ -70,7 +74,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
                 onlandVisualTrashAssessment.Notes = Notes;
-                onlandVisualTrashAssessment.CompletedDate = DateTime.Now;
+                onlandVisualTrashAssessment.CompletedDate = AssessmentDate;
 
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())

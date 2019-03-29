@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using LtInfo.Common.MvcResults;
-using MoreLinq;
+﻿using LtInfo.Common.MvcResults;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea;
 using Neptune.Web.Common;
@@ -13,6 +6,12 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -38,11 +37,48 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var transectLineLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectLineLayerGeoJson();
 
             var mapInitJson = new OVTAAreaMapInitJson("ovtaAreaMap", assessmentAreaLayerGeoJson, transectLineLayerGeoJson, observationsLayerGeoJson);
+            var newUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
+            var editDetailsUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.EditOnlandVisualTrashAssessmentAreaBasics(onlandVisualTrashAssessmentArea));
             var viewData = new Views.OnlandVisualTrashAssessmentArea.DetailViewData(CurrentPerson,
-                onlandVisualTrashAssessmentArea, mapInitJson);
+                onlandVisualTrashAssessmentArea, mapInitJson, newUrl , editDetailsUrl);
 
             return RazorView<Views.OnlandVisualTrashAssessmentArea.Detail, Views.OnlandVisualTrashAssessmentArea.DetailViewData>(viewData);
         }
+
+        private PartialViewResult ViewEditBasics(OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, EditOnlandVisualTrashAssessmentAreaBasicsViewModel viewModel)
+        {
+            var viewData = new EditOnlandVisualTrashAssessmentAreaBasicsViewData(CurrentPerson, onlandVisualTrashAssessmentArea);
+            return RazorPartialView<EditOnlandVisualTrashAssessmentAreaBasics, EditOnlandVisualTrashAssessmentAreaBasicsViewData, EditOnlandVisualTrashAssessmentAreaBasicsViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public PartialViewResult EditOnlandVisualTrashAssessmentAreaBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            var viewModel = new EditOnlandVisualTrashAssessmentAreaBasicsViewModel(onlandVisualTrashAssessmentArea);
+            return ViewEditBasics(onlandVisualTrashAssessmentArea, viewModel);
+        }
+
+        [HttpPost]
+        [OnlandVisualTrashAssessmentAreaViewFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditOnlandVisualTrashAssessmentAreaBasics(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, EditOnlandVisualTrashAssessmentAreaBasicsViewModel viewModel)
+        {
+            var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewEditBasics(onlandVisualTrashAssessmentArea, viewModel);
+            }
+
+            viewModel.UpdateModel(onlandVisualTrashAssessmentArea);
+            SetMessageForDisplay($"Successfully updated Onland Visual Trash Assessment Area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}");
+
+            return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
+        }
+
 
         [HttpGet]
         [OnlandVisualTrashAssessmentAreaDeleteFeature]
