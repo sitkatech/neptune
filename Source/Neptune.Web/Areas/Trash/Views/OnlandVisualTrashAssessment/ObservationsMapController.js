@@ -201,7 +201,13 @@
             $scope.neptuneMap.map.locate({ setView: true });
         };
 
-        $scope.neptuneMap.map.on("locationfound", onMapClick);
+        $scope.neptuneMap.map.on("locationfound", function (event) {
+            var latlng = event.latlng;
+            setPointOnMap(latlng);
+            $scope.$apply();
+            $scope.isClickToAddModeActive = false;
+            jQuery('.leaflet-container').css('cursor', '');
+        });
 
 
         // photo handling

@@ -348,7 +348,8 @@ NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (
 };
 
 
-/* For getting the BMP delineation from the Neptune DB
+/* For getting the BMP delineation from the Neptune DB.
+ Returns a promise so the caller can mess w/ the delineation layer later if they want.
  */
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
     if (this.selectedBMPDelineationLayer) {
@@ -362,7 +363,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
     var url = bmpFeature.properties["DelineationURL"];
     var self = this;
-    jQuery.ajax({
+    var promise = jQuery.ajax({
         url: url,
         dataType: "json",
         jsonpCallback: "getJson",
@@ -377,6 +378,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         },
         error: delineationErrorAlert
     });
+
+    return promise;
 };
 
 /* Catchment trace requires two ajax calls
@@ -534,19 +537,23 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
 };
 
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
+    debugger;
     if (!treatmentBMPID) {
         return; //misplaced call
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
     
     this.selectedAssetControl.treatmentBMP(layer.feature);
-    this.retrieveAndShowBMPDelineation(layer.feature);
+    var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
-    if (this.selectedBMPDelineationLayer) {
-        this.map.fitBounds(selectedBMPDelineationLayer.getBounds());
-    } else {
-        this.zoomAndPanToLayer(layer);
-    }
+    var self = this;
+    promise.then(function () {
+        if (self.selectedBMPDelineationLayer) {
+            self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds());
+        } else {
+            self.zoomAndPanToLayer(layer);
+        }
+    });
 
     this.setSelectedFeature(layer.feature);
 };
