@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Neptune.Web.Areas.Trash.Controllers;
+﻿using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
 {
@@ -15,13 +15,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public HtmlString LastAssessmentDateHtmlString { get; }
         public HtmlString ScoreHtmlString { get; }
         public string NewUrl { get; }
+        public string EditDetailsUrl { get; }
         public OnlandVisualTrashAssessmentIndexGridSpec GridSpec { get; }
         public string GridName { get; }
         public string GridDataUrl { get; }
         public bool UserHasAssessmentAreaManagePermission { get; }
         public OVTAAreaMapInitJson MapInitJson { get; }
 
-        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OVTAAreaMapInitJson mapInitJson) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OVTAAreaMapInitJson mapInitJson, string newUrl, string editDetailsUrl) : base(currentPerson)
         {
             EntityName = "Trash Module";
             EntityUrl = NeptuneArea.Trash.GetHomeUrl();
@@ -36,7 +37,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
                 ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
-            NewUrl = SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.NewAssessment(onlandVisualTrashAssessmentArea));
+            NewUrl = newUrl;
+            EditDetailsUrl = editDetailsUrl;
 
             UserHasAssessmentAreaManagePermission = new OnlandVisualTrashAssessmentAreaViewFeature().HasPermission(currentPerson, OnlandVisualTrashAssessmentArea).HasPermission;
 

@@ -11,8 +11,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public class OnlandVisualTrashAssessmentAreaIndexGridSpec : GridSpec<Models.OnlandVisualTrashAssessmentArea>
     {
-        public OnlandVisualTrashAssessmentAreaIndexGridSpec(Person currentPerson)
+        public OnlandVisualTrashAssessmentAreaIndexGridSpec(Person currentPerson, bool showDelete)
         {
+            if (showDelete)
+            {
+                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(), new OnlandVisualTrashAssessmentAreaDeleteFeature().HasPermission(currentPerson, x).HasPermission, true), 25, DhtmlxGridColumnFilterType.None);
+            }
             Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeModalDialogLink(
                 BootstrapHtmlHelpers.MakeGlyphIconWithHiddenText("glyphicon-plus", "Reassess this OVTA Area").ToString(),
                 x.GetBeginOVTAUrl(), 500, "Begin OVTA",
@@ -22,7 +26,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
             Add("Assessment Area Name",
                 x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
-                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                DhtmlxGridColumnFilterType.Html);
 
             Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 150,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

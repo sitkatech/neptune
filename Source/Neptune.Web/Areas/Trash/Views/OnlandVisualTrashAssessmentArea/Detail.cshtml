@@ -1,4 +1,5 @@
-﻿@using LtInfo.Common.BootstrapWrappers
+﻿
+@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.DhtmlWrappers
 @using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
@@ -29,6 +30,11 @@
     <div class="col-sm-6 col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
+                @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
+                {
+                    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.EditDetailsUrl, "Edit Details", 800, "Save", "Cancel", new List<string>(), null, null)
+
+                }
                 Details
             </div>
             <div class="panel-body">
@@ -140,4 +146,5 @@
         assessmentAreaLayer.addTo(summaryMap.map);
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
     });
+
 </script>

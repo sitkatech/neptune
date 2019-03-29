@@ -95,5 +95,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
             return null;
         }
+
+        public static readonly UrlTemplate<int> DeleteUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
+        public static string GetDeleteUrl(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+                return DeleteUrlTemplate.ParameterReplace(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
+        }
     }
 }
