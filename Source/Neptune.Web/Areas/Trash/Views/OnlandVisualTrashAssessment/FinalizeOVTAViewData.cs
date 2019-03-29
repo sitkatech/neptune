@@ -16,6 +16,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public StormwaterJurisdiction Jurisdiction { get; }
         public string CreatedDate { get; }
         public string ScoreDescriptionsUrl { get; }
+        public string AssessmentAreaDescription { get; set; }
 
         public TrashAssessmentSummaryMapViewData TrashAssessmentSummaryMapViewData { get; }
         public IEnumerable<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypeOthers { get; }
@@ -28,6 +29,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             ConductedByPerson = ovta.CreatedByPerson;
             Jurisdiction = ovta.StormwaterJurisdiction;
             CreatedDate = ovta.CreatedDate.ToShortDateString();
+            AssessmentAreaDescription = ovta.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription ??
+                                        ovta.DraftAreaDescription;
             ScoreDescriptionsUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.ScoreDescriptions());
 

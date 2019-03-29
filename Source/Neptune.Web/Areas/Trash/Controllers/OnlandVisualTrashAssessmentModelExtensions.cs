@@ -20,7 +20,7 @@ namespace Neptune.Web.Models
     {
         public static readonly UrlTemplate<int> EditUrlTemplate =
             new UrlTemplate<int>(
-                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.Instructions(UrlTemplate.Parameter1Int)));
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t => t.RecordObservations(UrlTemplate.Parameter1Int)));
         public static string GetEditUrl(this OnlandVisualTrashAssessment ovta)
         {
             return EditUrlTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
