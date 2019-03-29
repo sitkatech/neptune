@@ -351,10 +351,15 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
 NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
-        this.map.fitBounds(L.latLngBounds([layer.getLatLng()]));
+        this.map.fitBounds(L.latLngBounds([layer.getLatLng()]), {
+            maxZoom: 18
+        });
     } else {
         if (layer.getBounds().isValid()) {
-            this.map.fitBounds(layer.getBounds());
+            this.map.fitBounds(layer.getBounds(),
+            {
+                maxZoom:18
+            });
         }
     }
 };
@@ -482,4 +487,24 @@ NeptuneMaps.DefaultOptions = {
                 alt: feature.properties.Name
             });
     }
+};
+
+L.Control.Watermark = L.Control.extend({
+    onAdd: function (map) {
+
+        var img = L.DomUtil.create("img");
+
+        img.src = "/Content/img/OCStormwater/banner_logo.png";
+        img.style.width = "200px";
+
+        return img;
+    },
+
+    onRemove: function (map) {
+        jQuery(this.parentElement).remove();
+    }
+});
+
+L.control.watermark = function (opts) {
+    return new L.Control.Watermark(opts);
 };

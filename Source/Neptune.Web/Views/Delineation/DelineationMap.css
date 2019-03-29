@@ -8,7 +8,7 @@
 }
 .neptune-leaflet-control#beginDelineationControl {
   width: 375px;
-  height: 280px;
+  min-height: 260px;
 }
 .leaflet-bar hr {
   margin-top: 10px;
@@ -23,11 +23,6 @@ label.group {
 }
 .hiddenControlElement {
   display: none;
-}
-.frosted-overlay {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 400;
 }
 /* weird gross hack to allow centered controls by overriding bottom-right control placement */
 .leaflet-bottom.leaflet-right {

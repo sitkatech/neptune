@@ -20,25 +20,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "Network Catchments",
-            { pane: "networkCatchmentPane" }, function (evt) {
-
-                this.selectFeatureByWfs({
-                    cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                        evt.latlng.lat +
-                        " " +
-                        evt.latlng.lng +
-                        "))"
-                },
-                    "OCStormwater:NetworkCatchments",
-                    function (json) {
-                        if (json.features[0]) {
-                            this.setSelectedFeature(json.features[0]);
-                            // ReSharper disable once MisuseOfOwnerFunctionThis
-                            this.selectedAssetControl.networkCatchment(json.features[0]);
-                        }
-                    }.bind(this));
-            }.bind(this)
-        );
+            { pane: "networkCatchmentPane" });
 
     this.addWmsLayerWithParams("OCStormwater:Parcels",
         "All Parcels",
@@ -74,7 +56,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
     this.hookupSelectTreatmentBMPOnClick();
 };
 
-NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function(treatmentBMPFeature) {
+NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function (treatmentBMPFeature) {
     this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
 
@@ -82,7 +64,7 @@ NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function(treat
     this.map.off("click");
 };
 
-NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() {
+NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function () {
     if (!this.beginDelineationControl) {
         return; //misplaced call
     }
@@ -94,9 +76,6 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
 
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPOnClick();
-
-    // re-enable click to select network catchments
-    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 /* "Draw Catchment Mode"
@@ -105,7 +84,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function() 
  * of the Auto-Delineate path.
  */
 
-NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
+NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
     if (this.beginDelineationControl) {
         this.beginDelineationControl.remove();
         this.beginDelineationControl = null;
@@ -122,7 +101,7 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function() {
     this.buildDrawControl();
 };
 
-NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
+NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.editableFeatureGroup = new L.FeatureGroup();
     var editableFeatureGroup = this.editableFeatureGroup; // eliminates need to .bind(this) later
 
@@ -159,7 +138,7 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
     }
 
     this.map.on('draw:created',
-        function(e) {
+        function (e) {
             var layer = e.layer;
             editableFeatureGroup.addLayer(layer);
             var leafletId = layer._leaflet_id;
@@ -175,7 +154,7 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
         });
 
     this.map.on('draw:deleted',
-        function(e) {
+        function (e) {
             if (editableFeatureGroup.getLayers().length > 0) {
                 killPolygonDraw();
             } else {
@@ -184,7 +163,7 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function() {
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function() {
+NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function () {
     this.drawControl.remove();
     this.map.removeLayer(this.editableFeatureGroup);
     this.drawControl = null;
@@ -193,12 +172,13 @@ NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function() {
 
 NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     if (!save) {
-        if (this.selectedBMPDelineationLayer && !this.selectedBMPDelineationLayer.isUnsavedAutoDEM) {
+        if (this.selectedBMPDelineationLayer && !this.selectedBMPDelineationLayer.isUnsavedDelineation) {
             this.map.addLayer(this.selectedBMPDelineationLayer);
         } else {
             // either the selected BMP's delineation didn't exist or it should no longer
             this.selectedBMPDelineationLayer = null;
         }
+        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     } else {
         this.persistDrawnCatchment();
     }
@@ -209,7 +189,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
     this.hookupDeselectOnClick();
 };
 
-NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
+NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     // had better be only one feature
     var editableFeatureJson = this.editableFeatureGroup.toGeoJSON();
 
@@ -222,16 +202,17 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function() {
 
     var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
     var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
+    
     jQuery.ajax({
         url: delineationUrl,
-        data: { "WellKnownText": wkt },
+        data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
         type: 'POST',
         success: function (data) {
             this.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
             // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
             this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
         }.bind(this),
-        error: function(jq, ts, et) {
+        error: function (jq, ts, et) {
             alert(
                 "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
         }
@@ -272,14 +253,105 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 
     autoDelineate.MakeDelineationRequest(latLng);
 };
 
-NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bmpFeature) {
+/* "Trace-Delineate Mode"
+ * Map is locked down while the ajax calls for the network catchment trace are run.
+ *
+ * After a failed return, the failure is reported and the UI unblocked.
+ * After a successful return, the map is put into Draw Catchment Mode for the user to revise or accept the trace-delineation.
+ */
+
+NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
+
+    this.beginDelineationControl.remove();
+    this.beginDelineationControl = null;
+
+    var latLng = this.lastSelected.getLayers()[0].getLatLng();
+
+    this.disableUserInteraction();
+    this.treatmentBMPLayer.off("click");
+    this.displayLoading();
+
+    var self = this;
+    this.selectFeatureByWfsReturnPromise(
+        "OCStormwater:NetworkCatchments",
+        {
+            cql_filter: "intersects(CatchmentGeometry, POINT(" +
+                latLng.lat +
+                " " +
+                latLng.lng +
+                "))"
+        }).then(function (response) {
+            if (response.features[0]) {
+                return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
+            } else {
+                return jQuery.Deferred();
+            }
+        }).then(function (response) {
+            var geoJson = JSON.parse(response);
+            self.processAndShowTraceDelineation(geoJson);
+            self.removeLoading();
+            self.enableUserInteraction();
+            self.launchDrawCatchmentMode();
+
+        }).fail(function () {
+            self.selectedAssetControl.enableDelineationButton();
+            self.removeLoading();
+            self.enableUserInteraction();
+            self.hookupSelectTreatmentBMPOnClick();
+            self.hookupDeselectOnClick();
+            window.alert(
+                "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
+        }).always(function () {
+            self.selectedAssetControl.enableDelineationButton();
+            self.removeLoading();
+            self.enableUserInteraction();
+        });
+};
+
+NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (networkCatchmentID) {
+    return jQuery.ajax({
+        url: "/NetworkCatchment/UpstreamDelineation/" + networkCatchmentID,
+        type: "GET"
+    });
+}
+
+NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (geoJson) {
+    if (this.selectedBMPDelineationLayer) {
+        this.selectedBMPDelineationLayer.remove();
+        this.selectedBMPDelineationLayer = null;
+    }
+
+    this.selectedBMPDelineationLayer = L.geoJSON(geoJson,
+        {
+            style: function (feature) {
+                return {
+                    fillColor: "#4782ff",
+                    fill: true,
+                    fillOpacity: 0.4,
+                    color: "#4782ff",
+                    weight: 5,
+                    stroke: true
+                };
+            }
+        });
+    this.selectedBMPDelineationLayer.addTo(this.map);
+    this.selectedBMPDelineationLayer.isUnsavedDelineation = true; // so we know to clear the delineation if they cancel later
+};
+
+
+/* For getting the BMP delineation from the Neptune DB
+ */
+NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
+    if (this.selectedBMPDelineationLayer) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
         this.selectedBMPDelineationLayer = null;
     }
@@ -289,87 +361,86 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function(bm
     }
 
     var url = bmpFeature.properties["DelineationURL"];
-    SitkaAjax.ajax({
-            url: url,
-            dataType: "json",
-            jsonpCallback: "getJson"
-        },
-        function (response) {
+    var self = this;
+    jQuery.ajax({
+        url: url,
+        dataType: "json",
+        jsonpCallback: "getJson",
+        success: function(response) {
             if (response.noDelineation) {
                 return;
             }
             if (response.type !== "Feature") {
                 delineationErrorAlert();
             }
-            this.addBMPDelineationLayer(response);
-        }.bind(this),
-        function(error) {
-            delineationErrorAlert();
-        }
-    );
+            self.addBMPDelineationLayer(response);
+        },
+        error: delineationErrorAlert
+    });
 };
 
 /* Catchment trace requires two ajax calls
  * The Neptune Application provides the list of upstream catchments
  * and GeoServer provides the actual geometry.
- * It would be ideal to rewrite this in a continuation-passing style.
+ * It would be ideal to rewrite these routine to use promises.
  */
 
-NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function(networkCatchmentFeature) {
+NeptuneMaps.DelineationMap.prototype.retrieveAndShowUpstreamCatchments = function (networkCatchmentFeature) {
+    var self = this;
+
+    this.retrieveUpstreamCatchmentIDs(networkCatchmentFeature).then(function (response) {
+        return self.retrieveUpstreamCatchmentGeometry(response);
+    }).then(function (response) {
+        self.addUpstreamCatchmentLayer(response);
+    }).fail(function (error) {
+        self.selectedAssetControl.enableUpstreamCatchmentsButton();
+        upstreamCatchmentErrorAlert();
+    });
+};
+
+NeptuneMaps.DelineationMap.prototype.retrieveUpstreamCatchmentIDs = function (networkCatchmentFeature) {
     this.selectedAssetControl.disableUpstreamCatchmentsButton();
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.upstreamCatchmentsLayer)) {
         this.map.removeLayer(this.upstreamCatchmentsLayer);
     }
 
     if (!networkCatchmentFeature.properties["NetworkCatchmentID"]) {
-        return;
+        return jQuery.Deferred();
     }
 
     var url = "/NetworkCatchment/UpstreamCatchments/" + networkCatchmentFeature.properties["NetworkCatchmentID"];
 
-    SitkaAjax.ajax({
-            url: url,
-            dataType: "json",
-            jsonpCallback: "getJson"
-        },
-        this.processUpstreamCatchmentIDResponse.bind(this),
-        function(error) {
-            this.selectedAssetControl.enableUpstreamCatchmentsButton();
-            upstreamCatchmentErrorAlert();
-        }.bind(this)
-    );
+    return jQuery.ajax({
+        url: url,
+        type: "GET"
+    });
 };
 
-NeptuneMaps.DelineationMap.prototype.processUpstreamCatchmentIDResponse = function(response) {
+NeptuneMaps.DelineationMap.prototype.retrieveUpstreamCatchmentGeometry = function (response) {
     this.selectedAssetControl.reportUpstreamCatchments(response.networkCatchmentIDs.length);
 
     if (response.networkCatchmentIDs.length === 0) {
         this.selectedAssetControl.enableUpstreamCatchmentsButton();
-        return;
+        return jQuery.Deferred();
     }
     var parameters = L.Util.extend(this.createWfsParamsWithLayerName("OCStormwater:NetworkCatchments"),
         {
             cql_filter: "NetworkCatchmentID IN (" + response.networkCatchmentIDs.toString() + ")"
         });
 
-    SitkaAjax.ajax({
-            url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
-            dataType: "json",
-            jsonpCallback: "getJson"
-        },
-        this.processUpstreamCatchmentGeoServerResponse.bind(this),
-        function(error) {
-            this.selectedAssetControl.enableUpstreamCatchmentsButton();
-            upstreamCatchmentErrorAlert();
-        }.bind(this));
+    var self = this;
+    return jQuery.ajax({
+        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
+        type: "GET"
+    });
 };
 
-NeptuneMaps.DelineationMap.prototype.addUpstreamCatchmentLayer = function(geoJson) {
+NeptuneMaps.DelineationMap.prototype.addUpstreamCatchmentLayer = function (geoJson) {
     this.selectedAssetControl.enableUpstreamCatchmentsButton();
 
     this.upstreamCatchmentsLayer = L.geoJSON(geoJson,
         {
-            style: function(feature) {
+            style: function (feature) {
                 return {
                     fillColor: "#4782ff",
                     fill: true,
@@ -391,10 +462,15 @@ NeptuneMaps.DelineationMap.prototype.removeUpstreamCatchmentsLayer = function ()
 };
 
 NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJsonResponse) {
+    if (this.selectedBMPDelineationLayer) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
+
 
     this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
         {
-            style: function(feature) {
+            style: function (feature) {
                 return {
                     fillColor: "#FFFF00",
                     fill: true,
@@ -426,7 +502,7 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
         hacky = {
             type: "Polygon",
             coordinates: _
-                .find(geoJsonResponse.features, function(f) { return f.properties.WshdType === "Total Upstream"; })
+                .find(geoJsonResponse.features, function (f) { return f.properties.WshdType === "Total Upstream"; })
                 .geometry
                 .coordinates[1]
         };
@@ -434,7 +510,7 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
 
     this.selectedBMPDelineationLayer = L.geoJson(hacky,
         {
-            style: function(feature) {
+            style: function (feature) {
                 return {
                     fillColor: "#FFFF00",
                     fill: true,
@@ -447,32 +523,39 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayerFromDEM = function (g
         });
 
     this.selectedBMPDelineationLayer.addTo(this.map);
-    this.selectedBMPDelineationLayer.isUnsavedAutoDEM = true; // so we know to clear the auto-delineation if they cancel without saving later.
+    this.selectedBMPDelineationLayer.isUnsavedDelineation = true; // so we know to clear the auto-delineation if they cancel without saving later.
 };
 
-NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function() {
+NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
         this.selectedBMPDelineationLayer = null;
     }
 };
 
-NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function(treatmentBMPID) {
+NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
     if (!treatmentBMPID) {
         return; //misplaced call
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
-    this.zoomAndPanToLayer(layer);
-    this.setSelectedFeature(layer.feature);
+    
     this.selectedAssetControl.treatmentBMP(layer.feature);
     this.retrieveAndShowBMPDelineation(layer.feature);
+
+    if (this.selectedBMPDelineationLayer) {
+        this.map.fitBounds(selectedBMPDelineationLayer.getBounds());
+    } else {
+        this.zoomAndPanToLayer(layer);
+    }
+
+    this.setSelectedFeature(layer.feature);
 };
 
 /* helper methods to restore UI interactions after a blocking mode returns */
 
-NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function() {
+NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function () {
     var self = this;
-    
+
     this.map.on('click',
         function (e) {
             self.deselect();
@@ -487,7 +570,7 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 
     this.treatmentBMPLayer.on("click",
         function (e) {
-            self.removeUpstreamCatchmentsLayer();
+
             self.setSelectedFeature(e.layer.feature);
             self.selectedAssetControl.treatmentBMP(e.layer.feature);
             self.retrieveAndShowBMPDelineation(e.layer.feature);
@@ -495,14 +578,15 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 };
 
 NeptuneMaps.DelineationMap.prototype.displayLoading = function () {
-    this.frosty = new LeafletShades();
+    this.frosty = new L.LeafletLoading();
     this.frosty.addTo(this.map);
     this.map.spin(true);
 };
-
-NeptuneMaps.DelineationMap.prototype.removeLoading = function() {
-    this.frosty.remove();
-    this.frosty = null;
+NeptuneMaps.DelineationMap.prototype.removeLoading = function () {
+    if (this.frosty) {
+        this.frosty.remove();
+        this.frosty = null;
+    }
     this.map.spin(false);
 };
 
@@ -511,12 +595,12 @@ NeptuneMaps.DelineationMap.prototype.removeLoading = function() {
 
 /* assorted miscellaneous helper functions */
 
-var delineationErrorAlert = function() {
+var delineationErrorAlert = function () {
     window.alert(
         "There was an error retrieving the BMP Delineation. Please try again. If the problem persists, please contact Support.");
 };
 
-var upstreamCatchmentErrorAlert = function() {
+var upstreamCatchmentErrorAlert = function () {
     window.alert(
         "There was an error retrieving the upstream catchments. Please try again. If the problem persists, please contact Support.");
 };
@@ -544,15 +628,15 @@ var getDrawOptions = function (editableFeatureGroup) {
                 opacity: 0.3
             },
             remove: true
-}
+        }
     };
     return options;
 };
 
-var killPolygonDraw = function() {
+var killPolygonDraw = function () {
     jQuery(".leaflet-draw-toolbar-top").hide();
 };
 
-var unKillPolygonDraw = function() {
+var unKillPolygonDraw = function () {
     jQuery(".leaflet-draw-toolbar-top").show();
 }
