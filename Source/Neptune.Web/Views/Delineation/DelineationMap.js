@@ -553,9 +553,9 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         } else {
             self.zoomAndPanToLayer(layer);
         }
+        // don't set the selected layer
+        self.setSelectedFeature(layer.feature);
     });
-
-    this.setSelectedFeature(layer.feature);
 };
 
 /* helper methods to restore UI interactions after a blocking mode returns */
