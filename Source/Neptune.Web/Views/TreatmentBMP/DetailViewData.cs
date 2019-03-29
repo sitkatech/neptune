@@ -32,7 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public bool UserIsAdmin { get; }
         public Models.TreatmentBMP TreatmentBMP { get; }
-        public MapInitJson MapInitJson { get; }
+        public TreatmentBMPDetailMapInitJson MapInitJson { get; }
         public string AddBenchmarkAndThresholdUrl { get; }
 
         public bool HasSettableBenchmarkAndThresholdValues { get; }
@@ -57,7 +57,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string ManageTreatmentBMPImagesUrl { get; }
         public readonly string VerifiedUnverifiedUrl;
 
-        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, MapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
+        public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
             TreatmentBMP = treatmentBMP;

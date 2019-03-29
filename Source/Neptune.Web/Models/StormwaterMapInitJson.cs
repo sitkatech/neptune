@@ -85,7 +85,7 @@ namespace Neptune.Web.Models
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation?.DelineationGeometry);
             featureCollection.Features.Add(feature);
 
-            var treatmentBMPLayerGeoJson = new LayerGeoJson("Treatment BMPs", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };
+            var treatmentBMPLayerGeoJson = new LayerGeoJson("Delineation", featureCollection, "blue", 1, LayerInitialVisibility.Show) { EnablePopups = false };
             return treatmentBMPLayerGeoJson;
         }
     }
