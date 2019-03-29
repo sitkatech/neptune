@@ -19,13 +19,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._selectedBmpName = this.parentElement.querySelector("#selectedBmpName");
         this._delineationStatus = this.parentElement.querySelector("#delineationStatus");
         this._delineationButton = this.parentElement.querySelector("#delineationButton");
-
-        this._selectedCatchmentInfo = this.parentElement.querySelector("#selectedCatchmentInfo");
-        this._selectedCatchmentDetails = this.parentElement.querySelector("#selectedCatchmentDetails");
-        this._traverseCatchmentsButton = this.parentElement.querySelector("#traverseCatchmentsButton");
-        this._upstreamCatchmentReportContainer = this.parentElement.querySelector("#upstreamCatchmentReportContainer");
-        this._upstreamCatchmentReport = this.parentElement.querySelector("#upstreamCatchmentReport");
-
+        
         L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
             "click",
             function (e) {
@@ -68,7 +62,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
-        this._selectedCatchmentInfo.classList.add("hiddenControlElement");
     },
 
     launchDrawCatchmentMode: function () {
@@ -77,38 +70,15 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     exitDrawCatchmentMode: function (save) {
-        debugger;
         this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
 
         window.delineationMap.exitDrawCatchmentMode(save);
     },
-
-    networkCatchment: function (networkCatchmentFeature) {
-        if (this._traverseCatchmentsHandler) {
-            L.DomEvent.off(this._traverseCatchmentsButton, "click", this._traverseCatchmentsHandler);
-            this._traverseCatchmentsHandler = null;
-        }
-        this._traverseCatchmentsHandler = function (e) {
-            window.delineationMap.retrieveAndShowUpstreamCatchments(networkCatchmentFeature);
-        };
-        L.DomEvent.on(this._traverseCatchmentsButton,
-            "click",
-            this._traverseCatchmentsHandler);
-
-        this._selectedCatchmentDetails.innerHTML = "Selected Catchment ID: " + networkCatchmentFeature.properties["NetworkCatchmentID"];
-
-        this._selectedCatchmentInfo.classList.remove("hiddenControlElement");
-
-        this._selectedBmpInfo.classList.add("hiddenControlElement");
-        this._noAssetSelected.classList.add("hiddenControlElement");
-        this._upstreamCatchmentReportContainer.classList.add("hiddenControlElement");
-    },
-
+    
     reset: function () {
         this._selectedBmpInfo.classList.add("hiddenControlElement");
-        this._selectedCatchmentInfo.classList.add("hiddenControlElement");
         this._noAssetSelected.classList.remove("hiddenControlElement");
     },
 
@@ -133,22 +103,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             return; //misplaced call
         }
         this._delineationButton.removeAttribute("disabled");
-    },
-
-    disableUpstreamCatchmentsButton() {
-        if (!this._traverseCatchmentsButton) {
-            return; //misplaced call
-        }
-        this._traverseCatchmentsButton.innerHTML = "Loading...";
-        this._traverseCatchmentsButton.disabled = "disabled";
-    },
-
-    enableUpstreamCatchmentsButton() {
-        if (!this._traverseCatchmentsButton) {
-            return; //misplaced call
-        }
-        this._traverseCatchmentsButton.innerHTML = "Trace Upstream Catchments";
-        this._traverseCatchmentsButton.removeAttribute("disabled");
     }
 });
 

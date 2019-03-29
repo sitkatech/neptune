@@ -556,6 +556,7 @@
     <Compile Include="Views\Help\RequestOrganizationNameChange.cs" />
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\TreatmentBMPDetailMapInitJson.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanVerificationGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerify.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerifyViewData.cs" />

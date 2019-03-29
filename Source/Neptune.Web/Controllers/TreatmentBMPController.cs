@@ -95,11 +95,11 @@ namespace Neptune.Web.Controllers
         public ViewResult Detail(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var mapInitJson = new StormwaterMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
+            var mapInitJson = new TreatmentBMPDetailMapInitJson("StormwaterDetailMap", treatmentBMP.LocationPoint);
             mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPLayerGeoJson(new[] { treatmentBMP }, false, true));
             if (treatmentBMP.Delineation?.DelineationGeometry != null)
             {
-                mapInitJson.Layers.Add(StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(treatmentBMP));
+                mapInitJson.DelineationLayer = StormwaterMapInitJson.MakeTreatmentBMPDelineationLayerGeoJson(treatmentBMP);
             }
             var carouselImages = treatmentBMP.TreatmentBMPImages.OrderBy(x => x.TreatmentBMPImageID).ToList();
             var imageCarouselViewData = new ImageCarouselViewData(carouselImages, 400);

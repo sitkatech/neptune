@@ -20,25 +20,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "Network Catchments",
-            { pane: "networkCatchmentPane" }, function (evt) {
-
-                this.selectFeatureByWfs({
-                    cql_filter: "intersects(CatchmentGeometry, POINT(" +
-                        evt.latlng.lat +
-                        " " +
-                        evt.latlng.lng +
-                        "))"
-                },
-                    "OCStormwater:NetworkCatchments",
-                    function (json) {
-                        if (json.features[0]) {
-                            this.setSelectedFeature(json.features[0]);
-                            // ReSharper disable once MisuseOfOwnerFunctionThis
-                            this.selectedAssetControl.networkCatchment(json.features[0]);
-                        }
-                    }.bind(this));
-            }.bind(this)
-        );
+            { pane: "networkCatchmentPane" });
 
     this.addWmsLayerWithParams("OCStormwater:Parcels",
         "All Parcels",
@@ -94,9 +76,6 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 
     this.hookupDeselectOnClick();
     this.hookupSelectTreatmentBMPOnClick();
-
-    // re-enable click to select network catchments
-    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 /* "Draw Catchment Mode"
@@ -199,6 +178,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
             // either the selected BMP's delineation didn't exist or it should no longer
             this.selectedBMPDelineationLayer = null;
         }
+        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     } else {
         this.persistDrawnCatchment();
     }
@@ -207,7 +187,6 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
-    this.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
 };
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
@@ -274,7 +253,6 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", this.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 
     autoDelineate.MakeDelineationRequest(latLng);
@@ -322,24 +300,20 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
-            self.enableUserInteraction();
             self.launchDrawCatchmentMode();
+
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
             self.enableUserInteraction();
             self.hookupSelectTreatmentBMPOnClick();
             self.hookupDeselectOnClick();
-            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
             window.alert(
                 "There was an error retrieving the delineation from the Network Catchment Trace. Please try again. If the issue persists, please contact Support.");
         }).always(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
             self.enableUserInteraction();
-            self.hookupSelectTreatmentBMPOnClick();
-            self.hookupDeselectOnClick();
-            self.map.on("click", self.wmsLayers["OCStormwater:NetworkCatchments"].click);
         });
 };
 
@@ -374,9 +348,14 @@ NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (
 };
 
 
-/* For getting the BMP delineation from the Neptune DB
+/* For getting the BMP delineation from the Neptune DB.
+ Returns a promise so the caller can mess w/ the delineation layer later if they want.
  */
 NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
+    if (this.selectedBMPDelineationLayer) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
 
     if (!bmpFeature.properties["DelineationURL"]) {
         return;
@@ -384,7 +363,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
     var url = bmpFeature.properties["DelineationURL"];
     var self = this;
-    jQuery.ajax({
+    var promise = jQuery.ajax({
         url: url,
         dataType: "json",
         jsonpCallback: "getJson",
@@ -399,6 +378,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         },
         error: delineationErrorAlert
     });
+
+    return promise;
 };
 
 /* Catchment trace requires two ajax calls
@@ -556,14 +537,25 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
 };
 
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
+    debugger;
     if (!treatmentBMPID) {
         return; //misplaced call
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
-    this.zoomAndPanToLayer(layer);
-    this.setSelectedFeature(layer.feature);
+    
     this.selectedAssetControl.treatmentBMP(layer.feature);
-    this.retrieveAndShowBMPDelineation(layer.feature);
+    var promise = this.retrieveAndShowBMPDelineation(layer.feature);
+
+    var self = this;
+    promise.then(function () {
+        if (self.selectedBMPDelineationLayer) {
+            self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds());
+        } else {
+            self.zoomAndPanToLayer(layer);
+        }
+        // don't set the selected layer
+        self.setSelectedFeature(layer.feature);
+    });
 };
 
 /* helper methods to restore UI interactions after a blocking mode returns */
@@ -585,7 +577,7 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 
     this.treatmentBMPLayer.on("click",
         function (e) {
-            self.removeUpstreamCatchmentsLayer();
+
             self.setSelectedFeature(e.layer.feature);
             self.selectedAssetControl.treatmentBMP(e.layer.feature);
             self.retrieveAndShowBMPDelineation(e.layer.feature);
