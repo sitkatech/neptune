@@ -147,7 +147,13 @@ namespace Neptune.Web.Models
         //Only public for unit testing
         public static FileResource CreateNewFromHttpPostedFile(HttpPostedFileBase httpPostedFileBase, Person currentPerson)
         {
-            var originalFilenameInfo = new FileInfo(httpPostedFileBase.FileName);
+            var fileName = httpPostedFileBase.FileName;
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = Guid.NewGuid().ToString() + ".jpg";
+            }
+
+            var originalFilenameInfo = new FileInfo(fileName);
             var baseFilenameWithoutExtension = originalFilenameInfo.Name.Remove(originalFilenameInfo.Name.Length - originalFilenameInfo.Extension.Length, originalFilenameInfo.Extension.Length);
             var fileResourceData = ConvertHttpPostedFileToByteArray(httpPostedFileBase);
             var fileResourceMimeTypeID = GetFileResourceMimeTypeForFile(httpPostedFileBase).FileResourceMimeTypeID;
