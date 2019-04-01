@@ -49,6 +49,14 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             "click", this._beginDelineationHandler
         );
 
+        var detailButton = this.getTrackedElement("treatmentBMPDetailButton");
+        var href =
+            "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
+        detailButton.onclick = function() {
+            location.href = href;
+        };
+        
+
         this._selectedBmpName.innerHTML = "BMP: " +
             treatmentBMPFeature.properties["Name"];
 

@@ -71,42 +71,19 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
     return wfsParams;
 };
 
-// click is a function taking an event argument; it will be registered as a click handler for the map object and
-// stored in the wmsLayers object of this GeoServerMap. This allows the handler to be conveniently toggled on and off later
-NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName, params, click) {
+
+NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName, params, hide) {
     var wmsParams = this.createWmsParamsWithLayerName(layerName);
 
     if (params) { L.Util.extend(wmsParams, params); }
 
     var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
-    this.addLayerToLayerControl(wmsLayer, layerControlDisplayName);
-
-
-    if (click) {
-        this.map.on("click", click);
-    }
-    this.wmsLayers[layerName] = { layer: wmsLayer, click: click };
+    this.addLayerToLayerControl(wmsLayer, layerControlDisplayName, hide);
 
     return wmsLayer;
 };
 
-// DEPRECATED. Use addWmsLayer instead.
-NeptuneMaps.GeoServerMap.prototype.addWmsLayerWithParams = function (layerName, layerControlDisplayName, params) {
-    return this.addWmsLayer(layerName, layerControlDisplayName, params);
-};
-
-
-// todo: merge these two methods because promises are not the future but the now.
-NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function (customParams, layerName, response, error) {
-    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
-    SitkaAjax.ajax({
-        url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
-        dataType: "json",
-        jsonpCallback: "getJson"
-    }, response, error);                
-};
-
-NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfsReturnPromise = function( layerName, customParams) {
+NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function( layerName, customParams) {
     var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
     return jQuery.ajax({
         url: this.geoserverUrlOWS + L.Util.getParamString(parameters),

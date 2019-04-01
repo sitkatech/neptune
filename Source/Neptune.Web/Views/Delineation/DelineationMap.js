@@ -22,11 +22,11 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
             "Network Catchments",
             { pane: "networkCatchmentPane" });
 
-    this.addWmsLayerWithParams("OCStormwater:Parcels",
+    this.addWmsLayer("OCStormwater:Parcels",
         "All Parcels",
         {
             styles: "parcel_alt"
-        });
+        }, true);
     this.initializeTreatmentBMPClusteredLayer(mapInitJson);
     window.networkCatchmentLayer.bringToFront();
 
@@ -281,7 +281,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
     this.displayLoading();
 
     var self = this;
-    this.selectFeatureByWfsReturnPromise(
+    this.selectFeatureByWfs(
         "OCStormwater:NetworkCatchments",
         {
             cql_filter: "intersects(CatchmentGeometry, POINT(" +

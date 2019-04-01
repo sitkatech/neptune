@@ -16,27 +16,27 @@
 
 
         $scope.ovtaLayers = {
-            4: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+            4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
                 "OVTA Areas - Score A",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
                 }),
-            3: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+            3: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
                 "OVTA Areas - Score B",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
                 }),
-            2: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+            2: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
                 "OVTA Areas - Score C",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
                 }),
-            1: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+            1: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
                 "OVTA Areas - Score D",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
                 }),
-            0: $scope.neptuneMap.addWmsLayerWithParams("OCStormwater:OnlandVisualTrashAssessmentAreas",
+            0: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
                 "OVTA Areas - Not Yet Assessed",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"

@@ -305,14 +305,19 @@ NeptuneMaps.Map.prototype.removeLayerFromMap = function (layerToRemove) {
     }
 };
 
-NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName) {
+NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName, hide) { 
     this.layerControl.addOverlay(layer, layerName);
+    if (hide) {
+        this.map.removeLayer(layer);
+    }
 };
 
 NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
     }
+
+    console.log(feature.properties);
 
     this.lastSelected = L.geoJson(feature,
         {
