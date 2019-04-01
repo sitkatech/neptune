@@ -104,9 +104,9 @@
 
                     style: function (feature) {
                         return {
-                            color: "#b2b2b2",
+                            color: NeptuneMaps.Constants.defaultPolyColor,
                             weight: .5,
-                            fillColor: "#ff00ff",
+                            fillColor: NeptuneMaps.Constants.defaultPolyColor,
                             fillOpacity: .5
                         };
                     }
