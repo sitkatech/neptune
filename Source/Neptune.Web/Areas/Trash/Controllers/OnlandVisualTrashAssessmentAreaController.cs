@@ -74,7 +74,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             viewModel.UpdateModel(onlandVisualTrashAssessmentArea);
-            SetMessageForDisplay($"Successfully updated Onland Visual Trash Assessment Area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}");
+            SetMessageForDisplay("Successfully updated OVTA Area details");
 
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
