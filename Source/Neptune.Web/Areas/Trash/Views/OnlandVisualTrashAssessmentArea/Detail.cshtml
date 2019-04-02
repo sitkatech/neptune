@@ -30,12 +30,13 @@
     <div class="col-sm-6 col-xs-12">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
+                Details
                 @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
                 {
+                    <span class="pull-right">
                     @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.EditDetailsUrl, "Edit Details", 800, "Save", "Cancel", new List<string>(), null, null)
-
+                    </span>
                 }
-                Details
             </div>
             <div class="panel-body">
                 <div class="row">
