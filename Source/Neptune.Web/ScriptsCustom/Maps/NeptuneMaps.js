@@ -169,7 +169,10 @@ NeptuneMaps.Map.prototype.wfsParams = {
 };
 
 NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, overlayLayers) {
-    this.layerControl = L.control.layers(baseLayers, overlayLayers);
+    var options = {
+        collapsed: false
+    };
+    this.layerControl = L.control.layers(baseLayers, overlayLayers, options);
     this.layerControl.addTo(this.map);
 };
 
