@@ -63,6 +63,7 @@
                 $scope.neptuneMap.map.removeLayer($scope.neptuneMap.selectedParcelLayer);
             }
 
+            // FIXME: Using L.Util.extend here will overwrite the neptuneMap.wmsParams object with the result of the extend, which may not be ideal
             var wmsParameters = L.Util.extend($scope.neptuneMap.wmsParams,{
                     layers: $scope.AngularViewData.ParcelMapServiceLayerName,
                     cql_filter: "ParcelID in (" + $scope.AngularModel.ParcelIDs.join(",") + ")",

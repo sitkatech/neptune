@@ -72,19 +72,19 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
 };
 
 
-NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlDisplayName, params, hide) {
+NeptuneMaps.GeoServerMap.prototype.addWmsLayer = function (layerName, layerControlLabelHtml, params, hide) {
     var wmsParams = this.createWmsParamsWithLayerName(layerName);
 
     if (params) { L.Util.extend(wmsParams, params); }
 
     var wmsLayer = L.tileLayer.wms(this.geoserverUrlOWS, wmsParams).addTo(this.map);
-    this.addLayerToLayerControl(wmsLayer, layerControlDisplayName, hide);
+    this.addLayerToLayerControl(wmsLayer, layerControlLabelHtml, hide);
 
     return wmsLayer;
 };
 
-NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function( layerName, customParams) {
-    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), customParams);
+NeptuneMaps.GeoServerMap.prototype.selectFeatureByWfs = function(layerName, params) {
+    var parameters = L.Util.extend(this.createWfsParamsWithLayerName(layerName), params);
     return jQuery.ajax({
         url: this.geoserverUrlOWS + L.Util.getParamString(parameters),
         type: "GET"

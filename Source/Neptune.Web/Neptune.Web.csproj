@@ -1075,6 +1075,7 @@
     <Content Include="Content\img\OCStormwater\ms-icon-150x150.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-310x310.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-70x70.png" />
+    <Content Include="Content\img\OVTAScores\OVTA_ex_pics.png" />
     <Content Include="Content\img\pin-s-marker+838383.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
@@ -2984,6 +2985,7 @@
     <Folder Include="Areas\Modeling\Security\" />
     <Folder Include="Areas\Trash\Models\" />
     <Folder Include="Areas\Trash\Security\" />
+    <Folder Include="Content\img\legendImages\" />
     <Folder Include="Content\themes\base\minified\images\" />
   </ItemGroup>
   <ItemGroup>

@@ -2,20 +2,20 @@
 
 NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl) {
     NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
-    this.addWmsLayer("OCStormwater:LandUseBlocks", "Land Use Blocks");
-    this.addWmsLayer("OCStormwater:Parcels", "Parcels",
+
+    var landUseBlocksLegendUrl = geoserverUrl +
+        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+    var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
+
+    var parcelsLegendUrl = geoserverUrl +
+        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AParcels&style=parcel_alt&scale=5000&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+    var parcelsLabel = "<span>Land Use Blocks </br><img src='" + parcelsLegendUrl + "'/></span>";
+
+    this.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
+    this.addWmsLayer("OCStormwater:Parcels", parcelsLabel,
         {
             styles: "parcel_alt"
         });
-
-    var legendOptions = {
-        layer: "OCStormwater:LandUseBlocks",
-        style: "",
-        legend_options: "forceLabels:on:fontAntiAliasing:true:dpi:200",
-        format: "image/png"
-    };
-    this.wmsLegend = L.wmsLegend("Land Use Types", geoserverUrl, legendOptions, this.map);
-
 
     if (mapInitJson.TransectLineLayerGeoJson) {
         this.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {});
@@ -23,6 +23,10 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+
+NeptuneMaps.TrashAssessmentMap.prototype.BuildTrashAssessmentMapLegend = function() {
+
+};
 
 NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJsonFeatureCollection, options) {
     var layerOptions = Object.assign({}, NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions);

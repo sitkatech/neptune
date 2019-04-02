@@ -31,7 +31,6 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public OVTASummaryMapInitJson OVTASummaryMapInitJson { get; }
         public IEnumerable<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations
         { get; }
-
         public string GeoServerUrl { get; }
     }
 }
