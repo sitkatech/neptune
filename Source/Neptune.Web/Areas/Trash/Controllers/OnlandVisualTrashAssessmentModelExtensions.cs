@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
@@ -9,8 +5,11 @@ using LtInfo.Common.GeoJson;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Security;
+using System.Collections.Generic;
+using System.Data.Entity.Spatial;
+using System.Linq;
+using System.Web;
 using static System.String;
 
 namespace Neptune.Web.Models
@@ -140,7 +139,6 @@ namespace Neptune.Web.Models
                 {
                     return null;
                 }
-
 
                 var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry.ToSqlGeometry().MakeValid().ToDbGeometry());
                 featureCollection.Features.AddRange(new List<Feature> { feature });
