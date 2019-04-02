@@ -174,6 +174,22 @@ NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, ove
     };
     this.layerControl = L.control.layers(baseLayers, overlayLayers, options);
     this.layerControl.addTo(this.map);
+
+    var closem = L.DomUtil.create("a", "leaflet-control-layers-close");
+    closem.innerHTML = "Close";
+    L.DomEvent.on(closem,
+        "click",
+        function(e) {
+            jQuery(".leaflet-control-layers").removeClass("leaflet-control-layers-expanded");
+            jQuery(".leaflet-control-layers-close").toggle();
+        });
+
+    jQuery(".leaflet-control-layers-toggle").on("click",
+        function() {
+            jQuery(".leaflet-control-layers-close").toggle();
+        });
+
+    jQuery(".leaflet-control-layers").append(closem);
 };
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {
