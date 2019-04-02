@@ -35,7 +35,7 @@
                                 fill: true,
                                 fillOpacity: 0.5,
                                 color: NeptuneMaps.Constants.defaultPolyColor,
-                                weight: 5,
+                                weight: 2,
                                 stroke: true
                             };
                         }
