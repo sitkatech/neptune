@@ -1868,9 +1868,6 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.Serialization" />
-    <Reference Include="TinyCsvParser, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d7df35b038077099, processorArchitecture=MSIL">
-      <HintPath>..\NuGetPackages\TinyCsvParser.2.3.0\lib\net45\TinyCsvParser.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\NuGetPackages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
