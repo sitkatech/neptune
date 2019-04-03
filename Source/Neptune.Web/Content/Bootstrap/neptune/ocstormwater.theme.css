@@ -1266,4 +1266,5 @@ hr {
   max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
+  width: 150px;
 }
