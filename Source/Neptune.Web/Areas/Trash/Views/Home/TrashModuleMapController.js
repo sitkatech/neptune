@@ -2,16 +2,16 @@
     .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes,
-            function(m) {
-                return m.TrashCaptureStatusTypeID.toString();
-            });
+        $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
 
         $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson,
             "Terrain",
             $scope.AngularViewData.GeoServerUrl);
 
-        $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", "Land Use Blocks");
+        var landUseBlocksLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
+        $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
 
 
         $scope.ovtaLayers = {
@@ -180,15 +180,14 @@
 
         $scope.initializeParcelLayer = function () {
             if ($scope.parcelLayerGeoJson) {
-                $scope.neptuneMap.layerControl.removeLayer($scope.parcelLayerGeoJson);
                 $scope.neptuneMap.map.removeLayer($scope.parcelLayerGeoJson);
             } 
             $scope.parcelLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
                 {
                     filter: function (feature, layer) {
-                        return _.includes($scope.selectedTrashCaptureStatusIDs,
-                            feature.properties.TrashCaptureStatusTypeID.toString());
+                        return _.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer,
+                            feature.properties.TrashCaptureStatusTypeID);
                     },
                     style: function (feature) {
                         return {
@@ -206,8 +205,6 @@
                     $scope.setActiveParcelByID(e.layer.feature.properties.ParcelID);
                     $scope.$apply();
                 });
-
-            $scope.neptuneMap.layerControl.addOverlay($scope.parcelLayerGeoJson, "Parcels");
         };
 
         $scope.initializeTreatmentBMPClusteredLayer();
@@ -253,30 +250,9 @@
             });
         });
 
-        $scope.filterMapByTrashCaptureStatus = function () {
-            _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-                function (tcs) {
-                    // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
-                    if (_.includes($scope.selectedTrashCaptureStatusIDs, tcs.TrashCaptureStatusTypeID.toString())) {
-                        if (!$scope.treatmentBMPLayerGroup.hasLayer(
-                            $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID])) {
-                            $scope.treatmentBMPLayerGroup.addLayer(
-                                $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID]);
-                        }
-                    } else {
-                        if ($scope.treatmentBMPLayerGroup.hasLayer(
-                            $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID])
-                        ) {
-                            $scope.treatmentBMPLayerGroup.removeLayer(
-                                $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID]);
-                        }
-                    }
-                });
-            $scope.rebuildMarkerClusterGroup();
-        };
+        
 
         $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
-            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
             if (isOn) {
                 if (!$scope.treatmentBMPLayerGroup.hasLayer(
                     $scope.treatmentBMPLayers[trashCaptureStatusTypeID])) {
@@ -295,7 +271,23 @@
                 $scope.rebuildMarkerClusterGroup();
             }
         };
-        
+
+        $scope.filterParcelsByTrashCaptureStatusType = function(trashCaptureStatusTypeID, isOn) {
+
+            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
+            if (isOn) {
+                if (!_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
+                    $scope.selectedTrashCaptureStatusIDsForParcelLayer.push(trashCaptureStatusTypeID);
+                }
+            } else {
+
+                if (_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
+                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForParcelLayer,
+                        trashCaptureStatusTypeID);
+                }
+            }
+            $scope.initializeParcelLayer();
+        };
 
         $scope.setSelectedMarker = function(layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
@@ -395,6 +387,8 @@
         var PARTIAL_TC = 2;
         $scope.fullBmpOn = true;
         $scope.partialBmpOn = true;
+        $scope.fullParcelOn = true;
+        $scope.partialParcelOn = true;
         _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
             function(tcs) {
                 $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);

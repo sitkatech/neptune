@@ -201,10 +201,48 @@
             </div>
         </label>
     </div>
+    <div id="parcelLegend" style="display: none;">
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullParcelOn)" ng-model="fullParcelOn">
+                <span>
+                    <img src="@TrashCaptureStatusType.Full.SquareImageUrlForLegend()" height="12" style="margin-bottom:3px;"/> WQMP (Full Trash Capture)
+                </span>
+            </div>
+        </label>
+
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialParcelOn)" ng-model="partialParcelOn">
+                <span>
+                    <img src="@TrashCaptureStatusType.Partial.SquareImageUrlForLegend()" height="12" style="margin-bottom:3px;" /> WQMP (Partial Trash Capture)
+                </span>
+            </div>
+        </label>
+
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneParcelOn)" ng-model="noneParcelOn">
+                <span>
+                    <img src="@TrashCaptureStatusType.None.SquareImageUrlForLegend()" height="12" style="margin-bottom:3px;" /> WQMP (No Trash Capture)
+                </span>
+            </div>
+        </label>
+
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedParcelOn)" ng-model="notProvidedParcelOn">
+                <span>
+                    <img src="@TrashCaptureStatusType.NotProvided.SquareImageUrlForLegend()" height="12" style="margin-bottom:3px;" /> WQMP (Not Provided)
+                </span>
+            </div>
+        </label>
+    </div>
 </div> @*NeptuneApp*@ 
 
 <script>
     jQuery(document).ready(function() {
         jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
+        jQuery("#parcelLegend").appendTo(".leaflet-control-layers-list").toggle();
     })
 </script>
