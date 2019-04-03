@@ -19,11 +19,14 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using GeoJSON.Net.Feature;
@@ -509,6 +512,31 @@ namespace Neptune.Web.Controllers
                     return File(bytes, "application/zip");
                 }
             }
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult  UploadBMPs()
+        {
+            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
+            var viewModel = new UploadTreatmentBMPsViewModel();
+            return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData, viewModel);
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult UploadBMPs(UploadTreatmentBMPsViewModel viewModel)
+        {
+            var uploadCSV = viewModel.UploadCSV;
+
+            // todo: do something with uploadCSV
+
+        // parse the csv into bmp rows
+        //var treatmentBmps = TreatmentBMPCsvParserHelper.ParseBmpRowsFromCsv(uploadCSV.InputStream);
+
+            throw new NotImplementedException();
         }
 
         private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,

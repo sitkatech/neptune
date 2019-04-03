@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\TreatmentBMPCsvParserHelper.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -557,6 +558,9 @@
     <Compile Include="Views\Home\Training.cs" />
     <Compile Include="Views\Home\TrainingViewData.cs" />
     <Compile Include="Views\TreatmentBMP\TreatmentBMPDetailMapInitJson.cs" />
+    <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPsViewData.cs" />
+    <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPs.cs" />
+    <Compile Include="Views\TreatmentBMP\UploadTreatmentBMPsViewModel.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WaterQualityManagementPlanVerificationGridSpec.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerify.cs" />
     <Compile Include="Views\WaterQualityManagementPlan\WqmpVerifyViewData.cs" />
@@ -1669,6 +1673,7 @@
     <Content Include="Views\Delineation\DelineationMap.less" />
     <Content Include="Views\Delineation\DelineationMapTemplates.cshtml" />
     <Content Include="Views\Help\BulkUploadRequest.cshtml" />
+    <Content Include="Views\TreatmentBMP\UploadTreatmentBMPs.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -1758,6 +1763,7 @@
       <HintPath>..\NuGetPackages\Microsoft.Owin.Security.OpenIdConnect.3.1.0\lib\net45\Microsoft.Owin.Security.OpenIdConnect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Mvc, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\NuGetPackages\Microsoft.AspNet.Mvc.Futures.5.0.0\lib\net40\Microsoft.Web.Mvc.dll</HintPath>
@@ -1862,6 +1868,9 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml.Serialization" />
+    <Reference Include="TinyCsvParser, Version=2.3.0.0, Culture=neutral, PublicKeyToken=d7df35b038077099, processorArchitecture=MSIL">
+      <HintPath>..\NuGetPackages\TinyCsvParser.2.3.0\lib\net45\TinyCsvParser.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\NuGetPackages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
