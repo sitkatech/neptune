@@ -97,6 +97,7 @@ else
             drawControl = new L.Control.Draw(drawOptions);
             assessmentAreaMap.map.addControl(drawControl);
             assessmentAreaMap.map.addLayer(assessmentAreaMap.editableFeatureGroup);
+            assessmentAreaMap.layerControl.addOverlay(assessmentAreaMap.editableFeatureGroup, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
 
             assessmentAreaMap.map.on('draw:created',
                 function(e) {

@@ -118,6 +118,7 @@
                     }
                 });
             assessmentAreaLayer.addTo(summaryMap.map);
+            summaryMap.layerControl.addOverlay(assessmentAreaLayer, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
             if (summaryMap.map.getZoom > 18) {
                 summaryMap.map.setZoom(18);
             }

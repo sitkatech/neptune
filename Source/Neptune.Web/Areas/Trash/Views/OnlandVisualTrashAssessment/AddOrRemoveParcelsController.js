@@ -71,7 +71,9 @@
                 });
 
             $scope.neptuneMap.selectedParcelLayer = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl, wmsParameters);
-            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel);
+            var labelText = "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel;
+            var label = "<span><img src='/Content/img/legendImages/selectedGeometry.png' height='12px' style='margin-bottom:3px;'/> " + labelText + "</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, label);
             $scope.neptuneMap.map.addLayer($scope.neptuneMap.selectedParcelLayer);
 
             // Update map extent to selected parcels
