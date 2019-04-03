@@ -15,15 +15,15 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.map.getPane("markerPane").style.zIndex = 10001;
 
     window.stormwaterNetworkLayer = this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-        "Stormwater Network");
+        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
 
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
-            "Network Catchments",
+    "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
             { pane: "networkCatchmentPane" });
 
     this.addWmsLayer("OCStormwater:Parcels",
-        "All Parcels",
+        "<span><img src='/Content/img/legendImages/parcel.png' height='12px' style='margin-bottom:3px;' /> Parcels</span>",
         {
             styles: "parcel_alt"
         }, true);
@@ -51,8 +51,11 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
     if (this.markerClusterGroup) {
         this.map.removeLayer(markerClusterGroup);
     }
-
+    
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
+
+    var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
+    this.layerControl.addOverlay(this.markerClusterGroup, legendSpan);
     this.hookupSelectTreatmentBMPOnClick();
 };
 

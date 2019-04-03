@@ -482,7 +482,6 @@ NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
         }
     });
     layerToCluster.addTo(markerClusterGroup);
-    this.addLayerToLayerControl(markerClusterGroup, "Treatment BMPs");
     markerClusterGroup.addTo(this.map);
 
     return markerClusterGroup;
