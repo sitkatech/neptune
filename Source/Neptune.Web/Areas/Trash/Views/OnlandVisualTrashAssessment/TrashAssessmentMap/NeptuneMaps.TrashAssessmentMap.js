@@ -37,6 +37,8 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJ
     this.observationsLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
     this.observationsLayer.addTo(this.map);
 
+    this.layerControl.addOverlay(this.observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
+
     return this.observationsLayer;
 };
 
@@ -46,6 +48,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateTransectLineLayer = function(geoJ
 
     this.transectLineLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
     this.transectLineLayer.addTo(this.map);
+    this.layerControl.addOverlay(this.transectLineLayer, "<span><img src='/Content/img/legendImages/transectLine.png' height='12px' /> Transect</span>");
 
     return this.transectLineLayer;
 };

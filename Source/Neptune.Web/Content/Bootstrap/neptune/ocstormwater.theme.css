@@ -1262,3 +1262,8 @@ hr {
   cursor: pointer;
   float: right;
 }
+.leaflet-control-layers-list {
+  max-height: 350px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
