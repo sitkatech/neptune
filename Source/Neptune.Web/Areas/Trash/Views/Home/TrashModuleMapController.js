@@ -2,7 +2,7 @@
     .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-
+        console.log($scope.AngularViewData);
         $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes,
             function(m) {
                 return m.TrashCaptureStatusTypeID.toString();
@@ -17,27 +17,27 @@
 
         $scope.ovtaLayers = {
             4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas - Score A",
+                "<span><img src='/Content/img/legendImages/ovtaGreen.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score A</span>",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
                 }),
             3: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas - Score B",
+                "<span><img src='/Content/img/legendImages/ovtaYellow.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score B</span>",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
                 }),
             2: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas - Score C",
+                "<span><img src='/Content/img/legendImages/ovtaSalmon.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score C</span>",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
                 }),
             1: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas - Score D",
+                "<span><img src='/Content/img/legendImages/ovtaMagenta.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score D</span>",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
                 }),
             0: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "OVTA Areas - Not Yet Assessed",
+                "<span><img src='/Content/img/legendImages/ovtaGrey.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Not Yet Assessed</span>",
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
                 })
@@ -113,40 +113,58 @@
         
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
-            $scope.treatmentBMPLayerGeoJson = L.geoJson(
-                $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
-                {
-                    filter: function (feature, layer) {
-                        return _.includes($scope.selectedTrashCaptureStatusIDs,
-                            feature.properties.TrashCaptureStatusTypeID.toString());
-                    },
-                    pointToLayer: function (feature, latlng) {
-                        var icon = L.MakiMarkers.icon({
-                            icon: feature.properties.FeatureGlyph,
-                            color: feature.properties.FeatureColor,
-                            size: "m"
-                        });
 
-                        return L.marker(latlng,
-                            {
-                                icon: icon,
-                                title: feature.properties.Name,
-                                alt: feature.properties.Name
-                            });
-                    },
-                    style: function (feature) {
-                        return {
-                            color: feature.properties.FeatureColor = feature.properties.FeatureColor,
-                            weight: feature.properties.FeatureWeight = feature.properties.FeatureWeight,
-                            fill: feature.properties.FillPolygon = feature.properties.FillPolygon,
-                            fillOpacity: feature.properties.FillOpacity = feature.properties.FillOpacity
-                        };
-                    }
+            $scope.treatmentBMPLayers = {};
+            
+
+            _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
+                function(tcs) {
+
+                        var layer = L.geoJson(
+                            $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+                        {
+                            filter: function (feature, layer) {
+                                return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID;
+                            },
+                            pointToLayer: function (feature, latlng) {
+                                var icon = L.MakiMarkers.icon({
+                                    icon: feature.properties.FeatureGlyph,
+                                    color: feature.properties.FeatureColor,
+                                    size: "m"
+                                });
+
+                                return L.marker(latlng,
+                                    {
+                                        icon: icon,
+                                        title: feature.properties.Name,
+                                        alt: feature.properties.Name
+                                    });
+                            }
+                        });
+                    $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID] = layer;
+                    console.log(tcs.TrashCaptureStatusTypeDisplayName);
                 });
+
+            $scope.treatmentBMPLayerGroup = L.layerGroup(Object.values($scope.treatmentBMPLayers));
+
+            $scope.treatmentBMPLayerGroup.on('click',
+                function (e) {
+                    $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
+                    $scope.$apply();
+                });
+
+
+            $scope.buildMarkerClusterGroup();
+
+            //$scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
+        };
+
+        $scope.buildMarkerClusterGroup = function () {
+            debugger;
             if ($scope.markerClusterGroup) {
-                $scope.neptuneMap.layerControl.removeLayer($scope.markerClusterGroup);
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
-            } 
+            }
+
             $scope.markerClusterGroup = L.markerClusterGroup({
                 maxClusterRadius: 40,
                 showCoverageOnHover: false,
@@ -158,16 +176,9 @@
                     });
                 }
             });
-            $scope.treatmentBMPLayerGeoJson.addTo($scope.markerClusterGroup);
+            $scope.treatmentBMPLayerGroup.addTo($scope.markerClusterGroup);
             $scope.markerClusterGroup.addTo($scope.neptuneMap.map);
-            $scope.treatmentBMPLayerGeoJson.on('click',
-                function (e) {
-                    $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
-                    $scope.$apply();
-                });
-
-            $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
-        };
+        }
 
         $scope.initializeParcelLayer = function () {
             if ($scope.parcelLayerGeoJson) {
@@ -245,8 +256,25 @@
         });
 
         $scope.filterMapByTrashCaptureStatus = function () {
-            $scope.initializeTreatmentBMPClusteredLayer();
-            $scope.initializeParcelLayer();
+            _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
+                function (tcs) {
+                    // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
+                    if (_.includes($scope.selectedTrashCaptureStatusIDs, tcs.TrashCaptureStatusTypeID.toString())) {
+                        if (!$scope.treatmentBMPLayerGroup.hasLayer(
+                            $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID])) {
+                            $scope.treatmentBMPLayerGroup.addLayer(
+                                $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID]);
+                        }
+                    } else {
+                        if ($scope.treatmentBMPLayerGroup.hasLayer(
+                            $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID])
+                        ) {
+                            $scope.treatmentBMPLayerGroup.removeLayer(
+                                $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID]);
+                        }
+                    }
+                });
+            $scope.buildMarkerClusterGroup();
         };
 
         $scope.setSelectedMarker = function(layer) {

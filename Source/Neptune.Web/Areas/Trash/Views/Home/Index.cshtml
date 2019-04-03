@@ -55,6 +55,10 @@
         .bootstrap-select {
             padding-left: 0;
         }
+
+        .leaflet-control-layers-list {
+            width: 185px !important;
+        }
     </style>
 }
 
@@ -157,13 +161,6 @@
                         <div class="col-sm-12 col-md-3">
                             <h4>Legend and Map Controls</h4>
 
-                            @Html.LabelWithSugarFor(FieldDefinition.OVTAScore, FieldDefinition.OVTAScore.GetFieldDefinitionLabelPluralized())
-                            <ul id="ovtaAreaLegend">
-                                <li><img src="@OnlandVisualTrashAssessmentScore.A.LegendImgUrl()" /> A</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.B.LegendImgUrl()" /> B</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.C.LegendImgUrl()" /> C</li>
-                                <li><img src="@OnlandVisualTrashAssessmentScore.D.LegendImgUrl()" /> D</li>
-                            </ul>
                             @Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus, "Trash Capture BMPs and WQMPs")
                             <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="100%" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
                                     data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
