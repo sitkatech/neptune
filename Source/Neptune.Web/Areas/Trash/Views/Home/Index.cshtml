@@ -152,22 +152,11 @@
                                 <p class="systemText">No asset selected</p>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-7" style="margin-top: 20px;">
+                        <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
                             <div id="mapContainer">
                                 <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-3">
-                            <h4>Legend and Map Controls</h4>
-
-                            @Html.LabelWithSugarFor(FieldDefinition.TrashCaptureStatus, "Trash Capture BMPs and WQMPs")
-                            <select id="trashCaptureStatusTypeDropdown" class="btn btn-sm selectpicker" data-width="100%" multiple="multiple" ng-change="filterMapByTrashCaptureStatus()" ng-model="selectedTrashCaptureStatusIDs"
-                                    data-selected-text-format="count>1" data-count-selected-text="{0} of {1} selected" data-actions-box="true">
-                                <option ng-repeat="trashCaptureStatusType in AngularViewData.TrashCaptureStatusTypes | orderBy:'TrashCaptureStatusTypeSortOrder'" value="{{trashCaptureStatusType.TrashCaptureStatusTypeID}}">
-                                    {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
-                                </option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -177,8 +166,8 @@
     <div id="treatmentBMPLegend" style="display: none;">
         <label>
             <div>
-                @*These guys do not need to be represented on the model, but angular doesn't let you use ng-change without ng-model*@
-                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID))" ng-model="fake1">
+                
+                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
                 <span>
                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
                 </span>
@@ -187,7 +176,7 @@
 
         <label>
             <div>
-                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID))" ng-model="fake2">
+                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
                 <span>
                     <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                 </span>
@@ -196,7 +185,7 @@
 
         <label>
             <div>
-                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID))" ng-model="fake3">
+                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneBmpOn)" ng-model="noneBmpOn">
                 <span>
                     <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" height="18" /> BMP (No Trash Capture)
                 </span>
@@ -205,7 +194,7 @@
 
         <label>
             <div>
-                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID))" ng-model="fake4">
+                <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedBmpOn)" ng-model="notProvidedBmpOn">
                 <span>
                     <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" height="18" /> BMP (Not Provided)
                 </span>
@@ -213,3 +202,9 @@
         </label>
     </div>
 </div> @*NeptuneApp*@ 
+
+<script>
+    jQuery(document).ready(function() {
+        jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
+    })
+</script>

@@ -2,7 +2,6 @@
     .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        console.log($scope.AngularViewData);
         $scope.selectedTrashCaptureStatusIDs = _.map($scope.AngularViewData.TrashCaptureStatusTypes,
             function(m) {
                 return m.TrashCaptureStatusTypeID.toString();
@@ -142,7 +141,6 @@
                             }
                         });
                     $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID] = layer;
-                    console.log(tcs.TrashCaptureStatusTypeDisplayName);
                 });
 
             $scope.treatmentBMPLayerGroup = L.layerGroup(Object.values($scope.treatmentBMPLayers));
@@ -154,12 +152,12 @@
                 });
 
 
-            $scope.buildMarkerClusterGroup();
+            $scope.rebuildMarkerClusterGroup();
 
             //$scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
         };
 
-        $scope.buildMarkerClusterGroup = function () {
+        $scope.rebuildMarkerClusterGroup = function () {
             
             if ($scope.markerClusterGroup) {
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
@@ -274,12 +272,30 @@
                         }
                     }
                 });
-            $scope.buildMarkerClusterGroup();
+            $scope.rebuildMarkerClusterGroup();
         };
 
-        $scope.filterTrashCaptureStatusType = function(trashCaptureStatusTypeID) {
-            console.log(trashCaptureStatusTypeID);
+        $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
+            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
+            if (isOn) {
+                if (!$scope.treatmentBMPLayerGroup.hasLayer(
+                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID])) {
+                    $scope.treatmentBMPLayerGroup.addLayer(
+                        $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
+                }
+            } else {
+                if ($scope.treatmentBMPLayerGroup.hasLayer(
+                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID])
+                ) {
+                    $scope.treatmentBMPLayerGroup.removeLayer(
+                        $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
+                }
+            }
+            if (!skipRebuild) {
+                $scope.rebuildMarkerClusterGroup();
+            }
         };
+        
 
         $scope.setSelectedMarker = function(layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
@@ -374,10 +390,14 @@
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
 
-        jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
-
-        $scope.fake1 = true;
-        $scope.fake2 = true;
-        $scope.fake3 = true;
-        $scope.fake4 = true;
+// ReSharper disable InconsistentNaming
+        var FULL_TC = 1;
+        var PARTIAL_TC = 2;
+        $scope.fullBmpOn = true;
+        $scope.partialBmpOn = true;
+        _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
+            function(tcs) {
+                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);
+            });
+        $scope.rebuildMarkerClusterGroup();
     });
