@@ -160,7 +160,7 @@
         };
 
         $scope.buildMarkerClusterGroup = function () {
-            debugger;
+            
             if ($scope.markerClusterGroup) {
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
             }
@@ -277,6 +277,10 @@
             $scope.buildMarkerClusterGroup();
         };
 
+        $scope.filterTrashCaptureStatusType = function(trashCaptureStatusTypeID) {
+            console.log(trashCaptureStatusTypeID);
+        };
+
         $scope.setSelectedMarker = function(layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
@@ -369,4 +373,11 @@
         $scope.zoomMapToCurrentLocation = function() {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
+
+        jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
+
+        $scope.fake1 = true;
+        $scope.fake2 = true;
+        $scope.fake3 = true;
+        $scope.fake4 = true;
     });

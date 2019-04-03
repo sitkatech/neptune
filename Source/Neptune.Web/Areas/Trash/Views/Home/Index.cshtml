@@ -168,28 +168,48 @@
                                     {{trashCaptureStatusType.TrashCaptureStatusTypeDisplayName}}
                                 </option>
                             </select>
-                            <ul id="tcLegend">
-                                <li>
-                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" /> Full Trash Capture
-                                </li>
-
-                                <li>
-                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" /> Partial Trash Capture
-                                </li>
-
-                                <li>
-                                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" /> No Trash Capture
-                                </li>
-
-                                <li>
-                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" /> Not Provided
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div id="treatmentBMPLegend" style="display: none;">
+        <label>
+            <div>
+                @*These guys do not need to be represented on the model, but angular doesn't let you use ng-change without ng-model*@
+                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID))" ng-model="fake1">
+                <span>
+                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
+                </span>
+            </div>
+        </label>
 
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID))" ng-model="fake2">
+                <span>
+                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
+                </span>
+            </div>
+        </label>
+
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID))" ng-model="fake3">
+                <span>
+                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" height="18" /> BMP (No Trash Capture)
+                </span>
+            </div>
+        </label>
+
+        <label>
+            <div>
+                <input type="checkbox" ng-change="filterTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID))" ng-model="fake4">
+                <span>
+                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" height="18" /> BMP (Not Provided)
+                </span>
+            </div>
+        </label>
+    </div>
 </div> @*NeptuneApp*@ 
