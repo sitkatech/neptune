@@ -192,6 +192,7 @@
     <Compile Include="CommonUtilityTest.cs" />
     <Compile Include="CrossAreaRouteAttribute.cs" />
     <Compile Include="Crypto.cs" />
+    <Compile Include="CsvReader.cs" />
     <Compile Include="DataTableExtensions.cs" />
     <Compile Include="DbSpatial\DbSpatialHelper.cs" />
     <Compile Include="DbSpatial\DbSpatialHelperTest.cs" />
