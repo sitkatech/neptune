@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LtInfo.Common.Mvc;
@@ -28,6 +29,16 @@ namespace Neptune.Web.Areas.Trash.Controllers
             OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
             ObservationPhotoStagingSimple opss)
         {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(new
+                {
+                    Error =
+                        "There was an error uploading the image. Please try again. If the issue persists, please contact support."
+                });
+            }
+
             var fileResource = FileResource.CreateNewFromHttpPostedFile(opss.Photo, CurrentPerson);
 
             var staging = new OnlandVisualTrashAssessmentObservationPhotoStaging(fileResource,

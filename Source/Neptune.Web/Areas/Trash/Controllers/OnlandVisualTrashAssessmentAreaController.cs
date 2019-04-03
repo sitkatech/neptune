@@ -74,7 +74,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             viewModel.UpdateModel(onlandVisualTrashAssessmentArea);
-            SetMessageForDisplay($"Successfully updated Onland Visual Trash Assessment Area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}");
+            SetMessageForDisplay("Successfully updated OVTA Area details");
 
             return new ModalDialogFormJsonResult(onlandVisualTrashAssessmentArea.GetDetailUrl());
         }
@@ -116,7 +116,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             if (onlandVisualTrashAssessmentAreaCount != 0)
             {
-                confirmMessage = $"The Assessment Area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}, has {onlandVisualTrashAssessmentAreaCount} Assessment(s). You must first delete all associated Assessments before you can delete the Assessment Are ?";
+                confirmMessage = $"The Assessment Area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName} has {onlandVisualTrashAssessmentAreaCount} Assessment(s). You must first delete all associated Assessments before you can delete the Assessment Area";
                 viewData = new ConfirmDialogFormViewData(confirmMessage, false);
             }
             else

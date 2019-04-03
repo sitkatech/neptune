@@ -537,7 +537,6 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
 };
 
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
-    debugger;
     if (!treatmentBMPID) {
         return; //misplaced call
     }
