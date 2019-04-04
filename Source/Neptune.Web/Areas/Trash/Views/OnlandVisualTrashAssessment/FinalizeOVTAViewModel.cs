@@ -91,7 +91,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                         wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
                     }
 
-                    var dbgeom = DbGeometry.FromText(wkt, 4326);
+                    var dbgeom = DbGeometry.FromText(wkt, MapInitJson.CoordinateSystemId);
 
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
                         onlandVisualTrashAssessment.StormwaterJurisdiction, dbgeom);

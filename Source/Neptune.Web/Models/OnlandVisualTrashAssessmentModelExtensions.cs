@@ -59,7 +59,7 @@ namespace Neptune.Web.Models
 
                 var linestring = $"LINESTRING ({points})";
 
-                return DbGeometry.LineFromText(linestring, 4326);
+                return DbGeometry.LineFromText(linestring, MapInitJson.CoordinateSystemId);
             }
 
             return null;
