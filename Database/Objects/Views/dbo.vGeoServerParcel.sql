@@ -14,5 +14,5 @@ select
 	p.ParcelZipCode,
 	p.LandUse,
 	isnull(p.ParcelAreaInAcres, 0) as ParcelArea,
-	cast(case when w.ParcelID is null then 0 else 1 end as bit) as IsWQMPParcel
-from dbo.Parcel p left join (select distinct parcelid from dbo.WaterQualityManagementPlanParcel) w on p.ParcelID = w.ParcelID
+	Case when WQMPCount is null then 0 else WQMPCount end as WQMPCount
+from dbo.Parcel p left join (select ParcelID, count(*) as WQMPCount from dbo.WaterQualityManagementPlanParcel group by ParcelID) w on p.ParcelID = w.ParcelID

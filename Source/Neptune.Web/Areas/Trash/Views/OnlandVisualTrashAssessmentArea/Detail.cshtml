@@ -13,6 +13,7 @@
 @section JavascriptAndStylesContent
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
+    <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
     @{ DhtmlxGridIncludes.RenderPartialView(Html); }
 
 }
@@ -34,7 +35,7 @@
                 @if (ViewDataTyped.UserHasAssessmentAreaManagePermission)
                 {
                     <span class="pull-right">
-                    @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.EditDetailsUrl, "Edit Details", 800, "Save", "Cancel", new List<string>(), null, null)
+                        @ModalDialogFormHelper.ModalDialogFormLink(string.Format("{0}", BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-edit")), ViewDataTyped.EditDetailsUrl, "Edit Details", 800, "Save", "Cancel", new List<string>(), null, null)
                     </span>
                 }
             </div>
@@ -68,7 +69,7 @@
                 Location
             </div>
             <div class="panel-body">
-                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 250px;"></div>
+                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px;"></div>
                 <p class="systemText" style="margin-top: 10px; margin-bottom: 0px;">The transect line from the original assessment of this area is shown, if available, along with the observations from that assessment.</p>
             </div>
         </div>
@@ -93,7 +94,7 @@
     var observationsLayer;
     jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
-        summaryMap = new NeptuneMaps.Map(mapInitJson);
+        summaryMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
         var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
             style: function (feature) {
                 return {
@@ -101,11 +102,31 @@
                     fill: true,
                     fillOpacity: 0.5,
                     color: NeptuneMaps.Constants.defaultPolyColor,
-                    weight: 5,
+                    weight: 2,
                     stroke: true
                 };
             }
         });
+
+        assessmentAreaLayer.addTo(summaryMap.map);
+
+        if (mapInitJson.TransectLineLayerGeoJson) {
+
+            var transectLineLayer = L.geoJson(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {
+                style: function (feature) {
+                    return {
+                        fillOpacity: 0.5,
+                        color: "#FF00FF",
+                        weight: 2,
+                        stroke: true
+                    };
+                }
+            });
+
+            transectLineLayer.addTo(summaryMap.map);
+
+            summaryMap.layerControl.addOverlay(transectLineLayer, "<span><img src='/Content/img/legendImages/transectLine.png' height='12px' /> Transect</span>");
+        }
 
         if (mapInitJson.ObservationsLayerGeoJson) {
             var observationsLayer = L.geoJSON(mapInitJson.ObservationsLayerGeoJson.GeoJsonFeatureCollection,
@@ -127,25 +148,11 @@
                 }
             );
             observationsLayer.addTo(summaryMap.map);
+            summaryMap.layerControl.addOverlay(observationsLayer, "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+FF00FF@2x.png' height='30px' /> Observations</span>");
         }
-
-        if (mapInitJson.TransectLineLayerGeoJson) {
-
-            var transectLineLayer = L.geoJson(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {
-                style: function (feature) {
-                    return {
-                        fillOpacity: 0.5,
-                        color: "#FF00FF",
-                        weight: 2,
-                        stroke: true
-                    };
-                }
-            });
-
-            transectLineLayer.addTo(summaryMap.map);
-        }
-        assessmentAreaLayer.addTo(summaryMap.map);
         summaryMap.map.fitBounds(assessmentAreaLayer.getBounds());
+
+
     });
 
 </script>

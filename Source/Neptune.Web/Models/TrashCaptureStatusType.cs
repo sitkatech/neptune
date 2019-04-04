@@ -12,6 +12,11 @@ namespace Neptune.Web.Models
         {
             return "https://api.tiles.mapbox.com/v3/marker/pin-m-water+" + TrashCaptureStatusTypeColorCode + ".png";
         }
+
+        public string SquareImageUrlForLegend()
+        {
+            return "/Content/img/legendImages/" + TrashCaptureStatusTypeName + ".png";
+        }
     }
 
     public partial class TrashCaptureStatusTypeFull

@@ -21,6 +21,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
         public string GridDataUrl { get; }
         public bool UserHasAssessmentAreaManagePermission { get; }
         public OVTAAreaMapInitJson MapInitJson { get; }
+        public string GeoServerUrl { get; }
 
         public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, OVTAAreaMapInitJson mapInitJson, string newUrl, string editDetailsUrl) : base(currentPerson)
         {
@@ -53,6 +54,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             GridName = "onlandVisualTrashAssessmentsGrid";
             GridDataUrl =
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(j => j.OVTAGridJsonDataForAreaDetails(onlandVisualTrashAssessmentArea));
+
+            GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
         }
     }
 

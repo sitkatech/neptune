@@ -75,11 +75,12 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
         {
-            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, 4326).ToSqlGeometry().MakeValid().ToDbGeometry();
+            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid().ToDbGeometry();
             
             if (geom != null)
             {
                 // make sure the SRID is 4326 before we save
+                // todo: this code appears in FinalizeOVTAViewModel as well; it should either be encapsulated or we should figure out if there's a way to not have to do this in the first place
                 var wkt = geom.ToString();
 
                 if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
@@ -91,7 +92,7 @@ namespace Neptune.Web.Controllers
                     wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
                 }
 
-                geom = DbGeometry.FromText(wkt, 4326);
+                geom = DbGeometry.FromText(wkt, MapInitJson.CoordinateSystemId);
             }
 
 

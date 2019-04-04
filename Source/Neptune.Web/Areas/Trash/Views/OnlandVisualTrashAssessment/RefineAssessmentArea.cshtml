@@ -1,8 +1,5 @@
 ﻿@using LtInfo.Common.BootstrapWrappers
 @using LtInfo.Common.ModalDialog
-@using Neptune.Web.Models
-@using Neptune.Web.Views.FieldVisit
-@using Neptune.Web.Views.Shared
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @inherits Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.RefineAssessmentArea
@@ -22,7 +19,7 @@ else
 
     <p class="systemText">Note that the Assessment Area's edges should not intersect each other. If the area contains any edges that intersect each other, they will be split into separate shapes as necessary.</p>
 
-    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 350px; margin: 0"></div>
+    <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 450px; margin: 0"></div>
 
     using (Html.BeginForm())
      {
@@ -100,6 +97,7 @@ else
             drawControl = new L.Control.Draw(drawOptions);
             assessmentAreaMap.map.addControl(drawControl);
             assessmentAreaMap.map.addLayer(assessmentAreaMap.editableFeatureGroup);
+            assessmentAreaMap.layerControl.addOverlay(assessmentAreaMap.editableFeatureGroup, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
 
             assessmentAreaMap.map.on('draw:created',
                 function(e) {
