@@ -20,15 +20,6 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
@@ -40,6 +31,13 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace Neptune.Web.Controllers
 {
@@ -531,10 +529,9 @@ namespace Neptune.Web.Controllers
         {
             var uploadCSV = viewModel.UploadCSV;
 
-            // todo: do something with uploadCSV
-
-        // parse the csv into bmp rows
-        //var treatmentBmps = TreatmentBMPCsvParserHelper.ParseBmpRowsFromCsv(uploadCSV.InputStream);
+            var errorList = new List<string>();
+            // parse the csv into bmp rows
+            var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, out errorList);
 
             throw new NotImplementedException();
         }

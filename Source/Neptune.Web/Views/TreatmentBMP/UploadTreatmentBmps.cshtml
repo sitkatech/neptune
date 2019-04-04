@@ -18,14 +18,18 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*@
-@using LtInfo.Common.BootstrapWrappers
-@using LtInfo.Common.ModalDialog
-@using Microsoft.Web.Mvc
+
+
+<style>
+    .mt-3 {
+        margin-top: 20px;
+    }
+</style>
 
 @inherits Neptune.Web.Views.TreatmentBMP.UploadTreatmentBMPs
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         @Html.EditorFor(m => m.UploadCSV)
-        <button type="submit" class="btn btn-neptune pull-right">Upload</button>
+        <button type="submit" class="btn btn-neptune pull-right mt-3">Upload</button>
     </div>
 </form>
