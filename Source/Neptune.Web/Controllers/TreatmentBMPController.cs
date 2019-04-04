@@ -33,11 +33,14 @@ using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using ClosedXML.Excel;
+using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Controllers
 {
@@ -516,7 +519,10 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult  UploadBMPs()
         {
-            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
+            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToSelectListWithEmptyFirstRow(
+                x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
+            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
             var viewModel = new UploadTreatmentBMPsViewModel();
             return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData, viewModel);
         }
@@ -528,10 +534,15 @@ namespace Neptune.Web.Controllers
         public ActionResult UploadBMPs(UploadTreatmentBMPsViewModel viewModel)
         {
             var uploadCSV = viewModel.UploadCSV;
+            var bmpType = viewModel.BMPType;
 
             var errorList = new List<string>();
-            // parse the csv into bmp rows
             var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, out errorList);
+
+            foreach (var treatmentBMP in treatmentBmps)
+            {
+                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP.CastTo<TreatmentBMP>());
+            }
 
             throw new NotImplementedException();
         }

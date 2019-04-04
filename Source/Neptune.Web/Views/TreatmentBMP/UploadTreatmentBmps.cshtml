@@ -1,35 +1,48 @@
 ﻿@*-----------------------------------------------------------------------
-<copyright file="NewMonitoringProgramDocument.cshtml" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
-<author>Sitka Technology Group</author>
-</copyright>
+    <copyright file="NewMonitoringProgramDocument.cshtml" company="Tahoe Regional Planning Agency">
+    Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+    <author>Sitka Technology Group</author>
+    </copyright>
 
-<license>
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    <license>
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
 
-Source code is available upon request via <support@sitkatech.com>.
-</license>
------------------------------------------------------------------------*@
+    Source code is available upon request via <support@sitkatech.com>.
+    </license>
+    -----------------------------------------------------------------------*@
 
+
+@using LtInfo.Common.HtmlHelperExtensions
+@inherits Neptune.Web.Views.TreatmentBMP.UploadTreatmentBMPs
 
 <style>
-    .mt-3 {
+
+    .mt-2 {
         margin-top: 20px;
+    }
+
+    .mb-2 {
+        margin-bottom: 20px;
     }
 </style>
 
-@inherits Neptune.Web.Views.TreatmentBMP.UploadTreatmentBMPs
 <form method="post" enctype="multipart/form-data">
-    <div class="form-group">
+    <div class="form-group form-horizontal">
+        <div class="col-sm-4 col-xs-12 control-label">
+            @Html.LabelWithSugarFor(m => m.BMPType)
+        </div>
+        <div class="col-sm-8 col-xs-12 mb-2">
+            @Html.DropDownListFor(m => m.BMPType, ViewDataTyped.BMPTypes, new { @class = "form-control", style = "width:auto;" })
+        </div>
         @Html.EditorFor(m => m.UploadCSV)
-        <button type="submit" class="btn btn-neptune pull-right mt-3">Upload</button>
+        <button type="submit" class="btn btn-neptune pull-right mt-2">Upload</button>
     </div>
 </form>
