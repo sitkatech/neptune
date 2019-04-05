@@ -535,7 +535,7 @@ namespace Neptune.Web.Controllers
             var bmpType = viewModel.BMPType;
 
             var errorList = new List<string>();
-            var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, out errorList);
+            var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType,out errorList);
 
             if (errorList.Count != 0)
             {
