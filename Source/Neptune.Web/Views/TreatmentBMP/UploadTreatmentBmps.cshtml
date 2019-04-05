@@ -33,44 +33,67 @@
         margin-bottom: 20px;
     }
 </style>
+<p>Use this form to bulk upload Treatment BMPs. If the upload fails a detailed error report will be provided, otherwise BMPs will be imported per the CSV. Once uploaded, this action cannot be undone. <strong>It is strongly advised to test the upload in the QA environment prior to bulk uploading data to Production.</strong> The CSV must have a header row with column names that match the label of the field to be uploaded. The CSV should follow this general format:</p>
+
+<pre class="panel">
+BMP Name,BMP Type,Latitude,Longitude,Jurisdiction,Owner,Year Built or Installed,Asset ID in System of Record,Required Lifespan of Installation,Allowable End Date of Installation (if applicable),Required Field Visits Per Year,Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis
+Test2,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,Not Provided
+</pre>
+
+<p>Some fields are optional and others are required. Optional fields must exist in the CSV header, but can have blank/null data in the CSV. The fields must appear in the specified order.</p>
+
 
 <form method="post" enctype="multipart/form-data">
     <div class="form-group form-horizontal">
-        <div class="col-sm-4 col-xs-12 control-label">
+        <div class="col-sm-2 col-xs-12 control-label">
             @Html.LabelWithSugarFor(m => m.BMPType)
         </div>
-        <div class="col-sm-8 col-xs-12 mb-2">
+        <div class="col-sm-10 col-xs-12">
             @Html.DropDownListFor(m => m.BMPType, ViewDataTyped.BMPTypes, new { @class = "form-control", style = "width:auto;" })
         </div>
-        @Html.EditorFor(m => m.UploadCSV)
-        <button type="submit" class="btn btn-neptune pull-right mt-2">Upload</button>
     </div>
+    <div class="form-group form-horizontal">
+        <div class="col-sm-2 col-xs-12 control-label">
+            @Html.LabelWithSugarFor(m => m.UploadCSV)
+        </div>
+        <div class="col-sm-10 col-xs-12">
+            @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control", stylke = "width:400px;" })
+        </div>
+    </div>
+    <div class="pull-right">
+        <button type="submit" class="btn btn-neptune">Upload</button>
+    </div>
+    <div class="clearfix"></div>
 </form>
 
 @if (ViewDataTyped.ErrorList.Any())
 {
-    int count = 1;
-    <div class="col-md-12 col-xs-12 mt-2">
-        <strong>There are @ViewDataTyped.ErrorList.Count errors that need to be fixed before upload can be successful</strong>
-        <div class="row mt-2">
-            <div class="col-sm-1">
-                <strong>Error</strong>
-            </div>
-            <div class="col-sm-11">
-                <strong>Description</strong>
-            </div>
-        </div>
-        @foreach (var error in ViewDataTyped.ErrorList)
-        {
-            <div clas="row">
+    var count = 1;
+    <div>
+        <div class="alert alert-danger">There are @ViewDataTyped.ErrorList.Count errors that need to be fixed before upload can be successful</div>
+        <div class="col-md-12 col-xs-12 mt-2">
+
+            <div class="row mt-2">
                 <div class="col-sm-1">
-                    @count
+                    <strong>Error</strong>
                 </div>
                 <div class="col-sm-11">
-                    @error;
-                </div>              
+                    <strong>Description</strong>
+                </div>
             </div>
-            count++;
-        }
+            @foreach (var error in ViewDataTyped.ErrorList)
+            {
+                <div clas="row">
+                    <div class="col-sm-1">
+                        @count
+                    </div>
+                    <div class="col-sm-11">
+                        @error
+                    </div>
+                </div>
+                count++;
+
+            }
+        </div>
     </div>
 }

@@ -86,12 +86,12 @@ namespace Neptune.Web.Common
 
                     if (requiredFieldDifference.Any())
                     {
-                        errorList.Add("One or more required headers have not been provided, Required Fields are: " + string.Join(", ", requiredFields));
+                        errorList.Add("One or more required headers have not been provided. Required Fields are: " + string.Join(", ", requiredFields));
 
                     }
                     if (optionalFieldDifference.Any())
                     {
-                        errorList.Add("Some of the fields provided are not acceptable optional fields or are misspelled required fields. Optional Fields are: " + string.Join(", ", optionalFields));
+                        errorList.Add("Some of the fields provided do not match the list of accepted optional fields. Optional Fields are: " + string.Join(", ", optionalFields));
                     }
                 }
                 else
@@ -100,12 +100,11 @@ namespace Neptune.Web.Common
                     if (treatmentBMPName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            "BMP Name is null, empty, or just whitespaces for row: " + count);
+                            $"BMP Name is null, empty, or just whitespaces for row: {count}");
                     }
                     if (treatmentBMPs.Select(x => x.TreatmentBMPName).Contains(treatmentBMPName))
                     {
-                        errorList.Add(string.Format("A BMP by the name, {0}, already exists, row: " + count,
-                            treatmentBMPName));
+                        errorList.Add($"A BMP by the name '{treatmentBMPName}' already exists for row: {count}");
                     }
                     else
                     {
@@ -122,7 +121,7 @@ namespace Neptune.Web.Common
                     }
                     if (!treatmentBMPTypeNames.Contains(treatmentBMPType))
                     {
-                        errorList.Add($"No BMP Type with the name '{treatmentBMPType}' exists within our records, row: " + count);
+                        errorList.Add($"No BMP Type with the name '{treatmentBMPType}' exists within our records at row: " + count);
                     }
                     else
                     {
@@ -135,22 +134,24 @@ namespace Neptune.Web.Common
                     var treatmentBMPLongitude = fields[3];
                     if (treatmentBMPLatitude.IsNullOrWhiteSpace() || treatmentBMPLongitude.IsNullOrWhiteSpace())
                     {
-                        errorList.Add($"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row {count}");
+                        errorList.Add($"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
                     }
                     else
                     {
-                        treatmentBMP.LocationPoint = DbGeometry.FromText("Point (" + treatmentBMPLatitude + " " + treatmentBMPLongitude + ")", MapInitJson.CoordinateSystemId);
+                        treatmentBMP.LocationPoint = DbGeometry.FromText(
+                            $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
                     }
 
                     var treatmentBMPJurisdictionName = fields[4];
                     if (treatmentBMPJurisdictionName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            "BMP Jurisdiction Name is null, empty, or just whitespaces for row: " + count);
+                            $"BMP Jurisdiction Name is null, empty, or just whitespaces for row: {count}");
                     }
                     if (!jurisdictionNames.Contains(treatmentBMPJurisdictionName))
                     {
-                        errorList.Add("No Jurisdiction with that name exists within our records, row: " + count);
+                        errorList.Add(
+                            $"No Jurisdiction with name '{treatmentBMPJurisdictionName}' exists. See row: {{count}}");
                     }
                     else
                     {
@@ -162,11 +163,12 @@ namespace Neptune.Web.Common
                     if (treatmentBMPOwner.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            "BMP Organization Owner Name is null, empty, or just whitespaces for row: " + count);
+                            $"BMP Organization Owner Name is null, empty, or just whitespaces for row: {count}");
                     }
                     if (!jurisdictionNames.Contains(treatmentBMPOwner))
                     {
-                        errorList.Add("No BMP Organization Owner with that name exists within our records, row: " + count);
+                        errorList.Add(
+                            $"No BMP Organization Owner with that name exists within our records, row: {count}");
                     }
                     else
                     {
@@ -180,7 +182,7 @@ namespace Neptune.Web.Common
                     {
                         if (!int.TryParse(yearBuiltOrInstalled, out var yearBuiltOrInstalledInt))
                         {
-                            errorList.Add($"Year Built or Installed Field cannot be converted to Int at row {count}");
+                            errorList.Add($"Year Built or Installed Field cannot be converted to Int at row: {count}");
                         }
                         else
                         {
@@ -199,7 +201,8 @@ namespace Neptune.Web.Common
                     {
                         if (assetIDInSystemOfRecord.Length > 100)
                         {
-                            errorList.Add($"Asset ID In System of Record is too long at row, {count}, it must be 100 characters or less. Current Length is {assetIDInSystemOfRecord.Length}");
+                            errorList.Add(
+                                $"Asset ID In System of Record was too long. It must be 100 characters or less. Current Length is {assetIDInSystemOfRecord.Length} at row: {count}");
                         }
                         else
                         {
@@ -217,7 +220,7 @@ namespace Neptune.Web.Common
                         if (!TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName)
                             .Contains(requiredLifespanOfInstallation))
                         {
-                            errorList.Add($"No Required Lifespan Of Installation by the name {requiredLifespanOfInstallation} exists within our records at row {count}");
+                            errorList.Add($"No Required Lifespan Of Installation by the name {requiredLifespanOfInstallation} exists within our records at row: {count}");
                         }
                         else
                         {
@@ -236,22 +239,22 @@ namespace Neptune.Web.Common
                     var allowableEndDateOfInstallation = fields[9];
                     if (allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
-                        errorList.Add($"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row {count}");
+                        errorList.Add($"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row: {count}");
                     }
                     else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && (requiredLifespanOfInstallation == TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
                               requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))        
                     {
-                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row {count}");
+                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}");
                     }
                     else if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace() && !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
-                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to null for row {count}");
+                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to null for row: {count}");
                     }
                     if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         if (!DateTime.TryParse(allowableEndDateOfInstallation, out var allowableEndDateOfInstallationDateTime))
                         {
-                            errorList.Add($"Allowable End Date of Installation can not be converted to Date Time format at row {count}");
+                            errorList.Add($"Allowable End Date of Installation can not be converted to Date Time format at row: {count}");
                         } 
                         else
                         {
@@ -269,7 +272,7 @@ namespace Neptune.Web.Common
                     {
                         if (!int.TryParse(requiredFieldVisitsPerYear, out var requiredFieldVisitsPerYearInt))
                         {
-                            errorList.Add($"Required Field Visits per Year Field can not be converted to Int at row {count}");
+                            errorList.Add($"Required Field Visits per Year Field can not be converted to Int at row: {count}");
                         }
                         else
                         {
@@ -281,11 +284,10 @@ namespace Neptune.Web.Common
                         treatmentBMP.RequiredFieldVisitsPerYear = null;
                     }
 
-
                     var requiredPostStormFieldVisitsPerYear = fields[11];
                     if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
                     {
-                        errorList.Add($"Required post-storm field visits per year field cannot be converted to Int at row {count}");
+                        errorList.Add($"Required post-storm field visits per year field cannot be converted to Int at row: {count}");
                     }
                     else
                     {
@@ -298,7 +300,8 @@ namespace Neptune.Web.Common
                     {
                         if (notes.Length > 1000)
                         {
-                            errorList.Add($"Note length is too long at row {count} and needs to be 1000 characters or less, current length is {notes.Length}");
+                            errorList.Add(
+                                $"Note length is too long at and needs to be 1000 characters or less, current length is {notes.Length} at row: {count}");
                         }
                         else
                         {
@@ -335,11 +338,12 @@ namespace Neptune.Web.Common
                     if (treatmentSizingBasics.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            "Sizing Basics is null, empty, or just whitespaces for row: " + count);
+                            $"Sizing Basics is null, empty, or just whitespaces for row: {count}");
                     }
                     if (!SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName).Contains(treatmentSizingBasics))
                     {
-                        errorList.Add($"No Sizing Basic with the name '{treatmentSizingBasics}' exists in our records, row: " + count);
+                        errorList.Add(
+                            $"No Sizing Basic with the name '{treatmentSizingBasics}' exists in our records, row: {count}");
                     }
                     else
                     {
@@ -352,8 +356,8 @@ namespace Neptune.Web.Common
                 {
                     if (upload.Select(x => x.TreatmentBMPName).Contains(treatmentBMP.TreatmentBMPName))
                     {
-                        errorList.Add("The BMP Name, " + treatmentBMP.TreatmentBMPName +
-                                      " was already added in this upload, duplicate name is found at row: " + count);
+                        errorList.Add(
+                            $"The BMP Name '{treatmentBMP.TreatmentBMPName}' was already added in this upload, duplicate name is found at row: {count}");
                     }
                     //var treatmentBMP = new TreatmentBMP(treatmentBMP.TreatmentBMPName, treatmentBMP.TreatmentBMPTypeID, treatmentBMP.StormwaterJurisdictionID,treatmentBMP.OwnerOrganizationID);
                     upload.Add(treatmentBMP);

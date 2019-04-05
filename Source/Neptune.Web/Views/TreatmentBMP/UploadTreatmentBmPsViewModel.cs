@@ -8,7 +8,9 @@ namespace Neptune.Web.Views.TreatmentBMP
 {
     public class UploadTreatmentBMPsViewModel : FormViewModel
     {
+        [Required]
         [SitkaFileExtensions("csv")]
+        [DisplayName("CSV File to Import")]
         public  HttpPostedFileBase UploadCSV { get; set; }
 
         [Required]
