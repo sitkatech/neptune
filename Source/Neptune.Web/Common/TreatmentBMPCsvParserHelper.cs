@@ -45,8 +45,9 @@ namespace Neptune.Web.Common
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
 
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs;
-            var jurisdictions = HttpRequestStorage.DatabaseEntities.Organizations;
-            var jurisdictionNames = jurisdictions.Select(x => x.OrganizationName);
+            var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions;
+            var jurisdictionNames = jurisdictions.Select(x => x.Organization.OrganizationName);
+            var organizations = HttpRequestStorage.DatabaseEntities.Organizations;
 
             // if the fields don't match throw an exception
             int count = 0;
@@ -115,7 +116,7 @@ namespace Neptune.Web.Common
                     else
                     {
                         treatmentBMP.StormwaterJurisdictionID = jurisdictions
-                            .First((x => x.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
+                            .First((x => x.Organization.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
                     }
 
                     var treatmentBMPOwner = fields[4];
@@ -131,7 +132,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        treatmentBMP.OwnerOrganizationID = jurisdictions
+                        treatmentBMP.OwnerOrganizationID = organizations
                             .First((x => x.OrganizationName == treatmentBMPOwner)).OrganizationID;
                     }
 
@@ -440,13 +441,13 @@ Frank,30,10,Sitka Technology Grou,Sitka Technology Group,2008,ABCD,Perpetuity/Li
         public void TestJurisdictionNameExistsGood()
         {
             var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
             errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
             errorList.Any(x => !x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
-            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(1));
+            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
         }
 
         [Test]
@@ -475,13 +476,13 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Grou,2008,ABCD,Perpetuity/Li
         public void TestOrganizationOwnerExistsGood()
         {
             var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
             errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
             errorList.Any(x => !x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
-            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(1));
+            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
         }
 
         //Begin Optional Field Tests
