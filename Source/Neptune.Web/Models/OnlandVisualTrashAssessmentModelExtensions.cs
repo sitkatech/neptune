@@ -43,7 +43,7 @@ namespace Neptune.Web.Models
                 OnlandVisualTrashAssessmentStatus.Complete)
             {
                 return new HtmlString(
-                    $"<a href='{DetailUrlTemplate.ParameterReplace(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)}'>View</a>");
+                    $"<a class='gridButton' href='{DetailUrlTemplate.ParameterReplace(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)}'>View</a>");
             }
 
             return new HtmlString("");
