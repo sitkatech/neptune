@@ -44,26 +44,28 @@ Test2,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perp
 
 
 <form method="post" enctype="multipart/form-data">
-    <div class="form-group form-horizontal">
-        <div class="col-sm-2 col-xs-12 control-label">
-            @Html.LabelWithSugarFor(m => m.BMPType)
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-2 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.BMPType)
+            </div>
+            <div class="col-sm-10 col-xs-12">
+                @Html.DropDownListFor(m => m.BMPType, ViewDataTyped.BMPTypes, new { @class = "form-control", style = "width:auto;" })
+            </div>
         </div>
-        <div class="col-sm-10 col-xs-12">
-            @Html.DropDownListFor(m => m.BMPType, ViewDataTyped.BMPTypes, new { @class = "form-control", style = "width:auto;" })
+        <div class="form-group ">
+            <div class="col-sm-2 col-xs-12 control-label">
+                @Html.LabelWithSugarFor(m => m.UploadCSV)
+            </div>
+            <div class="col-sm-10 col-xs-12">
+                @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control", stylke = "width:400px;" })
+            </div>
         </div>
+        <div class="pull-right">
+            <button type="submit" class="btn btn-neptune">Upload</button>
+        </div>
+        <div class="clearfix"></div>
     </div>
-    <div class="form-group form-horizontal">
-        <div class="col-sm-2 col-xs-12 control-label">
-            @Html.LabelWithSugarFor(m => m.UploadCSV)
-        </div>
-        <div class="col-sm-10 col-xs-12">
-            @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control", stylke = "width:400px;" })
-        </div>
-    </div>
-    <div class="pull-right">
-        <button type="submit" class="btn btn-neptune">Upload</button>
-    </div>
-    <div class="clearfix"></div>
 </form>
 
 @if (ViewDataTyped.ErrorList.Any())
