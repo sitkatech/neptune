@@ -557,7 +557,7 @@ namespace Neptune.Web.Controllers
 
         private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)
         {
-            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToSelectListWithEmptyFirstRow(
+            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(
                 x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
                 x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
             var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, errorList, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
