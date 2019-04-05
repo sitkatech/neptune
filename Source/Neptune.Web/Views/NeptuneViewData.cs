@@ -119,11 +119,6 @@ namespace Neptune.Web.Views
                 bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(c => c.Index()), currentPerson, "Parcels", "Group1"));
             }
 
-            if (new JurisdictionManageFeature().HasPermissionByPerson(currentPerson))
-            {
-                bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<TreatmentBMPController>(c => c.UploadBMPs()), currentPerson, "BMP Bulk Upload", "Group1"));
-            }
-
             return bmpMenu;
         }
 

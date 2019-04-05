@@ -97,7 +97,7 @@ namespace Neptune.Web.Common
                 else
                 {
                     var treatmentBMPName = fields[0];
-                    if (string.IsNullOrWhiteSpace(treatmentBMPName))
+                    if (treatmentBMPName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             "BMP Name is null, empty, or just whitespaces for row: " + count);
@@ -115,7 +115,7 @@ namespace Neptune.Web.Common
 
 
                     var treatmentBMPType = fields[1];
-                    if (string.IsNullOrWhiteSpace(treatmentBMPType))
+                    if (treatmentBMPType.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             $"Treatment BMP Type is null, empty, or just whitespaces for BMP '{treatmentBMPName}' at row: {count}");
@@ -143,7 +143,7 @@ namespace Neptune.Web.Common
                     }
 
                     var treatmentBMPJurisdictionName = fields[4];
-                    if (string.IsNullOrWhiteSpace(treatmentBMPJurisdictionName))
+                    if (treatmentBMPJurisdictionName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             "BMP Jurisdiction Name is null, empty, or just whitespaces for row: " + count);
@@ -159,7 +159,7 @@ namespace Neptune.Web.Common
                     }
 
                     var treatmentBMPOwner = fields[5];
-                    if (string.IsNullOrWhiteSpace(treatmentBMPOwner))
+                    if (treatmentBMPOwner.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             "BMP Organization Owner Name is null, empty, or just whitespaces for row: " + count);
@@ -176,7 +176,7 @@ namespace Neptune.Web.Common
 
                     //start of Optional Fields
                     var yearBuiltOrInstalled = fields[6];
-                    if (yearBuiltOrInstalled != null)
+                    if (!yearBuiltOrInstalled.IsNullOrWhiteSpace())
                     {
                         if (!int.TryParse(yearBuiltOrInstalled, out var yearBuiltOrInstalledInt))
                         {
@@ -212,7 +212,7 @@ namespace Neptune.Web.Common
                     }
 
                     var requiredLifespanOfInstallation = fields[8];
-                    if (requiredLifespanOfInstallation != null)
+                    if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace())
                     {
                         if (!TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName)
                             .Contains(requiredLifespanOfInstallation))
@@ -238,8 +238,8 @@ namespace Neptune.Web.Common
                     {
                         errorList.Add($"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row {count}");
                     }
-                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation == TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
-                              requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName)        
+                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && (requiredLifespanOfInstallation == TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
+                              requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))        
                     {
                         errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row {count}");
                     }
@@ -247,7 +247,7 @@ namespace Neptune.Web.Common
                     {
                         errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to null for row {count}");
                     }
-                    if (allowableEndDateOfInstallation != null)
+                    if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         if (!DateTime.TryParse(allowableEndDateOfInstallation, out var allowableEndDateOfInstallationDateTime))
                         {
@@ -265,7 +265,7 @@ namespace Neptune.Web.Common
 
 
                     var requiredFieldVisitsPerYear = fields[10];
-                    if (requiredFieldVisitsPerYear != null)
+                    if (!requiredFieldVisitsPerYear.IsNullOrWhiteSpace())
                     {
                         if (!int.TryParse(requiredFieldVisitsPerYear, out var requiredFieldVisitsPerYearInt))
                         {
@@ -294,7 +294,7 @@ namespace Neptune.Web.Common
                     }
 
                     var notes = fields[12];
-                    if (!string.IsNullOrWhiteSpace(notes))
+                    if (!notes.IsNullOrWhiteSpace())
                     {
                         if (notes.Length > 1000)
                         {
@@ -313,7 +313,7 @@ namespace Neptune.Web.Common
                     //End of Basics
 
                     var treatmentBMPTrashCaptureStatus = fields[13];
-                    if (string.IsNullOrWhiteSpace(treatmentBMPTrashCaptureStatus))
+                    if (treatmentBMPTrashCaptureStatus.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             "Trash Capture Status is null, empty, or just whitespaces for row: " + count);
@@ -332,7 +332,7 @@ namespace Neptune.Web.Common
 
 
                     var treatmentSizingBasics = fields[14];
-                    if (string.IsNullOrWhiteSpace(treatmentSizingBasics))
+                    if (treatmentSizingBasics.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             "Sizing Basics is null, empty, or just whitespaces for row: " + count);

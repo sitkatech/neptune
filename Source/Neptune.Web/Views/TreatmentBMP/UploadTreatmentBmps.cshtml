@@ -46,3 +46,31 @@
         <button type="submit" class="btn btn-neptune pull-right mt-2">Upload</button>
     </div>
 </form>
+
+@if (ViewDataTyped.ErrorList.Any())
+{
+    int count = 1;
+    <div class="col-md-12 col-xs-12 mt-2">
+        <strong>There are @ViewDataTyped.ErrorList.Count errors that need to be fixed before upload can be successful</strong>
+        <div class="row mt-2">
+            <div class="col-sm-1">
+                <strong>Error</strong>
+            </div>
+            <div class="col-sm-11">
+                <strong>Description</strong>
+            </div>
+        </div>
+        @foreach (var error in ViewDataTyped.ErrorList)
+        {
+            <div clas="row">
+                <div class="col-sm-1">
+                    @count
+                </div>
+                <div class="col-sm-11">
+                    @error;
+                </div>              
+            </div>
+            count++;
+        }
+    </div>
+}

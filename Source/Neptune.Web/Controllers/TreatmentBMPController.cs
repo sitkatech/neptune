@@ -66,7 +66,8 @@ namespace Neptune.Web.Controllers
             var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount = treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount);
+            var bulkBMPUploadUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()); 
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount, bulkBMPUploadUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -519,12 +520,9 @@ namespace Neptune.Web.Controllers
         [NeptuneAdminFeature]
         public ViewResult  UploadBMPs()
         {
-            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToSelectListWithEmptyFirstRow(
-                x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
-                x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
-            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
             var viewModel = new UploadTreatmentBMPsViewModel();
-            return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData, viewModel);
+            var errorList = new List<string>();
+            return ViewUploadBMPs(viewModel, errorList);
         }
 
 
@@ -541,7 +539,7 @@ namespace Neptune.Web.Controllers
 
             if (errorList.Count != 0)
             {
-
+                return ViewUploadBMPs(viewModel, errorList);
             }
             else
             {
@@ -550,12 +548,20 @@ namespace Neptune.Web.Controllers
                     HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
                 }
                 HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
+                SetMessageForDisplay($"Upload of CSV successfully uploaded {treatmentBmps.Count} number of records");
+                return new RedirectResult(
+                    SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
+                        x.Index()));
             }
+        }
 
-            SetMessageForDisplay("Upload of CSV was successful");
-            return new RedirectResult(
-                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
-                    x.Index()));
+        private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)
+        {
+            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.ToSelectListWithEmptyFirstRow(
+                x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
+            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, errorList, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
+            return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData, viewModel);
         }
 
         private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,
