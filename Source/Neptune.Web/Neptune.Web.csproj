@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -453,7 +453,7 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\SelectOVTAAreaMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\OVTASummaryMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\Shared\TrashModuleMapViewDataForAngularBaseClass.cs" />
-    <Compile Include="Areas\Trash\Controllers\OnlandVisualTrashAssessmentModelExtensions.cs" />
+    <Compile Include="Models\OnlandVisualTrashAssessmentModelExtensions.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\OnlandVisualTrashAssessmentObservationModelExtensions.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\OVTAObservationsMapInitJson.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\FinalizeOVTA.cs" />
@@ -896,10 +896,9 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
-    <Content Include="Areas\Trash\Content\img\green.png" />
-    <Content Include="Areas\Trash\Content\img\orange.png" />
-    <Content Include="Areas\Trash\Content\img\red.png" />
-    <Content Include="Areas\Trash\Content\img\yellow.png" />
+    <Content Include="Content\img\legendImages\ovtaGreen.png" />
+    <Content Include="Content\img\legendImages\ovtaSalmon.png" />
+    <Content Include="Content\img\legendImages\ovtaYellow.png" />
     <Content Include="Areas\Trash\ScriptsCustom\Maps\NeptuneMaps.TrashModuleMap.js" />
     <Content Include="Areas\Trash\Views\Home\TrashModuleMapController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsController.js" />
@@ -1040,6 +1039,9 @@
     <Content Include="Content\img\icons\inventoryIcon.png" />
     <Content Include="Content\img\icons\modelingIcon.png" />
     <Content Include="Content\img\icons\trashIcon.png" />
+    <Content Include="Content\img\legendImages\selectedGeometry.png" />
+    <Content Include="Content\img\legendImages\transectLine.png" />
+    <Content Include="Content\img\legendImages\workflowAssessmentArea.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_48x48.png" />
     <Content Include="Content\img\MimeTypeIcons\pdf_20x20.png" />
@@ -1075,6 +1077,7 @@
     <Content Include="Content\img\OCStormwater\ms-icon-150x150.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-310x310.png" />
     <Content Include="Content\img\OCStormwater\ms-icon-70x70.png" />
+    <Content Include="Content\img\OVTAScores\OVTA_ex_pics.png" />
     <Content Include="Content\img\pin-s-marker+838383.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-114x114.png" />
     <Content Include="Content\img\SitkaTechnologyGroup\apple-icon-120x120.png" />
@@ -2982,6 +2985,7 @@
     <Folder Include="Areas\Modeling\Content\" />
     <Folder Include="Areas\Modeling\Models\" />
     <Folder Include="Areas\Modeling\Security\" />
+    <Folder Include="Areas\Trash\Content\img\" />
     <Folder Include="Areas\Trash\Models\" />
     <Folder Include="Areas\Trash\Security\" />
     <Folder Include="Content\themes\base\minified\images\" />

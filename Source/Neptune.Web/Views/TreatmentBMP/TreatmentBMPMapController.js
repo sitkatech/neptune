@@ -21,7 +21,7 @@
             var finder = jQuery(typeaheadSelector);
             finder.typeahead({
                 highlight: true,
-                minLength: 3
+                minLength: 1
             },
                 {
                     source: new Bloodhound({
@@ -106,6 +106,7 @@
                     }
                 });
             if ($scope.markerClusterGroup) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.markerClusterGroup);
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
             }
             $scope.markerClusterGroup = L.markerClusterGroup({
@@ -126,6 +127,11 @@
                     $scope.setActiveByID(e.layer.feature.properties.TreatmentBMPID);
                     $scope.$apply();
                 });
+
+
+          
+            var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, legendSpan);
         };
 
         $scope.initializeTreatmentBMPClusteredLayer();

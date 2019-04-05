@@ -169,8 +169,27 @@ NeptuneMaps.Map.prototype.wfsParams = {
 };
 
 NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, overlayLayers) {
-    this.layerControl = L.control.layers(baseLayers, overlayLayers);
+    var options = {
+        collapsed: false
+    };
+    this.layerControl = L.control.layers(baseLayers, overlayLayers, options);
     this.layerControl.addTo(this.map);
+
+    var closem = L.DomUtil.create("a", "leaflet-control-layers-close");
+    closem.innerHTML = "Close";
+    L.DomEvent.on(closem,
+        "click",
+        function(e) {
+            jQuery(".leaflet-control-layers").removeClass("leaflet-control-layers-expanded");
+            jQuery(".leaflet-control-layers-close").toggle();
+        });
+
+    jQuery(".leaflet-control-layers-toggle").on("click",
+        function() {
+            jQuery(".leaflet-control-layers-close").toggle();
+        });
+
+    jQuery(".leaflet-control-layers").append(closem);
 };
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {
@@ -305,14 +324,19 @@ NeptuneMaps.Map.prototype.removeLayerFromMap = function (layerToRemove) {
     }
 };
 
-NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName) {
+NeptuneMaps.Map.prototype.addLayerToLayerControl = function (layer, layerName, hide) { 
     this.layerControl.addOverlay(layer, layerName);
+    if (hide) {
+        this.map.removeLayer(layer);
+    }
 };
 
 NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.lastSelected)) {
         this.map.removeLayer(this.lastSelected);
     }
+
+    console.log(feature.properties);
 
     this.lastSelected = L.geoJson(feature,
         {
@@ -458,7 +482,6 @@ NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
         }
     });
     layerToCluster.addTo(markerClusterGroup);
-    this.addLayerToLayerControl(markerClusterGroup, "Treatment BMPs");
     markerClusterGroup.addTo(this.map);
 
     return markerClusterGroup;
@@ -467,7 +490,7 @@ NeptuneMaps.Map.prototype.makeMarkerClusterGroup = function(layerToCluster) {
 // constants for things like feature color that ought to be consistent across the site
 
 NeptuneMaps.Constants = {
-    defaultPolyColor: "#7070ff",
+    defaultPolyColor: "#4242ff",
     defaultSelectedFeatureColor: "#ffff00",
     spatialReference: 4326
 };

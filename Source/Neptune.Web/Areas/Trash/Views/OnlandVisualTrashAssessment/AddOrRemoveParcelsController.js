@@ -63,6 +63,7 @@
                 $scope.neptuneMap.map.removeLayer($scope.neptuneMap.selectedParcelLayer);
             }
 
+            // FIXME: Using L.Util.extend here will overwrite the neptuneMap.wmsParams object with the result of the extend, which may not be ideal
             var wmsParameters = L.Util.extend($scope.neptuneMap.wmsParams,{
                     layers: $scope.AngularViewData.ParcelMapServiceLayerName,
                     cql_filter: "ParcelID in (" + $scope.AngularModel.ParcelIDs.join(",") + ")",
@@ -70,7 +71,9 @@
                 });
 
             $scope.neptuneMap.selectedParcelLayer = L.tileLayer.wms($scope.AngularViewData.GeoServerUrl, wmsParameters);
-            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel);
+            var labelText = "Selected " + $scope.AngularViewData.ParcelFieldDefinitionLabel;
+            var label = "<span><img src='/Content/img/legendImages/selectedGeometry.png' height='12px' style='margin-bottom:3px;'/> " + labelText + "</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.neptuneMap.selectedParcelLayer, label);
             $scope.neptuneMap.map.addLayer($scope.neptuneMap.selectedParcelLayer);
 
             // Update map extent to selected parcels

@@ -50,7 +50,7 @@
                         return {
                             fillColor: "#FFFF00",
                             fill: true,
-                            fillOpacity: 0.5,
+                            fillOpacity: 0.75,
                             color: "#FFFF00",
                             weight: 5,
                             stroke: true
@@ -78,7 +78,9 @@
 
         $scope.initializeMap = function (overrideJurisdictionFilterForSelectedArea) {
             if ($scope.assessmentAreaLayerGeoJson) {
+                $scope.neptuneMap.layerControl.removeLayer($scope.assessmentAreaLayerGeoJson);
                 $scope.neptuneMap.map.removeLayer($scope.assessmentAreaLayerGeoJson);
+                $scope.assessmentAreaLayerGeoJson = null;
             }
 
             $scope.assessmentAreaLayerGeoJson = L.geoJson(
@@ -104,15 +106,19 @@
 
                     style: function (feature) {
                         return {
-                            color: "#b2b2b2",
+                            color: NeptuneMaps.Constants.defaultPolyColor,
                             weight: .5,
-                            fillColor: "#ff00ff",
+                            fillColor: NeptuneMaps.Constants.defaultPolyColor,
                             fillOpacity: .5
                         };
                     }
                 });
 
             $scope.assessmentAreaLayerGeoJson.addTo($scope.neptuneMap.map);
+            
+            var legendSpan = "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Areas</span>";
+            $scope.neptuneMap.layerControl.addOverlay($scope.assessmentAreaLayerGeoJson, legendSpan);
+
             $scope.assessmentAreaLayerGeoJson.on('click', selectAssessmentArea);
         };
 

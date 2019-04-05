@@ -7,7 +7,7 @@
             background-color: palegoldenrod;
         }
         #observationsPanel {
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: scroll;
             overflow-x: hidden;
             padding-left: 10px;
@@ -44,7 +44,7 @@
 
 <div class="row ignoreSerialization">
     <div class="col-md-7 col-md-push-5 col-sm-12">
-        <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 400px;"></div>
+        <div id="@ViewDataTyped.OVTASummaryMapInitJson.MapDivID" style="height: 450px;"></div>
     </div>
     <div class="col-md-5 col-md-pull-7 col-sm-12">
         <div class="panel panelNeptune" id="observationsPanel" style="">
@@ -112,12 +112,13 @@
                             fill: true,
                             fillOpacity: 0.5,
                             color: NeptuneMaps.Constants.defaultPolyColor,
-                            weight: 5,
+                            weight: 2,
                             stroke: true
                         };
                     }
                 });
             assessmentAreaLayer.addTo(summaryMap.map);
+            summaryMap.layerControl.addOverlay(assessmentAreaLayer, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' style='margin-bottom:3px;'/> Assessment Area</span>");
             if (summaryMap.map.getZoom > 18) {
                 summaryMap.map.setZoom(18);
             }
