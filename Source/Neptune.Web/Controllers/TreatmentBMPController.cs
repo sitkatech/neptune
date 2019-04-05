@@ -539,12 +539,23 @@ namespace Neptune.Web.Controllers
             var errorList = new List<string>();
             var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, out errorList);
 
-            foreach (var treatmentBMP in treatmentBmps)
+            if (errorList.Count != 0)
             {
-                HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP.CastTo<TreatmentBMP>());
+
+            }
+            else
+            {
+                foreach (var treatmentBMP in treatmentBmps)
+                {
+                    HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
+                }
+                HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
             }
 
-            throw new NotImplementedException();
+            SetMessageForDisplay("Upload of CSV was successful");
+            return new RedirectResult(
+                SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
+                    x.Index()));
         }
 
         private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,

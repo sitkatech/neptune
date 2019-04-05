@@ -14,27 +14,27 @@ namespace Neptune.Web.Common
 {
     public class TreatmentBMPUploadSimple
     {
-        public string TreatmentBMPName { get; set; }
-        public int TreatmentBMPTypeID { get; set; }
-        public DbGeometry LocationPoint { get; set; }
+        public string treatmentBMPName { get; set; }
+        public int treatmentBMPTypeID { get; set; }
+        public DbGeometry locationPoint { get; set; }
         public int StormwaterJurisdictionID { get; set; }
         public int OwnerOrganizationID { get; set; }
         public int? YearBuilt { get; set; }
         public string SystemOfRecordID { get; set; }
         public int? TreatmentBMPLifespanTypeID { get; set; }
-        public DateTime? TreatmentBMPLifeSpanEndDate { get; set; }
-        public int? RequiredFieldVisitsPerYear { get; set; }
-        public int? RequiredPostStormFieldVisitsPerYear { get; set; }
-
+        public DateTime? TreatmentBMPLifespanEndDate { get; set; }
+        public int? RequiredFieldVistsPerYear { get; set; }
+        public int? RequiredPostStormFieldVisits { get; set; }
         public string Notes { get; set; }
-        public int TrashCaptureStatusTypeID { get; set; }
-        public int SizingBasisTypeID { get; set; }
+        public int TrashCaptureStautsTypeID { get; set; }
+        public int SizingBasisStatusTypeID { get; set; }
     }
 
     public static class TreatmentBMPCsvParserHelper
     {
 
-        public static List<TreatmentBMPUploadSimple> CSVUpload(Stream fileStream, out List<string> errorList)
+
+        public static List<TreatmentBMP> CSVUpload(Stream fileStream, out List<string> errorList)
         {
             errorList = new List<string>();
             var StreamReader = new StreamReader(fileStream);
@@ -44,7 +44,7 @@ namespace Neptune.Web.Common
             return ParseBmpRowsFromCsv(parser, out errorList);
         }
 
-        public static List<TreatmentBMPUploadSimple> CSVUpload(string fileStream, out List<string> errorList)
+        public static List<TreatmentBMP> CSVUpload(string fileStream, out List<string> errorList)
         {
             errorList = new List<string>();
             var stringReader = new StringReader(fileStream);
@@ -53,14 +53,14 @@ namespace Neptune.Web.Common
             return ParseBmpRowsFromCsv(parser, out errorList);
         }
 
-        public static List<TreatmentBMPUploadSimple> ParseBmpRowsFromCsv(TextFieldParser parser, out List<string> errorList)
+        public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, out List<string> errorList)
         {
             parser.SetDelimiters(",");
             errorList = new List<string>();
-            var upload = new List<TreatmentBMPUploadSimple>();
-            var TreatmentBMPUploadRow = new TreatmentBMPUploadSimple();
+            var upload = new List<TreatmentBMP>();
+            var treatmentBMP = new TreatmentBMP(string.Empty, default(int), default(int), default(int), default(bool), default(int), default(int));
 
-            var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "BMP Type", "Sizing Basics", "Trash Capture Status", "Owner" };
+            var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "BMP Type", "Sizing Basis", "Trash Capture Status", "Owner" };
             var optionalFields = new List<string> {"Year Built or Installed","Asset ID in System of Record", "Required Lifespan of Installation",
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
 
@@ -109,7 +109,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.TreatmentBMPName = treatmentBMPName;
+                        treatmentBMP.TreatmentBMPName = treatmentBMPName;
                     }
 
 
@@ -126,7 +126,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.TreatmentBMPTypeID = treatmentBMPTypes.First(x => x.TreatmentBMPTypeName == treatmentBMPType)
+                        treatmentBMP.TreatmentBMPTypeID = treatmentBMPTypes.First(x => x.TreatmentBMPTypeName == treatmentBMPType)
                             .TreatmentBMPTypeID;
                     }
 
@@ -139,7 +139,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.LocationPoint = DbGeometry.FromText("Point (" + treatmentBMPLatitude + " " + treatmentBMPLongitude + ")", MapInitJson.CoordinateSystemId);
+                        treatmentBMP.LocationPoint = DbGeometry.FromText("Point (" + treatmentBMPLatitude + " " + treatmentBMPLongitude + ")", MapInitJson.CoordinateSystemId);
                     }
 
                     var treatmentBMPJurisdictionName = fields[4];
@@ -150,11 +150,11 @@ namespace Neptune.Web.Common
                     }
                     if (!jurisdictionNames.Contains(treatmentBMPJurisdictionName))
                     {
-                        errorList.Add("No Jurisdicition with that name exists within our records, row: " + count);
+                        errorList.Add("No Jurisdiction with that name exists within our records, row: " + count);
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.StormwaterJurisdictionID = jurisdictions
+                        treatmentBMP.StormwaterJurisdictionID = jurisdictions
                             .First((x => x.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
                     }
 
@@ -170,7 +170,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.OwnerOrganizationID = jurisdictions
+                        treatmentBMP.OwnerOrganizationID = jurisdictions
                             .First((x => x.OrganizationName == treatmentBMPOwner)).OrganizationID;
                     }
 
@@ -184,12 +184,12 @@ namespace Neptune.Web.Common
                         }
                         else
                         {
-                            TreatmentBMPUploadRow.YearBuilt = yearBuiltOrInstalledInt;
+                            treatmentBMP.YearBuilt = yearBuiltOrInstalledInt;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.YearBuilt = null;
+                        treatmentBMP.YearBuilt = null;
                     }
 
 
@@ -203,12 +203,12 @@ namespace Neptune.Web.Common
                         }
                         else
                         {
-                            TreatmentBMPUploadRow.SystemOfRecordID = assetIDInSystemOfRecord;
+                            treatmentBMP.SystemOfRecordID = assetIDInSystemOfRecord;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.SystemOfRecordID = null;
+                        treatmentBMP.SystemOfRecordID = null;
                     }
 
                     var requiredLifespanOfInstallation = fields[8];
@@ -221,33 +221,46 @@ namespace Neptune.Web.Common
                         }
                         else
                         {
-                            TreatmentBMPUploadRow.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanType.All
+                            treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanType.All
                                 .First(x => x.TreatmentBMPLifespanTypeDisplayName == requiredLifespanOfInstallation)
                                 .TreatmentBMPLifespanTypeID;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.TreatmentBMPLifespanTypeID = null;
+                        treatmentBMP.TreatmentBMPLifespanTypeID = null;
                     }
 
 
 
                     var allowableEndDateOfInstallation = fields[9];
+                    if (allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
+                    {
+                        errorList.Add($"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row {count}");
+                    }
+                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation == TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
+                              requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName)        
+                    {
+                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row {count}");
+                    }
+                    else if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace() && !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
+                    {
+                        errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to null for row {count}");
+                    }
                     if (allowableEndDateOfInstallation != null)
                     {
                         if (!DateTime.TryParse(allowableEndDateOfInstallation, out var allowableEndDateOfInstallationDateTime))
                         {
                             errorList.Add($"Allowable End Date of Installation can not be converted to Date Time format at row {count}");
-                        }
+                        } 
                         else
                         {
-                            TreatmentBMPUploadRow.TreatmentBMPLifeSpanEndDate = allowableEndDateOfInstallationDateTime;
+                            treatmentBMP.TreatmentBMPLifespanEndDate = allowableEndDateOfInstallationDateTime;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.TreatmentBMPLifeSpanEndDate = null;
+                        treatmentBMP.TreatmentBMPLifespanEndDate = null;
                     }
 
 
@@ -256,27 +269,27 @@ namespace Neptune.Web.Common
                     {
                         if (!int.TryParse(requiredFieldVisitsPerYear, out var requiredFieldVisitsPerYearInt))
                         {
-                            errorList.Add($"Required Field Vists per Year Field can not be converted to Int at row {count}");
+                            errorList.Add($"Required Field Visits per Year Field can not be converted to Int at row {count}");
                         }
                         else
                         {
-                            TreatmentBMPUploadRow.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYearInt;
+                            treatmentBMP.RequiredFieldVisitsPerYear = requiredFieldVisitsPerYearInt;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.RequiredFieldVisitsPerYear = null;
+                        treatmentBMP.RequiredFieldVisitsPerYear = null;
                     }
 
 
                     var requiredPostStormFieldVisitsPerYear = fields[11];
                     if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
                     {
-                        errorList.Add($"Required post-storm field vists per year field cannot be converted to Int at row {count}");
+                        errorList.Add($"Required post-storm field visits per year field cannot be converted to Int at row {count}");
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.RequiredPostStormFieldVisitsPerYear =
+                        treatmentBMP.RequiredPostStormFieldVisitsPerYear =
                             requiredPostStormFieldVisitsPerYearInt;
                     }
 
@@ -289,12 +302,12 @@ namespace Neptune.Web.Common
                         }
                         else
                         {
-                            TreatmentBMPUploadRow.Notes = notes;
+                            treatmentBMP.Notes = notes;
                         }
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.Notes = null;
+                        treatmentBMP.Notes = null;
                     }
 
                     //End of Basics
@@ -312,7 +325,7 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.TrashCaptureStatusTypeID = TrashCaptureStatusType.All
+                        treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusType.All
                             .First(x => x.TrashCaptureStatusTypeDisplayName == treatmentBMPTrashCaptureStatus)
                             .TrashCaptureStatusTypeID;
                     }
@@ -330,19 +343,20 @@ namespace Neptune.Web.Common
                     }
                     else
                     {
-                        TreatmentBMPUploadRow.SizingBasisTypeID = SizingBasisType.All.First(x => x.SizingBasisTypeDisplayName == treatmentSizingBasics).SizingBasisTypeID;
+                        treatmentBMP.SizingBasisTypeID = SizingBasisType.All.First(x => x.SizingBasisTypeDisplayName == treatmentSizingBasics).SizingBasisTypeID;
                     }
 
                 }
 
-                if (TreatmentBMPUploadRow.TreatmentBMPName != null)
+                if (count != 0)
                 {
-                    if (upload.Select(x => x.TreatmentBMPName).Contains(TreatmentBMPUploadRow.TreatmentBMPName))
+                    if (upload.Select(x => x.TreatmentBMPName).Contains(treatmentBMP.TreatmentBMPName))
                     {
-                        errorList.Add("The BMP Name, " + TreatmentBMPUploadRow.TreatmentBMPName +
+                        errorList.Add("The BMP Name, " + treatmentBMP.TreatmentBMPName +
                                       " was already added in this upload, duplicate name is found at row: " + count);
                     }
-                    upload.Add(TreatmentBMPUploadRow);
+                    //var treatmentBMP = new TreatmentBMP(treatmentBMP.TreatmentBMPName, treatmentBMP.TreatmentBMPTypeID, treatmentBMP.StormwaterJurisdictionID,treatmentBMP.OwnerOrganizationID);
+                    upload.Add(treatmentBMP);
                 }
 
                 count++;
@@ -455,12 +469,13 @@ Frank,Drywell,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet
         [Test]
         public void TestBMPLocationGood()
         {
-            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv =
+                @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
 Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
             errorList.Any(x => !x.Contains("Treatment BMP Latitude"));
-            Assert.That(treatmentBmpUploadSimples[0].LocationPoint, Is.EqualTo(DbGeometry.FromText("POINT (30 10)", MapInitJson.CoordinateSystemId)));
+            Assert.That(treatmentBmpUploadSimples[0].LocationPoint.ToString(), Is.EqualTo($"SRID={MapInitJson.CoordinateSystemId};POINT (30 10)"));
         }
 
         [Test]
@@ -561,7 +576,7 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetui
         }
 
         [Test]
-        public void TestAssestIdInSystemOfRecordsBad()
+        public void TestAssetIdInSystemOfRecordsBad()
         {
             string sysID = "";
             for (int i = 0; i < 102; i++)
@@ -577,7 +592,7 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},P
         }
 
         [Test]
-        public void TestAssestIdInSystemOfRecordsGood()
+        public void TestAssetIdInSystemOfRecordsGood()
         {
             var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
 Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
@@ -588,7 +603,7 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetui
         }
 
         [Test]
-        public void TestAssestIdInSystemOfRecordsNullGood()
+        public void TestAssetIdInSystemOfRecordsNullGood()
         {
             var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
 Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
@@ -641,6 +656,69 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perp
         }
 
         [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNullBad()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date"));
+        }
+
+        [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNotNullGood()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => !x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date"));
+            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(DateTime.Parse("11/12/2022")));
+        }
+
+        [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNotNullBad()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project"));
+        }
+
+        [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNullGood()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project"));
+            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
+        }
+
+                [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsNullButDateNotNullBad()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null"));
+        }
+
+        [Test]
+        public void TestAllowableEndDateOfInstallationTypeIsNullButDateNullGood()
+        {
+            var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,Full,";
+            List<string> errorList;
+            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
+            errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null"));
+            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
+        }
+
+        [Test]
         public void TestAllowableEndDateOfInstallationGood()
         {
             var csv = @"Name,BMP Type,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
@@ -648,7 +726,7 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perp
             List<string> errorList;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
             errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifeSpanEndDate, Is.EqualTo(DateTime.Parse("11/12/2022")));
+            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(DateTime.Parse("11/12/2022")));
         }
 
         [Test]
@@ -659,7 +737,7 @@ Frank,Drywell,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perp
             List<string> errorList;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, out errorList);
             errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifeSpanEndDate, Is.EqualTo(null));
+            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
         }
 
         [Test]
