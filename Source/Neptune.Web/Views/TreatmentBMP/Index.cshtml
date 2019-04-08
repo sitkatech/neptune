@@ -39,8 +39,10 @@
     @if (ViewDataTyped.HasManagePermissions)
     {
         <a class="btn btn-neptune headerButtonText treatmentBMPButton" href="@ViewDataTyped.NewUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Add Treatment BMP</a>
+        <a class="btn btn-neptune" href="@ViewDataTyped.BulkBMPUploadUrl">@BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") @BootstrapHtmlHelpers.MakeGlyphIcon("glyphicon-plus") Bulk Upload Treatment BMP</a>
     }
     <button class="btn btn-neptune" onclick="createDownloadConfirmDialog()"><span class="glyphicon glyphicon-map-marker" style="margin-right: 5px;"></span>Export Inventory to GIS</button>
+
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }

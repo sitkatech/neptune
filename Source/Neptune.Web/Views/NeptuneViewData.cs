@@ -119,7 +119,6 @@ namespace Neptune.Web.Views
                 bmpMenu.AddMenuItem(LtInfoMenuItem.MakeItem(new SitkaRoute<ParcelController>(c => c.Index()), currentPerson, "Parcels", "Group1"));
             }
 
-
             return bmpMenu;
         }
 

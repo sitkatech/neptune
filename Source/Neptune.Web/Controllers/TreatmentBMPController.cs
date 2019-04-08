@@ -19,13 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI.WebControls;
+using System;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
@@ -37,6 +31,16 @@ using Neptune.Web.Security;
 using Neptune.Web.Views.Shared;
 using Neptune.Web.Views.TreatmentBMP;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
+using ClosedXML.Excel;
+using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Controllers
 {
@@ -62,7 +66,8 @@ namespace Neptune.Web.Controllers
             var treatmentBmpsCurrentUserCanSee = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList().Where(x => x.CanView(CurrentPerson)).ToList();
             var treatmentBmpsInExportCount = treatmentBmpsCurrentUserCanSee.Count;
             var featureClassesInExportCount = treatmentBmpsCurrentUserCanSee.Select(x => x.TreatmentBMPTypeID).Distinct().Count() + 1;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount);
+            var bulkBMPUploadUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()); 
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, treatmentBmpsInExportCount, featureClassesInExportCount, bulkBMPUploadUrl);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -509,6 +514,54 @@ namespace Neptune.Web.Controllers
                     return File(bytes, "application/zip");
                 }
             }
+        }
+
+        [HttpGet]
+        [NeptuneAdminFeature]
+        public ViewResult  UploadBMPs()
+        {
+            var viewModel = new UploadTreatmentBMPsViewModel();
+            var errorList = new List<string>();
+            return ViewUploadBMPs(viewModel, errorList);
+        }
+
+
+        [HttpPost]
+        [NeptuneAdminFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult UploadBMPs(UploadTreatmentBMPsViewModel viewModel)
+        {
+            var uploadCSV = viewModel.UploadCSV;
+            var bmpType = viewModel.BMPType;
+
+            var errorList = new List<string>();
+            var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType,out errorList);
+
+            if (errorList.Count != 0)
+            {
+                return ViewUploadBMPs(viewModel, errorList);
+            }
+            else
+            {
+                foreach (var treatmentBMP in treatmentBmps)
+                {
+                    HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
+                }
+                HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
+                SetMessageForDisplay($"Upload of CSV successfully uploaded {treatmentBmps.Count} number of records");
+                return new RedirectResult(
+                    SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
+                        x.Index()));
+            }
+        }
+
+        private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)
+        {
+            var bmpTypes = HttpRequestStorage.DatabaseEntities.TreatmentBMPTypes.OrderBy(x => x.TreatmentBMPTypeName).ToSelectListWithEmptyFirstRow(
+                x => x.TreatmentBMPTypeID.ToString(CultureInfo.InvariantCulture),
+                x => x.TreatmentBMPTypeName.ToString(CultureInfo.InvariantCulture));
+            var viewData = new UploadTreatmentBMPsViewData(CurrentPerson, bmpTypes, errorList, SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.UploadBMPs()));
+            return RazorView<UploadTreatmentBMPs, UploadTreatmentBMPsViewData, UploadTreatmentBMPsViewModel>(viewData, viewModel);
         }
 
         private static void CreateEsriShapefileFromFeatureCollection(FeatureCollection featureCollection,
