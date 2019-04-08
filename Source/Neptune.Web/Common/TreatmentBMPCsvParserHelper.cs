@@ -14,7 +14,7 @@ namespace Neptune.Web.Common
 {
     public static class TreatmentBMPCsvParserHelper
     {
-        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType , out List<string> errorList)
+        public static List<TreatmentBMP> CSVUpload(Stream fileStream, int bmpType, out List<string> errorList)
         {
             errorList = new List<string>();
             var StreamReader = new StreamReader(fileStream);
@@ -36,18 +36,19 @@ namespace Neptune.Web.Common
         public static List<TreatmentBMP> ParseBmpRowsFromCsv(TextFieldParser parser, int bmpType, out List<string> errorList)
         {
             parser.SetDelimiters(",");
-            errorList = new List<string>();
-            var upload = new List<TreatmentBMP>();
-            var treatmentBMP = new TreatmentBMP(string.Empty, default(int), default(int), default(int), default(bool), default(int), default(int));
-
             var requiredFields = new List<string> { "Jurisdiction", "BMP Name", "Latitude", "Longitude", "Sizing Basis", "Trash Capture Status", "Owner" };
             var optionalFields = new List<string> {"Year Built or Installed","Asset ID in System of Record", "Required Lifespan of Installation",
                 "Allowable End Date of Installation (if applicable)", "Required Field Visits Per Year", "Required Post-Storm Field Visits Per Year","Notes"};
+            Dictionary<string, int> fieldsDict = new Dictionary<string, int> { };
+            errorList = new List<string>();
 
+            var upload = new List<TreatmentBMP>();
+            var treatmentBMP = new TreatmentBMP(string.Empty, default(int), default(int), default(int), default(bool), default(int), default(int));
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs;
             var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions;
             var jurisdictionNames = jurisdictions.Select(x => x.Organization.OrganizationName);
             var organizations = HttpRequestStorage.DatabaseEntities.Organizations;
+            var organizationNames = organizations.Select(x => x.OrganizationName);
 
             // if the fields don't match throw an exception
             int count = 0;
@@ -57,7 +58,13 @@ namespace Neptune.Web.Common
                 List<string> headers = new List<string>();
                 if (count == 0)
                 {
-                    headers = fields.Select(x => x.Trim()).ToList();
+                    for (int fieldIndex = 0; fieldIndex < fields.Length; fieldIndex++)
+                    {
+                        fieldsDict.Add(fields[fieldIndex].Trim(), fieldIndex);
+                    }
+
+
+                    headers = fieldsDict.Keys.ToList();
                     IEnumerable<string> requiredFieldDifference = requiredFields.Except(headers);
                     IEnumerable<string> optionalFieldDifference = headers.Except(requiredFields).Except(optionalFields);
 
@@ -73,7 +80,8 @@ namespace Neptune.Web.Common
                 }
                 else
                 {
-                    var treatmentBMPName = fields[0];
+
+                    var treatmentBMPName = fields[fieldsDict["BMP Name"]];
                     if (treatmentBMPName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
@@ -90,8 +98,8 @@ namespace Neptune.Web.Common
 
                     treatmentBMP.TreatmentBMPTypeID = bmpType;
 
-                    var treatmentBMPLatitude = fields[1];
-                    var treatmentBMPLongitude = fields[2];
+                    var treatmentBMPLatitude = fields[fieldsDict["Latitude"]];
+                    var treatmentBMPLongitude = fields[fieldsDict["Longitude"]];
                     if (treatmentBMPLatitude.IsNullOrWhiteSpace() || treatmentBMPLongitude.IsNullOrWhiteSpace())
                     {
                         errorList.Add($"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
@@ -102,16 +110,16 @@ namespace Neptune.Web.Common
                             $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
                     }
 
-                    var treatmentBMPJurisdictionName = fields[3];
+                    var treatmentBMPJurisdictionName = fields[fieldsDict["Jurisdiction"]];
                     if (treatmentBMPJurisdictionName.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            $"BMP Jurisdiction Name is null, empty, or just whitespaces for row: {count}");
+                            $"BMP Jurisdiction is null, empty, or just whitespaces for row: {count}");
                     }
                     if (!jurisdictionNames.Contains(treatmentBMPJurisdictionName))
                     {
                         errorList.Add(
-                            $"No Jurisdiction with name '{treatmentBMPJurisdictionName}' exists. See row: {{count}}");
+                            $"No Jurisdiction with name '{treatmentBMPJurisdictionName}' exists. See row: {count}");
                     }
                     else
                     {
@@ -119,13 +127,13 @@ namespace Neptune.Web.Common
                             .First((x => x.Organization.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
                     }
 
-                    var treatmentBMPOwner = fields[4];
+                    var treatmentBMPOwner = fields[fieldsDict["Owner"]];
                     if (treatmentBMPOwner.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
                             $"BMP Organization Owner Name is null, empty, or just whitespaces for row: {count}");
                     }
-                    if (!jurisdictionNames.Contains(treatmentBMPOwner))
+                    if (!organizationNames.Contains(treatmentBMPOwner))
                     {
                         errorList.Add(
                             $"No BMP Organization Owner with that name exists within our records, row: {count}");
@@ -137,7 +145,7 @@ namespace Neptune.Web.Common
                     }
 
                     //start of Optional Fields
-                    var yearBuiltOrInstalled = fields[5];
+                    var yearBuiltOrInstalled = fields[fieldsDict["Year Built or Installed"]];
                     if (!yearBuiltOrInstalled.IsNullOrWhiteSpace())
                     {
                         if (!int.TryParse(yearBuiltOrInstalled, out var yearBuiltOrInstalledInt))
@@ -156,7 +164,7 @@ namespace Neptune.Web.Common
 
 
 
-                    var assetIDInSystemOfRecord = fields[6];
+                    var assetIDInSystemOfRecord = fields[fieldsDict["Asset ID in System of Record"]];
                     if (!assetIDInSystemOfRecord.IsNullOrWhiteSpace())
                     {
                         if (assetIDInSystemOfRecord.Length > 100)
@@ -174,7 +182,7 @@ namespace Neptune.Web.Common
                         treatmentBMP.SystemOfRecordID = null;
                     }
 
-                    var requiredLifespanOfInstallation = fields[7];
+                    var requiredLifespanOfInstallation = fields[fieldsDict["Required Lifespan of Installation"]];
                     if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace())
                     {
                         if (!TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName)
@@ -196,13 +204,13 @@ namespace Neptune.Web.Common
 
 
 
-                    var allowableEndDateOfInstallation = fields[8];
+                    var allowableEndDateOfInstallation = fields[fieldsDict["Allowable End Date of Installation (if applicable)"]];
                     if (allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add($"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row: {count}");
                     }
                     else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && (requiredLifespanOfInstallation == TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
-                              requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))        
+                              requiredLifespanOfInstallation == TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))
                     {
                         errorList.Add($"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}");
                     }
@@ -215,7 +223,7 @@ namespace Neptune.Web.Common
                         if (!DateTime.TryParse(allowableEndDateOfInstallation, out var allowableEndDateOfInstallationDateTime))
                         {
                             errorList.Add($"Allowable End Date of Installation can not be converted to Date Time format at row: {count}");
-                        } 
+                        }
                         else
                         {
                             treatmentBMP.TreatmentBMPLifespanEndDate = allowableEndDateOfInstallationDateTime;
@@ -227,7 +235,7 @@ namespace Neptune.Web.Common
                     }
 
 
-                    var requiredFieldVisitsPerYear = fields[9];
+                    var requiredFieldVisitsPerYear = fields[fieldsDict["Required Field Visits Per Year"]];
                     if (!requiredFieldVisitsPerYear.IsNullOrWhiteSpace())
                     {
                         if (!int.TryParse(requiredFieldVisitsPerYear, out var requiredFieldVisitsPerYearInt))
@@ -244,18 +252,26 @@ namespace Neptune.Web.Common
                         treatmentBMP.RequiredFieldVisitsPerYear = null;
                     }
 
-                    var requiredPostStormFieldVisitsPerYear = fields[10];
-                    if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
+                    var requiredPostStormFieldVisitsPerYear = fields[fieldsDict["Required Post-Storm Field Visits Per Year"]];
+                    if (!requiredPostStormFieldVisitsPerYear.IsNullOrWhiteSpace())
                     {
-                        errorList.Add($"Required post-storm field visits per year field cannot be converted to Int at row: {count}");
+                        if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
+                        {
+                            errorList.Add($"Required post-storm field visits per year field cannot be converted to Int at row: {count}");
+                        }
+                        else
+                        {
+                            treatmentBMP.RequiredPostStormFieldVisitsPerYear =
+                                requiredPostStormFieldVisitsPerYearInt;
+                        }
                     }
                     else
                     {
-                        treatmentBMP.RequiredPostStormFieldVisitsPerYear =
-                            requiredPostStormFieldVisitsPerYearInt;
+                        treatmentBMP.RequiredPostStormFieldVisitsPerYear = null;
                     }
 
-                    var notes = fields[11];
+
+                    var notes = fields[fieldsDict["Notes"]];
                     if (!notes.IsNullOrWhiteSpace())
                     {
                         if (notes.Length > 1000)
@@ -275,7 +291,7 @@ namespace Neptune.Web.Common
 
                     //End of Basics
 
-                    var treatmentBMPTrashCaptureStatus = fields[12];
+                    var treatmentBMPTrashCaptureStatus = fields[fieldsDict["Trash Capture Status"]];
                     if (treatmentBMPTrashCaptureStatus.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
@@ -294,11 +310,11 @@ namespace Neptune.Web.Common
                     }
 
 
-                    var treatmentSizingBasics = fields[13];
+                    var treatmentSizingBasics = fields[fieldsDict["Sizing Basis"]];
                     if (treatmentSizingBasics.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
-                            $"Sizing Basics is null, empty, or just whitespaces for row: {count}");
+                            $"Sizing Basis is null, empty, or just whitespaces for row: {count}");
                     }
                     if (!SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName).Contains(treatmentSizingBasics))
                     {
@@ -317,7 +333,7 @@ namespace Neptune.Web.Common
                     if (upload.Select(x => x.TreatmentBMPName).Contains(treatmentBMP.TreatmentBMPName))
                     {
                         errorList.Add(
-                            $"The BMP Name '{treatmentBMP.TreatmentBMPName}' was already added in this upload, duplicate name is found at row: {count}");
+                            $"The BMP BMP Name '{treatmentBMP.TreatmentBMPName}' was already added in this upload, duplicate name is found at row: {count}");
                     }
                     //var treatmentBMP = new TreatmentBMP(treatmentBMP.TreatmentBMPName, treatmentBMP.TreatmentBMPTypeID, treatmentBMP.StormwaterJurisdictionID,treatmentBMP.OwnerOrganizationID);
                     upload.Add(treatmentBMP);
@@ -337,19 +353,18 @@ namespace Neptune.Web.Common
         [Test]
         public void TestInvalidColumns()
         {
-            var csv = @"Name,Jurisdiction Name,,Latitude,Longitude,BMP Type,Trash Capture Status,Sizing Basics,Yo";
+            var csv = @"BMP Name,Jurisdiction,,Latitude,Longitude,BMP Type,Trash Capture Status,Sizing Basis,Yo";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
             errorList.Any(x => x.Contains("One or more required headers have not been provided, Required Fields are: "));
             errorList.Any(x => x.Contains("Some of the fields provided are not acceptable optional fields or are misspelled required fields. Optional Fields are: "));
-
         }
 
         [Test]
         public void TestValidColumns()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics";
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
@@ -360,7 +375,7 @@ namespace Neptune.Web.Common
         [Test]
         public void TestBMPNameNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 ,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -371,7 +386,7 @@ namespace Neptune.Web.Common
         [Test]
         public void TestBMPNameExists()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Test,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,";
             List<string> errorList;
             var bmpType = 17;
@@ -383,7 +398,7 @@ Test,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Li
         [Test]
         public void TestBMPLatitudeNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -394,7 +409,7 @@ Frank,,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Lif
         [Test]
         public void TestBMPLongitudeNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -406,7 +421,7 @@ Frank,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Lif
         public void TestBMPLocationGood()
         {
             var csv =
-                @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+                @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -418,18 +433,18 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestJurisdictionNameNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => x.Contains("BMP Jurisdiction is null, empty, or just whitespaces for row: "));
         }
 
         [Test]
         public void TestJurisdictionNameExistsBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Grou,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -440,48 +455,48 @@ Frank,30,10,Sitka Technology Grou,Sitka Technology Group,2008,ABCD,Perpetuity/Li
         [Test]
         public void TestJurisdictionNameExistsGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
             errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
-            errorList.Any(x => !x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => !x.Contains("BMP Jurisdiction is null, empty, or just whitespaces for row: "));
             Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
         }
 
         [Test]
         public void TestOrganizationOwnerNameNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => x.Contains("BMP Organization Owner Name is null, empty, or just whitespaces for row:"));
         }
 
         [Test]
         public void TestOrganizationOwnerNameExistsBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Grou,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => x.Contains("No Jurisdicition with that name exists within our records, row: "));
+            errorList.Any(x => x.Contains("No BMP Organization Owner with that name exists within our records, row: "));
         }
 
         [Test]
         public void TestOrganizationOwnerExistsGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
-            errorList.Any(x => !x.Contains("BMP Jurisdiction Name is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => !x.Contains("BMP Organization Owner Name is null, empty, or just whitespaces for row:"));
+            errorList.Any(x => !x.Contains("No BMP Organization Owner with that name exists within our records, row: "));
             Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
         }
 
@@ -490,7 +505,7 @@ Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Pro
         [Test]
         public void TestYearBuiltIntParseBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,AB34,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -500,7 +515,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,AB34,ABCD,Perpetuity/L
         [Test]
         public void TestYearBuiltIntParseGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -512,7 +527,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestYearBuiltIntAcceptsNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -530,7 +545,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life 
                 sysID += "a";
             }
 
-            var csv = $@"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -541,7 +556,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},Perpetuit
         [Test]
         public void TestAssetIdInSystemOfRecordsGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -553,7 +568,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life 
         [Test]
         public void TestAssetIdInSystemOfRecordsNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -565,7 +580,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life 
         [Test]
         public void TestRequiredLifespanOfInstallationBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -576,7 +591,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet,11/12
         [Test]
         public void TestRequiredLifespanOfInstallationGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -588,7 +603,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredLifespanOfInstallationNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -600,7 +615,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,
         [Test]
         public void TestAllowableEndDateOfInstallationBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -611,7 +626,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNullBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -622,7 +637,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Da
         [Test]
         public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNotNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -634,7 +649,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Da
         [Test]
         public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNotNullBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -645,7 +660,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -654,10 +669,10 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
             Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
         }
 
-                [Test]
+        [Test]
         public void TestAllowableEndDateOfInstallationTypeIsNullButDateNotNullBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -668,7 +683,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,
         [Test]
         public void TestAllowableEndDateOfInstallationTypeIsNullButDateNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -680,7 +695,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,
         [Test]
         public void TestAllowableEndDateOfInstallationGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -692,7 +707,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestAllowableEndDateOfInstallationNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -704,7 +719,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredFieldVisitsPerYearBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,Ab5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -715,7 +730,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredFieldVisitsPerYearGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -727,7 +742,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredFieldVisitsPerYearNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -739,7 +754,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredPostStormFieldVisitsPerYearBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -750,7 +765,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredPostStormFieldVisitsPerYearGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -762,7 +777,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestRequiredPostStormFieldVisitsPerYearNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -780,7 +795,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
                 note += "a";
             }
 
-            var csv = $@"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,{note},Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -791,7 +806,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestNotesGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -803,7 +818,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestNotesNullGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -816,7 +831,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestTrashCaptureStatusExistsNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,null,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
@@ -828,7 +843,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,null,11/12/2
         [Test]
         public void TestTrashCaptureStatusExistsBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,4,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -839,7 +854,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestTrashCaptureStatusExistsGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
@@ -853,18 +868,18 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestSizingBasicsExistsNull()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => x.Contains("Sizing Basics is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
         }
 
         [Test]
         public void TestSizingBasicsExistsBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,4";
             List<string> errorList;
             var bmpType = 17;
@@ -875,13 +890,13 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void TestSizingBasicsExistsGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
             errorList.Any(x => !x.Contains("No Sizing Basic with the name "));
-            errorList.Any(x => !x.Contains("Sizing Basics is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => !x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
             Assert.That(treatmentBmpUploadSimples[0].SizingBasisTypeID, Is.EqualTo(4));
         }
 
@@ -889,7 +904,7 @@ Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/L
         [Test]
         public void UploadListPopulatesGood()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
 John,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
@@ -901,13 +916,13 @@ John,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Li
         [Test]
         public void UploadListPopulatesBad()
         {
-            var csv = @"Name,Latitude,Longitude,Jurisdiction Name, Owner,Year built or installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basics  
+            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
 Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,,Full,Not Provided";
             List<string> errorList;
             var bmpType = 17;
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList);
-            errorList.Any(x => x.Contains("Sizing Basics is null, empty, or just whitespaces for row: "));
+            errorList.Any(x => x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
             errorList.Any(x => x.Contains("A BMP by the name,"));
         }
     }
