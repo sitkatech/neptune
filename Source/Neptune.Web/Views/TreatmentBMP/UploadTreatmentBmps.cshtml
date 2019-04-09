@@ -32,6 +32,11 @@
     .mb-2 {
         margin-bottom: 20px;
     }
+
+    .scrollbox {
+        overflow-y: auto;
+        max-height: 190px;
+    }
 </style>
 <p>Use this form to bulk upload Treatment BMPs. If the upload fails a detailed error report will be provided, otherwise BMPs will be imported per the CSV. Once uploaded, this action cannot be undone. <strong>It is strongly advised to test the upload in the QA environment prior to bulk uploading data to Production.</strong> The CSV must have a header row with column names that match the label of the field to be uploaded. The CSV should follow this general format:</p>
 
@@ -58,7 +63,7 @@ Test2,30,10,City Of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Pro
                 @Html.LabelWithSugarFor(m => m.UploadCSV)
             </div>
             <div class="col-sm-10 col-xs-12">
-                @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control"})
+                @Html.EditorFor(m => m.UploadCSV, new { @class = "form-control" })
             </div>
         </div>
         <div class="pull-right">
@@ -73,29 +78,33 @@ Test2,30,10,City Of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Pro
     var count = 1;
     <div>
         <div class="alert alert-danger">There are @ViewDataTyped.ErrorList.Count errors that need to be fixed before upload can be successful</div>
-        <div class="col-md-12 col-xs-12 mt-2">
-
-            <div class="row mt-2">
-                <div class="col-sm-1">
-                    <strong>Error</strong>
-                </div>
-                <div class="col-sm-11">
-                    <strong>Description</strong>
-                </div>
-            </div>
-            @foreach (var error in ViewDataTyped.ErrorList)
-            {
-                <div clas="row">
+        <div class="panel panel-default mt-2">
+            <div class="panel-heading">
+                <div class="row">
                     <div class="col-sm-1">
-                        @count
+                        <strong>Error</strong>
                     </div>
                     <div class="col-sm-11">
-                        @error
+                        <strong>Description</strong>
                     </div>
                 </div>
-                count++;
+            </div>
+            <div class="panel-body scrollbox">
+                @foreach (var error in ViewDataTyped.ErrorList)
+                {
+                    <div clas="row">
+                        <div class="col-sm-1">
+                            @count
+                        </div>
+                        <div class="col-sm-11">
+                            @error
+                        </div>
+                    </div>
+                    count++;
 
-            }
+                }
+            </div>
         </div>
     </div>
+
 }
