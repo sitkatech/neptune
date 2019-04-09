@@ -27,7 +27,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     .ToGeoJsonFeatureCollection();
 
             
-            var observationsLayerGeoJson = onlandVisualTrashAssessmentArea.TransectBackingAssessment?.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
+            var observationsLayerGeoJson = onlandVisualTrashAssessmentArea.GetTransectBackingAssessment()?.OnlandVisualTrashAssessmentObservations.MakeObservationsLayerGeoJson();
 
 
             var assessmentAreaLayerGeoJson = new LayerGeoJson("assessmentArea", geoJsonFeatureCollection,
@@ -200,7 +200,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now,
-                OnlandVisualTrashAssessmentStatus.InProgress)
+                OnlandVisualTrashAssessmentStatus.InProgress, false)
             {
                 OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
                 AssessingNewArea = false,

@@ -103,5 +103,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         {
                 return DeleteUrlTemplate.ParameterReplace(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
         }
+
+        public static Models.OnlandVisualTrashAssessment GetTransectBackingAssessment(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.SingleOrDefault(x =>
+                x.IsTransectBackingAssessment);
+        }
     }
 }
