@@ -6,10 +6,3 @@ OnlandVisualTrashAssessmentAreaID int null constraint FK_TrashGeneratingUnit_Onl
 LandUseBlockID int null constraint FK_TrashGeneratingUnit_LandUseBlock_LandUseBlockID foreign key references dbo.LandUseBlock(LandUseBlockID),
 TrashGeneratingUnitGeometry geometry not null
 )
-
-Drop view if exists dbo.vGeoServerTrashGeneratingUnit
-Go
-
-Create view dbo.vGeoServerTrashGeneratingUnit
-as select * from dbo.TrashGeneratingUnit
-Go
