@@ -55,7 +55,7 @@ NeptuneMaps.GeoServerMap.prototype.createWmsParamsWithLayerName = function (laye
 
     // deep-copy the base params and extend them by the customParams;
     // doing it this way ensures that the base params are left alone so future WMS layers aren't called with those params
-    var wmsParams = Object.assign({}, this.wmsParams);
+    var wmsParams = jQuery.extend({}, this.wmsParams);
     L.Util.extend(wmsParams, customParams);
 
     return wmsParams;
@@ -66,7 +66,7 @@ NeptuneMaps.GeoServerMap.prototype.createWfsParamsWithLayerName = function (laye
         typeName: layerName
     };
 
-    var wfsParams = Object.assign({}, this.wfsParams);
+    var wfsParams = jQuery.extend({}, this.wfsParams);
     L.Util.extend(wfsParams, customParams);
     return wfsParams;
 };

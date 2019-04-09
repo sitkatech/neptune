@@ -6,7 +6,7 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
     if (!options) {
         options = {};
     }
-    Object.assign(this.options, options);
+    jQuery.extend(this.options, options);
 
     var landUseBlocksLegendUrl = geoserverUrl +
         "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
@@ -35,7 +35,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.BuildTrashAssessmentMapLegend = functio
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJsonFeatureCollection, options) {
-    var layerOptions = Object.assign({}, NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions);
+    var layerOptions = jQuery.extend({}, NeptuneMaps.TrashAssessmentMap.ObservationLayerDefaultOptions);
     L.Util.extend(layerOptions, options);
 
     this.observationsLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);
@@ -49,7 +49,7 @@ NeptuneMaps.TrashAssessmentMap.prototype.CreateObservationsLayer = function(geoJ
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype.CreateTransectLineLayer = function(geoJsonFeatureCollection, options) {
-    var layerOptions = Object.assign({}, NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions);
+    var layerOptions = jQuery.extend({}, NeptuneMaps.TrashAssessmentMap.TransectLineLayerDefaultOptions);
     L.Util.extend(layerOptions, options);
 
     this.transectLineLayer = L.geoJson(geoJsonFeatureCollection, layerOptions);

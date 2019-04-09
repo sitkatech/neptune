@@ -3,6 +3,7 @@
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
+        $scope.treatmentBMPLayerLookup = new Map();
 
         $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson,
             "Terrain",
@@ -138,23 +139,22 @@
                                         title: feature.properties.Name,
                                         alt: feature.properties.Name
                                     });
-                            }
+                            },
+                            onEachFeature: function (feature, layer) {
+                                $scope.treatmentBMPLayerLookup.set(feature.properties["TreatmentBMPID"], layer);
+                            }.bind(this)
                         });
                     $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID] = layer;
+                    layer.on('click',
+                        function (e) {
+                            $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
+                            $scope.$apply();
+                        });
                 });
 
             $scope.treatmentBMPLayerGroup = L.layerGroup(Object.values($scope.treatmentBMPLayers));
-
-            $scope.treatmentBMPLayerGroup.on('click',
-                function (e) {
-                    $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
-                    $scope.$apply();
-                });
-
-
+            
             $scope.rebuildMarkerClusterGroup();
-
-            //$scope.neptuneMap.layerControl.addOverlay($scope.markerClusterGroup, "Treatment BMPs");
         };
 
         $scope.rebuildMarkerClusterGroup = function () {
@@ -344,8 +344,9 @@
                 function(t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
-            var layer = _.find($scope.treatmentBMPLayerGeoJson._layers,
-                function (layer) { return treatmentBMPID === layer.feature.properties.TreatmentBMPID; });
+            //var layer = _.find($scope.treatmentBMPLayerLookup.get(treatmentBMPID),
+            //    function (layer) { return treatmentBMPID === layer.properties.TreatmentBMPID; });
+            var layer = $scope.treatmentBMPLayerLookup.get(treatmentBMPID);
             setActiveImpl(layer, true);
         };
 

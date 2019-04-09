@@ -137,7 +137,7 @@
     }
 
     $scope.populateDefaults = function () {
-        var temp = Object.assign({}, $scope.TreatmentBMPAssessmentObservationTypeSchema);
+        var temp = jQuery.extend({}, $scope.TreatmentBMPAssessmentObservationTypeSchema);
         if (Sitka.Methods.isUndefinedNullOrEmpty($scope.TreatmentBMPAssessmentObservationTypeSchema.AssessmentDescription)) {
             temp.AssessmentDescription = "Custom Assessment Instructions will be displayed here.";
         }
