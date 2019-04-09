@@ -289,6 +289,10 @@
     <Compile Include="Models\Generated\TrainingVideoPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TrashCaptureStatusType.Binding.cs" />
     <Compile Include="Models\Generated\TrashCaptureStatusTypePrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\TrashGeneratingUnit.Binding.cs" />
+    <Compile Include="Models\Generated\TrashGeneratingUnit.DatabaseContextExtensions.cs" />
+    <Compile Include="Models\Generated\TrashGeneratingUnitConfiguration.Binding.cs" />
+    <Compile Include="Models\Generated\TrashGeneratingUnitPrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMP.Binding.cs" />
     <Compile Include="Models\Generated\TreatmentBMP.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\TreatmentBMPAssessment.Binding.cs" />
