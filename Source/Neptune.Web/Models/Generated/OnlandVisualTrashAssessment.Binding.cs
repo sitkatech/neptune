@@ -24,7 +24,6 @@ namespace Neptune.Web.Models
         /// </summary>
         protected OnlandVisualTrashAssessment()
         {
-            this.OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment = new HashSet<OnlandVisualTrashAssessmentArea>();
             this.OnlandVisualTrashAssessmentObservations = new HashSet<OnlandVisualTrashAssessmentObservation>();
             this.OnlandVisualTrashAssessmentObservationPhotoStagings = new HashSet<OnlandVisualTrashAssessmentObservationPhotoStaging>();
             this.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes = new HashSet<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType>();
@@ -33,7 +32,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName, string draftAreaDescription) : this()
+        public OnlandVisualTrashAssessment(int onlandVisualTrashAssessmentID, int createdByPersonID, DateTime createdDate, int? onlandVisualTrashAssessmentAreaID, string notes, int? stormwaterJurisdictionID, bool? assessingNewArea, int onlandVisualTrashAssessmentStatusID, DbGeometry draftGeometry, bool? isDraftGeometryManuallyRefined, int? onlandVisualTrashAssessmentScoreID, DateTime? completedDate, string draftAreaName, string draftAreaDescription, bool isTransectBackingAssessment) : this()
         {
             this.OnlandVisualTrashAssessmentID = onlandVisualTrashAssessmentID;
             this.CreatedByPersonID = createdByPersonID;
@@ -49,12 +48,13 @@ namespace Neptune.Web.Models
             this.CompletedDate = completedDate;
             this.DraftAreaName = draftAreaName;
             this.DraftAreaDescription = draftAreaDescription;
+            this.IsTransectBackingAssessment = isTransectBackingAssessment;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public OnlandVisualTrashAssessment(int createdByPersonID, DateTime createdDate, int onlandVisualTrashAssessmentStatusID) : this()
+        public OnlandVisualTrashAssessment(int createdByPersonID, DateTime createdDate, int onlandVisualTrashAssessmentStatusID, bool isTransectBackingAssessment) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -62,12 +62,13 @@ namespace Neptune.Web.Models
             this.CreatedByPersonID = createdByPersonID;
             this.CreatedDate = createdDate;
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatusID;
+            this.IsTransectBackingAssessment = isTransectBackingAssessment;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public OnlandVisualTrashAssessment(Person createdByPerson, DateTime createdDate, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus) : this()
+        public OnlandVisualTrashAssessment(Person createdByPerson, DateTime createdDate, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus, bool isTransectBackingAssessment) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.OnlandVisualTrashAssessmentID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
@@ -76,6 +77,7 @@ namespace Neptune.Web.Models
             createdByPerson.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson.Add(this);
             this.CreatedDate = createdDate;
             this.OnlandVisualTrashAssessmentStatusID = onlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusID;
+            this.IsTransectBackingAssessment = isTransectBackingAssessment;
         }
 
         /// <summary>
@@ -83,7 +85,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static OnlandVisualTrashAssessment CreateNewBlank(Person createdByPerson, OnlandVisualTrashAssessmentStatus onlandVisualTrashAssessmentStatus)
         {
-            return new OnlandVisualTrashAssessment(createdByPerson, default(DateTime), onlandVisualTrashAssessmentStatus);
+            return new OnlandVisualTrashAssessment(createdByPerson, default(DateTime), onlandVisualTrashAssessmentStatus, default(bool));
         }
 
         /// <summary>
@@ -92,13 +94,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment.Any() || OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any();
+            return OnlandVisualTrashAssessmentObservations.Any() || OnlandVisualTrashAssessmentObservationPhotoStagings.Any() || OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentArea).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(OnlandVisualTrashAssessment).Name, typeof(OnlandVisualTrashAssessmentObservation).Name, typeof(OnlandVisualTrashAssessmentObservationPhotoStaging).Name, typeof(OnlandVisualTrashAssessmentPreliminarySourceIdentificationType).Name};
 
 
         /// <summary>
@@ -122,11 +124,6 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteChildren(DatabaseEntities dbContext)
         {
-
-            foreach(var x in OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
 
             foreach(var x in OnlandVisualTrashAssessmentObservations.ToList())
             {
@@ -159,10 +156,10 @@ namespace Neptune.Web.Models
         public DateTime? CompletedDate { get; set; }
         public string DraftAreaName { get; set; }
         public string DraftAreaDescription { get; set; }
+        public bool IsTransectBackingAssessment { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return OnlandVisualTrashAssessmentID; } set { OnlandVisualTrashAssessmentID = value; } }
 
-        public virtual ICollection<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreasWhereYouAreTheTransectBackingAssessment { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservation> OnlandVisualTrashAssessmentObservations { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentObservationPhotoStaging> OnlandVisualTrashAssessmentObservationPhotoStagings { get; set; }
         public virtual ICollection<OnlandVisualTrashAssessmentPreliminarySourceIdentificationType> OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes { get; set; }

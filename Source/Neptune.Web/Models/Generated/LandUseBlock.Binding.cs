@@ -24,7 +24,7 @@ namespace Neptune.Web.Models
         /// </summary>
         protected LandUseBlock()
         {
-
+            this.TrashGeneratingUnits = new HashSet<TrashGeneratingUnit>();
         }
 
         /// <summary>
@@ -64,13 +64,13 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return false;
+            return TrashGeneratingUnits.Any();
         }
 
         /// <summary>
         /// Dependent type names of this entity
         /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlock).Name};
+        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(LandUseBlock).Name, typeof(TrashGeneratingUnit).Name};
 
 
         /// <summary>
@@ -86,8 +86,19 @@ namespace Neptune.Web.Models
         /// </summary>
         public void DeleteFull(DatabaseEntities dbContext)
         {
-            
+            DeleteChildren(dbContext);
             Delete(dbContext);
+        }
+        /// <summary>
+        /// Dependent type names of this entity
+        /// </summary>
+        public void DeleteChildren(DatabaseEntities dbContext)
+        {
+
+            foreach(var x in TrashGeneratingUnits.ToList())
+            {
+                x.DeleteFull(dbContext);
+            }
         }
 
         [Key]
@@ -98,6 +109,7 @@ namespace Neptune.Web.Models
         [NotMapped]
         public int PrimaryKey { get { return LandUseBlockID; } set { LandUseBlockID = value; } }
 
+        public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public PriorityLandUseType PriorityLandUseType { get { return PriorityLandUseTypeID.HasValue ? PriorityLandUseType.AllLookupDictionary[PriorityLandUseTypeID.Value] : null; } }
 
         public static class FieldLengths

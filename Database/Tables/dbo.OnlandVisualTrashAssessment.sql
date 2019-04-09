@@ -17,12 +17,20 @@ CREATE TABLE [dbo].[OnlandVisualTrashAssessment](
 	[CompletedDate] [datetime] NULL,
 	[DraftAreaName] [varchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[DraftAreaDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[IsTransectBackingAssessment] [bit] NOT NULL,
  CONSTRAINT [PK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentID] PRIMARY KEY CLUSTERED 
 (
 	[OnlandVisualTrashAssessmentID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [CK_OnlandVisualTrashAssessment_AtMostOneTransectBackingAssessmentPerArea] ON [dbo].[OnlandVisualTrashAssessment]
+(
+	[OnlandVisualTrashAssessmentAreaID] ASC
+)
+WHERE ([IsTransectBackingAssessment]=(1))
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [FK_OnlandVisualTrashAssessment_OnlandVisualTrashAssessmentArea_OnlandVisualTrashAssessmentAreaID] FOREIGN KEY([OnlandVisualTrashAssessmentAreaID])
 REFERENCES [dbo].[OnlandVisualTrashAssessmentArea] ([OnlandVisualTrashAssessmentAreaID])
@@ -73,6 +81,10 @@ GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete] CHECK  (([OnlandVisualTrashAssessmentAreaID] IS NOT NULL AND ([AssessingNewArea]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) OR [OnlandVisualTrashAssessmentAreaID] IS NULL AND [AssessingNewArea]=(1)))
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete]
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_TransectBackingAssessmentMustBeComplete] CHECK  ((([IsTransectBackingAssessment]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) AND NOT ([IsTransectBackingAssessment]=(1) AND [OnlandVisualTrashAssessmentStatusID]<>(2))))
+GO
+ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_TransectBackingAssessmentMustBeComplete]
 GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON
