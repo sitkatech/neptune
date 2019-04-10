@@ -206,7 +206,7 @@ namespace Neptune.Web.Common
                         .Contains(requiredLifespanOfInstallation))
                     {
                         errorList.Add(
-                            $"No Required Lifespan Of Installation by the name {requiredLifespanOfInstallation} exists within our records at row: {count}");
+                            $"No Required Lifespan Of Installation by the name {requiredLifespanOfInstallation} exists within our records at row: {count}. Acceptable Values Are: {string.Join(", ", TreatmentBMPLifespanType.All.Select(x => x.TreatmentBMPLifespanTypeDisplayName))}");
                     }
                     else
                     {
@@ -232,7 +232,7 @@ namespace Neptune.Web.Common
                               TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))
                     {
                         errorList.Add(
-                            $"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}");
+                            $"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}" );
                     }
                     else if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
                              !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
@@ -315,13 +315,13 @@ namespace Neptune.Web.Common
             if (treatmentBMPTrashCaptureStatus.IsNullOrWhiteSpace())
             {
                 errorList.Add(
-                    "Trash Capture Status is null, empty, or just whitespaces for row: " + count);
+                    $"Trash Capture Status is null, empty, or just whitespaces for row: {count}");
             }
 
             if (!TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName)
                 .Contains(treatmentBMPTrashCaptureStatus))
             {
-                errorList.Add("No Trash Capture Status with that name exists in our records, row: " + count);
+                errorList.Add($"No Trash Capture Status with that name exists in our records, row: {count}. Acceptable Values Are: {string.Join(", ",TrashCaptureStatusType.All.Select(x => x.TrashCaptureStatusTypeDisplayName))}");
             }
             else
             {
@@ -341,7 +341,7 @@ namespace Neptune.Web.Common
             if (!SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName).Contains(treatmentSizingBasics))
             {
                 errorList.Add(
-                    $"No Sizing Basis with the name '{treatmentSizingBasics}' exists in our records, row: {count}");
+                    $"No Sizing Basis with the name '{treatmentSizingBasics}' exists in our records, row: {count}. Acceptable Values Are: {string.Join(", ",SizingBasisType.All.Select(x => x.SizingBasisTypeDisplayName))}");
             }
             else
             {
@@ -398,10 +398,14 @@ namespace Neptune.Web.Common
             errorList = new List<string>();
             var fieldsDict = new Dictionary<string, int>();
 
-
+            string temp;
             for (int fieldIndex = 0; fieldIndex < row.Length; fieldIndex++)
             {
-                fieldsDict.Add(row[fieldIndex].Trim(), fieldIndex);
+                temp = row[fieldIndex].Trim();
+                if (!temp.IsNullOrWhiteSpace())
+                {
+                    fieldsDict.Add(temp, fieldIndex);
+                }
             }
 
             List<string> headers = fieldsDict.Keys.ToList();
@@ -417,7 +421,7 @@ namespace Neptune.Web.Common
 
             if (customAttributesDifference.Any())
             {
-                errorList.Add($"The provided fields {string.Join(", ", customAttributesDifference.ToList())} did not match a property or custom attribute of the BMP type ‘{bmpType}’");
+                errorList.Add($"The provided fields '{string.Join(", ", customAttributesDifference.ToList())}' did not match a property or custom attribute of the BMP type ‘{bmpType}’");
             }
 
             return fieldsDict;
