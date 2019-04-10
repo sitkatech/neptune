@@ -109,6 +109,8 @@
         });
 
         assessmentAreaLayer.addTo(summaryMap.map);
+        summaryMap.layerControl.addOverlay(assessmentAreaLayer, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' /> Assessment Area</span>");
+
 
         if (mapInitJson.TransectLineLayerGeoJson) {
 
