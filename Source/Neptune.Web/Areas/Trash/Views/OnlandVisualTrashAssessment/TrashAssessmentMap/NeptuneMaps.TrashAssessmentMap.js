@@ -14,7 +14,7 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
 
     var parcelsLegendUrl = geoserverUrl +
         "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AParcels&style=parcel_alt&scale=5000&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-    var parcelsLabel = "<span>Land Use Blocks </br><img src='" + parcelsLegendUrl + "'/></span>";
+    var parcelsLabel = "<span>Parcels </br><img src='" + parcelsLegendUrl + "'/></span>";
 
     this.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
     this.addWmsLayer("OCStormwater:Parcels", parcelsLabel,

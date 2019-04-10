@@ -19,11 +19,11 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.Models;
+using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -39,8 +39,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using ClosedXML.Excel;
-using LtInfo.Common.Mvc;
 
 namespace Neptune.Web.Controllers
 {
