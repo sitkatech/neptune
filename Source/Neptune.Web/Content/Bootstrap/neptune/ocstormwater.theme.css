@@ -1268,3 +1268,7 @@ hr {
   overflow-x: hidden;
   width: 150px;
 }
+.mapLegendSquare {
+  margin-bottom: 3px;
+  height: 12px;
+}
