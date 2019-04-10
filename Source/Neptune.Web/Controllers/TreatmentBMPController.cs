@@ -526,31 +526,28 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [NeptuneAdminFeature]
-        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult UploadBMPs(UploadTreatmentBMPsViewModel viewModel)
         {
             var uploadCSV = viewModel.UploadCSV;
             var bmpType = viewModel.BMPType;
 
             var errorList = new List<string>();
-            var treatmentBmps = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType,out errorList);
+            var customAttributes = new List<CustomAttribute>();
+            var customAttributeValues = new List<CustomAttributeValue>();
+
+            var treatmentBMPs = TreatmentBMPCsvParserHelper.CSVUpload(uploadCSV.InputStream, bmpType, out errorList, out customAttributes, out customAttributeValues);
 
             if (errorList.Count != 0)
             {
                 return ViewUploadBMPs(viewModel, errorList);
             }
-            else
-            {
-                foreach (var treatmentBMP in treatmentBmps)
-                {
-                    HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Add(treatmentBMP);
-                }
-                HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
-                SetMessageForDisplay($"Upload of CSV successfully uploaded {treatmentBmps.Count} number of records");
-                return new RedirectResult(
-                    SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x =>
-                        x.Index()));
-            }
+            HttpRequestStorage.DatabaseEntities.TreatmentBMPs.AddRange(treatmentBMPs);
+            HttpRequestStorage.DatabaseEntities.CustomAttributes.AddRange(customAttributes);
+            HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues);
+            HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
+
+            SetMessageForDisplay($"Upload of CSV successfully uploaded {treatmentBMPs.Count} number of records");
+            return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }
 
         private ViewResult ViewUploadBMPs(UploadTreatmentBMPsViewModel viewModel, List<string> errorList)
