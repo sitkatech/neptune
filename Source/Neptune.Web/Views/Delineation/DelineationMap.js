@@ -366,7 +366,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     }
 
     if (!bmpFeature.properties["DelineationURL"]) {
-        return;
+        return jQuery.Deferred().resolve();
     }
 
     var url = bmpFeature.properties["DelineationURL"];
@@ -375,17 +375,16 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         url: url,
         dataType: "json",
         jsonpCallback: "getJson",
-        success: function(response) {
-            if (response.noDelineation) {
-                return;
-            }
-            if (response.type !== "Feature") {
-                delineationErrorAlert();
-            }
-            self.addBMPDelineationLayer(response);
-        },
-        error: delineationErrorAlert
-    });
+
+    }).then(function(response) {
+        if (response.noDelineation) {
+            return;
+        }
+        if (response.type !== "Feature") {
+            delineationErrorAlert();
+        }
+        self.addBMPDelineationLayer(response);
+    }).fail(delineationErrorAlert);
 
     return promise;
 };
@@ -554,12 +553,13 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
     var self = this;
-    promise.then(function () {
+    promise.always(function () {  // always is okay since we're checking if the delineation was set
         if (self.selectedBMPDelineationLayer) {
             self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds());
         } else {
             self.zoomAndPanToLayer(layer);
         }
+        
         // don't set the selected layer
         self.setSelectedFeature(layer.feature);
     });
