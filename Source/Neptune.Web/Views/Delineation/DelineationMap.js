@@ -14,16 +14,8 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     networkCatchmentPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
 
-    var stormwaterNetworkLayer = new L.TileLayer(
-        "https://tiles.arcgis.com/tiles/UXmFoWC7yDHcDN5Q/arcgis/rest/services/Stormwater_Network/VectorTileServer/tile/{z}/{y}/{x}",
-        {
-            maxNativeZoom: 18,
-            maxZoom: 22
-        });
-
-    this.addLayerToLayerControl(stormwaterNetworkLayer,
+    window.stormwaterNetworkLayer = this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
-    stormwaterNetworkLayer.addTo(this.map);
 
     this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)", { cql_filter:"DelineationType = 'Distributed'"});
     this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)", { cql_filter: "DelineationType = 'Centralized'"});
