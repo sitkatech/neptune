@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common.DbSpatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -56,6 +57,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string LocationEditUrl { get; }
         public string DelineationMapUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
+        public string DelineationArea { get; }
+
         public readonly string VerifiedUnverifiedUrl;
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
@@ -90,6 +93,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.ManageTreatmentBMPImages(TreatmentBMP));
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
+
+            DelineationArea = TreatmentBMP.Delineation?.DelineationGeometry
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }
