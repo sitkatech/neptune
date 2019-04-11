@@ -50,12 +50,18 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
 NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
+
+    var jurisdictionCQLFilter = this.config.JurisdictionCQLFilter;
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(jurisdictionCQLFilter)) {
+        jurisdictionCQLFilter = " AND " + jurisdictionCQLFilter;
+    }
+
     this.distributedLayer = this.addWmsLayer("OCStormwater:Delineations",
         "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)",
-        { cql_filter: "DelineationType = 'Distributed'", maxZoom: 22 });
+        { cql_filter: "DelineationType = 'Distributed'" + jurisdictionCQLFilter, maxZoom: 22 });
     this.centralizedLayer = this.addWmsLayer("OCStormwater:Delineations",
         "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)",
-        { cql_filter: "DelineationType = 'Centralized'", maxZoom: 22 });
+        { cql_filter: "DelineationType = 'Centralized'" + jurisdictionCQLFilter, maxZoom: 22 });
 };
 
 NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
