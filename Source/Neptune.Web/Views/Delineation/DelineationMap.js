@@ -9,18 +9,18 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     this.treatmentBMPLayerLookup = new Map();
     this.config = config;
 
+    this.initializeTreatmentBMPClusteredLayer(mapInitJson);
+
     // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
     var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
     networkCatchmentPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
 
-    window.stormwaterNetworkLayer = this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+    this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
 
-    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)", { cql_filter:"DelineationType = 'Distributed'"});
-    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)", { cql_filter: "DelineationType = 'Centralized'"});
 
-    window.networkCatchmentLayer =
+    var networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
     "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
             { pane: "networkCatchmentPane" });
@@ -34,8 +34,10 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
         {
             styles: "parcel_alt"
         }, true);
-    this.initializeTreatmentBMPClusteredLayer(mapInitJson);
-    window.networkCatchmentLayer.bringToFront();
+    networkCatchmentLayer.bringToFront();
+
+
+    this.addDelineationWmsLayers();
 
     L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
     this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
@@ -45,6 +47,20 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 };
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
+
+NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
+    this.distributedLayer = this.addWmsLayer("OCStormwater:Delineations",
+        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)",
+        { cql_filter: "DelineationType = 'Distributed'", maxZoom: 22 });
+    this.centralizedLayer = this.addWmsLayer("OCStormwater:Delineations",
+        "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)",
+        { cql_filter: "DelineationType = 'Centralized'", maxZoom: 22 });
+};
+
+NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function() {
+    this.distributedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
+    this.centralizedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
+}
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function (mapInitJson) {
     this.treatmentBMPLayer = L.geoJson(
@@ -89,9 +105,10 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
 };
 
 /* "Draw Catchment Mode"
+ * This is the bread and butter of the delineation workflows.
  * When in this mode, the user is given access to a Leaflet.Draw control pointed at this.selectedBMPDelineationLayer.
  * This mode is activated when the user chooses the draw option from the Begin Delineation Control or as the terminus
- * of the Auto-Delineate path.
+ * of the other delineation paths.
  */
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
@@ -213,19 +230,19 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
     var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
     
-    jQuery.ajax({
+    var self = this;
+    return jQuery.ajax({
         url: delineationUrl,
         data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
-        type: 'POST',
-        success: function (data) {
-            this.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
-            // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
-            this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
-        }.bind(this),
-        error: function (jq, ts, et) {
-            alert(
-                "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
-        }
+        type: 'POST'
+    }).then(function(response) {
+        self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
+        // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
+        self.retrieveAndShowBMPDelineation(self.lastSelected.toGeoJSON().features[0]);
+        self.cacheBustDelineationWmsLayers();
+    }).fail(function() {
+        alert(
+            "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
     });
 };
 
@@ -256,7 +273,6 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.launchDrawCatchmentMode();
         },
         function (error) {
-            console.log(error);
             window.alert("There was an error retrieving the delineation from the remote service.");
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
