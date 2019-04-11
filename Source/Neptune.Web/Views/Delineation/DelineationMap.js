@@ -11,13 +11,12 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 
     this.initializeTreatmentBMPClusteredLayer(mapInitJson);
 
+    this.addDelineationWmsLayers();
+
     // ensure that wms layers fetched through the GeoServerMap interface are always above all other layers
     var networkCatchmentPane = this.map.createPane("networkCatchmentPane");
     networkCatchmentPane.style.zIndex = 10000;
     this.map.getPane("markerPane").style.zIndex = 10001;
-
-    this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
 
 
     var networkCatchmentLayer =
@@ -36,8 +35,10 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
         }, true);
     networkCatchmentLayer.bringToFront();
 
+    this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
+        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
 
-    this.addDelineationWmsLayers();
+
 
     L.control.watermark({ position: 'bottomleft' }).addTo(this.map);
     this.selectedAssetControl = L.control.delineationSelectedAsset({ position: 'topleft' });
