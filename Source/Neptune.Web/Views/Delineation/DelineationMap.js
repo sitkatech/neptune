@@ -17,8 +17,9 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     window.stormwaterNetworkLayer = this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
         "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
 
-    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)", { cql_filter:"DelineationType = 'Distributed'"});
-    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)", { cql_filter: "DelineationType = 'Centralized'"});
+    debugger;
+var whatever=    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)", { cql_filter:"DelineationType = 'Distributed'", maxZoom:22});
+    this.addWmsLayer("OCStormwater:Delineations", "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationCentralized.PNG'/></span> Delineations (Centralized)", { cql_filter: "DelineationType = 'Centralized'", maxZoom: 22});
 
     window.networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
