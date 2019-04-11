@@ -1105,6 +1105,7 @@
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.js" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.css" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.js" />
+    <Content Include="Content\proj4js\proj4.js" />
     <Content Include="Content\qtip\jquery.qtip.validation.min.js">
       <DependentUpon>jquery.qtip.validation.js</DependentUpon>
     </Content>
