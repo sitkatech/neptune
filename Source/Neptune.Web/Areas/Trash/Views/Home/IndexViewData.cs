@@ -27,7 +27,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
         {
             MapInitJson = mapInitJson;
-            StormwaterJurisdictionCQLFilter = currentPerson.IsAdministrator() ? "" :  $"StormwaterJurisdictionID IN ({string.Join(",", CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))}) AND ";
+            StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
 
             ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
                 treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);

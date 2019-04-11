@@ -6,7 +6,8 @@ Select
 	d.DelineationID,
 	DelineationGeometry,
 	DelineationTypeName as DelineationType,
-	TreatmentBMPID
+	TreatmentBMPID,
+	StormwaterJurisdictionID
 from
 	dbo.Delineation d inner join dbo.DelineationType dt
 		on d.DelineationTypeID = dt.DelineationTypeID

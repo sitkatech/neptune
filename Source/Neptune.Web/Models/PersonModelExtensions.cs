@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -158,6 +159,13 @@ namespace Neptune.Web.Models
             var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
                 .Where(x => x.CanView(person)).ToList();
             return treatmentBmps;
+        }
+
+        public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson)
+        {
+            return currentPerson.IsAdministrator()
+                ? ""
+                : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
         }
     }
 }
