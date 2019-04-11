@@ -47,7 +47,10 @@ namespace Neptune.Web.Controllers
 
             var permissionCheckResult = new TreatmentBMPEditFeature().HasPermission(CurrentPerson, treatmentBMP);
 
-            Check.Assert(permissionCheckResult.HasPermission, permissionCheckResult.PermissionDeniedMessage);
+            if (treatmentBMP != null)
+            {
+                Check.Assert(permissionCheckResult.HasPermission, permissionCheckResult.PermissionDeniedMessage);
+            }
 
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
