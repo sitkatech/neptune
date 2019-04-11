@@ -129,6 +129,18 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
     this.buildDrawControl();
 };
 
+NeptuneMaps.DelineationMap.prototype.testSimplify = function(tolerance) {
+    if (this.simplified) {
+        this.map.removeLayer(this.simplified);
+        this.simplified = null;
+    }
+    this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    var simplify = turf.simplify(this.selectedBMPDelineationLayer.getLayers()[0].feature, { tolerance: tolerance });
+
+    this.simplified = L.geoJson(simplify); this.simplified.addTo(this.map);
+};
+
 NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.editableFeatureGroup = new L.FeatureGroup();
     var editableFeatureGroup = this.editableFeatureGroup; // eliminates need to .bind(this) later
@@ -138,10 +150,12 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.map.addControl(this.drawControl);
 
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-        debugger;
-        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        var feature1 = window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature;
+        var simplified = turf.simplify(feature1, {tolerance:.001});
 
-        L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
+
+        
+        L.geoJSON(simplified,
             {
                 onEachFeature: function (feature, layer) {
                     if (layer.getLayers) {
@@ -375,40 +389,6 @@ NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (
     this.selectedBMPDelineationLayer.isUnsavedDelineation = true; // so we know to clear the delineation if they cancel later
 };
 
-
-/* For getting the BMP delineation from the Neptune DB.
- Returns a promise so the caller can mess w/ the delineation layer later if they want.
- */
-NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
-    if (this.selectedBMPDelineationLayer) {
-        this.map.removeLayer(this.selectedBMPDelineationLayer);
-        this.selectedBMPDelineationLayer = null;
-    }
-
-    if (!bmpFeature.properties["DelineationURL"]) {
-        return jQuery.Deferred().resolve();
-    }
-
-    var url = bmpFeature.properties["DelineationURL"];
-    var self = this;
-    var promise = jQuery.ajax({
-        url: url,
-        dataType: "json",
-        jsonpCallback: "getJson",
-
-    }).then(function(response) {
-        if (response.noDelineation) {
-            return;
-        }
-        if (response.type !== "Feature") {
-            delineationErrorAlert();
-        }
-        self.addBMPDelineationLayer(response);
-    }).fail(delineationErrorAlert);
-
-    return promise;
-};
-
 /* Catchment trace requires two ajax calls
  * The Neptune Application provides the list of upstream catchments
  * and GeoServer provides the actual geometry.
@@ -563,6 +543,40 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
     }
 };
 
+/* For getting the BMP delineation from the Neptune DB.
+ Returns a promise so the caller can mess w/ the delineation layer later if they want.
+ */
+NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (bmpFeature) {
+    if (this.selectedBMPDelineationLayer) {
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
+        this.selectedBMPDelineationLayer = null;
+    }
+
+    if (!bmpFeature.properties["DelineationURL"]) {
+        return jQuery.Deferred().resolve();
+    }
+
+    var url = bmpFeature.properties["DelineationURL"];
+    var self = this;
+
+    var promise = jQuery.ajax({
+        url: url,
+        dataType: "json",
+        jsonpCallback: "getJson",
+
+    }).then(function (response) {
+        if (response.noDelineation) {
+            return;
+        }
+        if (response.type !== "Feature") {
+            delineationErrorAlert();
+        }
+        self.addBMPDelineationLayer(response);
+    }).fail(delineationErrorAlert);
+
+    return promise;
+};
+
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
     if (!treatmentBMPID) {
         return; //misplaced call
@@ -573,15 +587,17 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
     var self = this;
-    promise.always(function () {  // always is okay since we're checking if the delineation was set
+    promise.then(function () {  // always is okay since we're checking if the delineation was set
         if (self.selectedBMPDelineationLayer) {
             self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds());
         } else {
             self.zoomAndPanToLayer(layer);
         }
+        return jQuery.Deferred().resolve();
         
-        // don't set the selected layer
-        self.setSelectedFeature(layer.feature);
+    }).always(function() {
+        // don't set the selected layer until after the zoommies are done
+        setTimeout(function() { self.setSelectedFeature(layer.feature); }, 500);
     });
 };
 
