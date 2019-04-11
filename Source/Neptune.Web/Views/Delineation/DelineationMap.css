@@ -1,7 +1,6 @@
 ﻿.neptune-leaflet-control {
   background: white;
   padding: 7px;
-  cursor: pointer;
 }
 .neptune-leaflet-control#selectedAssetControl {
   width: 240px;

@@ -14,6 +14,18 @@
         var template = document.querySelector("#" + this.templateID);
         this.parentElement = document.importNode(template.content, true).firstElementChild;
 
+        L.DomEvent.on(this.parentElement,
+            'mouseover',
+            function() {
+                map.dragging.disable();
+            });
+
+        L.DomEvent.on(this.parentElement,
+            'mouseout',
+            function() {
+                map.dragging.enable();
+            });
+
         this.initializeControlInstance(map);
         return this.parentElement;
     },
