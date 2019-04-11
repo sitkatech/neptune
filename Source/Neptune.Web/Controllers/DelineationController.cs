@@ -45,7 +45,7 @@ namespace Neptune.Web.Controllers
                 : null;
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
 
-            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
