@@ -138,6 +138,7 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.map.addControl(this.drawControl);
 
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
+        debugger;
         this.map.removeLayer(this.selectedBMPDelineationLayer);
 
         L.geoJSON(window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature,
