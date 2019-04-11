@@ -21,7 +21,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 
     var networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
-    "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
+            "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
             { pane: "networkCatchmentPane" });
 
 
@@ -58,7 +58,7 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
         { cql_filter: "DelineationType = 'Centralized'", maxZoom: 22 });
 };
 
-NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function() {
+NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
     this.distributedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
     this.centralizedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
 }
@@ -75,7 +75,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
     if (this.markerClusterGroup) {
         this.map.removeLayer(markerClusterGroup);
     }
-    
+
     this.markerClusterGroup = this.makeMarkerClusterGroup(this.treatmentBMPLayer);
 
     var legendSpan = "<span><img src='https://api.tiles.mapbox.com/v3/marker/pin-m-water+935F59@2x.png' height='30px' /> Treatment BMPs</span>";
@@ -129,7 +129,7 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
     this.buildDrawControl();
 };
 
-NeptuneMaps.DelineationMap.prototype.testSimplify = function(tolerance) {
+NeptuneMaps.DelineationMap.prototype.testSimplify = function (tolerance) {
     if (this.simplified) {
         this.map.removeLayer(this.simplified);
         this.simplified = null;
@@ -150,12 +150,9 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.map.addControl(this.drawControl);
 
     if (!Sitka.Methods.isUndefinedNullOrEmpty(this.selectedBMPDelineationLayer)) {
-        var feature1 = window.delineationMap.selectedBMPDelineationLayer.getLayers()[0].feature;
-        var simplified = turf.simplify(feature1, {tolerance:.001});
+        this.map.removeLayer(this.selectedBMPDelineationLayer);
 
-
-        
-        L.geoJSON(simplified,
+        L.geoJSON(this.selectedBMPDelineationLayer.getLayers()[0].feature,
             {
                 onEachFeature: function (feature, layer) {
                     if (layer.getLayers) {
@@ -245,21 +242,36 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
 
     var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
     var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
-    
+
     var self = this;
     return jQuery.ajax({
         url: delineationUrl,
         data: { "WellKnownText": wkt, "DelineationType": this.delineationType },
         type: 'POST'
-    }).then(function(response) {
+    }).then(function (response) {
         self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
         // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
         self.retrieveAndShowBMPDelineation(self.lastSelected.toGeoJSON().features[0]);
         self.cacheBustDelineationWmsLayers();
-    }).fail(function() {
+    }).fail(function () {
         alert(
             "There was an error saving the delineation. Please try again. If the problem persists, please contact Support.");
     });
+};
+
+NeptuneMaps.DelineationMap.prototype.downsampleSelectedDelineation = function (tolerance) {
+    if (!this.selectedBMPDelineationLayer) {
+        return; //misplaced call
+    }
+
+    this.map.removeLayer(this.selectedBMPDelineationLayer);
+
+    var feature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
+    this.selectedBMPDelineationLayer = null;
+
+    //todo unkill var simplified = turf.simplify(feature1, {tolerance:}); or;
+    var simplified = turf.simplify(feature, { tolerance: tolerance });
+    this.addBMPDelineationLayer(simplified);
 };
 
 /* "Auto-Delineate Mode"
@@ -286,6 +298,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.removeLoading();
             self.enableUserInteraction();
 
+            self.downsampleSelectedDelineation(0.00001);
             self.launchDrawCatchmentMode();
         },
         function (error) {
@@ -342,8 +355,8 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
+            self.downsampleSelectedDelineation(.001);
             self.launchDrawCatchmentMode();
-
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
@@ -582,7 +595,7 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         return; //misplaced call
     }
     var layer = this.treatmentBMPLayerLookup.get(treatmentBMPID);
-    
+
     this.selectedAssetControl.treatmentBMP(layer.feature);
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
@@ -594,10 +607,10 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
             self.zoomAndPanToLayer(layer);
         }
         return jQuery.Deferred().resolve();
-        
-    }).always(function() {
+
+    }).always(function () {
         // don't set the selected layer until after the zoommies are done
-        setTimeout(function() { self.setSelectedFeature(layer.feature); }, 500);
+        setTimeout(function () { self.setSelectedFeature(layer.feature); }, 500);
     });
 };
 
