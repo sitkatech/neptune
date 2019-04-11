@@ -38,6 +38,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
         public bool CanManageStormwaterJurisdiction { get; }
+        public bool CanEditStormwaterJurisdiction { get; }
 
         public bool CanEditBenchmarkAndThresholds { get; }
 
@@ -70,6 +71,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
+            CanEditStormwaterJurisdiction = currentPerson.CanEditStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;

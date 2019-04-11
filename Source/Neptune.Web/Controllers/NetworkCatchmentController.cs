@@ -34,7 +34,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public JsonResult UpstreamCatchments(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;
@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public ContentResult UpstreamDelineation(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)
         {
             var networkCatchment = networkCatchmentPrimaryKey.EntityObject;

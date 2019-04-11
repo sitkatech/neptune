@@ -332,7 +332,7 @@
                         <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
                     </div>
                     <div class="col-xs-4 text-center">
-                        @if(ViewDataTyped.UserIsAdmin)
+                        @if(ViewDataTyped.CanEditStormwaterJurisdiction)
                         {
                             <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Delineate</a>
                         }

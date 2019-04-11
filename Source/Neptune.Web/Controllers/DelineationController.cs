@@ -30,6 +30,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Data.Entity.Spatial;
 using System.Web.Mvc;
+using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Controllers
 {
@@ -43,6 +44,12 @@ namespace Neptune.Web.Controllers
                 ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(
                     treatmentBMPID.Value)
                 : null;
+
+            var permissionCheckResult = new TreatmentBMPEditFeature().HasPermission(CurrentPerson, treatmentBMP);
+
+            Check.Assert(permissionCheckResult.HasPermission, permissionCheckResult.PermissionDeniedMessage);
+
+
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
 
             var delineationMapInitJson = new DelineationMapInitJson("delineationMap", CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
