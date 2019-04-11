@@ -308,7 +308,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.removeLoading();
             self.enableUserInteraction();
 
-            self.downsampleSelectedDelineation(0.001);
+            self.downsampleSelectedDelineation(0.0001);
             self.launchDrawCatchmentMode();
         },
         function (error) {
@@ -614,7 +614,7 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
         if (self.selectedBMPDelineationLayer) {
             self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds(), { maxZoom: 18 });
         } else {
-            self.map.fitBounds(layer.getBounds());
+            self.map.fitBounds(L.latLngBounds([layer.getLatLng()]), { maxZoom: 18 });
         }
         return jQuery.Deferred().resolve();
 
