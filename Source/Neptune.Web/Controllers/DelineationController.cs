@@ -39,7 +39,7 @@ namespace Neptune.Web.Controllers
     public class DelineationController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public ViewResult DelineationMap(int? treatmentBMPID)
         {
             var treatmentBMP = treatmentBMPID.HasValue
@@ -54,7 +54,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [TreatmentBMPEditFeature]
         public ContentResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
         {
@@ -80,7 +80,7 @@ namespace Neptune.Web.Controllers
             if (geom != null)
             {
                 // make sure the SRID is 4326 before we save
-                // todo: this code appears in FinalizeOVTAViewModel as well; it should either be encapsulated or we should figure out if there's a way to not have to do this in the first place
+                // todo: this code appears in FinalizeOVTAViewModel as well; it should either be encapsulated and then we should figure out if there's a way to not have to do this in the first place
                 var wkt = geom.ToString();
 
                 if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
@@ -133,8 +133,6 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
-
-            
 
             return Json(new {success = true});
         }
