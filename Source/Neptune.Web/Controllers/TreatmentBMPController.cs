@@ -546,7 +546,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.CustomAttributeValues.AddRange(customAttributeValues);
             HttpRequestStorage.DatabaseEntities.SaveChanges(CurrentPerson);
 
-            SetMessageForDisplay($"Upload of CSV successfully uploaded {treatmentBMPs.Count} number of records");
+            SetMessageForDisplay($"Upload Successful: {treatmentBMPs.Count} records added");
             return new RedirectResult(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index()));
         }
 

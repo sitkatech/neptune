@@ -123,7 +123,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.LocationPoint = DbGeometry.FromText(
-                    $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
+                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", MapInitJson.CoordinateSystemId);
             }
 
             var treatmentBMPJurisdictionName = row[fieldsDict["Jurisdiction"]];
@@ -141,7 +141,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.StormwaterJurisdictionID = jurisdictions
-                    .First((x => x.Organization.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
+                    .First(x => x.Organization.OrganizationName == treatmentBMPJurisdictionName).StormwaterJurisdictionID;
             }
 
             var treatmentBMPOwner = row[fieldsDict["Owner"]];
@@ -225,16 +225,12 @@ namespace Neptune.Web.Common
                         errorList.Add(
                             $"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row: {count}");
                     }
-                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() &&
-                             (requiredLifespanOfInstallation ==
-                              TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
-                              requiredLifespanOfInstallation ==
-                              TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))
+                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation != TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add(
                             $"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}" );
                     }
-                    else if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
+                    else if (requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
                              !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
@@ -556,7 +552,7 @@ Frank,30,10,Sitka Technology Grou,Sitka Technology Group,2008,ABCD,Perpetuity/Li
         public void TestJurisdictionNameExistsGood()
         {
             var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
+Frank,30,10,City of Dana Point,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
             List<string> errorList;
             List<CustomAttribute> customAttributes;
             List<CustomAttributeValue> customAttributeValues;
@@ -564,7 +560,7 @@ Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Pro
             var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
             errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
             errorList.Any(x => !x.Contains("BMP Jurisdiction is null, empty, or just whitespaces for row: "));
-            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
+            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(2));
         }
 
         [Test]
