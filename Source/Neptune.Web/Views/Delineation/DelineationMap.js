@@ -119,6 +119,8 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  */
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
+    this.restoreZoom = this.map.getZoom();
+
     if (this.beginDelineationControl) {
         this.beginDelineationControl.remove();
         this.beginDelineationControl = null;
@@ -127,9 +129,9 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
     this.selectedAssetControl.launchDrawCatchmentMode();
 
     if (this.selectedBMPDelineationLayer) {
-        this.zoomAndPanToLayer(this.selectedBMPDelineationLayer);
+        this.map.fitBounds(this.selectedBMPDelineationLayer.getBounds());
     } else {
-        this.zoomAndPanToLayer(this.lastSelected);
+        this.map.fitBounds(this.lastSelected.getBounds());
     }
 
     this.buildDrawControl();
@@ -233,6 +235,8 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
 
     this.hookupSelectTreatmentBMPOnClick();
     this.hookupDeselectOnClick();
+
+    this.map.setZoom(this.restoreZoom);
 };
 
 NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
@@ -304,7 +308,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             self.removeLoading();
             self.enableUserInteraction();
 
-            self.downsampleSelectedDelineation(0.00001);
+            self.downsampleSelectedDelineation(0.0001);
             self.launchDrawCatchmentMode();
         },
         function (error) {
@@ -606,11 +610,11 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
     var self = this;
-    promise.then(function () {  // always is okay since we're checking if the delineation was set
+    promise.then(function () { 
         if (self.selectedBMPDelineationLayer) {
-            self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds());
+            self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds(), { maxZoom: 18 });
         } else {
-            self.zoomAndPanToLayer(layer);
+            self.map.fitBounds(L.latLngBounds([layer.getLatLng()]), { maxZoom: 18 });
         }
         return jQuery.Deferred().resolve();
 

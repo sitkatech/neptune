@@ -370,7 +370,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     }
 };
 
-NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
+NeptuneMaps.Map.prototype.zoomAndPanToLayer = function (layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
         this.map.fitBounds(L.latLngBounds([layer.getLatLng()]), {
