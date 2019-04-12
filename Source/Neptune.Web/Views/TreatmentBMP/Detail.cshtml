@@ -325,24 +325,24 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
-                    <div class="col-xs-4 control-label text-right">
+                    <div class="col-xs-5 control-label text-center">
                         <p style="margin-top: 8px;">@Html.LabelWithSugarFor(FieldDefinition.DelineationType)</p>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-xs-4 text-center">
                         <p style="margin-top: 8px;">@ViewDataTyped.TreatmentBMP.GetDelineationTypeDisplay()</p>
                     </div>
-                </div><div class="row">
-                    <div class="col-xs-4 control-label text-right">
-                        <p style="margin-top: 8px;">Delineation Area (ac)</p>
-                    </div>
-                    <div class="col-xs-8">
-                        <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
-                    </div>
-                    <div class="col-xs-4 text-center">
+                    <div class="col-xs-3 text-center">
                         @if (ViewDataTyped.CanEditStormwaterJurisdiction)
                         {
                             <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Delineate</a>
                         }
+                    </div>
+                </div><div class="row">
+                    <div class="col-xs-5 control-label text-center">
+                        <p style="margin-top: 8px;"><label>Delineation Area (ac)</label></p>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
                     </div>
                 </div>
             </div>
