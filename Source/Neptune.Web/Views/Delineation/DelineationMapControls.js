@@ -49,22 +49,22 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             "click", this._beginDelineationHandler
         );
 
-        var detailButton = this.getTrackedElement("treatmentBMPDetailButton");
+        var detailLink = this.getTrackedElement("selectedBMPDetailLink");
         var href =
             "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
-        detailButton.onclick = function() {
-            location.href = href;
-        };
-        
+        detailLink.href = href;
+        detailLink.innerHTML = treatmentBMPFeature.properties.Name;
 
-        this._selectedBmpName.innerHTML = "BMP: " +
-            treatmentBMPFeature.properties["Name"];
+        debugger;
+        this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
-        if (treatmentBMPFeature.properties["DelineationURL"]) {
-            this._delineationStatus.innerHTML = "This BMP's current recorded delineation is displayed in yellow on the map.";
+        this.getTrackedElement("delineationArea").innerHTML = "-";
+
+        if (treatmentBMPFeature.properties.DelineationURL) {
+            this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
             this._delineationButton.innerHTML = "Redelineate Drainage Area";
         } else {
-            this._delineationStatus.innerHTML = "No catchment delineation has been performed for this BMP";
+            this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
             this._delineationButton.innerHTML = "Delineate Drainage Area";
         }
 
@@ -95,8 +95,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
 
-    reportDelineation: function(messageHtml) {
-        this.getTrackedElement("delineationStatus").innerHTML = messageHtml;
+    reportDelineationArea: function(area) {
+        this.getTrackedElement("delineationArea").innerHTML = area;
     },
 
     disableDelineationButton() {

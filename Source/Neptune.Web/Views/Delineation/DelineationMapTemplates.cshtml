@@ -5,13 +5,12 @@
         <h4>Selected Asset</h4>
         <span id="noAssetSelected" class="systemText">Select an asset on the map to see options</span>
         <div id="selectedBmpInfo" class="hiddenControlElement">
-            <span id="selectedBmpName"> </span> <br/>
-            <button type="button" href="" id="treatmentBMPDetailButton" class="btn btn-sm btn-neptune">Details</button>
+            <span id="selectedBmpName">BMP Name: <a id="selectedBMPDetailLink"></a> </span> <br />
+            <span>BMP Type: <span id="selectedBMPType"></span></span><br />
             <hr>
-            <strong>Drainage Area</strong>
-            <br>
-            <span id="delineationStatus" class="systemText">No catchment delineation has been performed for this BMP</span>
-            <br>
+            <strong>Drainage Area</strong> <br />
+            <span>Delineation Type: <span id="delineationType"></span></span> <br />
+            <span>Area: <span id="delineationArea">-</span></span>
             <button class="btn btn-sm btn-neptune" id="delineationButton" type="button">Delineate Drainage Area</button>
             <div class="hiddenControlElement" id="saveAndCancelButtonsWrapper">
                 <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save Delineation</button>

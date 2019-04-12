@@ -15,9 +15,11 @@ namespace Neptune.Web.Views.Delineation
             TreatmentBMPLayerGeoJson = MakeTreatmentBMPLayerGeoJson(databaseEntitiesTreatmentBMPs,
                 (feature, treatmentBMP) =>
                 {
+                    feature.Properties.Add("TreatmentBMPType", treatmentBMP.TreatmentBMPType.TreatmentBMPTypeName);
                     if (treatmentBMP.Delineation != null)
                     {
                         feature.Properties.Add("DelineationURL", treatmentBMP.GetDelineationUrl());
+                        feature.Properties.Add("DelineationType", treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName);
                     }
                 }, false);
         }

@@ -595,6 +595,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
             delineationErrorAlert();
         }
         self.addBMPDelineationLayer(response);
+        
+        self.selectedAssetControl.reportDelineationArea(response.properties.Area);
     }).fail(delineationErrorAlert);
 
     return promise;
