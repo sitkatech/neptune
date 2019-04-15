@@ -35,9 +35,9 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.PollDelineationStatus = funct
                     1000);
             } else if (data.jobStatus === "esriJobSucceeded") {
                 self.FetchDelineationResult(jobID);
-            } else {
+            } else if (data.jobStatus === "esriJobFailed") {
                 // this is a failure condition
-                self.ErrorCallback();
+                self.ErrorCallback(data);
             }
         },
         error: this.ErrorCallback

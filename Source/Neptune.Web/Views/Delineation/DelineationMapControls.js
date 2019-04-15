@@ -55,7 +55,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         detailLink.href = href;
         detailLink.innerHTML = treatmentBMPFeature.properties.Name;
 
-        debugger;
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
         this.getTrackedElement("delineationArea").innerHTML = "-";

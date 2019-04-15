@@ -417,6 +417,7 @@
     <Compile Include="Security\OnlandVisualTrashAssessmentDeleteFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentEditFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentViewFeature.cs" />
+    <Compile Include="Views\Delineation\DelineationMapConfig.cs" />
     <Compile Include="Views\Help\BulkUploadRequest.cs" />
     <Compile Include="Views\Help\BulkUploadRequestViewData.cs" />
     <Compile Include="Models\Delineation.cs" />
@@ -905,7 +906,15 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Content\img\legendImages\delineationCentralized.PNG" />
+    <Content Include="Content\img\legendImages\delineationDistributed.PNG" />
+    <Content Include="Content\img\legendImages\Full.png" />
+    <Content Include="Content\img\legendImages\networkCatchment.png" />
+    <Content Include="Content\img\legendImages\None.png" />
+    <Content Include="Content\img\legendImages\NotProvided.png" />
     <Content Include="Content\img\legendImages\ovtaGreen.png" />
+    <Content Include="Content\img\legendImages\ovtaGrey.png" />
+    <Content Include="Content\img\legendImages\ovtaMagenta.png" />
     <Content Include="Content\img\legendImages\ovtaSalmon.png" />
     <Content Include="Content\img\legendImages\ovtaYellow.png" />
     <Content Include="Areas\Trash\ScriptsCustom\Maps\NeptuneMaps.TrashModuleMap.js" />
@@ -1048,7 +1057,10 @@
     <Content Include="Content\img\icons\inventoryIcon.png" />
     <Content Include="Content\img\icons\modelingIcon.png" />
     <Content Include="Content\img\icons\trashIcon.png" />
+    <Content Include="Content\img\legendImages\parcel.png" />
+    <Content Include="Content\img\legendImages\Partial.png" />
     <Content Include="Content\img\legendImages\selectedGeometry.png" />
+    <Content Include="Content\img\legendImages\stormwaterNetwork.png" />
     <Content Include="Content\img\legendImages\transectLine.png" />
     <Content Include="Content\img\legendImages\workflowAssessmentArea.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
