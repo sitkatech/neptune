@@ -120,10 +120,28 @@ namespace Neptune.Web.Common
                 errorList.Add(
                     $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
             }
+            else if (!int.TryParse(treatmentBMPLatitude, out var treatmentBMPLatitudeInt))
+            {
+                errorList.Add(
+                    $"Allowable End Date of Installation can not be converted to Integer format at row: {count}");
+                if (treatmentBMPLatitudeInt <= 90 && treatmentBMPLatitudeInt >= -90)
+                {
+                    errorList.Add($"TreatmentBMPLatitude {treatmentBMPLatitudeInt} is less than -90 or greater than 90 at row: {count}");
+                }
+            }
+            else if (!int.TryParse(treatmentBMPLongitude, out var treatmentBMPLongitudeInt))
+            {
+                errorList.Add(
+                    $"Allowable End Date of Installation can not be converted to Integer format at row: {count}");
+                if (treatmentBMPLongitudeInt <= 180 && treatmentBMPLongitudeInt >= -180)
+                {
+                    errorList.Add($"TreatmentBMPLatitude {treatmentBMPLongitudeInt} is less than -90 or greater than 180 at row: {count}");
+                }
+            }
             else
             {
-                treatmentBMP.LocationPoint = DbGeometry.FromText(
-                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", MapInitJson.CoordinateSystemId);
+                    treatmentBMP.LocationPoint = DbGeometry.FromText(
+                        $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
             }
 
             var treatmentBMPJurisdictionName = row[fieldsDict["Jurisdiction"]];
@@ -276,7 +294,7 @@ namespace Neptune.Web.Common
                     if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
                     {
                         errorList.Add(
-                            $"Required post-storm field visits per year field cannot be converted to Int at row: {count}");
+                            $"Required Post-Storm Field visits per year field cannot be converted to Int at row: {count}");
                     }
                     else
                     {
@@ -366,7 +384,7 @@ namespace Neptune.Web.Common
 
                     if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Int at row: {rowCount}");
+                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowCount}");
                     }
                     else if (customAttributeDataType.IsDecimal() && !decimal.TryParse(value, out var valueDecimal))
                     {
