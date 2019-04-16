@@ -315,7 +315,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
         self.downsampleSelectedDelineation(0.0001);
         self.launchDrawCatchmentMode();
-    }).catch(function(error) {
+    }).fail(function(error) {
 
         if (error) {
             // look for the error message indicating that the service has no data to work with for the given location
