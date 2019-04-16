@@ -502,6 +502,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     var dbGeometry = draftGeometry.ElementAt(i);
                     if (reduce)
                     {
+                        // Reduce is SQL Server's implementation of the Douglas–Peucker downsampling algorithm
                         dbGeometry = dbGeometry.ToSqlGeometry().Reduce(.0000025).ToDbGeometry();
                     }
                     var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(dbGeometry);

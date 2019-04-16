@@ -1,65 +1,44 @@
 ﻿/* Wraps calls to the OC GIS auto-delineation service for consumption by UI code */
 
-NeptuneMaps.DelineationMap.AutoDelineate = function (delineationServiceUrl, successCallback, errorCallback) {
+// todo: need not use object instantiation
+NeptuneMaps.DelineationMap.AutoDelineate = function (delineationServiceUrl) {
     this.DelineationServiceUrl = delineationServiceUrl;
-    this.SuccessCallback = successCallback;
-    this.ErrorCallback = errorCallback;
 };
 
-NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequest = function (latLng) {
-    var url = this.DelineationServiceUrl + "submitJob?" + buildAutoDelineateParameterString(latLng);
+NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequestNew = function (latLng) {
+    var submitUrl = this.DelineationServiceUrl + "submitJob?" + buildAutoDelineateParameterString(latLng);
+    var self = this;
     
-    var self = this;
-    jQuery.ajax({
-        url: url,
-        type: "GET",
-        success: function (data) {
-            self.PollDelineationStatus(data.jobId);
-        },
-        error: this.ErrorCallback
-    });
-};
-
-NeptuneMaps.DelineationMap.AutoDelineate.prototype.PollDelineationStatus = function (jobID) {
-    var url = this.DelineationServiceUrl + "jobs/" + jobID + "?f=json&returnMessages=true"; // todo: dojo.preventCache?
-
-    var self = this;
-    jQuery.ajax({
-        url: url,
-        type: "GET",
-        success: function (data) {
-            if (data.jobStatus === "esriJobSubmitted" || data.jobStatus === "esriJobExecuting") {
-                window.setTimeout(function() {
-                        self.PollDelineationStatus(jobID);
-                    },
-                    1000);
-            } else if (data.jobStatus === "esriJobSucceeded") {
-                self.FetchDelineationResult(jobID);
-            } else {
-                // this is a failure condition
-                self.ErrorCallback();
-            }
-        },
-        error: this.ErrorCallback
-    });
-};
-
-NeptuneMaps.DelineationMap.AutoDelineate.prototype.FetchDelineationResult = function (jobID) {
-    var self = this;
-    jQuery.ajax({
-        url: this.DelineationServiceUrl + "jobs/" + jobID + "/results/Output_Watershed?f=geojson&returnType=data", // important to get results in geojson 
-        type: "GET",
-        success: function (data) {
+    return jQuery.ajax({
+        url: submitUrl,
+        type: "GET"
+    }).fail(function(data) {
+        // this fail is only hit if the initial request fails, in which case we assume the service is probably unavailable.
+        return jQuery.Deferred().reject({ serviceUnavailable: true });
+    }).then(function (data) {
+        var statusUrl = self.DelineationServiceUrl + "jobs/" + data.jobId + "?f=json&returnMessages=true";
+        return pollUntilDone(statusUrl);
+    }).then(function (data) {
+        return jQuery.ajax({
+            url: self.DelineationServiceUrl +
+                "jobs/" +
+                data.jobId +
+                "/results/Output_Watershed?f=geojson&returnType=data", // important to get results in geojson 
+            type: "GET"
+        });
+    }).then(function (data) {
+        return jQuery.Deferred(function (deferred) {
             if (data.value && data.value.type === "FeatureCollection") {
-                self.SuccessCallback(data.value);
+                deferred.resolve(data.value);
             } else {
-               //failure condition
-                self.ErrorCallback();
+                //failure condition
+                return deferred.reject(/*what to put here*/);
             }
-        },
-        error: this.ErrorCallback
+        });
     });
 };
+
+// halpers
 
 var buildAutoDelineateParameterString = function (latLng) {
     return jQuery.param(buildAutoDelineateParameters(latLng));
@@ -91,3 +70,28 @@ var buildInputBatchPointParameter = function (latLng) {
         "Input_Delineation_Type": "Direct Surface Contribution Only"
     };
 };
+
+// see https://stackoverflow.com/a/46208449
+var delay = function (t) {
+    return jQuery.Deferred(function () {
+        setTimeout(this.resolve, t);
+    });
+};
+
+function pollUntilDone(url) {
+    function run() {
+        return jQuery.ajax({
+            url: url,
+            type: "GET"
+        }).then(function (data) {
+            if (data.jobStatus === "esriJobSubmitted" || data.jobStatus === "esriJobExecuting") {
+                return delay(1000).then(run);
+            } else if (data.jobStatus === "esriJobSucceeded") {
+                return data;
+            } else {
+                return jQuery.Deferred().reject(data);
+            }
+        });
+    }
+    return run();
+}

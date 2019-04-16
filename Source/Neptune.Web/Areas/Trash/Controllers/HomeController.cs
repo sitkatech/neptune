@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MoreLinq;
 using Neptune.Web.Controllers;
@@ -15,27 +16,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneViewFeature]
         public ViewResult Index()
         {
-            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
-                .Where(x => x.CanView(CurrentPerson)).ToList();
+            var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
             var treatmentBMPLayerGeoJson = TrashModuleMapInitJson.MakeTreatmentBMPLayerGeoJsonForTrashMap(treatmentBmps, false);
-
 
             // don't even think about touching the actual parcel tabel, unless you want to materialize half a million big geometry bois
             var parcels = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Select(x => x.Parcel)
                 .AsEnumerable().DistinctBy(x => x.ParcelID).ToList();
             var parcelLayerGeoJson = TrashModuleMapInitJson.MakeParcelLayerGeoJsonForTrashMap(parcels, false);
 
-
-            var stormwaterJurisdictionsPersonCanEdit = CurrentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
-            var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any() ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
-                .Select(x => x.StormwaterJurisdictionGeometry)) : BoundingBox.MakeNewDefaultBoundingBox();
-
-            var mapInitJson = new TrashModuleMapInitJson("StormwaterIndexMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox);
+            var mapInitJson = new TrashModuleMapInitJson("StormwaterIndexMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, CurrentPerson.GetBoundingBox());
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
             var viewData = new IndexViewData(CurrentPerson, neptunePage, mapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels);
 
             return RazorView<Index, IndexViewData>(viewData);
-        }   
+        }
     }
 }

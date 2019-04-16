@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -141,6 +142,30 @@ namespace Neptune.Web.Models
             }
 
             return person.StormwaterJurisdictionPeople.Select(x => x.StormwaterJurisdiction);
+        }
+
+        public static BoundingBox GetBoundingBox(this Person person)
+        {
+            var stormwaterJurisdictionsPersonCanEdit = person.GetStormwaterJurisdictionsPersonCanEdit().ToList();
+            var boundingBox = stormwaterJurisdictionsPersonCanEdit.Any()
+                ? new BoundingBox(stormwaterJurisdictionsPersonCanEdit
+                    .Select(x => x.StormwaterJurisdictionGeometry))
+                : BoundingBox.MakeNewDefaultBoundingBox();
+            return boundingBox;
+        }
+
+        public static List<TreatmentBMP> GetTreatmentBmpsPersonCanManage(this Person person)
+        {
+            var treatmentBmps = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.ToList()
+                .Where(x => x.CanView(person)).ToList();
+            return treatmentBmps;
+        }
+
+        public static string GetStormwaterJurisdictionCqlFilter(this Person currentPerson)
+        {
+            return currentPerson.IsAdministrator()
+                ? ""
+                : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
         }
     }
 }

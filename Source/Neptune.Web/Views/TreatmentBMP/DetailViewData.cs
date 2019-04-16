@@ -19,6 +19,7 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using System.Data.Entity.Spatial;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -38,6 +39,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool HasSettableBenchmarkAndThresholdValues { get; }
         public bool CurrentPersonCanManage { get; }
         public bool CanManageStormwaterJurisdiction { get; }
+        public bool CanEditStormwaterJurisdiction { get; }
 
         public bool CanEditBenchmarkAndThresholds { get; }
 
@@ -55,6 +57,8 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string LocationEditUrl { get; }
         public string DelineationMapUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
+        public string DelineationArea { get; }
+
         public readonly string VerifiedUnverifiedUrl;
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
@@ -70,6 +74,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             HasSettableBenchmarkAndThresholdValues = TreatmentBMP.HasSettableBenchmarkAndThresholdValues();
             CurrentPersonCanManage = new TreatmentBMPManageFeature().HasPermission(currentPerson, TreatmentBMP).HasPermission;
             CanManageStormwaterJurisdiction = currentPerson.CanManageStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
+            CanEditStormwaterJurisdiction = currentPerson.CanEditStormwaterJurisdiction(treatmentBMP.StormwaterJurisdiction);
             UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             CanEditBenchmarkAndThresholds = CurrentPersonCanManage && HasSettableBenchmarkAndThresholdValues;
@@ -88,6 +93,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             ManageTreatmentBMPImagesUrl = SitkaRoute<TreatmentBMPImageController>.BuildUrlFromExpression(c => c.ManageTreatmentBMPImages(TreatmentBMP));
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
+
+            DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.0") ?? "-";
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }

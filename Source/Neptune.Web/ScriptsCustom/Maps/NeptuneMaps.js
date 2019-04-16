@@ -336,8 +336,6 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
         this.map.removeLayer(this.lastSelected);
     }
 
-    console.log(feature.properties);
-
     this.lastSelected = L.geoJson(feature,
         {
             pointToLayer: function (feature, latlng) {
@@ -372,7 +370,7 @@ NeptuneMaps.Map.prototype.setSelectedFeature = function (feature, callback) {
     }
 };
 
-NeptuneMaps.Map.prototype.zoomAndPanToLayer = function(layer) {
+NeptuneMaps.Map.prototype.zoomAndPanToLayer = function (layer) {
     if (layer.getLatLng) {
         this.map.panTo(layer.getLatLng());
         this.map.fitBounds(L.latLngBounds([layer.getLatLng()]), {

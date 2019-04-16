@@ -79,22 +79,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
                 {
-                    // make sure the SRID is 4326 before we save
-                    var wkt = onlandVisualTrashAssessment.DraftGeometry.ToString();
-
-                    if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
-                    {
-                        wkt = wkt.Substring(wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
-                    }
-                    else
-                    {
-                        wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
-                    }
-
-                    var dbgeom = DbGeometry.FromText(wkt, MapInitJson.CoordinateSystemId);
+                    var onlandVisualTrashAssessmentAreaGeometry = onlandVisualTrashAssessment.DraftGeometry.FixSrid();
 
                     var onlandVisualTrashAssessmentArea = new Models.OnlandVisualTrashAssessmentArea(AssessmentAreaName,
-                        onlandVisualTrashAssessment.StormwaterJurisdiction, dbgeom);
+                        onlandVisualTrashAssessment.StormwaterJurisdiction, onlandVisualTrashAssessmentAreaGeometry);
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
 
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentAreaID =

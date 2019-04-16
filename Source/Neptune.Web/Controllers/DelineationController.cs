@@ -19,42 +19,47 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System;
-using System.Data.Entity.Spatial;
-using System.Net;
-using System.Web.Mvc;
-using Neptune.Web.Common;
-using Neptune.Web.Security.Shared;
-using System.Web;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
+using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Data.Entity.Spatial;
+using System.Web.Mvc;
+using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Controllers
 {
     public class DelineationController : NeptuneBaseController
     {
         [HttpGet]
-        [NeptuneAdminFeature]
+        [NeptuneViewFeature]
         public ViewResult DelineationMap(int? treatmentBMPID)
         {
             var treatmentBMP = treatmentBMPID.HasValue
                 ? HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetTreatmentBMP(
                     treatmentBMPID.Value)
                 : null;
+
+            if (treatmentBMP != null)
+            {
+                var permissionCheckResult = new TreatmentBMPEditFeature().HasPermission(CurrentPerson, treatmentBMP);
+                Check.Assert(permissionCheckResult.HasPermission, permissionCheckResult.PermissionDeniedMessage);
+            }
+
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
 
-            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", HttpRequestStorage.DatabaseEntities.TreatmentBMPs);
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
 
         [HttpGet]
-        [NeptuneAdminFeature]
+        [TreatmentBMPEditFeature]
         public ContentResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -66,34 +71,19 @@ namespace Neptune.Web.Controllers
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
+            feature.Properties.Add("Area", (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.0") ?? "-");
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
 
         [HttpPost]
-        [NeptuneAdminFeature]
+        [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
         {
             var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid().ToDbGeometry();
-            
-            if (geom != null)
-            {
-                // make sure the SRID is 4326 before we save
-                // todo: this code appears in FinalizeOVTAViewModel as well; it should either be encapsulated or we should figure out if there's a way to not have to do this in the first place
-                var wkt = geom.ToString();
 
-                if (wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture) > -1)
-                {
-                    wkt = wkt.Substring(wkt.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
-                }
-                else
-                {
-                    wkt = wkt.Substring(wkt.IndexOf("POLYGON", StringComparison.InvariantCulture));
-                }
-
-                geom = DbGeometry.FromText(wkt, MapInitJson.CoordinateSystemId);
-            }
+            geom = geom?.FixSrid();
 
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
@@ -133,8 +123,6 @@ namespace Neptune.Web.Controllers
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
-
-            
 
             return Json(new {success = true});
         }

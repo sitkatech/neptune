@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -401,6 +401,7 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Common\NeptuneGeometryUtilities.cs" />
     <Compile Include="Common\TreatmentBMPCsvParserHelper.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasics.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasicsViewData.cs" />
@@ -416,6 +417,7 @@
     <Compile Include="Security\OnlandVisualTrashAssessmentDeleteFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentEditFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentViewFeature.cs" />
+    <Compile Include="Views\Delineation\DelineationMapConfig.cs" />
     <Compile Include="Views\Help\BulkUploadRequest.cs" />
     <Compile Include="Views\Help\BulkUploadRequestViewData.cs" />
     <Compile Include="Models\Delineation.cs" />
@@ -904,7 +906,15 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Content\img\legendImages\delineationCentralized.PNG" />
+    <Content Include="Content\img\legendImages\delineationDistributed.PNG" />
+    <Content Include="Content\img\legendImages\Full.png" />
+    <Content Include="Content\img\legendImages\networkCatchment.png" />
+    <Content Include="Content\img\legendImages\None.png" />
+    <Content Include="Content\img\legendImages\NotProvided.png" />
     <Content Include="Content\img\legendImages\ovtaGreen.png" />
+    <Content Include="Content\img\legendImages\ovtaGrey.png" />
+    <Content Include="Content\img\legendImages\ovtaMagenta.png" />
     <Content Include="Content\img\legendImages\ovtaSalmon.png" />
     <Content Include="Content\img\legendImages\ovtaYellow.png" />
     <Content Include="Areas\Trash\ScriptsCustom\Maps\NeptuneMaps.TrashModuleMap.js" />
@@ -1047,7 +1057,10 @@
     <Content Include="Content\img\icons\inventoryIcon.png" />
     <Content Include="Content\img\icons\modelingIcon.png" />
     <Content Include="Content\img\icons\trashIcon.png" />
+    <Content Include="Content\img\legendImages\parcel.png" />
+    <Content Include="Content\img\legendImages\Partial.png" />
     <Content Include="Content\img\legendImages\selectedGeometry.png" />
+    <Content Include="Content\img\legendImages\stormwaterNetwork.png" />
     <Content Include="Content\img\legendImages\transectLine.png" />
     <Content Include="Content\img\legendImages\workflowAssessmentArea.png" />
     <Content Include="Content\img\MimeTypeIcons\excel_20x20.png" />
@@ -1104,6 +1117,7 @@
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.js" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.css" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.js" />
+    <Content Include="Content\proj4js\proj4.js" />
     <Content Include="Content\qtip\jquery.qtip.validation.min.js">
       <DependentUpon>jquery.qtip.validation.js</DependentUpon>
     </Content>

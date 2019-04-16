@@ -14,7 +14,7 @@ namespace Neptune.Web.Views.Delineation
             PageTitle = "Delineation Map";
             GeoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
 
-            DelineationMapConfig = new DelineationMapConfig();
+            DelineationMapConfig = new DelineationMapConfig(currentPerson.GetStormwaterJurisdictionCqlFilter());
             
         }
 
@@ -24,18 +24,5 @@ namespace Neptune.Web.Views.Delineation
         public bool IsInitialTreatmentBMPProvided { get; }
         public string GeoServerUrl { get; }
         public DelineationMapConfig DelineationMapConfig { get; set; }
-    }
-
-    
-    public class DelineationMapConfig
-    {
-        public string AutoDelineateBaseUrl { get; set; }
-
-        // todo: source these values from Web.config when appropriate
-        public DelineationMapConfig()
-        {
-            AutoDelineateBaseUrl =
-                "https://ocgis.com/arcpub/rest/services/Flood/OCPWGlobalStormwaterDelineationServiceSurfaceOnly/GPServer/Global%20Surface%20Delineation/";
-        }
     }
 }
