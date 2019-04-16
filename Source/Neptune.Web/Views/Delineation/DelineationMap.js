@@ -317,20 +317,26 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         self.launchDrawCatchmentMode();
     }).fail(function(error) {
 
-        if (error) {
+        if (!error) {
+            // generic message
+            window.alert(
+                "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
+        }
+
+        if (error.messages) {
             // look for the error message indicating that the service has no data to work with for the given location
             var unsupportedAreaMessage = _.find(error.messages,
-                function(m) {
+                function (m) {
                     return m.description === "Number of intersecting catalog unit(s): 0";
                 });
             if (unsupportedAreaMessage) {
                 window.alert(
                     "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
-            } else {
-                window.alert(
-                    "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
             }
 
+        } else if (error.serviceUnavailable) {
+            window.alert(
+                "The DEM service is currently unavailable. Please try again later.");
         } else {
             // generic message
             window.alert(

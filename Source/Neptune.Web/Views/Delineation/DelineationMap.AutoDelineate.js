@@ -12,6 +12,9 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequestNew = f
     return jQuery.ajax({
         url: submitUrl,
         type: "GET"
+    }).fail(function(data) {
+        // this fail is only hit if the initial request fails, in which case we assume the service is probably unavailable.
+        return jQuery.Deferred().reject({ serviceUnavailable: true });
     }).then(function (data) {
         var statusUrl = self.DelineationServiceUrl + "jobs/" + data.jobId + "?f=json&returnMessages=true";
         return pollUntilDone(statusUrl);
