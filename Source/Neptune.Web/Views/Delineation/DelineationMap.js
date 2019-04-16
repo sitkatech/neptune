@@ -301,47 +301,49 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
     this.displayLoading();
 
     var self = this;
-    var autoDelineate = new NeptuneMaps.DelineationMap.AutoDelineate(this.config.AutoDelineateBaseUrl,
-        function (featureCollection) {
-            self.addBMPDelineationLayerFromDEM(featureCollection);
+    var autoDelineate = new NeptuneMaps.DelineationMap.AutoDelineate(this.config.AutoDelineateBaseUrl);
 
-            self.removeLoading();
-            self.enableUserInteraction();
 
-            self.downsampleSelectedDelineation(0.0001);
-            self.launchDrawCatchmentMode();
-        },
-        function (error) {
+    var promise = autoDelineate.MakeDelineationRequestNew(latLng);
 
-            if (error) {
-                // look for the error message indicating that the service has no data to work with for the given location
-                var unsupportedAreaMessage = _.find(error.messages,
-                    function(m) {
-                        return m.description === "Number of intersecting catalog unit(s): 0";
-                    });
-                if (unsupportedAreaMessage) {
-                    window.alert(
-                        "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
-                } else {
-                    window.alert(
-                        "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
-                }
 
+    promise.then(function(featureCollection) {
+        self.addBMPDelineationLayerFromDEM(featureCollection);
+
+        self.removeLoading();
+        self.enableUserInteraction();
+
+        self.downsampleSelectedDelineation(0.0001);
+        self.launchDrawCatchmentMode();
+    }).catch(function(error) {
+
+        if (error) {
+            // look for the error message indicating that the service has no data to work with for the given location
+            var unsupportedAreaMessage = _.find(error.messages,
+                function(m) {
+                    return m.description === "Number of intersecting catalog unit(s): 0";
+                });
+            if (unsupportedAreaMessage) {
+                window.alert(
+                    "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
             } else {
-                // generic message
                 window.alert(
                     "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
             }
 
+        } else {
+            // generic message
+            window.alert(
+                "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
+        }
 
-            self.selectedAssetControl.enableDelineationButton();
-            self.removeLoading();
-            self.enableUserInteraction();
-            self.hookupSelectTreatmentBMPOnClick();
-            self.hookupDeselectOnClick();
-        });
 
-    autoDelineate.MakeDelineationRequest(latLng);
+        self.selectedAssetControl.enableDelineationButton();
+        self.removeLoading();
+        self.enableUserInteraction();
+        self.hookupSelectTreatmentBMPOnClick();
+        self.hookupDeselectOnClick();
+    });
 };
 
 /* "Trace-Delineate Mode"
