@@ -120,29 +120,29 @@ namespace Neptune.Web.Common
                 errorList.Add(
                     $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
             }
-            else if (!int.TryParse(treatmentBMPLatitude, out var treatmentBMPLatitudeInt))
+            if (!decimal.TryParse(treatmentBMPLatitude, out var treatmentBMPLatitudeDecimal))
             {
                 errorList.Add(
-                    $"Allowable End Date of Installation can not be converted to Integer format at row: {count}");
-                if (treatmentBMPLatitudeInt <= 90 && treatmentBMPLatitudeInt >= -90)
-                {
-                    errorList.Add($"TreatmentBMPLatitude {treatmentBMPLatitudeInt} is less than -90 or greater than 90 at row: {count}");
-                }
+                    $"Allowable End Date of Installation can not be converted to Decimal format at row: {count}");
             }
-            else if (!int.TryParse(treatmentBMPLongitude, out var treatmentBMPLongitudeInt))
+            if (!(treatmentBMPLatitudeDecimal <= 90 && treatmentBMPLatitudeDecimal >= -90))
             {
                 errorList.Add(
-                    $"Allowable End Date of Installation can not be converted to Integer format at row: {count}");
-                if (treatmentBMPLongitudeInt <= 180 && treatmentBMPLongitudeInt >= -180)
-                {
-                    errorList.Add($"TreatmentBMPLatitude {treatmentBMPLongitudeInt} is less than -90 or greater than 180 at row: {count}");
-                }
+                    $"TreatmentBMPLatitude {treatmentBMPLatitudeDecimal} is less than -90 or greater than 90 at row: {count}");
             }
-            else
+            if (!decimal.TryParse(treatmentBMPLongitude, out var treatmentBMPLongitudeDecimal))
             {
-                    treatmentBMP.LocationPoint = DbGeometry.FromText(
-                        $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
+                errorList.Add(
+                    $"Allowable End Date of Installation can not be converted to Decimal format at row: {count}");
             }
+            if (!(treatmentBMPLongitudeDecimal <= 180 && treatmentBMPLongitudeDecimal >= -180))
+            {
+                errorList.Add(
+                    $"TreatmentBMPLatitude {treatmentBMPLongitudeDecimal} is less than -180 or greater than 180 at row: {count}");
+            }
+            treatmentBMP.LocationPoint = DbGeometry.FromText(
+                $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", MapInitJson.CoordinateSystemId);
+
 
             var treatmentBMPJurisdictionName = row[fieldsDict["Jurisdiction"]];
             if (treatmentBMPJurisdictionName.IsNullOrWhiteSpace())
@@ -243,12 +243,12 @@ namespace Neptune.Web.Common
                         errorList.Add(
                             $"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row: {count}");
                     }
-                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation != TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
+                    if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation != TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add(
                             $"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}" );
                     }
-                    else if (requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
+                    if (requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
                              !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
@@ -362,7 +362,6 @@ namespace Neptune.Web.Common
                 treatmentBMP.SizingBasisTypeID = SizingBasisType.All
                     .First(x => x.SizingBasisTypeDisplayName == treatmentSizingBasics).SizingBasisTypeID;
             }
-
 
             return treatmentBMP;
         }
