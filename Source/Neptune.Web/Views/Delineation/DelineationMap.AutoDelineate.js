@@ -1,5 +1,6 @@
 ﻿/* Wraps calls to the OC GIS auto-delineation service for consumption by UI code */
 
+// todo: need not use object instantiation
 NeptuneMaps.DelineationMap.AutoDelineate = function (delineationServiceUrl) {
     this.DelineationServiceUrl = delineationServiceUrl;
 };
