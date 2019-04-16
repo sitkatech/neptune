@@ -26,11 +26,9 @@ NeptuneMaps.DelineationMap.AutoDelineate.prototype.MakeDelineationRequestNew = f
     }).then(function (data) {
         return jQuery.Deferred(function (deferred) {
             if (data.value && data.value.type === "FeatureCollection") {
-                debugger;
                 deferred.resolve(data.value);
             } else {
                 //failure condition
-                debugger;
                 return deferred.reject(/*what to put here*/);
             }
         });
