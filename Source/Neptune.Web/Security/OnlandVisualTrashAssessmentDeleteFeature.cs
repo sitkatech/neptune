@@ -3,7 +3,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows Viewing an OVTA Area")]
+    [SecurityFeatureDescription("Allows Viewing an OVTA")]
     public class OnlandVisualTrashAssessmentDeleteFeature : NeptuneFeatureWithContext, INeptuneBaseFeatureWithContext<OnlandVisualTrashAssessment>
     {
         private readonly NeptuneFeatureWithContextImpl<OnlandVisualTrashAssessment> _lakeTahoeInfoFeatureWithContextImpl;
