@@ -53,8 +53,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
         [NeptuneAdminFeature]
         public ActionResult RefreshTrashGeneratingUnits(ConfirmDialogFormViewModel viewModel)
         {
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommandAsync(
+            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
                 "exec dbo.pRebuildTrashGeneratingUnitTable");
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
             return new ModalDialogFormJsonResult();
         }
