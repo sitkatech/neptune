@@ -78,14 +78,6 @@ ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_
 GO
 ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_CompletedAssessmentMustHaveScore]
 GO
-ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete] CHECK  (([OnlandVisualTrashAssessmentAreaID] IS NOT NULL AND ([AssessingNewArea]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) OR [OnlandVisualTrashAssessmentAreaID] IS NULL AND [AssessingNewArea]=(1)))
-GO
-ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_NewAssessmentCannotHaveOfficialAreaUnlessComplete]
-GO
-ALTER TABLE [dbo].[OnlandVisualTrashAssessment]  WITH CHECK ADD  CONSTRAINT [CK_OnlandVisualTrashAssessment_TransectBackingAssessmentMustBeComplete] CHECK  ((([IsTransectBackingAssessment]=(0) OR [OnlandVisualTrashAssessmentStatusID]=(2)) AND NOT ([IsTransectBackingAssessment]=(1) AND [OnlandVisualTrashAssessmentStatusID]<>(2))))
-GO
-ALTER TABLE [dbo].[OnlandVisualTrashAssessment] CHECK CONSTRAINT [CK_OnlandVisualTrashAssessment_TransectBackingAssessmentMustBeComplete]
-GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON
 SET QUOTED_IDENTIFIER ON
