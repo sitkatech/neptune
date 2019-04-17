@@ -22,7 +22,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     var networkCatchmentLayer =
         this.addWmsLayer("OCStormwater:NetworkCatchments",
             "<span><img src='/Content/img/legendImages/networkCatchment.png' height='12px' style='margin-bottom:3px;' /> Network Catchments</span>",
-            { pane: "networkCatchmentPane" });
+            { pane: "networkCatchmentPane" }, true);
 
 
     var parcelsLegendUrl = geoserverUrl +

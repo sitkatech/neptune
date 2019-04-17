@@ -198,7 +198,7 @@
         };
 
         $scope.addObservationAtCurrentLocation = function () {
-            $scope.neptuneMap.map.locate({ setView: true });
+            $scope.neptuneMap.map.locate({ setView: true, enableHighAccuracy: true });
         };
 
         $scope.neptuneMap.map.on("locationfound", function (event) {

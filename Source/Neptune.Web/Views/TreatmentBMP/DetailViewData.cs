@@ -94,7 +94,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
 
-            DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.0") ?? "-";
+            DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }

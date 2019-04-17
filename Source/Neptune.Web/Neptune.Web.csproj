@@ -418,6 +418,7 @@
     <Compile Include="Security\OnlandVisualTrashAssessmentEditStausFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentEditFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentViewFeature.cs" />
+    <Compile Include="UnitTestCommon\TestTreatmentCSVParser.cs" />
     <Compile Include="Views\Delineation\DelineationMapConfig.cs" />
     <Compile Include="Views\Help\BulkUploadRequest.cs" />
     <Compile Include="Views\Help\BulkUploadRequestViewData.cs" />

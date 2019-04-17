@@ -87,7 +87,8 @@ namespace Neptune.Web.Common
             return treatmentBMPsToUpload;
         }
 
-        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(int bmpType, string[] row, Dictionary<string, int> fieldsDict, int count, out List<string> errorList)
+        private static TreatmentBMP ParseRequiredAndOptionalFieldAndCreateBMP(int bmpType, string[] row,
+            Dictionary<string, int> fieldsDict, int count, out List<string> errorList)
         {
             errorList = new List<string>();
             var treatmentBMP = new TreatmentBMP(string.Empty, default(int), default(int), default(int), default(bool),
@@ -103,28 +104,31 @@ namespace Neptune.Web.Common
             {
                 errorList.Add(
                     $"BMP Name is null, empty, or just whitespaces for row: {count}");
-            }            
+            }
+
             if (treatmentBMPs.Select(x => x.TreatmentBMPName).Contains(treatmentBMPName))
             {
                 errorList.Add($"A BMP by the name '{treatmentBMPName}' already exists for row: {count}");
             }
+
             treatmentBMP.TreatmentBMPName = treatmentBMPName;
 
             treatmentBMP.TreatmentBMPTypeID = bmpType;
             treatmentBMP.TreatmentBMPType = treatmentBMPs.First(x => x.TreatmentBMPTypeID == bmpType).TreatmentBMPType;
-
+          
             var treatmentBMPLatitude = row[fieldsDict["Latitude"]];
             var treatmentBMPLongitude = row[fieldsDict["Longitude"]];
-            if (treatmentBMPLatitude.IsNullOrWhiteSpace() || treatmentBMPLongitude.IsNullOrWhiteSpace())
+            List<string> locationErrors = ParseLocation(treatmentBMPLatitude, treatmentBMPLongitude, count);
+            if (locationErrors.Any())
             {
-                errorList.Add(
-                    $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
+                errorList.AddRange(locationErrors);
             }
             else
             {
                 treatmentBMP.LocationPoint = DbGeometry.FromText(
-                    $"Point ({treatmentBMPLatitude} {treatmentBMPLongitude})", MapInitJson.CoordinateSystemId);
+                    $"Point ({treatmentBMPLongitude} {treatmentBMPLatitude})", MapInitJson.CoordinateSystemId);
             }
+
 
             var treatmentBMPJurisdictionName = row[fieldsDict["Jurisdiction"]];
             if (treatmentBMPJurisdictionName.IsNullOrWhiteSpace())
@@ -141,7 +145,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.StormwaterJurisdictionID = jurisdictions
-                    .First((x => x.Organization.OrganizationName == treatmentBMPJurisdictionName)).OrganizationID;
+                    .Single(x => x.Organization.OrganizationName == treatmentBMPJurisdictionName).StormwaterJurisdictionID;
             }
 
             var treatmentBMPOwner = row[fieldsDict["Owner"]];
@@ -159,7 +163,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.OwnerOrganizationID = organizations
-                    .First((x => x.OrganizationName == treatmentBMPOwner)).OrganizationID;
+                    .Single((x => x.OrganizationName == treatmentBMPOwner)).OrganizationID;
             }
 
             //start of Optional Fields
@@ -211,7 +215,7 @@ namespace Neptune.Web.Common
                     else
                     {
                         treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanType.All
-                            .First(x => x.TreatmentBMPLifespanTypeDisplayName == requiredLifespanOfInstallation)
+                            .Single(x => x.TreatmentBMPLifespanTypeDisplayName == requiredLifespanOfInstallation)
                             .TreatmentBMPLifespanTypeID;
                     }
                 }
@@ -225,16 +229,12 @@ namespace Neptune.Web.Common
                         errorList.Add(
                             $"An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date for row: {count}");
                     }
-                    else if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() &&
-                             (requiredLifespanOfInstallation ==
-                              TreatmentBMPLifespanType.Unspecified.TreatmentBMPLifespanTypeDisplayName ||
-                              requiredLifespanOfInstallation ==
-                              TreatmentBMPLifespanType.Perpetuity.TreatmentBMPLifespanTypeDisplayName))
+                    if (!allowableEndDateOfInstallation.IsNullOrWhiteSpace() && requiredLifespanOfInstallation != TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeDisplayName)
                     {
                         errorList.Add(
                             $"An end date was provided when 'Required Lifespan of Installation' field was set to {requiredLifespanOfInstallation} for row: {count}" );
                     }
-                    else if (!requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
+                    if (requiredLifespanOfInstallation.IsNullOrWhiteSpace() &&
                              !allowableEndDateOfInstallation.IsNullOrWhiteSpace())
                     {
                         errorList.Add(
@@ -280,7 +280,7 @@ namespace Neptune.Web.Common
                     if (!int.TryParse(requiredPostStormFieldVisitsPerYear, out var requiredPostStormFieldVisitsPerYearInt))
                     {
                         errorList.Add(
-                            $"Required post-storm field visits per year field cannot be converted to Int at row: {count}");
+                            $"Required Post-Storm Field visits per year field cannot be converted to Int at row: {count}");
                     }
                     else
                     {
@@ -326,7 +326,7 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.TrashCaptureStatusTypeID = TrashCaptureStatusType.All
-                    .First(x => x.TrashCaptureStatusTypeDisplayName == treatmentBMPTrashCaptureStatus)
+                    .Single(x => x.TrashCaptureStatusTypeDisplayName == treatmentBMPTrashCaptureStatus)
                     .TrashCaptureStatusTypeID;
             }
 
@@ -346,11 +346,43 @@ namespace Neptune.Web.Common
             else
             {
                 treatmentBMP.SizingBasisTypeID = SizingBasisType.All
-                    .First(x => x.SizingBasisTypeDisplayName == treatmentSizingBasics).SizingBasisTypeID;
+                    .Single(x => x.SizingBasisTypeDisplayName == treatmentSizingBasics).SizingBasisTypeID;
             }
 
-
             return treatmentBMP;
+        }
+
+        private static List<string> ParseLocation(string treatmentBMPLatitude, string treatmentBMPLongitude, int count)
+        {
+            var LocationErrorList = new List<string>();
+
+            if (treatmentBMPLatitude.IsNullOrWhiteSpace() || treatmentBMPLongitude.IsNullOrWhiteSpace())
+            {
+                LocationErrorList.Add(
+                    $"Treatment BMP Latitude {treatmentBMPLatitude} or Longitude {treatmentBMPLongitude} is null or empty space at row: {count}");
+            }
+            if (!decimal.TryParse(treatmentBMPLatitude, out var treatmentBMPLatitudeDecimal))
+            {
+                LocationErrorList.Add(
+                    $"Treatment BMP Latitude can not be converted to Decimal format at row: {count}");
+            }
+            if (!(treatmentBMPLatitudeDecimal <= 90 && treatmentBMPLatitudeDecimal >= -90))
+            {
+                LocationErrorList.Add(
+                    $"Treatment BMP Latitude {treatmentBMPLatitudeDecimal} is less than -90 or greater than 90 at row: {count}");
+            }
+            if (!decimal.TryParse(treatmentBMPLongitude, out var treatmentBMPLongitudeDecimal))
+            {
+                LocationErrorList.Add(
+                    $"Treatment BMP Longitude can not be converted to Decimal format at row: {count}");
+            }
+            if (!(treatmentBMPLongitudeDecimal <= 180 && treatmentBMPLongitudeDecimal >= -180))
+            {
+                LocationErrorList.Add(
+                    $"Treatment BMP Longitude {treatmentBMPLongitudeDecimal} is less than -180 or greater than 180 at row: {count}");
+            }
+
+            return LocationErrorList;
         }
 
         private static List<CustomAttribute> ParseCustomAttributes(TreatmentBMP treatmentBMP, string[] currentRow, Dictionary<string, int> fieldsDict, List<CustomAttributeType> customAttributeTypes, int rowCount, out List<string> currentErrorList, out List<CustomAttributeValue> customAttributeValues)
@@ -370,7 +402,7 @@ namespace Neptune.Web.Common
 
                     if (customAttributeDataType.IsInt() && !int.TryParse(value, out var valueInt))
                     {
-                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Int at row: {rowCount}");
+                        currentErrorList.Add($"{customAttributeType.CustomAttributeTypeName} field can not be converted to Integer at row: {rowCount}");
                     }
                     else if (customAttributeDataType.IsDecimal() && !decimal.TryParse(value, out var valueDecimal))
                     {
@@ -425,683 +457,6 @@ namespace Neptune.Web.Common
             }
 
             return fieldsDict;
-        }
-    }
-
-    [TestFixture]
-    public class TreatmentBMPCsvParserHelperTest
-    {
-
-        [Test]
-        public void TestInvalidColumns()
-        {
-            var csv = @"BMP Name,Jurisdiction,,Latitude,Longitude,BMP Type,Trash Capture Status,Sizing Basis,Yo";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("One or more required headers have not been provided, Required Fields are: "));
-            errorList.Any(x => x.Contains("Some of the fields provided are not acceptable optional fields or are misspelled required fields. Optional Fields are: "));
-        }
-
-        [Test]
-        public void TestValidColumns()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("One or more required headers have not been provided, Required Fields are: "));
-            errorList.Any(x => !x.Contains("Some of the fields provided are not acceptable optional fields or are misspelled required fields. Optional Fields are: "));
-        }
-
-        [Test]
-        public void TestBMPNameNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("BMP Name is null, empty, or just whitespaces for row: "));
-        }
-
-        [Test]
-        public void TestBMPNameExists()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Test,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("A BMP by the name,"));
-
-        }
-
-        [Test]
-        public void TestBMPLatitudeNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Treatment BMP Latitude "));
-        }
-
-        [Test]
-        public void TestBMPLongitudeNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Treatment BMP Latitude"));
-        }
-
-        [Test]
-        public void TestBMPLocationGood()
-        {
-            var csv =
-                @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Treatment BMP Latitude"));
-            Assert.That(treatmentBmpUploadSimples[0].LocationPoint.ToString(), Is.EqualTo($"SRID={MapInitJson.CoordinateSystemId};POINT (30 10)"));
-        }
-
-        [Test]
-        public void TestJurisdictionNameNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("BMP Jurisdiction is null, empty, or just whitespaces for row: "));
-        }
-
-        [Test]
-        public void TestJurisdictionNameExistsBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Grou,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("No Jurisdicition with that name exists within our records, row: "));
-        }
-
-        [Test]
-        public void TestJurisdictionNameExistsGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("No Jurisdicition with that name exists within our records, row: "));
-            errorList.Any(x => !x.Contains("BMP Jurisdiction is null, empty, or just whitespaces for row: "));
-            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
-        }
-
-        [Test]
-        public void TestOrganizationOwnerNameNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("BMP Organization Owner Name is null, empty, or just whitespaces for row:"));
-        }
-
-        [Test]
-        public void TestOrganizationOwnerNameExistsBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Grou,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("No BMP Organization Owner with that name exists within our records, row: "));
-        }
-
-        [Test]
-        public void TestOrganizationOwnerExistsGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,City of Brea,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("BMP Organization Owner Name is null, empty, or just whitespaces for row:"));
-            errorList.Any(x => !x.Contains("No BMP Organization Owner with that name exists within our records, row: "));
-            Assert.That(treatmentBmpUploadSimples[0].StormwaterJurisdictionID, Is.EqualTo(5));
-        }
-
-        //Begin Optional Field Tests
-
-        [Test]
-        public void TestYearBuiltIntParseBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,AB34,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Year Built or Installed Field cannot be converted to Int at row"));
-        }
-        [Test]
-        public void TestYearBuiltIntParseGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Year Built or Installed Field cannot be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].YearBuilt, Is.EqualTo(2008));
-        }
-
-        [Test]
-        public void TestYearBuiltIntAcceptsNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Year Built or Installed Field cannot be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].YearBuilt, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestAssetIdInSystemOfRecordsBad()
-        {
-            string sysID = "";
-            for (int i = 0; i < TreatmentBMP.FieldLengths.SystemOfRecordID + 2; i++)
-            {
-                sysID += "a";
-            }
-
-            var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,{sysID},Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Asset ID In System of Record is too long at row,"));
-        }
-
-        [Test]
-        public void TestAssetIdInSystemOfRecordsGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Asset ID In System of Record is too long at row, "));
-            Assert.That(treatmentBmpUploadSimples[0].SystemOfRecordID, Is.EqualTo("ABCD"));
-        }
-
-        [Test]
-        public void TestAssetIdInSystemOfRecordsNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Asset ID In System of Record is too long at row, "));
-            Assert.That(treatmentBmpUploadSimples[0].SystemOfRecordID, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestRequiredLifespanOfInstallationBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpet,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("No Required Lifespan Of Installation by the name"));
-        }
-
-        [Test]
-        public void TestRequiredLifespanOfInstallationGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("No Required Lifespan Of Installation by the name"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanTypeID, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void TestRequiredLifespanOfInstallationNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("No Required Lifespan Of Installation by the name"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanTypeID, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row"));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNullBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date"));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsFixedEndDateButDateNotNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("An end date must be provided if the 'Required Lifespan of Installation' field is set to fixed end date"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(DateTime.Parse("11/12/2022")));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNotNullBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project"));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsNotFixedEndDateButDateNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to Perpetuity/Life of Project"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsNullButDateNotNullBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null"));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationTypeIsNullButDateNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,,,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("An end date was provided when 'Required Lifespan of Installation' field was set to null"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Fixed End Date,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(DateTime.Parse("11/12/2022")));
-        }
-
-        [Test]
-        public void TestAllowableEndDateOfInstallationNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Allowable End Date of Installation can not be converted to Date Time format at row"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanEndDate, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestRequiredFieldVisitsPerYearBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,Ab5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Required Field Vists per Year Field can not be converted to Int at row"));
-        }
-
-        [Test]
-        public void TestRequiredFieldVisitsPerYearGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Required Field Vists per Year Field can not be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].RequiredFieldVisitsPerYear, Is.EqualTo(5));
-        }
-
-        [Test]
-        public void TestRequiredFieldVisitsPerYearNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Required Field Vists per Year Field can not be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].RequiredFieldVisitsPerYear, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestRequiredPostStormFieldVisitsPerYearBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Required post-storm field vists per year field cannot be converted to Int at row"));
-        }
-
-        [Test]
-        public void TestRequiredPostStormFieldVisitsPerYearGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Required post-storm field vists per year field cannot be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].RequiredPostStormFieldVisitsPerYear, Is.EqualTo(6));
-        }
-
-        [Test]
-        public void TestRequiredPostStormFieldVisitsPerYearNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Required post-storm field vists per year field cannot be converted to Int at row"));
-            Assert.That(treatmentBmpUploadSimples[0].RequiredPostStormFieldVisitsPerYear, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestNotesBad()
-        {
-            string note = "";
-            for (int i = 0; i < TreatmentBMP.FieldLengths.Notes + 2; i++)
-            {
-                note += "a";
-            }
-
-            var csv = $@"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,AB6,{note},Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Note length is too long at row"));
-        }
-
-        [Test]
-        public void TestNotesGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Note length is too long at row"));
-            Assert.That(treatmentBmpUploadSimples[0].Notes, Is.EqualTo("Happy"));
-        }
-
-        [Test]
-        public void TestNotesNullGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Note length is too long at row"));
-            Assert.That(treatmentBmpUploadSimples[0].Notes, Is.EqualTo(null));
-        }
-
-        //End Optional Field Tests
-        [Test]
-        public void TestTrashCaptureStatusExistsNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,null,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("No Required Lifespan Of Installation by the name"));
-            Assert.That(treatmentBmpUploadSimples[0].TreatmentBMPLifespanTypeID, Is.EqualTo(null));
-        }
-
-        [Test]
-        public void TestTrashCaptureStatusExistsBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,4,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("No Trash Capture Status with that name exists in our records, row: "));
-        }
-
-        [Test]
-        public void TestTrashCaptureStatusExistsGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("Trash Capture Status is null, empty, or just whitespaces for row: "));
-            errorList.Any(x => !x.Contains("No Trash Capture Status with that name exists in our records, row: "));
-            Assert.That(treatmentBmpUploadSimples[0].TrashCaptureStatusTypeID, Is.EqualTo(1));
-        }
-
-
-        [Test]
-        public void TestSizingBasicsExistsNull()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
-        }
-
-        [Test]
-        public void TestSizingBasicsExistsBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,4";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("No Sizing Basic with the name "));
-        }
-
-        [Test]
-        public void TestSizingBasicsExistsGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => !x.Contains("No Sizing Basic with the name "));
-            errorList.Any(x => !x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
-            Assert.That(treatmentBmpUploadSimples[0].SizingBasisTypeID, Is.EqualTo(4));
-        }
-
-
-        [Test]
-        public void UploadListPopulatesGood()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
-John,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("A BMP by the name,"));
-        }
-
-        [Test]
-        public void UploadListPopulatesBad()
-        {
-            var csv = @"BMP Name,Latitude,Longitude,Jurisdiction, Owner,Year Built or Installed,Asset ID in System of Record, Required Lifespan of Installation,Allowable End Date of Installation (if applicable), Required Field Visits Per Year, Required Post-Storm Field Visits Per Year,Notes,Trash Capture Status,Sizing Basis  
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,Full,Not Provided
-Frank,30,10,Sitka Technology Group,Sitka Technology Group,2008,ABCD,Perpetuity/Life of Project,11/12/2022,5,6,Happy,,Full,Not Provided";
-            List<string> errorList;
-            List<CustomAttribute> customAttributes;
-            List<CustomAttributeValue> customAttributeValues;
-            var bmpType = 17;
-            var treatmentBmpUploadSimples = TreatmentBMPCsvParserHelper.CSVUpload(csv, bmpType, out errorList, out customAttributes, out customAttributeValues);
-            errorList.Any(x => x.Contains("Sizing Basis is null, empty, or just whitespaces for row: "));
-            errorList.Any(x => x.Contains("A BMP by the name,"));
         }
     }
 
