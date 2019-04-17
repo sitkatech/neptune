@@ -63,7 +63,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             AssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID;
             PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
             OnlandVisualTrashAssessmentID = ovta.OnlandVisualTrashAssessmentID;
-            AssessmentDate = DateTime.Now;
+            AssessmentDate = ovta.CompletedDate ??  DateTime.Now;
 
         }
 

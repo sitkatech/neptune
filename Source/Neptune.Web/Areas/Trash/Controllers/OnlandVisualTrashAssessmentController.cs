@@ -40,8 +40,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var transsectLineLayerGeoJson = onlandVisualTrashAssessment.GetTransectLineLayerGeoJson();
 
             var ovtaSummaryMapInitJson = new OVTASummaryMapInitJson("summaryMap", observationsLayerGeoJson, assessmentAreaLayerGeoJson, transsectLineLayerGeoJson);
-
-            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment, new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations, NeptuneWebConfiguration.ParcelMapServiceUrl)));
+            var returnToEditUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
+                    x.EditStatusToAllowEdit(onlandVisualTrashAssessment));
+            var userHasPermissionToReturnToEdit = new OnlandVisualTrashAssessmentEditStausFeature().HasPermission(CurrentPerson, onlandVisualTrashAssessment).HasPermission;
+            return RazorView<Detail, DetailViewData>(new DetailViewData(CurrentPerson, onlandVisualTrashAssessment, new TrashAssessmentSummaryMapViewData(ovtaSummaryMapInitJson, onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations, NeptuneWebConfiguration.ParcelMapServiceUrl), returnToEditUrl, userHasPermissionToReturnToEdit));
         }
 
         [HttpGet]
@@ -66,7 +69,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public GridJsonNetJObjectResult<OnlandVisualTrashAssessmentArea> OnlandVisualTrashAssessmentAreaGridData()
         {
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
-            var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson,showDelete);
+            var gridSpec = new OnlandVisualTrashAssessmentAreaIndexGridSpec(CurrentPerson, showDelete);
             var onlandVisualTrashAssessmentAreas = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.ToList()
                 .Where(x => x.StormwaterJurisdiction == null ||
                             CurrentPerson.CanEditStormwaterJurisdiction(x.StormwaterJurisdiction))
@@ -88,7 +91,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
             var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
             gridSpec = new OnlandVisualTrashAssessmentIndexGridSpec(currentPerson, showDelete, showEdit, false);
-            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x=>x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).OrderByDescending(x=>x.CompletedDate).ToList();
+            return HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentAreaID == onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID).OrderByDescending(x => x.CompletedDate).ToList();
         }
 
         private List<OnlandVisualTrashAssessment> GetOVTAsAndGridSpec(out OnlandVisualTrashAssessmentIndexGridSpec gridSpec,
@@ -149,7 +152,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ActionResult InitiateOVTA(int? onlandVisualTrashAssessmentPrimaryKey,
             InitiateOVTAViewModel viewModel)
         {
-            var onlandVisualTrashAssessment =  onlandVisualTrashAssessmentPrimaryKey.HasValue
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.HasValue
                 ? HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.GetOnlandVisualTrashAssessment(
                     onlandVisualTrashAssessmentPrimaryKey.Value)
                 : null;
@@ -387,6 +390,48 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                         x.FinalizeOVTA(onlandVisualTrashAssessment)));
             }
+        }
+
+        [HttpGet]
+        [OnlandVisualTrashAssessmentEditStausFeature]
+        public PartialViewResult EditStatusToAllowEdit(
+            OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey)
+        {
+            var ovta = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(onlandVisualTrashAssessmentPrimaryKey.PrimaryKeyValue);
+
+            return ViewEditStatusToAllowEdit(ovta, viewModel);
+        }
+
+        private PartialViewResult ViewEditStatusToAllowEdit(OnlandVisualTrashAssessment ovta, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage =
+                $"This OVTA was finalized on {ovta.CompletedDate}. Are you sure you want to revert this OVTA to 'In Progress' status?";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
+                viewModel);
+        }
+
+        [HttpPost]
+        [OnlandVisualTrashAssessmentEditStausFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult EditStatusToAllowEdit(OnlandVisualTrashAssessmentPrimaryKey onlandVisualTrashAssessmentPrimaryKey,
+            ConfirmDialogFormViewModel viewModel)
+        {
+            var onlandVisualTrashAssessment = onlandVisualTrashAssessmentPrimaryKey.EntityObject;
+
+            if (!ModelState.IsValid)
+            {
+                return ViewEditStatusToAllowEdit(onlandVisualTrashAssessment, viewModel);
+            }
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
+            onlandVisualTrashAssessment.AssessingNewArea = false;
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
+                x.RecordObservations(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)));
+            
         }
 
         [HttpGet]

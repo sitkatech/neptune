@@ -8,8 +8,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
     {
         public Models.OnlandVisualTrashAssessment OnlandVisualTrashAssessment { get; }
         public TrashAssessmentSummaryMapViewData TrashAssessmentSummaryMapViewData { get; }
+        public string ReturnToEditUrl { get; }
+        public bool UserHasReturnToEditPermission { get; }
 
-        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment, TrashAssessmentSummaryMapViewData trashAssessmentSummaryMapViewData) : base(currentPerson)
+        public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment, TrashAssessmentSummaryMapViewData trashAssessmentSummaryMapViewData, string returnToEditUrl, bool userHasReturnToEditPermission) : base(currentPerson)
         {
             OnlandVisualTrashAssessment = onlandVisualTrashAssessment;
             TrashAssessmentSummaryMapViewData = trashAssessmentSummaryMapViewData;
@@ -21,6 +23,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 x.Detail(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea));
             // ReSharper disable once PossibleInvalidOperationException
             PageTitle = OnlandVisualTrashAssessment.CompletedDate.Value.ToShortDateString();
+            ReturnToEditUrl = returnToEditUrl;
+            UserHasReturnToEditPermission = userHasReturnToEditPermission;
         }
     }
 }
