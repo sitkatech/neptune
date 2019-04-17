@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
-            feature.Properties.Add("Area", (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.0") ?? "-");
+            feature.Properties.Add("Area", (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-");
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }

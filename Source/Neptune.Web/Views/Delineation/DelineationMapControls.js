@@ -58,13 +58,12 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
         this.getTrackedElement("delineationArea").innerHTML = "-";
+        this._delineationButton.innerHTML = "Edit Delineation";
 
         if (treatmentBMPFeature.properties.DelineationURL) {
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
-            this._delineationButton.innerHTML = "Redelineate Drainage Area";
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
-            this._delineationButton.innerHTML = "Delineate Drainage Area";
         }
 
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
