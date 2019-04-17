@@ -20,6 +20,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string AddBMPUrl { get; }
         public ViewPageContentViewData ProgramOverviewPageContentViewData { get; }
         public string StormwaterJurisdictionCQLFilter { get; }
+        public string RefreshTguUrl { get; }
 
 
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
@@ -44,6 +45,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     NeptuneWebConfiguration.CanonicalHostName);
             AddBMPUrl = SitkaRoute<TreatmentBMPController>.BuildAbsoluteUrlHttpsFromExpression(x => x.New(),
                 NeptuneWebConfiguration.CanonicalHostName);
+
+            RefreshTguUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.RefreshTrashGeneratingUnits());
 
             ProgramOverviewPageContentViewData = new ViewPageContentViewData(NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashModuleProgramOverview), currentPerson);
 
