@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
+using LtInfo.Common.DhtmlWrappers;
+using LtInfo.Common.ModalDialog;
 using static System.String;
 
 namespace Neptune.Web.Models
@@ -48,6 +50,35 @@ namespace Neptune.Web.Models
 
             return new HtmlString("");
         }
+
+
+        public static readonly UrlTemplate<int> EditStatusToAllowEditURLTemplate =
+           new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(t =>
+                    t.EditStatusToAllowEdit(UrlTemplate.Parameter1Int)));
+
+        public static string GetEditStatusToAllowEditUrl(this OnlandVisualTrashAssessment ovta)
+        {
+            return EditStatusToAllowEditURLTemplate.ParameterReplace(ovta.OnlandVisualTrashAssessmentID);
+        }
+
+        public static HtmlString GetEditUrlForGrid(this OnlandVisualTrashAssessment onlandVisualTrashAssessment, Person currentPerson)
+        {
+            var userCanEdit = new OnlandVisualTrashAssessmentEditStausFeature()
+                .HasPermission(currentPerson, onlandVisualTrashAssessment)
+                .HasPermission;
+            if (!userCanEdit) return new HtmlString(string.Empty);
+
+            var modalDialogForm = new ModalDialogForm(GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
+                ModalDialogFormHelper.DefaultDialogWidth, "Return to Edit");
+
+            return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
+                   OnlandVisualTrashAssessmentStatus.Complete
+                ? @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment), string.Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName), 500, "Continue", "Cancel", new List<string> { "gridButton" }, null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
+    }
+
+
+
         public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {
             if (ovta.OnlandVisualTrashAssessmentObservations.Count > 1)

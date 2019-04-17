@@ -22,8 +22,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             }
             if (showEdit)
             {
-                Add(string.Empty, x => DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(x.GetEditUrl(), new OnlandVisualTrashAssessmentEditFeature().HasPermission(currentPerson, x).HasPermission), 30, DhtmlxGridColumnFilterType.None);
-
+               Add(string.Empty, x =>  x.GetEditUrlForGrid(currentPerson), 80, DhtmlxGridColumnFilterType.None);
             }
 
             Add(string.Empty, x => (x.OnlandVisualTrashAssessmentArea != null
