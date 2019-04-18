@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using LtInfo.Common.MvcResults;
 using MoreLinq;
@@ -51,11 +52,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
         [HttpPost]
         [NeptuneAdminFeature]
-        public ActionResult RefreshTrashGeneratingUnits(ConfirmDialogFormViewModel viewModel)
+        public async Task<ActionResult> RefreshTrashGeneratingUnits(ConfirmDialogFormViewModel viewModel)
         {
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
-                "exec dbo.pRebuildTrashGeneratingUnitTable");
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 600;
+            await HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommandAsync("execute dbo.pRebuildTrashGeneratingUnitTable");
 
             return new ModalDialogFormJsonResult();
         }
