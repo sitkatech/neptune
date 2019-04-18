@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using LtInfo.Common;
+using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 
@@ -49,7 +51,25 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public void UpdateModel(Models.OnlandVisualTrashAssessment ovta)
         {
+            Check.Require(ModelObjectHelpers.IsRealPrimaryKeyValue(ovta.OnlandVisualTrashAssessmentID));
+
             ovta.StormwaterJurisdictionID = StormwaterJurisdiction?.StormwaterJurisdictionID;
+
+            var transectBackingAssessment = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Find(OnlandVisualTrashAssessmentAreaID).GetTransectBackingAssessment();
+            
+            // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
+            if (transectBackingAssessment != null)
+            {
+                if (transectBackingAssessment.OnlandVisualTrashAssessmentID != ovta.OnlandVisualTrashAssessmentID)
+                {
+                    ovta.IsTransectBackingAssessment = false;
+                }
+            }
+            else
+            {
+                ovta.IsTransectBackingAssessment = true;
+            }
+
             ovta.OnlandVisualTrashAssessmentAreaID = OnlandVisualTrashAssessmentAreaID;
             ovta.AssessingNewArea = AssessingNewArea;
         }
