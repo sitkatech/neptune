@@ -93,8 +93,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
 
-    reportDelineationArea: function(area) {
-        this.getTrackedElement("delineationArea").innerHTML = area;
+    reportDelineationArea: function(properties) {
+        this.getTrackedElement("delineationArea").innerHTML = properties.Area;
+        this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
     },
 
     disableDelineationButton() {

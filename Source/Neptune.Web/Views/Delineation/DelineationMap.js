@@ -260,7 +260,6 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
         type: 'POST'
     }).then(function (response) {
         self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
-        // the savvy reader will note that it's unnecessary to AJAX out for the delineation, but will know better than to ask me about it.
         self.retrieveAndShowBMPDelineation(self.lastSelected.toGeoJSON().features[0]);
         self.cacheBustDelineationWmsLayers();
     }).fail(function () {
@@ -279,7 +278,6 @@ NeptuneMaps.DelineationMap.prototype.downsampleSelectedDelineation = function (t
     var feature = this.selectedBMPDelineationLayer.getLayers()[0].feature;
     this.selectedBMPDelineationLayer = null;
 
-    //todo unkill var simplified = turf.simplify(feature1, {tolerance:}); or;
     var simplified = turf.simplify(feature, { tolerance: tolerance });
     this.addBMPDelineationLayer(simplified);
 };
@@ -605,6 +603,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     }
 
     if (!bmpFeature.properties["DelineationURL"]) {
+        
         return jQuery.Deferred().resolve();
     }
 
@@ -618,6 +617,8 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
 
     }).then(function (response) {
         if (response.noDelineation) {
+            self.selectedAssetControl.reportDelineationArea({ Area: "-", DelineationType: "No delineation provided" });
+            bmpFeature.properties.DelineationType = "No delineation provided";
             return;
         }
         if (response.type !== "Feature") {
@@ -625,7 +626,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         }
         self.addBMPDelineationLayer(response);
         
-        self.selectedAssetControl.reportDelineationArea(response.properties.Area);
+        self.selectedAssetControl.reportDelineationArea(response.properties);
     }).fail(delineationErrorAlert);
 
     return promise;
