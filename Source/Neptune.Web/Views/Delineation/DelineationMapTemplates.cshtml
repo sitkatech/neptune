@@ -8,9 +8,12 @@
             <strong>BMP Name: </strong> <a id="selectedBMPDetailLink"></a> <br />
             <strong>BMP Type: </strong><span id="selectedBMPType"></span><br />
             <hr>
-            <strong>Delineation Type: </strong> <span id="delineationType"></span><br/>
-            <strong>Area: </strong><span id="delineationArea">-</span> <br/>
+            <strong>Delineation Type: </strong> <span id="delineationType"></span><br />
+            <strong>Area: </strong><span id="delineationArea">-</span> <br />
             <button class="btn btn-sm btn-neptune" id="delineationButton" type="button">Edit Delineation</button>
+            <div>
+                <input type="checkbox" data-toggle="toggle" data-on="Verified" data-off="Provisional" data-width="100"/>
+            </div>
             <div class="hiddenControlElement" id="saveAndCancelButtonsWrapper">
                 <button class="btn btn-sm btn-neptune" id="saveDelineationButton" type="button">Save Delineation</button>
                 <button class="btn btn-sm btn-neptune" id="cancelDelineationButton" type="button">Cancel</button>
@@ -31,11 +34,11 @@
             <label class="group"><input type="radio" name="flowOption" id="flowOptionCentralized" value="Centralized"> Receives Both Piped Flow and Local Surface Flow (Centralized)</label>
             <hr>
             <label>2. Choose a delineation option</label><br>
-            <span id="noFlowOptionSelectedText" class="systemText">Select a flow type above to see delineations options. <br/><br/></span>
+            <span id="noFlowOptionSelectedText" class="systemText">Select a flow type above to see delineations options. <br /><br /></span>
             <div id="delineationTypeOptions">
-                <label class="group" id="delineationOptionAuto"><input type="radio" name="delineationOption"  value="autoDelineate"> Delineate Automatically from DEM <br></label>
-                <label class="group" id="delineationOptionDraw"><input type="radio" name="delineationOption"  value="drawDelineate"> <span id="delineationOptionDrawText"></span> <br></label>
-                <label class="group" id="delineateOptionTrace" ><input type="radio" name="delineationOption" value="traceDelineate"> Trace Network Catchments <br></label>
+                <label class="group" id="delineationOptionAuto"><input type="radio" name="delineationOption" value="autoDelineate"> Delineate Automatically from DEM <br></label>
+                <label class="group" id="delineationOptionDraw"><input type="radio" name="delineationOption" value="drawDelineate"> <span id="delineationOptionDrawText"></span> <br></label>
+                <label class="group" id="delineateOptionTrace"><input type="radio" name="delineationOption" value="traceDelineate"> Trace Network Catchments <br></label>
             </div>
         </div>
         <div class="text-right">

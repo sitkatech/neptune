@@ -3,8 +3,15 @@
  * HTML templates in DelineationMapTemplates.cshtml 
  */
 
-var stopClickPropagation = function (el) {
-    L.DomEvent.on(el, "click", function (e) { e.stopPropagation(); });
+var stopClickPropagation = function (parentElement) {
+    L.DomEvent.on(parentElement, "mouseover", function (e) {
+        // todo: still not the best way to handle this event-pausing stuff
+        window.freeze = true;
+    });
+
+    L.DomEvent.on(parentElement, "mouseout", function (e) {
+        window.freeze = false;
+    })
 };
 
 L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
@@ -19,7 +26,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._selectedBmpName = this.parentElement.querySelector("#selectedBmpName");
         this._delineationStatus = this.parentElement.querySelector("#delineationStatus");
         this._delineationButton = this.parentElement.querySelector("#delineationButton");
-        
+
         L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
             "click",
             function (e) {
@@ -66,8 +73,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
         }
 
+
+
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
+
+        $('input[type=checkbox][data-toggle=toggle]').bootstrapToggle({
+        });
     },
 
     launchDrawCatchmentMode: function () {
@@ -82,7 +94,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         window.delineationMap.exitDrawCatchmentMode(save);
     },
-    
+
     reset: function () {
         this._selectedBmpInfo.classList.add("hiddenControlElement");
         this._noAssetSelected.classList.remove("hiddenControlElement");
@@ -93,7 +105,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
     },
 
-    reportDelineationArea: function(area) {
+    reportDelineationArea: function (area) {
         this.getTrackedElement("delineationArea").innerHTML = area;
     },
 
@@ -125,11 +137,11 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationTypeOptions").hidden = true;
 
         var self = this;
-        this.parentElement.querySelectorAll("[name='flowOption']").forEach(function(el) {
-            L.DomEvent.on(el, 'click', function() { self.displayDelineationOptionsForFlowOption(this.value); });
+        this.parentElement.querySelectorAll("[name='flowOption']").forEach(function (el) {
+            L.DomEvent.on(el, 'click', function () { self.displayDelineationOptionsForFlowOption(this.value); });
         });
-        this.parentElement.querySelectorAll("[name='delineationOption']").forEach(function(el) {
-            L.DomEvent.on(el, 'click', function() { self.enableDelineationButton(); });
+        this.parentElement.querySelectorAll("[name='delineationOption']").forEach(function (el) {
+            L.DomEvent.on(el, 'click', function () { self.enableDelineationButton(); });
         });
 
         var drawOptionText = this.treatmentBMPFeature.properties.DelineationURL
@@ -167,7 +179,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     },
 
     displayDelineationOptionsForFlowOption: function (flowOption) {
-        
+
         if (flowOption === "Distributed") {
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
@@ -179,7 +191,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         } else if (flowOption === "Centralized") {
             this.getTrackedElement("noFlowOptionSelectedText").hidden = true;
             this.getTrackedElement("delineationTypeOptions").hidden = false;
-            
+
             this.getTrackedElement("delineateOptionTrace").hidden = false;
 
             this.getTrackedElement("delineationOptionAuto").hidden = true;

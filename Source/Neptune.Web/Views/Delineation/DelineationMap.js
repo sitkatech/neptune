@@ -662,10 +662,12 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function () {
 
     this.map.on('click',
         function (e) {
-            self.deselect();
-            self.removeBMPDelineationLayer();
-            self.removeUpstreamCatchmentsLayer();
-            self.selectedAssetControl.reset();
+            if (!window.freeze) {
+                self.deselect();
+                self.removeBMPDelineationLayer();
+                self.removeUpstreamCatchmentsLayer();
+                self.selectedAssetControl.reset();
+            }
         });
 };
 
@@ -674,10 +676,11 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 
     this.treatmentBMPLayer.on("click",
         function (e) {
-
-            self.setSelectedFeature(e.layer.feature);
-            self.selectedAssetControl.treatmentBMP(e.layer.feature);
-            self.retrieveAndShowBMPDelineation(e.layer.feature);
+            if (!window.freeze) {
+                self.setSelectedFeature(e.layer.feature);
+                self.selectedAssetControl.treatmentBMP(e.layer.feature);
+                self.retrieveAndShowBMPDelineation(e.layer.feature);
+            }
         });
 };
 

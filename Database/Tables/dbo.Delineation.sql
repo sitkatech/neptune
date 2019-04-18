@@ -6,6 +6,8 @@ CREATE TABLE [dbo].[Delineation](
 	[DelineationID] [int] IDENTITY(1,1) NOT NULL,
 	[DelineationGeometry] [geometry] NOT NULL,
 	[DelineationTypeID] [int] NOT NULL,
+	[IsVerified] [bit] NOT NULL,
+	[DateLastVerified] [datetime] NULL,
  CONSTRAINT [PK_Delineation_DelineationID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationID] ASC

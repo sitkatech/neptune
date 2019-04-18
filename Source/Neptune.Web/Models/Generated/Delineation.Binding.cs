@@ -30,34 +30,38 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationTypeID;
+            this.IsVerified = isVerified;
+            this.DateLastVerified = dateLastVerified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, int delineationTypeID) : this()
+        public Delineation(DbGeometry delineationGeometry, int delineationTypeID, bool isVerified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationTypeID;
+            this.IsVerified = isVerified;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
         /// </summary>
-        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType) : this()
+        public Delineation(DbGeometry delineationGeometry, DelineationType delineationType, bool isVerified) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.DelineationID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationType.DelineationTypeID;
+            this.IsVerified = isVerified;
         }
 
         /// <summary>
@@ -65,7 +69,7 @@ namespace Neptune.Web.Models
         /// </summary>
         public static Delineation CreateNewBlank(DelineationType delineationType)
         {
-            return new Delineation(default(DbGeometry), delineationType);
+            return new Delineation(default(DbGeometry), delineationType, default(bool));
         }
 
         /// <summary>
@@ -115,6 +119,8 @@ namespace Neptune.Web.Models
         public int DelineationID { get; set; }
         public DbGeometry DelineationGeometry { get; set; }
         public int DelineationTypeID { get; set; }
+        public bool IsVerified { get; set; }
+        public DateTime? DateLastVerified { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 

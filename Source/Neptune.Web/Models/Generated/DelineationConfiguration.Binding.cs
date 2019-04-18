@@ -18,6 +18,8 @@ namespace Neptune.Web.Models
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.DelineationGeometry).HasColumnName(@"DelineationGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.DelineationTypeID).HasColumnName(@"DelineationTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.IsVerified).HasColumnName(@"IsVerified").HasColumnType("bit").IsRequired();
+            Property(x => x.DateLastVerified).HasColumnName(@"DateLastVerified").HasColumnType("datetime").IsOptional();
 
             // Foreign keys
 

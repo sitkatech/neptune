@@ -100,5 +100,11 @@
     "inputFiles": [
       "ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.js"
     ]
+  },
+  {
+    "outputFileName": "Content/bootstrap-toggle/bootstrap-toggle.min.min.css",
+    "inputFiles": [
+      "Content/bootstrap-toggle/bootstrap-toggle.min.css"
+    ]
   }
 ]

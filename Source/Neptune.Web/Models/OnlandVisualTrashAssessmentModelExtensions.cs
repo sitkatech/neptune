@@ -74,8 +74,11 @@ namespace Neptune.Web.Models
 
             return onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatus ==
                    OnlandVisualTrashAssessmentStatus.Complete
-                ? @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment), string.Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName), 500, "Continue", "Cancel", new List<string> { "gridButton" }, null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
-    }
+                ? @ModalDialogFormHelper.ModalDialogFormLink("Return to Edit", GetEditStatusToAllowEditUrl(onlandVisualTrashAssessment),
+                    string.Format("Return to Edit On-land Visual Trash Assessment for {0}", onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName),
+                    500, "Continue", "Cancel", new List<string> { "gridButton" },
+                    null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
+        }
 
 
 

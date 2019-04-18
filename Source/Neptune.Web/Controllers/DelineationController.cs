@@ -71,7 +71,7 @@ namespace Neptune.Web.Controllers
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
-            feature.Properties.Add("Area", (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-");
+            feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
@@ -118,7 +118,7 @@ namespace Neptune.Web.Controllers
                     return Json(new {success = true});
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID,false);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;

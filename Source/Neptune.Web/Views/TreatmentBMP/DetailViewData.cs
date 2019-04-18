@@ -20,6 +20,7 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 
 using System.Data.Entity.Spatial;
+using LtInfo.Common;
 using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
@@ -58,6 +59,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string DelineationMapUrl { get; }
         public string ManageTreatmentBMPImagesUrl { get; }
         public string DelineationArea { get; }
+        public string DelineationStatus { get; }
 
         public readonly string VerifiedUnverifiedUrl;
 
@@ -95,6 +97,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
+            DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified"; 
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }

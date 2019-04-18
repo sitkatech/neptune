@@ -40,6 +40,8 @@ namespace Neptune.Web.Controllers
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ManagerDashboard);
             var fieldVisitCount = HttpRequestStorage.DatabaseEntities.FieldVisits.GetProvisionalFieldVisits(CurrentPerson).Count;
             var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
+            var bmpDelineationsCount = HttpRequestStorage.DatabaseEntities.Delineations
+                .GetProvisionalBMPDelineations(CurrentPerson).Count;
             var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
