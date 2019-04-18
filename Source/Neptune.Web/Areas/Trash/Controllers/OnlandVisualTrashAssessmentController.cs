@@ -466,6 +466,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             {
                 return ViewRefreshParcels(viewModel);
             }
+
             onlandVisualTrashAssessment.IsDraftGeometryManuallyRefined = false;
             onlandVisualTrashAssessment.DraftGeometry = null;
 

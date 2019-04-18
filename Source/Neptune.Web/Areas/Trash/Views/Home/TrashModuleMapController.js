@@ -14,6 +14,10 @@
         var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
 
+        if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
+            $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
+                $scope.AngularViewData.StormwaterJurisdictionCqlFilter + " AND ";
+        }
 
         $scope.ovtaLayers = {
             4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
