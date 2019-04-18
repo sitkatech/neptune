@@ -45,7 +45,7 @@ namespace Neptune.Web.Common
         public const string NotAuthorizedLoginText = "You do not have permission to do that, please log in.";
 
         protected static ReadOnlyCollection<MethodInfo> AllControllerActionMethodsProtected;
-        
+
         private const string ControllerSuffix = "Controller";
         private const string ViewsRootNamespace = "Views";
         public const string DefaultAction = "Index";
@@ -57,7 +57,7 @@ namespace Neptune.Web.Common
 
         protected override void OnException(ExceptionContext filterContext)
         {
-             var lastError = filterContext.Exception;
+            var lastError = filterContext.Exception;
             if (lastError is SitkaRecordNotAuthorizedException && IsCurrentUserAnonymous())
             {
                 var requestUrl = Request.Url != null ? Request.Url.ToString() : String.Empty;
@@ -79,7 +79,7 @@ namespace Neptune.Web.Common
         {
             SetMessage(StatusErrorIndex, errorMessage, tempData);
         }
-        
+
         protected void SetErrorForDisplay(string errorMessage)
         {
             SetMessage(StatusErrorIndex, errorMessage, TempData);
@@ -178,8 +178,9 @@ namespace Neptune.Web.Common
             }
             var methods = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
             // All Asp.net MVC controller actions need return type ActionResult
-            return methods.Where(m => m.ReturnType == typeof(ActionResult) || m.ReturnType.IsSubclassOf(typeof(ActionResult))).ToList();
-        }
+            return methods.Where(m => m.ReturnType == typeof(ActionResult) || m.ReturnType.IsSubclassOf(typeof(ActionResult)) || (m.ReturnType.IsGenericType && m.ReturnType.GetGenericTypeDefinition() == typeof(System.Threading.Tasks.Task<>))).ToList();
+
+    }
 
         public static List<MethodInfo> GetAllControllerActionMethods(Type controllerTypeInTheAssemblyToSearchForOtherControllers)
         {
@@ -266,7 +267,7 @@ namespace Neptune.Web.Common
 
             var typeName = namespaceParts.Pop();
             Check.Require(namespaceParts.Pop() == "Controllers", string.Format("Folder containing type {0} does not match expected name convention of \"Controllers\"", typeName));
-            
+
             var areaName = namespaceParts.Pop();
             var areasFolder = namespaceParts.Pop();
 
@@ -369,7 +370,7 @@ namespace Neptune.Web.Common
 
         private static void EnsureViewModelIsSet<TViewModel>(TViewModel viewModel)
         {
-// ReSharper disable CompareNonConstrainedGenericWithNull
+            // ReSharper disable CompareNonConstrainedGenericWithNull
             if (!viewModel.GetType().IsValueType && viewModel == null)
             {
                 throw new ArgumentNullException("viewModel");
@@ -471,5 +472,5 @@ namespace Neptune.Web.Common
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class AutomaticallyCallEntityFrameworkSaveChangesWhenModelValidAttribute : Attribute
-    {}
+    { }
 }
