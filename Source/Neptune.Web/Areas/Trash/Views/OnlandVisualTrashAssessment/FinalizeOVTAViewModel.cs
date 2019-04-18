@@ -130,6 +130,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 (z,w)=>z.OnlandVisualTrashAssessmentID == w.OnlandVisualTrashAssessmentID && z.PreliminarySourceIdentificationTypeID == w.PreliminarySourceIdentificationTypeID,
                 (z,w) => z.ExplanationIfTypeIsOther = w.ExplanationIfTypeIsOther
                 );
+
+            onlandVisualTrashAssessment.DraftAreaDescription = null;
+            onlandVisualTrashAssessment.DraftAreaName = null;
+            onlandVisualTrashAssessment.DraftGeometry = null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

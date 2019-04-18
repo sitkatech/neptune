@@ -55,19 +55,27 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
             ovta.StormwaterJurisdictionID = StormwaterJurisdiction?.StormwaterJurisdictionID;
 
-            var transectBackingAssessment = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas.Find(OnlandVisualTrashAssessmentAreaID).GetTransectBackingAssessment();
-            
-            // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
-            if (transectBackingAssessment != null)
+            if (OnlandVisualTrashAssessmentAreaID.HasValue)
             {
-                if (transectBackingAssessment.OnlandVisualTrashAssessmentID != ovta.OnlandVisualTrashAssessmentID)
+                var transectBackingAssessment = HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentAreas
+                    .Find(OnlandVisualTrashAssessmentAreaID).GetTransectBackingAssessment();
+
+                // ensure the area to which this assessment is assigned ends up with only one transect-backing assessment
+                if (transectBackingAssessment != null)
                 {
-                    ovta.IsTransectBackingAssessment = false;
+                    if (transectBackingAssessment.OnlandVisualTrashAssessmentID != ovta.OnlandVisualTrashAssessmentID)
+                    {
+                        ovta.IsTransectBackingAssessment = false;
+                    }
+                }
+                else
+                {
+                    ovta.IsTransectBackingAssessment = true;
                 }
             }
             else
             {
-                ovta.IsTransectBackingAssessment = true;
+                ovta.IsTransectBackingAssessment = false;
             }
 
             ovta.OnlandVisualTrashAssessmentAreaID = OnlandVisualTrashAssessmentAreaID;
