@@ -1,7 +1,7 @@
 Create Procedure dbo.pRebuildTrashGeneratingUnitTable
 as
 
-Delete from TrashGeneratingUnit
+Delete from dbo.TrashGeneratingUnit
 
 /* 0. Preprocess the land use blocks table with "sentinel" rows indicating where there is no priority land use block data. */
 DROP TABLE IF EXISTS #LandUseBlocksAdjusted
