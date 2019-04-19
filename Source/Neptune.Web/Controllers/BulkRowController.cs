@@ -95,10 +95,6 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
-
-
-
-
         [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
@@ -155,7 +151,7 @@ namespace Neptune.Web.Controllers
         [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
-        public ContentResult BulkRowBMPDelineations()
+        public ContentResult BulkRowBMPDelineation()
         {
             return new ContentResult();
         }
@@ -170,7 +166,7 @@ namespace Neptune.Web.Controllers
             {
                 bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations
                     .Where(x => viewModel.EntityIDList.Contains(x.DelineationID))
-                    .OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+                    .ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
             }
             ModelState.Clear();
             var viewData = new BulkRowBMPDelineationViewData(bmpDelineations, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkBMPDelineationAsVerifiedModal(null)), "BMP Delineation", "The BMP Delineations for the selected BMP Delineations will be marked as Verified until the delineation is updated or a Jurisdiction Manager later flags the data as provisional.");

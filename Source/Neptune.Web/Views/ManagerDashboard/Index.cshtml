@@ -108,7 +108,7 @@
                             <p>A list of all BMPs with unverified delineations are shown here. Click the View button to see delineation of an individual BMP and verify the record. You can also select multiple BMP records and verify them in bulk through grid.</p>
                             <div>
                                 @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(ViewDataTyped.ProvisionalBMPDelineationGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
-                                    .BuildUrlFromExpression(x => x.BulkRowBMPDelineations()), "Verify all Selected BMP Delineations", "Verify all Selected BMP Delineations")))
+                                    .BuildUrlFromExpression(x => x.BulkRowBMPDelineation(null)), "Verify all Selected BMP Delineations", "Verify all Selected BMP Delineations")))
                             </div>
                             @Html.DhtmlxGrid(ViewDataTyped.ProvisionalBMPDelineationsGridSpec, ViewDataTyped.ProvisionalBMPDelineationGridName, ViewDataTyped.ProvisionalBMPDelineationGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
                         }
