@@ -42,33 +42,20 @@ namespace Neptune.Web.Views.ManagerDashboard
                 DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.uncheckAll()",
                     "glyphicon-unchecked", "Unselect All")
             };
-
             AddCheckBoxColumn();
-
             Add("EntityID", x => x.DelineationID, 0);
-
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
                     new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30,
                 DhtmlxGridColumnFilterType.None);
-
-
             Add(string.Empty,x => x.GetDetailUrlForGrid(), 60, DhtmlxGridColumnFilterType.None);
-
-
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
-
             Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-
             Add("Delineation Area (to 1/100th acre)", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 50,
                 DhtmlxGridColumnFilterType.Text);
-
-            Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified?.ToString() ?? "Never Verified", 80,
-                DhtmlxGridColumnFilterType.None);
-
-
+            Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
+                DhtmlxGridColumnFormatType.Date);
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
                 x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

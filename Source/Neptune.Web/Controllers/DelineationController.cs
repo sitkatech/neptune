@@ -69,7 +69,7 @@ namespace Neptune.Web.Controllers
             if (treatmentBMP.Delineation == null)
             {
                 // should be 400 tbh
-                return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
+                return Content(JObject.FromObject(new { noDelineation = true }).ToString(Formatting.None));
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
@@ -92,9 +92,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
 
+            // todo: validate on the view model, not here
             if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
             {
-                return Json(new {error = "Invalid Delineation Type"});
+                // todo: really should return a 400 bad request
+                return Json(new { error = "Invalid Delineation Type" });
             }
 
             var delineationType = DelineationType.ToType(delineationTypeEnum);
@@ -106,6 +108,7 @@ namespace Neptune.Web.Controllers
                     treatmentBMPDelineation.DelineationGeometry = geom;
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
+                    treatmentBMPDelineation.IsVerified = false;
                 }
                 else
                 {
@@ -118,16 +121,42 @@ namespace Neptune.Web.Controllers
             {
                 if (geom == null)
                 {
-                    return Json(new {success = true});
+                    return Json(new { success = true });
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID,false);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
 
-            return Json(new {success = true});
+
+
+            return Json(new { success = true });
+        }
+
+        [HttpGet]
+        public ContentResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey, ChangeDelineationStatusViewModel viewModel)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            // todo: learn how to send a 400 or other error code with Json
+            if (!ModelState.IsValid)
+            {
+                return Json(new {success = false});
+            }
+
+            delineation.IsVerified = viewModel.IsVerified;
+            delineation.DateLastVerified = DateTime.Now;
+            delineation.VerifiedByPersonID = CurrentPerson.PersonID;
+
+            return Json(new { success = true });
         }
 
         [HttpGet]
@@ -161,6 +190,11 @@ namespace Neptune.Web.Controllers
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
+    }
+
+    public class ChangeDelineationStatusViewModel
+    {
+        public bool IsVerified { get; set; }
     }
 
     public class ForTreatmentBMPViewModel

@@ -71,14 +71,21 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
+            this.getTrackedElement("delineationStatus").style.display = "none";
         }
-
-
 
         this._selectedBmpInfo.classList.remove("hiddenControlElement");
         this._noAssetSelected.classList.add("hiddenControlElement");
 
-        $('input[type=checkbox][data-toggle=toggle]').bootstrapToggle({
+        $('#verifyDelineationButton').bootstrapToggle({
+        });
+
+        var self = this;
+
+        // hook up event handler on button
+        jQuery("#verifyDelineationButton").off("change");
+        jQuery("#verifyDelineationButton").change(function(e) {
+            self.changeDelineationStatus(jQuery(this).prop("checked"));
         });
     },
 
@@ -122,6 +129,18 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             return; //misplaced call
         }
         this._delineationButton.removeAttribute("disabled");
+    },
+
+    changeDelineationStatus(verified) {
+        window.delineationMap.changeDelineationStatus(verified);
+    },
+
+    flipVerifyButton(verified) {
+        if (!verified) {
+            jQuery(this.getTrackedElement("verifyDelineationButton")).data('bs.toggle').off(true);
+        } else {
+            jQuery(this.getTrackedElement("verifyDelineationButton")).data('bs.toggle').on(true);
+        }
     }
 });
 
