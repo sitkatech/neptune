@@ -19,25 +19,21 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Web;
-using LtInfo.Common;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.HtmlHelperExtensions;
 using LtInfo.Common.Views;
-using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
+using System.Collections.Generic;
 
 namespace Neptune.Web.Views.ManagerDashboard
 {
-    public class ProvisionalBMPDelineationsGridSpec : GridSpec<Models.FieldVisit>
+    public class ProvisionalBMPDelineationsGridSpec : GridSpec<Models.Delineation>
     {
         public ProvisionalBMPDelineationsGridSpec(Person currentPerson, string gridName)
         {
-            ObjectNameSingular = "Field Visit";
-            ObjectNamePlural = "Field Visits";
+            ObjectNameSingular = "Delineation";
+            ObjectNamePlural = "Delineations";
 
             ArbitraryHeaderHtml = new List<string>
             {
@@ -46,39 +42,33 @@ namespace Neptune.Web.Views.ManagerDashboard
                 DatabaseContextExtensions.GetCheckboxSelectingUrl($"Sitka.{gridName}.grid.uncheckAll()",
                     "glyphicon-unchecked", "Unselect All")
             };
+
             AddCheckBoxColumn();
-            Add("EntityID", x => x.FieldVisitID, 0);
+
+            Add("EntityID", x => x.DelineationID, 0);
+
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
-                    new FieldVisitDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30,
+                    new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30,
                 DhtmlxGridColumnFilterType.None);
 
-            Add(string.Empty,
-                x =>
-                {
-                    // do this first because if the field visit is verified, fieldvisiteditfeature will fail
-                    if (x.IsFieldVisitVerified || x.FieldVisitStatus == FieldVisitStatus.Complete)
-                    {
-                        return new HtmlString($"<a href={x.GetDetailUrl()} class='gridButton'>View</a>");
-                    }
 
-                    if (!new FieldVisitEditFeature().HasPermission(currentPerson, x).HasPermission)
-                    {
-                        // only reason we would get here is that the user can't manage field visits for this jurisdiction
-                        return new HtmlString("");
-                    }
+            Add(string.Empty,x => x.GetDetailUrlForGrid(), 60, DhtmlxGridColumnFilterType.None);
 
-                    return new HtmlString($"<a href={x.GetEditUrl()} class='gridButton'>Continue</a>");
-                }, 60,
-                DhtmlxGridColumnFilterType.None);
 
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
-            Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 100, DhtmlxGridColumnFilterType.Text);
-            Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,100, DhtmlxGridColumnFilterType.Text);
+
+            Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
+
+            Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
+
             Add("Delineation Area (to 1/100th acre)", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 50,
                 DhtmlxGridColumnFilterType.Text);
-            Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation.DateLastVerified.ToString() ?? "Never Verified", 100,
+
+            Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified?.ToString() ?? "Never Verified", 80,
                 DhtmlxGridColumnFilterType.None);
+
+
             Add(Models.FieldDefinition.Jurisdiction.ToGridHeaderString(),
                 x => x.TreatmentBMP.StormwaterJurisdiction.GetDisplayNameAsDetailUrl(), 140,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);

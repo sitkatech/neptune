@@ -30,13 +30,14 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified) : this()
+        public Delineation(int delineationID, DbGeometry delineationGeometry, int delineationTypeID, bool isVerified, DateTime? dateLastVerified, int? verifiedByPersonID) : this()
         {
             this.DelineationID = delineationID;
             this.DelineationGeometry = delineationGeometry;
             this.DelineationTypeID = delineationTypeID;
             this.IsVerified = isVerified;
             this.DateLastVerified = dateLastVerified;
+            this.VerifiedByPersonID = verifiedByPersonID;
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Neptune.Web.Models
         /// <returns></returns>
         public bool HasDependentObjects()
         {
-            return TreatmentBMPs.Any();
+            return (TreatmentBMP != null);
         }
 
         /// <summary>
@@ -121,11 +122,15 @@ namespace Neptune.Web.Models
         public int DelineationTypeID { get; set; }
         public bool IsVerified { get; set; }
         public DateTime? DateLastVerified { get; set; }
+        public int? VerifiedByPersonID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return DelineationID; } set { DelineationID = value; } }
 
         public virtual ICollection<TreatmentBMP> TreatmentBMPs { get; set; }
+        [NotMapped]
+        public TreatmentBMP TreatmentBMP { get { return TreatmentBMPs.SingleOrDefault(); } set { TreatmentBMPs = new List<TreatmentBMP>{value};} }
         public DelineationType DelineationType { get { return DelineationType.AllLookupDictionary[DelineationTypeID]; } }
+        public virtual Person VerifiedByPerson { get; set; }
 
         public static class FieldLengths
         {

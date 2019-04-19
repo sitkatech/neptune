@@ -26,9 +26,9 @@ namespace Neptune.Web.Models
 {
     public static partial class DatabaseContextExtensions
     {
-        public static List<FieldVisit> GetProvisionalBMPDelineations(this IQueryable<Delineation> delineations, Person currentPerson)
+        public static List<Delineation> GetProvisionalBMPDelineations(this IQueryable<Delineation> delineations, Person currentPerson)
         {
-            //return delineations.Where(x => x.IsVerified == false).ToList().Where(x => x.TreatmentBMPs.Where(y => y   TreatmentBMP.CanView(currentPerson)).ToList();
+            return delineations.Where(x => x.IsVerified == false).ToList().Where(x => x.TreatmentBMP.CanView(currentPerson)).ToList();
         }
     }
 }

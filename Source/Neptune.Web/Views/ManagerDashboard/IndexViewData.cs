@@ -1,6 +1,7 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
+using Neptune.Web.Security;
 
 
 namespace Neptune.Web.Views.ManagerDashboard
@@ -29,6 +30,7 @@ namespace Neptune.Web.Views.ManagerDashboard
         public string ProvisionalBMPDelineationGridUncheckAllUrl { get; }
         public int BMPDelineationsCount { get; }
         public string DelineationIndexUrl { get; }
+        public bool UserCanViewBMPDelineations { get; }
 
         public IndexViewData(Person currentPerson, Models.NeptunePage neptunePage, int fieldVisitCount, int treatmentBMPsCount, int bmpDelineationsCount)
             : base(currentPerson, neptunePage, NeptuneArea.OCStormwaterTools)
@@ -48,6 +50,8 @@ namespace Neptune.Web.Views.ManagerDashboard
             FieldVisitCount = fieldVisitCount;
             FieldVisitsIndexUrl = SitkaRoute<FieldVisitController>.BuildUrlFromExpression(c => c.Index());
 
+
+
             ProvisionalTreatmentBMPGridName = "assessmentsGrid";
             ProvisionalTreatmentBMPGridSpec = new ProvisionalTreatmentBMPGridSpec(currentPerson, ProvisionalTreatmentBMPGridName)
             {
@@ -62,18 +66,23 @@ namespace Neptune.Web.Views.ManagerDashboard
             TreatmentBMPsCount = treatmentBMPsCount;
             TreatmentBMPIndexUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(c => c.Index());
 
-            ProvisionalBMPDelineationGridName = "Provisional BMP Delineations";
+
+
+            ProvisionalBMPDelineationGridName = "ProvisionalBMPDelineationsGrid";
             ProvisionalBMPDelineationsGridSpec = new ProvisionalBMPDelineationsGridSpec(currentPerson, ProvisionalBMPDelineationGridName)
             {
                 ObjectNameSingular = "Provisional BMP Delineation Record",
                 ObjectNamePlural = "Provisional BMP Delineation Records",
                 SaveFiltersInCookie = true
             };
+
             ProvisionalBMPDelineationGridDataUrl = SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(x =>
-                x.ProvisionalBMPDelineationGridJsonData(ProvisionalBMPDelineationGridName));
+                x.ProvisionalBMPDelineationsGridJson(ProvisionalBMPDelineationGridName));
+
             ProvisionalBMPDelineationGridCheckAllUrl = $"Sitka.{ProvisionalBMPDelineationGridName}.grid.checkAll()";
             ProvisionalBMPDelineationGridUncheckAllUrl = $"Sitka.{ProvisionalBMPDelineationGridName}.gird.uncheckAll()";
             BMPDelineationsCount = bmpDelineationsCount;
+            UserCanViewBMPDelineations = new JurisdictionManageFeature().HasPermissionByPerson(CurrentPerson);
             //DelineationIndexUrl = SitkaRoute<DelineationController>.BuildUrlFromExpression(x => x.Index)
         }
     }

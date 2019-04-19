@@ -31,6 +31,8 @@ using System;
 using System.Data.Entity.Spatial;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
@@ -126,6 +128,38 @@ namespace Neptune.Web.Controllers
             }
 
             return Json(new {success = true});
+        }
+
+        [HttpGet]
+        [DelineationDeleteFeature]
+        public PartialViewResult Delete(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(delineation.DelineationID);
+            return ViewDeleteDelineation(delineation, viewModel);
+        }
+
+        [HttpPost]
+        [DelineationDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(DelineationPrimaryKey delineationPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteDelineation(delineation, viewModel);
+            }
+            delineation.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            SetMessageForDisplay("Successfully deleted the field visit.");
+            return new ModalDialogFormJsonResult(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
+        }
+
+        private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to delete the delineation '{delineation.DelineationID}' from '{delineation.TreatmentBMP.TreatmentBMPName}'?";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
         }
     }
 

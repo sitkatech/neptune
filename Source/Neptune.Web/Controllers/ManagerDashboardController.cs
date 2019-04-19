@@ -42,7 +42,7 @@ namespace Neptune.Web.Controllers
             var treatmentBMPsCount = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.GetProvisionalTreatmentBMPs(CurrentPerson).Count;
             var bmpDelineationsCount = HttpRequestStorage.DatabaseEntities.Delineations
                 .GetProvisionalBMPDelineations(CurrentPerson).Count;
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, fieldVisitCount, treatmentBMPsCount, bmpDelineationsCount);
             return RazorView<Index, IndexViewData>(viewData);
         }
 
@@ -62,6 +62,15 @@ namespace Neptune.Web.Controllers
             var gridSpec = new ProvisionalTreatmentBMPGridSpec(CurrentPerson, gridName);
             var treatmentBMPs = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Include(x=>x.TreatmentBMPBenchmarkAndThresholds).GetProvisionalTreatmentBMPs(CurrentPerson);
             return new GridJsonNetJObjectResult<TreatmentBMP>(treatmentBMPs, gridSpec);
+        }
+
+        [JurisdictionManageFeature]
+        public GridJsonNetJObjectResult<Delineation> ProvisionalBMPDelineationsGridJson(string gridName)
+        {
+            var gridSpec = new ProvisionalBMPDelineationsGridSpec(CurrentPerson , gridName);
+            var bmpDelineations =
+                HttpRequestStorage.DatabaseEntities.Delineations.GetProvisionalBMPDelineations(CurrentPerson);
+                return new GridJsonNetJObjectResult<Delineation>(bmpDelineations, gridSpec);
         }
     }
 }
