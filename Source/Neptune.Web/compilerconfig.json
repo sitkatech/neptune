@@ -62,5 +62,13 @@
   {
     "outputFile": "Views/Delineation/DelineationMap.min.js",
     "inputFile": "Views/Delineation/DelineationMap.js"
+  },
+  {
+    "outputFile": "Content/bootstrap-toggle/bootstrap-toggle.min.es5.js",
+    "inputFile": "Content/bootstrap-toggle/bootstrap-toggle.min.js"
+  },
+  {
+    "outputFile": "Content/bootstrap-toggle/bootstrap-toggle.es5.js",
+    "inputFile": "Content/bootstrap-toggle/bootstrap-toggle.js"
   }
 ]

@@ -31,6 +31,8 @@ using System;
 using System.Data.Entity.Spatial;
 using System.Web.Mvc;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.MvcResults;
+using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
@@ -67,11 +69,11 @@ namespace Neptune.Web.Controllers
             if (treatmentBMP.Delineation == null)
             {
                 // should be 400 tbh
-                return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
+                return Content(JObject.FromObject(new { noDelineation = true }).ToString(Formatting.None));
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
-            feature.Properties.Add("Area", (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-");
+            feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
             feature.Properties.Add("DelineationType", treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
@@ -90,9 +92,11 @@ namespace Neptune.Web.Controllers
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
 
+            // todo: validate on the view model, not here
             if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
             {
-                return Json(new {error = "Invalid Delineation Type"});
+                // todo: really should return a 400 bad request
+                return Json(new { error = "Invalid Delineation Type" });
             }
 
             var delineationType = DelineationType.ToType(delineationTypeEnum);
@@ -104,6 +108,7 @@ namespace Neptune.Web.Controllers
                     treatmentBMPDelineation.DelineationGeometry = geom;
                     treatmentBMPDelineation.DelineationTypeID =
                         delineationType.DelineationTypeID;
+                    treatmentBMPDelineation.IsVerified = false;
                 }
                 else
                 {
@@ -116,17 +121,80 @@ namespace Neptune.Web.Controllers
             {
                 if (geom == null)
                 {
-                    return Json(new {success = true});
+                    return Json(new { success = true });
                 }
 
-                var delineation = new Delineation(geom, delineationType.DelineationTypeID);
+                var delineation = new Delineation(geom, delineationType.DelineationTypeID, false);
                 HttpRequestStorage.DatabaseEntities.Delineations.Add(delineation);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
                 treatmentBMP.DelineationID = delineation.DelineationID;
             }
 
-            return Json(new {success = true});
+
+
+            return Json(new { success = true });
         }
+
+        [HttpGet]
+        public ContentResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey, ChangeDelineationStatusViewModel viewModel)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            // todo: learn how to send a 400 or other error code with Json
+            if (!ModelState.IsValid)
+            {
+                return Json(new {success = false});
+            }
+
+            delineation.IsVerified = viewModel.IsVerified;
+            delineation.DateLastVerified = DateTime.Now;
+            delineation.VerifiedByPersonID = CurrentPerson.PersonID;
+
+            return Json(new { success = true });
+        }
+
+        [HttpGet]
+        [DelineationDeleteFeature]
+        public PartialViewResult Delete(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            var viewModel = new ConfirmDialogFormViewModel(delineation.DelineationID);
+            return ViewDeleteDelineation(delineation, viewModel);
+        }
+
+        [HttpPost]
+        [DelineationDeleteFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult Delete(DelineationPrimaryKey delineationPrimaryKey, ConfirmDialogFormViewModel viewModel)
+        {
+            var delineation = delineationPrimaryKey.EntityObject;
+            if (!ModelState.IsValid)
+            {
+                return ViewDeleteDelineation(delineation, viewModel);
+            }
+            delineation.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            SetMessageForDisplay("Successfully deleted the field visit.");
+            return new ModalDialogFormJsonResult(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
+        }
+
+        private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
+        {
+            var confirmMessage = $"Are you sure you want to delete the delineation '{delineation.DelineationID}' from '{delineation.TreatmentBMP.TreatmentBMPName}'?";
+
+            var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+    }
+
+    public class ChangeDelineationStatusViewModel
+    {
+        public bool IsVerified { get; set; }
     }
 
     public class ForTreatmentBMPViewModel

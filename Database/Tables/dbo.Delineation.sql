@@ -6,6 +6,9 @@ CREATE TABLE [dbo].[Delineation](
 	[DelineationID] [int] IDENTITY(1,1) NOT NULL,
 	[DelineationGeometry] [geometry] NOT NULL,
 	[DelineationTypeID] [int] NOT NULL,
+	[IsVerified] [bit] NOT NULL,
+	[DateLastVerified] [datetime] NULL,
+	[VerifiedByPersonID] [int] NULL,
  CONSTRAINT [PK_Delineation_DelineationID] PRIMARY KEY CLUSTERED 
 (
 	[DelineationID] ASC
@@ -17,6 +20,11 @@ ALTER TABLE [dbo].[Delineation]  WITH CHECK ADD  CONSTRAINT [FK_Delineation_Deli
 REFERENCES [dbo].[DelineationType] ([DelineationTypeID])
 GO
 ALTER TABLE [dbo].[Delineation] CHECK CONSTRAINT [FK_Delineation_DelineationType_DelineationTypeID]
+GO
+ALTER TABLE [dbo].[Delineation]  WITH CHECK ADD  CONSTRAINT [FK_Delineation_Person_VerifiedByPersonID_PersonID] FOREIGN KEY([VerifiedByPersonID])
+REFERENCES [dbo].[Person] ([PersonID])
+GO
+ALTER TABLE [dbo].[Delineation] CHECK CONSTRAINT [FK_Delineation_Person_VerifiedByPersonID_PersonID]
 GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON

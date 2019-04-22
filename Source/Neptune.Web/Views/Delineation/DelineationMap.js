@@ -228,6 +228,10 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         }
         this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     } else {
+        
+        // this is where to set the UI back to showing "Provisional" instead of "Verified"
+        this.selectedAssetControl.flipVerifyButton(false);
+        // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
     }
 
@@ -632,6 +636,25 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     return promise;
 };
 
+NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
+    var delineationID = this.lastSelected.toGeoJSON().features[0].properties.DelineationID;
+
+    var url = "/Delineation/ChangeDelineationStatus/" + delineationID;
+
+    jQuery.ajax({
+        url: url,
+        method: "POST",
+        data: {
+            IsVerified: verified
+        }
+    }).then(function(data) {
+        if (!success) {
+            window.alert(
+                "There was an error changing the delineation status. Please try again. If the issue persists, please contact Support.");
+        }
+    });
+}
+
 NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatmentBMPID) {
     if (!treatmentBMPID) {
         return; //misplaced call
@@ -663,10 +686,12 @@ NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function () {
 
     this.map.on('click',
         function (e) {
-            self.deselect();
-            self.removeBMPDelineationLayer();
-            self.removeUpstreamCatchmentsLayer();
-            self.selectedAssetControl.reset();
+            if (!window.freeze) {
+                self.deselect();
+                self.removeBMPDelineationLayer();
+                self.removeUpstreamCatchmentsLayer();
+                self.selectedAssetControl.reset();
+            }
         });
 };
 
@@ -675,10 +700,11 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
 
     this.treatmentBMPLayer.on("click",
         function (e) {
-
-            self.setSelectedFeature(e.layer.feature);
-            self.selectedAssetControl.treatmentBMP(e.layer.feature);
-            self.retrieveAndShowBMPDelineation(e.layer.feature);
+            if (!window.freeze) {
+                self.setSelectedFeature(e.layer.feature);
+                self.selectedAssetControl.treatmentBMP(e.layer.feature);
+                self.retrieveAndShowBMPDelineation(e.layer.feature);
+            }
         });
 };
 

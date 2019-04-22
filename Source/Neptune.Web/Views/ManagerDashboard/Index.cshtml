@@ -25,6 +25,7 @@
 @using LtInfo.Common.ModalDialog
 @using Neptune.Web.Common
 @using Neptune.Web.Controllers
+@using Neptune.Web.Models
 
 @inherits Neptune.Web.Views.ManagerDashboard.Index
 @section JavascriptAndStylesContent
@@ -89,3 +90,35 @@
         </div>
     </div>
 </div>
+@if (ViewDataTyped.UserCanViewBMPDelineations)
+{
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="panel panelNeptune">
+                <div class="panel-heading panelTitle">
+                    Provisional BMP Delineations
+                </div>
+                <div class="panel-body">
+
+                    @using (Html.BeginForm())
+                    {
+                        if (ViewDataTyped.BMPDelineationsCount > 0)
+
+                        {
+                            <p>A list of all BMPs with unverified delineations are shown here. Click the View button to see delineation of an individual BMP and verify the record. You can also select multiple BMP records and verify them in bulk through grid.</p>
+                            <div>
+                                @Html.Raw(DhtmlxGridHtmlHelpers.CreateVerifySelectedModalUrlHtml(ViewDataTyped.ProvisionalBMPDelineationGridName, new BulkTagModalDialogForm(SitkaRoute<BulkRowController>
+                                    .BuildUrlFromExpression(x => x.BulkRowBMPDelineation(null)), "Verify all Selected Delineations", "Verify all Selected Delineations")))
+                            </div>
+                            @Html.DhtmlxGrid(ViewDataTyped.ProvisionalBMPDelineationsGridSpec, ViewDataTyped.ProvisionalBMPDelineationGridName, ViewDataTyped.ProvisionalBMPDelineationGridDataUrl, "height:300px", DhtmlxGridResizeType.VerticalResizableHorizontalAutoFit)
+                        }
+                        else
+                        {
+                            <p> All provisional BMP Delineation Records have been reviewed and verified. @*<a href="@ViewDataTyped.TreatmentBMPIndexUrl">View all BMP Delineation Records</a>*@</p>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
