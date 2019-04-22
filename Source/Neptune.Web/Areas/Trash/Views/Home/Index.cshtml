@@ -133,10 +133,10 @@
                 <li>
                     <a href="#areaResults" aria-controls="areaResultsOverview" role="tab" data-toggle="tab" id="areaResultsTab">Area-Based Results</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="#loadResults" aria-controls="loadResultsOverview" role="tab" data-toggle="tab" id="loadResultsTab">Load-Based Results</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="#ovtaResults" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">OVTA Results</a>
                 </li>
             </ul>
@@ -149,7 +149,7 @@
                 <div role="tabpanel" class="tab-pane" id="areaResults">
                     <p class="systemText">Content under development.</p>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="loadResults">
+                <div role="tabpanel" class="tab-pane " id="loadResults">
                     <div class="row">
                         <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
                             <div id="loadBasedMapContainer">
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane " id="ovtaResults">
+                <div role="tabpanel" class="tab-pane active" id="ovtaResults">
                     <div class="row">
                         <div class="col-sm-12 col-md-2">
                             <h4>Selected Asset</h4>
@@ -276,6 +276,10 @@
 
     jQuery("#loadResultsTab").on("shown.bs.tab", function(){
         window.loadBasedMap.map.invalidateSize(false);
+        if (!window.loadBasedMapExtentSet) {
+            window.loadBasedMapExtentSet = true;
+            window.loadBasedMap.setMapBounds(loadBasedMapInitJson);
+        }
     });
 </script>
 
