@@ -13,7 +13,10 @@ namespace Neptune.Web.Areas.Trash.Views.Home
     public class IndexViewData : TrashModuleViewData
     {
         public ViewDataForAngularClass ViewDataForAngular { get; }
-        public MapInitJson MapInitJson { get; }
+        public MapInitJson OVTABasedMapInitJson { get; }
+        public MapInitJson AreaBasedMapInitJson { get; }
+        public MapInitJson LoadBasedMapInitJson { get; }
+
         public string AllOVTAsUrl { get; }
         public string FindBMPUrl { get; }
         public string BeginOVTAUrl { get; }
@@ -22,15 +25,17 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string StormwaterJurisdictionCQLFilter { get; }
         public string RefreshTguUrl { get; }
 
-
-        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson mapInitJson,
+        public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
             List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
         {
-            MapInitJson = mapInitJson;
+            OVTABasedMapInitJson = ovtaBasedMapInitJson;
+            AreaBasedMapInitJson = areaBasedMapInitJson;
+            LoadBasedMapInitJson = loadBasedMapInitJson;
+
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
 
-            ViewDataForAngular = new ViewDataForAngularClass(mapInitJson,
+            ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson,
                 treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);
             EntityName = "Trash Module";
             PageTitle = "Welcome";

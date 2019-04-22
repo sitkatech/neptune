@@ -133,10 +133,10 @@
                 <li>
                     <a href="#areaResults" aria-controls="areaResultsOverview" role="tab" data-toggle="tab" id="areaResultsTab">Area-Based Results</a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="#loadResults" aria-controls="loadResultsOverview" role="tab" data-toggle="tab" id="loadResultsTab">Load-Based Results</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="#ovtaResults" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">OVTA Results</a>
                 </li>
             </ul>
@@ -149,10 +149,17 @@
                 <div role="tabpanel" class="tab-pane" id="areaResults">
                     <p class="systemText">Content under development.</p>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="loadResults">
-                    <p class="systemText">Content under development.</p>
+                <div role="tabpanel" class="tab-pane active" id="loadResults">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+                            <div id="loadBasedMapContainer">
+                                <div id="@ViewDataTyped.LoadBasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="ovtaResults">
+                <div role="tabpanel" class="tab-pane " id="ovtaResults">
                     <div class="row">
                         <div class="col-sm-12 col-md-2">
                             <h4>Selected Asset</h4>
@@ -161,8 +168,8 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
-                            <div id="mapContainer">
-                                <div id="@ViewDataTyped.MapInitJson.MapDivID" style="height: 650px; margin: 0">
+                            <div id="ovtaBasedMapContainer">
+                                <div id="@ViewDataTyped.OVTABasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
                             </div>
                         </div>
@@ -171,6 +178,7 @@
             </div>
         </div>
     </div>
+
     <div id="treatmentBMPLegend" style="display: none;">
         <label>
             <div>
@@ -253,6 +261,22 @@
         jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
         jQuery("#parcelLegend").appendTo(".leaflet-control-layers-list").toggle();
     })
+</script>
+
+@*load-based map*@
+<script>
+    jQuery(document).ready(function() {
+        window.loadBasedMapInitJson =
+            @Html.Raw(JObject.FromObject(ViewDataTyped.LoadBasedMapInitJson).ToString(Formatting.None));
+        window.loadBasedMap =
+            new NeptuneMaps.GeoServerMap(window.loadBasedMapInitJson,
+                "Terrain",
+                "@ViewDataTyped.ViewDataForAngular.GeoServerUrl");
+    });
+
+    jQuery("#loadResultsTab").on("shown.bs.tab", function(){
+        window.loadBasedMap.map.invalidateSize(false);
+    });
 </script>
 
 

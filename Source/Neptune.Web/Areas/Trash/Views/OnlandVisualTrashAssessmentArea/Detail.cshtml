@@ -94,6 +94,7 @@
     var observationsLayer;
     jQuery(function() {
         var mapInitJson = @Html.Raw(JObject.FromObject(ViewDataTyped.MapInitJson).ToString(Formatting.None));
+        window.mapInitJson = mapInitJson;
         summaryMap = new NeptuneMaps.GeoServerMap(mapInitJson, "Terrain", "@ViewDataTyped.GeoServerUrl");
         var assessmentAreaLayer = L.geoJson(mapInitJson.AssessmentAreaLayerGeoJson.GeoJsonFeatureCollection, {
             style: function (feature) {
@@ -107,6 +108,8 @@
                 };
             }
         });
+
+        window.summaryMap = summaryMap;
 
         assessmentAreaLayer.addTo(summaryMap.map);
         summaryMap.layerControl.addOverlay(assessmentAreaLayer, "<span><img src='/Content/img/legendImages/workflowAssessmentArea.png' height='12px' /> Assessment Area</span>");

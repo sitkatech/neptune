@@ -22,15 +22,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var treatmentBmps = CurrentPerson.GetTreatmentBmpsPersonCanManage();
             var treatmentBMPLayerGeoJson = TrashModuleMapInitJson.MakeTreatmentBMPLayerGeoJsonForTrashMap(treatmentBmps, false);
 
-            // don't even think about touching the actual parcel tabel, unless you want to materialize half a million big geometry bois
             var parcels = HttpRequestStorage.DatabaseEntities.WaterQualityManagementPlanParcels.Select(x => x.Parcel)
                 .AsEnumerable().DistinctBy(x => x.ParcelID).ToList();
             var parcelLayerGeoJson = TrashModuleMapInitJson.MakeParcelLayerGeoJsonForTrashMap(parcels, false);
 
-            var mapInitJson = new TrashModuleMapInitJson("StormwaterIndexMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, CurrentPerson.GetBoundingBox());
+            var boundingBox = CurrentPerson.GetBoundingBox();
+            var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox);
+            var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox);
+            var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox);
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
-            var viewData = new IndexViewData(CurrentPerson, neptunePage, mapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels);
+            var viewData = new IndexViewData(CurrentPerson, neptunePage, ovtaBasedMapInitJson, areaBasedMapInitJson,
+                loadBasedMapInitJson, treatmentBmps, TrashCaptureStatusType.All, parcels);
 
             return RazorView<Index, IndexViewData>(viewData);
         }
