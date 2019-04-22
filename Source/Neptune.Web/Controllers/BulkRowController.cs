@@ -66,7 +66,34 @@ namespace Neptune.Web.Controllers
             return new ModalDialogFormJsonResult();
         }
 
+        [CrossAreaRoute]
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult MarkBMPDelineationAsVerifiedModal()
+        {
+            return new ContentResult();
+        }
 
+        [CrossAreaRoute]
+        [HttpPost]
+        [JurisdictionManageFeature]
+        [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
+        public ActionResult MarkBMPDelineationAsVerifiedModal(BulkRowTreatmentBMPViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new ModalDialogFormJsonResult();
+            }
+
+            var bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations.Where(x => viewModel.EntityIDList.Contains(x.DelineationID)).ToList();
+            bmpDelineations.ForEach(x => x.MarkAsVerified(CurrentPerson));
+
+            var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
+
+            SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
+
+            return new ModalDialogFormJsonResult();
+        }
 
         [CrossAreaRoute]
         [HttpGet]
@@ -119,6 +146,32 @@ namespace Neptune.Web.Controllers
             ModelState.Clear(); // we intentionally want to clear any error messages here since this post route is returning a view
             var viewData = new BulkRowTreatmentBMPViewData(treatmentBMPs, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkTreatmentBMPAsVerifiedModal(null)), "Treatment BMP", "The BMP inventory for the selected BMPs will be marked as Verified until the inventory is updated or a Jurisdiction Manager later flags the data as provisional.");
             return RazorPartialView<BulkRowTreatmentBMP, BulkRowTreatmentBMPViewData, BulkRowTreatmentBMPViewModel>(viewData, viewModel);
+        }
+
+        [CrossAreaRoute]
+        [HttpGet]
+        [JurisdictionManageFeature]
+        public ContentResult BulkRowBMPDelineation()
+        {
+            return new ContentResult();
+        }
+
+        [CrossAreaRoute]
+        [HttpPost]
+        [JurisdictionManageFeature]
+        public PartialViewResult BulkRowBMPDelineation(BulkRowBMPDelineationViewModel viewModel)
+        {
+            var bmpDelineations = new List<Delineation>();
+            if (viewModel.EntityIDList != null)
+            {
+                bmpDelineations = HttpRequestStorage.DatabaseEntities.Delineations
+                    .Where(x => viewModel.EntityIDList.Contains(x.DelineationID))
+                    .ToList().OrderBy(x => x.TreatmentBMP.TreatmentBMPName).ToList();
+            }
+            ModelState.Clear();
+            var viewData = new BulkRowBMPDelineationViewData(bmpDelineations, SitkaRoute<BulkRowController>.BuildUrlFromExpression(x => x.MarkBMPDelineationAsVerifiedModal(null)), "BMP Delineation", "The BMP Delineations for the selected BMP Delineations will be marked as Verified until the delineation is updated or a Jurisdiction Manager later flags the data as provisional.");
+            return RazorPartialView<BulkRowBMPDelineation, BulkRowBMPDelineationViewData, BulkRowBMPDelineationViewModel
+            >(viewData, viewModel);
         }
 
 

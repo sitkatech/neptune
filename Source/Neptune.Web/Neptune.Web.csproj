@@ -401,6 +401,8 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\DelineationModelExtensions.cs" />
+    <Compile Include="Models\Delineations.DatabaseContextExtensions.cs" />
     <Compile Include="Common\NeptuneGeometryUtilities.cs" />
     <Compile Include="Common\TreatmentBMPCsvParserHelper.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasics.cs" />
@@ -413,6 +415,7 @@
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ScoreDescriptions.cs" />
     <Compile Include="Models\OnlandVisualTrashAssessmentPreliminarySourceIdentificationType.cs" />
     <Compile Include="Models\PreliminarySourceIdentificationType.cs" />
+    <Compile Include="Security\DelineationDeleteFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaDeleteFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentDeleteFeature.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentEditStausFeature.cs" />
@@ -437,6 +440,7 @@
     <Compile Include="Models\OnlandVisualTrashAssessmentScore.cs" />
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaViewFeature.cs" />
     <Compile Include="Security\TreatmentBMPAssessmentPhotoManageFeature.cs" />
+    <Compile Include="Views\ManagerDashboard\ProvisionalBMPDelineationsGridSpec.cs" />
     <Compile Include="Views\NetworkCatchment\Index.cs" />
     <Compile Include="Views\NetworkCatchment\IndexViewData.cs" />
     <Compile Include="Controllers\NetworkCatchmentController.cs" />
@@ -497,6 +501,9 @@
     <Compile Include="Views\Shared\NeptuneNavBarViewData.cs" />
     <Compile Include="Views\Shared\NeptuneSiteExplorerViewData.cs" />
     <Compile Include="Views\Shared\NeptuneSiteExplorer.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowBMPDelineationViewData.cs" />
+    <Compile Include="Views\Shared\ProjectControls\BulkRowBMPDelineationViewModel.cs" />
     <Compile Include="Views\TreatmentBMP\FindABMPViewModel.cs" />
     <Compile Include="Areas\Modeling\Controllers\HomeController.cs" />
     <Compile Include="Areas\Modeling\Views\Home\Index.cs" />
@@ -908,6 +915,10 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js" />
     <Content Include="Content\img\legendImages\delineationCentralized.PNG" />
     <Content Include="Content\img\legendImages\delineationDistributed.PNG" />
     <Content Include="Content\img\legendImages\Full.png" />
@@ -1322,6 +1333,7 @@
     <Content Include="Content\Bootstrap\bootstrap-3.4.1\less\utilities.less" />
     <Content Include="Content\Bootstrap\bootstrap-3.4.1\less\variables.less" />
     <Content Include="Content\Bootstrap\bootstrap-3.4.1\less\wells.less" />
+    <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js.map" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />
@@ -1697,6 +1709,7 @@
     <Content Include="Views\Delineation\DelineationMapTemplates.cshtml" />
     <Content Include="Views\Help\BulkUploadRequest.cshtml" />
     <Content Include="Views\TreatmentBMP\UploadTreatmentBMPs.cshtml" />
+    <Content Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

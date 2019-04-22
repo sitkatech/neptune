@@ -43,14 +43,17 @@
             font-size: 75%;
             margin-bottom: 0;
         }
+
         .unverify-inventory-btn {
             font-size: 11px;
             margin: 0 5px 0 0;
             text-align: right;
         }
+
         .treatmentBMPLocationLegend .glyphicon-stop {
             margin-right: 5px;
         }
+
         #legend {
             padding: 10px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
@@ -61,45 +64,45 @@
 @section RightOfPageTitle{
     @if (ViewDataTyped.CurrentPersonCanManage)
     {
-    <div class="pull-right">
-        @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
-        {
-            <div style="display:inline-block">
-                <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
-                <span style="margin-right: 5px">Inventory has been verified</span>
-                
-                @if (ViewDataTyped.CanManageStormwaterJurisdiction)
-                {
-                    @ModalDialogFormHelper.ModalDialogFormLink("Mark BMP Record as Provisional", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Provisional?", 400, "Continue", "Cancel", new List<string> { "help-block", "unverify-inventory-btn" }, null, null)
-                }
+        <div class="pull-right">
+            @if (ViewDataTyped.TreatmentBMP.InventoryIsVerified)
+            {
+                <div style="display:inline-block">
+                    <span class="helpicon glyphicon glyphicon-ok helpiconGridBlue" style="cursor: default;"></span>
+                    <span style="margin-right: 5px">Inventory has been verified</span>
+
+                    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Mark BMP Record as Provisional", ViewDataTyped.VerifiedUnverifiedUrl, "Mark BMP Record as Provisional?", 400, "Continue", "Cancel", new List<string> { "help-block", "unverify-inventory-btn" }, null, null)
+                    }
+                </div>
+            }
+            else
+            {
+                <div style="display:inline-block">
+                    <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
+                    <span style="margin-right: 5px">Inventory has not been verified</span>
+
+                    @if (ViewDataTyped.CanManageStormwaterJurisdiction)
+                    {
+                        @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
+                    }
+                </div>
+            }
+
+
+
+
+
+            <div style="display: inline-block; vertical-align: top;">
+
+                @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
             </div>
-        }
-        else
-        {
-            <div style="display:inline-block">
-                <span class="helpicon glyphicon glyphicon-warning-sign helpiconGridBlue" style="cursor: default;"></span>
-                <span style="margin-right: 5px">Inventory has not been verified</span>
-
-                @if (ViewDataTyped.CanManageStormwaterJurisdiction)
-                {
-                    @ModalDialogFormHelper.ModalDialogFormLink("Verify Inventory", ViewDataTyped.VerifiedUnverifiedUrl, "Verify Inventory?", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune", "headerButtonText", "inactivateUserButton" }, null, null)
-                }
-            </div>
-        }
-
-
-
-        
-        
-        <div style="display: inline-block; vertical-align: top;">
-
-            @ModalDialogFormHelper.ModalDialogFormLink("Begin Field Visit", ViewDataTyped.NewFieldVisitUrl, "Begin Field Visit", 400, "Continue", "Cancel", new List<string> { "btn", "btn-neptune" }, null, null)
         </div>
-    </div>
     }
 }
 
-                    <div class="row">
+<div class="row">
     <div class="col-xs-12 col-sm-6">
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
@@ -186,7 +189,7 @@
                         @ViewDataTyped.TreatmentBMP.RequiredPostStormFieldVisitsPerYear.ToString()
                     </div>
                 </div>
-                <hr/>
+                <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">Notes</label>
                     <div class="col-sm-7">@ViewDataTyped.TreatmentBMP.Notes</div>
@@ -334,10 +337,11 @@
                     <div class="col-xs-3 text-center">
                         @if (ViewDataTyped.CanEditStormwaterJurisdiction)
                         {
-                        <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Edit</a>
+                            <a href="@ViewDataTyped.DelineationMapUrl" class="btn btn-sm btn-neptune">Edit</a>
                         }
                     </div>
-                </div><div class="row">
+                </div>
+                <div class="row">
                     <div class="col-xs-5 control-label text-center">
                         <p style="margin-top: 8px;"><label>Delineation Area (ac)</label></p>
                     </div>
@@ -345,6 +349,17 @@
                         <p style="margin-top: 8px;">@ViewDataTyped.DelineationArea</p>
                     </div>
                 </div>
+                @if (ViewDataTyped.TreatmentBMP.Delineation != null)
+                {
+                    <div class="row">
+                        <div class="col-xs-5 control-label text-center">
+                            <p style="margin-top: 8px;"><label>Delination Status</label></p>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            @ViewDataTyped.DelineationStatus
+                        </div>
+                    </div>
+                }
             </div>
 
         </div>
@@ -565,7 +580,7 @@
             }
         });
         map.map.addControl(legend);
-        
+
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery(".legend-container").append( jQuery("#legend") );
         jQuery("#legend").css("display", "");

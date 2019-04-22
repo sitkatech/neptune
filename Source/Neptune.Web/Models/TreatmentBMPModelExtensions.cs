@@ -92,7 +92,7 @@ namespace Neptune.Web.Models
 
         public static HtmlString GetDisplayNameAsUrl(this TreatmentBMP treatmentBMP)
         {
-            return treatmentBMP == null ? new HtmlString(string.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
+            return treatmentBMP == null ? new HtmlString(String.Empty) : UrlTemplate.MakeHrefString(DetailUrlTemplate.ParameterReplace(treatmentBMP.TreatmentBMPID), treatmentBMP.TreatmentBMPName);
         }
 
         public static FeatureCollection ToGeoJsonFeatureCollection(this IEnumerable<TreatmentBMP> treatmentBMPs)
@@ -227,6 +227,12 @@ namespace Neptune.Web.Models
                 x.RequiredFieldVisitsPerYear);
             feature.Properties.Add("Required_Post_Storm_Visits_Per_Year",
                 x.RequiredPostStormFieldVisitsPerYear);
+        }
+
+        public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
+        {
+            //todo: move the sqm - ac conversion factor to a const
+            return (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
         }
     }
 }

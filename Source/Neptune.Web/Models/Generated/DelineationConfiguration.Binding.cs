@@ -18,9 +18,12 @@ namespace Neptune.Web.Models
             Property(x => x.DelineationID).HasColumnName(@"DelineationID").HasColumnType("int").IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.DelineationGeometry).HasColumnName(@"DelineationGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.DelineationTypeID).HasColumnName(@"DelineationTypeID").HasColumnType("int").IsRequired();
+            Property(x => x.IsVerified).HasColumnName(@"IsVerified").HasColumnType("bit").IsRequired();
+            Property(x => x.DateLastVerified).HasColumnName(@"DateLastVerified").HasColumnType("datetime").IsOptional();
+            Property(x => x.VerifiedByPersonID).HasColumnName(@"VerifiedByPersonID").HasColumnType("int").IsOptional();
 
             // Foreign keys
-
+            HasOptional(a => a.VerifiedByPerson).WithMany(b => b.DelineationsWhereYouAreTheVerifiedByPerson).HasForeignKey(c => c.VerifiedByPersonID).WillCascadeOnDelete(false); // FK_Delineation_Person_VerifiedByPersonID_PersonID
         }
     }
 }
