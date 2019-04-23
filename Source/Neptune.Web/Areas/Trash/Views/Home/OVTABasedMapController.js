@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("TreatmentBMPMapController", function($scope, angularModelAndViewData) {
+    .controller("OVTABasedMapController", function($scope, angularModelAndViewData) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];

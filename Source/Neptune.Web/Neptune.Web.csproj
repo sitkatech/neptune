@@ -931,7 +931,7 @@
     <Content Include="Content\img\legendImages\ovtaSalmon.png" />
     <Content Include="Content\img\legendImages\ovtaYellow.png" />
     <Content Include="Areas\Trash\ScriptsCustom\Maps\NeptuneMaps.TrashModuleMap.js" />
-    <Content Include="Areas\Trash\Views\Home\TrashModuleMapController.js" />
+    <Content Include="Areas\Trash\Views\Home\OVTABasedMapController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\AddOrRemoveParcelsController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\ObservationsMapController.js" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\placeholder_camera.jpg" />
