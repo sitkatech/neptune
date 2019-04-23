@@ -915,6 +915,7 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedMapController.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />

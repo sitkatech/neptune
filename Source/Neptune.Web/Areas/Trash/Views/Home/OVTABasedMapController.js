@@ -1,6 +1,5 @@
 ﻿angular.module("NeptuneApp")
     .controller("OVTABasedMapController", function ($scope, angularModelAndViewData) {
-        debugger;
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
@@ -46,9 +45,9 @@
                 {
                     cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
                 })
-    };
+        };
 
-        $scope.selectedOVTAScores = function() {
+        $scope.selectedOVTAScores = function () {
             var scores = [];
             for (var i = 0; i <= 5; i++) {
                 if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
@@ -58,18 +57,25 @@
             return scores;
         };
 
-        $scope.buildSelectOVTAAreaParameters = function(latlng) {
-            var scores = $scope.selectedOVTAScores();
-            var scoresClause = "Score in (" + scores.join(',') + ")";
+        $scope.buildSelectOVTAAreaParameters = function (latlng) {
 
-            var intersectionClause = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + latlng.lat + " " + latlng.lng + "))";
-
-            return scoresClause + " and " + intersectionClause;
         };
 
-        $scope.neptuneMap.map.on("click", function(event) {
+        $scope.neptuneMap.map.on("click", function (event) {
+            var scores = $scope.selectedOVTAScores();
+
+            if (scores.length === 0) {
+                return;
+            }
+
+            var scoresClause = "Score in (" + scores.join(',') + ")";
+
+            var intersectionClause = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + event.latlng.lat + " " + event.latlng.lng + "))";
+
+            var cql_filter = scoresClause + " and " + intersectionClause;
+
             var customParams = {
-                "cql_filter": $scope.buildSelectOVTAAreaParameters(event.latlng),
+                "cql_filter": cql_filter,
                 "typeName": "OnlandVisualTrashAssessmentAreas"
             };
 
@@ -115,18 +121,18 @@
                     $scope.loadSummaryPanel(url);
                 });
         };
-        
+
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
 
             $scope.treatmentBMPLayers = {};
-            
+
 
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-                function(tcs) {
+                function (tcs) {
 
-                        var layer = L.geoJson(
-                            $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+                    var layer = L.geoJson(
+                        $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
                         {
                             filter: function (feature, layer) {
                                 return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID;
@@ -158,12 +164,12 @@
                 });
 
             $scope.treatmentBMPLayerGroup = L.layerGroup(Object.values($scope.treatmentBMPLayers));
-            
+
             $scope.rebuildMarkerClusterGroup();
         };
 
         $scope.rebuildMarkerClusterGroup = function () {
-            
+
             if ($scope.markerClusterGroup) {
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
             }
@@ -186,7 +192,7 @@
         $scope.initializeParcelLayer = function () {
             if ($scope.parcelLayerGeoJson) {
                 $scope.neptuneMap.map.removeLayer($scope.parcelLayerGeoJson);
-            } 
+            }
             $scope.parcelLayerGeoJson = L.geoJson(
                 $scope.AngularViewData.MapInitJson.ParcelLayerGeoJson.GeoJsonFeatureCollection,
                 {
@@ -198,7 +204,7 @@
                         return {
                             color: feature.properties.FeatureColor,
                             weight: .5,
-                            fill: true, 
+                            fill: true,
                             fillOpacity: .35
                         };
                     }
@@ -221,20 +227,20 @@
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
-        $scope.applyMap = function(marker, treatmentBMPID) {
+        $scope.applyMap = function (marker, treatmentBMPID) {
             $scope.setSelectedMarker(marker);
             var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
-                function(t) {
+                function (t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
             $scope.activeTreatmentBMP = treatmentBMP;
             $scope.$apply();
         };
-        
+
         $scope.$watch(function () {
             var foundIDs = [];
             var map = $scope.neptuneMap.map;
-            map.eachLayer(function(layer) {
+            map.eachLayer(function (layer) {
                 if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
                     if (map.getBounds().contains(layer.getLatLng())) {
                         foundIDs.push(layer.feature.properties.TreatmentBMPID);
@@ -250,12 +256,12 @@
                 }
             });
             // clusters get multicounted, so we need to use this function to pick out the unique IDs only
-            $scope.visibleBMPIDs = foundIDs.filter(function(element, index, array) {
+            $scope.visibleBMPIDs = foundIDs.filter(function (element, index, array) {
                 return array.indexOf(element) === index;
             });
         });
 
-        
+
 
         $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
             if (isOn) {
@@ -277,7 +283,7 @@
             }
         };
 
-        $scope.filterParcelsByTrashCaptureStatusType = function(trashCaptureStatusTypeID, isOn) {
+        $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
 
             // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
             if (isOn) {
@@ -294,14 +300,14 @@
             $scope.initializeParcelLayer();
         };
 
-        $scope.setSelectedMarker = function(layer) {
+        $scope.setSelectedMarker = function (layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
             }
 
             $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
                 {
-                    pointToLayer: function(feature, latlng) {
+                    pointToLayer: function (feature, latlng) {
                         var icon = L.MakiMarkers.icon({
                             icon: "marker",
                             color: "#FFFF00",
@@ -314,7 +320,7 @@
                                 riseOnHover: true
                             });
                     },
-                    style: function(feature) {
+                    style: function (feature) {
                         return {
                             fillColor: "#FFFF00",
                             fill: true,
@@ -329,24 +335,24 @@
             $scope.lastSelected.addTo($scope.neptuneMap.map);
         };
 
-        $scope.loadSummaryPanel = function(mapSummaryUrl) {
+        $scope.loadSummaryPanel = function (mapSummaryUrl) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
                 jQuery.get(mapSummaryUrl)
-                    .done(function(data) {
+                    .done(function (data) {
                         jQuery('#ovtaBasedMapSummaryResults').empty();
                         jQuery('#ovtaBasedMapSummaryResults').append(data);
                     });
             }
         };
 
-        $scope.markerClicked = function(self, e) {
+        $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
             $scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
         };
-        
+
         $scope.setActiveBMPByID = function (treatmentBMPID) {
             var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
-                function(t) {
+                function (t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
             //var layer = _.find($scope.treatmentBMPLayerLookup.get(treatmentBMPID),
@@ -355,13 +361,13 @@
             setActiveImpl(layer, true);
         };
 
-        $scope.setActiveParcelByID = function(parcelID) {
+        $scope.setActiveParcelByID = function (parcelID) {
             var parcel = _.find($scope.AngularViewData.Parcels,
-                function(t) {
+                function (t) {
                     return t.ParcelID == parcelID;
                 });
             var layer = _.find($scope.parcelLayerGeoJson._layers,
-                function(layer) { return parcelID === layer.feature.properties.ParcelID; });
+                function (layer) { return parcelID === layer.feature.properties.ParcelID; });
             setActiveImpl(layer, true);
         };
 
@@ -380,15 +386,15 @@
         }
 
 
-        $scope.visibleBMPCount = function() {
+        $scope.visibleBMPCount = function () {
             return $scope.visibleBMPIDs.length;
         };
-        
-        $scope.zoomMapToCurrentLocation = function() {
+
+        $scope.zoomMapToCurrentLocation = function () {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
 
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         var FULL_TC = 1;
         var PARTIAL_TC = 2;
         $scope.fullBmpOn = true;
@@ -396,7 +402,7 @@
         $scope.fullParcelOn = true;
         $scope.partialParcelOn = true;
         _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-            function(tcs) {
+            function (tcs) {
                 $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);
             });
         $scope.rebuildMarkerClusterGroup();

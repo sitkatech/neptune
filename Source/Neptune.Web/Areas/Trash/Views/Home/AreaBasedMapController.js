@@ -1,11 +1,12 @@
 ﻿angular.module("NeptuneApp")
-    .controller("LoadBasedMapController", function ($scope, angularModelAndViewData) {
+    .controller("AreaBasedMapController", function ($scope, angularModelAndViewData) {
+        debugger;
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
         $scope.treatmentBMPLayerLookup = new Map();
 
-        $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.LoadBasedMapInitJson,
+        $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.AreaBasedMapInitJson,
             "Terrain",
             $scope.AngularViewData.GeoServerUrl);
 
@@ -62,7 +63,7 @@
             $scope.rebuildMarkerClusterGroup();
         };
 
-        $scope.rebuildMarkerClusterGroup = function() {
+        $scope.rebuildMarkerClusterGroup = function () {
 
             if ($scope.markerClusterGroup) {
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
@@ -71,7 +72,7 @@
             $scope.markerClusterGroup = L.markerClusterGroup({
                 maxClusterRadius: 40,
                 showCoverageOnHover: false,
-                iconCreateFunction: function(cluster) {
+                iconCreateFunction: function (cluster) {
                     return new L.DivIcon({
                         html: '<div><span>' + cluster.getChildCount() + '</span></div>',
                         className: 'treatmentBMPCluster',
@@ -83,7 +84,7 @@
             $scope.markerClusterGroup.addTo($scope.neptuneMap.map);
         };
 
-        
+
 
         $scope.initializeTreatmentBMPClusteredLayer();
 
@@ -201,19 +202,19 @@
             $scope.lastSelected.addTo($scope.neptuneMap.map);
         };
 
-        $scope.loadSummaryPanel = function (mapSummaryUrl) {
+        $scope.areaSummaryPanel = function (mapSummaryUrl) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
                 jQuery.get(mapSummaryUrl)
                     .done(function (data) {
-                        jQuery('#loadBasedMapSummaryResults').empty();
-                        jQuery('#loadBasedMapSummaryResults').append(data);
+                        jQuery('#areaBasedMapSummaryResults').empty();
+                        jQuery('#areaBasedMapSummaryResults').append(data);
                     });
             }
         };
 
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
-            $scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
+            $scope.areaSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
         };
 
         $scope.setActiveBMPByID = function (treatmentBMPID) {
@@ -247,7 +248,7 @@
             }
 
             // multi-way binding
-            $scope.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
+            $scope.areaSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.setSelectedMarker(layer);
         }
 
@@ -273,11 +274,11 @@
             });
         $scope.rebuildMarkerClusterGroup();
 
-        jQuery("#loadResultsTab").on("shown.bs.tab", function () {
+        jQuery("#areaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
-            if (!$scope.loadBasedMapExtentSet) {
-                $scope.loadBasedMapExtentSet = true;
-                $scope.neptuneMap.setMapBounds($scope.AngularViewData.LoadBasedMapInitJson);
+            if (!$scope.areaBasedMapExtentSet) {
+                $scope.areaBasedMapExtentSet = true;
+                $scope.neptuneMap.setMapBounds($scope.AngularViewData.AreaBasedMapInitJson);
             }
         });
 
