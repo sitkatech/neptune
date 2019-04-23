@@ -68,7 +68,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
         this.getTrackedElement("delineationArea").innerHTML = "-";
-        this._delineationButton.innerHTML = "Edit Delineation";
+        this._delineationButton.innerHTML = "Edit";
 
         if (treatmentBMPFeature.properties.DelineationURL) {
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
@@ -82,7 +82,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._noAssetSelected.classList.add("hiddenControlElement");
 
         $('#verifyDelineationButton').bootstrapToggle({
-            onstyle: 'btn btn-neptune'
+            // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
+            onstyle: 'btn btn-neptune btn-sm',
+            offstyle: 'sm btn-default',
+            style: "neptuneToggle"
         });
 
         var self = this;

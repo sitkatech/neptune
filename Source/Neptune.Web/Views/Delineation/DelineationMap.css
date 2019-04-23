@@ -1,6 +1,7 @@
 ﻿.neptune-leaflet-control {
   background: white;
   padding: 7px;
+  padding-top: 0;
 }
 .neptune-leaflet-control#selectedAssetControl {
   width: 240px;
@@ -41,4 +42,9 @@ label.group {
 }
 .leaflet-bar a#selectedBMPDetailLink:hover {
   background: none;
+}
+.neptuneToggle .toggle-group label {
+  line-height: 12px;
+  padding-top: 9px;
+  font-size: 12px;
 }
