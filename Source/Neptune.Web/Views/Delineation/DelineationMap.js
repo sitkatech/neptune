@@ -90,6 +90,7 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 };
 
 NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function (treatmentBMPFeature) {
+    console.log(treatmentBMPFeature.properties);
     this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
 

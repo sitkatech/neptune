@@ -60,7 +60,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         var href =
             "/TreatmentBMP/Detail/" + treatmentBMPFeature.properties.TreatmentBMPID;
         detailLink.href = href;
-        detailLink.innerHTML = treatmentBMPFeature.properties.Name;
+        detailLink.innerHTML = treatmentBMPFeature.properties.Name;// + "<span class='glyphicon glyphicon-new-window></span>";
+
+        var whatever = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
+        detailLink.append(whatever);
 
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
@@ -113,7 +116,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     reportDelineationArea: function(properties) {
-        this.getTrackedElement("delineationArea").innerHTML = properties.Area;
+        this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
         this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
     },
 
@@ -213,9 +216,9 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationTypeOptions").hidden = false;
 
             this.getTrackedElement("delineateOptionTrace").hidden = false;
+            this.getTrackedElement("delineationOptionDraw").hidden = false;
 
             this.getTrackedElement("delineationOptionAuto").hidden = true;
-            this.getTrackedElement("delineationOptionDraw").hidden = true;
         }
     },
 
@@ -235,6 +238,8 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         } else if (flowOption === "Centralized") {
             if (delineationOption === "traceDelineate") {
                 window.delineationMap.launchTraceDelineateMode();
+            } else if (delineationOption === "drawDelineate") {
+                window.delineationMap.launchDrawCatchmentMode();
             }
         }
     },
@@ -242,6 +247,10 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     enableDelineationButton() {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
     },
+
+    preselectDelineationType(type) {
+        //todo
+    }
 });
 
 L.control.beginDelineation = function (opts, treatmentBMPFeature) {
