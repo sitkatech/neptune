@@ -35,7 +35,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
 
-            ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson,
+            ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson,
                 treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
@@ -60,16 +60,21 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
         {
             public MapInitJson MapInitJson { get; }
+            public MapInitJson AreaBasedMapInitJson { get; }
+            public MapInitJson LoadBasedMapInitJson { get; }
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
             public List<ParcelSimple> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
             public string StormwaterJurisdictionCqlFilter { get; }
 
-            public ViewDataForAngularClass(MapInitJson mapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
+            public ViewDataForAngularClass(MapInitJson mapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
                 List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels,
                 string stormwaterJurisdictionCqlFilter)
             {
                 MapInitJson = mapInitJson;
+                AreaBasedMapInitJson = areaBasedMapInitJson;
+                LoadBasedMapInitJson = loadBasedMapInitJson;
+                
                 TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();
                 Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;

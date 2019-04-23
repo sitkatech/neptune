@@ -132,7 +132,7 @@ namespace Neptune.Web.Models
     public partial class TrashCaptureStatusTypeFull : TrashCaptureStatusType
     {
         private TrashCaptureStatusTypeFull(int trashCaptureStatusTypeID, string trashCaptureStatusTypeName, string trashCaptureStatusTypeDisplayName, int trashCaptureStatusTypeSortOrder, int trashCaptureStatusTypePriority, string trashCaptureStatusTypeColorCode) : base(trashCaptureStatusTypeID, trashCaptureStatusTypeName, trashCaptureStatusTypeDisplayName, trashCaptureStatusTypeSortOrder, trashCaptureStatusTypePriority, trashCaptureStatusTypeColorCode) {}
-        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"e83521");
+        public static readonly TrashCaptureStatusTypeFull Instance = new TrashCaptureStatusTypeFull(1, @"Full", @"Full", 10, 1, @"18af18");
     }
 
     public partial class TrashCaptureStatusTypePartial : TrashCaptureStatusType

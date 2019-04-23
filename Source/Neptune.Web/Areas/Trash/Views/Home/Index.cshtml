@@ -265,6 +265,9 @@
 
 @*load-based map*@
 <script>
+    window.ovtaBasedMapInitJson =         @Html.Raw(JObject.FromObject(ViewDataTyped.OVTABasedMapInitJson).ToString(Formatting.None));
+    
+
     jQuery(document).ready(function() {
         window.loadBasedMapInitJson =
             @Html.Raw(JObject.FromObject(ViewDataTyped.LoadBasedMapInitJson).ToString(Formatting.None));
@@ -272,6 +275,68 @@
             new NeptuneMaps.GeoServerMap(window.loadBasedMapInitJson,
                 "Terrain",
                 "@ViewDataTyped.ViewDataForAngular.GeoServerUrl");
+
+        var fullTrashCaptureLayer = L.geoJson(
+            window.ovtaBasedMapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+            {
+                filter: function (feature, layer) {
+                    return feature.properties.TrashCaptureStatus === "Full";
+                },
+                pointToLayer: function (feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: feature.properties.FeatureGlyph,
+                        color: feature.properties.FeatureColor,
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            title: feature.properties.Name,
+                            alt: feature.properties.Name
+                        });
+                }
+            });
+
+        var partialTrashCaptureLayer = L.geoJson(
+            window.ovtaBasedMapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
+            {
+                filter: function (feature, layer) {
+                    return feature.properties.TrashCaptureStatus === "Partial";
+                },
+                pointToLayer: function (feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: feature.properties.FeatureGlyph,
+                        color: feature.properties.FeatureColor,
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            title: feature.properties.Name,
+                            alt: feature.properties.Name
+                        });
+                }
+            });
+
+
+        window.loadBasedMap.treatmentBMPLayerGroup = L.layerGroup([fullTrashCaptureLayer, partialTrashCaptureLayer]);
+
+
+        var markerClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: 40,
+            showCoverageOnHover: false,
+            iconCreateFunction: function (cluster) {
+                return new L.DivIcon({
+                    html: '<div><span>' + cluster.getChildCount() + '</span></div>',
+                    className: 'treatmentBMPCluster',
+                    iconSize: new L.Point(40, 40)
+                });
+            }
+        });
+        window.loadBasedMap.treatmentBMPLayerGroup.addTo(markerClusterGroup);
+        markerClusterGroup.addTo(window.loadBasedMap.map);
     });
 
     jQuery("#loadResultsTab").on("shown.bs.tab", function(){
