@@ -30,7 +30,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Data.Entity.Spatial;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
+using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
 using Neptune.Web.Views.Shared;
 
@@ -160,6 +162,33 @@ namespace Neptune.Web.Controllers
         }
 
         [HttpGet]
+        [TreatmentBMPEditFeature]
+        public ContentResult MapDelete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        {
+            return new ContentResult();
+        }
+
+        [HttpPost]
+        [TreatmentBMPEditFeature]
+        public ActionResult MapDelete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
+        {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var delineation = treatmentBMP.Delineation;
+
+            if (delineation == null)
+            {
+                throw new SitkaRecordNotFoundException($"No delineation found for Treatment BMP {treatmentBMPPrimaryKey.PrimaryKeyValue}");
+            }
+
+            treatmentBMP.DelineationID = null;
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            return Json(new {success = true});
+        }
+
+        [HttpGet]
         [DelineationDeleteFeature]
         public PartialViewResult Delete(DelineationPrimaryKey delineationPrimaryKey)
         {
@@ -201,5 +230,10 @@ namespace Neptune.Web.Controllers
     {
         public string WellKnownText { get; set; }
         public string DelineationType { get; set; }
+    }
+
+    public class MapDeleteViewModel
+    {
+        // s formality
     }
 }
