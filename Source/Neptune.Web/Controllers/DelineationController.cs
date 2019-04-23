@@ -179,13 +179,13 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
             delineation.DeleteFull(HttpRequestStorage.DatabaseEntities);
-            SetMessageForDisplay("Successfully deleted the field visit.");
+            SetMessageForDisplay("Successfully deleted the delineation.");
             return new ModalDialogFormJsonResult(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
         }
 
         private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to delete the delineation '{delineation.DelineationID}' from '{delineation.TreatmentBMP.TreatmentBMPName}'?";
+            var confirmMessage = $"Are you sure you want to delete the delineation for '{delineation.TreatmentBMP.TreatmentBMPName}'?";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
