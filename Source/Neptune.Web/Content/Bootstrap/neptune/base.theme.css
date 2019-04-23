@@ -8,13 +8,13 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v15/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v16/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
-  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v15/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v16/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
 }
 html,
 body {
@@ -1008,14 +1008,14 @@ nav#wizardNav ul li a.disabled {
 }
 /* Leaflet */
 .treatmentBMPCluster {
-  background-color: #935f59;
+  background-color: #b8b8b8;
   opacity: 0.7 !important;
   background-clip: padding-box;
   border-radius: 20px;
 }
 .treatmentBMPCluster div {
-  background-color: #935f59;
-  color: #fff;
+  background-color: #737373;
+  color: #161616;
   font-weight: 900;
   width: 30px;
   height: 30px;

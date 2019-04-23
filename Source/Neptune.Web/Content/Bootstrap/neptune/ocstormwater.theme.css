@@ -1008,14 +1008,14 @@ nav#wizardNav ul li a.disabled {
 }
 /* Leaflet */
 .treatmentBMPCluster {
-  background-color: #935f59;
+  background-color: #b8b8b8;
   opacity: 0.7 !important;
   background-clip: padding-box;
   border-radius: 20px;
 }
 .treatmentBMPCluster div {
-  background-color: #935f59;
-  color: #fff;
+  background-color: #737373;
+  color: #161616;
   font-weight: 900;
   width: 30px;
   height: 30px;
