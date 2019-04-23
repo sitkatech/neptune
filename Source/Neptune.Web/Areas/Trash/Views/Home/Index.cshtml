@@ -13,6 +13,7 @@
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedMapController.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedMapController.js")"></script>
     <script type="text/javascript">
         // <![CDATA[
         angular.module("NeptuneApp")
@@ -23,7 +24,10 @@
                         AngularViewData:
                             @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
                     };
-                });
+            });
+
+        //angular.bootstrap(jQuery("#loadResults"), ["NeptuneApp"]);
+        //angular.bootstrap(jQuery("#ovtaResults"), ["NeptuneApp"]);
 
         jQuery(document).ready(function() {
             jQuery('.selectpicker').selectpicker("val", [1, 2]);
@@ -125,7 +129,7 @@
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ProgramOverviewPageContentViewData); }
 
 
-<div>
+<div  ng-app="NeptuneApp">
 
     <div class="container-fluid">
         <div class="row">
@@ -149,9 +153,15 @@
                 <div role="tabpanel" class="tab-pane" id="areaResults">
                     <p class="systemText">Content under development.</p>
                 </div>
-                <div role="tabpanel" class="tab-pane " id="loadResults">
+                <div role="tabpanel" class="tab-pane " id="loadResults" ng-controller="LoadBasedMapController">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12" style="margin-top: 20px;">
+                        <div class="col-sm-12 col-md-2">
+                            <h4>Selected Asset</h4>
+                            <div id="loadBasedMapSummaryResults">
+                                <p class="systemText">No asset selected</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
                             <div id="loadBasedMapContainer">
                                 <div id="@ViewDataTyped.LoadBasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
@@ -159,11 +169,11 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="ovtaResults" ng-app="NeptuneApp" ng-controller="OVTABasedMapController">
+                <div role="tabpanel" class="tab-pane active" id="ovtaResults" ng-controller="OVTABasedMapController">
                     <div class="row">
                         <div class="col-sm-12 col-md-2">
                             <h4>Selected Asset</h4>
-                            <div id="mapSummaryResults">
+                            <div id="ovtaBasedMapSummaryResults">
                                 <p class="systemText">No asset selected</p>
                             </div>
                         </div>
@@ -251,8 +261,6 @@
                             </div>
                         </label>
                     </div>
-
-
                 </div>@*OVTABasedMapController*@
             </div>
         </div>
@@ -261,13 +269,13 @@
 
 <script>
     jQuery(document).ready(function () {
-        jQuery("#treatmentBMPLegend").appendTo(".leaflet-control-layers-list").toggle();
-        jQuery("#parcelLegend").appendTo(".leaflet-control-layers-list").toggle();
+        jQuery("#treatmentBMPLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
+        jQuery("#parcelLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
     })
 </script>
 
 @*load-based map*@
-<script>
+@*<script>
     window.ovtaBasedMapInitJson =         @Html.Raw(JObject.FromObject(ViewDataTyped.OVTABasedMapInitJson).ToString(Formatting.None));
     
 
@@ -349,7 +357,7 @@
             window.loadBasedMap.setMapBounds(loadBasedMapInitJson);
         }
     });
-</script>
+</script>*@
 
 
 <script>
