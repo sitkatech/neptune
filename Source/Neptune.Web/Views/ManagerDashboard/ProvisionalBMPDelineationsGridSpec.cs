@@ -52,7 +52,7 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Delineation Area (to 1/100th acre)", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 50,
+            Add("Delineation Area", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 50,
                 DhtmlxGridColumnFilterType.Text);
             Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
