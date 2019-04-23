@@ -72,6 +72,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         if (treatmentBMPFeature.properties.DelineationURL) {
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
+            this.getTrackedElement("delineationStatus").style.display = "initial";
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
             this.getTrackedElement("delineationStatus").style.display = "none";
@@ -81,6 +82,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this._noAssetSelected.classList.add("hiddenControlElement");
 
         $('#verifyDelineationButton').bootstrapToggle({
+            onstyle: 'btn btn-neptune'
         });
 
         var self = this;
@@ -144,6 +146,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         } else {
             jQuery(this.getTrackedElement("verifyDelineationButton")).data('bs.toggle').on(true);
         }
+    },
+
+    showVerifyButton() {
+        this.getTrackedElement("delineationStatus").style.display = "initial";
     }
 });
 
