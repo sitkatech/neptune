@@ -406,4 +406,12 @@
                 $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);
             });
         $scope.rebuildMarkerClusterGroup();
+
+        jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
+            $scope.neptuneMap.map.invalidateSize(false);
+            if (!$scope.ovtaBasedMapExtentSet) {
+                $scope.ovtaBasedMapExtentSet = true;
+                $scope.neptuneMap.setMapBounds($scope.AngularViewData.MapInitJson);
+            }
+        });
     });
