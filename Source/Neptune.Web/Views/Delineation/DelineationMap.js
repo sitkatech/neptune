@@ -231,6 +231,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         
         // this is where to set the UI back to showing "Provisional" instead of "Verified"
         this.selectedAssetControl.flipVerifyButton(false);
+        this.selectedAssetControl.showVerifyButton();
         // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
     }
