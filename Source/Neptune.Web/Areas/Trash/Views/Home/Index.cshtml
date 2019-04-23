@@ -132,13 +132,13 @@
     <div class="container-fluid">
         <div class="row">
             <ul class="nav nav-tabs" id="organizationDetailsTabs" style="border-bottom: none;">
-                <li>
+                <li class="active">
                     <a href="#areaResults" aria-controls="areaResultsOverview" role="tab" data-toggle="tab" id="areaResultsTab">Area-Based Results</a>
                 </li>
                 <li>
                     <a href="#loadResults" aria-controls="loadResultsOverview" role="tab" data-toggle="tab" id="loadResultsTab">Load-Based Results</a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="#ovtaResults" aria-controls="ovtaResultsOverview" role="tab" data-toggle="tab" id="ovtaResultsTab">OVTA Results</a>
                 </li>
             </ul>
@@ -148,7 +148,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane " id="areaResults" ng-controller="AreaBasedMapController">
+                <div role="tabpanel" class="tab-pane active" id="areaResults" ng-controller="AreaBasedMapController">
                     <div class="row">
                         <div class="col-sm-12 col-md-2">
                             <h4>Selected Asset</h4>
@@ -218,7 +218,7 @@
                         </label>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane active" id="ovtaResults" ng-controller="OVTABasedMapController">
+                <div role="tabpanel" class="tab-pane" id="ovtaResults" ng-controller="OVTABasedMapController">
                     <div class="row">
                         <div class="col-sm-12 col-md-2">
                             <h4>Selected Asset</h4>
