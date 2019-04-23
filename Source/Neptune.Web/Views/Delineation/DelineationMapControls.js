@@ -258,7 +258,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
     },
 
     preselectDelineationType(type) {
-        //todo
+        jQuery("input[name='flowOption'][value='" + type + "']").prop("checked", true);
     }
 });
 

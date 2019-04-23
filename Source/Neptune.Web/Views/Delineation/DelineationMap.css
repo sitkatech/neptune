@@ -1,10 +1,10 @@
 ﻿.neptune-leaflet-control {
   background: white;
   padding: 7px;
-  padding-top: 0;
 }
 .neptune-leaflet-control#selectedAssetControl {
   width: 240px;
+  padding-top: 0px;
 }
 .neptune-leaflet-control#beginDelineationControl {
   width: 375px;

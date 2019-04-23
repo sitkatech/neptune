@@ -90,9 +90,10 @@ NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = func
 };
 
 NeptuneMaps.DelineationMap.prototype.addBeginDelineationControl = function (treatmentBMPFeature) {
-    console.log(treatmentBMPFeature.properties);
     this.beginDelineationControl = L.control.beginDelineation({ position: "bottomright" }, treatmentBMPFeature);
     this.beginDelineationControl.addTo(this.map);
+    this.beginDelineationControl.preselectDelineationType(treatmentBMPFeature.properties.DelineationType);
+    this.beginDelineationControl.displayDelineationOptionsForFlowOption(treatmentBMPFeature.properties.DelineationType);
 
     this.treatmentBMPLayer.off("click");
     this.map.off("click");
@@ -138,21 +139,9 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
     this.buildDrawControl();
 };
 
-NeptuneMaps.DelineationMap.prototype.testSimplify = function (tolerance) {
-    if (this.simplified) {
-        this.map.removeLayer(this.simplified);
-        this.simplified = null;
-    }
-    this.map.removeLayer(this.selectedBMPDelineationLayer);
-
-    var simplify = turf.simplify(this.selectedBMPDelineationLayer.getLayers()[0].feature, { tolerance: tolerance });
-
-    this.simplified = L.geoJson(simplify); this.simplified.addTo(this.map);
-};
-
 NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.editableFeatureGroup = new L.FeatureGroup();
-    var editableFeatureGroup = this.editableFeatureGroup; // eliminates need to .bind(this) later
+    var editableFeatureGroup = this.editableFeatureGroup;
 
     var drawOptions = getDrawOptions(editableFeatureGroup);
     this.drawControl = new L.Control.Draw(drawOptions);
@@ -229,10 +218,12 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         }
         this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
     } else {
-        
         // this is where to set the UI back to showing "Provisional" instead of "Verified"
         this.selectedAssetControl.flipVerifyButton(false);
         this.selectedAssetControl.showVerifyButton();
+
+        this.treatmentBMPLayerLookup.get(this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID).feature.properties.DelineationType = this.delineationType;
+
         // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
     }
