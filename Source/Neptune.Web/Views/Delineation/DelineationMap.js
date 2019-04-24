@@ -407,8 +407,10 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
 };
 
 NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (networkCatchmentID) {
+    var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(networkCatchmentID);
+
     return jQuery.ajax({
-        url: "/NetworkCatchment/UpstreamDelineation/" + networkCatchmentID,
+        url: url,
         type: "GET"
     });
 }
