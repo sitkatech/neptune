@@ -58,6 +58,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
             this.getTrackedElement("delineationStatus").style.display = "none";
+            this.getTrackedElement("deleteDelineationButton").style.display = "none";
         }
 
         this.getTrackedElement("selectedBmpInfo").classList.remove("hiddenControlElement");
@@ -173,6 +174,9 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
     showVerifyButton:function() {
         this.getTrackedElement("delineationStatus").style.display = "initial";
+    },
+    showDeleteButton: function() {
+        this.getTrackedElement("deleteDelineationButton").style.display="initial";
     }
 });
 

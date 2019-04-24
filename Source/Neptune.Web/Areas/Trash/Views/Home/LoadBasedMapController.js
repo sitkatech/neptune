@@ -11,7 +11,7 @@
 
         var landUseBlocksLegendUrl = $scope.AngularViewData.GeoServerUrl +
             "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnits&style=tgu_style&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-        var landUseBlocksLabel = "<span>Trash Generating Units </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
+        var landUseBlocksLabel = "<span>Trash Capture Status </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", landUseBlocksLabel);
 
 

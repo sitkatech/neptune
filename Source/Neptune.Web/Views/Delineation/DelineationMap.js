@@ -520,7 +520,6 @@ NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (treatmentBMPF
         data: {},
         method: "POST"
     }).then(function () {
-        window.alert("Deleted the delin");
         self.removeBMPDelineationLayer();
         self.selectedAssetControl.clearDelineationDetails();
         self.cacheBustDelineationWmsLayers();
@@ -564,6 +563,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
         self.addBMPDelineationLayer(response);
 
         self.selectedAssetControl.reportDelineationArea(response.properties);
+        self.selectedAssetControl.showDeleteButton();
     }).fail(delineationErrorAlert);
 
     return promise;
