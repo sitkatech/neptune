@@ -590,6 +590,10 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
     }
 };
 
+NeptuneMaps.DelineationMap.prototype.deleteDelineation = function(treatmentBMPFeature) {
+    window.alert("Yay");
+};
+
 /* For getting the BMP delineation from the Neptune DB.
  Returns a promise so the caller can mess w/ the delineation layer later if they want.
  */

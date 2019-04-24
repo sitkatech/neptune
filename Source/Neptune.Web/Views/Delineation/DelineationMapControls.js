@@ -20,13 +20,6 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     initializeControlInstance: function (map) {
         stopClickPropagation(this.parentElement);
 
-        this._noAssetSelected = this.parentElement.querySelector("#noAssetSelected");
-
-        this._selectedBmpInfo = this.parentElement.querySelector("#selectedBmpInfo");
-        this._selectedBmpName = this.parentElement.querySelector("#selectedBmpName");
-        this._delineationStatus = this.parentElement.querySelector("#delineationStatus");
-        this._delineationButton = this.parentElement.querySelector("#delineationButton");
-
         L.DomEvent.on(this.getTrackedElement("cancelDelineationButton"),
             "click",
             function (e) {
@@ -41,20 +34,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
-        if (this._beginDelineationHandler) {
-            L.DomEvent.off(this._delineationButton, "click", this._beginDelineationHandler);
-            this._beginDelineationHandler = null;
-        }
-
-        this._beginDelineationHandler = function (e) {
-            window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
-            this.disableDelineationButton();
-            e.stopPropagation();
-        }.bind(this);
-
-        L.DomEvent.on(this._delineationButton,
-            "click", this._beginDelineationHandler
-        );
+        this.registerDelineationButtonHandler(treatmentBMPFeature);
+        this.registerDeleteButtonHandler(treatmentBMPFeature);
 
         var detailLink = this.getTrackedElement("selectedBMPDetailLink");
         var href =
@@ -62,13 +43,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         detailLink.href = href;
         detailLink.innerHTML = treatmentBMPFeature.properties.Name;// + "<span class='glyphicon glyphicon-new-window></span>";
 
-        var whatever = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
-        detailLink.append(whatever);
+        var newWindowIcon = L.DomUtil.create("span", "glyphicon glyphicon-new-window");
+        detailLink.append(newWindowIcon);
 
         this.getTrackedElement("selectedBMPType").innerHTML = treatmentBMPFeature.properties.TreatmentBMPType;
 
         this.getTrackedElement("delineationArea").innerHTML = "-";
-        this._delineationButton.innerHTML = "Edit";
+        this.getTrackedElement("delineationButton").innerHTML = "Edit";
 
         if (treatmentBMPFeature.properties.DelineationURL) {
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
@@ -78,8 +59,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this.getTrackedElement("delineationStatus").style.display = "none";
         }
 
-        this._selectedBmpInfo.classList.remove("hiddenControlElement");
-        this._noAssetSelected.classList.add("hiddenControlElement");
+        this.getTrackedElement("selectedBmpInfo").classList.remove("hiddenControlElement");
+        this.getTrackedElement("noAssetSelected").classList.add("hiddenControlElement");
 
         $('#verifyDelineationButton').bootstrapToggle({
             // note that bootstrapToggle is broken and you have supply class names that don't quite make sense to make it work
@@ -97,6 +78,42 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         });
     },
 
+    registerDelineationButtonHandler: function(treatmentBMPFeature) {
+        var self = this;
+        var delineationButton = this.getTrackedElement("delineationButton");
+        if (this._beginDelineationHandler) {
+            L.DomEvent.off(delineationButton, "click", this._beginDelineationHandler);
+            this._beginDelineationHandler = null;
+        }
+
+        this._beginDelineationHandler = function(e) {
+            window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
+            self.disableDelineationButton();
+            e.stopPropagation();
+        };
+
+        L.DomEvent.on(delineationButton,
+            "click", this._beginDelineationHandler
+        );
+    },
+
+    registerDeleteButtonHandler: function(treatmentBMPFeature) {
+
+        var deleteButton = this.getTrackedElement("deleteDelineationButton");
+        if (this._deleteDelineationHandler) {
+            L.DomEvent.off(deleteButton, "click", this._deleteDelineationHandler);
+            this._deleteDelineationHandler = null;
+        }
+
+        this._deleteDelineationHandler = function(e) {
+            window.delineationMap.deleteDelineation(treatmentBMPFeature);
+        };
+
+        L.DomEvent.on(deleteButton,
+            "click", this._deleteDelineationHandler
+        );
+    },
+
     launchDrawCatchmentMode: function () {
         this.getTrackedElement("saveAndCancelButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
@@ -111,8 +128,8 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
     },
 
     reset: function () {
-        this._selectedBmpInfo.classList.add("hiddenControlElement");
-        this._noAssetSelected.classList.remove("hiddenControlElement");
+        this.getTrackedElement("selectedBmpInfo").classList.add("hiddenControlElement");
+        this.getTrackedElement("noAssetSelected").classList.remove("hiddenControlElement");
     },
 
     reportUpstreamCatchments: function (count) {
@@ -125,25 +142,25 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
     },
 
-    disableDelineationButton() {
-        if (!this._delineationButton) {
+    disableDelineationButton: function() {
+        if (!this.getTrackedElement("delineationButton")) {
             return; //misplaced call
         }
-        this._delineationButton.disabled = "disabled";
+        this.getTrackedElement("delineationButton").disabled = "disabled";
     },
 
-    enableDelineationButton() {
-        if (!this._delineationButton) {
+    enableDelineationButton: function() {
+        if (!this.getTrackedElement("delineationButton")) {
             return; //misplaced call
         }
-        this._delineationButton.removeAttribute("disabled");
+        this.getTrackedElement("delineationButton").removeAttribute("disabled");
     },
 
-    changeDelineationStatus(verified) {
+    changeDelineationStatus:function(verified) {
         window.delineationMap.changeDelineationStatus(verified);
     },
 
-    flipVerifyButton(verified) {
+    flipVerifyButton:function(verified) {
         if (!verified) {
             jQuery(this.getTrackedElement("verifyDelineationButton")).data('bs.toggle').off(true);
         } else {
@@ -151,7 +168,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         }
     },
 
-    showVerifyButton() {
+    showVerifyButton:function() {
         this.getTrackedElement("delineationStatus").style.display = "initial";
     }
 });
