@@ -216,13 +216,13 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
             // either the selected BMP's delineation didn't exist or it should no longer
             this.selectedBMPDelineationLayer = null;
         }
-        this.retrieveAndShowBMPDelineation(this.lastSelected.toGeoJSON().features[0]);
+        this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
     } else {
         // this is where to set the UI back to showing "Provisional" instead of "Verified"
         this.selectedAssetControl.flipVerifyButton(false);
         this.selectedAssetControl.showVerifyButton();
 
-        this.treatmentBMPLayerLookup.get(this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID).feature.properties.DelineationType = this.delineationType;
+        this.treatmentBMPLayerLookup.get(this.getSelectedBMPFeature().properties.TreatmentBMPID).feature.properties.DelineationType = this.delineationType;
 
         // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
@@ -247,8 +247,9 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
         wkt = Terraformer.WKT.convert({ type: "Polygon" });
     }
 
-    var treatmentBMPID = this.lastSelected.toGeoJSON().features[0].properties.TreatmentBMPID;
-    var delineationUrl = "/Delineation/ForTreatmentBMP/" + treatmentBMPID;
+    var treatmentBMPID = this.getSelectedBMPFeature().properties.TreatmentBMPID;
+    var delineationUrl =
+        new Sitka.UrlTemplate(this.config.TreatmentBMPDelineationUrlTemplate).ParameterReplace(treatmentBMPID);
 
     var self = this;
     return jQuery.ajax({
@@ -257,7 +258,7 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
         type: 'POST'
     }).then(function (response) {
         self.treatmentBMPLayerLookup.get(treatmentBMPID).feature.properties.DelineationURL = delineationUrl;
-        self.retrieveAndShowBMPDelineation(self.lastSelected.toGeoJSON().features[0]);
+        self.retrieveAndShowBMPDelineation(self.getSelectedBMPFeature());
         self.cacheBustDelineationWmsLayers();
     }).fail(function () {
         alert(
@@ -552,10 +553,14 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     return promise;
 };
 
-NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
-    var delineationID = this.lastSelected.toGeoJSON().features[0].properties.DelineationID;
+NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function() {
+    return this.lastSelected.toGeoJSON().features[0];
+};
 
-    var url = "/Delineation/ChangeDelineationStatus/" + delineationID;
+NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verified) {
+    var delineationID = this.getSelectedBMPFeature().properties.DelineationID;
+
+    var url = new Sitka.UrlTemplate(this.config.ChangeDelineationStatusUrlTemplate).ParameterReplace(delineationID);
 
     jQuery.ajax({
         url: url,
