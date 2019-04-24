@@ -163,21 +163,26 @@ namespace Neptune.Web.Controllers
 
         [HttpGet]
         [TreatmentBMPEditFeature]
-        public ContentResult MapDelete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey)
+        public ContentResult MapDelete(int? treatmentBMPPrimaryKey)
         {
             return new ContentResult();
         }
 
         [HttpPost]
         [TreatmentBMPEditFeature]
-        public ActionResult MapDelete(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
+        public ActionResult MapDelete(int? treatmentBMPPrimaryKey, MapDeleteViewModel viewModel)
         {
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
-            var delineation = treatmentBMP.Delineation;
+            var treatmentBMP = HttpRequestStorage.DatabaseEntities.TreatmentBMPs.Find(treatmentBMPPrimaryKey);
+            var delineation = treatmentBMP?.Delineation;
+
+            if (treatmentBMP == null)
+            {
+                throw new SitkaRecordNotFoundException($"Could not find Treatment BMP {treatmentBMPPrimaryKey}");
+            }
 
             if (delineation == null)
             {
-                throw new SitkaRecordNotFoundException($"No delineation found for Treatment BMP {treatmentBMPPrimaryKey.PrimaryKeyValue}");
+                throw new SitkaRecordNotFoundException($"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
             treatmentBMP.DelineationID = null;
