@@ -56,6 +56,8 @@ namespace Neptune.Web.Common
         public static readonly string LandUseBlockLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameLandUseBlock");
         public static readonly string NetworkCatchmentLayerName = SitkaConfiguration.GetOptionalAppSetting("MapServiceLayerNameNetworkCatchment");
 
+        public static readonly string AutoDelineateServiceUrl = SitkaConfiguration.GetOptionalAppSetting("AutoDelineateServiceUrl");
+
         public static readonly DirectoryInfo LogFileFolder = ParseLogFileFolder();
 
         public static readonly NeptuneEnvironment NeptuneEnvironment = NeptuneEnvironment.MakeNeptuneEnvironment(SitkaConfiguration.GetRequiredAppSetting("NeptuneEnvironment"));

@@ -302,7 +302,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
     var promise = autoDelineate.MakeDelineationRequestNew(latLng);
 
 
-    promise.then(function(featureCollection) {
+    promise.then(function (featureCollection) {
         self.addBMPDelineationLayerFromDEM(featureCollection);
 
         self.removeLoading();
@@ -310,7 +310,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
         self.downsampleSelectedDelineation(0.0001);
         self.launchDrawCatchmentMode();
-    }).fail(function(error) {
+    }).fail(function (error) {
 
         if (!error) {
             // generic message
@@ -318,18 +318,18 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
                 "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
         }
 
-        if (error.messages) {
+        var unsupportedAreaMessage;
+        if (error.messages && _.find(error.messages,
+            function (m) {
+                return m.description === "Number of intersecting catalog unit(s): 0";
+            })) {
             // look for the error message indicating that the service has no data to work with for the given location
-            var unsupportedAreaMessage = _.find(error.messages,
-                function (m) {
-                    return m.description === "Number of intersecting catalog unit(s): 0";
-                });
-            if (unsupportedAreaMessage) {
-                window.alert(
-                    "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
-            }
 
-        } else if (error.serviceUnavailable) {
+            window.alert(
+                "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
+        }
+
+        else if (error.serviceUnavailable) {
             window.alert(
                 "The DEM service is currently unavailable. Please try again later.");
         } else {
@@ -590,7 +590,7 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
     }
 };
 
-NeptuneMaps.DelineationMap.prototype.deleteDelineation = function(treatmentBMPFeature) {
+NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (treatmentBMPFeature) {
     window.alert("Yay");
 };
 
@@ -604,7 +604,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     }
 
     if (!bmpFeature.properties["DelineationURL"]) {
-        
+
         return jQuery.Deferred().resolve();
     }
 
@@ -626,7 +626,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
             delineationErrorAlert();
         }
         self.addBMPDelineationLayer(response);
-        
+
         self.selectedAssetControl.reportDelineationArea(response.properties);
     }).fail(delineationErrorAlert);
 
@@ -644,7 +644,7 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function (verifie
         data: {
             IsVerified: verified
         }
-    }).then(function(data) {
+    }).then(function (data) {
         if (!success) {
             window.alert(
                 "There was an error changing the delineation status. Please try again. If the issue persists, please contact Support.");
@@ -662,7 +662,7 @@ NeptuneMaps.DelineationMap.prototype.preselectTreatmentBMP = function (treatment
     var promise = this.retrieveAndShowBMPDelineation(layer.feature);
 
     var self = this;
-    promise.then(function () { 
+    promise.then(function () {
         if (self.selectedBMPDelineationLayer) {
             self.map.fitBounds(self.selectedBMPDelineationLayer.getBounds(), { maxZoom: 18 });
         } else {

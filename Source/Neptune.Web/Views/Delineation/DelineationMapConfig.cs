@@ -5,6 +5,8 @@
         public string AutoDelineateBaseUrl { get; }
         public string JurisdictionCQLFilter { get; }
 
+
+
         // todo: source these values from Web.config when appropriate
         public DelineationMapConfig(string jurisdictionCQLFilter)
         {
