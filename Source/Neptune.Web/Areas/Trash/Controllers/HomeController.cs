@@ -27,9 +27,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var parcelLayerGeoJson = TrashModuleMapInitJson.MakeParcelLayerGeoJsonForTrashMap(parcels, false);
 
             var boundingBox = CurrentPerson.GetBoundingBox();
-            var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox);
-            var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox);
-            var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox);
+            var ovtaBasedMapInitJson = new TrashModuleMapInitJson("ovtaBasedResultsMap", treatmentBMPLayerGeoJson, parcelLayerGeoJson, boundingBox)
+                {LayerControlClass = "ovta-based-map-layer-control"};
+            var areaBasedMapInitJson = new StormwaterMapInitJson("areaBasedResultsMap", boundingBox) { LayerControlClass = "area-based-map-layer-control" };
+            var loadBasedMapInitJson= new StormwaterMapInitJson("loadBasedResultsMap", boundingBox) { LayerControlClass = "load-based-map-layer-control" };
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashHomePage);
             var viewData = new IndexViewData(CurrentPerson, neptunePage, ovtaBasedMapInitJson, areaBasedMapInitJson,

@@ -1,6 +1,5 @@
 ﻿angular.module("NeptuneApp")
     .controller("AreaBasedMapController", function ($scope, angularModelAndViewData) {
-        debugger;
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];

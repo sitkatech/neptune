@@ -54,6 +54,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         if (treatmentBMPFeature.properties.DelineationURL) {
             this.getTrackedElement("delineationType").innerHTML = treatmentBMPFeature.properties.DelineationType;
             this.getTrackedElement("delineationStatus").style.display = "initial";
+            this.getTrackedElement("deleteDelineationButton").style.display = "initial";
         } else {
             this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
             this.getTrackedElement("delineationStatus").style.display = "none";
@@ -132,14 +133,16 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("noAssetSelected").classList.remove("hiddenControlElement");
     },
 
-    reportUpstreamCatchments: function (count) {
-        this._upstreamCatchmentReportContainer.classList.remove("hiddenControlElement");
-        this._upstreamCatchmentReport.innerHTML = "Found " + count + " upstream catchment(s)";
-    },
-
     reportDelineationArea: function(properties) {
         this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
         this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
+    },
+
+    clearDelineationDetails: function() {
+        this.getTrackedElement("delineationArea").innerHTML = "-";
+        this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
+        this.getTrackedElement("deleteDelineationButton").style.display = "none";
+        this.getTrackedElement("delineationStatus").style.display = "none";
     },
 
     disableDelineationButton: function() {

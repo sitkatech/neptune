@@ -13,8 +13,6 @@ namespace Neptune.Web.Views.Delineation
         public string ChangeDelineationStatusUrlTemplate { get; }
         public string TreatmentBMPDelineationUrlTemplate { get; }
 
-
-        // todo: source these values from Web.config when appropriate
         public DelineationMapConfig(string jurisdictionCQLFilter)
         {
             JurisdictionCQLFilter = jurisdictionCQLFilter;

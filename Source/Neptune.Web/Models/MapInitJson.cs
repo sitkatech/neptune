@@ -31,6 +31,7 @@ namespace Neptune.Web.Models
         protected const int DefaultZoomLevel = 10;
 
         public string MapDivID;
+        public string LayerControlClass;
         public BoundingBox BoundingBox;
         public int ZoomLevel;
         public List<LayerGeoJson> Layers;

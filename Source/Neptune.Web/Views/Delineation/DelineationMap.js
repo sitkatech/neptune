@@ -216,7 +216,6 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
             // either the selected BMP's delineation didn't exist or it should no longer
             this.selectedBMPDelineationLayer = null;
         }
-        this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
     } else {
         // this is where to set the UI back to showing "Provisional" instead of "Verified"
         this.selectedAssetControl.flipVerifyButton(false);
@@ -227,6 +226,7 @@ NeptuneMaps.DelineationMap.prototype.exitDrawCatchmentMode = function (save) {
         // returns a promise but there's no need to actually do anything with it
         this.persistDrawnCatchment();
     }
+    this.retrieveAndShowBMPDelineation(this.getSelectedBMPFeature());
 
     this.tearDownDrawControl();
 
@@ -444,7 +444,7 @@ NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJsonR
         this.map.removeLayer(this.selectedBMPDelineationLayer);
         this.selectedBMPDelineationLayer = null;
     }
-    
+
     this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
         {
             style: function (feature) {
@@ -511,7 +511,23 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
 };
 
 NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (treatmentBMPFeature) {
-    window.alert("Yay");
+    var deleteUrl =
+        new Sitka.UrlTemplate(this.config.DeleteDelineationUrlTemplate).ParameterReplace(treatmentBMPFeature.properties
+            .TreatmentBMPID);
+    var self = this;
+    jQuery.ajax({
+        url: deleteUrl,
+        data: {},
+        method: "POST"
+    }).then(function () {
+        window.alert("Deleted the delin");
+        self.removeBMPDelineationLayer();
+        self.selectedAssetControl.clearDelineationDetails();
+        self.cacheBustDelineationWmsLayers();
+    }).fail(function () {
+        window.alert(
+            "There was an error deleting the delineation. Please try again. If the issue persists, please contact support.");
+    });
 };
 
 /* For getting the BMP delineation from the Neptune DB.
@@ -553,7 +569,7 @@ NeptuneMaps.DelineationMap.prototype.retrieveAndShowBMPDelineation = function (b
     return promise;
 };
 
-NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function() {
+NeptuneMaps.DelineationMap.prototype.getSelectedBMPFeature = function () {
     return this.lastSelected.toGeoJSON().features[0];
 };
 
