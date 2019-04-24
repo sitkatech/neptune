@@ -309,7 +309,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         self.removeLoading();
         self.enableUserInteraction();
 
-        self.downsampleSelectedDelineation(0.0001);
+        self.downsampleSelectedDelineation(0.00005);
         self.launchDrawCatchmentMode();
     }).fail(function (error) {
 
