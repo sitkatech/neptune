@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
-using System.Net.Http;
 using System.Web.Mvc;
 using GeoJSON.Net.Feature;
 using LtInfo.Common.DbSpatial;
@@ -18,10 +17,6 @@ namespace Neptune.Web.Controllers
 {
     public class NetworkCatchmentController : NeptuneBaseController
     {
-        // todo: should share this with the entire application
-        // https://docs.microsoft.com/en-us/azure/architecture/antipatterns/improper-instantiation/
-        private static readonly HttpClient HttpClient = new HttpClient();
-
         [HttpGet]
         [NeptuneViewFeature]
         public ViewResult Index()

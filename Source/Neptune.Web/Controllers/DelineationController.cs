@@ -29,11 +29,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Data.Entity.Spatial;
+using System.Linq;
 using System.Web.Mvc;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
 using LtInfo.Common.MvcResults;
+using Microsoft.SqlServer.Types;
 using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
@@ -218,6 +220,52 @@ namespace Neptune.Web.Controllers
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+        }
+
+        [HttpGet]
+        [SitkaAdminFeature]
+        public JsonResult CalculateTGUsForDelineation(DelineationPrimaryKey delineationPrimaryKey)
+        {
+            var delineationGeometry = delineationPrimaryKey.EntityObject.DelineationGeometry;
+
+            var trashGeneratingUnits =
+                HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x =>
+                    x.TrashGeneratingUnitGeometry.Intersects(delineationGeometry));
+
+            var tguUnion = trashGeneratingUnits.Select(x=>x.TrashGeneratingUnitGeometry).ToList().UnionListGeometries();
+            
+            // create restrictions of the input layers
+            var stormwaterJurisdictionsRestricted = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Where(x => x.StormwaterJurisdictionGeometry.Intersects(tguUnion))
+                .Select(x => new
+                {
+                    StormwaterJurisdictionID = x.StormwaterJurisdictionID,
+                    StormwaterJurisdictionGeometry = x.StormwaterJurisdictionGeometry.Intersection(tguUnion)
+                });
+
+            var onlandVisualTrashAssessmentAreasRestricted = HttpRequestStorage.DatabaseEntities
+                .OnlandVisualTrashAssessmentAreas
+                .Where(x => x.OnlandVisualTrashAssessmentAreaGeometry.Intersects(tguUnion)).Select(x => new
+                {
+                    OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID,
+                    OnlandVisualTrashAssessmentAreaGeometry = x.OnlandVisualTrashAssessmentAreaGeometry
+                });
+
+            var delineationsRestricted = HttpRequestStorage.DatabaseEntities
+                .Delineations
+                .Where(x => x.DelineationGeometry.Intersects(tguUnion)).Select(x => new
+                {
+                    DelineationID = x.DelineationID,
+                    DelineationGeometry = x.DelineationGeometry
+                });
+
+            return Json(new
+                {
+                    tguCount = trashGeneratingUnits.Count(),
+                    stormwaterJurisdictions = stormwaterJurisdictionsRestricted.Select(x=>x.StormwaterJurisdictionID).ToArray(),
+                    onlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreasRestricted.Select(x=>x.OnlandVisualTrashAssessmentAreaID).ToArray(),
+                    Delineations = delineationsRestricted.Select(x=>x.DelineationID).ToArray()
+                },
+                JsonRequestBehavior.AllowGet);
         }
     }
 
