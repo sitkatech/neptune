@@ -1,22 +1,76 @@
 IF EXISTS ( SELECT  *
             FROM    sys.objects
-            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTable')
+            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation')
                     AND type IN ( N'P', N'PC' ) ) 
 DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation
 GO
 
-Create Procedure dbo.pRebuildTrashGeneratingUnitTable
+Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation @DelineationID int
 as
 
-Delete from dbo.TrashGeneratingUnit
+/*-2. Identify the TGUs that are made dirty by an update to the given Delineation. Save the geom of their unions and delete them */
+Declare @SpliceSeed Geometry;
+Declare @SpliceBase Geometry;
+Select @SpliceSeed = DelineationGeometry from dbo.Delineation where DelineationID = @DelineationID
+
+Select @SpliceBase = geometry::UnionAggregate(TrashGeneratingUnitGeometry) from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceSeed) = 1
+
+Delete from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceBase) = 1
+
+/*-1. Restrict the input layers */
+
+Select 
+	LandUseBlockID,
+	PriorityLandUseTypeID,
+	LandUseDescription,
+	@SpliceBase.STIntersection(LandUseBlockGeometry) as LandUseBlockGeometry
+into #LandUseBlocksRestricted
+from dbo.LandUseBlock
+where @SpliceBase.STIntersects(LandUseBlockGeometry) = 1
+
+
+Select 
+	StormwaterJurisdictionID,
+	OrganizationID,
+	@SpliceBase.STIntersection(StormwaterJurisdictionGeometry) as StormwaterJurisdictionGeometry,
+	StateProvinceID,
+	IsTransportationJurisdiction
+into #JurisdictionsRestricted
+from dbo.StormwaterJurisdiction
+where @SpliceBase.STIntersects(StormwaterJurisdictionGeometry) = 1
+
+
+Select
+	DelineationID,
+	@SpliceBase.STIntersection(DelineationGeometry) as DelineationGeometry,
+	DelineationTypeID,
+	IsVerified,
+	DateLastVerified,
+	VerifiedByPersonID
+into #DelineationsRestricted
+from dbo.Delineation
+where @SpliceBase.STIntersects(DelineationGeometry) = 1
+
+
+Select
+	OnlandVisualTrashAssessmentAreaID,
+	OnlandVisualTrashAssessmentAreaGeometry,
+	MostRecentAssessmentDate,
+	MostRecentAssessmentScore
+into #OnlandVisualTrashAssessmentAreasRestricted
+from dbo.vOnlandVisualTrashAssessmentAreaDated
+where @SpliceBase.STIntersects(OnlandVisualTrashAssessmentAreaGeometry) = 1
+
+
+/* From here on out, everything is identical to dbo.pRebuildTrashGeneratingUnitTable,
+but referencing the temp tables created in step -1 instead of the living breathing tables*/
 
 /* 0. Preprocess the land use blocks table with "sentinel" rows indicating where there is no priority land use block data. */
 DROP TABLE IF EXISTS #LandUseBlocksAdjusted
 
 Select * into #LandUseBlocksAdjusted
 from
-(select * from LandUseBlock
-	--select count(*) from StormwaterJurisdiction
+(select * from #LandUseBlocksRestricted
 
 union all
 
@@ -28,31 +82,31 @@ SELECT
 FROM
 (
   SELECT GEOMETRY::UnionAggregate(lub.LandUseBlockGeometry) AS UGeometry, sj.StormwaterJurisdictionID AS StormwaterJurisdictionID
-  FROM dbo.StormwaterJurisdiction sj
-  left JOIN dbo.LandUseBlock lub
+  FROM dbo.#JurisdictionsRestricted sj
+  left JOIN dbo.#LandUseBlocksRestricted lub
   ON sj.StormwaterJurisdictionGeometry.STIntersects(lub.LandUseBlockGeometry) = 1
   GROUP BY sj.StormwaterJurisdictionID
 ) sq
- LEFT JOIN dbo.StormwaterJurisdiction sj ON sq.StormwaterJurisdictionID = sj.StormwaterJurisdictionID) s
+ LEFT JOIN dbo.#JurisdictionsRestricted sj ON sq.StormwaterJurisdictionID = sj.StormwaterJurisdictionID) s
 
-/* 1. Produce the Jurisdiction-Delineation-OVTA layer using the BCF algorithm */
+/* 1. Produce the Jurisdiction-#DelineationsRestricted-OVTA layer using the BCF algorithm */
 
--- StormwaterJurisdiction will serve as our "Background Layer" for the Boundary/Clip phase
+-- #JurisdictionsRestricted will serve as our "Background Layer" for the Boundary/Clip phase
 declare @BackgroundLayer geometry;
-select @BackgroundLayer = geometry::UnionAggregate(StormwaterJurisdictionGeometry) from StormwaterJurisdiction;
+select @BackgroundLayer = geometry::UnionAggregate(StormwaterJurisdictionGeometry) from #JurisdictionsRestricted;
 --select @BackgroundLayer;
 
 declare @BufferDelta decimal(11,11) = .000000001;
 
--- Assemble the boundary layer from the Delineation and OVTAA layers
+-- Assemble the boundary layer from the #DelineationsRestricted and OVTAA layers
 Declare @BoundaryLayer geometry;
 Select @BoundaryLayer = geometry::UnionAggregate(BoundaryGeometry) from (
 
-select OnlandVisualTrashAssessmentAreaGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from vOnlandVisualTrashAssessmentAreaDated
+select OnlandVisualTrashAssessmentAreaGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #OnlandVisualTrashAssessmentAreasRestricted
 union all
-Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from Delineation
+Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #DelineationsRestricted
 Union all
-Select StormwaterJurisdictionGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from StormwaterJurisdiction
+Select StormwaterJurisdictionGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #JurisdictionsRestricted
 ) q
 
 -- Clip
@@ -76,7 +130,7 @@ Select @ClipLayer.STGeometryN(n) as Geom
     into #JurisdictionDelineationOvta
     from #TempNumbers
 
-/* 2. Jurisdiction, Delineation, and Assessment Area data are recovered by joining back to those tables */
+/* 2. Jurisdiction, #DelineationsRestricted, and Assessment Area data are recovered by joining back to those tables */
 
 -- do an alter table #JurisdictionDelineationOVTA to add a JurisdictionID, TreatmentBMPID (which will take the place of DelineationID), and OVTAAID
 Alter Table #JurisdictionDelineationOvta
@@ -88,7 +142,7 @@ OnlandVisualTrashAssessmentAreaID int null
 --set the jurisdiction ID
 Update jdo
 set jdo.JurisdictionID = sj.StormwaterJurisdictionID
-from #JurisdictionDelineationOvta jdo join StormwaterJurisdiction sj on jdo.Geom.STIntersects(sj.StormwaterJurisdictionGeometry) = 1
+from #JurisdictionDelineationOvta jdo join #JurisdictionsRestricted sj on jdo.Geom.STIntersects(sj.StormwaterJurisdictionGeometry) = 1
 
 -- set the ovta area ID. Requires a sub-query to select the most recent OVTA from the pullback
 
@@ -99,7 +153,7 @@ from #JurisdictionDelineationOvta jdo join (
 		JdoId, ovta.OnlandVisualTrashAssessmentAreaID,
 		rowNumber = ROW_NUMBER() over (partition by jdoid order by ovta.MostRecentAssessmentDate desc)
 	from #JurisdictionDelineationOvta jdo
-		join vOnlandVisualTrashAssessmentAreaDated ovta
+		join #OnlandVisualTrashAssessmentAreasRestricted ovta
 			on jdo.Geom.STIntersects(ovta.OnlandVisualTrashAssessmentAreaGeometry) = 1
 ) x on jdo.JdoId = x.JdoId
 where
@@ -113,7 +167,7 @@ from #JurisdictionDelineationOvta jdo join (
 		t.TreatmentBMPID, d.DelineationGeometry, tcs.TrashCaptureStatusTypePriority, jdo.JdoID,
 		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority desc)
 	from
-		Delineation d inner join TreatmentBMP t
+		#DelineationsRestricted d inner join TreatmentBMP t
 			on d.DelineationID = t.DelineationID
 		join TrashCaptureStatusType tcs
 			on t.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
@@ -122,7 +176,7 @@ from #JurisdictionDelineationOvta jdo join (
 ) x on jdo.JdoId = x.JdoId
 where x.rowNumber = 1
 
-/*3. PLU data is integrated by joining out to the LandUseBlock table; result set is inserted directly to TGU table (release script 153) */
+/*3. PLU data is integrated by joining out to the #LandUseBlocksRestricted table; result set is inserted directly to TGU table (release script 153) */
 
 Insert into dbo.TrashGeneratingUnit (
 	StormwaterJurisdictionID,
@@ -140,5 +194,7 @@ select
 from
 	#JurisdictionDelineationOvta jdo join #LandUseBlocksAdjusted lub
 		on jdo.Geom.STIntersects(lub.LandUseBlockGeometry) = 1
+
+
 
 GO

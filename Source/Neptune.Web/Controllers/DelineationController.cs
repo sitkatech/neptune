@@ -61,7 +61,8 @@ namespace Neptune.Web.Controllers
 
             var neptunePage = NeptunePage.GetNeptunePageByPageType(NeptunePageType.DelineationMap);
 
-            var delineationMapInitJson = new DelineationMapInitJson("delineationMap", CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
+            var delineationMapInitJson = new DelineationMapInitJson("delineationMap",
+                CurrentPerson.GetTreatmentBmpsPersonCanManage(), CurrentPerson.GetBoundingBox());
             var viewData = new DelineationMapViewData(CurrentPerson, neptunePage, delineationMapInitJson, treatmentBMP);
             return RazorView<DelineationMap, DelineationMapViewData>(viewData);
         }
@@ -75,12 +76,13 @@ namespace Neptune.Web.Controllers
             if (treatmentBMP.Delineation == null)
             {
                 // should be 400 tbh
-                return Content(JObject.FromObject(new { noDelineation = true }).ToString(Formatting.None));
+                return Content(JObject.FromObject(new {noDelineation = true}).ToString(Formatting.None));
             }
 
             var feature = DbGeometryToGeoJsonHelper.FromDbGeometry(treatmentBMP.Delineation.DelineationGeometry);
             feature.Properties.Add("Area", treatmentBMP.GetDelineationAreaString());
-            feature.Properties.Add("DelineationType", treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");
+            feature.Properties.Add("DelineationType",
+                treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName ?? "No delineation provided");
 
             return Content(JObject.FromObject(feature).ToString(Formatting.None));
         }
@@ -88,9 +90,13 @@ namespace Neptune.Web.Controllers
         [HttpPost]
         [TreatmentBMPEditFeature]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, ForTreatmentBMPViewModel viewModel)
+        public ActionResult ForTreatmentBMP(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey,
+            ForTreatmentBMPViewModel viewModel)
         {
-            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY ? null : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry().MakeValid().ToDbGeometry();
+            var geom = viewModel.WellKnownText == DbGeometryToGeoJsonHelper.POLYGON_EMPTY
+                ? null
+                : DbGeometry.FromText(viewModel.WellKnownText, MapInitJson.CoordinateSystemId).ToSqlGeometry()
+                    .MakeValid().ToDbGeometry();
 
             geom = geom?.FixSrid();
 
@@ -102,7 +108,7 @@ namespace Neptune.Web.Controllers
             if (!Enum.TryParse(viewModel.DelineationType, out DelineationTypeEnum delineationTypeEnum))
             {
                 // todo: really should return a 400 bad request
-                return Json(new { error = "Invalid Delineation Type" });
+                return Json(new {error = "Invalid Delineation Type"});
             }
 
             var delineationType = DelineationType.ToType(delineationTypeEnum);
@@ -127,7 +133,7 @@ namespace Neptune.Web.Controllers
             {
                 if (geom == null)
                 {
-                    return Json(new { success = true });
+                    return Json(new {success = true});
                 }
 
                 var delineation = new Delineation(geom, delineationType.DelineationTypeID, false);
@@ -138,7 +144,7 @@ namespace Neptune.Web.Controllers
 
 
 
-            return Json(new { success = true });
+            return Json(new {success = true});
         }
 
         [HttpGet]
@@ -149,7 +155,8 @@ namespace Neptune.Web.Controllers
 
         [HttpPost]
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
-        public ActionResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey, ChangeDelineationStatusViewModel viewModel)
+        public ActionResult ChangeDelineationStatus(DelineationPrimaryKey delineationPrimaryKey,
+            ChangeDelineationStatusViewModel viewModel)
         {
             var delineation = delineationPrimaryKey.EntityObject;
             // todo: learn how to send a 400 or other error code with Json
@@ -162,7 +169,7 @@ namespace Neptune.Web.Controllers
             delineation.DateLastVerified = DateTime.Now;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
-            return Json(new { success = true });
+            return Json(new {success = true});
         }
 
         [HttpGet]
@@ -178,10 +185,11 @@ namespace Neptune.Web.Controllers
         {
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var delineation = treatmentBMP.Delineation;
-            
+
             if (delineation == null)
             {
-                throw new SitkaRecordNotFoundException($"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
+                throw new SitkaRecordNotFoundException(
+                    $"No delineation found for Treatment BMP {treatmentBMPPrimaryKey}");
             }
 
             treatmentBMP.DelineationID = null;
@@ -211,93 +219,29 @@ namespace Neptune.Web.Controllers
             {
                 return ViewDeleteDelineation(delineation, viewModel);
             }
+
             delineation.DeleteFull(HttpRequestStorage.DatabaseEntities);
             SetMessageForDisplay("Successfully deleted the delineation.");
-            return new ModalDialogFormJsonResult(SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
+            return new ModalDialogFormJsonResult(
+                SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
         }
 
         private PartialViewResult ViewDeleteDelineation(Delineation delineation, ConfirmDialogFormViewModel viewModel)
         {
-            var confirmMessage = $"Are you sure you want to delete the delineation for '{delineation.TreatmentBMP.TreatmentBMPName}'?";
+            var confirmMessage =
+                $"Are you sure you want to delete the delineation for '{delineation.TreatmentBMP.TreatmentBMPName}'?";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
-            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData, viewModel);
+            return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
+                viewModel);
         }
 
-        [HttpGet]
-        [SitkaAdminFeature]
-        public JsonResult CalculateTGUsForDelineation(DelineationPrimaryKey delineationPrimaryKey)
+        public async JsonResult CalculateTGUsForDelineation(DelineationPrimaryKey delineationPrimaryKey)
         {
-            var delineationGeometry = delineationPrimaryKey.EntityObject.DelineationGeometry;
+            HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 600;
+            await HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommandAsync("execute dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation");
 
-            var trashGeneratingUnits =
-                HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Where(x =>
-                    x.TrashGeneratingUnitGeometry.Intersects(delineationGeometry));
-
-            var tguUnion = trashGeneratingUnits.Select(x=>x.TrashGeneratingUnitGeometry).ToList().UnionListGeometries();
-            
-            // create restrictions of the input layers
-
-            var stormwaterJurisdictionsRestricted = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Where(x => x.StormwaterJurisdictionGeometry.Intersects(tguUnion))
-                .Select(x => new
-                {
-                    StormwaterJurisdictionID = x.StormwaterJurisdictionID,
-                    StormwaterJurisdictionGeometry = x.StormwaterJurisdictionGeometry.Intersection(tguUnion)
-                });
-
-            var onlandVisualTrashAssessmentAreasRestricted = HttpRequestStorage.DatabaseEntities
-                .OnlandVisualTrashAssessmentAreas
-                .Where(x => x.OnlandVisualTrashAssessmentAreaGeometry.Intersects(tguUnion)).Select(x => new
-                {
-                    OnlandVisualTrashAssessmentAreaID = x.OnlandVisualTrashAssessmentAreaID,
-                    OnlandVisualTrashAssessmentAreaGeometry = x.OnlandVisualTrashAssessmentAreaGeometry
-                });
-
-            var delineationsRestricted = HttpRequestStorage.DatabaseEntities
-                .Delineations
-                .Where(x => x.DelineationGeometry.Intersects(tguUnion)).Select(x => new
-                {
-                    DelineationID = x.DelineationID,
-                    DelineationGeometry = x.DelineationGeometry
-                });
-
-            // todo: I only need the boundaries of said geometries
-
-            var landUseBlocksRestricted = HttpRequestStorage.DatabaseEntities.LandUseBlocks
-                .Where(x => x.LandUseBlockGeometry.Intersects(tguUnion)).Select(x => new
-                {
-                    LandUseBlockID = x.LandUseBlockID,
-                    PriorityLandUseTypeID = x.PriorityLandUseTypeID,
-                    LandUseBlockGeometry = x.LandUseBlockGeometry
-                });
-
-            // todo: adjust landUseBlocksRestricted by stormwaterJurisdictionsRestricted (LUBA)
-
-            // join sj to lub
-            //stormwaterJurisdictionsRestricted.Join(landUseBlocksRestricted, x => x.StormwaterJurisdictionGeometry,
-            //    y => y.LandUseBlockGeometry,
-            //    (x, y) => new {lol = "todo"},
-            //    new DbGeometryIntersectComparer()
-            //    );
-
-            stormwaterJurisdictionsRestricted.Select(x=> landUseBlocksRestricted.Where(y=>y.LandUseBlockGeometry.Intersects(x.StormwaterJurisdictionGeometry)).Select(y=>y.LandUseBlockGeometry.Intersection(x.StormwaterJurisdictionGeometry)).ToList().UnionListGeometries());
-
-            //var landUseBlocksAdjusted = landUseBlocksRestricted.Union()
-
-            // todo: union and buffer all the boundaries (BU)
-            // todo: subtract BU from tguUnion (Cl)
-            // todo: extract individual polys from Cl (Fl)
-            // todo: join Fl to LUBA to create the new TGUs
-
-            return Json(new
-                {
-                    tguCount = trashGeneratingUnits.Count(),
-                    stormwaterJurisdictions = stormwaterJurisdictionsRestricted.Select(x=>x.StormwaterJurisdictionID).ToArray(),
-                    onlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreasRestricted.Select(x=>x.OnlandVisualTrashAssessmentAreaID).ToArray(),
-                    delineations = delineationsRestricted.Select(x=>x.DelineationID).ToArray(),
-                    landUseBlocksRestricted = landUseBlocksRestricted.Select(x=>x.LandUseBlockID).ToArray()
-                },
-                JsonRequestBehavior.AllowGet);
+            return Json(new {success = true});
         }
     }
 
