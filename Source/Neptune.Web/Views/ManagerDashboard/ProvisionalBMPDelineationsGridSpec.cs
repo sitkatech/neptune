@@ -46,13 +46,13 @@ namespace Neptune.Web.Views.ManagerDashboard
             Add("EntityID", x => x.DelineationID, 0);
             Add(string.Empty,
                 x => DhtmlxGridHtmlHelpers.MakeDeleteIconAndLinkBootstrap(x.GetDeleteUrl(),
-                    new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 30,
+                    new DelineationDeleteFeature().HasPermission(currentPerson, x).HasPermission), 20,
                 DhtmlxGridColumnFilterType.None);
-            Add(string.Empty,x => x.GetDetailUrlForGrid(), 60, DhtmlxGridColumnFilterType.None);
+            Add(string.Empty,x => x.GetDetailUrlForGrid(), 45, DhtmlxGridColumnFilterType.None);
             Add("BMP Name", x => x.TreatmentBMP.GetDisplayNameAsUrl(), 120, DhtmlxGridColumnFilterType.Html);
             Add("BMP Type", x => x.TreatmentBMP.TreatmentBMPType.TreatmentBMPTypeName, 125, DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Delineation Type", x => x.TreatmentBMP.Delineation.DelineationType.DelineationTypeDisplayName,80, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Delineation Area", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 50,
+            Add("Delineation Area", x => x.TreatmentBMP.Delineation?.GetDelineationAreaString(), 75,
                 DhtmlxGridColumnFilterType.Text);
             Add("Date of Last Delineation Verification", x => x.TreatmentBMP.Delineation?.DateLastVerified, 120,
                 DhtmlxGridColumnFormatType.Date);
