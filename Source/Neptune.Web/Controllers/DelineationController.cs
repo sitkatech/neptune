@@ -28,9 +28,10 @@ using Neptune.Web.Views.Delineation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Spatial;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using JetBrains.Annotations;
 using LtInfo.Common;
@@ -235,14 +236,6 @@ namespace Neptune.Web.Controllers
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
                 viewModel);
         }
-
-        public async JsonResult CalculateTGUsForDelineation(DelineationPrimaryKey delineationPrimaryKey)
-        {
-            HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 600;
-            await HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommandAsync("execute dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation");
-
-            return Json(new {success = true});
-        }
     }
 
     public class ChangeDelineationStatusViewModel
@@ -259,18 +252,5 @@ namespace Neptune.Web.Controllers
     public class MapDeleteViewModel
     {
         // s formality
-    }
-
-    public class DbGeometryIntersectComparer : IEqualityComparer<DbGeometry>
-    {
-        public bool Equals(DbGeometry x, DbGeometry y)
-        {
-            return x?.Intersects(y) ?? false;
-        }
-
-        public int GetHashCode(DbGeometry obj)
-        {
-            return obj.GetHashCode();
-        }
     }
 }
