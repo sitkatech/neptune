@@ -28,9 +28,11 @@ using Neptune.Web.Views.Delineation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web.Mvc;
+using JetBrains.Annotations;
 using LtInfo.Common;
 using LtInfo.Common.DesignByContract;
 using LtInfo.Common.Models;
@@ -235,6 +237,7 @@ namespace Neptune.Web.Controllers
             var tguUnion = trashGeneratingUnits.Select(x=>x.TrashGeneratingUnitGeometry).ToList().UnionListGeometries();
             
             // create restrictions of the input layers
+
             var stormwaterJurisdictionsRestricted = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.Where(x => x.StormwaterJurisdictionGeometry.Intersects(tguUnion))
                 .Select(x => new
                 {
@@ -258,12 +261,41 @@ namespace Neptune.Web.Controllers
                     DelineationGeometry = x.DelineationGeometry
                 });
 
+            // todo: I only need the boundaries of said geometries
+
+            var landUseBlocksRestricted = HttpRequestStorage.DatabaseEntities.LandUseBlocks
+                .Where(x => x.LandUseBlockGeometry.Intersects(tguUnion)).Select(x => new
+                {
+                    LandUseBlockID = x.LandUseBlockID,
+                    PriorityLandUseTypeID = x.PriorityLandUseTypeID,
+                    LandUseBlockGeometry = x.LandUseBlockGeometry
+                });
+
+            // todo: adjust landUseBlocksRestricted by stormwaterJurisdictionsRestricted (LUBA)
+
+            // join sj to lub
+            //stormwaterJurisdictionsRestricted.Join(landUseBlocksRestricted, x => x.StormwaterJurisdictionGeometry,
+            //    y => y.LandUseBlockGeometry,
+            //    (x, y) => new {lol = "todo"},
+            //    new DbGeometryIntersectComparer()
+            //    );
+
+            stormwaterJurisdictionsRestricted.Select(x=> landUseBlocksRestricted.Where(y=>y.LandUseBlockGeometry.Intersects(x.StormwaterJurisdictionGeometry)).Select(y=>y.LandUseBlockGeometry.Intersection(x.StormwaterJurisdictionGeometry)).ToList().UnionListGeometries());
+
+            //var landUseBlocksAdjusted = landUseBlocksRestricted.Union()
+
+            // todo: union and buffer all the boundaries (BU)
+            // todo: subtract BU from tguUnion (Cl)
+            // todo: extract individual polys from Cl (Fl)
+            // todo: join Fl to LUBA to create the new TGUs
+
             return Json(new
                 {
                     tguCount = trashGeneratingUnits.Count(),
                     stormwaterJurisdictions = stormwaterJurisdictionsRestricted.Select(x=>x.StormwaterJurisdictionID).ToArray(),
                     onlandVisualTrashAssessmentAreas = onlandVisualTrashAssessmentAreasRestricted.Select(x=>x.OnlandVisualTrashAssessmentAreaID).ToArray(),
-                    Delineations = delineationsRestricted.Select(x=>x.DelineationID).ToArray()
+                    delineations = delineationsRestricted.Select(x=>x.DelineationID).ToArray(),
+                    landUseBlocksRestricted = landUseBlocksRestricted.Select(x=>x.LandUseBlockID).ToArray()
                 },
                 JsonRequestBehavior.AllowGet);
         }
@@ -283,5 +315,18 @@ namespace Neptune.Web.Controllers
     public class MapDeleteViewModel
     {
         // s formality
+    }
+
+    public class DbGeometryIntersectComparer : IEqualityComparer<DbGeometry>
+    {
+        public bool Equals(DbGeometry x, DbGeometry y)
+        {
+            return x?.Intersects(y) ?? false;
+        }
+
+        public int GetHashCode(DbGeometry obj)
+        {
+            return obj.GetHashCode();
+        }
     }
 }
