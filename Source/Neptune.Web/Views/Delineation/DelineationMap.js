@@ -530,8 +530,7 @@ NeptuneMaps.DelineationMap.prototype.deleteDelineation = function(treatmentBMPFe
                 "There was an error deleting the delineation. Please try again. If the issue persists, please contact support.");
         });
     };
-
-    confirmDeleteDelineation(treatmentBMPFeature.properties.TreatmentBMPName);
+    confirmDeleteDelineation(treatmentBMPFeature.properties.Name);
 };
 
 /* For getting the BMP delineation from the Neptune DB.
