@@ -510,23 +510,28 @@ NeptuneMaps.DelineationMap.prototype.removeBMPDelineationLayer = function () {
     }
 };
 
-NeptuneMaps.DelineationMap.prototype.deleteDelineation = function (treatmentBMPFeature) {
+NeptuneMaps.DelineationMap.prototype.deleteDelineation = function(treatmentBMPFeature) {
     var deleteUrl =
         new Sitka.UrlTemplate(this.config.DeleteDelineationUrlTemplate).ParameterReplace(treatmentBMPFeature.properties
             .TreatmentBMPID);
     var self = this;
-    jQuery.ajax({
-        url: deleteUrl,
-        data: {},
-        method: "POST"
-    }).then(function () {
-        self.removeBMPDelineationLayer();
-        self.selectedAssetControl.clearDelineationDetails();
-        self.cacheBustDelineationWmsLayers();
-    }).fail(function () {
-        window.alert(
-            "There was an error deleting the delineation. Please try again. If the issue persists, please contact support.");
-    });
+
+    this.postDelete = function () {
+        jQuery.ajax({
+            url: deleteUrl,
+            data: {},
+            method: "POST"
+        }).then(function () {
+            self.removeBMPDelineationLayer();
+            self.selectedAssetControl.clearDelineationDetails();
+            self.cacheBustDelineationWmsLayers();
+        }).fail(function () {
+            window.alert(
+                "There was an error deleting the delineation. Please try again. If the issue persists, please contact support.");
+        });
+    };
+
+    confirmDeleteDelineation(treatmentBMPFeature.properties.TreatmentBMPName);
 };
 
 /* For getting the BMP delineation from the Neptune DB.
@@ -704,6 +709,28 @@ var killPolygonDraw = function () {
     jQuery(".leaflet-draw-toolbar-top").hide();
 };
 
-var unKillPolygonDraw = function () {
+var unKillPolygonDraw = function() {
     jQuery(".leaflet-draw-toolbar-top").show();
-}
+};
+
+var confirmDeleteDelineation = function(treatmentBMPName) {
+    var alertHtml =
+        "<div class='modal neptune-modal' style='width: 500px; margin:auto;'>" +
+            "<div class='modal-dialog neptune-modal-dialog'>" +
+            "<div class='modal-content'>" +
+            "<div class='modal-header'>" +
+            "<button type='button' class='btn btn-xs btn-neptune modal-close-button' data-dismiss='modal'><span>&times</span></button>" +
+            "<span class='modal-title'>Delete Delineation</span>" +
+            "</div>" +
+            "<div class='modal-body'><p>Are you sure you want to delete the delineation for BMP " + treatmentBMPName + "?</p></div>" +
+            "<div class='modal-footer'>" +
+            "<button type='button' class='btn btn-neptune pull-right' data-dismiss='modal'>Cancel</button>" +
+            "<button type='button' class='btn btn-neptune pull-right' style='margin-right:5px;' onclick='window.delineationMap.postDelete()' data-dismiss='modal'>Continue</a>" +
+            "</div>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+    var alertDiv = jQuery(alertHtml);
+    alertDiv.modal({ keyboard: true });
+    alertDiv.draggable({ handle: ".modal-header" });
+};
