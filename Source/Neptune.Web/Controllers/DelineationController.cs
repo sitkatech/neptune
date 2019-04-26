@@ -221,7 +221,11 @@ namespace Neptune.Web.Controllers
                 return ViewDeleteDelineation(delineation, viewModel);
             }
 
-            delineation.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            delineation.TreatmentBMP.DelineationID = null;
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+            HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
             SetMessageForDisplay("Successfully deleted the delineation.");
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
