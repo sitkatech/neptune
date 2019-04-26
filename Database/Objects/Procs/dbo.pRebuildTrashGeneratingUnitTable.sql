@@ -2,7 +2,7 @@ IF EXISTS ( SELECT  *
             FROM    sys.objects
             WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTable')
                     AND type IN ( N'P', N'PC' ) ) 
-DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation
+DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTable
 GO
 
 Create Procedure dbo.pRebuildTrashGeneratingUnitTable
@@ -111,7 +111,7 @@ set jdo.TreatmentBMPId = x.TreatmentBMPID
 from #JurisdictionDelineationOvta jdo join (
 	select
 		t.TreatmentBMPID, d.DelineationGeometry, tcs.TrashCaptureStatusTypePriority, jdo.JdoID,
-		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority desc)
+		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority asc)
 	from
 		Delineation d inner join TreatmentBMP t
 			on d.DelineationID = t.DelineationID
