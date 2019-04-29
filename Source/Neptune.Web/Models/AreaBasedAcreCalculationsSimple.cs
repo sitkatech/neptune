@@ -1,4 +1,4 @@
-﻿namespace Neptune.Web.Areas.Trash.Models
+﻿namespace Neptune.Web.Models
 {
     public class AreaBasedAcreCalculationsSimple
     {

@@ -14,7 +14,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
 
 
-            return Json(new AreaBasedAcreCalculationsSimple())
+            return Json(new AreaBasedAcreCalculationsSimple());
         }
     }
 }
