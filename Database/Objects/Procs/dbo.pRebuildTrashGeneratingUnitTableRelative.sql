@@ -1,17 +1,19 @@
 IF EXISTS ( SELECT  *
             FROM    sys.objects
-            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation')
+            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTableRelative')
                     AND type IN ( N'P', N'PC' ) ) 
-DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation
+DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelative
 GO
 
-Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelativeDelineation @DelineationID int
+Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelative
+	@ObjectIDs varchar(max),
+	@ObjectType varchar(max)
 as
 
 /*-2. Identify the TGUs that are made dirty by an update to the given Delineation. Save the geom of their unions and delete them */
 Declare @SpliceSeed Geometry;
 Declare @SpliceBase Geometry;
-Select @SpliceSeed = DelineationGeometry from dbo.Delineation where DelineationID = @DelineationID
+Select @SpliceSeed = dbo.fGetTGUInputGeometry(@ObjectIDs, @ObjectType);
 
 Select @SpliceBase = geometry::UnionAggregate(TrashGeneratingUnitGeometry) from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceSeed) = 1
 
@@ -195,6 +197,14 @@ from
 	#JurisdictionDelineationOvta jdo join #LandUseBlocksAdjusted lub
 		on jdo.Geom.STIntersects(lub.LandUseBlockGeometry) = 1
 
-
+select
+	jdo.JurisdictionID,
+	jdo.TreatmentBMPID,
+	jdo.OnlandVisualTrashAssessmentAreaID,
+	lub.LandUseBlockID,
+	jdo.Geom.STIntersection(lub.LandUseBlockGeometry)
+from
+	#JurisdictionDelineationOvta jdo join #LandUseBlocksAdjusted lub
+		on jdo.Geom.STIntersects(lub.LandUseBlockGeometry) = 1
 
 GO
