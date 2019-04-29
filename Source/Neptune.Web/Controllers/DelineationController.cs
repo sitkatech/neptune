@@ -19,27 +19,21 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.GeoJson;
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
+using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Data.Entity;
 using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using JetBrains.Annotations;
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using LtInfo.Common.MvcResults;
-using Microsoft.SqlServer.Types;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
@@ -100,7 +94,6 @@ namespace Neptune.Web.Controllers
                     .MakeValid().ToDbGeometry();
 
             geom = geom?.FixSrid();
-
 
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
@@ -255,6 +248,6 @@ namespace Neptune.Web.Controllers
 
     public class MapDeleteViewModel
     {
-        // s formality
+        // a formality
     }
 }
