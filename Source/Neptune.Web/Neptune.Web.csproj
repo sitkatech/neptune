@@ -915,6 +915,7 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Views\Home\AreaBasedCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedMapController.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.css" />
@@ -1129,6 +1130,7 @@
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.css" />
     <Content Include="Content\leaflet\leaflet.loading\leaflet.loading.js" />
     <Content Include="Content\leaflet\leaflet.spin\leaflet.spin.min.js" />
+    <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.css" />
     <Content Include="Content\leaflet\leaflet.templatedcontrol\leaflet.templatedcontrol.js" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.css" />
     <Content Include="Content\leaflet\leaflet.wmslegend\leaflet.wmslegend.js" />

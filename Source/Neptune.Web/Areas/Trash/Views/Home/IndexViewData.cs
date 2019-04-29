@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Web.Mvc;
+using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
@@ -25,6 +28,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
         public string StormwaterJurisdictionCQLFilter { get; }
         public string RefreshTguUrl { get; }
 
+        public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
+
         public IndexViewData(Person currentPerson, NeptunePage neptunePage, MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson,
             IEnumerable<Models.TreatmentBMP> treatmentBMPs, List<TrashCaptureStatusType> trashCaptureStatusTypes,
             List<Models.Parcel> parcels) : base(currentPerson, neptunePage)
@@ -34,6 +39,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             LoadBasedMapInitJson = loadBasedMapInitJson;
 
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
+            JurisdictionSelectList = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
 
             ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson,
                 treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);
