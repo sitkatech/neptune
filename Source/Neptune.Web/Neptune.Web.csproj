@@ -1224,6 +1224,7 @@
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\Detail.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessment\TrashAssessmentSummaryMap.cshtml" />
     <Content Include="Areas\Trash\Views\OnlandVisualTrashAssessmentArea\EditOnlandVisualTrashAssessmentAreaBasics.cshtml" />
+    <Compile Include="Common\TrashGeneratingUnitHelper.cs" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
