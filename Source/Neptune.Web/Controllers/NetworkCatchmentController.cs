@@ -1,8 +1,6 @@
 ﻿using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.NetworkCatchment;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Linq;
@@ -17,17 +15,6 @@ namespace Neptune.Web.Controllers
 {
     public class NetworkCatchmentController : NeptuneBaseController
     {
-        [HttpGet]
-        [NeptuneViewFeature]
-        public ViewResult Index()
-        {
-            var geoServerUrl = NeptuneWebConfiguration.ParcelMapServiceUrl;
-            var networkCatchmentLayerName = NeptuneWebConfiguration.NetworkCatchmentLayerName;
-
-            var viewData = new IndexViewData(CurrentPerson, new NetworkCatchmentMapInitJson("networkCatchmentMap"), geoServerUrl, networkCatchmentLayerName);
-            return RazorView<Index, IndexViewData>(viewData);
-        }
-
         [HttpGet]
         [NeptuneViewFeature]
         public JsonResult UpstreamCatchments(NetworkCatchmentPrimaryKey networkCatchmentPrimaryKey)

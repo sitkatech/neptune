@@ -28,6 +28,7 @@ namespace Neptune.Web.Areas.Trash.Views
                 BuildTrashBMPsMenu(CurrentPerson),
                 BuildOVTAMenu(CurrentPerson),
                 BuildResultsMenu(CurrentPerson),
+                LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), CurrentPerson, "Delineation Map", "Group1"),
                 BuildManageMenu(CurrentPerson)
             };
 

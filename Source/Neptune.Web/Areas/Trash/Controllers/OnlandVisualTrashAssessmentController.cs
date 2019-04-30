@@ -379,6 +379,18 @@ namespace Neptune.Web.Areas.Trash.Controllers
             HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Load();
             viewModel.UpdateModel(onlandVisualTrashAssessment, HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessmentPreliminarySourceIdentificationTypes.Local);
 
+            var tguUpdateSuccess =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The OVTA was successfully finalized, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The OVTA was successfully finalized");
+            }
+
             if (viewModel.Finalize.GetValueOrDefault())
             {
                 return Redirect(
@@ -406,7 +418,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         private PartialViewResult ViewEditStatusToAllowEdit(OnlandVisualTrashAssessment ovta, ConfirmDialogFormViewModel viewModel)
         {
             var confirmMessage =
-                $"This OVTA was finalized on {ovta.CompletedDate}. Are you sure you want to revert this OVTA to 'In Progress' status?";
+                $"This OVTA was finalized on {ovta.CompletedDate}. Are you sure you want to revert this OVTA to the \"In Progress\" status?";
 
             var viewData = new ConfirmDialogFormViewData(confirmMessage, true);
             return RazorPartialView<ConfirmDialogForm, ConfirmDialogFormViewData, ConfirmDialogFormViewModel>(viewData,
@@ -427,11 +439,22 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
             onlandVisualTrashAssessment.AssessingNewArea = false;
-            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            var tguUpdateSuccess =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The OVTA was successfully returned to the \"In Progress\" status, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The OVTA was successfully returned to the \"In Progress\" status");
+            }
 
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x =>
                 x.RecordObservations(onlandVisualTrashAssessment.OnlandVisualTrashAssessmentID)));
-            
+
         }
 
         [HttpGet]

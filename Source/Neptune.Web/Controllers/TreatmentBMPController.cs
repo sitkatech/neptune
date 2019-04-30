@@ -194,14 +194,30 @@ namespace Neptune.Web.Controllers
         [AutomaticallyCallEntityFrameworkSaveChangesWhenModelValid]
         public ActionResult Edit(TreatmentBMPPrimaryKey treatmentBMPPrimaryKey, EditViewModel viewModel)
         {
+            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             if (!ModelState.IsValid)
             {
                 return ViewEdit(viewModel);
             }
 
-            var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
+            var refreshTGUs = treatmentBMP.Delineation != null &&
+                              (viewModel.TrashCaptureStatusTypeID != treatmentBMP.TrashCaptureStatusTypeID);
+
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
+
+            if (refreshTGUs)
+            {
+                var tguUpdateSuccess = treatmentBMP.Delineation.UpdateTrashGeneratingUnits();
+                if (tguUpdateSuccess)
+                {
+                    SetMessageForDisplay("Treatment BMP successfully saved.");
+                }
+                else
+                {
+                    SetInfoForDisplay("The Treatment BMP was successfully edited, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+                }
+            }
 
             SetMessageForDisplay("Treatment BMP successfully saved.");
 

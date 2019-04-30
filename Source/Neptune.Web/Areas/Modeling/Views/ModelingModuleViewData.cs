@@ -18,6 +18,7 @@ namespace Neptune.Web.Areas.Modeling.Views
         {
             TopLevelLtInfoMenuItems = new List<LtInfoMenuItem>
             {
+                LtInfoMenuItem.MakeItem(new SitkaRoute<DelineationController>(c => c.DelineationMap(null)), CurrentPerson, "Delineation Map", "Group1"),
                 BuildManageMenu(CurrentPerson)
             };
 

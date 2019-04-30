@@ -171,8 +171,10 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
     this.map.addLayer(this.editableFeatureGroup);
     if (this.editableFeatureGroup.getLayers().length > 0) {
         killPolygonDraw();
+        jQuery(".leaflet-draw-edit-edit").get(0).click();
     } else {
         unKillPolygonDraw();
+        jQuery(".leaflet-draw-draw-polygon").get(0).click();
     }
 
     this.map.on('draw:created',

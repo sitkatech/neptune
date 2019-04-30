@@ -19,27 +19,21 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
+using LtInfo.Common.DesignByContract;
 using LtInfo.Common.GeoJson;
+using LtInfo.Common.MvcResults;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.Delineation;
+using Neptune.Web.Views.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Data.Entity;
 using System.Data.Entity.Spatial;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using JetBrains.Annotations;
-using LtInfo.Common;
-using LtInfo.Common.DesignByContract;
-using LtInfo.Common.Models;
-using LtInfo.Common.MvcResults;
-using Microsoft.SqlServer.Types;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Controllers
 {
@@ -101,7 +95,6 @@ namespace Neptune.Web.Controllers
 
             geom = geom?.FixSrid();
 
-
             var treatmentBMP = treatmentBMPPrimaryKey.EntityObject;
             var treatmentBMPDelineation = treatmentBMP.Delineation;
 
@@ -128,6 +121,8 @@ namespace Neptune.Web.Controllers
                     treatmentBMP.DelineationID = null;
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
                     HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
+
+                    var tguUpdateSuccess = treatmentBMPDelineation.UpdateTrashGeneratingUnitsAfterDelete();
                 }
             }
             else
@@ -170,6 +165,19 @@ namespace Neptune.Web.Controllers
             delineation.DateLastVerified = DateTime.Now;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
+
+            var tguUpdateSuccess =
+                delineation.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delineation status was successfully changed, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delineation status was successfully changed.");
+            }
+
             return Json(new {success = true});
         }
 
@@ -198,6 +206,19 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+
+            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delineation was successfully deleted.");
+            }
+
             return Json(new {success = true});
         }
 
@@ -226,7 +247,17 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay("Successfully deleted the delineation.");
+            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delination was successfully deleted.");
+            }
+
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
         }
@@ -255,6 +286,6 @@ namespace Neptune.Web.Controllers
 
     public class MapDeleteViewModel
     {
-        // s formality
+        // a formality
     }
 }
