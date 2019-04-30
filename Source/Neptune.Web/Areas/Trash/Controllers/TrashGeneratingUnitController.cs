@@ -18,17 +18,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var fullTrashCapture = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.TreatmentBMP.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID /*&& todo add PLU == true */);
+                x.TreatmentBMP.TrashCaptureStatusTypeID == TrashCaptureStatusType.Full.TrashCaptureStatusTypeID /*&& todo add PLU == true */).Select(x=>x.TrashGeneratingUnitGeometry.Area).Sum();
 
             var equivalentArea = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID /*&& todo: add PLU != true */ &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID);
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID).Select(x => x.TrashGeneratingUnitGeometry.Area).Sum();
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
             var totalPLUAcres = trashGeneratingUnits.Where(
-                x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID /*&& todo add PLU == true */);
+                x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID /*&& todo add PLU == true */).Select(x => x.TrashGeneratingUnitGeometry.Area).Sum();
 
             return Json(new AreaBasedAcreCalculationsSimple());
         }
