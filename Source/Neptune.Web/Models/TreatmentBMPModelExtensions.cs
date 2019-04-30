@@ -25,6 +25,7 @@ using System.Linq;
 using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
+using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GdalOgr;
 using LtInfo.Common.GeoJson;
 using Neptune.Web.Common;
@@ -232,8 +233,7 @@ namespace Neptune.Web.Models
 
         public static string GetDelineationAreaString(this TreatmentBMP treatmentBMP)
         {
-            //todo: move the sqm - ac conversion factor to a const
-            return (treatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
+            return (treatmentBMP.Delineation?.DelineationGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres)?.ToString("0.00") ?? "-";
         }
     }
 }
