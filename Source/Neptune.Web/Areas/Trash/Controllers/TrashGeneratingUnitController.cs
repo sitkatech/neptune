@@ -13,7 +13,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
     {
         [HttpGet]
         [JurisdictionEditFeature]
-        public JsonResult GetAcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        public JsonResult AcreBasedCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
         {
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
             var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
@@ -33,7 +33,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var totalPLUAcres = trashGeneratingUnits.Where(
                 x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID /*&& todo add PLU == true */).GetArea();
 
-            return Json(new AreaBasedAcreCalculationsSimple());
+            return Json(new AreaBasedAcreCalculationsSimple(), JsonRequestBehavior.AllowGet);
         }
     }
 
