@@ -163,6 +163,19 @@ namespace Neptune.Web.Controllers
             delineation.DateLastVerified = DateTime.Now;
             delineation.VerifiedByPersonID = CurrentPerson.PersonID;
 
+
+            var tguUpdateSuccess =
+                delineation.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delineation status was successfully changed, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delineation status was successfully changed.");
+            }
+
             return Json(new {success = true});
         }
 
@@ -191,6 +204,20 @@ namespace Neptune.Web.Controllers
 
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+
+            var tguUpdateSuccess =
+                delineation.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delineation was successfully deleted.");
+            }
+
             return Json(new {success = true});
         }
 
@@ -219,7 +246,18 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay("Successfully deleted the delineation.");
+            var tguUpdateSuccess =
+                delineation.UpdateTrashGeneratingUnits();
+            if (!tguUpdateSuccess)
+            {
+                SetInfoForDisplay(
+                    "The Delination was successfully deleted, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
+            else
+            {
+                SetMessageForDisplay("The Delination was successfully deleted.");
+            }
+
             return new ModalDialogFormJsonResult(
                 SitkaRoute<ManagerDashboardController>.BuildUrlFromExpression(c => c.Index()));
         }

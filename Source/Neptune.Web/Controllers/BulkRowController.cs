@@ -36,10 +36,6 @@ namespace Neptune.Web.Controllers
 {
     public class BulkRowController : NeptuneBaseController
     {
-
-        
-
-        
         [CrossAreaRoute]
         [HttpGet]
         [JurisdictionManageFeature]
@@ -90,7 +86,16 @@ namespace Neptune.Web.Controllers
 
             var numberOfVerifiedBMPDelineations = bmpDelineations.Count;
 
-            SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
+            var tguUpdateSuccess = bmpDelineations.UpdateTrashGeneratingUnits();
+
+            if (tguUpdateSuccess)
+            {
+                SetMessageForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified.");
+            }
+            else
+            {
+                SetInfoForDisplay($"{numberOfVerifiedBMPDelineations} BMP Delineations were successfully verified, but the Trash Capture Status results failed to update. Your changes will not be reflected in the Trash Capture Status results until the results are recalculated.");
+            }
 
             return new ModalDialogFormJsonResult();
         }

@@ -10,30 +10,66 @@ namespace Neptune.Web.Common
         public const string DelineationObjectType = "Delineation";
         public const string OnlandVisualTrashAssessmentAreaObjectType = "OnlandVisualTrashAssessmentArea";
 
-        public static void UpdateTrashGeneratingUnits(this Delineation delineation)
+        public static bool UpdateTrashGeneratingUnits(this Delineation delineation)
         {
-            var objectIDs = new SqlParameter("@ObjectIDs", FormatIDString(new List<int> {delineation.DelineationID}));
-            var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+            // calling save changes here so the caller can't forget to
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
-                "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+            try
+            {
+                var objectIDs =
+                    new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { delineation.DelineationID }));
+                var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        public static void UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations)
+        public static bool UpdateTrashGeneratingUnits(this IEnumerable<Delineation> delineations)
         {
-            var objectIDs = new SqlParameter("@ObjectIDs", FormatIDString(delineations.Select(x=>x.DelineationID)));
-            var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+            // calling save changes here so the caller can't forget to
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
-                "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+            try
+            {
+                var objectIDs =
+                    new SqlParameter("@ObjectIDs", FormatIDString(delineations.Select(x => x.DelineationID)));
+                var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
+
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public static void UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        public static bool UpdateTrashGeneratingUnits(this OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            var objectIDs = new SqlParameter("@ObjectIDs", FormatIDString(new List<int> {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID}));
-            var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
+            // calling save changes here so the caller can't forget to
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
-                "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+            try
+            {
+                var objectIDs = new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID }));
+                var objectType = new SqlParameter("@ObjectType", OnlandVisualTrashAssessmentAreaObjectType);
+
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static string FormatIDString(IEnumerable<int> idList)
