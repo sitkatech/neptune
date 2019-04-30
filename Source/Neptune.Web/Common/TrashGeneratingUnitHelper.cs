@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using Neptune.Web.Models;
@@ -21,8 +22,32 @@ namespace Neptune.Web.Common
                     new SqlParameter("@ObjectIDs", FormatIDString(new List<int> { delineation.DelineationID }));
                 var objectType = new SqlParameter("@ObjectType", DelineationObjectType);
 
+                HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 600;
                 HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
                     "dbo.pRebuildTrashGeneratingUnitTableRelative @ObjectIDs, @ObjectType", objectIDs, objectType);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static bool UpdateTrashGeneratingUnitsAfterDelete(this Delineation delineation)
+        {
+            var wellKnownText = delineation.DelineationGeometry.ToString();
+            wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
+
+            // calling save changes here so the caller can't forget to
+            HttpRequestStorage.DatabaseEntities.SaveChanges();
+
+            try
+            {
+                var geometryWKT = new SqlParameter("@GeometryWKT", wellKnownText);
+
+                HttpRequestStorage.DatabaseEntities.Database.CommandTimeout = 600;
+                HttpRequestStorage.DatabaseEntities.Database.ExecuteSqlCommand(
+                    "dbo.pRebuildTrashGeneratingUnitTableRelative @GeometryWKT", geometryWKT);
 
                 return true;
             }

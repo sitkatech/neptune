@@ -121,6 +121,8 @@ namespace Neptune.Web.Controllers
                     treatmentBMP.DelineationID = null;
                     HttpRequestStorage.DatabaseEntities.SaveChanges();
                     HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(treatmentBMPDelineation);
+
+                    var tguUpdateSuccess = treatmentBMPDelineation.UpdateTrashGeneratingUnitsAfterDelete();
                 }
             }
             else
@@ -206,8 +208,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
 
-            var tguUpdateSuccess =
-                delineation.UpdateTrashGeneratingUnits();
+            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
             if (!tguUpdateSuccess)
             {
                 SetInfoForDisplay(
@@ -246,8 +247,7 @@ namespace Neptune.Web.Controllers
             HttpRequestStorage.DatabaseEntities.Delineations.DeleteDelineation(delineation);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            var tguUpdateSuccess =
-                delineation.UpdateTrashGeneratingUnits();
+            var tguUpdateSuccess = delineation.UpdateTrashGeneratingUnitsAfterDelete();
             if (!tguUpdateSuccess)
             {
                 SetInfoForDisplay(

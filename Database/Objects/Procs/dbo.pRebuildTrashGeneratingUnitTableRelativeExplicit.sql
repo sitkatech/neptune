@@ -1,19 +1,18 @@
 IF EXISTS ( SELECT  *
             FROM    sys.objects
-            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTableRelative')
+            WHERE   object_id = OBJECT_ID(N'dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit')
                     AND type IN ( N'P', N'PC' ) ) 
-DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelative
+DROP PROCEDURE dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit
 GO
 
-Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelative
-	@ObjectIDs varchar(max),
-	@ObjectType varchar(max)
+Create Procedure dbo.pRebuildTrashGeneratingUnitTableRelativeExplicit
+	@GeometryWKT varchar(max)
 as
 
 /*-2. Identify the TGUs that are made dirty by an update to the given Delineation. Save the geom of their unions and delete them */
 Declare @SpliceSeed Geometry;
 Declare @SpliceBase Geometry;
-Select @SpliceSeed = dbo.fGetTGUInputGeometry(@ObjectIDs, @ObjectType);
+Select @SpliceSeed = geometry::STGeomFromText(@GeometryWKT, 4326);
 
 Select @SpliceBase = geometry::UnionAggregate(TrashGeneratingUnitGeometry) from dbo.TrashGeneratingUnit where TrashGeneratingUnitGeometry.STIntersects(@SpliceSeed) = 1
 

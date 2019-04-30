@@ -441,8 +441,6 @@
     <Compile Include="Security\OnlandVisualTrashAssessmentAreaViewFeature.cs" />
     <Compile Include="Security\TreatmentBMPAssessmentPhotoManageFeature.cs" />
     <Compile Include="Views\ManagerDashboard\ProvisionalBMPDelineationsGridSpec.cs" />
-    <Compile Include="Views\NetworkCatchment\Index.cs" />
-    <Compile Include="Views\NetworkCatchment\IndexViewData.cs" />
     <Compile Include="Controllers\NetworkCatchmentController.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\AddOrRemoveParcelsMapIntJson.cs" />
     <Compile Include="Areas\Trash\Views\OnlandVisualTrashAssessment\MapInitJson\RefineAssessmentAreaMapInitJson.cs" />
@@ -1706,7 +1704,6 @@
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\NeptuneSiteExplorer.cshtml" />
     <Content Include="Views\Shared\NeptuneNavBar.cshtml" />
-    <Content Include="Views\NetworkCatchment\Index.cshtml" />
     <Content Include="Views\Delineation\DelineationMap.cshtml" />
     <Content Include="Views\Delineation\DelineationMap.less" />
     <Content Include="Views\Delineation\DelineationMapTemplates.cshtml" />
