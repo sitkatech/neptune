@@ -61,6 +61,25 @@
             width: 195px !important;
             padding: 5px;
         }
+
+        td {
+            text-align: center;
+            width: 20px;
+            font-weight: bold;
+            padding-right: 0;
+            border: none;
+        }
+
+        .value {
+            font-size: 25px;
+        }
+
+        tfoot td{
+            padding-bottom: 0;
+        }
+        p {
+            margin-bottom: 0;
+        }
     </style>
 }
 
@@ -125,7 +144,7 @@
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ProgramOverviewPageContentViewData); }
 
 
-<div  ng-app="NeptuneApp">
+<div ng-app="NeptuneApp">
 
     <div class="container-fluid">
         <div class="row">
@@ -308,8 +327,59 @@
 
 <template id="areaBasedCalculationControlTemplate">
     <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl">
-        <div id="jurisdictionDropdownContainer">
-
+        <div class="form-horizontal">
+            @if(ViewDataTyped.JurisdictionSelectList.Count() > 1) { 
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-sm-5" style="padding-right: 4px">
+                        <strong>Status by Jurisdiction</strong>
+                    </div>
+                    <div class="col-sm-7" style="padding-left: 4px">
+                        <div id="jurisdictionDropdownContainer"></div>
+                    </div>
+                </div>
+            }
+            <table class="table" style="margin-bottom: 0; width: 400px;">
+                <tfoot>
+                <tr>
+                    <td style="width: 25%; padding-bottom: 0; border: none;">
+                        <strong>Full Trash Capture</strong>
+                    </td>
+                    <td style="width: 25%; padding-bottom: 0; border: none;">
+                        <strong>Equivalent Area</strong>
+                    </td>
+                    <td style="padding-bottom: 0; border: none;">
+                        <strong>Total Full Capture Equivalent</strong>
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <tr>
+                    <td style="padding-bottom: 0;">
+                        <div id="fullTrashCapture" class="value" style="color: rgb(76, 146, 76)">0</div>
+                        <p style="color: rgb(116, 116, 114)">acres</p>
+                    </td>
+                    <td style="padding-bottom: 0;">
+                        <div id="equivalentArea" class="value" style="color: rgb(140, 200, 10)">0</div>
+                        <p style="color: rgb(116, 116, 114)">acres via OVTA "A"</p>
+                    </td>
+                    <td style="padding-bottom: 0;">
+                        <div class="row">
+                            <div class="col-sm-5" style="padding-right: 0">
+                                <div id="totalAcresCaptured" class="value" style="color: rgb(76, 146, 76);">0</div>
+                                <p style="color: rgb(116, 116, 114)">acres captured</p>
+                            </div>
+                            <div class="col-sm-1" style="padding-top: 10%; margin-right: 8px; padding-left: 4px;">
+                                <strong> of </strong>
+                            </div>
+                            <div class="col-sm-5" style="padding-left: 0">
+                                <div id="totalPLUAcres" class="value">0</div>
+                                <p style="color: rgb(116, 116, 114)">total PLU acres</p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>

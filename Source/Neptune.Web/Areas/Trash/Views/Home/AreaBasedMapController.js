@@ -16,6 +16,7 @@
 
         var areaBasedCalculationControl = L.control.areaBasedCalculationControl({ position: 'topleft', areaCalculationsUrlTemplate: $scope.AngularViewData.AreaBasedCalculationsUrlTemplate });
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
+        areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
@@ -283,4 +284,7 @@
                 $scope.neptuneMap.setMapBounds($scope.AngularViewData.AreaBasedMapInitJson);
             }
         });
+
+        jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));
+        jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-fullscreen"));
     });
