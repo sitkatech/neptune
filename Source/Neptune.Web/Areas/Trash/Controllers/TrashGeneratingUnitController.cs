@@ -21,7 +21,10 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var fullTrashCapture = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID ==
-                TrashCaptureStatusType.Full.TrashCaptureStatusTypeID /*&& todo add PLU == true */).GetArea();
+                TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null && x.LandUseBlock.PriorityLandUseTypeID != null
+                ).GetArea();
 
             var equivalentArea = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -33,7 +36,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var totalPLUAcres = trashGeneratingUnits.Where(
                 x => x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID /*&& todo add PLU == true */).GetArea();
 
-            return Json(new AreaBasedAcreCalculationsSimple(), JsonRequestBehavior.AllowGet);
+            return Json(new AreaBasedAcreCalculationsSimple(/* TODO: Initialize this object with the values calculated above*/), JsonRequestBehavior.AllowGet);
         }
     }
 

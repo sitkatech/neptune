@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.Shared;
@@ -68,6 +69,9 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public MapInitJson MapInitJson { get; }
             public MapInitJson AreaBasedMapInitJson { get; }
             public MapInitJson LoadBasedMapInitJson { get; }
+
+            public string AreaBasedCalculationsUrlTemplate { get; }
+
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
             public List<ParcelSimple> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
@@ -85,6 +89,9 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
                 StormwaterJurisdictionCqlFilter = stormwaterJurisdictionCqlFilter;
+                AreaBasedCalculationsUrlTemplate =
+                    new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
+                        x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
             }
         }
     }

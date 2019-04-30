@@ -2,15 +2,27 @@
     templateID: "areaBasedCalculationControlTemplate",
 
     initializeControlInstance: function (map) {
+        // must register the event handler before moving the element
+        this.registerHandlerOnDropdown(map);
 
-        //debugger;
-        var jurisdictionDropdownJQuery = jQuery("select[name='jurisdictionDropdown']");
-        this.getTrackedElement("jurisdictionDropdownContainer").append(jurisdictionDropdownJQuery.get(0));
+        this.getTrackedElement("jurisdictionDropdownContainer").append(jQuery("select[name='jurisdictionDropdown']").get(0));
+        this.areaCalculationsUrlTemplate = this.options.areaCalculationsUrlTemplate;
+    },
 
-        jurisdictionDropdownJQuery.change(function() {
-            // todo: zoom the map to the selected jurisdiction
+    registerHandlerOnDropdown: function (map) {
+        var self = this;
+        jQuery("select[name='jurisdictionDropdown']").change(function () {
+            var areaCalculationsUrl =
+                new Sitka.UrlTemplate(self.areaCalculationsUrlTemplate).ParameterReplace(this.value);
+            jQuery.ajax({
+                url: areaCalculationsUrl, 
+                method: "GET"
+            }).then(function(response) {
+                console.log(response);
 
-            // todo: make an ajax call for the calculations to display
+                // todo: display results of calculation
+
+            });
         });
     }
 });
