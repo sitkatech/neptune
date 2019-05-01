@@ -14,8 +14,16 @@
         var landUseBlocksLabel = "<span>Trash Capture Status </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", landUseBlocksLabel);
 
-        var areaBasedCalculationControl = L.control.areaBasedCalculationControl({ position: 'topleft', areaCalculationsUrlTemplate: $scope.AngularViewData.AreaBasedCalculationsUrlTemplate });
+        var areaBasedCalculationControl = L.control.areaBasedCalculationControl({
+            position: 'topleft',
+            areaCalculationsUrlTemplate: $scope.AngularViewData.AreaBasedCalculationsUrlTemplate,
+            showDropdown: $scope.AngularViewData.ShowDropdown
+    });
+
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
+
+        areaBasedCalculationControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
+        areaBasedCalculationControl.loadAreaBasedCalculationOnLoad();
         areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
 
