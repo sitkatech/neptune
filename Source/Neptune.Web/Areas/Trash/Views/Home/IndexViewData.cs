@@ -39,11 +39,13 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             AreaBasedMapInitJson = areaBasedMapInitJson;
             LoadBasedMapInitJson = loadBasedMapInitJson;
 
+            var stormwaterJurisdictionsPersonCanEdit = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToList();
             StormwaterJurisdictionCQLFilter = currentPerson.GetStormwaterJurisdictionCqlFilter();
-            JurisdictionSelectList = currentPerson.GetStormwaterJurisdictionsPersonCanEdit().ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
+            JurisdictionSelectList = stormwaterJurisdictionsPersonCanEdit.OrderBy(x => x.GetOrganizationDisplayName()).ToSelectList(x => x.StormwaterJurisdictionID.ToString(CultureInfo.InvariantCulture), x => x.GetOrganizationDisplayName());
+            var showDropdown = stormwaterJurisdictionsPersonCanEdit.Count() > 1;
 
             ViewDataForAngular = new ViewDataForAngularClass(ovtaBasedMapInitJson, areaBasedMapInitJson, loadBasedMapInitJson,
-                treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter);
+                treatmentBMPs, trashCaptureStatusTypes, parcels, StormwaterJurisdictionCQLFilter, showDropdown);
             EntityName = "Trash Module";
             PageTitle = "Welcome";
             AllOVTAsUrl =
@@ -77,9 +79,11 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
             public string StormwaterJurisdictionCqlFilter { get; }
 
+            public bool ShowDropdown { get; }
+
             public ViewDataForAngularClass(MapInitJson mapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
                 List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels,
-                string stormwaterJurisdictionCqlFilter)
+                string stormwaterJurisdictionCqlFilter, bool showDropdown)
             {
                 MapInitJson = mapInitJson;
                 AreaBasedMapInitJson = areaBasedMapInitJson;
@@ -89,6 +93,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
                 TrashCaptureStatusTypes = trashCaptureStatusTypeSimples;
                 StormwaterJurisdictionCqlFilter = stormwaterJurisdictionCqlFilter;
+                ShowDropdown = showDropdown;
                 AreaBasedCalculationsUrlTemplate =
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
