@@ -1,16 +1,32 @@
 ﻿L.Control.AreaBasedCalculationControl = L.Control.TemplatedControl.extend({
     templateID: "areaBasedCalculationControlTemplate",
 
-    initializeControlInstance: function (map) {
+    initializeControlInstance: function(map) {
         this.map = map;
-        // must register the event handler before moving the element
-        this.registerHandlerOnDropdown(map);
 
-        this.getTrackedElement("jurisdictionDropdownContainer").append(jQuery("select[name='jurisdictionDropdown']").get(0));
+        if (this.options.showDropdown) {
+
+            // must register the event handler before moving the element
+            this.registerHandlerOnDropdown(map);
+
+            this.getTrackedElement("jurisdictionDropdownContainer")
+                .append(jQuery("select[name='jurisdictionDropdown']").get(0));
+        }
         this.areaCalculationsUrlTemplate = this.options.areaCalculationsUrlTemplate;
-        $(document).ready(function() {
+    },
 
-        });
+    zoomToJurisdictionOnLoad: function (jurisdictionFeatures) {
+        var self = this;
+        var selectedJurisdictionID = jQuery("select[name='jurisdictionDropdown']").val();
+        var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
+        self.map.fitBounds(bounds);
+    },
+
+    loadAreaBasedCalculationOnLoad: function() {
+        var self = this;
+        var selectedJurisdictionID = jQuery("select[name='jurisdictionDropdown']").val();
+        var areaCalculationUrl = new Sitka.UrlTemplate(self.areaCalculationsUrlTemplate).ParameterReplace(selectedJurisdictionID);
+        populateTGUValues(areaCalculationUrl);
     },
 
     registerHandlerOnDropdown: function (map) {
@@ -18,8 +34,6 @@
         jQuery("select[name='jurisdictionDropdown']").change(function () {
             var areaCalculationsUrl =
                 new Sitka.UrlTemplate(self.areaCalculationsUrlTemplate).ParameterReplace(this.value);
-
-            //todo: move this ajax call to its own function so it can be used to select the first jurisdiction when the user loads the page
             populateTGUValues(areaCalculationsUrl);
         });
     },
