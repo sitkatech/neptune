@@ -85,6 +85,9 @@ namespace Neptune.Web.Views.TreatmentBMP
         [FieldDefinitionDisplay(FieldDefinitionEnum.TrashCaptureStatus)]
         public int? TrashCaptureStatusTypeID { get; set; }
 
+        [DisplayName("Trash Capture Effectiveness")]
+        public int? TrashCaptureEffectiveness { get; set; }
+
         [Required]
         [FieldDefinitionDisplay(FieldDefinitionEnum.SizingBasis)]
         public int? SizingBasisTypeID { get; set; }
@@ -113,6 +116,7 @@ namespace Neptune.Web.Views.TreatmentBMP
             RequiredPostStormFieldVisitsPerYear = treatmentBMP.RequiredPostStormFieldVisitsPerYear;
             TrashCaptureStatusTypeID = treatmentBMP.TrashCaptureStatusTypeID;
             SizingBasisTypeID = treatmentBMP.SizingBasisTypeID;
+            TrashCaptureEffectiveness = treatmentBMP.TrashCaptureEffectiveness;
         }
 
         public void UpdateModel(Models.TreatmentBMP treatmentBMP, Person currentPerson)
@@ -163,6 +167,7 @@ namespace Neptune.Web.Views.TreatmentBMP
 
             treatmentBMP.TreatmentBMPLifespanTypeID = TreatmentBMPLifespanTypeID;
             treatmentBMP.TreatmentBMPLifespanEndDate = TreatmentBMPLifespanTypeID == TreatmentBMPLifespanType.FixedEndDate.TreatmentBMPLifespanTypeID ? TreatmentBMPLifespanEndDate : null;
+            treatmentBMP.TrashCaptureEffectiveness = TrashCaptureStatusTypeID == TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID ? TrashCaptureEffectiveness : null;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -181,6 +186,12 @@ namespace Neptune.Web.Views.TreatmentBMP
                 yield return new SitkaValidationResult<EditViewModel, DateTime?>(
                     "The Lifespan End Date must be set if the Lifespan Type is Fixed End Date.",
                     x => x.TreatmentBMPLifespanEndDate);
+            }
+
+
+            if (TrashCaptureEffectiveness <= 0 || TrashCaptureEffectiveness >= 100)
+            {
+                yield return new SitkaValidationResult<EditViewModel, int?>("The Trash Effectiveness must be between 1 and 99, if the score is 100 please select Full", m => m.TrashCaptureEffectiveness);
             }
         }
     }
