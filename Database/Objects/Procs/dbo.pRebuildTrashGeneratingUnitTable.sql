@@ -111,7 +111,7 @@ set jdo.TreatmentBMPId = x.TreatmentBMPID
 from #JurisdictionDelineationOvta jdo join (
 	select
 		t.TreatmentBMPID, d.DelineationGeometry, tcs.TrashCaptureStatusTypePriority, jdo.JdoID,
-		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority asc)
+		rowNumber = ROW_NUMBER() over (partition by jdo.JdoID order by tcs.TrashCaptureStatusTypePriority asc, t.TrashCaptureEffectiveness desc)
 	from
 		Delineation d inner join TreatmentBMP t
 			on d.DelineationID = t.DelineationID

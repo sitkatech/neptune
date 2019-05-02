@@ -69,7 +69,10 @@
 
 @section RightOfPageTitle
 {
-    <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
+    @if(ViewDataTyped.CurrentPerson.IsAdministrator)
+    {
+        <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
+    }
 }
 
 @{ ViewPageContent.RenderPartialView(Html, ViewDataTyped.ViewPageContentViewData); }
@@ -324,8 +327,12 @@
         text-align: center;
     }
 
-    .value {
+    .font25 {
         font-size: 25px;
+    }
+
+    .font18 {
+        font-size: 15px;
     }
 
     .greyLabel {
@@ -345,10 +352,10 @@
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
                 <div class="form-group" style="margin-bottom: 5px;">
-                    <div class="col-sm-5 control-label">
-                        <strong>Status by Jurisdiction</strong>
+                    <div class="col-sm-6 control-label vet-align-center">
+                        <strong class="font18">Status by Jurisdiction</strong>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-6">
                         <div id="jurisdictionDropdownContainer"></div>
                     </div>
                 </div>
@@ -381,24 +388,24 @@
                 <tbody>
                     <tr>
                         <td class="TGUColumn center">
-                            <div id="fullTrashCapture" class="value" style="color: rgb(76, 146, 76)">0</div>
+                            <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">0</div>
                             <p class="greyLabel">acres</p>
                         </td>
                         <td class="TGUColumn center">
-                            <div id="equivalentArea" class="value" style="color: rgb(140, 200, 10)">0</div>
+                            <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">0</div>
                             <p class="greyLabel">acres via OVTA "A"</p>
                         </td>
                         <td class="TGUColumn center">
                             <div class="row">
                                 <div class="col-sm-5" style="padding-right: 0">
-                                    <div id="totalAcresCaptured" class="value" style="color: rgb(76, 146, 76);">0</div>
+                                    <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
                                     <p class="greyLabel">acres captured</p>
                                 </div>
                                 <div class="col-sm-1" style="padding-top: 10%; margin-right: 8px; padding-left: 4px;">
                                     <strong> of </strong>
                                 </div>
                                 <div class="col-sm-5" style="padding-left: 0">
-                                    <div id="totalPLUAcres" class="value">0</div>
+                                    <div id="totalPLUAcres" class="font25">0</div>
                                     <p class="greyLabel">total PLU acres</p>
                                 </div>
                             </div>
@@ -411,7 +418,7 @@
 </template>
 
 <div class="hiddenDropdownContainer" style="display: none;">
-    @Html.DropDownList("jurisdictionDropdown", ViewDataTyped.JurisdictionSelectList);
+    @Html.DropDownList("jurisdictionDropdown", ViewDataTyped.JurisdictionSelectList, new {@class="form-control"});
 </div>
 
 <script>

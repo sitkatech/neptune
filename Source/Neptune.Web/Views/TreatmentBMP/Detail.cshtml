@@ -158,6 +158,15 @@
                         @ViewDataTyped.TreatmentBMP.TrashCaptureStatusType.TrashCaptureStatusTypeDisplayName
                     </div>
                 </div>
+                @if(ViewDataTyped.DisplayTrashCaptureEffectiveness)
+                {
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Trash Capture Effectiveness</label>
+                        <div class="col-sm-7">
+                            @ViewDataTyped.TreatmentBMP.TrashCaptureEffectiveness %
+                        </div>
+                    </div>
+                }
                 <hr />
                 <div class="row">
                     <label class="col-sm-5 control-label text-right">@Html.LabelWithSugarFor(FieldDefinition.RequiredLifespanOfInstallation)</label>

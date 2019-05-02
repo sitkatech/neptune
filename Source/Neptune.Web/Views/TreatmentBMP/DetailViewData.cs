@@ -60,6 +60,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public string ManageTreatmentBMPImagesUrl { get; }
         public string DelineationArea { get; }
         public string DelineationStatus { get; }
+        public bool DisplayTrashCaptureEffectiveness { get; }
 
         public readonly string VerifiedUnverifiedUrl;
 
@@ -97,7 +98,9 @@ namespace Neptune.Web.Views.TreatmentBMP
             VerifiedUnverifiedUrl = verifiedUnverifiedUrl;
 
             DelineationArea = (TreatmentBMP.Delineation?.DelineationGeometry.Area * 2471050)?.ToString("0.00") ?? "-";
-            DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified"; 
+            DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
+            DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
+                                               TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }

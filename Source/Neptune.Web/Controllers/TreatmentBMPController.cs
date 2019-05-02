@@ -201,7 +201,7 @@ namespace Neptune.Web.Controllers
             }
 
             var refreshTGUs = treatmentBMP.Delineation != null &&
-                              (viewModel.TrashCaptureStatusTypeID != treatmentBMP.TrashCaptureStatusTypeID);
+                              (viewModel.TrashCaptureStatusTypeID != treatmentBMP.TrashCaptureStatusTypeID || viewModel.TrashCaptureEffectiveness != treatmentBMP.TrashCaptureEffectiveness);
 
             treatmentBMP.MarkInventoryAsProvisionalIfNonManager(CurrentPerson);
             viewModel.UpdateModel(treatmentBMP, CurrentPerson);
