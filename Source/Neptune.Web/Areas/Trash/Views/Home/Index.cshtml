@@ -69,7 +69,7 @@
 
 @section RightOfPageTitle
 {
-    @if(ViewDataTyped.CurrentPerson.IsAdministrator)
+    @if(ViewDataTyped.CurrentPerson.IsAdministrator())
     {
         <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
     }
