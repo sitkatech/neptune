@@ -14,6 +14,19 @@
         var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
 
+        var OVTABasedResultsControl = L.control.OVTABasedResultsControl({
+            position: 'topleft',
+            OVTABasedResultsUrlTemplate: $scope.AngularViewData.OVTABasedResultsUrlTemplate,
+            showDropdown: $scope.AngularViewData.ShowDropdown
+        });
+
+        OVTABasedResultsControl.addTo($scope.neptuneMap.map);
+
+        OVTABasedResultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
+        OVTABasedResultsControl.loadAreaBasedCalculationOnLoad();
+        OVTABasedResultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
+
+
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
                 $scope.AngularViewData.StormwaterJurisdictionCqlFilter + " AND ";
@@ -62,6 +75,9 @@
         };
 
         $scope.neptuneMap.map.on("click", function (event) {
+            // todo: Ian to delete this line before pull request
+            return;
+
             var scores = $scope.selectedOVTAScores();
 
             if (scores.length === 0) {
@@ -82,6 +98,8 @@
             $scope.selectOVTAArea(customParams);
 
         });
+
+
 
         $scope.selectOVTAArea = function (customParams) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
@@ -414,4 +432,7 @@
                 $scope.neptuneMap.setMapBounds($scope.AngularViewData.MapInitJson);
             }
         });
+
+        jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));
+        jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-fullscreen"));
     });
