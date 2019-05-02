@@ -401,6 +401,7 @@
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatus.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\WaterQualityManagementPlanVisitStatusPrimaryKey.Binding.cs" />
+    <Compile Include="Models\OVTAResultsSimple.cs" />
     <Compile Include="Areas\Trash\Controllers\TrashGeneratingUnitController.cs" />
     <Compile Include="Models\AreaBasedAcreCalculationsSimple.cs" />
     <Compile Include="Models\DelineationModelExtensions.cs" />
@@ -915,6 +916,7 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Views\Home\OVTABasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
     <Content Include="Areas\Trash\Views\Home\LoadBasedMapController.js" />

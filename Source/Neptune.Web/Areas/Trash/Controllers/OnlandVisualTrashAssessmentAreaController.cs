@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using LtInfo.Common.DbSpatial;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -213,11 +214,106 @@ namespace Neptune.Web.Areas.Trash.Controllers
             return new ModalDialogFormJsonResult(
                 SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.RecordObservations(onlandVisualTrashAssessment)));
         }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        {
+            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
+
+            var sumPLUAcresWhereOVTAIsA = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID != null
+                ).GetArea();
+           
+            var sumPLUAcrexsWhereOVTAIsB = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID != null
+            ).GetArea();
+
+            var sumPLUAcrexsWhereOVTAIsC = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID != null
+            ).GetArea();
+
+            var sumPLUAcrexsWhereOVTAIsD = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID != null
+            ).GetArea();
+
+
+            var sumALUAcresWhereOVTAIsA = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID ==
+                OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID == null).GetArea();
+
+            var sumALUAcresWhereOVTAIsB = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID == null
+            ).GetArea();
+
+            var sumALUAcresWhereOVTAIsC = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID == null
+            ).GetArea();
+
+            var sumALUAcresWhereOVTAIsD = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID == null
+            ).GetArea();
+
+            return Json(new OVTAResultsSimple
+            {
+                PLUSumAcresWhereOVTAIsA = sumPLUAcresWhereOVTAIsA,
+                PLUSumAcresWhereOVTAIsB = sumPLUAcrexsWhereOVTAIsB,
+                PLUSumAcresWhereOVTAIsC = sumPLUAcrexsWhereOVTAIsC,
+                PLUSumAcresWhereOVTAIsD = sumPLUAcrexsWhereOVTAIsD,
+                ALUSumAcresWhereOVTAIsA = sumALUAcresWhereOVTAIsA,
+                ALUSumAcresWhereOVTAIsB = sumALUAcresWhereOVTAIsB,
+                ALUSumAcresWhereOVTAIsC = sumALUAcresWhereOVTAIsC,
+                ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
+
 
     public class FindAssessmentAreaByNameViewModel
     {
         public string SearchTerm { get; set; }
         public int JurisdictionID { get; set; }
+    }
+}
+
+public static class AreaCalculationsHelper
+{
+    public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
+    {
+        return Math.Round(trashGeneratingUnits
+            .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 2); // will never be null
     }
 }
