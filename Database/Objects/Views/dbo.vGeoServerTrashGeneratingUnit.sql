@@ -8,6 +8,7 @@ select
 	tcs.TrashCaptureStatusTypeName as TrashCaptureStatus,
 	ovtaad.MostRecentAssessmentScore as AssessmentScore,
 	Case When lub.PriorityLandUseTypeID is null then 0 else 1 end as IsPriorityLandUse,
+	Case when tgu.LandUseBlockID is null then 1 else 0 end as NoDataProvided,
 	TrashGeneratingUnitGeometry
 from dbo.TrashGeneratingUnit tgu
 	left join dbo.vOnlandVisualTrashAssessmentAreaDated ovtaad
