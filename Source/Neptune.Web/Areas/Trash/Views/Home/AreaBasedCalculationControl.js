@@ -53,8 +53,6 @@ function populateTGUValues(areaCalculationsUrl) {
         url: areaCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
-
         jQuery("#fullTrashCapture").text(response.FullTrashCaptureAcreage);
         jQuery("#equivalentArea").text(response.EquivalentAreaAcreage);
         jQuery("#totalAcresCaptured").text(response.TotalAcresCaptured);

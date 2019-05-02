@@ -18,7 +18,7 @@
             position: 'topleft',
             areaCalculationsUrlTemplate: $scope.AngularViewData.AreaBasedCalculationsUrlTemplate,
             showDropdown: $scope.AngularViewData.ShowDropdown
-    });
+        });
 
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
 
