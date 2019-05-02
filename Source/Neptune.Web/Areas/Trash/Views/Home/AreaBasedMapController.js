@@ -213,16 +213,6 @@
             $scope.lastSelected.addTo($scope.neptuneMap.map);
         };
 
-        $scope.areaSummaryPanel = function (mapSummaryUrl) {
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
-                jQuery.get(mapSummaryUrl)
-                    .done(function (data) {
-                        jQuery('#areaBasedMapSummaryResults').empty();
-                        jQuery('#areaBasedMapSummaryResults').append(data);
-                    });
-            }
-        };
-
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
             $scope.areaSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
@@ -239,16 +229,6 @@
             setActiveImpl(layer, true);
         };
 
-        $scope.setActiveParcelByID = function (parcelID) {
-            var parcel = _.find($scope.AngularViewData.Parcels,
-                function (t) {
-                    return t.ParcelID == parcelID;
-                });
-            var layer = _.find($scope.parcelLayerGeoJson._layers,
-                function (layer) { return parcelID === layer.feature.properties.ParcelID; });
-            setActiveImpl(layer, true);
-        };
-
         function setActiveImpl(layer, updateMap) {
             if (updateMap) {
                 if (layer.getLatLng) {
@@ -259,7 +239,6 @@
             }
 
             // multi-way binding
-            $scope.areaSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.setSelectedMarker(layer);
         }
 
@@ -275,13 +254,13 @@
         // ReSharper disable InconsistentNaming
         var FULL_TC = 1;
         var PARTIAL_TC = 2;
-        $scope.fullBmpOn = true;
-        $scope.partialBmpOn = true;
-        $scope.fullParcelOn = true;
-        $scope.partialParcelOn = true;
+        $scope.fullBmpOn = false;
+        $scope.partialBmpOn = false;
+        $scope.fullParcelOn = false;
+        $scope.partialParcelOn = false;
         _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
             function (tcs) {
-                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);
+                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
             });
         $scope.rebuildMarkerClusterGroup();
 

@@ -353,16 +353,6 @@
             $scope.lastSelected.addTo($scope.neptuneMap.map);
         };
 
-        $scope.loadSummaryPanel = function (mapSummaryUrl) {
-            if (!Sitka.Methods.isUndefinedNullOrEmpty(mapSummaryUrl)) {
-                jQuery.get(mapSummaryUrl)
-                    .done(function (data) {
-                        jQuery('#ovtaBasedMapSummaryResults').empty();
-                        jQuery('#ovtaBasedMapSummaryResults').append(data);
-                    });
-            }
-        };
-
         $scope.markerClicked = function (self, e) {
             $scope.setSelectedMarker(e.layer);
             $scope.loadSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
@@ -399,7 +389,6 @@
             }
 
             // multi-way binding
-            $scope.loadSummaryPanel(layer.feature.properties.MapSummaryUrl);
             $scope.setSelectedMarker(layer);
         }
 
@@ -415,13 +404,13 @@
         // ReSharper disable InconsistentNaming
         var FULL_TC = 1;
         var PARTIAL_TC = 2;
-        $scope.fullBmpOn = true;
-        $scope.partialBmpOn = true;
-        $scope.fullParcelOn = true;
-        $scope.partialParcelOn = true;
+        $scope.fullBmpOn = false;
+        $scope.partialBmpOn = false;
+        $scope.fullParcelOn = false;
+        $scope.partialParcelOn = false;
         _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
             function (tcs) {
-                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, tcs.TrashCaptureStatusTypeID === FULL_TC || tcs.TrashCaptureStatusTypeID === PARTIAL_TC, true);
+                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
             });
         $scope.rebuildMarkerClusterGroup();
 

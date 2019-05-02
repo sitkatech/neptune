@@ -152,13 +152,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="areaResults" ng-controller="AreaBasedMapController">
                     <div class="row">
-                        <div class="col-sm-12 col-md-2">
-                            <h4>Selected Asset</h4>
-                            <div id="areaBasedMapSummaryResults">
-                                <p class="systemText">No asset selected</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
+                        <div class="col-sm-12" style="margin-top: 20px;">
                             <div id="areaBasedMapContainer">
                                 <div id="@ViewDataTyped.AreaBasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
@@ -187,13 +181,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane " id="loadResults" ng-controller="LoadBasedMapController">
                     <div class="row">
-                        <div class="col-sm-12 col-md-2">
-                            <h4>Selected Asset</h4>
-                            <div id="loadBasedMapSummaryResults">
-                                <p class="systemText">No asset selected</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
+                        <div class="col-sm-12" style="margin-top: 20px;">
                             <div id="loadBasedMapContainer">
                                 <div id="@ViewDataTyped.LoadBasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
@@ -222,13 +210,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="ovtaResults" ng-controller="OVTABasedMapController">
                     <div class="row">
-                        <div class="col-sm-12 col-md-2">
-                            <h4>Selected Asset</h4>
-                            <div id="ovtaBasedMapSummaryResults">
-                                <p class="systemText">No asset selected</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-10" style="margin-top: 20px;">
+                        <div class="col-sm-12" style="margin-top: 20px;">
                             <div id="ovtaBasedMapContainer">
                                 <div id="@ViewDataTyped.OVTABasedMapInitJson.MapDivID" style="height: 650px; margin: 0">
                                 </div>
@@ -420,7 +402,12 @@
 </div>
 
 
-
+<style>
+    .ovtaResults {
+        font-weight: bold;
+        border: none !important;
+    }
+</style>
 <template id="OVTABasedResultsControlTemplate">
     <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl">
         <div class="form-horizontal">
@@ -450,19 +437,19 @@
             <table class="table areaBasedCalculationControlTable">
                 <thead>
                     <tr>
-                        <td class="TGUColumn font15" style="width: 55%">
+                        <td class="ovtaResults font15" style="width: 55%">
                             <strong>Score</strong>
                         </td>
-                        <td class="TGUColumn center font15" style="width: 8.75%">
+                        <td class="ovtaResults center font15" style="width: 8.75%">
                             <strong>A</strong>
                         </td>
-                        <td class="TGUColumn center font15" style="width: 8.75%">
+                        <td class="ovtaResults center font15" style="width: 8.75%">
                             <strong>B</strong>
                         </td>
-                        <td class="TGUColumn center font15" style="width: 8.75%">
+                        <td class="ovtaResults center font15" style="width: 8.75%">
                             <strong>C</strong>
                         </td>
-                        <td class="TGUColumn center font15" style="width: 8.75%">
+                        <td class="ovtaResults center font15" style="width: 8.75%">
                             <strong>D</strong>
                         </td>
                     </tr>
@@ -472,16 +459,16 @@
                         <td class="font15" style="border: none">
                             <div>Priority Land Use Area (acres)</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="PLUIsA" style="color: rgb(74,222,0)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="PLUIsB" style="color: rgb(240,234,0)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="PLUIsC" style="color: rgb(255,127,127)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="PLUIsD" style="color: rgb(197,0,255)">0</div>
                         </td>
                     </tr>
@@ -489,16 +476,16 @@
                         <td class="font15" style="border: none">
                             <div>Alternative Land Use Area (acres)</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="ALUIsA" style="color: rgb(74,222,0)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="ALUIsB" style="color: rgb(240,234,0)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="ALUIsC" style="color: rgb(255,127,127)">0</div>
                         </td>
-                        <td class="TGUColumn center font15">
+                        <td class="ovtaResults center font15">
                             <div id="ALUIsD" style="color: rgb(197,0,255)">0</div>
                         </td>
                     </tr>
@@ -518,6 +505,7 @@
         jQuery("#treatmentBMPLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
         jQuery("#parcelLegend").appendTo("#ovtaResults .leaflet-control-layers-list").toggle();
         jQuery("#treatmentBMPLegendLoadBased").appendTo("#loadResults .leaflet-control-layers-list").toggle();
+        jQuery("#treatmentBMPLegendAreaBased").appendTo("#areaResults .leaflet-control-layers-list").toggle();
 
     })
 </script>
