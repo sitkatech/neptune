@@ -27,6 +27,19 @@
         areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
 
+        var applyJurisdictionMask = function(stormwaterJurisdictionID) {
+            if ($scope.maskLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
+                $scope.maskLayer = null;
+            }
+
+            var wmsParams = $scope.neptuneMap.createWfsParamsWithLayerName("OCStormwater:Jurisdictions");
+            wmsParams.cql_filter = "StormwaterJurisdictionID != " + stormwaterJurisdictionID;
+            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
+            $scope.maskLayer.addTo($scope.neptuneMap.map);
+
+        };
+
         $scope.initializeTreatmentBMPClusteredLayer = function () {
 
             $scope.treatmentBMPLayers = {};
