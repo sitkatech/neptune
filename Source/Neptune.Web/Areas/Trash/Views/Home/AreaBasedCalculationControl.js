@@ -15,11 +15,12 @@
         this.areaCalculationsUrlTemplate = this.options.areaCalculationsUrlTemplate;
     },
 
-    zoomToJurisdictionOnLoad: function (jurisdictionFeatures) {
+    zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionDropdown']").val();
-        var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
+        var bounds = getBounds(jurisdictionFeatures, selectedJurisdictionID);
         self.map.fitBounds(bounds);
+        callback(selectedJurisdictionID);
     },
 
     loadAreaBasedCalculationOnLoad: function() {
@@ -45,6 +46,14 @@
             var bounds = getBounds(jurisdictionFeatures, selectedJurisdictionID);
             self.map.fitBounds(bounds);
         });
+    },
+
+    registerAdditionalHandler: function(callback) {
+        var self = this;
+        jQuery("select[name='jurisdictionDropdown']").change(function () {
+            var selectedJurisdictionID = this.value;
+            callback(selectedJurisdictionID);
+        });
     }
 });
 
@@ -53,8 +62,6 @@ function populateTGUValues(areaCalculationsUrl) {
         url: areaCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
-
         jQuery("#fullTrashCapture").text(response.FullTrashCaptureAcreage);
         jQuery("#equivalentArea").text(response.EquivalentAreaAcreage);
         jQuery("#totalAcresCaptured").text(response.TotalAcresCaptured);

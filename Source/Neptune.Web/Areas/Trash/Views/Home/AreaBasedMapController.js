@@ -22,23 +22,26 @@
 
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
 
-        areaBasedCalculationControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
-        areaBasedCalculationControl.loadAreaBasedCalculationOnLoad();
-        areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
-
-
-        var applyJurisdictionMask = function(stormwaterJurisdictionID) {
+        var applyJurisdictionMask = function (stormwaterJurisdictionID) {
+            debugger;
             if ($scope.maskLayer) {
                 $scope.neptuneMap.map.removeLayer($scope.maskLayer);
                 $scope.maskLayer = null;
             }
 
-            var wmsParams = $scope.neptuneMap.createWfsParamsWithLayerName("OCStormwater:Jurisdictions");
-            wmsParams.cql_filter = "StormwaterJurisdictionID != " + stormwaterJurisdictionID;
+            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
+            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
             $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
             $scope.maskLayer.addTo($scope.neptuneMap.map);
+            $scope.maskLayer.bringToFront();
 
         };
+
+        areaBasedCalculationControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features, applyJurisdictionMask);
+        areaBasedCalculationControl.loadAreaBasedCalculationOnLoad();
+        areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
+
+        areaBasedCalculationControl.registerAdditionalHandler(applyJurisdictionMask);
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
 
