@@ -10,6 +10,7 @@
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedCalculationControl.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedResultsCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedMapController.js")"></script>
     <script type="text/javascript">
@@ -37,20 +38,20 @@
             list-style-type: none;
         }
 
-            #tcLegend img {
-                max-height: 50px;
-                margin-right: 5px;
-            }
+        #tcLegend img {
+            max-height: 50px;
+            margin-right: 5px;
+        }
 
-            #ovtaAreaLegend img {
-                max-height: 25px;
-                margin-right: 5px;
-                border: 1px solid #ddd;
-            }
+        #ovtaAreaLegend img {
+            max-height: 25px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+        }
 
-            #ovtaAreaLegend li {
-                padding-bottom: 10px;
-            }
+        #ovtaAreaLegend li {
+            padding-bottom: 10px;
+        }
 
 
         .bootstrap-select {
@@ -61,15 +62,13 @@
             width: 195px !important;
             padding: 5px;
         }
-
-
     </style>
 }
 
 
 @section RightOfPageTitle
 {
-    @if(ViewDataTyped.CurrentPerson.IsAdministrator)
+    @if(ViewDataTyped.CurrentPerson.IsAdministrator())
     {
         <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
     }
@@ -318,11 +317,6 @@
         width: 400px;
     }
 
-    .footerLabel {
-        padding-bottom: 0;
-        border: none !important;
-    }
-
     .center {
         text-align: center;
     }
@@ -331,7 +325,7 @@
         font-size: 25px;
     }
 
-    .font18 {
+    .font15 {
         font-size: 15px;
     }
 
@@ -343,7 +337,10 @@
     .TGUColumn {
         padding: 0 !important;
         font-weight: bold;
+        border: none !important;
     }
+
+
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
@@ -352,8 +349,8 @@
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
                 <div class="form-group" style="margin-bottom: 5px;">
-                    <div class="col-sm-6 control-label vet-align-center">
-                        <strong class="font18">Status by Jurisdiction</strong>
+                    <div class="col-sm-6 control-label" style="padding-top: 7px;">
+                        <strong class="font15">Status by Jurisdiction</strong>
                     </div>
                     <div class="col-sm-6">
                         <div id="jurisdictionDropdownContainer"></div>
@@ -364,23 +361,24 @@
             {
                 <div class="form-group" style="margin-bottom: 5px;">
                     <div class="col-sm-7 control-label">
-                        <strong>Showing results for Jurisdiction:</strong>
+                        <strong class="font15">Showing results for Jurisdiction:</strong>
                     </div>
                     <div class="col-sm-5">
-                        <strong>@ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
+                        <strong class="font15">@ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
                     </div>
                 </div>
             }
+            <hr/>
             <table class="table areaBasedCalculationControlTable">
                 <tfoot>
                     <tr>
-                        <td class="TGUColumn footerLabel center">
+                        <td class="TGUColumn center">
                             <strong>Full Trash Capture</strong>
                         </td>
-                        <td class="TGUColumn footerLabel center">
+                        <td class="TGUColumn center">
                             <strong>Equivalent Area</strong>
                         </td>
-                        <td class="TGUColumn footerLabel center">
+                        <td class="TGUColumn center">
                             <strong>Total Full Capture Equivalent</strong>
                         </td>
                     </tr>
@@ -418,8 +416,102 @@
 </template>
 
 <div class="hiddenDropdownContainer" style="display: none;">
-    @Html.DropDownList("jurisdictionDropdown", ViewDataTyped.JurisdictionSelectList, new {@class="form-control"});
+    @Html.DropDownList("jurisdictionDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
 </div>
+
+
+
+<template id="OVTABasedResultsControlTemplate">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl">
+        <div class="form-horizontal">
+            @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
+            {
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <div class="col-sm-6 control-label" style="padding-top: 7px;">
+                        <strong class="font15">Status by Jurisdiction</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="jurisdictionResultsDropdownContainer"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <div class="col-sm-7 control-label">
+                        <strong class="font15">Showing results for Jurisdiction:</strong>
+                    </div>
+                    <div class="col-sm-5">
+                        <strong class="font15">@ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
+                    </div>
+                </div>
+            }
+            <hr />
+            <table class="table areaBasedCalculationControlTable">
+                <thead>
+                    <tr>
+                        <td class="TGUColumn font15" style="width: 55%">
+                            <strong>Score</strong>
+                        </td>
+                        <td class="TGUColumn center font15" style="width: 8.75%">
+                            <strong>A</strong>
+                        </td>
+                        <td class="TGUColumn center font15" style="width: 8.75%">
+                            <strong>B</strong>
+                        </td>
+                        <td class="TGUColumn center font15" style="width: 8.75%">
+                            <strong>C</strong>
+                        </td>
+                        <td class="TGUColumn center font15" style="width: 8.75%">
+                            <strong>D</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font15" style="border: none">
+                            <div>Priority Land Use Area (acres)</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="PLUIsA" style="color: rgb(74,222,0)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="PLUIsB" style="color: rgb(240,234,0)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="PLUIsC" style="color: rgb(255,127,127)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="PLUIsD" style="color: rgb(197,0,255)">0</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font15" style="border: none">
+                            <div>Alternative Land Use Area (acres)</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="ALUIsA" style="color: rgb(74,222,0)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="ALUIsB" style="color: rgb(240,234,0)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="ALUIsC" style="color: rgb(255,127,127)">0</div>
+                        </td>
+                        <td class="TGUColumn center font15">
+                            <div id="ALUIsD" style="color: rgb(197,0,255)">0</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<div class="hiddenDropdownContainer" style="display: none;">
+    @Html.DropDownList("jurisdictionResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
+</div>
+
 
 <script>
     jQuery(document).ready(function () {

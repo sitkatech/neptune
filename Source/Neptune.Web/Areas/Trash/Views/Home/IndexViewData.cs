@@ -74,6 +74,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
             public string AreaBasedCalculationsUrlTemplate { get; }
 
+            public string OVTABasedResultsUrlTemplate { get; }
+
             public List<TreatmentBMPSimple> TreatmentBMPs { get; }
             public List<ParcelSimple> Parcels { get; }
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
@@ -97,6 +99,9 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 AreaBasedCalculationsUrlTemplate =
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
+
+                OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x =>
+                    x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
             }
         }
     }
