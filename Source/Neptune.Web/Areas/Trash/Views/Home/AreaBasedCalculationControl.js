@@ -7,7 +7,7 @@
         if (this.options.showDropdown) {
 
             // must register the event handler before moving the element
-            this.registerHandlerOnDropdown(map);
+            this.registerHandlerOnDropdown();
 
             this.getTrackedElement("jurisdictionDropdownContainer")
                 .append(jQuery("select[name='jurisdictionDropdown']").get(0));
@@ -29,7 +29,7 @@
         populateTGUValues(areaCalculationUrl);
     },
 
-    registerHandlerOnDropdown: function (map) {
+    registerHandlerOnDropdown: function () {
         var self = this;
         jQuery("select[name='jurisdictionDropdown']").change(function () {
             var areaCalculationsUrl =
@@ -42,7 +42,7 @@
         var self = this;
         jQuery("select[name='jurisdictionDropdown']").change(function () {
             var selectedJurisdictionID = this.value;
-            var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
+            var bounds = getBounds(jurisdictionFeatures, selectedJurisdictionID);
             self.map.fitBounds(bounds);
         });
     }
@@ -62,7 +62,7 @@ function populateTGUValues(areaCalculationsUrl) {
     });
 }
 
-function zoom(jurisdictionFeatures, selectedJurisdictionID) {
+function getBounds(jurisdictionFeatures, selectedJurisdictionID) {
     var geoJson = L
         .geoJson(_.find(jurisdictionFeatures,
             function (f) {
