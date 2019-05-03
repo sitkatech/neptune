@@ -63,6 +63,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         public bool DisplayTrashCaptureEffectiveness { get; }
 
         public readonly string VerifiedUnverifiedUrl;
+        public string TrashCaptureEffectiveness { get; }
 
         public DetailViewData(Person currentPerson, Models.TreatmentBMP treatmentBMP, TreatmentBMPDetailMapInitJson mapInitJson, ImageCarouselViewData imageCarouselViewData, string verifiedUnverifiedUrl)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
@@ -101,6 +102,8 @@ namespace Neptune.Web.Views.TreatmentBMP
             DelineationStatus = TreatmentBMP.Delineation?.IsVerified == false ? "Provisional" : "Verified";
             DisplayTrashCaptureEffectiveness = TreatmentBMP.TrashCaptureStatusTypeID ==
                                                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID;
+
+            TrashCaptureEffectiveness = TreatmentBMP.TrashCaptureEffectiveness == null ? "Not Provided" : TreatmentBMP.TrashCaptureEffectiveness + "%";
 
             DelineationMapUrl = treatmentBMP.GetDelineationMapUrl();
         }
