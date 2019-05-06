@@ -198,7 +198,7 @@
                             @Html.LabelWithSugarFor(m => m.TrashCaptureEffectiveness)
                         </div>
                         <div class="col-xs-12 col-sm-4 input-group" style="width: 250px; padding-left: 15px">
-                            @Html.TextBoxFor(m => m.TrashCaptureEffectiveness, new { @class = "form-control", type = "Number" })
+                            @Html.TextBox(@Html.NameFor(x=>x.TrashCaptureEffectiveness).ToString(), (Model.TrashCaptureEffectiveness.HasValue ? Model.TrashCaptureEffectiveness.Value.ToString() : string.Empty), new { @class = "sitkaPercentage form-control", onchange = "this.value = Math.round(this.value);", step="1", type="number" })
                             <span class="input-group-addon">%</span>
                             @Html.ValidationMessageFor(m => m.TrashCaptureEffectiveness)
                         </div>
