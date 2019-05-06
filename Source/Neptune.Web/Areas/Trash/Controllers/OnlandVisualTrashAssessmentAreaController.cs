@@ -13,6 +13,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using LtInfo.Common.DbSpatial;
+using LtInfo.Common.DesignByContract;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -96,15 +97,20 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public ActionResult Delete(OnlandVisualTrashAssessmentAreaPrimaryKey onlandVisualTrashAssessmentAreaPrimaryKey, ConfirmDialogFormViewModel viewModel)
         {
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentAreaPrimaryKey.EntityObject;
+
+            var assessmentCount = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Count;
+            Check.Assert(assessmentCount == 0, $"The Assessment Area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName} cannot be deleted because it has {assessmentCount} Assessment(s) which must be deleted first.");
+
             if (!ModelState.IsValid)
             {
                 return ViewDeleteOnlandVisualTrashAssessmentArea(onlandVisualTrashAssessmentArea, viewModel);
             }
 
-            onlandVisualTrashAssessmentArea.DeleteFull(HttpRequestStorage.DatabaseEntities);
+            onlandVisualTrashAssessmentArea.Delete(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
 
-            SetMessageForDisplay(string.Format("Successfully deleted the assessment area, {0}.", onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName));
+            SetMessageForDisplay(
+                $"Successfully deleted the assessment area, {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}.");
             return new ModalDialogFormJsonResult(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(c => c.Index()));
         }
 
@@ -117,7 +123,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             if (onlandVisualTrashAssessmentAreaCount != 0)
             {
-                confirmMessage = $"The Assessment Area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName} has {onlandVisualTrashAssessmentAreaCount} Assessment(s). You must first delete all associated Assessments before you can delete the Assessment Area";
+                confirmMessage = $"The Assessment Area {onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName} has {onlandVisualTrashAssessmentAreaCount} Assessment(s). You must first delete all associated Assessments before you can delete the Assessment Area.";
                 viewData = new ConfirmDialogFormViewData(confirmMessage, false);
             }
             else
