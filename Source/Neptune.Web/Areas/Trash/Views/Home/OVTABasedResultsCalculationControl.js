@@ -15,7 +15,6 @@
     },
 
     zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {
-        debugger;
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionResultsDropdown']").val();
         var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
