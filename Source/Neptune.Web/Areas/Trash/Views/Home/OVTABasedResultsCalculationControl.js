@@ -27,7 +27,7 @@
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionResultsDropdown']").val();
         var resultsCalculationsUrl = new Sitka.UrlTemplate(self.OVTABasedResultsUrlTemplate).ParameterReplace(selectedJurisdictionID);
-        populateTGUValues(resultsCalculationsUrl);
+        populateTGUValuesOVTABased(resultsCalculationsUrl);
     },
 
     registerHandlerOnDropdown: function (map) {
@@ -35,7 +35,7 @@
         jQuery("select[name='jurisdictionResultsDropdown']").change(function () {
             var resultsCalculationsUrl =
                 new Sitka.UrlTemplate(self.OVTABasedResultsUrlTemplate).ParameterReplace(this.value);
-            populateTGUValues(resultsCalculationsUrl);
+            populateTGUValuesOVTABased(resultsCalculationsUrl);
         });
     },
 
@@ -57,9 +57,9 @@
     }
 });
 
-function populateTGUValues(areaCalculationsUrl) {
+function populateTGUValuesOVTABased(resultsCalculationsUrl) {
     jQuery.ajax({
-        url: areaCalculationsUrl,
+        url: resultsCalculationsUrl,
         method: "GET"
     }).then(function (response) {
         jQuery("#PLUIsA").text(response.PLUSumAcresWhereOVTAIsA);

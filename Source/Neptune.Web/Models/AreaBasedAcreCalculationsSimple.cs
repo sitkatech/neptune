@@ -7,5 +7,7 @@
         public double TotalAcresCaptured { get; set; }
         public double TotalPLUAcres { get; set; }
 
+        public double PercentTreated { get; set; }
+
     }
 }
