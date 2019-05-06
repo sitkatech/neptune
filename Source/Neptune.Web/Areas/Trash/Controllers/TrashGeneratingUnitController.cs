@@ -42,12 +42,15 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != null).GetArea();
 
+            var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
+
             return Json(new AreaBasedAcreCalculationsSimple
             {
                 FullTrashCaptureAcreage = fullTrashCapture,
                 EquivalentAreaAcreage = equivalentArea,
                 TotalAcresCaptured = totalAcresCaptured,
-                TotalPLUAcres = totalPLUAcres
+                TotalPLUAcres = totalPLUAcres,
+                PercentTreated = percentTreated
             }, JsonRequestBehavior.AllowGet);
         }
     }
@@ -57,7 +60,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return Math.Round(trashGeneratingUnits
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 2); // will never be null
+                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 1); // will never be null
         }
     }
 }

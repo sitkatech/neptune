@@ -22,6 +22,11 @@
 
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
 
+        var wmsParamsForBackgroundLayer = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:MaskLayers");
+        var backgroundLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParamsForBackgroundLayer);
+        backgroundLayer.addTo($scope.neptuneMap.map);
+        backgroundLayer.bringToFront();
+
         var applyJurisdictionMask = function (stormwaterJurisdictionID) {
             if ($scope.maskLayer) {
                 $scope.neptuneMap.map.removeLayer($scope.maskLayer);
