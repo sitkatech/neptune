@@ -14,6 +14,22 @@
         var landUseBlocksLabel = "<span>Trash Capture Status </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", landUseBlocksLabel);
 
+        var applyJurisdictionMask = function () {
+            debugger;
+            if ($scope.maskLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
+                $scope.maskLayer = null;
+            }
+
+            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
+            wmsParams.cql_filter = $scope.AngularViewData.NegativeStormwaterJurisdictionCqlFilter;
+            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
+            $scope.maskLayer.addTo($scope.neptuneMap.map);
+            $scope.maskLayer.bringToFront();
+
+        };
+
+        applyJurisdictionMask();
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
 

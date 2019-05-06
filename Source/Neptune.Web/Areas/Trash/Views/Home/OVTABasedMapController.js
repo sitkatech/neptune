@@ -23,6 +23,7 @@
         ovtaBasedResultsControl.addTo($scope.neptuneMap.map);
 
         var applyJurisdictionMask = function (stormwaterJurisdictionID) {
+            debugger;
             if ($scope.maskLayer) {
                 $scope.neptuneMap.map.removeLayer($scope.maskLayer);
                 $scope.maskLayer = null;
@@ -40,6 +41,7 @@
         ovtaBasedResultsControl.loadAreaBasedCalculationOnLoad();
         ovtaBasedResultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
+        ovtaBasedResultsControl.registerAdditionalHandler(applyJurisdictionMask);
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
@@ -89,9 +91,6 @@
         };
 
         $scope.neptuneMap.map.on("click", function (event) {
-            // todo: Ian to delete this line before pull request
-            return;
-
             var scores = $scope.selectedOVTAScores();
 
             if (scores.length === 0) {

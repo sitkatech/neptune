@@ -15,6 +15,7 @@
     },
 
     zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {
+        debugger;
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionResultsDropdown']").val();
         var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
@@ -61,8 +62,6 @@ function populateTGUValues(areaCalculationsUrl) {
         url: areaCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
-
         jQuery("#PLUIsA").text(response.PLUSumAcresWhereOVTAIsA);
         jQuery("#PLUIsB").text(response.PLUSumAcresWhereOVTAIsB);
         jQuery("#PLUIsC").text(response.PLUSumAcresWhereOVTAIsC);

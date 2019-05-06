@@ -167,5 +167,11 @@ namespace Neptune.Web.Models
                 ? ""
                 : $"StormwaterJurisdictionID IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
         }
+        public static string GetNegativeStormwaterJurisdictionCqlFilter(this Person currentPerson)
+        {
+            return currentPerson.IsAdministrator()
+                ? ""
+                : $"StormwaterJurisdictionID NOT IN ({String.Join(",", currentPerson.GetStormwaterJurisdictionsPersonCanEdit().Select(x => x.StormwaterJurisdictionID))})";
+        }
     }
 }
