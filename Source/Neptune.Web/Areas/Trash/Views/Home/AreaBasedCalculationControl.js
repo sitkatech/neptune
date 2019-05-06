@@ -27,7 +27,7 @@
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionDropdown']").val();
         var areaCalculationUrl = new Sitka.UrlTemplate(self.areaCalculationsUrlTemplate).ParameterReplace(selectedJurisdictionID);
-        populateTGUValues(areaCalculationUrl);
+        populateTGUValuesAreaBased(areaCalculationUrl);
     },
 
     registerHandlerOnDropdown: function () {
@@ -35,7 +35,7 @@
         jQuery("select[name='jurisdictionDropdown']").change(function () {
             var areaCalculationsUrl =
                 new Sitka.UrlTemplate(self.areaCalculationsUrlTemplate).ParameterReplace(this.value);
-            populateTGUValues(areaCalculationsUrl);
+            populateTGUValuesAreaBased(areaCalculationsUrl);
         });
     },
 
@@ -57,7 +57,7 @@
     }
 });
 
-function populateTGUValues(areaCalculationsUrl) {
+function populateTGUValuesAreaBased(areaCalculationsUrl) {
     jQuery.ajax({
         url: areaCalculationsUrl,
         method: "GET"
@@ -66,6 +66,7 @@ function populateTGUValues(areaCalculationsUrl) {
         jQuery("#equivalentArea").text(response.EquivalentAreaAcreage);
         jQuery("#totalAcresCaptured").text(response.TotalAcresCaptured);
         jQuery("#totalPLUAcres").text(response.TotalPLUAcres);
+        //jQuery("#AcresTreated").text(response.PercentTreated + "%");
     });
 }
 
