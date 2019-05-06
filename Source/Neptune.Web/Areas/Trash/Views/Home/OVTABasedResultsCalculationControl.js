@@ -14,11 +14,12 @@
         this.OVTABasedResultsUrlTemplate = this.options.OVTABasedResultsUrlTemplate;
     },
 
-    zoomToJurisdictionOnLoad: function (jurisdictionFeatures) {
+    zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionResultsDropdown']").val();
         var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
         self.map.fitBounds(bounds);
+        callback(selectedJurisdictionID);
     },
 
     loadAreaBasedCalculationOnLoad: function () {
@@ -43,6 +44,14 @@
             var selectedJurisdictionID = this.value;
             var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
             self.map.fitBounds(bounds);
+        });
+    },
+
+    registerAdditionalHandler: function (callback) {
+        var self = this;
+        jQuery("select[name='jurisdictionResultsDropdown']").change(function () {
+            var selectedJurisdictionID = this.value;
+            callback(selectedJurisdictionID);
         });
     }
 });
@@ -76,6 +85,6 @@ function zoom(jurisdictionFeatures, selectedJurisdictionID) {
 };
 
 
-L.control.OVTABasedResultsControl = function (opts) {
+L.control.ovtaBasedResultsControl = function (opts) {
     return new L.Control.OVTABasedResultsControl(opts);
 };

@@ -23,7 +23,6 @@
         areaBasedCalculationControl.addTo($scope.neptuneMap.map);
 
         var applyJurisdictionMask = function (stormwaterJurisdictionID) {
-            debugger;
             if ($scope.maskLayer) {
                 $scope.neptuneMap.map.removeLayer($scope.maskLayer);
                 $scope.maskLayer = null;

@@ -14,17 +14,31 @@
         var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
         $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
 
-        var OVTABasedResultsControl = L.control.OVTABasedResultsControl({
+        var ovtaBasedResultsControl = L.control.ovtaBasedResultsControl({
             position: 'topleft',
             OVTABasedResultsUrlTemplate: $scope.AngularViewData.OVTABasedResultsUrlTemplate,
             showDropdown: $scope.AngularViewData.ShowDropdown
         });
 
-        OVTABasedResultsControl.addTo($scope.neptuneMap.map);
+        ovtaBasedResultsControl.addTo($scope.neptuneMap.map);
 
-        OVTABasedResultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
-        OVTABasedResultsControl.loadAreaBasedCalculationOnLoad();
-        OVTABasedResultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
+        var applyJurisdictionMask = function (stormwaterJurisdictionID) {
+            if ($scope.maskLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
+                $scope.maskLayer = null;
+            }
+
+            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
+            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
+            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
+            $scope.maskLayer.addTo($scope.neptuneMap.map);
+            $scope.maskLayer.bringToFront();
+
+        };
+
+        ovtaBasedResultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features, applyJurisdictionMask);
+        ovtaBasedResultsControl.loadAreaBasedCalculationOnLoad();
+        ovtaBasedResultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
