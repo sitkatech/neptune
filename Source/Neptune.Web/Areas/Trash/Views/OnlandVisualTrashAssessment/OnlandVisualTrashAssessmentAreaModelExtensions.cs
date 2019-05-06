@@ -110,14 +110,5 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.SingleOrDefault(x =>
                 x.IsTransectBackingAssessment);
         }
-
-        public static void DeleteFullExceptTGUs(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, DatabaseEntities dbContext)
-        {
-            foreach (var x in onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
-            onlandVisualTrashAssessmentArea.Delete(dbContext);
-        }
     }
 }
