@@ -70,7 +70,6 @@ namespace Neptune.Web.Views.TreatmentBMP
 
         [DisplayName("Trash Capture Effectiveness")]
         [Range(1, 99, ErrorMessage = "The Trash Effectiveness must be between 1 and 99, if the score is 100 please select Full")]
-        [CustomValidation(typeof(int), "Please enter the Trash Capture Effectiveness value as an integer")]
         public int? TrashCaptureEffectiveness { get; set; }
 
         /// <summary>
