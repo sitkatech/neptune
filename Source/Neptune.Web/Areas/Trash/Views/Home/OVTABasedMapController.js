@@ -9,6 +9,8 @@
             "Terrain",
             $scope.AngularViewData.GeoServerUrl);
 
+        $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
+
         var landUseBlocksLegendUrl = $scope.AngularViewData.GeoServerUrl +
             "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
         var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";

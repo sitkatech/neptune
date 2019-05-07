@@ -70,7 +70,8 @@ NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
 
     // add vector layers
     this.vectorLayers = [];
-
+    this.vectorLayerGroups = [];
+    
     for (var i = 0; i < mapInitJson.Layers.length; ++i) {
         var currentLayer = mapInitJson.Layers[i];
         switch (currentLayer.LayerType) {
@@ -136,6 +137,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
 
     overlayLayers[currentLayer.LayerName] = layerGroup;
     this.vectorLayers.push(layerGeoJson);
+    this.vectorLayerGroups.push(layerGroup);
 };
 
 NeptuneMaps.Map.prototype.addWmsLayer = function (currentLayer, overlayLayers) {
