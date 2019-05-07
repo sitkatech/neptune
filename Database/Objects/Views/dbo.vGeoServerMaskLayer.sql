@@ -3,5 +3,5 @@ go
 
 Create View dbo.vGeoServerMaskLayer as
 
-Select geometry::UnionAggregate(StormwaterJurisdictionGeometry).STEnvelope().STDifference(geometry::UnionAggregate(StormwaterJurisdictionGeometry)) as MaskLayerGeometry from dbo.StormwaterJurisdiction
+Select geometry::UnionAggregate(StormwaterJurisdictionGeometry).STEnvelope().STBuffer(1).STDifference(geometry::UnionAggregate(StormwaterJurisdictionGeometry)) as MaskLayerGeometry from dbo.StormwaterJurisdiction
 GO

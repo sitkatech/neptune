@@ -392,7 +392,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
-            self.downsampleSelectedDelineation(.001);
+            self.downsampleSelectedDelineation(.0001);
             self.launchDrawCatchmentMode();
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
