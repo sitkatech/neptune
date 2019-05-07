@@ -23,7 +23,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.DhtmlWrappers;
 using LtInfo.Common.Mvc;
@@ -78,11 +80,19 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
         {
 
             Add("Trash Generating Unit ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            Add("Land Use Type", x => x.LandUseBlock.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "", 100, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDetailUrl() ?? "", 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Governing TreatmentBMP", x => x.TreatmentBMP?.GetDetailUrl() ?? "", 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDetailUrl() ?? "", 100, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Land Use Type", x =>
+            {
+                if (x.LandUseBlock == null)
+                {
+                    return "No data provided";
+                }
+
+                return x.LandUseBlock?.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use";
+            }, 140, DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrlNoPermissionCheck() ?? new HtmlString(""), 300, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 195, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
         }
 
     }
@@ -97,6 +107,8 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
         public string GridDataUrl { get; }
         public IndexViewData(Person currentPerson) : base (currentPerson, NeptuneArea.OCStormwaterTools)
         {
+            EntityName = "Trash Generating Unit";
+            PageTitle = "Index";
             GridSpec = new TrashGeneratingUnitGridSpec() { ObjectNameSingular = "Absolute Unit", ObjectNamePlural = "Absolute Units", SaveFiltersInCookie = true };
             GridName = "absoluteUnitsGrid";
             GridDataUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(j => j.TrashGeneratingUnitGridJsonData());
