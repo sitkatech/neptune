@@ -120,7 +120,7 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  * of the other delineation paths.
  */
 
-NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
+NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function (drawModeOptions) {
     this.restoreZoom = this.map.getZoom();
 
     if (this.beginDelineationControl) {
@@ -136,10 +136,10 @@ NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function () {
         this.map.fitBounds(this.lastSelected.getBounds());
     }
 
-    this.buildDrawControl();
+    this.buildDrawControl(drawModeOptions);
 };
 
-NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
+NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOptions) {
     this.editableFeatureGroup = new L.FeatureGroup();
     var editableFeatureGroup = this.editableFeatureGroup;
 
@@ -162,20 +162,9 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
 
             });
     }
+    this.map.addLayer(editableFeatureGroup);
 
-    /* this is not the best way to prevent drawing multiple polygons, but the other options are:
-     * 1. fork Leaflet.Draw and add the functionality or
-     * 2.maintain two versions of the draw control that track the same feature group but with different options
-     * and the answer to both of those is "no"
-     */
-    this.map.addLayer(this.editableFeatureGroup);
-    if (this.editableFeatureGroup.getLayers().length > 0) {
-        killPolygonDraw();
-        jQuery(".leaflet-draw-edit-edit").get(0).click();
-    } else {
-        unKillPolygonDraw();
-        jQuery(".leaflet-draw-draw-polygon").get(0).click();
-    }
+    this.functionName(drawModeOptions);
 
     this.map.on('draw:created',
         function (e) {
@@ -201,6 +190,26 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function () {
                 unKillPolygonDraw();
             }
         });
+};
+
+NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions) {
+
+
+    /* this is not the best way to prevent drawing multiple polygons, but the other options are:
+     * 1. fork Leaflet.Draw and add the functionality or
+     * 2.maintain two versions of the draw control that track the same feature group but with different options
+     * and the answer to both of those is "no"
+     */
+
+    var editableFeatureGroup = this.editableFeatureGroup;
+    console.log(drawModeOptions.delineationType);
+    if (editableFeatureGroup.getLayers().length > 0) {
+        killPolygonDraw();
+        jQuery(".leaflet-draw-edit-edit").get(0).click();
+    } else {
+        unKillPolygonDraw();
+        jQuery(".leaflet-draw-draw-polygon").get(0).click();
+    }
 };
 
 NeptuneMaps.DelineationMap.prototype.tearDownDrawControl = function () {
@@ -389,16 +398,24 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             if (response.features[0]) {
                 return self.retrieveDelineationFromNetworkTrace(response.features[0].properties.NetworkCatchmentID);
             } else {
-                return jQuery.Deferred();
+                return jQuery.Deferred(function (deferred) {
+                    return deferred.reject();
+                });
             }
         }).then(function (response) {
             var geoJson = JSON.parse(response);
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
-        
-        self.downsampleSelectedDelineation(TOLERANCE_BIG_POLY);
-            self.launchDrawCatchmentMode();
+
+            self.downsampleSelectedDelineation(TOLERANCE_BIG_POLY);
+
+            var drawModeOptions = {
+                tolerance: TOLERANCE_BIG_POLY,
+                delineationType: self.delineationType
+            };
+
+            self.launchDrawCatchmentMode(drawModeOptions);
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
             self.removeLoading();
