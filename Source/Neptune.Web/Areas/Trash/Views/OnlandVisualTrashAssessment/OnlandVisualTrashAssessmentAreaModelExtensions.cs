@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Spatial;
 using System.Linq;
 using System.Web;
 using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.DbSpatial;
 using LtInfo.Common.GeoJson;
+using MoreLinq;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Common;
 using Neptune.Web.Models;
@@ -16,6 +18,15 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 {
     public static class OnlandVisualTrashAssessmentAreaModelExtensions
     {
+
+        public static readonly UrlTemplate<int> DeleteUrlTemplate =
+            new UrlTemplate<int>(
+                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
+        public static string GetDeleteUrl(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return DeleteUrlTemplate.ParameterReplace(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
+        }
+
         public static readonly UrlTemplate<int> DetailUrlTemplate =
             new UrlTemplate<int>(
                 SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int)));
@@ -97,18 +108,25 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return null;
         }
 
-        public static readonly UrlTemplate<int> DeleteUrlTemplate =
-            new UrlTemplate<int>(
-                SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(t => t.Delete(UrlTemplate.Parameter1Int)));
-        public static string GetDeleteUrl(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
-        {
-                return DeleteUrlTemplate.ParameterReplace(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID);
-        }
-
         public static Models.OnlandVisualTrashAssessment GetTransectBackingAssessment(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.SingleOrDefault(x =>
                 x.IsTransectBackingAssessment);
+        }
+
+        public static DbGeometry RecomputeTransectLine(
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            var onlandVisualTrashAssessments = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments
+                .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
+                            OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID).ToList();
+
+            if (onlandVisualTrashAssessments.Any())
+            {
+                return onlandVisualTrashAssessments.MaxBy(x => x.CompletedDate).GetTransect().FixSrid();
+            }
+
+            return null;
         }
     }
 }
