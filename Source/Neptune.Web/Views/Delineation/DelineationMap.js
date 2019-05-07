@@ -268,6 +268,9 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     });
 };
 
+var TOLERANCE_BIG_POLY   = 0.0001;
+var TOLERANCE_SMALL_POLY = 0.000015;
+console.log(TOLERANCE_SMALL_POLY);
 NeptuneMaps.DelineationMap.prototype.downsampleSelectedDelineation = function (tolerance) {
     if (!this.selectedBMPDelineationLayer) {
         return; //misplaced call
@@ -311,7 +314,8 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         self.removeLoading();
         self.enableUserInteraction();
 
-        self.downsampleSelectedDelineation(0.00005);
+        
+        self.downsampleSelectedDelineation(TOLERANCE_SMALL_POLY);
         self.launchDrawCatchmentMode();
     }).fail(function (error) {
 
@@ -392,7 +396,8 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.processAndShowTraceDelineation(geoJson);
             self.removeLoading();
             self.enableUserInteraction();
-            self.downsampleSelectedDelineation(.0001);
+        
+        self.downsampleSelectedDelineation(TOLERANCE_BIG_POLY);
             self.launchDrawCatchmentMode();
         }).fail(function () {
             self.selectedAssetControl.enableDelineationButton();
