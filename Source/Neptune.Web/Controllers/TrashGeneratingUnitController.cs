@@ -19,24 +19,15 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using LtInfo.Common;
-using LtInfo.Common.DbSpatial;
-using LtInfo.Common.DhtmlWrappers;
-using LtInfo.Common.Mvc;
 using LtInfo.Common.MvcResults;
-using LtInfo.Common.Views;
-using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
 using Neptune.Web.Views.TrashGeneratingUnit;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 using Index = Neptune.Web.Views.TrashGeneratingUnit.Index;
 using IndexViewData = Neptune.Web.Views.TrashGeneratingUnit.IndexViewData;
 
@@ -68,51 +59,6 @@ namespace Neptune.Web.Controllers
             return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.OrderByDescending(x=>x.LastUpdateDate).Include(x => x.TreatmentBMP)
                 .Include(x => x.OnlandVisualTrashAssessmentArea).Include(x => x.LandUseBlock)
                 .Include(x => x.StormwaterJurisdiction.Organization).ToList();
-        }
-    }
-}
-namespace Neptune.Web.Views.TrashGeneratingUnit
-{
-
-    public class TrashGeneratingUnitGridSpec : GridSpec<Models.TrashGeneratingUnit>
-    {
-        public TrashGeneratingUnitGridSpec()
-        {
-
-            Add("Trash Generating Unit ID", x => x.TrashGeneratingUnitID.ToString(CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.FormattedNumeric);
-            Add("Land Use Type", x =>
-            {
-                if (x.LandUseBlock == null)
-                {
-                    return "No data provided";
-                }
-
-                return x.LandUseBlock?.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use";
-            }, 140, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrlNoPermissionCheck() ?? new HtmlString(""), 255, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
-            Add("Last Updated", x => x.LastUpdateDate, 120,DhtmlxGridColumnFormatType.DateTime);
-        }
-
-    }
-
-    public abstract class Index : TypedWebViewPage<IndexViewData>
-    {
-    }
-    public class IndexViewData : NeptuneViewData
-    {
-        public TrashGeneratingUnitGridSpec GridSpec { get; }
-        public string GridName { get; }
-        public string GridDataUrl { get; }
-        public IndexViewData(Person currentPerson) : base (currentPerson, NeptuneArea.OCStormwaterTools)
-        {
-            EntityName = "Trash Generating Unit";
-            PageTitle = "Index";
-            GridSpec = new TrashGeneratingUnitGridSpec() { ObjectNameSingular = "Absolute Unit", ObjectNamePlural = "Absolute Units", SaveFiltersInCookie = true };
-            GridName = "absoluteUnitsGrid";
-            GridDataUrl = SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(j => j.TrashGeneratingUnitGridJsonData());
         }
     }
 }
