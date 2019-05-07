@@ -15,7 +15,7 @@ from dbo.TrashGeneratingUnit tgu
 		on tgu.OnlandVisualTrashAssessmentAreaID = ovtaad.OnlandVisualTrashAssessmentAreaID
 	left join dbo.TreatmentBMP tbmp
 		on tgu.TreatmentBMPID = tbmp.TreatmentBMPID
-	join dbo.TrashCaptureStatusType tcs
+	left join dbo.TrashCaptureStatusType tcs
 		on tcs.TrashCaptureStatusTypeID = tbmp.TrashCaptureStatusTypeID
 	left join dbo.LandUseBlock lub
 		on lub.LandUseBlockID = tgu.LandUseBlockID
