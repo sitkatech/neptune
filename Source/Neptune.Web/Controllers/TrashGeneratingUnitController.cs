@@ -65,7 +65,7 @@ namespace Neptune.Web.Controllers
         {
             gridSpec = new TrashGeneratingUnitGridSpec();
 
-            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.Include(x => x.TreatmentBMP)
+            return HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits.OrderByDescending(x=>x.LastUpdateDate).Include(x => x.TreatmentBMP)
                 .Include(x => x.OnlandVisualTrashAssessmentArea).Include(x => x.LandUseBlock)
                 .Include(x => x.StormwaterJurisdiction.Organization).ToList();
         }
@@ -89,10 +89,11 @@ namespace Neptune.Web.Views.TrashGeneratingUnit
 
                 return x.LandUseBlock?.PriorityLandUseType?.PriorityLandUseTypeDisplayName ?? "Not Priority Land Use";
             }, 140, DhtmlxGridColumnFilterType.SelectFilterStrict);
-            Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrlNoPermissionCheck() ?? new HtmlString(""), 300, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
-            Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 195, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Governing OVTA Area", x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrlNoPermissionCheck() ?? new HtmlString(""), 255, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add("Governing Treatment BMP", x => x.TreatmentBMP?.GetDisplayNameAsUrl() ?? new HtmlString(""), 190, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Stormwater Jurisdiction", x => x.StormwaterJurisdiction?.GetDisplayNameAsDetailUrl() ?? new HtmlString(""), 170, DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Area", x => ((x.TrashGeneratingUnitGeometry.Area ?? 0) * DbSpatialHelper.SqlGeometryAreaToAcres).ToString("F2", CultureInfo.InvariantCulture), 100, DhtmlxGridColumnFilterType.Numeric);
+            Add("Last Updated", x => x.LastUpdateDate, 120,DhtmlxGridColumnFormatType.DateTime);
         }
 
     }

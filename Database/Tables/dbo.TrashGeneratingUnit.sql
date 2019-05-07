@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[TrashGeneratingUnit](
 	[OnlandVisualTrashAssessmentAreaID] [int] NULL,
 	[LandUseBlockID] [int] NULL,
 	[TrashGeneratingUnitGeometry] [geometry] NOT NULL,
+	[LastUpdateDate] [datetime] NULL,
  CONSTRAINT [PK_TrashGeneratingUnit_TrashGeneratingUnitID] PRIMARY KEY CLUSTERED 
 (
 	[TrashGeneratingUnitID] ASC
