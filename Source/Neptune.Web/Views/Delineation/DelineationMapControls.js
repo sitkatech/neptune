@@ -262,9 +262,8 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
-        var drawModeOptions = { delineationType: flowOption, mechanism: STRATEGY_MANUAL };
-        console.log(drawModeOptions);
-
+        var drawModeOptions = { delineationType: flowOption, delineationStrategy: STRATEGY_MANUAL };
+        
         if (flowOption === "Distributed") {
             if (delineationOption === "drawDelineate") {
                 window.delineationMap.launchDrawCatchmentMode(drawModeOptions);

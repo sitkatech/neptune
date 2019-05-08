@@ -140,7 +140,7 @@ namespace Neptune.Web.Controllers
 
 
 
-            return Json(new {success = true});
+            return Json(new {success = true, delineationID = treatmentBMP.DelineationID});
         }
 
         [HttpGet]
