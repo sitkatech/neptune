@@ -65,6 +65,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 $"<a href=\"{onlandVisualTrashAssessmentArea.GetDetailUrl()}\" alt=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" title=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" >{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}</a>");
         }
 
+        public static HtmlString GetDisplayNameAsDetailUrlNoPermissionCheck(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return new HtmlString(
+                $"<a href=\"{onlandVisualTrashAssessmentArea.GetDetailUrl()}\" alt=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" title=\"{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}\" >{onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName}</a>");
+        }
+
         public static DateTime? GetLastAssessmentDate(
             this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {

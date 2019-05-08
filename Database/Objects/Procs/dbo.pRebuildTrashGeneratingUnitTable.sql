@@ -129,16 +129,17 @@ Insert into dbo.TrashGeneratingUnit (
 	TreatmentBMPID,
 	OnlandVisualTrashAssessmentAreaID,
 	LandUseBlockID,
-	TrashGeneratingUnitGeometry
+	TrashGeneratingUnitGeometry,
+	LastUpdateDate
 )
 select
 	jdo.JurisdictionID,
 	jdo.TreatmentBMPID,
 	jdo.OnlandVisualTrashAssessmentAreaID,
 	lub.LandUseBlockID,
-	jdo.Geom.STIntersection(lub.LandUseBlockGeometry)
+	jdo.Geom.STIntersection(lub.LandUseBlockGeometry),
+	GetDate()
 from
 	#JurisdictionDelineationOvta jdo join #LandUseBlocksAdjusted lub
 		on jdo.Geom.STIntersects(lub.LandUseBlockGeometry) = 1
-
 GO
