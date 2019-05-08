@@ -121,9 +121,15 @@
 
         $scope.initializeTreatmentBMPClusteredLayer();
 
-        $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('zoomend', function () {
+            $scope.$apply();
+            trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('moveend', function () {
+            $scope.$apply();
+            trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
+        });
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
@@ -296,4 +302,7 @@
 
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-fullscreen"));
+
+        trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
     });

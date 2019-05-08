@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("OVTABasedMapController", function ($scope, angularModelAndViewData) {
+    .controller("OVTABasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
@@ -439,6 +439,8 @@
                 $scope.ovtaBasedMapExtentSet = true;
                 $scope.neptuneMap.setMapBounds($scope.AngularViewData.MapInitJson);
             }
+            console.log([trashMapService.center, trashMapService.zoom]);
+            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom);
         });
 
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));

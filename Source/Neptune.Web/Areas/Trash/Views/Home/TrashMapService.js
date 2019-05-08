@@ -1,9 +1,17 @@
-﻿angular.module("NeptuneApp").factory("trashMapService", ['$window', function(win) {
-        var trashMapServiceInstance = {};
+﻿angular.module("NeptuneApp").factory("trashMapService", ['$window', function (win) {
+    var trashMapServiceInstance = {};
 
-        trashMapServiceInstance.test = function() {
-            win.alert("Service is wired!");
-        };
+    trashMapServiceInstance.saveBounds = function (bounds) {
+        this.bounds = bounds;
+    };
 
-        return trashMapServiceInstance;
-    }]);
+    trashMapServiceInstance.saveCenter = function(center) {
+        this.center = center;
+    };
+
+    trashMapServiceInstance.saveZoom = function(zoom) {
+        this.zoom = zoom;
+    };
+
+    return trashMapServiceInstance;
+}]);
