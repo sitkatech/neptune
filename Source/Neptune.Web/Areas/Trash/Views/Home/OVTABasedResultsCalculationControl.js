@@ -22,7 +22,7 @@
         callback(selectedJurisdictionID);
     },
 
-    zoomToJurisdiction: function(stormwaterJurisdictionID) {
+    maskToJurisdiction: function(stormwaterJurisdictionID) {
         jQuery("select[name='jurisdictionResultsDropdown']").val(stormwaterJurisdictionID);
         jQuery("select[name='jurisdictionResultsDropdown']").change();
     },

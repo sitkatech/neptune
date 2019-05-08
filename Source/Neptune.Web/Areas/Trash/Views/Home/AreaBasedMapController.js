@@ -280,7 +280,6 @@
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
 
-        // ReSharper disable InconsistentNaming
         $scope.fullBmpOn = false;
         $scope.partialBmpOn = false;
         $scope.fullParcelOn = false;
@@ -294,7 +293,7 @@
         jQuery("#areaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
 
-            areaBasedCalculationControl.zoomToJurisdiction(trashMapService.stormwaterJurisdictionID);
+            applyJurisdictionMask(trashMapService.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 
@@ -303,4 +302,5 @@
 
         trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
+        trashMapService.saveStormwaterJurisdictionID(areaBasedCalculationControl.getSelectedJurisdictionID());
     });

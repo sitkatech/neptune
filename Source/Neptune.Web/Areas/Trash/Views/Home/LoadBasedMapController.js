@@ -279,9 +279,6 @@
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
 
-        // ReSharper disable InconsistentNaming
-        var FULL_TC = 1;
-        var PARTIAL_TC = 2;
         $scope.fullBmpOn = false;
         $scope.partialBmpOn = false;
         $scope.fullParcelOn = false;
@@ -297,5 +294,4 @@
 
             $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
-
     });

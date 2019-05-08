@@ -430,7 +430,6 @@
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };
 
-        // ReSharper disable InconsistentNaming
         $scope.fullBmpOn = false;
         $scope.partialBmpOn = false;
         $scope.fullParcelOn = false;
@@ -444,7 +443,7 @@
         jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
 
-            ovtaBasedResultsControl.zoomToJurisdiction(trashMapService.stormwaterJurisdictionID);
+            applyJurisdictionMask(trashMapService.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 

@@ -58,6 +58,9 @@
             var selectedJurisdictionID = this.value;
             callback(selectedJurisdictionID);
         });
+    },
+    getSelectedJurisdictionID: function() {
+        return jQuery("select[name='jurisdictionDropdown']").val();
     }
 });
 
