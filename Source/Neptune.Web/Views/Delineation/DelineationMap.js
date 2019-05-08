@@ -57,6 +57,12 @@ var TOLERANCE_SMALL_POLY = 0.000015;
 var DELINEATION_DISTRIBUTED = "Distributed";
 var DELINEATION_CENTRALIZED = "Centralized";
 
+var STRATEGY_AUTODEM = "AutoDEM";
+var STRATEGY_NETWORK_TRACE = "NetworkTrace";
+var STRATEGY_MANUAL = "Manual";
+
+/* Prototype members */
+
 NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
 
     var jurisdictionCQLFilter = this.config.JurisdictionCQLFilter;
@@ -126,6 +132,12 @@ NeptuneMaps.DelineationMap.prototype.removeBeginDelineationControl = function ()
  * When in this mode, the user is given access to a Leaflet.Draw control pointed at this.selectedBMPDelineationLayer.
  * This mode is activated when the user chooses the draw option from the Begin Delineation Control or as the terminus
  * of the other delineation paths.
+ * drawModeOptions is a
+ * {
+ *   tolerance: number,
+ *   delineationType: string [DELINEATION_CENTRALIZED | DELINEATION_DISTRIBUTED],
+ *   delineationStrategy: string [STRATEGY_AUTODEM | STRATEGY_NETWORK_TRACE]
+ * }
  */
 
 NeptuneMaps.DelineationMap.prototype.launchDrawCatchmentMode = function (drawModeOptions) {
@@ -167,7 +179,6 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
                         editableFeatureGroup.addLayer(layer);
                     }
                 }
-
             });
     }
     this.map.addLayer(editableFeatureGroup);
@@ -194,8 +205,6 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
 };
 
 NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions, goDirectlyToVertexEditIfAllowed) {
-
-
     /* this is not the best way to prevent drawing multiple polygons, but the other options are:
      * 1. fork Leaflet.Draw and add the functionality or
      * 2.maintain two versions of the draw control that track the same feature group but with different options
@@ -205,12 +214,12 @@ NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions, g
     var editableFeatureGroup = this.editableFeatureGroup;
     if (editableFeatureGroup.getLayers().length > 0) {
         killPolygonDraw();
-        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationType === DELINEATION_DISTRIBUTED) {
+        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationStrategy !== STRATEGY_NETWORK_TRACE) {
             jQuery(".leaflet-draw-edit-edit").get(0).click();
         }
     } else {
         unKillPolygonDraw();
-        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationType === DELINEATION_DISTRIBUTED) {
+        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationStrategy !== STRATEGY_NETWORK_TRACE) {
             jQuery(".leaflet-draw-draw-polygon").get(0).click();
         }
     }
@@ -296,6 +305,7 @@ NeptuneMaps.DelineationMap.prototype.downsampleSelectedDelineation = function (t
     this.addBMPDelineationLayer(simplified);
 };
 
+
 /* "Auto-Delineate Mode"
  * In this UI "mode", the map is locked down to all user interactions while waiting for the DEM service to return.
  * After a failed return, the failure is reported and the UI unblocked.
@@ -327,7 +337,7 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
 
         
 
-        var drawModeOptions = { tolerance: TOLERANCE_SMALL_POLY, delineationType: DELINEATION_DISTRIBUTED };
+        var drawModeOptions = { tolerance: TOLERANCE_SMALL_POLY, delineationType: DELINEATION_DISTRIBUTED, delineationStrategy: STRATEGY_AUTODEM };
 
         self.launchDrawCatchmentMode(drawModeOptions);
     }).fail(function (error) {
@@ -410,11 +420,10 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
             self.removeLoading();
             self.enableUserInteraction();
 
-            self.downsampleSelectedDelineation(TOLERANCE_BIG_POLY);
-
             var drawModeOptions = {
                 tolerance: TOLERANCE_BIG_POLY,
-                delineationType: DELINEATION_CENTRALIZED
+                delineationType: DELINEATION_CENTRALIZED,
+                delineationStrategy: STRATEGY_NETWORK_TRACE
             };
 
             self.launchDrawCatchmentMode(drawModeOptions);
@@ -433,14 +442,14 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function (networkCatchmentID) {
+NeptuneMaps.DelineationMap.prototype.retrieveDelineationFromNetworkTrace = function(networkCatchmentID) {
     var url = new Sitka.UrlTemplate(this.config.CatchmentTraceUrlTemplate).ParameterReplace(networkCatchmentID);
 
     return jQuery.ajax({
         url: url,
         type: "GET"
     });
-}
+};
 
 NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (geoJson) {
     if (this.selectedBMPDelineationLayer) {
@@ -465,13 +474,13 @@ NeptuneMaps.DelineationMap.prototype.processAndShowTraceDelineation = function (
     this.selectedBMPDelineationLayer.isUnsavedDelineation = true; // so we know to clear the delineation if they cancel later
 };
 
-NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJsonResponse) {
+NeptuneMaps.DelineationMap.prototype.addBMPDelineationLayer = function (geoJson) {
     if (this.selectedBMPDelineationLayer) {
         this.map.removeLayer(this.selectedBMPDelineationLayer);
         this.selectedBMPDelineationLayer = null;
     }
 
-    this.selectedBMPDelineationLayer = L.geoJson(geoJsonResponse,
+    this.selectedBMPDelineationLayer = L.geoJson(geoJson,
         {
             style: function (feature) {
                 return {
@@ -687,8 +696,10 @@ NeptuneMaps.DelineationMap.prototype.removeLoading = function () {
     this.map.spin(false);
 };
 
-
-
+/* Utility methods. These should be free of side-effects */
+var downsampleGeoJsonFeature = function (geoJson, tolerance) {
+    return tuf.simplify(geoJson, { tolerance: tolerance });
+};
 
 /* assorted miscellaneous helper functions */
 

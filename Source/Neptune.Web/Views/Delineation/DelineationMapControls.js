@@ -262,7 +262,8 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
-        var drawModeOptions = { delineationType: flowOption };
+        var drawModeOptions = { delineationType: flowOption, mechanism: STRATEGY_MANUAL };
+        console.log(drawModeOptions);
 
         if (flowOption === "Distributed") {
             if (delineationOption === "drawDelineate") {
