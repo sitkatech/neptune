@@ -49,6 +49,14 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
 
 NeptuneMaps.DelineationMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
 
+/* Constants */
+
+var TOLERANCE_BIG_POLY = 0.0001;
+var TOLERANCE_SMALL_POLY = 0.000015;
+
+var DELINEATION_DISTRIBUTED = "Distributed";
+var DELINEATION_CENTRALIZED = "Centralized";
+
 NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
 
     var jurisdictionCQLFilter = this.config.JurisdictionCQLFilter;
@@ -64,10 +72,10 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
         { cql_filter: "DelineationType = 'Centralized'" + jurisdictionCQLFilter, maxZoom: 22 });
 };
 
-NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function () {
+NeptuneMaps.DelineationMap.prototype.cacheBustDelineationWmsLayers = function() {
     this.distributedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
     this.centralizedLayer.setParams({ wmsParameterThatDoesNotExist: Date.now() }, false);
-}
+};
 
 NeptuneMaps.DelineationMap.prototype.initializeTreatmentBMPClusteredLayer = function (mapInitJson) {
     this.treatmentBMPLayer = L.geoJson(
@@ -164,8 +172,9 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
     }
     this.map.addLayer(editableFeatureGroup);
 
-    this.functionName(drawModeOptions);
+    this.functionName(drawModeOptions, true);
 
+    var self = this;
     this.map.on('draw:created',
         function (e) {
             var layer = e.layer;
@@ -175,24 +184,16 @@ NeptuneMaps.DelineationMap.prototype.buildDrawControl = function (drawModeOption
             editableFeatureGroup._layers[leafletId].feature.properties = new Object();
             editableFeatureGroup._layers[leafletId].feature.type = "Feature";
 
-            if (editableFeatureGroup.getLayers().length > 0) {
-                killPolygonDraw();
-            } else {
-                unKillPolygonDraw();
-            }
+            self.functionName(drawModeOptions, false);
         });
 
     this.map.on('draw:deleted',
         function (e) {
-            if (editableFeatureGroup.getLayers().length > 0) {
-                killPolygonDraw();
-            } else {
-                unKillPolygonDraw();
-            }
+            self.functionName(drawModeOptions, false);
         });
 };
 
-NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions) {
+NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions, goDirectlyToVertexEditIfAllowed) {
 
 
     /* this is not the best way to prevent drawing multiple polygons, but the other options are:
@@ -202,13 +203,16 @@ NeptuneMaps.DelineationMap.prototype.functionName = function (drawModeOptions) {
      */
 
     var editableFeatureGroup = this.editableFeatureGroup;
-    console.log(drawModeOptions.delineationType);
     if (editableFeatureGroup.getLayers().length > 0) {
         killPolygonDraw();
-        jQuery(".leaflet-draw-edit-edit").get(0).click();
+        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationType === DELINEATION_DISTRIBUTED) {
+            jQuery(".leaflet-draw-edit-edit").get(0).click();
+        }
     } else {
         unKillPolygonDraw();
-        jQuery(".leaflet-draw-draw-polygon").get(0).click();
+        if (goDirectlyToVertexEditIfAllowed && drawModeOptions.delineationType === DELINEATION_DISTRIBUTED) {
+            jQuery(".leaflet-draw-draw-polygon").get(0).click();
+        }
     }
 };
 
@@ -277,9 +281,7 @@ NeptuneMaps.DelineationMap.prototype.persistDrawnCatchment = function () {
     });
 };
 
-var TOLERANCE_BIG_POLY   = 0.0001;
-var TOLERANCE_SMALL_POLY = 0.000015;
-console.log(TOLERANCE_SMALL_POLY);
+
 NeptuneMaps.DelineationMap.prototype.downsampleSelectedDelineation = function (tolerance) {
     if (!this.selectedBMPDelineationLayer) {
         return; //misplaced call
@@ -324,8 +326,10 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
         self.enableUserInteraction();
 
         
-        self.downsampleSelectedDelineation(TOLERANCE_SMALL_POLY);
-        self.launchDrawCatchmentMode();
+
+        var drawModeOptions = { tolerance: TOLERANCE_SMALL_POLY, delineationType: DELINEATION_DISTRIBUTED };
+
+        self.launchDrawCatchmentMode(drawModeOptions);
     }).fail(function (error) {
 
         if (!error) {
@@ -334,13 +338,12 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
                 "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
         }
 
-        var unsupportedAreaMessage;
         if (error.messages && _.find(error.messages,
             function (m) {
                 return m.description === "Number of intersecting catalog unit(s): 0";
             })) {
-            // look for the error message indicating that the service has no data to work with for the given location
 
+            // look for the error message indicating that the service has no data to work with for the given location
             window.alert(
                 "The DEM service does not currently have data available near the selected Treatment BMP. If you would like to help expand the service to include your jurisdiction please contact the administrators to learn more.");
         }
@@ -353,7 +356,6 @@ NeptuneMaps.DelineationMap.prototype.launchAutoDelineateMode = function () {
             window.alert(
                 "There was an error retrieving the delineation from the remote service. If the issue persists, please contact Support.");
         }
-
 
         self.selectedAssetControl.enableDelineationButton();
         self.removeLoading();
@@ -412,7 +414,7 @@ NeptuneMaps.DelineationMap.prototype.launchTraceDelineateMode = function () {
 
             var drawModeOptions = {
                 tolerance: TOLERANCE_BIG_POLY,
-                delineationType: self.delineationType
+                delineationType: DELINEATION_CENTRALIZED
             };
 
             self.launchDrawCatchmentMode(drawModeOptions);

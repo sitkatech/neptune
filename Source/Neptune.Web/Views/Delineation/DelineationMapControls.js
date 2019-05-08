@@ -262,9 +262,11 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
 
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
+        var drawModeOptions = { delineationType: flowOption };
+
         if (flowOption === "Distributed") {
             if (delineationOption === "drawDelineate") {
-                window.delineationMap.launchDrawCatchmentMode();
+                window.delineationMap.launchDrawCatchmentMode(drawModeOptions);
             } else if (delineationOption === "autoDelineate") {
                 window.delineationMap.launchAutoDelineateMode();
             }
@@ -272,7 +274,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             if (delineationOption === "traceDelineate") {
                 window.delineationMap.launchTraceDelineateMode();
             } else if (delineationOption === "drawDelineate") {
-                window.delineationMap.launchDrawCatchmentMode();
+                window.delineationMap.launchDrawCatchmentMode(drawModeOptions);
             }
         }
     },
