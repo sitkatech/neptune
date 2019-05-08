@@ -281,8 +281,6 @@
         };
 
         // ReSharper disable InconsistentNaming
-        var FULL_TC = 1;
-        var PARTIAL_TC = 2;
         $scope.fullBmpOn = false;
         $scope.partialBmpOn = false;
         $scope.fullParcelOn = false;
@@ -295,6 +293,9 @@
 
         jQuery("#areaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
+
+            areaBasedCalculationControl.zoomToJurisdiction(trashMapService.stormwaterJurisdictionID);
+            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));

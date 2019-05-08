@@ -49,6 +49,10 @@
 
         ovtaBasedResultsControl.registerAdditionalHandler(applyJurisdictionMask);
 
+        ovtaBasedResultsControl.registerAdditionalHandler(function (stormwaterJurisdictionID) {
+            trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
+        });
+
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
                 $scope.AngularViewData.StormwaterJurisdictionCqlFilter + " AND ";
@@ -258,9 +262,15 @@
         $scope.initializeTreatmentBMPClusteredLayer();
         $scope.initializeParcelLayer();
 
-        $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('zoomend', function () {
+            $scope.$apply();
+            trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('moveend', function () {
+            $scope.$apply();
+            trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
+        });
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
@@ -421,8 +431,6 @@
         };
 
         // ReSharper disable InconsistentNaming
-        var FULL_TC = 1;
-        var PARTIAL_TC = 2;
         $scope.fullBmpOn = false;
         $scope.partialBmpOn = false;
         $scope.fullParcelOn = false;
@@ -435,10 +443,14 @@
 
         jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
+
             ovtaBasedResultsControl.zoomToJurisdiction(trashMapService.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-fullscreen"));
+
+        trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
     });

@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("LoadBasedMapController", function ($scope, angularModelAndViewData) {
+    .controller("LoadBasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
@@ -111,9 +111,15 @@
 
         $scope.initializeTreatmentBMPClusteredLayer();
 
-        $scope.neptuneMap.map.on('zoomend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('zoomend', function () {
+            $scope.$apply();
+            trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        });
         $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () { $scope.$apply(); });
+        $scope.neptuneMap.map.on('moveend', function () {
+            $scope.$apply();
+            trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
+        });
         $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
         $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
 
@@ -288,10 +294,8 @@
 
         jQuery("#loadResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
-            if (!$scope.loadBasedMapExtentSet) {
-                $scope.loadBasedMapExtentSet = true;
-                $scope.neptuneMap.setMapBounds($scope.AngularViewData.LoadBasedMapInitJson);
-            }
+
+            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 
     });
