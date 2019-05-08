@@ -66,7 +66,6 @@ function populateTGUValuesAreaBased(areaCalculationsUrl) {
         jQuery("#equivalentArea").text(response.EquivalentAreaAcreage);
         jQuery("#totalAcresCaptured").text(response.TotalAcresCaptured);
         jQuery("#totalPLUAcres").text(response.TotalPLUAcres);
-        //jQuery("#AcresTreated").text(response.PercentTreated + "%");
     });
 }
 

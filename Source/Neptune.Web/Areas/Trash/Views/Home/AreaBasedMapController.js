@@ -1,5 +1,5 @@
 ﻿angular.module("NeptuneApp")
-    .controller("AreaBasedMapController", function ($scope, angularModelAndViewData) {
+    .controller("AreaBasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
         $scope.AngularModel = angularModelAndViewData.AngularModel;
         $scope.AngularViewData = angularModelAndViewData.AngularViewData;
         $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
