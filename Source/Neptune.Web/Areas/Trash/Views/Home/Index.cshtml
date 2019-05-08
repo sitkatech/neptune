@@ -25,7 +25,7 @@
                             @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
                     };
             });
-
+        
         jQuery(document).ready(function() {
             jQuery('.selectpicker').selectpicker("val", [1, 2]);
             jQuery('#trashCaptureStatusTypeDropdown').change();

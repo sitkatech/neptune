@@ -40,7 +40,6 @@
             $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
             $scope.maskLayer.addTo($scope.neptuneMap.map);
             $scope.maskLayer.bringToFront();
-
         };
 
         areaBasedCalculationControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features, applyJurisdictionMask);
@@ -48,6 +47,10 @@
         areaBasedCalculationControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
 
         areaBasedCalculationControl.registerAdditionalHandler(applyJurisdictionMask);
+
+        areaBasedCalculationControl.registerAdditionalHandler(function(stormwaterJurisdictionID) {
+            trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
+        });
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
 
@@ -251,8 +254,6 @@
                 function (t) {
                     return t.TreatmentBMPID == treatmentBMPID;
                 });
-            //var layer = _.find($scope.treatmentBMPLayerLookup.get(treatmentBMPID),
-            //    function (layer) { return treatmentBMPID === layer.properties.TreatmentBMPID; });
             var layer = $scope.treatmentBMPLayerLookup.get(treatmentBMPID);
             setActiveImpl(layer, true);
         };
@@ -294,10 +295,6 @@
 
         jQuery("#areaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
-            if (!$scope.areaBasedMapExtentSet) {
-                $scope.areaBasedMapExtentSet = true;
-                $scope.neptuneMap.setMapBounds($scope.AngularViewData.AreaBasedMapInitJson);
-            }
         });
 
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));

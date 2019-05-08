@@ -13,5 +13,9 @@
         this.zoom = zoom;
     };
 
+    trashMapServiceInstance.saveStormwaterJurisdictionID = function(stormwaterJurisdictionID) {
+        this.stormwaterJurisdictionID = stormwaterJurisdictionID;
+    }
+
     return trashMapServiceInstance;
 }]);

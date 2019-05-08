@@ -435,12 +435,8 @@
 
         jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
             $scope.neptuneMap.map.invalidateSize(false);
-            if (!$scope.ovtaBasedMapExtentSet) {
-                $scope.ovtaBasedMapExtentSet = true;
-                $scope.neptuneMap.setMapBounds($scope.AngularViewData.MapInitJson);
-            }
-            console.log([trashMapService.center, trashMapService.zoom]);
-            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom);
+            ovtaBasedResultsControl.zoomToJurisdiction(trashMapService.stormwaterJurisdictionID);
+            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
         });
 
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));

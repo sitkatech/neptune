@@ -919,6 +919,7 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Views\Home\TrashMapJurisdictionDropdownControl.html" />
     <Content Include="Areas\Trash\Views\Home\OVTABasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />

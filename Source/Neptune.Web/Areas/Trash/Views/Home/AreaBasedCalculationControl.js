@@ -3,7 +3,6 @@
 
     initializeControlInstance: function(map) {
         this.map = map;
-
         if (this.options.showDropdown) {
 
             // must register the event handler before moving the element
