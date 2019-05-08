@@ -121,9 +121,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
                             OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID).ToList();
 
-            if (onlandVisualTrashAssessments.Any())
+            // new transect should come from the earliest completed assessment
+            if (onlandVisualTrashAssessments.Any(x=>x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID))
             {
-                return onlandVisualTrashAssessments.MaxBy(x => x.CompletedDate).GetTransect().FixSrid();
+                return onlandVisualTrashAssessments.MinBy(x => x.CompletedDate).GetTransect().FixSrid();
             }
 
             return null;
