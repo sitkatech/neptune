@@ -452,6 +452,4 @@
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-fullscreen"));
 
-        trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
-        trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
     });
