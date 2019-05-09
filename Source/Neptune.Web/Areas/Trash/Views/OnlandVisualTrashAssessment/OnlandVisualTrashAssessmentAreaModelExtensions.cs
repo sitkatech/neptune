@@ -121,7 +121,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         }
 
         public static DbGeometry RecomputeTransectLine(
-            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea, out Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment)
         {
             var onlandVisualTrashAssessments = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments
                 .Where(x => x.OnlandVisualTrashAssessmentStatusID ==
@@ -130,9 +130,11 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             // new transect should come from the earliest completed assessment
             if (onlandVisualTrashAssessments.Any(x=>x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID))
             {
-                return onlandVisualTrashAssessments.MinBy(x => x.CompletedDate).GetTransect().FixSrid();
+                onlandVisualTrashAssessment = onlandVisualTrashAssessments.MinBy(x => x.CompletedDate);
+                return onlandVisualTrashAssessment.GetTransect()?.FixSrid();
             }
 
+            onlandVisualTrashAssessment = null;
             return null;
         }
     }

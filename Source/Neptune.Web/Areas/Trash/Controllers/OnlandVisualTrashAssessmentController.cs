@@ -441,10 +441,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
             onlandVisualTrashAssessment.AssessingNewArea = false;
             if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
             {
-
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = onlandVisualTrashAssessment
-                    .OnlandVisualTrashAssessmentArea.RecomputeTransectLine();
+                    .OnlandVisualTrashAssessmentArea.RecomputeTransectLine(out var transectBackingAssessment);
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+                if (transectBackingAssessment != null)
+                {
+                    transectBackingAssessment.IsTransectBackingAssessment = true;
+                }
             }
 
             var tguUpdateSuccess =

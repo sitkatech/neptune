@@ -8,6 +8,10 @@ namespace Neptune.Web.Common
     {
         public static DbGeometry FixSrid(this DbGeometry geometry)
         {
+            if (geometry == null)
+            {
+                return geometry;
+            }
             var wellKnownText = geometry.ToString();
 
             // geometry.ToString() includes the SRID at the beginning of the string but is otherwise legal WKT
@@ -15,9 +19,12 @@ namespace Neptune.Web.Common
             {
                 wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("MULTIPOLYGON", StringComparison.InvariantCulture));
             }
-            else
+            else if (wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture) > -1)
             {
                 wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("POLYGON", StringComparison.InvariantCulture));
+            } else if (wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture) > -1)
+            {
+                wellKnownText = wellKnownText.Substring(wellKnownText.IndexOf("LINESTRING", StringComparison.InvariantCulture));
             }
 
             geometry = DbGeometry.FromText(wellKnownText, MapInitJson.CoordinateSystemId);
