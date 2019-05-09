@@ -30,10 +30,12 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             var equivalentArea = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
-                x.LandUseBlock == null &&
-                x.LandUseBlock.PriorityLandUseTypeID == null &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID).GetArea();
+                // This is how to check "PLU == true"
+                x.LandUseBlock != null &&
+                x.LandUseBlock.PriorityLandUseTypeID != null
+                ).GetArea();
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
@@ -60,7 +62,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
         public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
         {
             return Math.Round(trashGeneratingUnits
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 1); // will never be null
+                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 2); // will never be null
         }
     }
 }
