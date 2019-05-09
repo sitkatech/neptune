@@ -71,6 +71,10 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             style: "neptuneToggle"
         });
 
+        if (treatmentBMPFeature.properties.IsDelineationVerified) {
+            $('#verifyDelineationButton').bootstrapToggle("on");
+        }
+
         var self = this;
 
         // hook up event handler on button

@@ -22,6 +22,7 @@ namespace Neptune.Web.Views.Delineation
                         if (treatmentBMP.DelineationID.HasValue)
                         {
                             feature.Properties.Add("DelineationID", treatmentBMP.DelineationID);
+                            feature.Properties.Add("IsDelineationVerified", treatmentBMP.Delineation.IsVerified);
                         }
                         feature.Properties.Add("DelineationType", treatmentBMP.Delineation?.DelineationType.DelineationTypeDisplayName);
                     }
