@@ -1,12 +1,12 @@
 ﻿/* Extension of GeoServerMap with functionality for the Onland Visual Trash Assessment Workflow */
 
 NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, geoserverUrl, options) {
-    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl);
 
     if (!options) {
         options = {};
     }
     jQuery.extend(this.options, options);
+    NeptuneMaps.GeoServerMap.call(this, mapInitJson, initialBaseLayerShown, geoserverUrl,this.options);
 
     var landUseBlocksLegendUrl = geoserverUrl +
         "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
@@ -25,7 +25,7 @@ NeptuneMaps.TrashAssessmentMap = function (mapInitJson, initialBaseLayerShown, g
     if (mapInitJson.TransectLineLayerGeoJson) {
         this.CreateTransectLineLayer(mapInitJson.TransectLineLayerGeoJson.GeoJsonFeatureCollection, {});
         this.transectLineLayer.bringToFront();
-    }
+    };
 };
 
 NeptuneMaps.TrashAssessmentMap.prototype = Sitka.Methods.clonePrototype(NeptuneMaps.GeoServerMap.prototype);
@@ -104,5 +104,6 @@ NeptuneMaps.TrashAssessmentMap.prototype.SetActiveObservationByID = function (ob
 // placeholder for when options eventually become useful
 NeptuneMaps.TrashAssessmentMap.prototype.options = {
     showTransectOnLegend: true,
-    showObservationsOnLegend: true
+    showObservationsOnLegend: true,
+    collapseLayerControl: true
 };

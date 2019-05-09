@@ -21,8 +21,7 @@ Source code is available upon request via <support@sitkatech.com>.
 var NeptuneMaps = {};
 
 /* ====== Main Map ====== */
-NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
-{
+NeptuneMaps.Map = function(mapInitJson, initialBaseLayerShown, customOptions) {
     var self = this;
     this.MapDivId = mapInitJson.MapDivID;
     var tileOptions = {
@@ -53,14 +52,20 @@ NeptuneMaps.Map = function (mapInitJson, initialBaseLayerShown)
     else if (Sitka.Methods.isUndefinedNullOrEmpty(initialBaseLayerShown) || baseLayers[initialBaseLayerShown] == null)
     {
         initialBaseLayerShown = "Terrain";
-    }    
+    }
 
+    if (!customOptions) {
+        customOptions = {};
+    }
+    this.customOptions = customOptions;
     var options = {
-        scrollWheelZoom: true, // If this is on (default) scrolling down the page will intercept and starting zooming the map
+        scrollWheelZoom:
+            true, // If this is on (default) scrolling down the page will intercept and starting zooming the map
         layers: [baseLayers[initialBaseLayerShown]],
         attributionControl: false,
         fullscreenControl: mapInitJson.AllowFullScreen ? { pseudoFullscreen: true } : false
     };
+
     this.map = L.map(this.MapDivId, options);
 
     if (streetLayerGroup != null)
@@ -180,39 +185,53 @@ var BetterLayerControl = L.Control.Layers.extend(
     });
 
 NeptuneMaps.Map.prototype.addLayersToMapLayersControl = function(baseLayers, overlayLayers, layerControlClass) {
-    var options = {
-        collapsed: false
-    };
-
-    this.layerControl = new BetterLayerControl(baseLayers, overlayLayers, options);
-
-    this.layerControl.addTo(this.map);
-    var leafletControlLayersSelector = ".leaflet-control-layers";
-    var closeButtonClass = "leaflet-control-layers-close";
-    var closeButtonSelector = ".leaflet-control-layers-close";
-
-    if (!Sitka.Methods.isUndefinedNullOrEmpty(layerControlClass)) {
-        this.layerControl.fixClass(layerControlClass);
-        leafletControlLayersSelector = "." + layerControlClass;
-        closeButtonClass += " " + layerControlClass + "-close";
-        closeButtonSelector = "." + layerControlClass + "-close";
+    var collapsed = false;
+    if (this.customOptions.collapseLayerControl) {
+        collapsed = true;
     }
 
-    var closem = L.DomUtil.create("a", closeButtonClass);
-    closem.innerHTML = "Close";
-    L.DomEvent.on(closem,
-        "click",
-        function(e) {
+    var layerControlOptions = {
+        collapsed: collapsed
+    };
+
+    this.layerControl = new BetterLayerControl(baseLayers, overlayLayers, layerControlOptions);
+
+    this.layerControl.addTo(this.map);
+    if (!collapsed)
+    {
+        var leafletControlLayersSelector = ".leaflet-control-layers";
+        var closeButtonClass = "leaflet-control-layers-close";
+        var closeButtonSelector = ".leaflet-control-layers-close";
+        var toggleSelector = ".leaflet-control-layers-toggle";
+
+        if (!Sitka.Methods.isUndefinedNullOrEmpty(layerControlClass)) {
+            this.layerControl.fixClass(layerControlClass);
+            leafletControlLayersSelector = "." + layerControlClass;
+            closeButtonClass += " " + layerControlClass + "-close";
+            closeButtonSelector = "." + layerControlClass + "-close";
+            toggleSelector = "." + layerControlClass + " " + toggleSelector;
+        }
+
+        var closem = L.DomUtil.create("a", closeButtonClass);
+        closem.innerHTML = "Close";
+        L.DomEvent.on(closem,
+            "click",
+            function(e) {
+                jQuery(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
+                jQuery(closeButtonSelector).toggle();
+            });
+
+        jQuery(toggleSelector).on("click",
+            function() {
+                jQuery(closeButtonSelector).toggle();
+            });
+        jQuery(leafletControlLayersSelector).append(closem);
+
+        this.closeMapLayersControl = function() {
             jQuery(leafletControlLayersSelector).removeClass("leaflet-control-layers-expanded");
             jQuery(closeButtonSelector).toggle();
-        });
-
-    jQuery("." + layerControlClass + " .leaflet-control-layers-toggle").on("click",
-        function() {
-            jQuery(closeButtonSelector).toggle();
-        });
-
-    jQuery(leafletControlLayersSelector).append(closem);
+        };
+    }
 };
 
 NeptuneMaps.Map.prototype.setMapBounds = function(mapInitJson) {

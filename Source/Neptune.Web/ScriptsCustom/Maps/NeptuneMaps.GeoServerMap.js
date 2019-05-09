@@ -18,8 +18,8 @@ GNU Affero General Public License <http://www.gnu.org/licenses/> for more detail
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-NeptuneMaps.GeoServerMap = function (parcelLocationSummaryMapInitJson, initialBaseLayerShown, geoserverUrl) {
-    NeptuneMaps.Map.call(this, parcelLocationSummaryMapInitJson, initialBaseLayerShown);
+NeptuneMaps.GeoServerMap = function (parcelLocationSummaryMapInitJson, initialBaseLayerShown, geoserverUrl, customOptions) {
+    NeptuneMaps.Map.call(this, parcelLocationSummaryMapInitJson, initialBaseLayerShown, customOptions);
 
     this.geoserverUrlOWS = geoserverUrl;
 
