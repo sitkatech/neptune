@@ -441,9 +441,15 @@ namespace Neptune.Web.Areas.Trash.Controllers
             onlandVisualTrashAssessment.AssessingNewArea = false;
             if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
             {
+                onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = null;
+
+                HttpRequestStorage.DatabaseEntities.SaveChanges();
+
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = onlandVisualTrashAssessment
                     .OnlandVisualTrashAssessmentArea.RecomputeTransectLine(out var transectBackingAssessment);
-                onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+                
+                
                 if (transectBackingAssessment != null)
                 {
                     transectBackingAssessment.IsTransectBackingAssessment = true;
