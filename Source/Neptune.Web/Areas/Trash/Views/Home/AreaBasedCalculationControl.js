@@ -16,6 +16,8 @@
 
     selectJurisdiction: function (stormwaterJursidictionID) {
         jQuery("select[name='jurisdictionDropdown']").val(stormwaterJursidictionID);
+        var areaCalculationUrl = new Sitka.UrlTemplate(this.areaCalculationsUrlTemplate).ParameterReplace(stormwaterJursidictionID);
+        populateTGUValuesAreaBased(areaCalculationUrl);
     },
 
     zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {

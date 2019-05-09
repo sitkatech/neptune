@@ -5,8 +5,10 @@ using Neptune.Web.Models;
 using Neptune.Web.Security;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using Neptune.Web.Areas.Trash.Controllers;
 
 namespace Neptune.Web.Areas.Trash.Controllers
 {
@@ -19,30 +21,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
             var jurisdiction = jurisdictionPrimaryKey.EntityObject;
             var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
 
-            var fullTrashCapture = trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.TreatmentBMP.TrashCaptureStatusTypeID ==
-                TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
-                ).GetArea();
+            var fullTrashCapture = trashGeneratingUnits.FullTrashCaptureAcreage(jurisdiction);
 
-            var equivalentArea = trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
-                x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
-                // This is how to check "PLU == true"
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
-                ).GetArea();
+            var equivalentArea = trashGeneratingUnits.EquivalentAreaAcreage(jurisdiction);
 
             var totalAcresCaptured = fullTrashCapture + equivalentArea;
 
-            var totalPLUAcres = trashGeneratingUnits.Where(x =>
-                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null).GetArea();
+            var totalPLUAcres = trashGeneratingUnits.TotalPLUAcreage(jurisdiction);
 
             var percentTreated = totalPLUAcres != 0 ? totalAcresCaptured / totalPLUAcres : 0;
 
@@ -53,6 +38,43 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 TotalAcresCaptured = totalAcresCaptured,
                 TotalPLUAcres = totalPLUAcres,
                 PercentTreated = percentTreated
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public JsonResult OVTABasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        {
+            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
+
+            var sumPLUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.PriorityOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+           
+            var sumPLUAcrexsWhereOVTAIsB = TrashGeneratingUnitHelper.PriorityOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumPLUAcrexsWhereOVTAIsC = TrashGeneratingUnitHelper.PriorityOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumPLUAcrexsWhereOVTAIsD = TrashGeneratingUnitHelper.PriorityOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+
+
+            var sumALUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.AlternateOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsB = TrashGeneratingUnitHelper.AlternateOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsC = TrashGeneratingUnitHelper.AlternateOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsD = TrashGeneratingUnitHelper.AlternateOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+
+            return Json(new OVTAResultsSimple
+            {
+                PLUSumAcresWhereOVTAIsA = sumPLUAcresWhereOVTAIsA,
+                PLUSumAcresWhereOVTAIsB = sumPLUAcrexsWhereOVTAIsB,
+                PLUSumAcresWhereOVTAIsC = sumPLUAcrexsWhereOVTAIsC,
+                PLUSumAcresWhereOVTAIsD = sumPLUAcrexsWhereOVTAIsD,
+                ALUSumAcresWhereOVTAIsA = sumALUAcresWhereOVTAIsA,
+                ALUSumAcresWhereOVTAIsB = sumALUAcresWhereOVTAIsB,
+                ALUSumAcresWhereOVTAIsC = sumALUAcresWhereOVTAIsC,
+                ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD
             }, JsonRequestBehavior.AllowGet);
         }
     }

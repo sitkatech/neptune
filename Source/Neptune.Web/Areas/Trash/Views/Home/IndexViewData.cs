@@ -105,7 +105,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
-                OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x =>
+                OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
             }
         }
