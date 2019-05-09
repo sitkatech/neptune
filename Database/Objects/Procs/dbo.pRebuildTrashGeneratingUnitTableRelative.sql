@@ -106,7 +106,7 @@ Select @BoundaryLayer = geometry::UnionAggregate(BoundaryGeometry) from (
 
 select OnlandVisualTrashAssessmentAreaGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #OnlandVisualTrashAssessmentAreasRestricted
 union all
-Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #DelineationsRestricted
+Select DelineationGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #DelineationsRestricted where IsVerified = 1
 Union all
 Select StormwaterJurisdictionGeometry.STBoundary().STBuffer(@BufferDelta) as BoundaryGeometry from #JurisdictionsRestricted
 ) q
@@ -175,6 +175,7 @@ from #JurisdictionDelineationOvta jdo join (
 			on t.TrashCaptureStatusTypeID = tcs.TrashCaptureStatusTypeID
 		join #JurisdictionDelineationOvta jdo
 			on jdo.Geom.STIntersects(d.DelineationGeometry) = 1
+	where d.IsVerified = 1
 ) x on jdo.JdoId = x.JdoId
 where x.rowNumber = 1
 
