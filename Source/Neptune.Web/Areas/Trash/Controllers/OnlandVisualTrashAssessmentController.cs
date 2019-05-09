@@ -439,6 +439,13 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
             onlandVisualTrashAssessment.AssessingNewArea = false;
+            if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
+            {
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine = onlandVisualTrashAssessment
+                    .OnlandVisualTrashAssessmentArea.RecomputeTransectLine();
+                onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
+            }
 
             var tguUpdateSuccess =
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
