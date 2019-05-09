@@ -290,8 +290,10 @@
         $scope.rebuildMarkerClusterGroup();
 
         jQuery("#loadResultsTab").on("shown.bs.tab", function () {
+            var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
+            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });
     });

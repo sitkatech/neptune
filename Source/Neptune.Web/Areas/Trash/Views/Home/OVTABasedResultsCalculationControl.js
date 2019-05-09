@@ -14,17 +14,16 @@
         this.OVTABasedResultsUrlTemplate = this.options.OVTABasedResultsUrlTemplate;
     },
 
+    selectJurisdiction: function(stormwaterJursidictionID) {
+        jQuery("select[name='jurisdictionResultsDropdown']").val(stormwaterJursidictionID);
+    },
+
     zoomToJurisdictionOnLoad: function (jurisdictionFeatures, callback) {
         var self = this;
         var selectedJurisdictionID = jQuery("select[name='jurisdictionResultsDropdown']").val();
         var bounds = zoom(jurisdictionFeatures, selectedJurisdictionID);
         self.map.fitBounds(bounds);
         callback(selectedJurisdictionID);
-    },
-
-    maskToJurisdiction: function(stormwaterJurisdictionID) {
-        jQuery("select[name='jurisdictionResultsDropdown']").val(stormwaterJurisdictionID);
-        jQuery("select[name='jurisdictionResultsDropdown']").change();
     },
 
     loadAreaBasedCalculationOnLoad: function () {

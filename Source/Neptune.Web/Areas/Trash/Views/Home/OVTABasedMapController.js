@@ -441,10 +441,12 @@
         $scope.rebuildMarkerClusterGroup();
 
         jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
+            var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            applyJurisdictionMask(trashMapService.stormwaterJurisdictionID);
-            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
+            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            ovtaBasedResultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
+            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });
 
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));

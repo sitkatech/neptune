@@ -291,16 +291,19 @@
         $scope.rebuildMarkerClusterGroup();
 
         jQuery("#areaResultsTab").on("shown.bs.tab", function () {
+            var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            applyJurisdictionMask(trashMapService.stormwaterJurisdictionID);
-            $scope.neptuneMap.map.setView(trashMapService.center, trashMapService.zoom, { animate: false });
+            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            areaBasedCalculationControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
+            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });
 
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));
         jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-fullscreen"));
 
         trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
+        trashMapService.saveBounds($scope.neptuneMap.map.getBounds());
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
         trashMapService.saveStormwaterJurisdictionID(areaBasedCalculationControl.getSelectedJurisdictionID());
     });
