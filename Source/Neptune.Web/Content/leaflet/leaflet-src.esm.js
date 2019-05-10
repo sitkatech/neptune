@@ -1,9 +1,9 @@
 /* @preserve
- * Leaflet 1.4.0, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.5.0, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2018 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 
-var version = "1.4.0";
+var version = "1.5.0";
 
 /*
  * @namespace Util
@@ -121,8 +121,8 @@ function falseFn() { return false; }
 // @function formatNum(num: Number, digits?: Number): Number
 // Returns the number `num` rounded to `digits` decimals, or to 6 decimals by default.
 function formatNum(num, digits) {
-	var pow = Math.pow(10, (digits === undefined ? 6 : digits));
-	return Math.round(num * pow) / pow;
+	digits = (digits === undefined ? 6 : digits);
+	return +(Math.round(num + ('e+' + digits)) + ('e-' + digits));
 }
 
 // @function trim(str: String): String
@@ -247,30 +247,29 @@ function cancelAnimFrame(id) {
 	}
 }
 
-
-var Util = (Object.freeze || Object)({
-	freeze: freeze,
-	extend: extend,
-	create: create,
-	bind: bind,
-	lastId: lastId,
-	stamp: stamp,
-	throttle: throttle,
-	wrapNum: wrapNum,
-	falseFn: falseFn,
-	formatNum: formatNum,
-	trim: trim,
-	splitWords: splitWords,
-	setOptions: setOptions,
-	getParamString: getParamString,
-	template: template,
-	isArray: isArray,
-	indexOf: indexOf,
-	emptyImageUrl: emptyImageUrl,
-	requestFn: requestFn,
-	cancelFn: cancelFn,
-	requestAnimFrame: requestAnimFrame,
-	cancelAnimFrame: cancelAnimFrame
+var Util = /*#__PURE__*/Object.freeze({
+  freeze: freeze,
+  extend: extend,
+  create: create,
+  bind: bind,
+  get lastId () { return lastId; },
+  stamp: stamp,
+  throttle: throttle,
+  wrapNum: wrapNum,
+  falseFn: falseFn,
+  formatNum: formatNum,
+  trim: trim,
+  splitWords: splitWords,
+  setOptions: setOptions,
+  getParamString: getParamString,
+  template: template,
+  isArray: isArray,
+  indexOf: indexOf,
+  emptyImageUrl: emptyImageUrl,
+  requestFn: requestFn,
+  cancelFn: cancelFn,
+  requestAnimFrame: requestAnimFrame,
+  cancelAnimFrame: cancelAnimFrame
 });
 
 // @class Class
@@ -462,7 +461,7 @@ var Events = {
 	 *
 	 * @alternative
 	 * @method off: this
-	 * Removes all listeners to all events on the object.
+	 * Removes all listeners to all events on the object. This includes implicitly attached events.
 	 */
 	off: function (types, fn, context) {
 
@@ -1642,9 +1641,11 @@ var Earth = extend({}, CRS, {
  * a sphere. Used by the `EPSG:3857` CRS.
  */
 
+var earthRadius = 6378137;
+
 var SphericalMercator = {
 
-	R: 6378137,
+	R: earthRadius,
 	MAX_LATITUDE: 85.0511287798,
 
 	project: function (latlng) {
@@ -1667,7 +1668,7 @@ var SphericalMercator = {
 	},
 
 	bounds: (function () {
-		var d = 6378137 * Math.PI;
+		var d = earthRadius * Math.PI;
 		return new Bounds([-d, -d], [d, d]);
 	})()
 };
@@ -1821,7 +1822,7 @@ function pointsToPath(rings, closed) {
  * ```
  */
 
-var style$1 = document.documentElement.style;
+var style = document.documentElement.style;
 
 // @property ie: Boolean; `true` for all Internet Explorer versions (not Edge).
 var ie = 'ActiveXObject' in window;
@@ -1864,19 +1865,19 @@ var phantom = userAgentContains('phantom');
 
 // @property opera12: Boolean
 // `true` for the Opera browser supporting CSS transforms (version 12 or later).
-var opera12 = 'OTransition' in style$1;
+var opera12 = 'OTransition' in style;
 
 // @property win: Boolean; `true` when the browser is running in a Windows platform
 var win = navigator.platform.indexOf('Win') === 0;
 
 // @property ie3d: Boolean; `true` for all Internet Explorer versions supporting CSS transforms.
-var ie3d = ie && ('transition' in style$1);
+var ie3d = ie && ('transition' in style);
 
 // @property webkit3d: Boolean; `true` for webkit-based browsers supporting CSS transforms.
 var webkit3d = ('WebKitCSSMatrix' in window) && ('m11' in new window.WebKitCSSMatrix()) && !android23;
 
 // @property gecko3d: Boolean; `true` for gecko-based browsers supporting CSS transforms.
-var gecko3d = 'MozPerspective' in style$1;
+var gecko3d = 'MozPerspective' in style;
 
 // @property any3d: Boolean
 // `true` for all browsers supporting CSS transforms.
@@ -1952,38 +1953,37 @@ function userAgentContains(str) {
 	return navigator.userAgent.toLowerCase().indexOf(str) >= 0;
 }
 
-
-var Browser = (Object.freeze || Object)({
-	ie: ie,
-	ielt9: ielt9,
-	edge: edge,
-	webkit: webkit,
-	android: android,
-	android23: android23,
-	androidStock: androidStock,
-	opera: opera,
-	chrome: chrome,
-	gecko: gecko,
-	safari: safari,
-	phantom: phantom,
-	opera12: opera12,
-	win: win,
-	ie3d: ie3d,
-	webkit3d: webkit3d,
-	gecko3d: gecko3d,
-	any3d: any3d,
-	mobile: mobile,
-	mobileWebkit: mobileWebkit,
-	mobileWebkit3d: mobileWebkit3d,
-	msPointer: msPointer,
-	pointer: pointer,
-	touch: touch,
-	mobileOpera: mobileOpera,
-	mobileGecko: mobileGecko,
-	retina: retina,
-	canvas: canvas,
-	svg: svg,
-	vml: vml
+var Browser = /*#__PURE__*/Object.freeze({
+  ie: ie,
+  ielt9: ielt9,
+  edge: edge,
+  webkit: webkit,
+  android: android,
+  android23: android23,
+  androidStock: androidStock,
+  opera: opera,
+  chrome: chrome,
+  gecko: gecko,
+  safari: safari,
+  phantom: phantom,
+  opera12: opera12,
+  win: win,
+  ie3d: ie3d,
+  webkit3d: webkit3d,
+  gecko3d: gecko3d,
+  any3d: any3d,
+  mobile: mobile,
+  mobileWebkit: mobileWebkit,
+  mobileWebkit3d: mobileWebkit3d,
+  msPointer: msPointer,
+  pointer: pointer,
+  touch: touch,
+  mobileOpera: mobileOpera,
+  mobileGecko: mobileGecko,
+  retina: retina,
+  canvas: canvas,
+  svg: svg,
+  vml: vml
 });
 
 /*
@@ -2126,7 +2126,7 @@ var _pre = '_leaflet_';
 
 // inspired by Zepto touch code by Thomas Fuchs
 function addDoubleTapListener(obj, handler, id) {
-	var last, touch$$1,
+	var last, touch,
 	    doubleTap = false,
 	    delay = 250;
 
@@ -2145,27 +2145,28 @@ function addDoubleTapListener(obj, handler, id) {
 		var now = Date.now(),
 		    delta = now - (last || now);
 
-		touch$$1 = e.touches ? e.touches[0] : e;
+		touch = e.touches ? e.touches[0] : e;
 		doubleTap = (delta > 0 && delta <= delay);
 		last = now;
 	}
 
 	function onTouchEnd(e) {
-		if (doubleTap && !touch$$1.cancelBubble) {
+		if (doubleTap && !touch.cancelBubble) {
 			if (pointer) {
 				if ((!edge) || e.pointerType === 'mouse') { return; }
 				// work around .type being readonly with MSPointer* events
 				var newTouch = {},
 				    prop, i;
 
-				for (i in touch$$1) {
-					prop = touch$$1[i];
-					newTouch[i] = prop && prop.bind ? prop.bind(touch$$1) : prop;
+				for (i in touch) {
+					prop = touch[i];
+					newTouch[i] = prop && prop.bind ? prop.bind(touch) : prop;
 				}
-				touch$$1 = newTouch;
+				touch = newTouch;
 			}
-			touch$$1.type = 'dblclick';
-			handler(touch$$1);
+			touch.type = 'dblclick';
+			touch.button = 0;
+			handler(touch);
 			last = null;
 		}
 	}
@@ -2494,8 +2495,7 @@ function enableImageDrag() {
 	off(window, 'dragstart', preventDefault);
 }
 
-var _outlineElement;
-var _outlineStyle;
+var _outlineElement, _outlineStyle;
 // @function preventOutline(el: HTMLElement)
 // Makes the [outline](https://developer.mozilla.org/docs/Web/CSS/outline)
 // of the element `el` invisible. Used internally by Leaflet to prevent
@@ -2546,36 +2546,35 @@ function getScale(element) {
 	};
 }
 
-
-var DomUtil = (Object.freeze || Object)({
-	TRANSFORM: TRANSFORM,
-	TRANSITION: TRANSITION,
-	TRANSITION_END: TRANSITION_END,
-	get: get,
-	getStyle: getStyle,
-	create: create$1,
-	remove: remove,
-	empty: empty,
-	toFront: toFront,
-	toBack: toBack,
-	hasClass: hasClass,
-	addClass: addClass,
-	removeClass: removeClass,
-	setClass: setClass,
-	getClass: getClass,
-	setOpacity: setOpacity,
-	testProp: testProp,
-	setTransform: setTransform,
-	setPosition: setPosition,
-	getPosition: getPosition,
-	disableTextSelection: disableTextSelection,
-	enableTextSelection: enableTextSelection,
-	disableImageDrag: disableImageDrag,
-	enableImageDrag: enableImageDrag,
-	preventOutline: preventOutline,
-	restoreOutline: restoreOutline,
-	getSizedParentNode: getSizedParentNode,
-	getScale: getScale
+var DomUtil = /*#__PURE__*/Object.freeze({
+  TRANSFORM: TRANSFORM,
+  TRANSITION: TRANSITION,
+  TRANSITION_END: TRANSITION_END,
+  get: get,
+  getStyle: getStyle,
+  create: create$1,
+  remove: remove,
+  empty: empty,
+  toFront: toFront,
+  toBack: toBack,
+  hasClass: hasClass,
+  addClass: addClass,
+  removeClass: removeClass,
+  setClass: setClass,
+  getClass: getClass,
+  setOpacity: setOpacity,
+  testProp: testProp,
+  setTransform: setTransform,
+  setPosition: setPosition,
+  getPosition: getPosition,
+  get disableTextSelection () { return disableTextSelection; },
+  get enableTextSelection () { return enableTextSelection; },
+  disableImageDrag: disableImageDrag,
+  enableImageDrag: enableImageDrag,
+  preventOutline: preventOutline,
+  restoreOutline: restoreOutline,
+  getSizedParentNode: getSizedParentNode,
+  getScale: getScale
 });
 
 /*
@@ -2880,24 +2879,21 @@ function filterClick(e, handler) {
 	handler(e);
 }
 
-
-
-
-var DomEvent = (Object.freeze || Object)({
-	on: on,
-	off: off,
-	stopPropagation: stopPropagation,
-	disableScrollPropagation: disableScrollPropagation,
-	disableClickPropagation: disableClickPropagation,
-	preventDefault: preventDefault,
-	stop: stop,
-	getMousePosition: getMousePosition,
-	getWheelDelta: getWheelDelta,
-	fakeStop: fakeStop,
-	skipped: skipped,
-	isExternalTarget: isExternalTarget,
-	addListener: on,
-	removeListener: off
+var DomEvent = /*#__PURE__*/Object.freeze({
+  on: on,
+  off: off,
+  stopPropagation: stopPropagation,
+  disableScrollPropagation: disableScrollPropagation,
+  disableClickPropagation: disableClickPropagation,
+  preventDefault: preventDefault,
+  stop: stop,
+  getMousePosition: getMousePosition,
+  getWheelDelta: getWheelDelta,
+  fakeStop: fakeStop,
+  skipped: skipped,
+  isExternalTarget: isExternalTarget,
+  addListener: on,
+  removeListener: off
 });
 
 /*
@@ -4276,11 +4272,11 @@ var Map = Evented.extend({
 	// DOM event handling
 
 	// @section Interaction events
-	_initEvents: function (remove$$1) {
+	_initEvents: function (remove) {
 		this._targets = {};
 		this._targets[stamp(this._container)] = this;
 
-		var onOff = remove$$1 ? off : on;
+		var onOff = remove ? off : on;
 
 		// @event click: MouseEvent
 		// Fired when the user clicks (or taps) the map.
@@ -4302,16 +4298,22 @@ var Map = Evented.extend({
 		// this event. Also fired on mobile when the user holds a single touch
 		// for a second (also called long press).
 		// @event keypress: KeyboardEvent
-		// Fired when the user presses a key from the keyboard while the map is focused.
+		// Fired when the user presses a key from the keyboard that produces a character value while the map is focused.
+		// @event keydown: KeyboardEvent
+		// Fired when the user presses a key from the keyboard while the map is focused. Unlike the `keypress` event,
+		// the `keydown` event is fired for keys that produce a character value and for keys
+		// that do not produce a character value.
+		// @event keyup: KeyboardEvent
+		// Fired when the user releases a key from the keyboard while the map is focused.
 		onOff(this._container, 'click dblclick mousedown mouseup ' +
-			'mouseover mouseout mousemove contextmenu keypress', this._handleDOMEvent, this);
+			'mouseover mouseout mousemove contextmenu keypress keydown keyup', this._handleDOMEvent, this);
 
 		if (this.options.trackResize) {
 			onOff(window, 'resize', this._onResize, this);
 		}
 
 		if (any3d && this.options.transform3DLimit) {
-			(remove$$1 ? this.off : this.on).call(this, 'moveend', this._onMoveEnd);
+			(remove ? this.off : this.on).call(this, 'moveend', this._onMoveEnd);
 		}
 	},
 
@@ -4368,7 +4370,7 @@ var Map = Evented.extend({
 
 		var type = e.type;
 
-		if (type === 'mousedown' || type === 'keypress') {
+		if (type === 'mousedown' || type === 'keypress' || type === 'keyup' || type === 'keydown') {
 			// prevents outline when clicking on keyboard-focusable element
 			preventOutline(e.target || e.srcElement);
 		}
@@ -4407,7 +4409,7 @@ var Map = Evented.extend({
 			originalEvent: e
 		};
 
-		if (e.type !== 'keypress') {
+		if (e.type !== 'keypress' && e.type !== 'keydown' && e.type !== 'keyup') {
 			var isMarker = target.getLatLng && (!target._radius || target._radius <= 10);
 			data.containerPoint = isMarker ?
 				this.latLngToContainerPoint(target.getLatLng()) : this.mouseEventToContainerPoint(e);
@@ -4660,7 +4662,7 @@ var Map = Evented.extend({
 		}
 
 		// @event zoomanim: ZoomAnimEvent
-		// Fired at least once per zoom animation. For continous zoom, like pinch zooming, fired once per frame during zoom.
+		// Fired at least once per zoom animation. For continuous zoom, like pinch zooming, fired once per frame during zoom.
 		this.fire('zoomanim', {
 			center: center,
 			zoom: zoom,
@@ -4778,6 +4780,8 @@ var Control = Class.extend({
 			corner.appendChild(container);
 		}
 
+		this._map.on('unload', this.remove, this);
+
 		return this;
 	},
 
@@ -4794,6 +4798,7 @@ var Control = Class.extend({
 			this.onRemove(this._map);
 		}
 
+		this._map.off('unload', this.remove, this);
 		this._map = null;
 
 		return this;
@@ -5191,7 +5196,7 @@ var Layers = Control.extend({
 			input.className = 'leaflet-control-layers-selector';
 			input.defaultChecked = checked;
 		} else {
-			input = this._createRadioElement('leaflet-base-layers', checked);
+			input = this._createRadioElement('leaflet-base-layers_' + stamp(this), checked);
 		}
 
 		this._layerControlInputs.push(input);
@@ -5576,7 +5581,7 @@ var Attribution = Control.extend({
 
 		// @option prefix: String = 'Leaflet'
 		// The HTML text shown before the attributions. Pass `false` to disable.
-		prefix: '<a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'
+		prefix: '<a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>'
 	},
 
 	initialize: function (options) {
@@ -5795,12 +5800,12 @@ var Draggable = Evented.extend({
 
 	// @constructor L.Draggable(el: HTMLElement, dragHandle?: HTMLElement, preventOutline?: Boolean, options?: Draggable options)
 	// Creates a `Draggable` object for moving `el` when you start dragging the `dragHandle` element (equals `el` itself by default).
-	initialize: function (element, dragStartTarget, preventOutline$$1, options) {
+	initialize: function (element, dragStartTarget, preventOutline, options) {
 		setOptions(this, options);
 
 		this._element = element;
 		this._dragStartTarget = dragStartTarget || element;
-		this._preventOutline = preventOutline$$1;
+		this._preventOutline = preventOutline;
 	},
 
 	// @method enable()
@@ -6220,17 +6225,16 @@ function _flat(latlngs) {
 	return isFlat(latlngs);
 }
 
-
-var LineUtil = (Object.freeze || Object)({
-	simplify: simplify,
-	pointToSegmentDistance: pointToSegmentDistance,
-	closestPointOnSegment: closestPointOnSegment,
-	clipSegment: clipSegment,
-	_getEdgeIntersection: _getEdgeIntersection,
-	_getBitCode: _getBitCode,
-	_sqClosestPointOnSegment: _sqClosestPointOnSegment,
-	isFlat: isFlat,
-	_flat: _flat
+var LineUtil = /*#__PURE__*/Object.freeze({
+  simplify: simplify,
+  pointToSegmentDistance: pointToSegmentDistance,
+  closestPointOnSegment: closestPointOnSegment,
+  clipSegment: clipSegment,
+  _getEdgeIntersection: _getEdgeIntersection,
+  _getBitCode: _getBitCode,
+  _sqClosestPointOnSegment: _sqClosestPointOnSegment,
+  isFlat: isFlat,
+  _flat: _flat
 });
 
 /*
@@ -6287,9 +6291,8 @@ function clipPolygon(points, bounds, round) {
 	return points;
 }
 
-
-var PolyUtil = (Object.freeze || Object)({
-	clipPolygon: clipPolygon
+var PolyUtil = /*#__PURE__*/Object.freeze({
+  clipPolygon: clipPolygon
 });
 
 /*
@@ -6321,7 +6324,7 @@ var LonLat = {
  * @namespace Projection
  * @projection L.Projection.Mercator
  *
- * Elliptical Mercator projection — more complex than Spherical Mercator. Takes into account that Earth is a geoid, not a perfect sphere. Used by the EPSG:3395 CRS.
+ * Elliptical Mercator projection — more complex than Spherical Mercator. Assumes that Earth is an ellipsoid. Used by the EPSG:3395 CRS.
  */
 
 var Mercator = {
@@ -6386,13 +6389,10 @@ var Mercator = {
 
  */
 
-
-
-
-var index = (Object.freeze || Object)({
-	LonLat: LonLat,
-	Mercator: Mercator,
-	SphericalMercator: SphericalMercator
+var index = /*#__PURE__*/Object.freeze({
+  LonLat: LonLat,
+  Mercator: Mercator,
+  SphericalMercator: SphericalMercator
 });
 
 /*
@@ -6481,7 +6481,7 @@ CRS.Simple = Simple;
  * @example
  *
  * ```js
- * var layer = L.Marker(latlng).addTo(map);
+ * var layer = L.marker(latlng).addTo(map);
  * layer.addTo(map);
  * layer.remove();
  * ```
@@ -7412,6 +7412,10 @@ var Marker = Layer.extend({
 		// `Map pane` where the markers icon will be added.
 		pane: 'markerPane',
 
+		// @option pane: String = 'shadowPane'
+		// `Map pane` where the markers shadow will be added.
+		shadowPane: 'shadowPane',
+
 		// @option bubblingMouseEvents: Boolean = false
 		// When `true`, a mouse event on this marker will trigger the same event on the map
 		// (unless [`L.DomEvent.stopPropagation`](#domevent-stoppropagation) is used).
@@ -7502,6 +7506,12 @@ var Marker = Layer.extend({
 	setZIndexOffset: function (offset) {
 		this.options.zIndexOffset = offset;
 		return this.update();
+	},
+
+	// @method getIcon: Icon
+	// Returns the current icon used by the marker
+	getIcon: function () {
+		return this.options.icon;
 	},
 
 	// @method setIcon(icon: Icon): this
@@ -7599,7 +7609,7 @@ var Marker = Layer.extend({
 		}
 		this._initInteraction();
 		if (newShadow && addShadow) {
-			this.getPane('shadowPane').appendChild(this._shadow);
+			this.getPane(options.shadowPane).appendChild(this._shadow);
 		}
 	},
 
@@ -7683,7 +7693,9 @@ var Marker = Layer.extend({
 	_updateOpacity: function () {
 		var opacity = this.options.opacity;
 
-		setOpacity(this._icon, opacity);
+		if (this._icon) {
+			setOpacity(this._icon, opacity);
+		}
 
 		if (this._shadow) {
 			setOpacity(this._shadow, opacity);
@@ -7820,6 +7832,9 @@ var Path = Layer.extend({
 		setOptions(this, style);
 		if (this._renderer) {
 			this._renderer._updateStyle(this);
+			if (this.options.stroke && style.hasOwnProperty('weight')) {
+				this._updateBounds();
+			}
 		}
 		return this;
 	},
@@ -8261,14 +8276,19 @@ var Polyline = Path.extend({
 		this._rings = [];
 		this._projectLatlngs(this._latlngs, this._rings, pxBounds);
 
+		if (this._bounds.isValid() && pxBounds.isValid()) {
+			this._rawPxBounds = pxBounds;
+			this._updateBounds();
+		}
+	},
+
+	_updateBounds: function () {
 		var w = this._clickTolerance(),
 		    p = new Point(w, w);
-
-		if (this._bounds.isValid() && pxBounds.isValid()) {
-			pxBounds.min._subtract(p);
-			pxBounds.max._add(p);
-			this._pxBounds = pxBounds;
-		}
+		this._pxBounds = new Bounds([
+			this._rawPxBounds.min.subtract(p),
+			this._rawPxBounds.max.add(p)
+		]);
 	},
 
 	// recursively turns latlngs into a set of rings with projected coordinates
@@ -8698,10 +8718,10 @@ var GeoJSON = FeatureGroup.extend({
 	},
 
 	_setLayerStyle: function (layer, style) {
-		if (typeof style === 'function') {
-			style = style(layer.feature);
-		}
 		if (layer.setStyle) {
+			if (typeof style === 'function') {
+				style = style(layer.feature);
+			}
 			layer.setStyle(style);
 		}
 	}
@@ -8851,19 +8871,25 @@ var PointToGeoJSON = {
 };
 
 // @namespace Marker
-// @method toGeoJSON(): Object
+// @method toGeoJSON(precision?: Number): Object
+// `precision` is the number of decimal places for coordinates.
+// The default value is 6 places.
 // Returns a [`GeoJSON`](http://en.wikipedia.org/wiki/GeoJSON) representation of the marker (as a GeoJSON `Point` Feature).
 Marker.include(PointToGeoJSON);
 
 // @namespace CircleMarker
-// @method toGeoJSON(): Object
+// @method toGeoJSON(precision?: Number): Object
+// `precision` is the number of decimal places for coordinates.
+// The default value is 6 places.
 // Returns a [`GeoJSON`](http://en.wikipedia.org/wiki/GeoJSON) representation of the circle marker (as a GeoJSON `Point` Feature).
 Circle.include(PointToGeoJSON);
 CircleMarker.include(PointToGeoJSON);
 
 
 // @namespace Polyline
-// @method toGeoJSON(): Object
+// @method toGeoJSON(precision?: Number): Object
+// `precision` is the number of decimal places for coordinates.
+// The default value is 6 places.
 // Returns a [`GeoJSON`](http://en.wikipedia.org/wiki/GeoJSON) representation of the polyline (as a GeoJSON `LineString` or `MultiLineString` Feature).
 Polyline.include({
 	toGeoJSON: function (precision) {
@@ -8879,7 +8905,9 @@ Polyline.include({
 });
 
 // @namespace Polygon
-// @method toGeoJSON(): Object
+// @method toGeoJSON(precision?: Number): Object
+// `precision` is the number of decimal places for coordinates.
+// The default value is 6 places.
 // Returns a [`GeoJSON`](http://en.wikipedia.org/wiki/GeoJSON) representation of the polygon (as a GeoJSON `Polygon` or `MultiPolygon` Feature).
 Polygon.include({
 	toGeoJSON: function (precision) {
@@ -8915,7 +8943,9 @@ LayerGroup.include({
 		});
 	},
 
-	// @method toGeoJSON(): Object
+	// @method toGeoJSON(precision?: Number): Object
+	// `precision` is the number of decimal places for coordinates.
+	// The default value is 6 places.
 	// Returns a [`GeoJSON`](http://en.wikipedia.org/wiki/GeoJSON) representation of the layer group (as a GeoJSON `FeatureCollection`, `GeometryCollection`, or `MultiPoint`).
 	toGeoJSON: function (precision) {
 
@@ -9260,7 +9290,12 @@ var VideoOverlay = ImageOverlay.extend({
 
 		// @option loop: Boolean = true
 		// Whether the video will loop back to the beginning when played.
-		loop: true
+		loop: true,
+
+		// @option keepAspectRatio: Boolean = true
+		// Whether the video will save aspect ratio after the projection.
+		// Relevant for supported browsers. Browser compatibility- https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
+		keepAspectRatio: true
 	},
 
 	_initImage: function () {
@@ -9290,6 +9325,7 @@ var VideoOverlay = ImageOverlay.extend({
 
 		if (!isArray(this._url)) { this._url = [this._url]; }
 
+		if (!this.options.keepAspectRatio && vid.style.hasOwnProperty('objectFit')) { vid.style['objectFit'] = 'fill'; }
 		vid.autoplay = !!this.options.autoplay;
 		vid.loop = !!this.options.loop;
 		for (var i = 0; i < this._url.length; i++) {
@@ -9311,6 +9347,49 @@ var VideoOverlay = ImageOverlay.extend({
 
 function videoOverlay(video, bounds, options) {
 	return new VideoOverlay(video, bounds, options);
+}
+
+/*
+ * @class SVGOverlay
+ * @aka L.SVGOverlay
+ * @inherits ImageOverlay
+ *
+ * Used to load, display and provide DOM access to an SVG file over specific bounds of the map. Extends `ImageOverlay`.
+ *
+ * An SVG overlay uses the [`<svg>`](https://developer.mozilla.org/docs/Web/SVG/Element/svg) element.
+ *
+ * @example
+ *
+ * ```js
+ * var element = '<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image xlink:href="https://mdn.mozillademos.org/files/6457/mdn_logo_only_color.png" height="200" width="200"/></svg>',
+ * 		 elementBounds = [ [ 32, -130 ], [ 13, -100 ] ];
+ * L.svgOverlay(element, elementBounds).addTo(map);
+ * ```
+ */
+
+var SVGOverlay = ImageOverlay.extend({
+	_initImage: function () {
+		var el = this._image = this._url;
+
+		addClass(el, 'leaflet-image-layer');
+		if (this._zoomAnimated) { addClass(el, 'leaflet-zoom-animated'); }
+
+		el.onselectstart = falseFn;
+		el.onmousemove = falseFn;
+	}
+
+	// @method getElement(): SVGElement
+	// Returns the instance of [`SVGElement`](https://developer.mozilla.org/docs/Web/API/SVGElement)
+	// used by this overlay.
+});
+
+
+// @factory L.svgOverlay(svg: String|SVGElement, bounds: LatLngBounds, options?: SVGOverlay options)
+// Instantiates an image overlay object given an SVG element and the geographical bounds it is tied to.
+// A viewBox attribute is required on the SVG element to zoom in and out properly.
+
+function svgOverlay(el, bounds, options) {
+	return new SVGOverlay(el, bounds, options);
 }
 
 /*
@@ -9465,6 +9544,38 @@ var DivOverlay = Layer.extend({
 			toBack(this._container);
 		}
 		return this;
+	},
+
+	_prepareOpen: function (parent, layer, latlng) {
+		if (!(layer instanceof Layer)) {
+			latlng = layer;
+			layer = parent;
+		}
+
+		if (layer instanceof FeatureGroup) {
+			for (var id in parent._layers) {
+				layer = parent._layers[id];
+				break;
+			}
+		}
+
+		if (!latlng) {
+			if (layer.getCenter) {
+				latlng = layer.getCenter();
+			} else if (layer.getLatLng) {
+				latlng = layer.getLatLng();
+			} else {
+				throw new Error('Unable to get source layer LatLng.');
+			}
+		}
+
+		// set overlay source to this layer
+		this._source = layer;
+
+		// update the overlay (content, layout, ect...)
+		this.update();
+
+		return latlng;
 	},
 
 	_updateContent: function () {
@@ -9921,28 +10032,8 @@ Layer.include({
 	// @method openPopup(latlng?: LatLng): this
 	// Opens the bound popup at the specified `latlng` or at the default popup anchor if no `latlng` is passed.
 	openPopup: function (layer, latlng) {
-		if (!(layer instanceof Layer)) {
-			latlng = layer;
-			layer = this;
-		}
-
-		if (layer instanceof FeatureGroup) {
-			for (var id in this._layers) {
-				layer = this._layers[id];
-				break;
-			}
-		}
-
-		if (!latlng) {
-			latlng = layer.getCenter ? layer.getCenter() : layer.getLatLng();
-		}
-
 		if (this._popup && this._map) {
-			// set popup source to this layer
-			this._popup._source = layer;
-
-			// update the popup (content, layout, ect...)
-			this._popup.update();
+			latlng = this._popup._prepareOpen(this, layer, latlng);
 
 			// open the popup on the map
 			this._map.openPopup(this._popup, latlng);
@@ -10313,9 +10404,9 @@ Layer.include({
 		return this;
 	},
 
-	_initTooltipInteractions: function (remove$$1) {
-		if (!remove$$1 && this._tooltipHandlersAdded) { return; }
-		var onOff = remove$$1 ? 'off' : 'on',
+	_initTooltipInteractions: function (remove) {
+		if (!remove && this._tooltipHandlersAdded) { return; }
+		var onOff = remove ? 'off' : 'on',
 		    events = {
 			remove: this.closeTooltip,
 			move: this._moveTooltip
@@ -10333,35 +10424,14 @@ Layer.include({
 			events.add = this._openTooltip;
 		}
 		this[onOff](events);
-		this._tooltipHandlersAdded = !remove$$1;
+		this._tooltipHandlersAdded = !remove;
 	},
 
 	// @method openTooltip(latlng?: LatLng): this
 	// Opens the bound tooltip at the specified `latlng` or at the default tooltip anchor if no `latlng` is passed.
 	openTooltip: function (layer, latlng) {
-		if (!(layer instanceof Layer)) {
-			latlng = layer;
-			layer = this;
-		}
-
-		if (layer instanceof FeatureGroup) {
-			for (var id in this._layers) {
-				layer = this._layers[id];
-				break;
-			}
-		}
-
-		if (!latlng) {
-			latlng = layer.getCenter ? layer.getCenter() : layer.getLatLng();
-		}
-
 		if (this._tooltip && this._map) {
-
-			// set tooltip source to this layer
-			this._tooltip._source = layer;
-
-			// update the tooltip (content, layout, ect...)
-			this._tooltip.update();
+			latlng = this._tooltip._prepareOpen(this, layer, latlng);
 
 			// open the tooltip on the map
 			this._map.openTooltip(this._tooltip, latlng);
@@ -10472,8 +10542,9 @@ var DivIcon = Icon.extend({
 		// iconAnchor: (Point),
 		// popupAnchor: (Point),
 
-		// @option html: String = ''
-		// Custom HTML code to put inside the div element, empty by default.
+		// @option html: String|HTMLElement = ''
+		// Custom HTML code to put inside the div element, empty by default. Alternatively,
+		// an instance of `HTMLElement`.
 		html: false,
 
 		// @option bgPos: Point = [0, 0]
@@ -10487,7 +10558,12 @@ var DivIcon = Icon.extend({
 		var div = (oldIcon && oldIcon.tagName === 'DIV') ? oldIcon : document.createElement('div'),
 		    options = this.options;
 
-		div.innerHTML = options.html !== false ? options.html : '';
+		if (options.html instanceof Element) {
+			empty(div);
+			div.appendChild(options.html);
+		} else {
+			div.innerHTML = options.html !== false ? options.html : '';
+		}
 
 		if (options.bgPos) {
 			var bgPos = toPoint(options.bgPos);
@@ -13834,5 +13910,5 @@ Map.TouchZoom = TouchZoom;
 
 Object.freeze = freeze;
 
-export { version, Control, control, Browser, Evented, Mixin, Util, Class, Handler, extend, bind, stamp, setOptions, DomEvent, DomUtil, PosAnimation, Draggable, LineUtil, PolyUtil, Point, toPoint as point, Bounds, toBounds as bounds, Transformation, toTransformation as transformation, index as Projection, LatLng, toLatLng as latLng, LatLngBounds, toLatLngBounds as latLngBounds, CRS, GeoJSON, geoJSON, geoJson, Layer, LayerGroup, layerGroup, FeatureGroup, featureGroup, ImageOverlay, imageOverlay, VideoOverlay, videoOverlay, DivOverlay, Popup, popup, Tooltip, tooltip, Icon, icon, DivIcon, divIcon, Marker, marker, TileLayer, tileLayer, GridLayer, gridLayer, SVG, svg$1 as svg, Renderer, Canvas, canvas$1 as canvas, Path, CircleMarker, circleMarker, Circle, circle, Polyline, polyline, Polygon, polygon, Rectangle, rectangle, Map, createMap as map };
+export { Bounds, Browser, CRS, Canvas, Circle, CircleMarker, Class, Control, DivIcon, DivOverlay, DomEvent, DomUtil, Draggable, Evented, FeatureGroup, GeoJSON, GridLayer, Handler, Icon, ImageOverlay, LatLng, LatLngBounds, Layer, LayerGroup, LineUtil, Map, Marker, Mixin, Path, Point, PolyUtil, Polygon, Polyline, Popup, PosAnimation, index as Projection, Rectangle, Renderer, SVG, SVGOverlay, TileLayer, Tooltip, Transformation, Util, VideoOverlay, bind, toBounds as bounds, canvas$1 as canvas, circle, circleMarker, control, divIcon, extend, featureGroup, geoJSON, geoJson, gridLayer, icon, imageOverlay, toLatLng as latLng, toLatLngBounds as latLngBounds, layerGroup, createMap as map, marker, toPoint as point, polygon, polyline, popup, rectangle, setOptions, stamp, svg$1 as svg, svgOverlay, tileLayer, tooltip, toTransformation as transformation, version, videoOverlay };
 //# sourceMappingURL=leaflet-src.esm.js.map
