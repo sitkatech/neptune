@@ -4,16 +4,20 @@
             angularModelAndViewData,
             trashMapService,
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
-            null);
+            null,
+            { showTrashGeneratingUnits: true });
         $scope.applyJurisdictionMask();
+
+        var allowedTrashCaptureStatusTypeIDs = [3, 4];
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.treatmentBMPLayers = {};
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
                 function (tcs) {
-                    if (tcs.TrashCaptureStatusTypeID === 3 || tcs.TrashCaptureStatusTypeID === 4) {
+                    if (_.includes(allowedTrashCaptureStatusTypeIDs, tcs.TrashCaptureStatusTypeID)) {
                         return;
                     }
+
                     var layer = L.geoJson(
                         $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
                         {
@@ -51,7 +55,7 @@
             $scope.rebuildMarkerClusterGroup();
         };
 
-        $scope.rebuildMarkerClusterGroup = function() {
+        $scope.rebuildMarkerClusterGroup = function () {
 
             if ($scope.markerClusterGroup) {
                 $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
@@ -60,7 +64,7 @@
             $scope.markerClusterGroup = L.markerClusterGroup({
                 maxClusterRadius: 40,
                 showCoverageOnHover: false,
-                iconCreateFunction: function(cluster) {
+                iconCreateFunction: function (cluster) {
                     return new L.DivIcon({
                         html: '<div><span>' + cluster.getChildCount() + '</span></div>',
                         className: 'treatmentBMPCluster',
@@ -72,7 +76,7 @@
             $scope.markerClusterGroup.addTo($scope.neptuneMap.map);
         };
 
-        
+
 
         $scope.initializeTreatmentBMPClusteredLayer();
 

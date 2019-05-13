@@ -7,15 +7,24 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        NeptuneMaps.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.AreaBasedMapInitJson, resultsControl);
-
+        NeptuneMaps.initTrashMapController($scope,
+            angularModelAndViewData,
+            trashMapService,
+            angularModelAndViewData.AngularViewData.AreaBasedMapInitJson,
+            resultsControl,
+            {
+                showTrashGeneratingUnits: true,
+                disallowedTrashCaptureStatusTypeIDs : [3, 4]
+            });
+        
         $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.treatmentBMPLayers = {};
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
                 function (tcs) {
-                    if (tcs.TrashCaptureStatusTypeID === 3 || tcs.TrashCaptureStatusTypeID === 4) {
+                    if (_.includes(disallowedTrashCaptureStatusTypeIDs, tcs.TrashCaptureStatusTypeID)) {
                         return;
                     }
+
                     var layer = L.geoJson(
                         $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
                         {

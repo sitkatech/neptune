@@ -1,15 +1,17 @@
 ﻿angular.module("NeptuneApp")
     .controller("OVTABasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
-
-
-
         var resultsControl = L.control.ovtaBasedResultsControl({
             position: 'topleft',
             OVTABasedResultsUrlTemplate: angularModelAndViewData.AngularViewData.OVTABasedResultsUrlTemplate,
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        NeptuneMaps.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.OVTABasedMapInitJson, resultsControl);
+        NeptuneMaps.initTrashMapController($scope,
+            angularModelAndViewData,
+            trashMapService,
+            angularModelAndViewData.AngularViewData.OVTABasedMapInitJson,
+            resultsControl,
+            { showLandUseBlocks: true });
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
@@ -122,13 +124,15 @@
         };
 
 
+        var disallowedTrashCaptureStatusTypeIDs = [];
+
         $scope.initializeTreatmentBMPClusteredLayer = function () {
-
             $scope.treatmentBMPLayers = {};
-
-
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
                 function (tcs) {
+                    if (_.includes(disallowedTrashCaptureStatusTypeIDs, tcs.TrashCaptureStatusTypeID)) {
+                        return;
+                    }
 
                     var layer = L.geoJson(
                         $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,

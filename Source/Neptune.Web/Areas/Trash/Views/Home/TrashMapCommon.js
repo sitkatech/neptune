@@ -32,7 +32,11 @@
     return trashMapServiceInstance;
 }]);
 
-NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, trashMapService, mapInitJson, resultsControl) {
+NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, trashMapService, mapInitJson, resultsControl, options) {
+    if (!options) {
+        options = {};
+    }
+
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
     $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
@@ -45,10 +49,20 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     // initialize reference layers
     $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
 
-    var trashGeneratingUnitsLegendUrl = $scope.AngularViewData.GeoServerUrl +
-        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnits&style=tgu_style&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-    var trashGeneratingUnitsLabel = "<span>Trash Capture Status </br><img src='" + trashGeneratingUnitsLegendUrl + "'/></span>";
-    $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", trashGeneratingUnitsLabel);
+    if (options.showTrashGeneratingUnits) {
+        var trashGeneratingUnitsLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnits&style=tgu_style&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var trashGeneratingUnitsLabel =
+            "<span>Trash Capture Status </br><img src='" + trashGeneratingUnitsLegendUrl + "'/></span>";
+        $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", trashGeneratingUnitsLabel);
+    }
+
+    if (options.showLandUseBlocks) {
+        var landUseBlocksLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
+        $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
+    }
 
     var wmsParamsForBackgroundLayer = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:MaskLayers");
     var backgroundLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParamsForBackgroundLayer);
