@@ -210,4 +210,71 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
             $scope.rebuildMarkerClusterGroup();
         }
     };
+
+    // utility methods of the controller
+    $scope.setSelectedMarker = function (layer) {
+        if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
+            $scope.neptuneMap.map.removeLayer($scope.lastSelected);
+        }
+
+        $scope.lastSelected = L.geoJson(layer.toGeoJSON(),
+            {
+                pointToLayer: function (feature, latlng) {
+                    var icon = L.MakiMarkers.icon({
+                        icon: "marker",
+                        color: "#FFFF00",
+                        size: "m"
+                    });
+
+                    return L.marker(latlng,
+                        {
+                            icon: icon,
+                            riseOnHover: true
+                        });
+                },
+                style: function (feature) {
+                    return {
+                        fillColor: "#FFFF00",
+                        fill: true,
+                        fillOpacity: 0.5,
+                        color: "#FFFF00",
+                        weight: 5,
+                        stroke: true
+                    };
+                }
+            });
+
+        $scope.lastSelected.addTo($scope.neptuneMap.map);
+    };
+
+    $scope.markerClicked = function (self, e) {
+        $scope.setSelectedMarker(e.layer);
+        $scope.areaSummaryPanel(e.layer.feature.properties.MapSummaryUrl);
+    };
+
+    $scope.setActiveBMPByID = function (treatmentBMPID) {
+        var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
+            function (t) {
+                return t.TreatmentBMPID == treatmentBMPID;
+            });
+        var layer = $scope.treatmentBMPLayerLookup.get(treatmentBMPID);
+        setActiveImpl(layer, true);
+    };
+
+    function setActiveImpl(layer, updateMap) {
+        if (updateMap) {
+            if (layer.getLatLng) {
+                $scope.neptuneMap.map.panTo(layer.getLatLng());
+            } else {
+                $scope.neptuneMap.map.panTo(layer.getCenter());
+            }
+        }
+
+        // multi-way binding
+        $scope.setSelectedMarker(layer);
+    }
+
+    $scope.zoomMapToCurrentLocation = function () {
+        $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
+    };
 };
