@@ -17,16 +17,6 @@
                 disallowedTrashCaptureStatusTypeIDs : [3, 4]
             });
 
-        $scope.applyMap = function (marker, treatmentBMPID) {
-            $scope.setSelectedMarker(marker);
-            var treatmentBMP = _.find($scope.AngularViewData.TreatmentBMPs,
-                function (t) {
-                    return t.TreatmentBMPID == treatmentBMPID;
-                });
-            $scope.activeTreatmentBMP = treatmentBMP;
-            $scope.$apply();
-        };
-
         $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
             if (isOn) {
                 if (!$scope.treatmentBMPLayerGroup.hasLayer(
