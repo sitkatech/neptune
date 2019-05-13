@@ -41,23 +41,6 @@
             }
         };
 
-        $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
-
-            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
-            if (isOn) {
-                if (!_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    $scope.selectedTrashCaptureStatusIDsForParcelLayer.push(trashCaptureStatusTypeID);
-                }
-            } else {
-
-                if (_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForParcelLayer,
-                        trashCaptureStatusTypeID);
-                }
-            }
-            $scope.initializeParcelLayer();
-        };
-
         $scope.setSelectedMarker = function (layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
