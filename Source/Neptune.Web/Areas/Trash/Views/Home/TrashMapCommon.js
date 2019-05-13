@@ -189,4 +189,25 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
     });
     $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
+
+    // filtering logic
+    $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
+        if (isOn) {
+            if (!$scope.treatmentBMPLayerGroup.hasLayer(
+                $scope.treatmentBMPLayers[trashCaptureStatusTypeID])) {
+                $scope.treatmentBMPLayerGroup.addLayer(
+                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
+            }
+        } else {
+            if ($scope.treatmentBMPLayerGroup.hasLayer(
+                $scope.treatmentBMPLayers[trashCaptureStatusTypeID])
+            ) {
+                $scope.treatmentBMPLayerGroup.removeLayer(
+                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
+            }
+        }
+        if (!skipRebuild) {
+            $scope.rebuildMarkerClusterGroup();
+        }
+    };
 };

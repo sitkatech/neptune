@@ -17,26 +17,6 @@
                 disallowedTrashCaptureStatusTypeIDs : [3, 4]
             });
 
-        $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
-            if (isOn) {
-                if (!$scope.treatmentBMPLayerGroup.hasLayer(
-                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID])) {
-                    $scope.treatmentBMPLayerGroup.addLayer(
-                        $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
-                }
-            } else {
-                if ($scope.treatmentBMPLayerGroup.hasLayer(
-                    $scope.treatmentBMPLayers[trashCaptureStatusTypeID])
-                ) {
-                    $scope.treatmentBMPLayerGroup.removeLayer(
-                        $scope.treatmentBMPLayers[trashCaptureStatusTypeID]);
-                }
-            }
-            if (!skipRebuild) {
-                $scope.rebuildMarkerClusterGroup();
-            }
-        };
-
         $scope.setSelectedMarker = function (layer) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
                 $scope.neptuneMap.map.removeLayer($scope.lastSelected);
