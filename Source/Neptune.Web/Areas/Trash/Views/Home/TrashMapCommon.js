@@ -32,7 +32,7 @@
     return trashMapServiceInstance;
 }]);
 
-Sitka.initTrashMapController = function ($scope, angularModelAndViewData, trashMapService, mapInitJson, resultsControl) {
+NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, trashMapService, mapInitJson, resultsControl) {
     $scope.AngularModel = angularModelAndViewData.AngularModel;
     $scope.AngularViewData = angularModelAndViewData.AngularViewData;
     $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
@@ -57,29 +57,32 @@ Sitka.initTrashMapController = function ($scope, angularModelAndViewData, trashM
 
 
     // initialize results control
-    resultsControl.addTo($scope.neptuneMap.map);
+    if (resultsControl) {
+        resultsControl.addTo($scope.neptuneMap.map);
 
-    $scope.applyJurisdictionMask = function (stormwaterJurisdictionID) {
-        if ($scope.maskLayer) {
-            $scope.neptuneMap.map.removeLayer($scope.maskLayer);
-            $scope.maskLayer = null;
-        }
+        $scope.applyJurisdictionMask = function(stormwaterJurisdictionID) {
+            if ($scope.maskLayer) {
+                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
+                $scope.maskLayer = null;
+            }
 
-        var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
-        wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
-        $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
-        $scope.maskLayer.addTo($scope.neptuneMap.map);
-        $scope.maskLayer.bringToFront();
-    };
+            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
+            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
+            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
+            $scope.maskLayer.addTo($scope.neptuneMap.map);
+            $scope.maskLayer.bringToFront();
+        };
 
-    // this is brittle--it expects the 0th layer in the Layers object to be the Stormwater Jurisdictions
-    resultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.JurisdictionsGeoJson.features, $scope.applyJurisdictionMask);
-    resultsControl.loadAreaBasedCalculationOnLoad();
-    resultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.JurisdictionsGeoJson.features);
+        // this is brittle--it expects the 0th layer in the Layers object to be the Stormwater Jurisdictions
+        resultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.JurisdictionsGeoJson.features,
+            $scope.applyJurisdictionMask);
+        resultsControl.loadAreaBasedCalculationOnLoad();
+        resultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.JurisdictionsGeoJson.features);
 
-    resultsControl.registerAdditionalHandler($scope.applyJurisdictionMask);
+        resultsControl.registerAdditionalHandler($scope.applyJurisdictionMask);
 
-    resultsControl.registerAdditionalHandler(function (stormwaterJurisdictionID) {
-        trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
-    });
+        resultsControl.registerAdditionalHandler(function(stormwaterJurisdictionID) {
+            trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
+        });
+    }
 };

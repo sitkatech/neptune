@@ -9,7 +9,7 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        Sitka.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.OVTABasedMapInitJson, resultsControl);
+        NeptuneMaps.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.OVTABasedMapInitJson, resultsControl);
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =

@@ -7,7 +7,7 @@
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        Sitka.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.AreaBasedMapInitJson, resultsControl);
+        NeptuneMaps.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.AreaBasedMapInitJson, resultsControl);
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
             $scope.treatmentBMPLayers = {};
@@ -260,5 +260,6 @@
         trashMapService.saveBounds($scope.neptuneMap.map.getBounds());
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
         trashMapService.saveStormwaterJurisdictionID(resultsControl.getSelectedJurisdictionID());
+
         console.log("Area Based Map loaded successfully");
     });
