@@ -278,7 +278,7 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
     };
 
-    // final map init
+    // handle switching between tabs (i.e. sync)
     jQuery(options.tabSelector).on("shown.bs.tab", function () {
         var mapState = trashMapService.getMapState();
         $scope.neptuneMap.map.invalidateSize(false);
@@ -298,4 +298,15 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         jQuery(options.resultsSelector + " .leaflet-top.leaflet-left")
             .append(jQuery(options.resultsSelector + " .leaflet-control-fullscreen"));
     }
+
+    // final map init
+    $scope.fullBmpOn = false;
+    $scope.partialBmpOn = false;
+    $scope.fullParcelOn = false;
+    $scope.partialParcelOn = false;
+    _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
+        function (tcs) {
+            $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
+        });
+    $scope.rebuildMarkerClusterGroup();
 };

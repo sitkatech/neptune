@@ -184,16 +184,4 @@
             }
             $scope.initializeParcelLayer();
         };
-
-        $scope.fullBmpOn = false;
-        $scope.partialBmpOn = false;
-        $scope.fullParcelOn = false;
-        $scope.partialParcelOn = false;
-        _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-            function (tcs) {
-                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
-            });
-        $scope.rebuildMarkerClusterGroup();
-
-        console.log("OVTA Based Map loaded successfully");
     });

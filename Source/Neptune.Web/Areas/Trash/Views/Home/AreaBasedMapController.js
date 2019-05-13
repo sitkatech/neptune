@@ -19,34 +19,9 @@
                 resultsSelector: "#areaResults"
             });
 
-        $scope.fullBmpOn = false;
-        $scope.partialBmpOn = false;
-        $scope.fullParcelOn = false;
-        $scope.partialParcelOn = false;
-        _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-            function (tcs) {
-                $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
-            });
-        $scope.rebuildMarkerClusterGroup();
-
-        //jQuery(tabSelector).on("shown.bs.tab", function () {
-        //    var mapState = trashMapService.getMapState();
-        //    $scope.neptuneMap.map.invalidateSize(false);
-
-        //    $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
-        //    resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
-        //    $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
-        //});
-
-        //jQuery(resultsSelector + " .leaflet-top.leaflet-left").append(jQuery(resultsSelector + " .leaflet-control-zoom"));
-        //jQuery(resultsSelector + " .leaflet-top.leaflet-left").append(jQuery(resultsSelector + " .leaflet-control-fullscreen"));
-
-
-
+        // these trashMapService calls just need to happen on whichever map is active when the page is loaded, which is this one.
         trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
         trashMapService.saveBounds($scope.neptuneMap.map.getBounds());
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
         trashMapService.saveStormwaterJurisdictionID(resultsControl.getSelectedJurisdictionID());
-
-        console.log("Area Based Map loaded successfully");
     });
