@@ -7,7 +7,8 @@
             null,
             {
                 showTrashGeneratingUnits: true,
-                disallowedTrashCaptureStatusTypeIDs: [3, 4]
+                disallowedTrashCaptureStatusTypeIDs: [3, 4],
+                tabSelector: "#loadResultsTab"
             });
         $scope.applyJurisdictionMask();
 
@@ -20,14 +21,6 @@
                 $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
             });
         $scope.rebuildMarkerClusterGroup();
-
-        jQuery("#loadResultsTab").on("shown.bs.tab", function () {
-            var mapState = trashMapService.getMapState();
-            $scope.neptuneMap.map.invalidateSize(false);
-
-            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
-            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
-        });
 
         console.log("Load based results loaded successfully");
     });

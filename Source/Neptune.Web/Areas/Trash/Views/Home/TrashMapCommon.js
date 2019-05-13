@@ -277,4 +277,25 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     $scope.zoomMapToCurrentLocation = function () {
         $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
     };
+
+    // final map init
+    jQuery(options.tabSelector).on("shown.bs.tab", function () {
+        var mapState = trashMapService.getMapState();
+        $scope.neptuneMap.map.invalidateSize(false);
+
+        $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+
+        if (resultsControl) {
+            resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
+        }
+
+        $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
+    });
+
+    if (options.resultsSelector) {
+        jQuery(options.resultsSelector + " .leaflet-top.leaflet-left")
+            .append(jQuery(options.resultsSelector + " .leaflet-control-zoom"));
+        jQuery(options.resultsSelector + " .leaflet-top.leaflet-left")
+            .append(jQuery(options.resultsSelector + " .leaflet-control-fullscreen"));
+    }
 };

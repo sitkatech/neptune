@@ -14,7 +14,9 @@
             resultsControl,
             {
                 showTrashGeneratingUnits: true,
-                disallowedTrashCaptureStatusTypeIDs : [3, 4]
+                disallowedTrashCaptureStatusTypeIDs: [3, 4],
+                tabSelector: "#areaResultsTab",
+                resultsSelector: "#areaResults"
             });
 
         $scope.fullBmpOn = false;
@@ -27,17 +29,19 @@
             });
         $scope.rebuildMarkerClusterGroup();
 
-        jQuery("#areaResultsTab").on("shown.bs.tab", function () {
-            var mapState = trashMapService.getMapState();
-            $scope.neptuneMap.map.invalidateSize(false);
+        //jQuery(tabSelector).on("shown.bs.tab", function () {
+        //    var mapState = trashMapService.getMapState();
+        //    $scope.neptuneMap.map.invalidateSize(false);
 
-            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
-            resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
-            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
-        });
+        //    $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+        //    resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
+        //    $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
+        //});
 
-        jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-zoom"));
-        jQuery("#areaResults .leaflet-top.leaflet-left").append(jQuery("#areaResults .leaflet-control-fullscreen"));
+        //jQuery(resultsSelector + " .leaflet-top.leaflet-left").append(jQuery(resultsSelector + " .leaflet-control-zoom"));
+        //jQuery(resultsSelector + " .leaflet-top.leaflet-left").append(jQuery(resultsSelector + " .leaflet-control-fullscreen"));
+
+
 
         trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
         trashMapService.saveBounds($scope.neptuneMap.map.getBounds());

@@ -13,7 +13,9 @@
             resultsControl,
             {
                 showLandUseBlocks: true,
-                disallowedTrashCaptureStatusTypeIDs: []
+                disallowedTrashCaptureStatusTypeIDs: [],
+                tabSelector: "#ovtaResultsTab",
+                resultsSelector: "#ovtaResults"
             });
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
@@ -192,18 +194,6 @@
                 $scope.filterBMPsByTrashCaptureStatusType(tcs.TrashCaptureStatusTypeID, false, true);
             });
         $scope.rebuildMarkerClusterGroup();
-
-        jQuery("#ovtaResultsTab").on("shown.bs.tab", function () {
-            var mapState = trashMapService.getMapState();
-            $scope.neptuneMap.map.invalidateSize(false);
-
-            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
-            resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
-            $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
-        });
-
-        jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));
-        jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-fullscreen"));
 
         console.log("OVTA Based Map loaded successfully");
     });
