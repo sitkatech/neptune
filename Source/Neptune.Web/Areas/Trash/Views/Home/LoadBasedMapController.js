@@ -104,12 +104,7 @@
             // multi-way binding
             $scope.setSelectedMarker(layer);
         }
-
-
-        $scope.visibleBMPCount = function () {
-            return $scope.visibleBMPIDs.length;
-        };
-
+        
         $scope.zoomMapToCurrentLocation = function () {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
         };

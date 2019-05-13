@@ -156,6 +156,23 @@
         };
         $scope.initializeParcelLayer();
 
+        $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
+
+            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
+            if (isOn) {
+                if (!_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
+                    $scope.selectedTrashCaptureStatusIDsForParcelLayer.push(trashCaptureStatusTypeID);
+                }
+            } else {
+
+                if (_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
+                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForParcelLayer,
+                        trashCaptureStatusTypeID);
+                }
+            }
+            $scope.initializeParcelLayer();
+        };
+
         $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
             if (isOn) {
                 if (!$scope.treatmentBMPLayerGroup.hasLayer(
@@ -174,23 +191,6 @@
             if (!skipRebuild) {
                 $scope.rebuildMarkerClusterGroup();
             }
-        };
-
-        $scope.filterParcelsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn) {
-
-            // if the trash capture status is selected, be sure to display on the map. else, be sure it's not displayed
-            if (isOn) {
-                if (!_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    $scope.selectedTrashCaptureStatusIDsForParcelLayer.push(trashCaptureStatusTypeID);
-                }
-            } else {
-
-                if (_.includes($scope.selectedTrashCaptureStatusIDsForParcelLayer, trashCaptureStatusTypeID)) {
-                    Sitka.Methods.removeFromJsonArray($scope.selectedTrashCaptureStatusIDsForParcelLayer,
-                        trashCaptureStatusTypeID);
-                }
-            }
-            $scope.initializeParcelLayer();
         };
 
         $scope.setSelectedMarker = function (layer) {
@@ -266,11 +266,6 @@
             // multi-way binding
             $scope.setSelectedMarker(layer);
         }
-
-
-        $scope.visibleBMPCount = function () {
-            return $scope.visibleBMPIDs.length;
-        };
 
         $scope.zoomMapToCurrentLocation = function () {
             $scope.neptuneMap.map.locate({ setView: true, maxZoom: 15 });
