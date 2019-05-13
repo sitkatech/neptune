@@ -5,12 +5,10 @@
             trashMapService,
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
             null);
+        $scope.applyJurisdictionMask();
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
-
             $scope.treatmentBMPLayers = {};
-
-
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
                 function (tcs) {
                     if (tcs.TrashCaptureStatusTypeID === 3 || tcs.TrashCaptureStatusTypeID === 4) {
@@ -260,7 +258,7 @@
             var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });
 

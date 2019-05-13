@@ -54,24 +54,27 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
     var backgroundLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParamsForBackgroundLayer);
     backgroundLayer.addTo($scope.neptuneMap.map);
     backgroundLayer.bringToFront();
+    
+    $scope.applyJurisdictionMask = function (stormwaterJurisdictionID) {
+        if ($scope.maskLayer) {
+            $scope.neptuneMap.map.removeLayer($scope.maskLayer);
+            $scope.maskLayer = null;
+        }
 
-
+        var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
+        if (stormwaterJurisdictionID) {
+            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
+        } else {
+            wmsParams.cql_filter = $scope.AngularViewData.NegativeStormwaterJurisdictionCqlFilter;
+        }
+        $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
+        $scope.maskLayer.addTo($scope.neptuneMap.map);
+        $scope.maskLayer.bringToFront();
+    };
+    
     // initialize results control
     if (resultsControl) {
         resultsControl.addTo($scope.neptuneMap.map);
-
-        $scope.applyJurisdictionMask = function(stormwaterJurisdictionID) {
-            if ($scope.maskLayer) {
-                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
-                $scope.maskLayer = null;
-            }
-
-            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
-            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
-            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
-            $scope.maskLayer.addTo($scope.neptuneMap.map);
-            $scope.maskLayer.bringToFront();
-        };
 
         // this is brittle--it expects the 0th layer in the Layers object to be the Stormwater Jurisdictions
         resultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.JurisdictionsGeoJson.features,
