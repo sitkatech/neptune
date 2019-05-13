@@ -21,6 +21,8 @@ Source code is available upon request via <support@sitkatech.com>.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using LtInfo.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Security;
 using Neptune.Web.Common;
@@ -29,22 +31,6 @@ namespace Neptune.Web.Models
 {
     public static class IRoleExtensions
     {
-        /// <summary>
-        /// Note AnonymousRole should not use this!
-        /// </summary>
-        public static string GetSummaryUrl(this IRole role)
-        {
-            if (role is AnonymousRole)
-            {
-                return SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Anonymous());
-            }
-            else
-            {
-                return SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Detail(role.RoleID));
-            }
-
-        }
-
         public static List<FeaturePermission> GetFeaturePermissions(this IRole role, Type baseFeatureType)
         {
             var featurePermissions = new List<FeaturePermission>();
@@ -64,5 +50,10 @@ namespace Neptune.Web.Models
             return featurePermissions;
         }
 
+        public static readonly UrlTemplate<int, int> SummaryUrlTemplate = new UrlTemplate<int, int>(SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Detail(UrlTemplate.Parameter1Int, UrlTemplate.Parameter2Int)));
+        public static HtmlString GetDisplayNameAsUrl(this IRole role)
+        {
+            return UrlTemplate.MakeHrefString(SummaryUrlTemplate.ParameterReplace((int)role.NeptuneAreaEnum.Value, role.RoleID), role.RoleDisplayName);
+        }
     }
 }

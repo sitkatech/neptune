@@ -20,11 +20,8 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Neptune.Web.Security;
 using Neptune.Web.Common;
-using Neptune.Web.Controllers;
-using LtInfo.Common;
 
 namespace Neptune.Web.Models
 {
@@ -42,14 +39,7 @@ namespace Neptune.Web.Models
             return HttpRequestStorage.DatabaseEntities.People.Where(x => x.IsActive && x.RoleID == RoleID).ToList();
         }
 
-        public HtmlString GetDisplayNameAsUrl()
-        {
-            return UrlTemplate.MakeHrefString(SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Detail(RoleID)), RoleDisplayName);
-        }
-
-        public static string GetAnonymousRoleUrl()
-        {
-            return SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Anonymous());
-        }
+        public NeptuneAreaEnum? NeptuneAreaEnum => NeptuneArea.OCStormwaterTools.ToEnum;
+        public string NeptuneAreaDisplayName => NeptuneArea.OCStormwaterTools.NeptuneAreaDisplayName;
     }
 }

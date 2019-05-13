@@ -40,4 +40,6 @@ values
 (35, 'OVTAIndex', 'OVTA Index', 2),
 (36, 'TrashModuleProgramOverview', 'Trash Module Program Overview', 2),
 (37, 'DelineationMap', 'Delineation Map', 2),
-(38, 'BulkUploadRequest', 'Bulk Upload Request', 2)
+(38, 'BulkUploadRequest', 'Bulk Upload Request', 2),
+(39, 'DroolToolHomePage', 'Drool Tool Home Page', 2),
+(40, 'DroolToolAboutPage', 'Drool Tool About Page', 2)

@@ -22,7 +22,8 @@ namespace Neptune.Web
         {
             {string.Empty, NeptuneWebConfiguration.CanonicalHostNameRoot},
             {NeptuneArea.Trash.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameTrash},
-            {NeptuneArea.Modeling.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameModeling}
+            {NeptuneArea.Modeling.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameModeling},
+            {NeptuneArea.DroolTool.NeptuneAreaName, NeptuneWebConfiguration.CanonicalHostNameDroolTool}
         };
 
         protected void Application_Start()

@@ -1,6 +1,6 @@
 ﻿/*-----------------------------------------------------------------------
-<copyright file="NeptuneInfoSiteExplorer.cs" company="Tahoe Regional Planning Agency">
-Copyright (c) Tahoe Regional Planning Agency. All rights reserved.
+<copyright file="NavAndHeaderLayout.cs" company="Tahoe Regional Planning Agency and Sitka Technology Group">
+Copyright (c) Tahoe Regional Planning Agency and Sitka Technology Group. All rights reserved.
 <author>Sitka Technology Group</author>
 </copyright>
 
@@ -14,12 +14,15 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License <http://www.gnu.org/licenses/> for more details.
+
 Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
-namespace Neptune.Web.Views.Shared
+
+
+namespace Neptune.Web.Areas.DroolTool.Views.Shared
 {
-    public abstract class NeptuneSiteExplorer : LtInfo.Common.Mvc.TypedWebPartialViewPage<NeptuneSiteExplorerViewData>
+    public abstract class NavAndHeaderLayout : LtInfo.Common.Mvc.TypedWebViewPage<DroolToolModuleViewData>
     {
     }
 }

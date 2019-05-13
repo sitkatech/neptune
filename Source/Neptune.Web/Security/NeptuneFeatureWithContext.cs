@@ -29,7 +29,7 @@ namespace Neptune.Web.Security
     {
         public IActionFilter ActionFilter;
 
-        protected NeptuneFeatureWithContext(List<Role> grantedRoles) : base(grantedRoles.Select(x => (IRole)x).ToList())
+        protected NeptuneFeatureWithContext(List<Role> grantedRoles) : base(grantedRoles.Select(x => (IRole)x).ToList(), NeptuneArea.OCStormwaterTools)
         {
         }
 

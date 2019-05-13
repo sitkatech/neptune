@@ -43,7 +43,8 @@ namespace Neptune.Web.Models
             var anonymousSitkaUser = new Person
             {
                 PersonID = AnonymousPersonID,
-                RoleID = Role.Unassigned.RoleID
+                RoleID = Role.Unassigned.RoleID,
+                DroolToolRoleID = Models.DroolToolRole.Unassigned.DroolToolRoleID
             };
             // as we add new areas, we need to make sure we assign the anonymous user with the unassigned roles for each area
             return anonymousSitkaUser;
