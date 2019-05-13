@@ -42,10 +42,10 @@
                     cql_filter: "intersects(ParcelGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
                 });
             jQuery.ajax({
-                    url: mapServiceUrl + L.Util.getParamString(parameters),
-                    dataTpe: "json",
-                    jsonCallback: "getJson"
-                },
+                url: mapServiceUrl + L.Util.getParamString(parameters),
+                dataTpe: "json",
+                jsonCallback: "getJson"
+            },
                 function (response) {
                     if (response.features.length == 0) {
                         return;
