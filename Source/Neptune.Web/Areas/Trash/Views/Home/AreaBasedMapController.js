@@ -100,32 +100,6 @@
             $scope.$apply();
         };
 
-        $scope.$watch(function () {
-            var foundIDs = [];
-            var map = $scope.neptuneMap.map;
-            map.eachLayer(function (layer) {
-                if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
-                    if (map.getBounds().contains(layer.getLatLng())) {
-                        foundIDs.push(layer.feature.properties.TreatmentBMPID);
-                    }
-                }
-                if (layer instanceof L.MarkerCluster) {
-                    if (map.getBounds().contains(layer.getLatLng())) {
-                        var markers = layer.getAllChildMarkers();
-                        for (var i = 0; i < markers.length; i++) {
-                            foundIDs.push(markers[i].feature.properties.TreatmentBMPID);
-                        }
-                    }
-                }
-            });
-            // clusters get multicounted, so we need to use this function to pick out the unique IDs only
-            $scope.visibleBMPIDs = foundIDs.filter(function (element, index, array) {
-                return array.indexOf(element) === index;
-            });
-        });
-
-
-
         $scope.filterBMPsByTrashCaptureStatusType = function (trashCaptureStatusTypeID, isOn, skipRebuild) {
             if (isOn) {
                 if (!$scope.treatmentBMPLayerGroup.hasLayer(
