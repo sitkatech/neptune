@@ -8,7 +8,7 @@
 {
     @{ MapJavascriptIncludes.RenderPartialView(Html); }
     <script src="@Url.Content("~/ScriptsCustom/Maps/NeptuneMaps.GeoServerMap.min.js")" type="text/javascript"></script>
-    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/TrashMapService.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/TrashMapCommon.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedResultsCalculationControl.js")"></script>
@@ -192,7 +192,6 @@
                     <div id="treatmentBMPLegendLoadBased" style="display: none;">
                         <label>
                             <div>
-
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
                                 <span>
                                     <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
