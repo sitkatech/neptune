@@ -5,92 +5,11 @@
             trashMapService,
             angularModelAndViewData.AngularViewData.LoadBasedMapInitJson,
             null,
-            { showTrashGeneratingUnits: true });
-        $scope.applyJurisdictionMask();
-
-        var allowedTrashCaptureStatusTypeIDs = [3, 4];
-
-        $scope.initializeTreatmentBMPClusteredLayer = function () {
-            $scope.treatmentBMPLayers = {};
-            _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
-                function (tcs) {
-                    if (_.includes(allowedTrashCaptureStatusTypeIDs, tcs.TrashCaptureStatusTypeID)) {
-                        return;
-                    }
-
-                    var layer = L.geoJson(
-                        $scope.AngularViewData.MapInitJson.TreatmentBMPLayerGeoJson.GeoJsonFeatureCollection,
-                        {
-                            filter: function (feature, layer) {
-                                return feature.properties.TrashCaptureStatusTypeID === tcs.TrashCaptureStatusTypeID;
-                            },
-                            pointToLayer: function (feature, latlng) {
-                                var icon = L.MakiMarkers.icon({
-                                    icon: feature.properties.FeatureGlyph,
-                                    color: feature.properties.FeatureColor,
-                                    size: "m"
-                                });
-
-                                return L.marker(latlng,
-                                    {
-                                        icon: icon,
-                                        title: feature.properties.Name,
-                                        alt: feature.properties.Name
-                                    });
-                            },
-                            onEachFeature: function (feature, layer) {
-                                $scope.treatmentBMPLayerLookup.set(feature.properties["TreatmentBMPID"], layer);
-                            }.bind(this)
-                        });
-                    $scope.treatmentBMPLayers[tcs.TrashCaptureStatusTypeID] = layer;
-                    layer.on('click',
-                        function (e) {
-                            $scope.setActiveBMPByID(e.layer.feature.properties.TreatmentBMPID);
-                            $scope.$apply();
-                        });
-                });
-
-            $scope.treatmentBMPLayerGroup = L.layerGroup(Object.values($scope.treatmentBMPLayers));
-
-            $scope.rebuildMarkerClusterGroup();
-        };
-
-        $scope.rebuildMarkerClusterGroup = function () {
-
-            if ($scope.markerClusterGroup) {
-                $scope.neptuneMap.map.removeLayer($scope.markerClusterGroup);
-            }
-
-            $scope.markerClusterGroup = L.markerClusterGroup({
-                maxClusterRadius: 40,
-                showCoverageOnHover: false,
-                iconCreateFunction: function (cluster) {
-                    return new L.DivIcon({
-                        html: '<div><span>' + cluster.getChildCount() + '</span></div>',
-                        className: 'treatmentBMPCluster',
-                        iconSize: new L.Point(40, 40)
-                    });
-                }
+            {
+                showTrashGeneratingUnits: true,
+                disallowedTrashCaptureStatusTypeIDs: [3, 4]
             });
-            $scope.treatmentBMPLayerGroup.addTo($scope.markerClusterGroup);
-            $scope.markerClusterGroup.addTo($scope.neptuneMap.map);
-        };
-
-
-
-        $scope.initializeTreatmentBMPClusteredLayer();
-
-        $scope.neptuneMap.map.on('zoomend', function () {
-            $scope.$apply();
-            trashMapService.saveZoom($scope.neptuneMap.map.getZoom());
-        });
-        $scope.neptuneMap.map.on('animationend', function () { $scope.$apply(); });
-        $scope.neptuneMap.map.on('moveend', function () {
-            $scope.$apply();
-            trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
-        });
-        $scope.neptuneMap.map.on('viewreset', function () { $scope.$apply(); });
-        $scope.lastSelected = null; //cache for the last clicked item so we can reset it's color
+        $scope.applyJurisdictionMask();
 
         $scope.applyMap = function (marker, treatmentBMPID) {
             $scope.setSelectedMarker(marker);
