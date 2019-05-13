@@ -1,57 +1,15 @@
 ﻿angular.module("NeptuneApp")
     .controller("OVTABasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
-        $scope.AngularModel = angularModelAndViewData.AngularModel;
-        $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-        $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
-        $scope.treatmentBMPLayerLookup = new Map();
 
-        $scope.neptuneMap = new NeptuneMaps.GeoServerMap($scope.AngularViewData.MapInitJson,
-            "Terrain",
-            $scope.AngularViewData.GeoServerUrl);
 
-        $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
 
-        var landUseBlocksLegendUrl = $scope.AngularViewData.GeoServerUrl +
-            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ALandUseBlocks&style=&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-        var landUseBlocksLabel = "<span>Land Use Blocks </br><img src='" + landUseBlocksLegendUrl + "'/></span>";
-        $scope.neptuneMap.addWmsLayer("OCStormwater:LandUseBlocks", landUseBlocksLabel);
-
-        var ovtaBasedResultsControl = L.control.ovtaBasedResultsControl({
+        var resultsControl = L.control.ovtaBasedResultsControl({
             position: 'topleft',
-            OVTABasedResultsUrlTemplate: $scope.AngularViewData.OVTABasedResultsUrlTemplate,
-            showDropdown: $scope.AngularViewData.ShowDropdown
+            OVTABasedResultsUrlTemplate: angularModelAndViewData.AngularViewData.OVTABasedResultsUrlTemplate,
+            showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        ovtaBasedResultsControl.addTo($scope.neptuneMap.map);
-
-        var wmsParamsForBackgroundLayer = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:MaskLayers");
-        var backgroundLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParamsForBackgroundLayer);
-        backgroundLayer.addTo($scope.neptuneMap.map);
-        backgroundLayer.bringToFront();
-
-        var applyJurisdictionMask = function (stormwaterJurisdictionID) {
-            if ($scope.maskLayer) {
-                $scope.neptuneMap.map.removeLayer($scope.maskLayer);
-                $scope.maskLayer = null;
-            }
-
-            var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
-            wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
-            $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
-            $scope.maskLayer.addTo($scope.neptuneMap.map);
-            $scope.maskLayer.bringToFront();
-
-        };
-
-        ovtaBasedResultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features, applyJurisdictionMask);
-        ovtaBasedResultsControl.loadAreaBasedCalculationOnLoad();
-        ovtaBasedResultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
-
-        ovtaBasedResultsControl.registerAdditionalHandler(applyJurisdictionMask);
-
-        ovtaBasedResultsControl.registerAdditionalHandler(function (stormwaterJurisdictionID) {
-            trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
-        });
+        Sitka.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.OVTABasedMapInitJson, resultsControl);
 
         if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.AngularViewData.StormwaterJurisdictionCqlFilter)) {
             $scope.AngularViewData.StormwaterJurisdictionCqlFilter =
@@ -444,12 +402,13 @@
             var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
-            ovtaBasedResultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
+            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });
 
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-zoom"));
         jQuery("#ovtaResults .leaflet-top.leaflet-left").append(jQuery("#ovtaResults .leaflet-control-fullscreen"));
 
+        console.log("OVTA Based Map loaded successfully");
     });

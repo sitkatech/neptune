@@ -1,57 +1,4 @@
-﻿var InitTrashMapController = function ($scope, angularModelAndViewData, trashMapService, mapInitJson, resultsControl) {
-    $scope.AngularModel = angularModelAndViewData.AngularModel;
-    $scope.AngularViewData = angularModelAndViewData.AngularViewData;
-    $scope.selectedTrashCaptureStatusIDsForParcelLayer = [1, 2];
-    $scope.treatmentBMPLayerLookup = new Map();
-
-    $scope.neptuneMap = new NeptuneMaps.GeoServerMap(mapInitJson,
-        "Terrain",
-        $scope.AngularViewData.GeoServerUrl);
-    
-    // initialize reference layers
-    $scope.neptuneMap.vectorLayerGroups[0].addTo($scope.neptuneMap.map);
-
-    var trashGeneratingUnitsLegendUrl = $scope.AngularViewData.GeoServerUrl +
-        "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3ATrashGeneratingUnits&style=tgu_style&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
-    var trashGeneratingUnitsLabel = "<span>Trash Capture Status </br><img src='" + trashGeneratingUnitsLegendUrl + "'/></span>";
-    $scope.neptuneMap.addWmsLayer("OCStormwater:TrashGeneratingUnits", trashGeneratingUnitsLabel);
-
-    var wmsParamsForBackgroundLayer = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:MaskLayers");
-    var backgroundLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParamsForBackgroundLayer);
-    backgroundLayer.addTo($scope.neptuneMap.map);
-    backgroundLayer.bringToFront();
-
-
-    // initialize results control
-    resultsControl.addTo($scope.neptuneMap.map);
-
-    var applyJurisdictionMask = function (stormwaterJurisdictionID) {
-        if ($scope.maskLayer) {
-            $scope.neptuneMap.map.removeLayer($scope.maskLayer);
-            $scope.maskLayer = null;
-        }
-
-        var wmsParams = $scope.neptuneMap.createWmsParamsWithLayerName("OCStormwater:Jurisdictions");
-        wmsParams.cql_filter = "StormwaterJurisdictionID <> " + stormwaterJurisdictionID;
-        $scope.maskLayer = L.tileLayer.wms($scope.neptuneMap.geoserverUrlOWS, wmsParams);
-        $scope.maskLayer.addTo($scope.neptuneMap.map);
-        $scope.maskLayer.bringToFront();
-    };
-
-    // this is brittle--it expects the 0th layer in the Layers object to be the Stormwater Jurisdictions
-    resultsControl.zoomToJurisdictionOnLoad($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features, applyJurisdictionMask);
-    resultsControl.loadAreaBasedCalculationOnLoad();
-    resultsControl.registerZoomToJurisdictionHandler($scope.AngularViewData.MapInitJson.Layers[0].GeoJsonFeatureCollection.features);
-
-    resultsControl.registerAdditionalHandler(applyJurisdictionMask);
-
-    resultsControl.registerAdditionalHandler(function (stormwaterJurisdictionID) {
-        trashMapService.saveStormwaterJurisdictionID(stormwaterJurisdictionID);
-    });
-};
-
-
-angular.module("NeptuneApp")
+﻿angular.module("NeptuneApp")
     .controller("AreaBasedMapController", function ($scope, angularModelAndViewData, trashMapService) {
 
         var resultsControl = L.control.areaBasedCalculationControl({
@@ -60,13 +7,10 @@ angular.module("NeptuneApp")
             showDropdown: angularModelAndViewData.AngularViewData.ShowDropdown
         });
 
-        InitTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.AreaBasedMapInitJson, resultsControl);
+        Sitka.initTrashMapController($scope, angularModelAndViewData, trashMapService, angularModelAndViewData.AngularViewData.AreaBasedMapInitJson, resultsControl);
 
         $scope.initializeTreatmentBMPClusteredLayer = function () {
-
             $scope.treatmentBMPLayers = {};
-
-
             _.forEach($scope.AngularViewData.TrashCaptureStatusTypes,
                 function (tcs) {
                     if (tcs.TrashCaptureStatusTypeID === 3 || tcs.TrashCaptureStatusTypeID === 4) {
@@ -304,7 +248,7 @@ angular.module("NeptuneApp")
             var mapState = trashMapService.getMapState();
             $scope.neptuneMap.map.invalidateSize(false);
 
-            applyJurisdictionMask(mapState.stormwaterJurisdictionID);
+            $scope.applyJurisdictionMask(mapState.stormwaterJurisdictionID);
             resultsControl.selectJurisdiction(mapState.stormwaterJurisdictionID);
             $scope.neptuneMap.map.setView(mapState.center, mapState.zoom, { animate: false });
         });

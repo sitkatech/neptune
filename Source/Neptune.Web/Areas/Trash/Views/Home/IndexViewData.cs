@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using GeoJSON.Net.Feature;
 using LtInfo.Common;
 using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
@@ -71,7 +72,10 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
         public class ViewDataForAngularClass : TrashModuleMapViewDataForAngularBaseClass
         {
+
             public MapInitJson MapInitJson { get; }
+
+            public MapInitJson OVTABasedMapInitJson { get; }
             public MapInitJson AreaBasedMapInitJson { get; }
             public MapInitJson LoadBasedMapInitJson { get; }
 
@@ -84,16 +88,19 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public List<TrashCaptureStatusType> TrashCaptureStatusTypes { get; }
             public string StormwaterJurisdictionCqlFilter { get; }
             public string NegativeStormwaterJurisdictionCqlFilter { get; }
+            public FeatureCollection JurisdictionsGeoJson { get; }
 
             public bool ShowDropdown { get; }
 
-            public ViewDataForAngularClass(MapInitJson mapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
+            public ViewDataForAngularClass(MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
                 List<TrashCaptureStatusType> trashCaptureStatusTypeSimples, List<Models.Parcel> parcels,
                 string stormwaterJurisdictionCqlFilter, bool showDropdown, string negativeStormwaterJurisdictionCqlFilter)
             {
-                MapInitJson = mapInitJson;
+                OVTABasedMapInitJson = ovtaBasedMapInitJson;
                 AreaBasedMapInitJson = areaBasedMapInitJson;
                 LoadBasedMapInitJson = loadBasedMapInitJson;
+                // it's kind of weird that we need a "global" json that's just a copy of the OVTA-based json, but it works
+                MapInitJson = OVTABasedMapInitJson;
                 
                 TreatmentBMPs = treatmentBMPs.Select(x => new TreatmentBMPSimple(x)).ToList();
                 Parcels = parcels.Select(x => new ParcelSimple(x)).ToList();
@@ -104,6 +111,9 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 AreaBasedCalculationsUrlTemplate =
                     new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                         x.AcreBasedCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
+
+                var jurisdictions = HttpRequestStorage.DatabaseEntities.StormwaterJurisdictions.GetJurisdictionsWithGeospatialFeatures();
+                JurisdictionsGeoJson = StormwaterJurisdiction.ToGeoJsonFeatureCollection(jurisdictions);
 
                 OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
