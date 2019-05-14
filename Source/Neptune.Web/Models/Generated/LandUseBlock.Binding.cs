@@ -30,32 +30,47 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry) : this()
+        public LandUseBlock(int landUseBlockID, int? priorityLandUseTypeID, string landUseDescription, DbGeometry landUseBlockGeometry, decimal trashGenerationRate, int permitTypeID) : this()
         {
             this.LandUseBlockID = landUseBlockID;
             this.PriorityLandUseTypeID = priorityLandUseTypeID;
             this.LandUseDescription = landUseDescription;
             this.LandUseBlockGeometry = landUseBlockGeometry;
+            this.TrashGenerationRate = trashGenerationRate;
+            this.PermitTypeID = permitTypeID;
         }
 
         /// <summary>
         /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
         /// </summary>
-        public LandUseBlock(DbGeometry landUseBlockGeometry) : this()
+        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, int permitTypeID) : this()
         {
             // Mark this as a new object by setting primary key with special value
             this.LandUseBlockID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
             
             this.LandUseBlockGeometry = landUseBlockGeometry;
+            this.TrashGenerationRate = trashGenerationRate;
+            this.PermitTypeID = permitTypeID;
         }
 
+        /// <summary>
+        /// Constructor for building a new object with MinimalConstructor required fields, using objects whenever possible
+        /// </summary>
+        public LandUseBlock(DbGeometry landUseBlockGeometry, decimal trashGenerationRate, PermitType permitType) : this()
+        {
+            // Mark this as a new object by setting primary key with special value
+            this.LandUseBlockID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
+            this.LandUseBlockGeometry = landUseBlockGeometry;
+            this.TrashGenerationRate = trashGenerationRate;
+            this.PermitTypeID = permitType.PermitTypeID;
+        }
 
         /// <summary>
         /// Creates a "blank" object of this type and populates primitives with defaults
         /// </summary>
-        public static LandUseBlock CreateNewBlank()
+        public static LandUseBlock CreateNewBlank(PermitType permitType)
         {
-            return new LandUseBlock(default(DbGeometry));
+            return new LandUseBlock(default(DbGeometry), default(decimal), permitType);
         }
 
         /// <summary>
@@ -106,11 +121,14 @@ namespace Neptune.Web.Models
         public int? PriorityLandUseTypeID { get; set; }
         public string LandUseDescription { get; set; }
         public DbGeometry LandUseBlockGeometry { get; set; }
+        public decimal TrashGenerationRate { get; set; }
+        public int PermitTypeID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return LandUseBlockID; } set { LandUseBlockID = value; } }
 
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public PriorityLandUseType PriorityLandUseType { get { return PriorityLandUseTypeID.HasValue ? PriorityLandUseType.AllLookupDictionary[PriorityLandUseTypeID.Value] : null; } }
+        public PermitType PermitType { get { return PermitType.AllLookupDictionary[PermitTypeID]; } }
 
         public static class FieldLengths
         {

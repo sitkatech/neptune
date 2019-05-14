@@ -19,6 +19,8 @@ namespace Neptune.Web.Models
             Property(x => x.PriorityLandUseTypeID).HasColumnName(@"PriorityLandUseTypeID").HasColumnType("int").IsOptional();
             Property(x => x.LandUseDescription).HasColumnName(@"LandUseDescription").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.LandUseBlockGeometry).HasColumnName(@"LandUseBlockGeometry").HasColumnType("geometry").IsRequired();
+            Property(x => x.TrashGenerationRate).HasColumnName(@"TrashGenerationRate").HasColumnType("decimal").IsRequired();
+            Property(x => x.PermitTypeID).HasColumnName(@"PermitTypeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
 

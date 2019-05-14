@@ -411,6 +411,11 @@ namespace Neptune.Web.Models
                 case "Person":
                     return People.GetPerson(primaryKey);
 
+                case "PermitType":
+                    var permitType = PermitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(permitType, "PermitType", primaryKey);
+                    return permitType;
+
                 case "PreliminarySourceIdentificationCategory":
                     var preliminarySourceIdentificationCategory = PreliminarySourceIdentificationCategory.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
                     Check.RequireNotNullThrowNotFound(preliminarySourceIdentificationCategory, "PreliminarySourceIdentificationCategory", primaryKey);
