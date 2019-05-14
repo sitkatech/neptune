@@ -9,9 +9,11 @@ var stopClickPropagation = function (parentElement) {
         window.freeze = true;
     });
 
-    L.DomEvent.on(parentElement, "mouseout", function (e) {
-        window.freeze = false;
-    })
+    L.DomEvent.on(parentElement,
+        "mouseout",
+        function(e) {
+            window.freeze = false;
+        });
 };
 
 L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({

@@ -1,7 +1,9 @@
 ﻿L.Control.AreaBasedCalculationControl = L.Control.TemplatedControl.extend({
     templateID: "areaBasedCalculationControlTemplate",
 
-    initializeControlInstance: function(map) {
+    initializeControlInstance: function (map) {
+        window.stopClickPropagation(this.parentElement);
+
         this.map = map;
         if (this.options.showDropdown) {
 
