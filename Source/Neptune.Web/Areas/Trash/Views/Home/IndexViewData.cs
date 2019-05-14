@@ -8,9 +8,12 @@ using LtInfo.Common.Mvc;
 using Neptune.Web.Areas.Trash.Controllers;
 using Neptune.Web.Areas.Trash.Views.Shared;
 using Neptune.Web.Common;
+using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Views;
 using Neptune.Web.Views.Shared;
+using HomeController = Neptune.Web.Areas.Trash.Controllers.HomeController;
+using TrashGeneratingUnitController = Neptune.Web.Areas.Trash.Controllers.TrashGeneratingUnitController;
 using TreatmentBMPController = Neptune.Web.Controllers.TreatmentBMPController;
 
 namespace Neptune.Web.Areas.Trash.Views.Home
@@ -89,6 +92,11 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public string StormwaterJurisdictionCqlFilter { get; }
             public string NegativeStormwaterJurisdictionCqlFilter { get; }
             public FeatureCollection JurisdictionsGeoJson { get; }
+            
+            public string OrganizationUrlTemplate { get; }
+            public string BMPUrlTemplate { get; }
+            public string OVTAAUrlTemplate { get; }
+
 
             public bool ShowDropdown { get; }
 
@@ -117,6 +125,12 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
                 OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
+
+                // Templates for links in detail pop-up
+                OrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
+                BMPUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
+                OVTAAUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
+
             }
         }
     }
