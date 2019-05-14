@@ -310,3 +310,16 @@ NeptuneMaps.initTrashMapController = function ($scope, angularModelAndViewData, 
         });
     $scope.rebuildMarkerClusterGroup();
 };
+
+window.stopClickPropagation = function (parentElement) {
+    L.DomEvent.on(parentElement, "mouseover", function (e) {
+        // todo: still not the best way to handle this event-pausing stuff
+        window.freeze = true;
+    });
+
+    L.DomEvent.on(parentElement,
+        "mouseout",
+        function (e) {
+            window.freeze = false;
+        });
+};

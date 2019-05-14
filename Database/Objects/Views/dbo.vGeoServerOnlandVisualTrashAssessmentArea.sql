@@ -7,7 +7,11 @@ select
 	area.OnlandVisualTrashAssessmentAreaName,
 	area.StormwaterJurisdictionID,
 	area.OnlandVisualTrashAssessmentAreaGeometry,
-	case when area.OnlandVisualTrashAssessmentScoreID is null then 0 else Score.NumericValue end as Score
+	case when area.OnlandVisualTrashAssessmentScoreID is null then 0 else Score.NumericValue end as Score,
+	score.OnlandVisualTrashAssessmentScoreDisplayName,
+	ovta.CompletedDate
 from dbo.OnlandVisualTrashAssessmentArea area left join
 	dbo.OnlandVisualTrashAssessmentScore score
-		on area.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID
+		on area.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID 
+		left join dbo.OnlandVisualTrashAssessment ovta
+		on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID

@@ -2,6 +2,7 @@
     templateID: "OVTABasedResultsControlTemplate",
 
     initializeControlInstance: function(map) {
+        window.stopClickPropagation(this.parentElement);
         this.map = map;
 
         if (this.options.showDropdown) {
