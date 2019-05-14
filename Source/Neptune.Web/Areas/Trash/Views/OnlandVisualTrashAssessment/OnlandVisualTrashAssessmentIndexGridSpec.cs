@@ -41,7 +41,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     DhtmlxGridColumnFilterType.Html);
             }
 
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
+            Add(FieldDefinition.BaselineScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Last Assessment Date", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Status", x => x.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);

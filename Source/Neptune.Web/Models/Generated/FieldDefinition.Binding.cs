@@ -77,8 +77,9 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionOnlandVisualTrashAssessment OnlandVisualTrashAssessment = FieldDefinitionOnlandVisualTrashAssessment.Instance;
         public static readonly FieldDefinitionOnlandVisualTrashAssessmentNotes OnlandVisualTrashAssessmentNotes = FieldDefinitionOnlandVisualTrashAssessmentNotes.Instance;
         public static readonly FieldDefinitionDelineationType DelineationType = FieldDefinitionDelineationType.Instance;
-        public static readonly FieldDefinitionOVTAScore OVTAScore = FieldDefinitionOVTAScore.Instance;
+        public static readonly FieldDefinitionBaselineScore BaselineScore = FieldDefinitionBaselineScore.Instance;
         public static readonly FieldDefinitionSizingBasis SizingBasis = FieldDefinitionSizingBasis.Instance;
+        public static readonly FieldDefinitionProgressScore ProgressScore = FieldDefinitionProgressScore.Instance;
 
         public static readonly List<FieldDefinition> All;
         public static readonly ReadOnlyDictionary<int, FieldDefinition> AllLookupDictionary;
@@ -88,7 +89,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static FieldDefinition()
         {
-            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, OVTAScore, SizingBasis };
+            All = new List<FieldDefinition> { IsPrimaryContactOrganization, Organization, Password, MeasurementUnit, PhotoCaption, PhotoCredit, PhotoTiming, PrimaryContact, OrganizationType, Username, ExternalLinks, RoleName, ChartLastUpdatedDate, TreatmentBMPType, ConveyanceFunctionsAsIntended, AssessmentScoreWeight, ObservationScore, AlternativeScore, AssessmentForInternalUseOnly, TreatmentBMPDesignDepth, ReceivesSystemCommunications, Jurisdiction, ModeledCatchment, TreatmentBMP, TreatmentBMPAssessmentObservationType, ObservationCollectionMethod, ObservationThresholdType, ObservationTargetType, MeasurementUnitLabel, PropertiesToObserve, MinimumNumberOfObservations, MaximumNumberOfObservations, MinimumValueOfEachObservation, MaximumValueOfEachObservation, DefaultThresholdValue, DefaultBenchmarkValue, AssessmentFailsIfObservationFails, CustomAttributeType, CustomAttributeDataType, MaintenanceRecordType, MaintenanceRecord, AttributeTypePurpose, FundingSource, IsPostMaintenanceAssessment, FundingEvent, FieldVisit, FieldVisitStatus, WaterQualityManagementPlan, Parcel, RequiredLifespanOfInstallation, RequiredFieldVisitsPerYear, RequiredPostStormFieldVisitsPerYear, WaterQualityManagementPlanDocumentType, HasAllRequiredDocuments, DateOfLastInventoryChange, TrashCaptureStatus, OnlandVisualTrashAssessment, OnlandVisualTrashAssessmentNotes, DelineationType, BaselineScore, SizingBasis, ProgressScore };
             AllLookupDictionary = new ReadOnlyDictionary<int, FieldDefinition>(All.ToDictionary(x => x.FieldDefinitionID));
         }
 
@@ -178,6 +179,8 @@ namespace Neptune.Web.Models
                     return AssessmentScoreWeight;
                 case FieldDefinitionEnum.AttributeTypePurpose:
                     return AttributeTypePurpose;
+                case FieldDefinitionEnum.BaselineScore:
+                    return BaselineScore;
                 case FieldDefinitionEnum.ChartLastUpdatedDate:
                     return ChartLastUpdatedDate;
                 case FieldDefinitionEnum.ConveyanceFunctionsAsIntended:
@@ -246,8 +249,6 @@ namespace Neptune.Web.Models
                     return Organization;
                 case FieldDefinitionEnum.OrganizationType:
                     return OrganizationType;
-                case FieldDefinitionEnum.OVTAScore:
-                    return OVTAScore;
                 case FieldDefinitionEnum.Parcel:
                     return Parcel;
                 case FieldDefinitionEnum.Password:
@@ -260,6 +261,8 @@ namespace Neptune.Web.Models
                     return PhotoTiming;
                 case FieldDefinitionEnum.PrimaryContact:
                     return PrimaryContact;
+                case FieldDefinitionEnum.ProgressScore:
+                    return ProgressScore;
                 case FieldDefinitionEnum.PropertiesToObserve:
                     return PropertiesToObserve;
                 case FieldDefinitionEnum.ReceivesSystemCommunications:
@@ -357,8 +360,9 @@ namespace Neptune.Web.Models
         OnlandVisualTrashAssessment = 58,
         OnlandVisualTrashAssessmentNotes = 59,
         DelineationType = 60,
-        OVTAScore = 61,
-        SizingBasis = 62
+        BaselineScore = 61,
+        SizingBasis = 62,
+        ProgressScore = 63
     }
 
     public partial class FieldDefinitionIsPrimaryContactOrganization : FieldDefinition
@@ -715,15 +719,21 @@ namespace Neptune.Web.Models
         public static readonly FieldDefinitionDelineationType Instance = new FieldDefinitionDelineationType(60, @"DelineationType", @"Delineation Type", @"Indicates whether the delineation is distributed or centralized.", true);
     }
 
-    public partial class FieldDefinitionOVTAScore : FieldDefinition
+    public partial class FieldDefinitionBaselineScore : FieldDefinition
     {
-        private FieldDefinitionOVTAScore(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
-        public static readonly FieldDefinitionOVTAScore Instance = new FieldDefinitionOVTAScore(61, @"OVTAScore", @"OVTA Score", @"For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments' scores.", true);
+        private FieldDefinitionBaselineScore(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionBaselineScore Instance = new FieldDefinitionBaselineScore(61, @"BaselineScore", @"Baseline Score", @"For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments' scores.", true);
     }
 
     public partial class FieldDefinitionSizingBasis : FieldDefinition
     {
         private FieldDefinitionSizingBasis(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
         public static readonly FieldDefinitionSizingBasis Instance = new FieldDefinitionSizingBasis(62, @"SizingBasis", @"Sizing Basis", @"Indicates whether this BMP is sized for full trash capture, water quality improvement, or otherwise.", true);
+    }
+
+    public partial class FieldDefinitionProgressScore : FieldDefinition
+    {
+        private FieldDefinitionProgressScore(int fieldDefinitionID, string fieldDefinitionName, string fieldDefinitionDisplayName, string defaultDefinition, bool canCustomizeLabel) : base(fieldDefinitionID, fieldDefinitionName, fieldDefinitionDisplayName, defaultDefinition, canCustomizeLabel) {}
+        public static readonly FieldDefinitionProgressScore Instance = new FieldDefinitionProgressScore(63, @"ProgressScore", @"Progress Score", @"", true);
     }
 }
