@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
-using System.Web;
 
 namespace Neptune.Web.Models
 {
@@ -31,6 +30,7 @@ namespace Neptune.Web.Models
         string RoleDescription { get; }
         List<FeaturePermission> GetFeaturePermissions();
         List<Person> GetPeopleWithRole();
-        HtmlString GetDisplayNameAsUrl();
+        NeptuneAreaEnum? NeptuneAreaEnum { get; }
+        string NeptuneAreaDisplayName { get; }
     }
 }

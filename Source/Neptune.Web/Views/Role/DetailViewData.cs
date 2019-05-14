@@ -37,6 +37,12 @@ namespace Neptune.Web.Views.Role
         public string RoleName { get; }
         public string RoleDescription { get; }
 
+        // ReSharper disable once InconsistentNaming
+        public readonly NeptuneAreaEnum? NeptuneAreaEnum;
+        // ReSharper disable once InconsistentNaming
+        public readonly string NeptuneAreaName;
+
+
         public DetailViewData(Person currentPerson, IRole role)
             : base(currentPerson, NeptuneArea.OCStormwaterTools)
         {
@@ -47,9 +53,13 @@ namespace Neptune.Web.Views.Role
             RoleName = role.RoleDisplayName;
             RoleDescription = role.RoleDescription;
 
-            GridSpec = new PersonWithRoleGridSpec() { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
-            GridName = "PersonWithRoleGrid";
-            GridDataUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(tc => tc.PersonWithRoleGridJsonData(role.RoleID));
+            //Grid
+            if (role.NeptuneAreaEnum.HasValue)
+            {
+                GridSpec = new PersonWithRoleGridSpec() { ObjectNameSingular = "Person", ObjectNamePlural = "People", SaveFiltersInCookie = true };
+                GridName = "PersonWithRoleGrid";
+                GridDataUrl = SitkaRoute<RoleController>.BuildUrlFromExpression(tc => tc.PersonWithRoleGridJsonData(role.NeptuneAreaEnum.Value, role.RoleID));
+            }
 
             PageTitle = $"Role Summary for {RoleName}";
             EntityName = "Role Summary";

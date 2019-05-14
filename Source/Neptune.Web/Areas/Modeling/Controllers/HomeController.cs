@@ -6,7 +6,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Security.Shared;
 using Neptune.Web.Views.Map;
 using Neptune.Web.Views.Shared.JurisdictionControls;
 

@@ -35,17 +35,26 @@ namespace Neptune.Web.Security
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public abstract class NeptuneBaseFeature : RelyingPartyAuthorizeAttribute
     {
+        private readonly NeptuneArea _neptuneArea;
+
         public IList<IRole> GrantedRoles { get; }
 
-        protected NeptuneBaseFeature(IList<IRole> grantedRoles) // params
+        protected NeptuneBaseFeature(IList<IRole> grantedRoles, NeptuneArea neptuneArea) // params
         {
             // Force user to pass us empty lists to make life simpler
             Check.RequireNotNull(grantedRoles, "Can\'t pass null for Granted Roles.");
+
+            if (grantedRoles.Any())
+            {
+                // roles passed in need to be for the corresponding area
+                Check.Require(grantedRoles.All(x => x.NeptuneAreaDisplayName == neptuneArea.NeptuneAreaDisplayName));
+            }
 
             // At least one of these must be set
             //Check.Ensure(grantedRoles.Any(), "Must set at least one Role");
 
             GrantedRoles = grantedRoles;
+            _neptuneArea = neptuneArea;
         }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -70,9 +79,10 @@ namespace Neptune.Web.Security
         {
             if (!GrantedRoles.Any()) // AnonymousUnclassifiedFeature case
             {
-                return true; 
+                return true;
+
             }
-            return person != null && GrantedRoles.Any(x => x.RoleID == person.Role.RoleID);
+            return _neptuneArea.HasPermissionByPerson(person, GrantedRoles);
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)

@@ -41,7 +41,7 @@ namespace Neptune.Web.Models
         /// <summary>
         /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
         /// </summary>
-        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName) : this()
+        public Person(int personID, Guid personGuid, string firstName, string lastName, string email, string phone, int roleID, DateTime createDate, DateTime? updateDate, DateTime? lastActivityDate, bool isActive, int organizationID, bool receiveSupportEmails, string loginName, int? droolToolRoleID) : this()
         {
             this.PersonID = personID;
             this.PersonGuid = personGuid;
@@ -57,6 +57,7 @@ namespace Neptune.Web.Models
             this.OrganizationID = organizationID;
             this.ReceiveSupportEmails = receiveSupportEmails;
             this.LoginName = loginName;
+            this.DroolToolRoleID = droolToolRoleID;
         }
 
         /// <summary>
@@ -221,6 +222,7 @@ namespace Neptune.Web.Models
         public int OrganizationID { get; set; }
         public bool ReceiveSupportEmails { get; set; }
         public string LoginName { get; set; }
+        public int? DroolToolRoleID { get; set; }
         [NotMapped]
         public int PrimaryKey { get { return PersonID; } set { PersonID = value; } }
 
@@ -238,6 +240,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<WaterQualityManagementPlanVerify> WaterQualityManagementPlanVerifiesWhereYouAreTheLastEditedByPerson { get; set; }
         public Role Role { get { return Role.AllLookupDictionary[RoleID]; } }
         public virtual Organization Organization { get; set; }
+        public DroolToolRole DroolToolRole { get { return DroolToolRoleID.HasValue ? DroolToolRole.AllLookupDictionary[DroolToolRoleID.Value] : null; } }
 
         public static class FieldLengths
         {

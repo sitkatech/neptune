@@ -214,6 +214,11 @@ namespace Neptune.Web.Models
                     Check.RequireNotNullThrowNotFound(delineationType, "DelineationType", primaryKey);
                     return delineationType;
 
+                case "DroolToolRole":
+                    var droolToolRole = DroolToolRole.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
+                    Check.RequireNotNullThrowNotFound(droolToolRole, "DroolToolRole", primaryKey);
+                    return droolToolRole;
+
                 case "FieldDefinitionDataImage":
                     return FieldDefinitionDataImages.GetFieldDefinitionDataImage(primaryKey);
 

@@ -47,9 +47,9 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
-        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(int roleID)
+        public GridJsonNetJObjectResult<Person> PersonWithRoleGridJsonData(NeptuneAreaEnum neptuneAreaEnum, int roleID)
         {
-            var role = Role.AllLookupDictionary[roleID];
+            var role = NeptuneArea.ToType(neptuneAreaEnum).GetRole(roleID);
             var gridSpec = new PersonWithRoleGridSpec();
             var peopleWithRole = role.GetPeopleWithRole();
             var gridJsonNetJObjectResult = new GridJsonNetJObjectResult<Person>(peopleWithRole, gridSpec);
@@ -70,9 +70,9 @@ namespace Neptune.Web.Controllers
         }
 
         [UserEditFeature]
-        public ViewResult Detail(int roleID)
+        public ViewResult Detail(int neptuneAreID, int roleID)
         {
-            var role = Role.AllLookupDictionary[roleID];
+            var role = NeptuneArea.AllLookupDictionary[neptuneAreID].GetRole(roleID);
             return ViewDetail(role);
         }
 

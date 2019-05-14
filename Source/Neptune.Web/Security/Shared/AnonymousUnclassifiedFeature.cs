@@ -26,7 +26,7 @@ namespace Neptune.Web.Security.Shared
     [SecurityFeatureDescription("Anonymous Access")]
     public class AnonymousUnclassifiedFeature : NeptuneBaseFeature
     {
-        public AnonymousUnclassifiedFeature() : base(new List<IRole>())
+        public AnonymousUnclassifiedFeature() : base(new List<IRole>(), null)
         {
         }
     }

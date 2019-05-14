@@ -45,9 +45,7 @@ namespace Neptune.Web.Models
             return new List<Person>();
         }
 
-        public HtmlString GetDisplayNameAsUrl()
-        {
-            return UrlTemplate.MakeHrefString(SitkaRoute<RoleController>.BuildUrlFromExpression(t => t.Anonymous()), RoleDisplayName);
-        }
+        public NeptuneAreaEnum? NeptuneAreaEnum => null;
+        public string NeptuneAreaDisplayName => "Anonymous";
     }
 }
