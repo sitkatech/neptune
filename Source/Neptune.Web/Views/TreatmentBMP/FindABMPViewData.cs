@@ -25,7 +25,6 @@ using Neptune.Web.Common;
 using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using Neptune.Web.Security;
-using Neptune.Web.Views.Shared;
 
 namespace Neptune.Web.Views.TreatmentBMP
 {
@@ -33,11 +32,7 @@ namespace Neptune.Web.Views.TreatmentBMP
     {
         public const int MaxNumberOfBmpsInList = 40;
 
-        public TreatmentBMPGridSpec GridSpec { get; }
-        public string GridName { get; }
-        public string GridDataUrl { get; }
         public MapInitJson MapInitJson { get; }
-        public TreatmentBMPTypeLegendViewData TreatmentBMPTypeLegendViewData { get; }
         public string FindTreatmentBMPByNameUrl { get; }
         public string NewUrl { get; }
         public bool HasManagePermissions { get; }
@@ -51,19 +46,7 @@ namespace Neptune.Web.Views.TreatmentBMP
         {
             PageTitle = "Find a BMP";
             EntityName = $"{Models.FieldDefinition.TreatmentBMP.GetFieldDefinitionLabelPluralized()}";
-            var showDelete = new JurisdictionManageFeature().HasPermissionByPerson(currentPerson);
-            var showEdit = new JurisdictionEditFeature().HasPermissionByPerson(currentPerson);
-            GridSpec = new TreatmentBMPGridSpec(currentPerson, showDelete, showEdit)
-            {
-                ObjectNameSingular = "Treatment BMP",
-                ObjectNamePlural = "Treatment BMPs",
-                SaveFiltersInCookie = true
-            };
-            GridName = "treatmentBMPsGrid";
-            GridDataUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(j => j.TreatmentBMPGridJsonData());
-
             MapInitJson = mapInitJson;
-            TreatmentBMPTypeLegendViewData = new TreatmentBMPTypeLegendViewData();
             FindTreatmentBMPByNameUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.FindByName(null));
             NewUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.New());
             AllBMPsUrl = SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Index());
