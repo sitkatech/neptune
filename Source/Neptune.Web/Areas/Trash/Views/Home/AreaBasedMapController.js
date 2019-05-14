@@ -25,42 +25,72 @@
         trashMapService.saveCenter($scope.neptuneMap.map.getCenter());
         trashMapService.saveStormwaterJurisdictionID(resultsControl.getSelectedJurisdictionID());
 
+        $scope.neptuneMap.map.on("click",
+            function (event) {
+                if (!window.freeze) {
+                    onMapClick(event);
+                }
+            });
+
         function onMapClick(event) {
             var layerName = "OCStormwater:TrashGeneratingUnits";
-            var mapServiceUrl = $scope.AngularViewData.MapServiceUrl;
-            if (!layerName || !mapServiceUrl) {
-                return;
-            }
+            var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
-            debugger;
-
-            var latlng = event.latLng;
+            var latlng = event.latlng;
             var latLngWrapped = latlng.wrap();
             var parameters = L.Util.extend($scope.neptuneMap.createWfsParamsWithLayerName(layerName),
                 {
                     typeName: layerName,
-                    cql_filter: "intersects(ParcelGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
+                    cql_filter: "intersects(TrashGeneratingUnitGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
                 });
             jQuery.ajax({
                 url: mapServiceUrl + L.Util.getParamString(parameters),
-                dataTpe: "json",
-                jsonCallback: "getJson"
-            },
-                function (response) {
-                    if (response.features.length == 0) {
-                        return;
-                    }
-                    var mergedProperties = _.merge.apply(_, _.map(response.features, "properties"));
-                    $scope.toggle(mergedProperties.JurisdictionID,
-                        function () {
-                            $scope.$apply();
-                        });
-                },
-                function () {
-                    console.error("There was an error selecting the " +
-                        $scope.AngularViewData.JurisdictionID +
-                        "from list");
-                });
+                type: "GET"
+            }).then(function (response) {
+                if (response.features.length == 0) {
+                    return;
+                }
+
+                var trashGeneratingUnit = response.features[0];
+
+                var popup = L.popup({ minWidth: 200 })
+                    .setLatLng(latlng)
+                    .setContent(createPopupContent(trashGeneratingUnit.properties))
+                    .openOn($scope.neptuneMap.map).bindPopup();
+
+            }).fail(function () {
+                console.error("There was an error selecting the " +
+                    $scope.AngularViewData.JurisdictionID +
+                    "from list");
+            });
+        }
+
+        function createPopupContent(properties) {
+            console.log(properties);
+
+            var organizationDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OrganizationUrlTemplate).ParameterReplace(properties.OrganizationID);
+            var BMPDetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.BMPUrlTemplate).ParameterReplace(properties.TreatmentBMPID);
+            var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+
+            var landUseType = "<strong>Land Use Type:   </strong>" + properties.LandUseType + "<br>";
+            var ovtaScore = "<strong>Governing OVTA Score:   </strong>";
+            if (properties.AssessmentScore != "NotProvided") {
+                ovtaScore += "<a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.AssessmentScore + "</a><br>";
+            } else {
+                ovtaScore += "Not Assessed<br>";
+            }
+            var BMPName = "<strong>BMP Name:   </strong>";
+            if (properties.TreatmentBMPID) {
+                BMPName += "<a href='" + BMPDetailUrl + " 'target='_blank'>" + properties.TreatmentBMPName + "</a><br>";
+            } else {
+                BMPName += "Delineation Not Provided<br>";
+            }
+            var stormwaterJurisdictionName = "<strong>Stormwater Jurisdiction:   </strong><a href='" + organizationDetailUrl + "' target='_blank'>" + properties.OrganizationName + "</a><br>";
+            var date = new Date(properties.LastCalculatedDate);
+            var lastCalculatedDate = "<strong>Last Calculated Date:   </strong>" + date.toDateString() + "<br>";
+
+            return landUseType + ovtaScore + BMPName + stormwaterJurisdictionName + lastCalculatedDate;
         }
 
     });
+
