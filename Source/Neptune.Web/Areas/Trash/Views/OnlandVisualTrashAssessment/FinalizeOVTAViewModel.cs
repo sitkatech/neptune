@@ -40,6 +40,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
 
+        [DisplayName("Is Progress")]
+        public bool IsProgressAssessment { get; set; }
+
         public List<PreliminarySourceIdentificationSimple> PreliminarySourceIdentifications { get; set; }
 
         public int? AssessmentAreaID { get; set; }
@@ -64,6 +67,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             PreliminarySourceIdentifications = ovta.GetPreliminarySourceIdentificationSimples();
             OnlandVisualTrashAssessmentID = ovta.OnlandVisualTrashAssessmentID;
             AssessmentDate = ovta.CompletedDate ??  DateTime.Now;
+            IsProgressAssessment = ovta.IsProgressAssessment;
 
         }
 
@@ -75,6 +79,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentScoreID = ScoreID;
                 onlandVisualTrashAssessment.Notes = Notes;
                 onlandVisualTrashAssessment.CompletedDate = AssessmentDate;
+                onlandVisualTrashAssessment.IsProgressAssessment = IsProgressAssessment;
 
                 // create the assessment area
                 if (onlandVisualTrashAssessment.AssessingNewArea.GetValueOrDefault())
