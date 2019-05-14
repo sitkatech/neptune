@@ -15,7 +15,12 @@ DROP TABLE IF EXISTS #LandUseBlocksAdjusted
 
 Select * into #LandUseBlocksAdjusted
 from
-(select * from LandUseBlock
+(select
+	LandUseBlockID,
+	PriorityLandUseTypeID,
+	LandUseDescription,
+	LandUseBlockGeometry
+from LandUseBlock
 	--select count(*) from StormwaterJurisdiction
 
 union all

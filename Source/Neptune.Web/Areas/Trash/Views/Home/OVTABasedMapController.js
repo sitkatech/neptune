@@ -26,59 +26,10 @@
         var ovtaLayerLegendUrl = $scope.AngularViewData.GeoServerUrl +
             "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AOnlandVisualTrashAssessmentAreas&style=ovta_score&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
         var ovtaLayerLabel = "<span>Assessment Areas </br><img src='" + ovtaLayerLegendUrl + "'/></span>";
-        $scope.ovtaLayer = $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas", ovtaLayerLabel);
-
-        //$scope.ovtaLayers = {
-        //    4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-        //        "<span><img src='/Content/img/legendImages/ovtaGreen.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score A</span>",
-        //        {
-        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
-        //        }),
-        //    3: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-        //        "<span><img src='/Content/img/legendImages/ovtaYellow.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score B</span>",
-        //        {
-        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
-        //        }),
-        //    2: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-        //        "<span><img src='/Content/img/legendImages/ovtaSalmon.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score C</span>",
-        //        {
-        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
-        //        }),
-        //    1: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-        //        "<span><img src='/Content/img/legendImages/ovtaMagenta.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score D</span>",
-        //        {
-        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
-        //        }),
-        //    0: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-        //        "<span><img src='/Content/img/legendImages/ovtaGrey.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Not Yet Assessed</span>",
-        //        {
-        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
-        //        })
-        //};
-
-        //$scope.selectedOVTAScores = function () {
-        //    var scores = [];
-        //    for (var i = 0; i <= 5; i++) {
-        //        if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
-        //            scores.push(i);
-        //        }
-        //    }
-        //    return scores;
-        //};
-
-        //$scope.buildSelectOVTAAreaParameters = function (latlng) {
-
-        //};
+        $scope.ovtaLayer =
+            $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas", ovtaLayerLabel);
 
         $scope.neptuneMap.map.on("click", function (event) {
-            //var scores = $scope.selectedOVTAScores();
-
-            //if (scores.length === 0) {
-            //    return;
-            //}
-
-            // var scoresClause = "Score in (" + scores.join(',') + ")";
-
             var cqlFilter = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + event.latlng.lat + " " + event.latlng.lng + "))";
 
             var customParams = {
@@ -87,10 +38,7 @@
             };
 
             $scope.selectOVTAArea(customParams);
-
         });
-
-
 
         $scope.selectOVTAArea = function (customParams) {
             if (!Sitka.Methods.isUndefinedNullOrEmpty($scope.lastSelected)) {
@@ -99,17 +47,15 @@
 
             var parameters = L.Util.extend($scope.neptuneMap.wfsParams, customParams);
 
-
-            SitkaAjax.ajax({
+            jQuery.ajax({
                 url: $scope.neptuneMap.geoserverUrlOWS + L.Util.getParamString(parameters),
-                dataType: 'json',
-                jsonpCallback: 'getJson'
-            },
-                function (response) {
-                    if (!response.features || !response.features[0]) {
-                        return;
-                    }
-                    $scope.lastSelected = L.geoJson(response, {
+                type: "GET"
+            }).then(function (response) {
+                if (!response.features || !response.features[0]) {
+                    return;
+                }
+                $scope.lastSelected = L.geoJson(response,
+                    {
                         style: function (feature) {
                             return {
                                 stroke: true,
@@ -120,15 +66,11 @@
                         },
                     }).addTo($scope.neptuneMap.map);
 
-                    var bounds = $scope.lastSelected.getBounds();
-                    if (bounds.isValid()) {
-                        $scope.neptuneMap.map.fitBounds(bounds);
-                    }
-
-                    var assessmentAreaID = response.features[0].properties["OnlandVisualTrashAssessmentAreaID"];
-                    var url = "/OnlandVisualTrashAssessmentArea/TrashMapAssetPanel/" + assessmentAreaID;
-                    $scope.loadSummaryPanel(url);
-                });
+                var bounds = $scope.lastSelected.getBounds();
+                if (bounds.isValid()) {
+                    $scope.neptuneMap.map.fitBounds(bounds);
+                }
+            });
         };
 
         $scope.initializeParcelLayer = function () {
@@ -191,11 +133,11 @@
         $scope.neptuneMap.map.on("click",
             function (event) {
                 if (!window.freeze) {
-                    onMapClick(event);
+                    makeOVTAPopup(event);
                 }
             });
 
-        function onMapClick(event) {
+        function makeOVTAPopup(event) {
             var layerName = "OCStormwater:OnlandVisualTrashAssessmentAreas";
             var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
@@ -217,7 +159,7 @@
                 var content = "";
                 var ovtas = _.sortBy(response.features, [function (o) {return o.properties.CompletedDate}]).reverse();
 
-                for (var ovta in ovtas) {
+                for (var i = 0; i < ovtas.length; i++) {
                     content += createPopupContent(ovtas[ovta].properties);
                 }         
 

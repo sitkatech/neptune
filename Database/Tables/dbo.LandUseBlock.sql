@@ -7,6 +7,12 @@ CREATE TABLE [dbo].[LandUseBlock](
 	[PriorityLandUseTypeID] [int] NULL,
 	[LandUseDescription] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[LandUseBlockGeometry] [geometry] NOT NULL,
+	[TrashGenerationRate] [decimal](18, 0) NOT NULL,
+	[LandUseForTGR] [varchar](80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[MedianHouseholdIncomeResidential] [numeric](18, 0) NOT NULL,
+	[MedianHouseholdIncomeRetail] [numeric](18, 0) NOT NULL,
+	[StormwaterJurisdictionID] [int] NOT NULL,
+	[PermitTypeID] [int] NOT NULL,
  CONSTRAINT [PK_LandUseBlock_LandUseBlockID] PRIMARY KEY CLUSTERED 
 (
 	[LandUseBlockID] ASC
@@ -14,10 +20,20 @@ CREATE TABLE [dbo].[LandUseBlock](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 GO
+ALTER TABLE [dbo].[LandUseBlock]  WITH CHECK ADD  CONSTRAINT [FK_LandUseBlock_PermitType_PermitTypeID] FOREIGN KEY([PermitTypeID])
+REFERENCES [dbo].[PermitType] ([PermitTypeID])
+GO
+ALTER TABLE [dbo].[LandUseBlock] CHECK CONSTRAINT [FK_LandUseBlock_PermitType_PermitTypeID]
+GO
 ALTER TABLE [dbo].[LandUseBlock]  WITH CHECK ADD  CONSTRAINT [FK_LandUseBlock_PriorityLandUseType_PriorityLandUseTypeID] FOREIGN KEY([PriorityLandUseTypeID])
 REFERENCES [dbo].[PriorityLandUseType] ([PriorityLandUseTypeID])
 GO
 ALTER TABLE [dbo].[LandUseBlock] CHECK CONSTRAINT [FK_LandUseBlock_PriorityLandUseType_PriorityLandUseTypeID]
+GO
+ALTER TABLE [dbo].[LandUseBlock]  WITH CHECK ADD  CONSTRAINT [FK_LandUseBlock_StormwaterJurisdiction_StormwaterJurisdictionID] FOREIGN KEY([StormwaterJurisdictionID])
+REFERENCES [dbo].[StormwaterJurisdiction] ([StormwaterJurisdictionID])
+GO
+ALTER TABLE [dbo].[LandUseBlock] CHECK CONSTRAINT [FK_LandUseBlock_StormwaterJurisdiction_StormwaterJurisdictionID]
 GO
 SET ARITHABORT ON
 SET CONCAT_NULL_YIELDS_NULL ON

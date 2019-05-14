@@ -235,6 +235,8 @@
     <Compile Include="Models\Generated\Parcel.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\ParcelConfiguration.Binding.cs" />
     <Compile Include="Models\Generated\ParcelPrimaryKey.Binding.cs" />
+    <Compile Include="Models\Generated\PermitType.Binding.cs" />
+    <Compile Include="Models\Generated\PermitTypePrimaryKey.Binding.cs" />
     <Compile Include="Models\Generated\Person.Binding.cs" />
     <Compile Include="Models\Generated\Person.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\PersonConfiguration.Binding.cs" />

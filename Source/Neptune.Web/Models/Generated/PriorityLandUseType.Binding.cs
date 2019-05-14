@@ -19,11 +19,12 @@ namespace Neptune.Web.Models
     public abstract partial class PriorityLandUseType : IHavePrimaryKey
     {
         public static readonly PriorityLandUseTypeCommercial Commercial = PriorityLandUseTypeCommercial.Instance;
-        public static readonly PriorityLandUseTypeHighDensity HighDensity = PriorityLandUseTypeHighDensity.Instance;
+        public static readonly PriorityLandUseTypeHighDensityResidential HighDensityResidential = PriorityLandUseTypeHighDensityResidential.Instance;
         public static readonly PriorityLandUseTypeIndustrial Industrial = PriorityLandUseTypeIndustrial.Instance;
         public static readonly PriorityLandUseTypeMixedUrban MixedUrban = PriorityLandUseTypeMixedUrban.Instance;
-        public static readonly PriorityLandUseTypeRetail Retail = PriorityLandUseTypeRetail.Instance;
-        public static readonly PriorityLandUseTypeTransportation Transportation = PriorityLandUseTypeTransportation.Instance;
+        public static readonly PriorityLandUseTypeCommercialRetail CommercialRetail = PriorityLandUseTypeCommercialRetail.Instance;
+        public static readonly PriorityLandUseTypePublicTransportationStations PublicTransportationStations = PriorityLandUseTypePublicTransportationStations.Instance;
+        public static readonly PriorityLandUseTypeALU ALU = PriorityLandUseTypeALU.Instance;
 
         public static readonly List<PriorityLandUseType> All;
         public static readonly ReadOnlyDictionary<int, PriorityLandUseType> AllLookupDictionary;
@@ -33,7 +34,7 @@ namespace Neptune.Web.Models
         /// </summary>
         static PriorityLandUseType()
         {
-            All = new List<PriorityLandUseType> { Commercial, HighDensity, Industrial, MixedUrban, Retail, Transportation };
+            All = new List<PriorityLandUseType> { Commercial, HighDensityResidential, Industrial, MixedUrban, CommercialRetail, PublicTransportationStations, ALU };
             AllLookupDictionary = new ReadOnlyDictionary<int, PriorityLandUseType>(All.ToDictionary(x => x.PriorityLandUseTypeID));
         }
 
@@ -105,18 +106,20 @@ namespace Neptune.Web.Models
         {
             switch (enumValue)
             {
+                case PriorityLandUseTypeEnum.ALU:
+                    return ALU;
                 case PriorityLandUseTypeEnum.Commercial:
                     return Commercial;
-                case PriorityLandUseTypeEnum.HighDensity:
-                    return HighDensity;
+                case PriorityLandUseTypeEnum.CommercialRetail:
+                    return CommercialRetail;
+                case PriorityLandUseTypeEnum.HighDensityResidential:
+                    return HighDensityResidential;
                 case PriorityLandUseTypeEnum.Industrial:
                     return Industrial;
                 case PriorityLandUseTypeEnum.MixedUrban:
                     return MixedUrban;
-                case PriorityLandUseTypeEnum.Retail:
-                    return Retail;
-                case PriorityLandUseTypeEnum.Transportation:
-                    return Transportation;
+                case PriorityLandUseTypeEnum.PublicTransportationStations:
+                    return PublicTransportationStations;
                 default:
                     throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
             }
@@ -126,11 +129,12 @@ namespace Neptune.Web.Models
     public enum PriorityLandUseTypeEnum
     {
         Commercial = 1,
-        HighDensity = 2,
+        HighDensityResidential = 2,
         Industrial = 3,
         MixedUrban = 4,
-        Retail = 5,
-        Transportation = 6
+        CommercialRetail = 5,
+        PublicTransportationStations = 6,
+        ALU = 7
     }
 
     public partial class PriorityLandUseTypeCommercial : PriorityLandUseType
@@ -139,10 +143,10 @@ namespace Neptune.Web.Models
         public static readonly PriorityLandUseTypeCommercial Instance = new PriorityLandUseTypeCommercial(1, @"Commercial", @"Commercial", @"#c2fbfc");
     }
 
-    public partial class PriorityLandUseTypeHighDensity : PriorityLandUseType
+    public partial class PriorityLandUseTypeHighDensityResidential : PriorityLandUseType
     {
-        private PriorityLandUseTypeHighDensity(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
-        public static readonly PriorityLandUseTypeHighDensity Instance = new PriorityLandUseTypeHighDensity(2, @"HighDensity", @"High Density", @"#c0d6fc");
+        private PriorityLandUseTypeHighDensityResidential(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
+        public static readonly PriorityLandUseTypeHighDensityResidential Instance = new PriorityLandUseTypeHighDensityResidential(2, @"HighDensityResidential", @"High Density Residential", @"#c0d6fc");
     }
 
     public partial class PriorityLandUseTypeIndustrial : PriorityLandUseType
@@ -157,15 +161,21 @@ namespace Neptune.Web.Models
         public static readonly PriorityLandUseTypeMixedUrban Instance = new PriorityLandUseTypeMixedUrban(4, @"MixedUrban", @"Mixed Urban", @"#fcb6b9");
     }
 
-    public partial class PriorityLandUseTypeRetail : PriorityLandUseType
+    public partial class PriorityLandUseTypeCommercialRetail : PriorityLandUseType
     {
-        private PriorityLandUseTypeRetail(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
-        public static readonly PriorityLandUseTypeRetail Instance = new PriorityLandUseTypeRetail(5, @"Retail", @"Retail", @"#f2cafc");
+        private PriorityLandUseTypeCommercialRetail(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
+        public static readonly PriorityLandUseTypeCommercialRetail Instance = new PriorityLandUseTypeCommercialRetail(5, @"CommercialRetail", @"Commercial-Retail", @"#f2cafc");
     }
 
-    public partial class PriorityLandUseTypeTransportation : PriorityLandUseType
+    public partial class PriorityLandUseTypePublicTransportationStations : PriorityLandUseType
     {
-        private PriorityLandUseTypeTransportation(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
-        public static readonly PriorityLandUseTypeTransportation Instance = new PriorityLandUseTypeTransportation(6, @"Transportation", @"Transportation", @"#fcd6b6");
+        private PriorityLandUseTypePublicTransportationStations(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
+        public static readonly PriorityLandUseTypePublicTransportationStations Instance = new PriorityLandUseTypePublicTransportationStations(6, @"Public Transportation Stations", @"PublicTransportationStations", @"#fcd6b6");
+    }
+
+    public partial class PriorityLandUseTypeALU : PriorityLandUseType
+    {
+        private PriorityLandUseTypeALU(int priorityLandUseTypeID, string priorityLandUseTypeName, string priorityLandUseTypeDisplayName, string mapColorHexCode) : base(priorityLandUseTypeID, priorityLandUseTypeName, priorityLandUseTypeDisplayName, mapColorHexCode) {}
+        public static readonly PriorityLandUseTypeALU Instance = new PriorityLandUseTypeALU(7, @"ALU", @"ALU", @"#ffffff");
     }
 }
