@@ -23,63 +23,66 @@
                 $scope.AngularViewData.StormwaterJurisdictionCqlFilter + " AND ";
         }
 
-        $scope.ovtaLayers = {
-            4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "<span><img src='/Content/img/legendImages/ovtaGreen.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score A</span>",
-                {
-                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
-                }),
-            3: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "<span><img src='/Content/img/legendImages/ovtaYellow.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score B</span>",
-                {
-                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
-                }),
-            2: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "<span><img src='/Content/img/legendImages/ovtaSalmon.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score C</span>",
-                {
-                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
-                }),
-            1: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "<span><img src='/Content/img/legendImages/ovtaMagenta.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score D</span>",
-                {
-                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
-                }),
-            0: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
-                "<span><img src='/Content/img/legendImages/ovtaGrey.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Not Yet Assessed</span>",
-                {
-                    cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
-                })
-        };
+        var ovtaLayerLegendUrl = $scope.AngularViewData.GeoServerUrl +
+            "?service=WMS&request=GetLegendGraphic&version=1.0.0&layer=OCStormwater%3AOnlandVisualTrashAssessmentAreas&style=ovta_score&legend_options=forceLabels%3Aon%3AfontAntiAliasing%3Atrue%3Adpi%3A200&format=image%2Fpng";
+        var ovtaLayerLabel = "<span>Assessment Areas </br><img src='" + ovtaLayerLegendUrl + "'/></span>";
+        $scope.ovtaLayer = $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas", ovtaLayerLabel);
 
-        $scope.selectedOVTAScores = function () {
-            var scores = [];
-            for (var i = 0; i <= 5; i++) {
-                if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
-                    scores.push(i);
-                }
-            }
-            return scores;
-        };
+        //$scope.ovtaLayers = {
+        //    4: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
+        //        "<span><img src='/Content/img/legendImages/ovtaGreen.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score A</span>",
+        //        {
+        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 4
+        //        }),
+        //    3: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
+        //        "<span><img src='/Content/img/legendImages/ovtaYellow.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score B</span>",
+        //        {
+        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 3
+        //        }),
+        //    2: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
+        //        "<span><img src='/Content/img/legendImages/ovtaSalmon.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score C</span>",
+        //        {
+        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 2
+        //        }),
+        //    1: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
+        //        "<span><img src='/Content/img/legendImages/ovtaMagenta.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Score D</span>",
+        //        {
+        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=" + 1
+        //        }),
+        //    0: $scope.neptuneMap.addWmsLayer("OCStormwater:OnlandVisualTrashAssessmentAreas",
+        //        "<span><img src='/Content/img/legendImages/ovtaGrey.png' height='12px' style='margin-bottom:3px;'/> OVTA Areas - Not Yet Assessed</span>",
+        //        {
+        //            cql_filter: $scope.AngularViewData.StormwaterJurisdictionCqlFilter + "Score=0"
+        //        })
+        //};
 
-        $scope.buildSelectOVTAAreaParameters = function (latlng) {
+        //$scope.selectedOVTAScores = function () {
+        //    var scores = [];
+        //    for (var i = 0; i <= 5; i++) {
+        //        if ($scope.neptuneMap.map.hasLayer($scope.ovtaLayers[i])) {
+        //            scores.push(i);
+        //        }
+        //    }
+        //    return scores;
+        //};
 
-        };
+        //$scope.buildSelectOVTAAreaParameters = function (latlng) {
+
+        //};
 
         $scope.neptuneMap.map.on("click", function (event) {
-            var scores = $scope.selectedOVTAScores();
+            //var scores = $scope.selectedOVTAScores();
 
-            if (scores.length === 0) {
-                return;
-            }
+            //if (scores.length === 0) {
+            //    return;
+            //}
 
-            var scoresClause = "Score in (" + scores.join(',') + ")";
+            // var scoresClause = "Score in (" + scores.join(',') + ")";
 
-            var intersectionClause = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + event.latlng.lat + " " + event.latlng.lng + "))";
-
-            var cql_filter = scoresClause + " and " + intersectionClause;
+            var cqlFilter = "contains(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + event.latlng.lat + " " + event.latlng.lng + "))";
 
             var customParams = {
-                "cql_filter": cql_filter,
+                "cql_filter": cqlFilter,
                 "typeName": "OnlandVisualTrashAssessmentAreas"
             };
 
