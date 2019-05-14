@@ -28,11 +28,11 @@
         $scope.neptuneMap.map.on("click",
             function (event) {
                 if (!window.freeze) {
-                    onMapClick(event);
+                    getTGUPopup(event);
                 }
             });
 
-        function onMapClick(event) {
+        function getTGUPopup(event) {
             var layerName = "OCStormwater:TrashGeneratingUnits";
             var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
 
@@ -58,10 +58,6 @@
                     .setContent(createPopupContent(trashGeneratingUnit.properties))
                     .openOn($scope.neptuneMap.map).bindPopup();
 
-            }).fail(function () {
-                console.error("There was an error selecting the " +
-                    $scope.AngularViewData.JurisdictionID +
-                    "from list");
             });
         }
 
