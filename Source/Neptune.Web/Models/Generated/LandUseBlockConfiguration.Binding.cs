@@ -20,10 +20,14 @@ namespace Neptune.Web.Models
             Property(x => x.LandUseDescription).HasColumnName(@"LandUseDescription").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.LandUseBlockGeometry).HasColumnName(@"LandUseBlockGeometry").HasColumnType("geometry").IsRequired();
             Property(x => x.TrashGenerationRate).HasColumnName(@"TrashGenerationRate").HasColumnType("decimal").IsRequired();
+            Property(x => x.LandUseForTGR).HasColumnName(@"LandUseForTGR").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(80);
+            Property(x => x.MedianHouseholdIncomeResidential).HasColumnName(@"MedianHouseholdIncomeResidential").HasColumnType("decimal").IsRequired();
+            Property(x => x.MedianHouseholdIncomeRetail).HasColumnName(@"MedianHouseholdIncomeRetail").HasColumnType("decimal").IsRequired();
+            Property(x => x.StormwaterJurisdictionID).HasColumnName(@"StormwaterJurisdictionID").HasColumnType("int").IsRequired();
             Property(x => x.PermitTypeID).HasColumnName(@"PermitTypeID").HasColumnType("int").IsRequired();
 
             // Foreign keys
-
+            HasRequired(a => a.StormwaterJurisdiction).WithMany(b => b.LandUseBlocks).HasForeignKey(c => c.StormwaterJurisdictionID).WillCascadeOnDelete(false); // FK_LandUseBlock_StormwaterJurisdiction_StormwaterJurisdictionID
         }
     }
 }
