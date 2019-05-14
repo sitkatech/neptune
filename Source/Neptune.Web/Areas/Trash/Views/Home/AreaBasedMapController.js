@@ -86,8 +86,15 @@
                 BMPName += "Delineation Not Provided<br>";
             }
             var stormwaterJurisdictionName = "<strong>Stormwater Jurisdiction:   </strong><a href='" + organizationDetailUrl + "' target='_blank'>" + properties.OrganizationName + "</a><br>";
-            var date = new Date(properties.LastCalculatedDate);
-            var lastCalculatedDate = "<strong>Last Calculated Date:   </strong>" + date.toDateString() + "<br>";
+
+            var lastCalculatedDate = "<strong>Last Calculated Date:   </strong>";
+            if (properties.LastCalculatedDate != null) {
+                var date = new Date(properties.LastCalculatedDate);
+                lastCalculatedDate += date.toLocaleDateString() + "<br>";
+            } else {
+                lastCalculatedDate += "Not Assessed";
+            }
+            
 
             return landUseType + ovtaScore + BMPName + stormwaterJurisdictionName + lastCalculatedDate;
         }

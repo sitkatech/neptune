@@ -184,4 +184,80 @@
             }
             $scope.initializeParcelLayer();
         };
+
+        $scope.neptuneMap.map.on("click",
+            function (event) {
+                if (!window.freeze) {
+                    onMapClick(event);
+                }
+            });
+
+        function onMapClick(event) {
+            var layerName = "OCStormwater:OnlandVisualTrashAssessmentAreas";
+            var mapServiceUrl = $scope.neptuneMap.geoserverUrlOWS;
+
+            var latlng = event.latlng;
+            var latLngWrapped = latlng.wrap();
+            var parameters = L.Util.extend($scope.neptuneMap.createWfsParamsWithLayerName(layerName),
+                {
+                    typeName: layerName,
+                    cql_filter: "intersects(OnlandVisualTrashAssessmentAreaGeometry, POINT(" + latLngWrapped.lat + " " + latLngWrapped.lng + "))"
+                });
+            jQuery.ajax({
+                url: mapServiceUrl + L.Util.getParamString(parameters),
+                type: "GET"
+            }).then(function (response) {
+                if (response.features.length == 0) {
+                    return;
+                }
+
+                var content = "";
+                var ovtas = _.sortBy(response.features, [function (o) {return o.properties.CompletedDate}]).reverse();
+
+                for (var ovta in ovtas) {
+                    content += createPopupContent(ovtas[ovta].properties);
+                }         
+
+                var popup = L.popup({ minWidth: 200, maxWidth: 500})
+                    .setLatLng(latlng)
+                    .setContent(content)
+                    .openOn($scope.neptuneMap.map).bindPopup();
+
+            }).fail(function () {
+                console.error("There was an error selecting the " +
+                    $scope.AngularViewData.JurisdictionID +
+                    "from list");
+            });
+        }
+
+        function createPopupContent(properties) {
+
+            var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+
+            var ovtaName = "<strong>Assessment Area:   </strong><a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.OnlandVisualTrashAssessmentAreaName + "</a> ";
+            var lastCalculatedDateAndScore = "<strong>Last Assessment: </strong>";
+            if (properties.OnlandVisualTrashAssessmentScoreDisplayName != null && properties.CompletedDate != null) {
+                var date = new Date(properties.CompletedDate);
+                var lastCalculatedDate = "";
+                if (properties.CompletedDate != null) {
+                    lastCalculatedDate = date.toLocaleDateString() + ", ";
+                } else {
+                    lastCalculatedDate = "Not Assessed";
+                }
+
+                var ovtaScore = "<strong>Score: </strong>";
+                if (properties.Score != "NotProvided") {
+                    ovtaScore += properties.OnlandVisualTrashAssessmentScoreDisplayName;
+                } else {
+                    ovtaScore += "Not Assessed";
+                }
+
+                lastCalculatedDateAndScore = lastCalculatedDate + ovtaScore;
+            } else {
+                lastCalculatedDateAndScore = "Not Assessed";
+            }
+            
+
+            return ovtaName + "(" + lastCalculatedDateAndScore + ")<br>";
+        }
     });
