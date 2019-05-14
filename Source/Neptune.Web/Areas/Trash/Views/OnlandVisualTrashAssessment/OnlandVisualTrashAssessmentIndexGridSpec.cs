@@ -38,7 +38,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 Add("Assessment Area Name",
                     x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
-                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                    DhtmlxGridColumnFilterType.Html);
             }
 
             Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
