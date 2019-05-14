@@ -319,8 +319,14 @@
     .TGUColumn {
         padding: 0 !important;
         font-weight: bold;
-        border: none !important;
+        border-top: none !important;
+        border-bottom: none !important;
     }
+
+    table td + td {
+        border-left: 1px solid rgb(128, 128, 128);
+    }
+
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
@@ -340,11 +346,8 @@
             else
             {
                 <div class="form-group" style="margin-bottom: 5px;">
-                    <div class="col-sm-7 control-label">
-                        <strong class="font15">Showing results for </strong>
-                    </div>
-                    <div class="col-sm-5">
-                        <strong class="font15">@ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
+                    <div class="col-sm-12 text-center">
+                        <strong class="font15">Showing results for @ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
                     </div>
                 </div>
             }
@@ -352,13 +355,13 @@
             <table class="table areaBasedCalculationControlTable">
                 <tfoot>
                     <tr>
-                        <td class="TGUColumn center" style="width:20%">
+                        <td class="TGUColumn center" >
                             <strong>Full Trash Capture</strong>
                         </td>
-                        <td class="TGUColumn center" style="width:20%">
+                        <td class="TGUColumn center" style="border-left: none">
                             <strong>Equivalent Area</strong>
                         </td>
-                        <td class="TGUColumn center" style="width:60%">
+                        <td class="TGUColumn center" style="border-left: none">
                             <strong>Total Full Capture Equivalent</strong>
                         </td>
                     </tr>
@@ -383,8 +386,8 @@
                                     <strong> of </strong>
                                 </div>
                                 <div class="col-sm-5" style="padding-left: 0">
-                                    <div id="totalPLUAcres" class="font25">0</div>
-                                    <p class="greyLabel">total PLU acres</p>
+                                    <div id="totalPLUAcres" class="font25 center">0</div>
+                                    <p class="greyLabel center">total PLU acres</p>
                                 </div>
                             </div>
                         </td>
@@ -423,11 +426,8 @@
             else
             {
                 <div class="form-group" style="margin-bottom: 5px;">
-                    <div class="col-sm-7 control-label">
-                        <strong class="font15">Showing results for </strong>
-                    </div>
-                    <div class="col-sm-5">
-                        <strong class="font15">@ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
+                    <div class="col-sm-12 text-center">
+                        <strong class="font15">Showing results for @ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
                     </div>
                 </div>
             }
@@ -472,7 +472,7 @@
                     </tr>
                     <tr>
                         <td class="font15" style="border: none">
-                            <div>Alternative Land Use Area (acres)</div>
+                            <div>Alternate Land Use Area (acres)</div>
                         </td>
                         <td class="ovtaResults center font15">
                             <div id="ALUIsA" style="color: rgb(74,222,0)">0</div>
