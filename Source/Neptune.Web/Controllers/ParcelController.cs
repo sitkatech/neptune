@@ -12,7 +12,7 @@ namespace Neptune.Web.Controllers
     public class ParcelController : NeptuneBaseController
     {
         [HttpGet]
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public ActionResult Index()
         {
             var neptunePageHome = NeptunePage.GetNeptunePageByPageType(NeptunePageType.ParcelList);
@@ -43,7 +43,7 @@ namespace Neptune.Web.Controllers
             return mapInitJson;
         }
 
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public JsonResult FindByAddress(string term)
         {
             var searchString = term.Trim();
@@ -59,7 +59,7 @@ namespace Neptune.Web.Controllers
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
 
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public JsonResult FindSimpleByAddress(string term)
         {
             var searchString = term.Trim();
@@ -74,7 +74,7 @@ namespace Neptune.Web.Controllers
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
 
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         // ReSharper disable once InconsistentNaming
         public JsonResult FindByAPN(string term)
         {
@@ -90,7 +90,7 @@ namespace Neptune.Web.Controllers
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
 
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         // ReSharper disable once InconsistentNaming
         public JsonResult FindSimpleByAPN(string term)
         {
@@ -106,7 +106,7 @@ namespace Neptune.Web.Controllers
             return Json(listItems, JsonRequestBehavior.AllowGet);
         }
 
-        [JurisdictionManageFeature]
+        [JurisdictionEditFeature]
         public PartialViewResult SummaryForMap(string parcelNumber)
         {
             var parcel = HttpRequestStorage.DatabaseEntities.Parcels.GetParcelByParcelNumber(parcelNumber);
