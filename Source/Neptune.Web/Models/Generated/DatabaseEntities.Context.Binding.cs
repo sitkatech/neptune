@@ -68,6 +68,7 @@ namespace Neptune.Web.Models
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
             modelBuilder.Configurations.Add(new OrganizationTypeConfiguration());
             modelBuilder.Configurations.Add(new ParcelConfiguration());
+            modelBuilder.Configurations.Add(new PermitTypeConfiguration());
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new QuickBMPConfiguration());
             modelBuilder.Configurations.Add(new SourceControlBMPConfiguration());
@@ -138,6 +139,7 @@ namespace Neptune.Web.Models
         public virtual DbSet<OrganizationType> OrganizationTypes { get; set; }
         public virtual DbSet<Parcel> Parcels { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<PermitType> PermitTypes { get; set; }
         public virtual DbSet<QuickBMP> QuickBMPs { get; set; }
         public virtual DbSet<SourceControlBMPAttributeCategory> SourceControlBMPAttributeCategories { get; set; }
         public virtual DbSet<SourceControlBMPAttribute> SourceControlBMPAttributes { get; set; }
@@ -412,9 +414,7 @@ namespace Neptune.Web.Models
                     return People.GetPerson(primaryKey);
 
                 case "PermitType":
-                    var permitType = PermitType.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
-                    Check.RequireNotNullThrowNotFound(permitType, "PermitType", primaryKey);
-                    return permitType;
+                    return PermitTypes.GetPermitType(primaryKey);
 
                 case "PreliminarySourceIdentificationCategory":
                     var preliminarySourceIdentificationCategory = PreliminarySourceIdentificationCategory.All.SingleOrDefault(x => x.PrimaryKey == primaryKey);
