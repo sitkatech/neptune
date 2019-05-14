@@ -163,7 +163,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
 
             if (onlandVisualTrashAssessment == null)
             {
-                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress, false);
+                onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now, OnlandVisualTrashAssessmentStatus.InProgress, false, false);
                 HttpRequestStorage.DatabaseEntities.OnlandVisualTrashAssessments.Add(onlandVisualTrashAssessment);
                 HttpRequestStorage.DatabaseEntities.SaveChanges();
             }

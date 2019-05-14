@@ -206,7 +206,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             var onlandVisualTrashAssessment = new OnlandVisualTrashAssessment(CurrentPerson, DateTime.Now,
-                OnlandVisualTrashAssessmentStatus.InProgress, false)
+                OnlandVisualTrashAssessmentStatus.InProgress, false, false)
             {
                 OnlandVisualTrashAssessmentAreaID = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaID,
                 AssessingNewArea = false,

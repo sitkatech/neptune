@@ -30,6 +30,7 @@ namespace Neptune.Web.Models
             Property(x => x.DraftAreaName).HasColumnName(@"DraftAreaName").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(100);
             Property(x => x.DraftAreaDescription).HasColumnName(@"DraftAreaDescription").HasColumnType("varchar").IsOptional().IsUnicode(false).HasMaxLength(500);
             Property(x => x.IsTransectBackingAssessment).HasColumnName(@"IsTransectBackingAssessment").HasColumnType("bit").IsRequired();
+            Property(x => x.IsProgressAssessment).HasColumnName(@"IsProgressAssessment").HasColumnType("bit").IsRequired();
 
             // Foreign keys
             HasRequired(a => a.CreatedByPerson).WithMany(b => b.OnlandVisualTrashAssessmentsWhereYouAreTheCreatedByPerson).HasForeignKey(c => c.CreatedByPersonID).WillCascadeOnDelete(false); // FK_OnlandVisualTrashAssessment_Person_CreatedByPersonID_PersonID
