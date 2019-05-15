@@ -101,7 +101,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
             return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore != null
-                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
         }

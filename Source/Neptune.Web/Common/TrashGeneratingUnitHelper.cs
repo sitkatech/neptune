@@ -131,7 +131,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID ==
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
                 // This is how to check "PLU == true"
@@ -157,7 +157,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID ==
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -169,7 +169,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID == null
@@ -180,7 +180,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != null
@@ -191,7 +191,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != null
@@ -202,7 +202,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID == null
@@ -213,7 +213,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID ==
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
@@ -224,7 +224,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != null
@@ -235,7 +235,7 @@ namespace Neptune.Web.Common
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID != null
