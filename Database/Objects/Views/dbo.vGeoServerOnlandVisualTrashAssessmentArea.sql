@@ -7,11 +7,13 @@ select
 	area.OnlandVisualTrashAssessmentAreaName,
 	area.StormwaterJurisdictionID,
 	area.OnlandVisualTrashAssessmentAreaGeometry,
-	case when area.OnlandVisualTrashAssessmentScoreID is null then 0 else Score.NumericValue end as Score,
+	case when area.OnlandVisualTrashAssessmentProgressScoreID is null then 0 else Score.NumericValue end as Score,
+	-- todo: this view might need to be updated to also include the Baseline score in the future; for now we'll use Progress for OVTA results
 	score.OnlandVisualTrashAssessmentScoreDisplayName,
 	ovta.CompletedDate
 from dbo.OnlandVisualTrashAssessmentArea area left join
 	dbo.OnlandVisualTrashAssessmentScore score
-		on area.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID 
+		on area.OnlandVisualTrashAssessmentProgressScoreID = score.OnlandVisualTrashAssessmentScoreID 
 		left join dbo.OnlandVisualTrashAssessment ovta
 		on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
+where ovta.IsProgressAssessment = 1

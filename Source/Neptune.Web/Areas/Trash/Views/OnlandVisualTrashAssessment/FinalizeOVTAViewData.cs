@@ -18,6 +18,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public string ScoreDescriptionsUrl { get; }
         public string AssessmentAreaDescription { get; set; }
 
+        public bool IsProgressAssessment { get; set; }
+
         public TrashAssessmentSummaryMapViewData TrashAssessmentSummaryMapViewData { get; }
         public IEnumerable<PreliminarySourceIdentificationType> PreliminarySourceIdentificationTypeOthers { get; }
 
@@ -29,6 +31,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             ConductedByPerson = ovta.CreatedByPerson;
             Jurisdiction = ovta.StormwaterJurisdiction;
             CreatedDate = ovta.CreatedDate.ToShortDateString();
+            IsProgressAssessment = ovta.IsProgressAssessment;
             AssessmentAreaDescription = ovta.OnlandVisualTrashAssessmentArea?.AssessmentAreaDescription ??
                                         ovta.DraftAreaDescription;
             ScoreDescriptionsUrl =

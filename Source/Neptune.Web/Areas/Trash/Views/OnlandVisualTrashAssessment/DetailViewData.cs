@@ -10,10 +10,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         public TrashAssessmentSummaryMapViewData TrashAssessmentSummaryMapViewData { get; }
         public string ReturnToEditUrl { get; }
         public bool UserHasReturnToEditPermission { get; }
+        public string IsProgressAssessment { get; }
 
         public DetailViewData(Person currentPerson, Models.OnlandVisualTrashAssessment onlandVisualTrashAssessment, TrashAssessmentSummaryMapViewData trashAssessmentSummaryMapViewData, string returnToEditUrl, bool userHasReturnToEditPermission) : base(currentPerson)
         {
             OnlandVisualTrashAssessment = onlandVisualTrashAssessment;
+            IsProgressAssessment = onlandVisualTrashAssessment.ToBaselineProgress();
             TrashAssessmentSummaryMapViewData = trashAssessmentSummaryMapViewData;
             EntityName = "On-land Visual Trash Assessment";
             EntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());

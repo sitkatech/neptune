@@ -28,7 +28,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                 x => x.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
                 DhtmlxGridColumnFilterType.Html);
 
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.GetScoreAsHtmlString(), 150,
+            Add(FieldDefinition.BaselineScore.ToGridHeaderString(), x => x.GetBaselineScoreAsHtmlString(), 150,
+                DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+            Add(FieldDefinition.ProgressScore.ToGridHeaderString(), x => x.GetProgressScoreAsHtmlString(), 150,
                 DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
             Add("Number of Assessments Completed", x => x.OnlandVisualTrashAssessments.Count, 170,
                 DhtmlxGridColumnAggregationType.Total);

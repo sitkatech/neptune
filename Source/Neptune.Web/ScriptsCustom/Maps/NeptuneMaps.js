@@ -137,7 +137,7 @@ NeptuneMaps.Map.prototype.addVectorLayer = function (currentLayer, overlayLayers
         layerGeoJson.on("click", function (e) { self.clickThroughFeature(e); });
     }
     else if (!currentLayer.HasCustomPopups) {
-        layerGeoJson.on("click", function(e) { self.getFeatureInfo(e); });
+        layerGeoJson.on("click", function(e) { /*self.getFeatureInfo(e);*/ });
     }
 
     overlayLayers[currentLayer.LayerName] = layerGroup;

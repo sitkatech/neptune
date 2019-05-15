@@ -88,11 +88,20 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Max(x => x.CompletedDate);
         }
 
-        public static HtmlString GetScoreAsHtmlString(
+        public static HtmlString GetBaselineScoreAsHtmlString(
             this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
-                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
+                    .OnlandVisualTrashAssessmentScoreDisplayName
+                : "<p class='systemText'>No completed assessments</p>");
+        }
+
+        public static HtmlString GetProgressScoreAsHtmlString(
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore != null
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
         }
@@ -136,6 +145,14 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
             onlandVisualTrashAssessment = null;
             return null;
+        }
+
+        public static OnlandVisualTrashAssessmentScore CalculateProgressScore(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x =>
+                    x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
+                        .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment)
+                .MaxBy(x => x.CompletedDate).OnlandVisualTrashAssessmentScore;
         }
     }
 }

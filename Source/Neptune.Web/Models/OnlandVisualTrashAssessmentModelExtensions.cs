@@ -80,7 +80,10 @@ namespace Neptune.Web.Models
                     null, null) : DhtmlxGridHtmlHelpers.MakeEditIconAsHyperlinkBootstrap(GetEditUrl(onlandVisualTrashAssessment));
         }
 
-
+        public static string ToBaselineProgress(this OnlandVisualTrashAssessment onlandVisualTrashAssessment)
+        {
+           return onlandVisualTrashAssessment.IsProgressAssessment ? "Progress" : "Baseline";
+        }
 
         public static DbGeometry GetTransect(this OnlandVisualTrashAssessment ovta)
         {

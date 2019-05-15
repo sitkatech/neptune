@@ -38,10 +38,12 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             {
                 Add("Assessment Area Name",
                     x => x.OnlandVisualTrashAssessmentArea?.GetDisplayNameAsDetailUrl(currentPerson) ?? new HtmlString("Not Set"), 170,
-                    DhtmlxGridColumnFilterType.SelectFilterHtmlStrict);
+                    DhtmlxGridColumnFilterType.Html);
             }
 
-            Add(FieldDefinition.OVTAScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
+            Add(FieldDefinition.AssessmentScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
+                DhtmlxGridColumnFilterType.SelectFilterStrict);
+            Add("Assessment Type", x => x.ToBaselineProgress(), 75,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Last Assessment Date", x => x.CompletedDate, 120, DhtmlxGridColumnFormatType.Date);
             Add("Status", x => x.OnlandVisualTrashAssessmentStatus.OnlandVisualTrashAssessmentStatusDisplayName, 120, DhtmlxGridColumnFilterType.SelectFilterStrict);

@@ -65,11 +65,6 @@
                             };
                         },
                     }).addTo($scope.neptuneMap.map);
-
-                var bounds = $scope.lastSelected.getBounds();
-                if (bounds.isValid()) {
-                    $scope.neptuneMap.map.fitBounds(bounds);
-                }
             });
         };
 
