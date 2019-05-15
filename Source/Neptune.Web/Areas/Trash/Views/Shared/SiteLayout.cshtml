@@ -47,14 +47,18 @@
             @RenderSection("RightOfPageTitle", false)
         </div>
 
-        <div class="breadcrumbTitle arrow firstArrow current">
-            <a href="@ViewDataTyped.EntityUrl">@ViewDataTyped.EntityName</a>
-        </div>
+        <a href="@ViewDataTyped.EntityUrl">
+            <div class="breadcrumbTitle arrow firstArrow current">
+                @ViewDataTyped.EntityName
+            </div>
+        </a>
         @if (ViewDataTyped.SubEntityName != null)
         {
-            <div id="vert-align-middle" class="breadcrumbTitle arrow middleArrow default">
-                <a href="@ViewDataTyped.SubEntityUrl" title="@ViewDataTyped.SubEntityName">@ViewDataTyped.SubEntityName</a>
-            </div>
+            <a href="@ViewDataTyped.SubEntityUrl" title="@ViewDataTyped.SubEntityName">
+                <div id="vert-align-middle" class="breadcrumbTitle arrow middleArrow default">
+                    @ViewDataTyped.SubEntityName
+                </div>
+            </a>
         }
         <div class="breadcrumbTitle arrow lastArrow default" title="@ViewDataTyped.PageTitle">@ViewDataTyped.PageTitle</div>
     </div>
