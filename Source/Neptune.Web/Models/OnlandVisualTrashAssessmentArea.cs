@@ -11,9 +11,10 @@ namespace Neptune.Web.Models
             return $"OVTA Area {OnlandVisualTrashAssessmentAreaID}";
         }
 
-        public OnlandVisualTrashAssessmentScore CalculateScoreFromBackingData()
+        // todo: this is the old calculation, needs to be updated to take baseline vs progress into account
+        public OnlandVisualTrashAssessmentScore CalculateScoreFromBackingData(bool calculateProgressScore)
         {
-            if (OnlandVisualTrashAssessments.All(x => x.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID))
+            if (OnlandVisualTrashAssessments.All(x => x.OnlandVisualTrashAssessmentStatusID != OnlandVisualTrashAssessmentStatus.Complete.OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment == calculateProgressScore))
             {
                 return null;
             }
