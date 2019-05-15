@@ -16,4 +16,4 @@ from dbo.OnlandVisualTrashAssessmentArea area left join
 		on area.OnlandVisualTrashAssessmentProgressScoreID = score.OnlandVisualTrashAssessmentScoreID 
 		left join dbo.OnlandVisualTrashAssessment ovta
 		on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
-		where ovta.IsProgressAssessment = 1
+where ovta.IsProgressAssessment = 1
