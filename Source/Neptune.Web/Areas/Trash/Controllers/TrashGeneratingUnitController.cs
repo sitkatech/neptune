@@ -77,6 +77,45 @@ namespace Neptune.Web.Areas.Trash.Controllers
                 ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD
             }, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpGet]
+        [JurisdictionEditFeature]
+        public JsonResult LoadBasedResultsCalculations(StormwaterJurisdictionPrimaryKey jurisdictionPrimaryKey)
+        {
+            var jurisdiction = jurisdictionPrimaryKey.EntityObject;
+            var trashGeneratingUnits = HttpRequestStorage.DatabaseEntities.TrashGeneratingUnits;
+
+            var sumPLUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.PriorityOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumPLUAcrexsWhereOVTAIsB = TrashGeneratingUnitHelper.PriorityOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumPLUAcrexsWhereOVTAIsC = TrashGeneratingUnitHelper.PriorityOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumPLUAcrexsWhereOVTAIsD = TrashGeneratingUnitHelper.PriorityOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+
+
+            var sumALUAcresWhereOVTAIsA = TrashGeneratingUnitHelper.AlternateOVTAScoreAAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsB = TrashGeneratingUnitHelper.AlternateOVTAScoreBAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsC = TrashGeneratingUnitHelper.AlternateOVTAScoreCAcreage(trashGeneratingUnits, jurisdiction);
+
+            var sumALUAcresWhereOVTAIsD = TrashGeneratingUnitHelper.AlternateOVTAScoreDAcreage(trashGeneratingUnits, jurisdiction);
+
+            return Json(new OVTAResultsSimple
+            {
+                PLUSumAcresWhereOVTAIsA = sumPLUAcresWhereOVTAIsA,
+                PLUSumAcresWhereOVTAIsB = sumPLUAcrexsWhereOVTAIsB,
+                PLUSumAcresWhereOVTAIsC = sumPLUAcrexsWhereOVTAIsC,
+                PLUSumAcresWhereOVTAIsD = sumPLUAcrexsWhereOVTAIsD,
+                ALUSumAcresWhereOVTAIsA = sumALUAcresWhereOVTAIsA,
+                ALUSumAcresWhereOVTAIsB = sumALUAcresWhereOVTAIsB,
+                ALUSumAcresWhereOVTAIsC = sumALUAcresWhereOVTAIsC,
+                ALUSumAcresWhereOVTAIsD = sumALUAcresWhereOVTAIsD
+            }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 
     public static class AreaCalculationsHelper
@@ -85,6 +124,11 @@ namespace Neptune.Web.Areas.Trash.Controllers
         {
             return Math.Round(trashGeneratingUnits
                 .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 1); // will never be null
+        }
+        public static double GetAreaLoadBased(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
+        {
+            return Math.Round(trashGeneratingUnits
+                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres * (double) x.LandUseBlock.TrashGenerationRate).Sum().GetValueOrDefault(), 1); // will never be null
         }
     }
 }
