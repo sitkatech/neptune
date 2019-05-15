@@ -64,4 +64,5 @@ VALUES
 (60, 'DelineationType', 'Delineation Type', 'Indicates whether the delineation is distributed or centralized.', 1),
 (61, 'BaselineScore', 'Baseline Score', 'For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments'' scores.', 1),
 (62, 'SizingBasis', 'Sizing Basis', 'Indicates whether this BMP is sized for full trash capture, water quality improvement, or otherwise.', 1),
-(63, 'ProgressScore', 'Progress Score', '', 1)
+(63, 'ProgressScore', 'Progress Score', '', 1),
+(64, 'AssessmentScore', 'Assessment Score', 'For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments'' scores.', 1)

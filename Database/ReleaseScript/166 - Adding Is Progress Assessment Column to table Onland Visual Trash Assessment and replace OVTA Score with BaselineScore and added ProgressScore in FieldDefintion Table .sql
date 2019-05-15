@@ -17,4 +17,4 @@ Update dbo.FieldDefinition Set FieldDefinitionName = 'BaselineScore', FieldDefin
 GO
 
 Insert Into dbo.FieldDefinition (FieldDefinitionID, FieldDefinitionName, FieldDefinitionDisplayName, DefaultDefinition, CanCustomizeLabel)
-Values (63, 'ProgressScore', 'Progress Score', '', 1)
+Values (63, 'ProgressScore', 'Progress Score', '', 1),(64, 'AssessmentScore', 'Assessment Score', 'For an OVTA, scores range from A to D and indicate the condition of the assessed area at the time of the assessment. For an OVTA Area, the score is an aggregate of all of its Assessments'' scores.', 1)
