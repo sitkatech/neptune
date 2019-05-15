@@ -4,7 +4,7 @@ using Neptune.Web.Models;
 
 namespace Neptune.Web.Security
 {
-    [SecurityFeatureDescription("Allows Managing Jurisdicton Assets")]
+    [SecurityFeatureDescription("Allows editing Jurisdicton Assets")]
     public class JurisdictionEditFeature : NeptuneFeature
     {
         public JurisdictionEditFeature()

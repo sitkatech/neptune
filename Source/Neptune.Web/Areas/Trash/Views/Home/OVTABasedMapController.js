@@ -160,7 +160,7 @@
                 var ovtas = _.sortBy(response.features, [function (o) {return o.properties.CompletedDate}]).reverse();
 
                 for (var i = 0; i < ovtas.length; i++) {
-                    content += createPopupContent(ovtas[ovta].properties);
+                    content += createPopupContent(ovtas[i].properties);
                 }         
 
                 var popup = L.popup({ minWidth: 200, maxWidth: 500})
