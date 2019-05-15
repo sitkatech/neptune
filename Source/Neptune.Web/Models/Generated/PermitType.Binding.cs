@@ -3,10 +3,11 @@
 //  Use the corresponding partial class for customizations.
 //  Source Table: [dbo].[PermitType]
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Collections.Generic;
-using System.Data.Entity.Spatial;
+using System.Data;
 using System.Linq;
 using System.Web;
 using LtInfo.Common.DesignByContract;
@@ -15,105 +16,124 @@ using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
 {
-    // Table [dbo].[PermitType] is NOT multi-tenant, so is attributed as ICanDeleteFull
-    [Table("[dbo].[PermitType]")]
-    public partial class PermitType : IHavePrimaryKey, ICanDeleteFull
+    public abstract partial class PermitType : IHavePrimaryKey
     {
+        public static readonly PermitTypePhaseIMS4 PhaseIMS4 = PermitTypePhaseIMS4.Instance;
+        public static readonly PermitTypePhaseIIMS4 PhaseIIMS4 = PermitTypePhaseIIMS4.Instance;
+        public static readonly PermitTypeIGP IGP = PermitTypeIGP.Instance;
+
+        public static readonly List<PermitType> All;
+        public static readonly ReadOnlyDictionary<int, PermitType> AllLookupDictionary;
+
         /// <summary>
-        /// Default Constructor; only used by EF
+        /// Static type constructor to coordinate static initialization order
         /// </summary>
-        protected PermitType()
+        static PermitType()
         {
-            this.LandUseBlocks = new HashSet<LandUseBlock>();
+            All = new List<PermitType> { PhaseIMS4, PhaseIIMS4, IGP };
+            AllLookupDictionary = new ReadOnlyDictionary<int, PermitType>(All.ToDictionary(x => x.PermitTypeID));
         }
 
         /// <summary>
-        /// Constructor for building a new object with MaximalConstructor required fields in preparation for insert into database
+        /// Protected constructor only for use in instantiating the set of static lookup values that match database
         /// </summary>
-        public PermitType(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : this()
+        protected PermitType(int permitTypeID, string permitTypeName, string permitTypeDisplayName)
         {
-            this.PermitTypeID = permitTypeID;
-            this.PermitTypeName = permitTypeName;
-            this.PermitTypeDisplayName = permitTypeDisplayName;
-        }
-
-        /// <summary>
-        /// Constructor for building a new object with MinimalConstructor required fields in preparation for insert into database
-        /// </summary>
-        public PermitType(string permitTypeName, string permitTypeDisplayName) : this()
-        {
-            // Mark this as a new object by setting primary key with special value
-            this.PermitTypeID = ModelObjectHelpers.MakeNextUnsavedPrimaryKeyValue();
-            
-            this.PermitTypeName = permitTypeName;
-            this.PermitTypeDisplayName = permitTypeDisplayName;
-        }
-
-
-        /// <summary>
-        /// Creates a "blank" object of this type and populates primitives with defaults
-        /// </summary>
-        public static PermitType CreateNewBlank()
-        {
-            return new PermitType(default(string), default(string));
-        }
-
-        /// <summary>
-        /// Does this object have any dependent objects? (If it does have dependent objects, these would need to be deleted before this object could be deleted.)
-        /// </summary>
-        /// <returns></returns>
-        public bool HasDependentObjects()
-        {
-            return LandUseBlocks.Any();
-        }
-
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public static readonly List<string> DependentEntityTypeNames = new List<string> {typeof(PermitType).Name, typeof(LandUseBlock).Name};
-
-
-        /// <summary>
-        /// Delete just the entity 
-        /// </summary>
-        public void Delete(DatabaseEntities dbContext)
-        {
-            dbContext.PermitTypes.Remove(this);
-        }
-        
-        /// <summary>
-        /// Delete entity plus all children
-        /// </summary>
-        public void DeleteFull(DatabaseEntities dbContext)
-        {
-            DeleteChildren(dbContext);
-            Delete(dbContext);
-        }
-        /// <summary>
-        /// Dependent type names of this entity
-        /// </summary>
-        public void DeleteChildren(DatabaseEntities dbContext)
-        {
-
-            foreach(var x in LandUseBlocks.ToList())
-            {
-                x.DeleteFull(dbContext);
-            }
+            PermitTypeID = permitTypeID;
+            PermitTypeName = permitTypeName;
+            PermitTypeDisplayName = permitTypeDisplayName;
         }
 
         [Key]
-        public int PermitTypeID { get; set; }
-        public string PermitTypeName { get; set; }
-        public string PermitTypeDisplayName { get; set; }
+        public int PermitTypeID { get; private set; }
+        public string PermitTypeName { get; private set; }
+        public string PermitTypeDisplayName { get; private set; }
         [NotMapped]
-        public int PrimaryKey { get { return PermitTypeID; } set { PermitTypeID = value; } }
+        public int PrimaryKey { get { return PermitTypeID; } }
 
-        public virtual ICollection<LandUseBlock> LandUseBlocks { get; set; }
-
-        public static class FieldLengths
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public bool Equals(PermitType other)
         {
-            public const int PermitTypeName = 80;
-            public const int PermitTypeDisplayName = 80;
+            if (other == null)
+            {
+                return false;
+            }
+            return other.PermitTypeID == PermitTypeID;
         }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PermitType);
+        }
+
+        /// <summary>
+        /// Enum types are equal by primary key
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return PermitTypeID;
+        }
+
+        public static bool operator ==(PermitType left, PermitType right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(PermitType left, PermitType right)
+        {
+            return !Equals(left, right);
+        }
+
+        public PermitTypeEnum ToEnum { get { return (PermitTypeEnum)GetHashCode(); } }
+
+        public static PermitType ToType(int enumValue)
+        {
+            return ToType((PermitTypeEnum)enumValue);
+        }
+
+        public static PermitType ToType(PermitTypeEnum enumValue)
+        {
+            switch (enumValue)
+            {
+                case PermitTypeEnum.IGP:
+                    return IGP;
+                case PermitTypeEnum.PhaseIIMS4:
+                    return PhaseIIMS4;
+                case PermitTypeEnum.PhaseIMS4:
+                    return PhaseIMS4;
+                default:
+                    throw new ArgumentException(string.Format("Unable to map Enum: {0}", enumValue));
+            }
+        }
+    }
+
+    public enum PermitTypeEnum
+    {
+        PhaseIMS4 = 1,
+        PhaseIIMS4 = 2,
+        IGP = 3
+    }
+
+    public partial class PermitTypePhaseIMS4 : PermitType
+    {
+        private PermitTypePhaseIMS4(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypePhaseIMS4 Instance = new PermitTypePhaseIMS4(1, @"PhaseIMS4", @"Phase I MS4");
+    }
+
+    public partial class PermitTypePhaseIIMS4 : PermitType
+    {
+        private PermitTypePhaseIIMS4(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypePhaseIIMS4 Instance = new PermitTypePhaseIIMS4(2, @"PhaseIIMS4", @"Phase II MS4");
+    }
+
+    public partial class PermitTypeIGP : PermitType
+    {
+        private PermitTypeIGP(int permitTypeID, string permitTypeName, string permitTypeDisplayName) : base(permitTypeID, permitTypeName, permitTypeDisplayName) {}
+        public static readonly PermitTypeIGP Instance = new PermitTypeIGP(3, @"IGP", @"IGP");
     }
 }

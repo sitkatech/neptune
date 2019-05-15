@@ -75,8 +75,6 @@ namespace Neptune.Web.Models
             this.StormwaterJurisdiction = stormwaterJurisdiction;
             stormwaterJurisdiction.LandUseBlocks.Add(this);
             this.PermitTypeID = permitType.PermitTypeID;
-            this.PermitType = permitType;
-            permitType.LandUseBlocks.Add(this);
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace Neptune.Web.Models
         public virtual ICollection<TrashGeneratingUnit> TrashGeneratingUnits { get; set; }
         public PriorityLandUseType PriorityLandUseType { get { return PriorityLandUseTypeID.HasValue ? PriorityLandUseType.AllLookupDictionary[PriorityLandUseTypeID.Value] : null; } }
         public virtual StormwaterJurisdiction StormwaterJurisdiction { get; set; }
-        public virtual PermitType PermitType { get; set; }
+        public PermitType PermitType { get { return PermitType.AllLookupDictionary[PermitTypeID]; } }
 
         public static class FieldLengths
         {
