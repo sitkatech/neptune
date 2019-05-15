@@ -18,6 +18,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Xml.XPath;
 using LtInfo.Common.Mvc;
+using MoreLinq;
 using Neptune.Web.Areas.Trash.Views;
 using Index = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.Index;
 using IndexViewData = Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment.IndexViewData;
@@ -439,6 +440,7 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
             onlandVisualTrashAssessment.AssessingNewArea = false;
+
             if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
             {
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
@@ -455,6 +457,15 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     transectBackingAssessment.IsTransectBackingAssessment = true;
                 }
             }
+
+            // update the assessment area scores now that this assessment no longer contributes
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(false)
+                    .OnlandVisualTrashAssessmentScoreID;
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateProgressScore()
+                    .OnlandVisualTrashAssessmentScoreID;
 
             var tguUpdateSuccess =
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
@@ -535,13 +546,21 @@ namespace Neptune.Web.Areas.Trash.Controllers
             }
 
             var onlandVisualTrashAssessmentArea = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea;
+            var isProgressAssessment = onlandVisualTrashAssessment.IsProgressAssessment;
             onlandVisualTrashAssessment.DeleteFull(HttpRequestStorage.DatabaseEntities);
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             if (onlandVisualTrashAssessmentArea != null)
             {
-                // todo: set the baseline and the progress score
-                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentArea
+                onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID = onlandVisualTrashAssessmentArea
                     .CalculateScoreFromBackingData(false)?.OnlandVisualTrashAssessmentScoreID;
+
+
+                if (isProgressAssessment)
+                {
+                    onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
+                        onlandVisualTrashAssessmentArea.CalculateProgressScore()
+                            ?.OnlandVisualTrashAssessmentScoreID;
+                }
             }
 
             SetMessageForDisplay("Successfully deleted the assessment.");
