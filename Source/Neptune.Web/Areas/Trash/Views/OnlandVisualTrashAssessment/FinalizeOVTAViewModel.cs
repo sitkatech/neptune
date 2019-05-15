@@ -40,7 +40,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
         [Required]
         public int? StormwaterJurisdictionID { get; set; }
 
-        [DisplayName("Is Progress")]
+        [DisplayName("Assessment Type")]
         public bool IsProgressAssessment { get; set; }
 
         public List<PreliminarySourceIdentificationSimple> PreliminarySourceIdentifications { get; set; }
@@ -103,10 +103,13 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription =
                     AssessmentAreaDescription;
-                // todo: set the baseline and the progress score
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID =
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
                     onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(false)?
                         .OnlandVisualTrashAssessmentScoreID;
+
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID = onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(true)?
+                    .OnlandVisualTrashAssessmentScoreID;
 
                 if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
                 {

@@ -41,7 +41,7 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
                     DhtmlxGridColumnFilterType.Html);
             }
 
-            Add(FieldDefinition.BaselineScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
+            Add(FieldDefinition.AssessmentScore.ToGridHeaderString(), x => x.OnlandVisualTrashAssessmentScore?.OnlandVisualTrashAssessmentScoreDisplayName, 100,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);
             Add("Assessment Type", x => x.ToBaselineProgress(), 75,
                 DhtmlxGridColumnFilterType.SelectFilterStrict);

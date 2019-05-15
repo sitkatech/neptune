@@ -1,4 +1,5 @@
 ﻿@using LtInfo.Common.DhtmlWrappers
+@using LtInfo.Common.HtmlHelperExtensions
 @using LtInfo.Common.ModalDialog
 @using MoreLinq
 @using Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
@@ -62,7 +63,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 col-xs-12 control-label">
-                                <label> Score</label>
+                                @Html.LabelWithSugarFor(FieldDefinition.AssessmentScore)
                             </div>
                             <div class="col-sm-6 col-xs-12">
                                 @ViewDataTyped.OnlandVisualTrashAssessment.OnlandVisualTrashAssessmentScore.OnlandVisualTrashAssessmentScoreDisplayName

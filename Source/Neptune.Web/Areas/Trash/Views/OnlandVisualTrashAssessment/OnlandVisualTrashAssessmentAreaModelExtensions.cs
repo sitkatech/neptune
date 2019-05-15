@@ -88,11 +88,20 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
             return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Max(x => x.CompletedDate);
         }
 
-        public static HtmlString GetScoreAsHtmlString(
+        public static HtmlString GetBaselineScoreAsHtmlString(
             this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
-                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
+                    .OnlandVisualTrashAssessmentScoreDisplayName
+                : "<p class='systemText'>No completed assessments</p>");
+        }
+
+        public static HtmlString GetProgressScoreAsHtmlString(
+            this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
+        {
+            return new HtmlString(onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore != null
+                ? onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
         }

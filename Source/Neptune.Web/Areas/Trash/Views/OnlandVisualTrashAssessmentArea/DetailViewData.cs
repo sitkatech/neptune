@@ -13,7 +13,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
     {
         public Models.OnlandVisualTrashAssessmentArea OnlandVisualTrashAssessmentArea { get; }
         public HtmlString LastAssessmentDateHtmlString { get; }
-        public HtmlString ScoreHtmlString { get; }
+        public HtmlString BaselineScoreHtmlString { get; }
+        public HtmlString ProgressScoreHtmlString { get; }
         public string NewUrl { get; }
         public string EditDetailsUrl { get; }
         public OnlandVisualTrashAssessmentIndexGridSpec GridSpec { get; }
@@ -28,14 +29,19 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             EntityName = "Trash Module";
             EntityUrl = NeptuneArea.Trash.GetHomeUrl();
             SubEntityName = "OVTA Areas";
+            SubEntityUrl = SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Index());
             PageTitle = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentAreaName;
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             MapInitJson = mapInitJson;
             var completedAssessments = OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x => x.OnlandVisualTrashAssessmentStatus == OnlandVisualTrashAssessmentStatus.Complete).ToList();
 
             LastAssessmentDateHtmlString = new HtmlString( completedAssessments.Max(x => x.CompletedDate)?.ToShortDateString() ?? "<p class='systemText'>No completed assessments</p>");
-            ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
-                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+            ProgressScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore != null
+                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScore
+                    .OnlandVisualTrashAssessmentScoreDisplayName
+                : "<p class='systemText'>No completed assessments</p>");
+            BaselineScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
+                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
             NewUrl = newUrl;

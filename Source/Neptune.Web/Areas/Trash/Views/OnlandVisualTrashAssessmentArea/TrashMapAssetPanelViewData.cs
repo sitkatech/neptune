@@ -14,8 +14,8 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessmentArea
             OnlandVisualTrashAssessmentArea = onlandVisualTrashAssessmentArea;
             UserHasViewDetailsPermission =
                 currentPerson.CanEditStormwaterJurisdiction(onlandVisualTrashAssessmentArea.StormwaterJurisdiction);
-            ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore != null
-                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScore
+            ScoreHtmlString = new HtmlString(OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore != null
+                ? OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScore
                     .OnlandVisualTrashAssessmentScoreDisplayName
                 : "<p class='systemText'>No completed assessments</p>");
         }
