@@ -539,8 +539,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
             HttpRequestStorage.DatabaseEntities.SaveChanges();
             if (onlandVisualTrashAssessmentArea != null)
             {
+                // todo: set the baseline and the progress score
                 onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID = onlandVisualTrashAssessmentArea
-                    .CalculateScoreFromBackingData()?.OnlandVisualTrashAssessmentScoreID;
+                    .CalculateScoreFromBackingData(false)?.OnlandVisualTrashAssessmentScoreID;
             }
 
             SetMessageForDisplay("Successfully deleted the assessment.");

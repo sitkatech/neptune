@@ -103,8 +103,9 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.AssessmentAreaDescription =
                     AssessmentAreaDescription;
+                // todo: set the baseline and the progress score
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentScoreID =
-                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData()?
+                    onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(false)?
                         .OnlandVisualTrashAssessmentScoreID;
 
                 if (onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.TransectLine == null && onlandVisualTrashAssessment.OnlandVisualTrashAssessmentObservations.Count >= 2)
