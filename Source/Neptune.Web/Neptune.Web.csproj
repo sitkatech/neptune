@@ -421,6 +421,8 @@
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBase.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBootstrapper.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobException.cs" />
+    <Compile Include="ScheduledJobs\ScheduledBackgroundJobLaunchHelper.cs" />
+    <Compile Include="ScheduledJobs\TrashGeneratingUnitRefreshScheduledBackgroundJob.cs" />
     <Compile Include="Views\TrashGeneratingUnit\Index.cs" />
     <Compile Include="Views\TrashGeneratingUnit\IndexViewData.cs" />
     <Compile Include="Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />

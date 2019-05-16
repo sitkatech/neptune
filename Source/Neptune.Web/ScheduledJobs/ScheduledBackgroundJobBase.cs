@@ -13,7 +13,12 @@ namespace Neptune.Web.ScheduledJobs
         /// </summary>
         public static readonly object ScheduledBackgroundJobLock = new object();
 
-        public const string JobName = "Project Update Reminders";
+        public static string JobName
+        {
+            get { return "Background Job"; }
+        }
+
+
         protected ILog Logger { get; }
         protected DatabaseEntities DbContext;
 

@@ -5,6 +5,8 @@ namespace Neptune.Web.ScheduledJobs
 {
     public class TrashGeneratingUnitRefreshScheduledBackgroundJob : ScheduledBackgroundJobBase
     {
+        public new static string JobName => "TGU Refresh";
+
         public override List<NeptuneEnvironmentType> RunEnvironments => new List<NeptuneEnvironmentType>
         {
             NeptuneEnvironmentType.Local,

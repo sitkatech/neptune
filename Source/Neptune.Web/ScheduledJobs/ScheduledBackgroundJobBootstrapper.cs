@@ -63,7 +63,9 @@ namespace Neptune.Web.ScheduledJobs
         {
             var recurringJobIds = new List<string>();
 
-            // todo: need to have job
+            AddRecurringJob(TrashGeneratingUnitRefreshScheduledBackgroundJob.JobName,
+                () => ScheduledBackgroundJobLaunchHelper.RunTrashGeneratingUnitRefreshScheduledBackgroundJob(),
+                MakeDailyUtcCronJobStringFromLocalTime(1, 23), recurringJobIds);
             
             // Remove any jobs we haven't explicity scheduled
             RemoveExtraneousJobs(recurringJobIds);
