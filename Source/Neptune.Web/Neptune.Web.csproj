@@ -418,6 +418,7 @@
     <Compile Include="Areas\DroolTool\Views\DroolToolModuleViewData.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\NavAndHeaderLayout.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\SiteLayout.cs" />
+    <Compile Include="ScheduledJobs\ScheduledBackgroundJobBootstrapper.cs" />
     <Compile Include="Views\TrashGeneratingUnit\Index.cs" />
     <Compile Include="Views\TrashGeneratingUnit\IndexViewData.cs" />
     <Compile Include="Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
@@ -1367,6 +1368,7 @@
     <Content Include="Content\Bootstrap\bootstrap-3.4.1\less\wells.less" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js.map" />
     <Compile Include="Controllers\TrashGeneratingUnitController.cs" />
+    <Compile Include="ScheduledJobs\HangfireNeptuneWebAuthorizationFilter.cs" />
     <None Include="Service References\KeystoneDataService\KeystoneData.disco" />
     <None Include="Service References\KeystoneDataService\configuration91.svcinfo" />
     <None Include="Service References\KeystoneDataService\configuration.svcinfo" />

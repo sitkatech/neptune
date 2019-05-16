@@ -17,6 +17,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Security.Principal;
+using Neptune.Web.ScheduledJobs;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
@@ -30,6 +31,7 @@ namespace Neptune.Web
         /// </summary>
         public void Configuration(IAppBuilder app)
         {
+            ScheduledBackgroundJobBootstrapper.ConfigureHangfireAndScheduledBackgroundJobs(app);
             SitkaHttpApplication.Logger.Info("Owin Startup");
 
             System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
