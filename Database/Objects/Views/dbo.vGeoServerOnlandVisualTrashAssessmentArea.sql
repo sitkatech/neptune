@@ -2,18 +2,24 @@ DROP VIEW IF EXISTS dbo.vGeoServerOnlandVisualTrashAssessmentArea
 GO
 
 create view dbo.vGeoServerOnlandVisualTrashAssessmentArea as
-select
-	area.OnlandVisualTrashAssessmentAreaID,
-	area.OnlandVisualTrashAssessmentAreaName,
-	area.StormwaterJurisdictionID,
-	area.OnlandVisualTrashAssessmentAreaGeometry,
-	case when area.OnlandVisualTrashAssessmentProgressScoreID is null then 0 else Score.NumericValue end as Score,
-	-- todo: this view might need to be updated to also include the Baseline score in the future; for now we'll use Progress for OVTA results
-	score.OnlandVisualTrashAssessmentScoreDisplayName,
-	ovta.CompletedDate
-from dbo.OnlandVisualTrashAssessmentArea area left join
-	dbo.OnlandVisualTrashAssessmentScore score
-		on area.OnlandVisualTrashAssessmentProgressScoreID = score.OnlandVisualTrashAssessmentScoreID 
-		left join dbo.OnlandVisualTrashAssessment ovta
-		on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
-where ovta.IsProgressAssessment = 1
+	Select
+		area.OnlandVisualTrashAssessmentAreaID,
+		area.OnlandVisualTrashAssessmentAreaName,
+		area.StormwaterJurisdictionID,
+		area.OnlandVisualTrashAssessmentAreaGeometry,
+		score.OnlandVisualTrashAssessmentScoreDisplayName as Score,
+		ovta.CompletedDate
+	from dbo.OnlandVisualTrashAssessmentArea area
+		left join (
+			Select
+				*,
+				Row_Number() over (partition by OnlandVisualTrashAssessmentAreaID order by CompletedDate desc) as RankByCompletedDate
+			from dbo.OnlandVisualTrashAssessment
+			where CompletedDate is not null
+		) ovta on area.OnlandVisualTrashAssessmentAreaID = ovta.OnlandVisualTrashAssessmentAreaID
+		left join dbo.OnlandVisualTrashAssessmentScore score
+			on ovta.OnlandVisualTrashAssessmentScoreID = score.OnlandVisualTrashAssessmentScoreID
+	where
+		RankByCompletedDate = 1
+		or RankByCompletedDate is null -- have to account for this being null so we get the results of the left outer join
+go

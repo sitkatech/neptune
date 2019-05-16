@@ -149,10 +149,10 @@ namespace Neptune.Web.Areas.Trash.Views.OnlandVisualTrashAssessment
 
         public static OnlandVisualTrashAssessmentScore CalculateProgressScore(this Models.OnlandVisualTrashAssessmentArea onlandVisualTrashAssessmentArea)
         {
-            return onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x =>
-                    x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
-                        .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment)
-                .MaxBy(x => x.CompletedDate).OnlandVisualTrashAssessmentScore;
+            var onlandVisualTrashAssessments = onlandVisualTrashAssessmentArea.OnlandVisualTrashAssessments.Where(x =>
+                x.OnlandVisualTrashAssessmentStatusID == OnlandVisualTrashAssessmentStatus.Complete
+                    .OnlandVisualTrashAssessmentStatusID && x.IsProgressAssessment).ToList();
+            return onlandVisualTrashAssessments.Any() ? onlandVisualTrashAssessments.MaxBy(x => x.CompletedDate).OnlandVisualTrashAssessmentScore : null;
         }
     }
 }
