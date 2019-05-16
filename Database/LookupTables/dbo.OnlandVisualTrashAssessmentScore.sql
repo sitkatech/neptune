@@ -1,6 +1,6 @@
 delete from dbo.OnlandVisualTrashAssessmentScore
 
-insert into dbo.OnlandVisualTrashAssessmentScore (OnlandVisualTrashAssessmentScoreID, OnlandVisualTrashAssessmentScoreName, OnlandVisualTrashAssessmentScoreDisplayName, NumericValue, TrashGeneratingRate)
+insert into dbo.OnlandVisualTrashAssessmentScore (OnlandVisualTrashAssessmentScoreID, OnlandVisualTrashAssessmentScoreName, OnlandVisualTrashAssessmentScoreDisplayName, NumericValue, TrashGenerationRate)
 values
 (1, 'A', 'A', 4, 2.5),
 (2, 'B', 'B', 3, 7.5),
