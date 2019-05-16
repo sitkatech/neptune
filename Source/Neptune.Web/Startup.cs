@@ -31,7 +31,6 @@ namespace Neptune.Web
         /// </summary>
         public void Configuration(IAppBuilder app)
         {
-            ScheduledBackgroundJobBootstrapper.ConfigureHangfireAndScheduledBackgroundJobs(app);
             SitkaHttpApplication.Logger.Info("Owin Startup");
 
             System.IdentityModel.Tokens.JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
@@ -120,7 +119,10 @@ namespace Neptune.Web
                         return Task.FromResult(0);
                     }
                 }
+
             });
+
+            ScheduledBackgroundJobBootstrapper.ConfigureHangfireAndScheduledBackgroundJobs(app);
         }
 
         public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)

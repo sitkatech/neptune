@@ -30,7 +30,6 @@ namespace Neptune.Web.ScheduledJobs
         /// </summary>
         private static void ConfigureHangfire(IAppBuilder app)
         {
-            Thread.Sleep(1000);
             var sqlServerStorageOptions = new SqlServerStorageOptions
             {
                 // We have scripted out the Hangfire tables, so we tell Hangfire not to insert them. 
