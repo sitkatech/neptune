@@ -441,6 +441,17 @@ namespace Neptune.Web.Areas.Trash.Controllers
             onlandVisualTrashAssessment.OnlandVisualTrashAssessmentStatusID = OnlandVisualTrashAssessmentStatus.InProgress.OnlandVisualTrashAssessmentStatusID;
             onlandVisualTrashAssessment.AssessingNewArea = false;
 
+
+
+            // update the assessment area scores now that this assessment no longer contributes
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(false)?
+                    .OnlandVisualTrashAssessmentScoreID;
+
+            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
+                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateProgressScore()?
+                    .OnlandVisualTrashAssessmentScoreID;
+
             if (onlandVisualTrashAssessment.IsTransectBackingAssessment)
             {
                 onlandVisualTrashAssessment.IsTransectBackingAssessment = false;
@@ -457,15 +468,6 @@ namespace Neptune.Web.Areas.Trash.Controllers
                     transectBackingAssessment.IsTransectBackingAssessment = true;
                 }
             }
-
-            // update the assessment area scores now that this assessment no longer contributes
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID =
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateScoreFromBackingData(false)
-                    .OnlandVisualTrashAssessmentScoreID;
-
-            onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentProgressScoreID =
-                onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.CalculateProgressScore()
-                    .OnlandVisualTrashAssessmentScoreID;
 
             var tguUpdateSuccess =
                 onlandVisualTrashAssessment.OnlandVisualTrashAssessmentArea.UpdateTrashGeneratingUnits();
