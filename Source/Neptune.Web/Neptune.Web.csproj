@@ -418,7 +418,9 @@
     <Compile Include="Areas\DroolTool\Views\DroolToolModuleViewData.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\NavAndHeaderLayout.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\SiteLayout.cs" />
+    <Compile Include="ScheduledJobs\ScheduledBackgroundJobBase.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBootstrapper.cs" />
+    <Compile Include="ScheduledJobs\ScheduledBackgroundJobException.cs" />
     <Compile Include="Views\TrashGeneratingUnit\Index.cs" />
     <Compile Include="Views\TrashGeneratingUnit\IndexViewData.cs" />
     <Compile Include="Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
