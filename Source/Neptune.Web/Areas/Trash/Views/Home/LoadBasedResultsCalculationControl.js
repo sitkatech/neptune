@@ -12,7 +12,6 @@
             this.getTrackedElement("jurisdictionLoadResultsDropdownContainer")
                 .append(jQuery("select[name='jurisdictionLoadResultsDropdown']").get(0));
         }
-        debugger;
         this.LoadBasedResultsUrlTemplate = this.options.loadCalculationsUrlTemplate;
     },
 
@@ -69,14 +68,12 @@ function populateTGUValuesLoadBased(resultsCalculationsUrl) {
         url: resultsCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        jQuery("#PLUIsA").text(response.PLUSumAcresWhereLoadIsA);
-        jQuery("#PLUIsB").text(response.PLUSumAcresWhereLoadIsB);
-        jQuery("#PLUIsC").text(response.PLUSumAcresWhereLoadIsC);
-        jQuery("#PLUIsD").text(response.PLUSumAcresWhereLoadIsD);
-        jQuery("#ALUIsA").text(response.ALUSumAcresWhereLoadIsA);
-        jQuery("#ALUIsB").text(response.ALUSumAcresWhereLoadIsB);
-        jQuery("#ALUIsC").text(response.ALUSumAcresWhereLoadIsC);
-        jQuery("#ALUIsD").text(response.ALUSumAcresWhereLoadIsD);
+        console.log(response);
+        jQuery("#viaFullTrashCapture").text(response.LoadFullCapture);
+        jQuery("#viaPartialTrashCapture").text(response.LoadPartialCapture);
+        jQuery("#viaOVTAScore").text(response.LoadOVTA);
+        jQuery("#totalAchieved").text(response.TotalAchieved);
+        jQuery("#targetLoadReduction").text(response.TargetLoadReduction);
     });
 }
 

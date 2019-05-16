@@ -3,6 +3,7 @@ using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using MoreLinq;
 using Neptune.Web.Areas.Trash.Controllers;
 
 namespace Neptune.Web.Common
@@ -135,7 +136,7 @@ namespace Neptune.Web.Common
 
             var estimatedLoadedBased = commerical + highDensityResidential + industrial + mixedUrban +
                                          commericalRetail + publicTransportationStations + alu;
-            var actualLoadedBased = fullCapture.Where(x => x.LandUseBlockID != null).GetArea() * 2.5;
+            var actualLoadedBased = fullCapture.Where(x => x.LandUseBlockID != null).GetArea() * (double) OnlandVisualTrashAssessmentScore.A.TrashGenerationRate;
 
             return estimatedLoadedBased - actualLoadedBased;
         }
@@ -143,25 +144,59 @@ namespace Neptune.Web.Common
         public static double LoadBasedPartialCapture(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
             StormwaterJurisdiction jurisdiction)
         {
-            var fullCapture = trashGeneratingUnits.Where(x =>
+            var partialCapture = trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.TreatmentBMP.TrashCaptureStatusTypeID ==
                 TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
                 x.LandUseBlock != null);
 
-            var commerical = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var highDensityResidential = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID).GetAreaLoadBased();
-            var industrial = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var mixedUrban = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID).GetAreaLoadBased();
-            var commericalRetail = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID).GetAreaLoadBased();
-            var publicTransportationStations = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID).GetAreaLoadBased();
-            var alu = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetAreaLoadBased();
+            var commercial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID).GetAreaLoadBased();
+            var highDensityResidential = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID).GetAreaLoadBased();
+            var industrial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID).GetAreaLoadBased();
+            var mixedUrban = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID).GetAreaLoadBased();
+            var commercialRetail = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID).GetAreaLoadBased();
+            var publicTransportationStations = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID).GetAreaLoadBased();
+            var alu = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetAreaLoadBased();
 
-            var estimatedLoadedBased = commerical + highDensityResidential + industrial + mixedUrban +
-                                         commericalRetail + publicTransportationStations + alu;
-            var actualLoadedBased = fullCapture.Where(x => x.LandUseBlockID != null).GetArea() * 2.5;
+            var estimatedLoadedBased = commercial + highDensityResidential + industrial + mixedUrban +
+                                       commercialRetail + publicTransportationStations + alu;
+
+            var actualLoadedBased = partialCapture.Where(x => x.LandUseBlockID != null).GetAreaPartialCaptureLoadBased();
 
             return estimatedLoadedBased - actualLoadedBased;
+        }
+
+        public static double LoadBasedOVTAProgressScores(this DbSet<OnlandVisualTrashAssessment> onlandVisualTrashAssessments,
+            StormwaterJurisdiction jurisdiction)
+        {
+            var trashGeneratingUnitsFromProgressAssessments = onlandVisualTrashAssessments
+                .Where(x => x.IsProgressAssessment)
+                .Select(x => x.OnlandVisualTrashAssessmentArea).AsEnumerable().DistinctBy(x=>x.OnlandVisualTrashAssessmentAreaID).ToList();
+            
+            var estimatedOVTAsArea = trashGeneratingUnitsFromProgressAssessments.GetAreaBaselineScoreLoadBased();
+            var actualOVtAsArea = trashGeneratingUnitsFromProgressAssessments.GetAreaProgressScoreLoadBased();
+
+            return estimatedOVTAsArea - actualOVtAsArea;
+        }
+
+        public static double TargetLoadReduction(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
+            StormwaterJurisdiction jurisdiction)
+        {
+            var partialCapture = trashGeneratingUnits.Where(x =>
+                x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
+                x.TreatmentBMP.TrashCaptureStatusTypeID ==
+                TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
+                x.LandUseBlock != null && x.LandUseBlock.PriorityLandUseTypeID != null);
+
+
+
+            var baselineLoading = partialCapture.GetAreaLoadBased();
+
+            var hypotheticalLoad = partialCapture.GetArea() *
+                                  (double) OnlandVisualTrashAssessmentScore.A.TrashGenerationRate;
+
+
+            return baselineLoading - hypotheticalLoad;
         }
 
 

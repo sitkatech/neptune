@@ -15,7 +15,8 @@
             {
                 showTrashGeneratingUnits: true,
                 disallowedTrashCaptureStatusTypeIDs: [3, 4],
-                tabSelector: "#loadResultsTab"
+                tabSelector: "#loadResultsTab",
+                resultsSelector: "#loadResults"
             });
 
 
