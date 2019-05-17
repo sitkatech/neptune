@@ -116,6 +116,7 @@ namespace Neptune.Web.Common
             return String.Join(",", idList);
         }
 
+        // Area-based calculations
 
         public static double TotalPLUAcreage(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
             StormwaterJurisdiction jurisdiction)
@@ -152,6 +153,8 @@ namespace Neptune.Web.Common
                 x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
+
+        // OVTA-based calculations
 
         public static double AlternateOVTAScoreDAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
