@@ -123,7 +123,7 @@ namespace Neptune.Web.Common
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null).GetArea();
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
 
         public static double EquivalentAreaAcreage(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
@@ -136,7 +136,7 @@ namespace Neptune.Web.Common
                 x.TreatmentBMP.TrashCaptureStatusTypeID != TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -149,7 +149,7 @@ namespace Neptune.Web.Common
                 TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -161,7 +161,7 @@ namespace Neptune.Web.Common
                 OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == null
+                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -172,7 +172,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == null
+                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -183,7 +183,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.D.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -194,7 +194,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.B.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -205,7 +205,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == null
+                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -217,7 +217,7 @@ namespace Neptune.Web.Common
                 OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID == null).GetArea();
+                x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
 
         public static double PriorityOVTAScoreCAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
@@ -227,7 +227,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.C.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
 
@@ -238,7 +238,7 @@ namespace Neptune.Web.Common
                 x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
-                x.LandUseBlock.PriorityLandUseTypeID != null
+                x.LandUseBlock.PriorityLandUseTypeID != PriorityLandUseType.ALU.PriorityLandUseTypeID
             ).GetArea();
         }
     }
