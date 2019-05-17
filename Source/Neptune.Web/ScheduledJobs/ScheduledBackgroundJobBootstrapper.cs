@@ -34,7 +34,7 @@ namespace Neptune.Web.ScheduledJobs
             {
                 // We have scripted out the Hangfire tables, so we tell Hangfire not to insert them. 
                 // This might be an issue when Hangfire does a change to its schema, but this should work for now.
-                PrepareSchemaIfNecessary = false
+                PrepareSchemaIfNecessary = true
             };
             GlobalConfiguration.Configuration.UseSqlServerStorage(NeptuneWebConfiguration.DatabaseConnectionString,
                 sqlServerStorageOptions);
