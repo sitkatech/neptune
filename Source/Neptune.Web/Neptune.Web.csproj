@@ -46,6 +46,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\LandUseBlockController.cs" />
     <Compile Include="Models\Generated\AuditLog.Binding.cs" />
     <Compile Include="Models\Generated\AuditLog.DatabaseContextExtensions.cs" />
     <Compile Include="Models\Generated\AuditLogConfiguration.Binding.cs" />
@@ -423,8 +424,11 @@
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobException.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobLaunchHelper.cs" />
     <Compile Include="ScheduledJobs\TrashGeneratingUnitRefreshScheduledBackgroundJob.cs" />
+    <Compile Include="Views\LandUseBlock\Index.cs" />
+    <Compile Include="Views\LandUseBlock\IndexViewData.cs" />
     <Compile Include="Views\TrashGeneratingUnit\Index.cs" />
     <Compile Include="Views\TrashGeneratingUnit\IndexViewData.cs" />
+    <Compile Include="Views\LandUseBlock\LandUseBlockGridSpec.cs" />
     <Compile Include="Views\TrashGeneratingUnit\TrashGeneratingUnitGridSpec.cs" />
     <Compile Include="Models\OVTAResultsSimple.cs" />
     <Compile Include="Areas\Trash\Controllers\TrashGeneratingUnitController.cs" />
@@ -1748,6 +1752,7 @@
     <Content Include="Views\TreatmentBMP\UploadTreatmentBMPs.cshtml" />
     <Content Include="Views\Shared\ProjectControls\BulkRowBMPDelineation.cshtml" />
     <Content Include="Views\TrashGeneratingUnit\Index.cshtml" />
+    <Content Include="Views\LandUseBlock\Index.cshtml" />
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\NuGetPackages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>

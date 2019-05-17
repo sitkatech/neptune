@@ -496,7 +496,7 @@ NeptuneMaps.Map.prototype.addEsriReferenceLayer = function(url, layerName, popup
     this.addLayerToLayerControl(features, layerName);
 };
 
-NeptuneMaps.Map.prototype.addEsriDynamicLayer = function (url, layerName) {
+NeptuneMaps.Map.prototype.addEsriDynamicLayer = function (url, layerName, show) {
     var pane = this.map.createPane("esriPane");
     pane.style.zIndex = 300;
 
@@ -505,7 +505,9 @@ NeptuneMaps.Map.prototype.addEsriDynamicLayer = function (url, layerName) {
     );
 
     this.addLayerToLayerControl(tile, layerName);
-    tile.addTo(this.map);
+    if (show) {
+        tile.addTo(this.map);
+    }
     return tile;
 };
 

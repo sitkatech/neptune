@@ -36,7 +36,7 @@ NeptuneMaps.DelineationMap = function (mapInitJson, initialBaseLayerShown, geose
     networkCatchmentLayer.bringToFront();
 
     this.addEsriDynamicLayer("https://ocgis.com/arcpub/rest/services/Flood/Stormwater_Network/MapServer/",
-        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>");
+        "<span>Stormwater Network <br/> <img src='/Content/img/legendImages/stormwaterNetwork.png' height='50'/> </span>", false);
 
 
 
