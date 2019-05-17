@@ -176,7 +176,7 @@
 
             var ovtaName = "<strong>Assessment Area:   </strong><a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.OnlandVisualTrashAssessmentAreaName + "</a> ";
             var lastCalculatedDateAndScore = "<strong>Last Assessment: </strong>";
-            if (properties.OnlandVisualTrashAssessmentScoreDisplayName != null && properties.CompletedDate != null) {
+            if (properties.Score != null && properties.CompletedDate != null) {
                 var date = new Date(properties.CompletedDate);
                 var lastCalculatedDate = "";
                 if (properties.CompletedDate != null) {
@@ -187,7 +187,7 @@
 
                 var ovtaScore = "<strong>Score: </strong>";
                 if (properties.Score != "NotProvided") {
-                    ovtaScore += properties.OnlandVisualTrashAssessmentScoreDisplayName;
+                    ovtaScore += properties.Score;
                 } else {
                     ovtaScore += "Not Assessed";
                 }
