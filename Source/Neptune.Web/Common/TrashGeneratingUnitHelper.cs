@@ -156,7 +156,7 @@ namespace Neptune.Web.Common
 
         // OVTA-based calculations
 
-        public static double AlternateOVTAScoreDAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreDAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -168,7 +168,7 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreBAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreBAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -179,7 +179,7 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreDAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreDAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -190,7 +190,7 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreBAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreBAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -201,7 +201,7 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreCAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreCAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -212,18 +212,17 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double AlternateOVTAScoreAAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double AlternateOVTAScoreAAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
-                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID ==
-                OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
+                x.OnlandVisualTrashAssessmentArea.OnlandVisualTrashAssessmentBaselineScoreID == OnlandVisualTrashAssessmentScore.A.OnlandVisualTrashAssessmentScoreID &&
                 // This is how to check "PLU == true"
                 x.LandUseBlock != null &&
                 x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetArea();
         }
 
-        public static double PriorityOVTAScoreCAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreCAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
@@ -234,7 +233,7 @@ namespace Neptune.Web.Common
             ).GetArea();
         }
 
-        public static double PriorityOVTAScoreAAcreage(DbSet<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
+        public static double PriorityOVTAScoreAAcreage(IQueryable<TrashGeneratingUnit> trashGeneratingUnits, StormwaterJurisdiction jurisdiction)
         {
             return trashGeneratingUnits.Where(x =>
                 x.StormwaterJurisdictionID == jurisdiction.StormwaterJurisdictionID &&
