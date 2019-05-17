@@ -35,6 +35,8 @@ namespace Neptune.Web.Models
     /// </summary>
     public static class PersonModelExtensions
     {
+        private const int AnonymousPersonID = -999;
+
         public static HtmlString GetFullNameFirstLastAsUrl(this Person person)
         {
             return UrlTemplate.MakeHrefString(person.GetDetailUrl(), person.GetFullNameFirstLast());
@@ -106,6 +108,33 @@ namespace Neptune.Web.Models
         public static bool IsManagerOrAdmin(this Person person)
         {
             return person.Role == Role.Admin || person.Role == Role.JurisdictionManager || person.Role == Role.SitkaAdmin;
+        }
+
+        /// <summary>
+        /// Needed for Keystone; basically <see cref="HttpRequestStorage.Person" /> is set to this fake
+        /// "Anonymous" person when we are not authenticated to not have to handle the null Person case.
+        /// Seems like MR and all the other RPs do this so following the pattern
+        /// </summary>
+        /// <returns></returns>
+        public static Person GetAnonymousSitkaUser()
+        {
+            // as we add new areas, we need to make sure we assign the anonymous user with the unassigned roles for each area
+            var anonymousSitkaUser = new Person(AnonymousPersonID,
+                new Guid(),
+                "Anonymous",
+                "User",
+                null,
+                null,
+                Role.Unassigned.RoleID,
+                DateTime.Now,
+                null,
+                DateTime.Now,
+                true,
+                -1,
+                false,
+                null,
+                null);
+            return anonymousSitkaUser;
         }
 
         public static bool CanManageStormwaterJurisdiction(this Person person, StormwaterJurisdiction stormwaterJurisdiction)

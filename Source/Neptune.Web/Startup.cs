@@ -17,6 +17,7 @@ using Neptune.Web.Controllers;
 using Neptune.Web.Models;
 using System.Collections.Generic;
 using System.Security.Principal;
+using Neptune.Web.ScheduledJobs;
 
 [assembly: OwinStartup(typeof(Startup))]
 namespace Neptune.Web
@@ -118,7 +119,10 @@ namespace Neptune.Web
                         return Task.FromResult(0);
                     }
                 }
+
             });
+
+            ScheduledBackgroundJobBootstrapper.ConfigureHangfireAndScheduledBackgroundJobs(app);
         }
 
         public static IKeystoneUser SyncLocalAccountStore(IKeystoneUserClaims keystoneUserClaims, IIdentity userIdentity)
