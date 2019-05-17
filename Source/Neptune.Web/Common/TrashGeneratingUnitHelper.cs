@@ -126,19 +126,32 @@ namespace Neptune.Web.Common
                 TrashCaptureStatusType.Full.TrashCaptureStatusTypeID &&
                 x.LandUseBlock != null);
 
-            var commerical = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var highDensityResidential = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID).GetAreaLoadBased();
-            var industrial = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var mixedUrban = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID).GetAreaLoadBased();
-            var commericalRetail = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID).GetAreaLoadBased();
-            var publicTransportationStations = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID).GetAreaLoadBased();
-            var alu = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetAreaLoadBased();
+            var commercial = fullCapture.Where(x =>x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID);
+            var commercialArea = commercial.Any() ? commercial.GetAreaLoadBased() : 0;
 
-            var estimatedLoadedBased = commerical + highDensityResidential + industrial + mixedUrban +
-                                         commericalRetail + publicTransportationStations + alu;
-            var actualLoadedBased = fullCapture.Where(x => x.LandUseBlockID != null).GetArea() * (double) OnlandVisualTrashAssessmentScore.A.TrashGenerationRate;
+            var highDensityResidential = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID);
+            var highDensityResidentialArea = highDensityResidential.Any() ? highDensityResidential.GetAreaLoadBased() : 0;
 
-            return estimatedLoadedBased - actualLoadedBased;
+            var industrial = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID);
+            var industrialArea = industrial.Any() ? industrial.GetAreaLoadBased() : 0;
+
+            var mixedUrban = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID);
+            var mixedUrbanArea = mixedUrban.Any() ? mixedUrban.GetAreaLoadBased() : 0;
+
+            var commercialRetail = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID);
+            var commercialRetailArea = commercialRetail.Any() ? commercialRetail.GetAreaLoadBased() : 0;
+
+            var publicTransportationStations = fullCapture.Where(x =>  x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID);
+            var publicTransportationStationsArea = publicTransportationStations.Any() ? publicTransportationStations.GetAreaLoadBased() : 0;
+
+            var alu = fullCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID);
+            var aluArea = alu.Any() ? alu.GetAreaLoadBased() : 0;
+
+            var estimatedLoadBased = commercialArea + highDensityResidentialArea + industrialArea + mixedUrbanArea +
+                                       commercialRetailArea + publicTransportationStationsArea + aluArea;
+            var actualLoadBased = fullCapture.Where(x => x.LandUseBlockID != null).GetArea() * (double) OnlandVisualTrashAssessmentScore.A.TrashGenerationRate;
+
+            return estimatedLoadBased - actualLoadBased;
         }
 
         public static double LoadBasedPartialCapture(this DbSet<TrashGeneratingUnit> trashGeneratingUnits,
@@ -150,20 +163,33 @@ namespace Neptune.Web.Common
                 TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID &&
                 x.LandUseBlock != null);
 
-            var commercial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var highDensityResidential = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID).GetAreaLoadBased();
-            var industrial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID).GetAreaLoadBased();
-            var mixedUrban = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID).GetAreaLoadBased();
-            var commercialRetail = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID).GetAreaLoadBased();
-            var publicTransportationStations = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID).GetAreaLoadBased();
-            var alu = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID).GetAreaLoadBased();
+            var commercial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Commercial.PriorityLandUseTypeID);
+            var commercialArea = commercial.Any() ? commercial.GetAreaLoadBased() : 0;
 
-            var estimatedLoadedBased = commercial + highDensityResidential + industrial + mixedUrban +
-                                       commercialRetail + publicTransportationStations + alu;
+            var highDensityResidential = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.HighDensityResidential.PriorityLandUseTypeID);
+            var highDensityResidentialArea = highDensityResidential.Any() ? highDensityResidential.GetAreaLoadBased() : 0;
 
-            var actualLoadedBased = partialCapture.Where(x => x.LandUseBlockID != null).GetAreaPartialCaptureLoadBased();
+            var industrial = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.Industrial.PriorityLandUseTypeID);
+            var industrialArea = industrial.Any() ? industrial.GetAreaLoadBased() : 0;
 
-            return estimatedLoadedBased - actualLoadedBased;
+            var mixedUrban = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.MixedUrban.PriorityLandUseTypeID);
+            var mixedUrbanArea = mixedUrban.Any() ? mixedUrban.GetAreaLoadBased() : 0;
+
+            var commercialRetail = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.CommercialRetail.PriorityLandUseTypeID);
+            var commercialRetailArea = commercialRetail.Any() ? commercialRetail.GetAreaLoadBased() : 0;
+
+            var publicTransportationStations = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.PublicTransportationStations.PriorityLandUseTypeID);
+            var publicTransportationStationsArea = publicTransportationStations.Any() ? publicTransportationStations.GetAreaLoadBased() : 0;
+
+            var alu = partialCapture.Where(x => x.LandUseBlock.PriorityLandUseTypeID == PriorityLandUseType.ALU.PriorityLandUseTypeID);
+            var aluArea = alu.Any() ? alu.GetAreaLoadBased() : 0;
+
+            var estimatedLoadBased = commercialArea + highDensityResidentialArea + industrialArea + mixedUrbanArea +
+                                       commercialRetailArea + publicTransportationStationsArea + aluArea;
+
+            var actualLoadBased = partialCapture.Where(x => x.LandUseBlockID != null).GetAreaPartialCaptureLoadBased();
+
+            return estimatedLoadBased - actualLoadBased;
         }
 
         public static double LoadBasedOVTAProgressScores(this DbSet<OnlandVisualTrashAssessment> onlandVisualTrashAssessments,
