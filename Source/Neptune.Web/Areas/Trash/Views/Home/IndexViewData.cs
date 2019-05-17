@@ -96,6 +96,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public string OrganizationUrlTemplate { get; }
             public string BMPUrlTemplate { get; }
             public string OVTAAUrlTemplate { get; }
+            public string OVTAUrlTemplate { get; }
+            public string LoadBasedResultsUrlTemplate { get; }
 
 
             public bool ShowDropdown { get; }
@@ -130,6 +132,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 OrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
                 BMPUrlTemplate = new UrlTemplate<int>(SitkaRoute<TreatmentBMPController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
                 OVTAAUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentAreaController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
+                OVTAUrlTemplate = new UrlTemplate<int>(SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
             }
         }
