@@ -34,6 +34,7 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
         public string NegativeStormwaterJurisdictionCQLFilter { get; }
         public string RefreshTguUrl { get; }
+        public string ScoreDescriptionsUrl { get; }
 
         public IEnumerable<SelectListItem> JurisdictionSelectList { get; }
 
@@ -68,6 +69,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
                 NeptuneWebConfiguration.CanonicalHostName);
 
             RefreshTguUrl = SitkaRoute<HomeController>.BuildUrlFromExpression(x => x.RefreshTrashGeneratingUnits());
+            ScoreDescriptionsUrl =
+                SitkaRoute<OnlandVisualTrashAssessmentController>.BuildUrlFromExpression(x => x.ScoreDescriptions());
 
             ProgramOverviewPageContentViewData = new ViewPageContentViewData(NeptunePage.GetNeptunePageByPageType(NeptunePageType.TrashModuleProgramOverview), currentPerson);
 
