@@ -83,8 +83,9 @@ namespace Neptune.Web.Areas.Trash.Controllers
     {
         public static double GetArea(this IEnumerable<TrashGeneratingUnit> trashGeneratingUnits)
         {
-            return Math.Round(trashGeneratingUnits
-                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum().GetValueOrDefault(), 0); // will never be null
+            return trashGeneratingUnits
+                .Select(x => x.TrashGeneratingUnitGeometry.Area * DbSpatialHelper.SqlGeometryAreaToAcres).Sum()
+                .GetValueOrDefault();
         }
     }
 }
