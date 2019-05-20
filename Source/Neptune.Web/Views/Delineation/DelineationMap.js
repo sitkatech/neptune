@@ -732,18 +732,26 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
     };
     var self = this;
     this.selectFeatureByWfs("OCStormwater:Delineations", params).then(function(response) {
-        console.log(response); 
-        // todo: grab the first delineation off the response object, look for the bmp it belongs to, select it and the delineation
         if (response.totalFeatures === 0) {
             return; // no one cares
         }
 
         var delineation = response.features[0];
-        var treatmentBMPID = delineation.properties.TreatmentBMPID;
 
-        var layer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
-        self.setSelectedFeature(layer.feature);
-        self.retrieveAndShowBMPDelineation(layer.feature);
+        if ((delineation.properties.DelineationType === DELINEATION_DISTRIBUTED &&
+            self.map.hasLayer(self.distributedLayer))
+            ||
+            (delineation.properties.DelineationType === DELINEATION_CENTRALIZED &&
+                self.map.hasLayer(self.centralizedLayer))
+
+        ) {
+            var treatmentBMPID = delineation.properties.TreatmentBMPID;
+            var layer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
+            if (layer) {
+                self.setSelectedFeature(layer.feature);
+                self.retrieveAndShowBMPDelineation(layer.feature);
+            }
+        }
     });
 };
 
