@@ -1,7 +1,7 @@
-Drop view if exists dbo.vTrashGeneratingUnitForLoadCalculation
+Drop view if exists dbo.vTrashGeneratingUnitLoadBasedFullCapture
 GO
 
-Create View dbo.vTrashGeneratingUnitForLoadCalculation
+Create View dbo.vTrashGeneratingUnitLoadBasedFullCapture
 as 
 Select
 	TrashGeneratingUnitID as PrimaryKey,
