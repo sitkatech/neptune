@@ -72,6 +72,8 @@ NeptuneMaps.DelineationMap.prototype.addDelineationWmsLayers = function () {
     if (!Sitka.Methods.isUndefinedNullOrEmpty(jurisdictionCQLFilter)) {
         jurisdictionCQLFilter = " AND " + jurisdictionCQLFilter;
     }
+    // delete this line when the analysts realize that they actually do want the delineations hidden by jurisdiction
+    jurisdictionCQLFilter = "";
 
     this.distributedLayer = this.addWmsLayer("OCStormwater:Delineations",
         "<span><img class='mapLegendSquare' src='/Content/img/legendImages/delineationDistributed.PNG'/></span> Delineations (Distributed)",
