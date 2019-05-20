@@ -146,19 +146,34 @@
             jQuery.ajax({
                 url: mapServiceUrl + L.Util.getParamString(parameters),
                 type: "GET"
-            }).then(function (response) {
+            }).then(function(response) {
                 if (response.features.length == 0) {
                     return;
                 }
 
                 var content = "";
-                var ovtas = _.sortBy(response.features, [function (o) {return o.properties.CompletedDate}]).reverse();
-
+                var ovtas = _.sortBy(response.features, function(o) { return o.properties.CompletedDate }).reverse();
+                var idsToAvoid = [];
+                
                 for (var i = 0; i < ovtas.length; i++) {
-                    content += createPopupContent(ovtas[i].properties);
-                }         
+                    var properties = ovtas[i].properties;
+                    if (idsToAvoid.indexOf(properties.OnlandVisualTrashAssessmentAreaID) >= 0) {
+                        continue;
+                    } else {
+                        idsToAvoid.push(properties.OnlandVisualTrashAssessmentAreaID);
+                        var filteredOVTAs = _.filter(ovtas, function(o) {
+                            return o.properties.OnlandVisualTrashAssessmentAreaID ==
+                                properties.OnlandVisualTrashAssessmentAreaID;
+                        });
+                        var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
+                        content += "<strong>Assessment Area:   </strong><a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.OnlandVisualTrashAssessmentAreaName + "</a><br/>";
+                        for (var j = 0; j < filteredOVTAs.length; j++) {
+                            content += createPopupContent(filteredOVTAs[j].properties);
+                        }
+                    }
+                }
 
-                var popup = L.popup({ minWidth: 200, maxWidth: 500})
+                var popup = L.popup({ minWidth: 200, maxWidth: 500 })
                     .setLatLng(latlng)
                     .setContent(content)
                     .openOn($scope.neptuneMap.map).bindPopup();
@@ -170,20 +185,27 @@
             });
         }
 
+
+
         function createPopupContent(properties) {
+            var OVTADetailUrl =
+                new Sitka.UrlTemplate($scope.AngularViewData.OVTAUrlTemplate).ParameterReplace(properties
+                    .OnlandVisualTrashAssessmentID);
 
-            var OVTAADetailUrl = new Sitka.UrlTemplate($scope.AngularViewData.OVTAAUrlTemplate).ParameterReplace(properties.OnlandVisualTrashAssessmentAreaID);
-
-            var ovtaName = "<strong>Assessment Area:   </strong><a href='" + OVTAADetailUrl + "' target='_blank'>" + properties.OnlandVisualTrashAssessmentAreaName + "</a> ";
-            var lastCalculatedDateAndScore = "<strong>Last Assessment: </strong>";
+            var lastCalculatedDateTypeAndScore = "";
             if (properties.Score != null && properties.CompletedDate != null) {
                 var date = new Date(properties.CompletedDate);
-                var lastCalculatedDate = "";
+                var lastCalculatedDate = "&nbsp;&nbsp;";
                 if (properties.CompletedDate != null) {
-                    lastCalculatedDate = date.toLocaleDateString() + ", ";
+                    lastCalculatedDate = "<a href='" + OVTADetailUrl + "' target='_blank'>" +
+                        date.toLocaleDateString() + "</a>, ";
                 } else {
                     lastCalculatedDate = "Not Assessed";
                 }
+
+                var type = "<strong>Type: </strong>";
+                    type += properties.IsProgressAssessment ? "Progress, " : "Baseline, ";
+
 
                 var ovtaScore = "<strong>Score: </strong>";
                 if (properties.Score != "NotProvided") {
@@ -192,12 +214,11 @@
                     ovtaScore += "Not Assessed";
                 }
 
-                lastCalculatedDateAndScore = lastCalculatedDate + ovtaScore;
+                lastCalculatedDateTypeAndScore = lastCalculatedDate + type + ovtaScore;
             } else {
-                lastCalculatedDateAndScore = "Not Assessed";
+                lastCalculatedDateTypeAndScore = "Not Assessed";
             }
-            
 
-            return ovtaName + "(" + lastCalculatedDateAndScore + ")<br>";
+            return lastCalculatedDateTypeAndScore + "<br>";
         }
     });

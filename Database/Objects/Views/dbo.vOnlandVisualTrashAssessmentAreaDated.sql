@@ -17,8 +17,8 @@ from dbo.OnlandVisualTrashAssessmentArea a
 			ovta.CompletedDate,
 			rownumber = Row_Number() over (partition by ovta.OnlandVisualTrashAssessmentAreaID order by ovta.CompletedDate desc)
 		from dbo.OnlandVisualTrashAssessment ovta
-		where CompletedDate is not null and IsProgressAssessment = 1
-	) q -- in the future we'll need to find a way to account for Baseline scores as well, but for now we'll only use Progress for results
+		where CompletedDate is not null
+	) q 
 		on a.OnlandVisualTrashAssessmentAreaID = q.OnlandVisualTrashAssessmentAreaID
 	join  dbo.OnlandVisualTrashAssessmentScore score
 		on score.OnlandVisualTrashAssessmentScoreID = q.OnlandVisualTrashAssessmentScoreID
