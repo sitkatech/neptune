@@ -68,14 +68,14 @@ function populateTGUValuesOVTABased(resultsCalculationsUrl) {
         url: resultsCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        jQuery("#PLUIsA").text(response.PLUSumAcresWhereOVTAIsA);
-        jQuery("#PLUIsB").text(response.PLUSumAcresWhereOVTAIsB);
-        jQuery("#PLUIsC").text(response.PLUSumAcresWhereOVTAIsC);
-        jQuery("#PLUIsD").text(response.PLUSumAcresWhereOVTAIsD);
-        jQuery("#ALUIsA").text(response.ALUSumAcresWhereOVTAIsA);
-        jQuery("#ALUIsB").text(response.ALUSumAcresWhereOVTAIsB);
-        jQuery("#ALUIsC").text(response.ALUSumAcresWhereOVTAIsC);
-        jQuery("#ALUIsD").text(response.ALUSumAcresWhereOVTAIsD);
+        jQuery("#PLUIsA").text(Math.round(response.PLUSumAcresWhereOVTAIsA));
+        jQuery("#PLUIsB").text(Math.round(response.PLUSumAcresWhereOVTAIsB));
+        jQuery("#PLUIsC").text(Math.round(response.PLUSumAcresWhereOVTAIsC));
+        jQuery("#PLUIsD").text(Math.round(response.PLUSumAcresWhereOVTAIsD));
+        jQuery("#ALUIsA").text(Math.round(response.ALUSumAcresWhereOVTAIsA));
+        jQuery("#ALUIsB").text(Math.round(response.ALUSumAcresWhereOVTAIsB));
+        jQuery("#ALUIsC").text(Math.round(response.ALUSumAcresWhereOVTAIsC));
+        jQuery("#ALUIsD").text(Math.round(response.ALUSumAcresWhereOVTAIsD));
     });
 }
 

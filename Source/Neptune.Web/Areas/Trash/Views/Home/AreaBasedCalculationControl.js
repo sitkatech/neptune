@@ -72,10 +72,10 @@ function populateTGUValuesAreaBased(areaCalculationsUrl) {
         url: areaCalculationsUrl,
         method: "GET"
     }).then(function (response) {
-        jQuery("#fullTrashCapture").text(response.FullTrashCaptureAcreage);
-        jQuery("#equivalentArea").text(response.EquivalentAreaAcreage);
-        jQuery("#totalAcresCaptured").text(response.TotalAcresCaptured);
-        jQuery("#totalPLUAcres").text(response.TotalPLUAcres);
+        jQuery("#fullTrashCapture").text(Math.round(response.FullTrashCaptureAcreage));
+        jQuery("#equivalentArea").text(Math.round(response.EquivalentAreaAcreage));
+        jQuery("#totalAcresCaptured").text(Math.round(response.TotalAcresCaptured));
+        jQuery("#totalPLUAcres").text(Math.round(response.TotalPLUAcres));
     });
 }
 
