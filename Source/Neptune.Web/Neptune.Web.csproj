@@ -421,6 +421,7 @@
     <Compile Include="Areas\DroolTool\Views\DroolToolModuleViewData.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\NavAndHeaderLayout.cs" />
     <Compile Include="Areas\DroolTool\Views\Shared\SiteLayout.cs" />
+    <Compile Include="Models\LoadResultsSimple.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBase.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobBootstrapper.cs" />
     <Compile Include="ScheduledJobs\ScheduledBackgroundJobException.cs" />
@@ -945,6 +946,7 @@
     <Compile Include="Controllers\NeptuneHomePageImageController.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMP.cs" />
     <Compile Include="Models\WaterQualityManagementPlanVerifyQuickBMPSimple.cs" />
+    <Content Include="Areas\Trash\Views\Home\LoadBasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\OVTABasedResultsCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedCalculationControl.js" />
     <Content Include="Areas\Trash\Views\Home\AreaBasedMapController.js" />
@@ -954,6 +956,7 @@
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.js" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.css" />
     <Content Include="Content\bootstrap-toggle\bootstrap-toggle.min.js" />
+    <Content Include="Content\img\icons\droolToolIcon.png" />
     <Content Include="Content\img\legendImages\delineationCentralized.PNG" />
     <Content Include="Content\img\legendImages\delineationDistributed.PNG" />
     <Content Include="Content\img\legendImages\Full.png" />

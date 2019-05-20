@@ -99,7 +99,6 @@ namespace Neptune.Web.Areas.Trash.Views.Home
             public string OVTAUrlTemplate { get; }
             public string LoadBasedResultsUrlTemplate { get; }
 
-
             public bool ShowDropdown { get; }
 
             public ViewDataForAngularClass(MapInitJson ovtaBasedMapInitJson, MapInitJson areaBasedMapInitJson, MapInitJson loadBasedMapInitJson, IEnumerable<Models.TreatmentBMP> treatmentBMPs,
@@ -127,6 +126,8 @@ namespace Neptune.Web.Areas.Trash.Views.Home
 
                 OVTABasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x =>
                     x.OVTABasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
+
+                LoadBasedResultsUrlTemplate = new UrlTemplate<int>(SitkaRoute<TrashGeneratingUnitController>.BuildUrlFromExpression(x => x.LoadBasedResultsCalculations(UrlTemplate.Parameter1Int))).UrlTemplateString;
 
                 // Templates for links in detail pop-up
                 OrganizationUrlTemplate = new UrlTemplate<int>(SitkaRoute<OrganizationController>.BuildUrlFromExpression(x => x.Detail(UrlTemplate.Parameter1Int))).UrlTemplateString;

@@ -12,6 +12,7 @@
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/OVTABasedResultsCalculationControl.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedResultsCalculationControl.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/LoadBasedMapController.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Areas/Trash/Views/Home/AreaBasedMapController.js")"></script>
     <script type="text/javascript">
@@ -25,7 +26,7 @@
                             @Html.Raw(JObject.FromObject(ViewDataTyped.ViewDataForAngular).ToString(Formatting.None))
                     };
             });
-        
+
         jQuery(document).ready(function() {
             jQuery('.selectpicker').selectpicker("val", [1, 2]);
             jQuery('#trashCaptureStatusTypeDropdown').change();
@@ -39,20 +40,20 @@
             list-style-type: none;
         }
 
-            #tcLegend img {
-                max-height: 50px;
-                margin-right: 5px;
-            }
+        #tcLegend img {
+            max-height: 50px;
+            margin-right: 5px;
+        }
 
-            #ovtaAreaLegend img {
-                max-height: 25px;
-                margin-right: 5px;
-                border: 1px solid #ddd;
-            }
+        #ovtaAreaLegend img {
+            max-height: 25px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+        }
 
-            #ovtaAreaLegend li {
-                padding-bottom: 10px;
-            }
+        #ovtaAreaLegend li {
+            padding-bottom: 10px;
+        }
 
 
         .bootstrap-select {
@@ -69,7 +70,7 @@
 
 @*@section RightOfPageTitle
 {
-    @if(ViewDataTyped.CurrentPerson.IsAdministrator())
+    @if (ViewDataTyped.CurrentPerson.IsAdministrator())
     {
         <button class="btn btn-neptune" onclick="createTguDialog()"><span class="glyphicon glyphicon-refresh" style="margin-right: 5px;"></span>Refresh TGUs</button>
     }
@@ -166,7 +167,7 @@
 
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -174,7 +175,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18"/> BMP (Partial Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -194,7 +195,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -202,7 +203,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18"/> BMP (Partial Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -223,7 +224,7 @@
 
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullBmpOn)" ng-model="fullBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18"/> BMP (Full Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Full.MapboxMarkerUrlForLegend()" height="18" /> BMP (Full Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -231,7 +232,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialBmpOn)" ng-model="partialBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18"/> BMP (Partial Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Partial.MapboxMarkerUrlForLegend()" height="18" /> BMP (Partial Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -239,7 +240,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneBmpOn)" ng-model="noneBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" height="18"/> BMP (No Trash Capture)
+                                    <img src="@TrashCaptureStatusType.None.MapboxMarkerUrlForLegend()" height="18" /> BMP (No Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -247,7 +248,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterBMPsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedBmpOn)" ng-model="notProvidedBmpOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" height="18"/> BMP (Not Provided)
+                                    <img src="@TrashCaptureStatusType.NotProvided.MapboxMarkerUrlForLegend()" height="18" /> BMP (Not Provided)
                                 </span>
                             </div>
                         </label>
@@ -257,7 +258,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Full.TrashCaptureStatusTypeID), fullParcelOn)" ng-model="fullParcelOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Full.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;"/> WQMP (Full Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Full.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Full Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -265,7 +266,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.Partial.TrashCaptureStatusTypeID), partialParcelOn)" ng-model="partialParcelOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.Partial.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;"/> WQMP (Partial Trash Capture)
+                                    <img src="@TrashCaptureStatusType.Partial.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Partial Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -273,7 +274,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.None.TrashCaptureStatusTypeID), noneParcelOn)" ng-model="noneParcelOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.None.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;"/> WQMP (No Trash Capture)
+                                    <img src="@TrashCaptureStatusType.None.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (No Trash Capture)
                                 </span>
                             </div>
                         </label>
@@ -281,7 +282,7 @@
                             <div>
                                 <input type="checkbox" ng-change="filterParcelsByTrashCaptureStatusType(@(TrashCaptureStatusType.NotProvided.TrashCaptureStatusTypeID), notProvidedParcelOn)" ng-model="notProvidedParcelOn">
                                 <span>
-                                    <img src="@TrashCaptureStatusType.NotProvided.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;"/> WQMP (Not Provided)
+                                    <img src="@TrashCaptureStatusType.NotProvided.SquareImageUrlForLegend()" height="12" style="margin-bottom: 3px;" /> WQMP (Not Provided)
                                 </span>
                             </div>
                         </label>
@@ -296,7 +297,7 @@
 <style>
     .areaBasedCalculationControlTable {
         margin-bottom: 0;
-        width: 400px;
+        width: 475px;
     }
 
     .font25 {
@@ -313,16 +314,16 @@
     }
 
     .TGUColumn {
-        padding: 0 !important;
         font-weight: bold;
         border-top: none !important;
         border-bottom: none !important;
+        padding-bottom: 0px;
+        padding-top: 0px;
     }
 
     table td + td {
-        border-left: 1px solid rgb(128, 128, 128);
+        border-left: 1px solid rgb(204, 204, 204);
     }
-
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
@@ -347,11 +348,11 @@
                     </div>
                 </div>
             }
-            <hr/>
+            <hr />
             <table class="table areaBasedCalculationControlTable">
                 <tfoot>
                     <tr>
-                        <td class="TGUColumn text-center" >
+                        <td class="TGUColumn text-center">
                             <strong>Full Trash Capture</strong>
                         </td>
                         <td class="TGUColumn text-center" style="border-left: none">
@@ -372,18 +373,18 @@
                             <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">0</div>
                             <p class="greyLabel">acres via OVTA "A"</p>
                         </td>
-                        <td class="TGUColumn pull-right">
+                        <td class="TGUColumn pull-right text-center">
                             <div class="row">
                                 <div class="col-sm-5" style="padding-right: 0px;">
-                                    <div id="totalAcresCaptured" class="font25 text-center" style="color: rgb(76, 146, 76);">0</div>
-                                    <p class="greyLabel text-center">acres captured</p>
+                                    <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
+                                    <p class="greyLabel">acres captured</p>
                                 </div>
-                                <div class="col-sm-1" style="padding-top: 10%; margin-right: 10px; padding-left: 2px;">
+                                <div class="col-sm-1" style="padding-top: 10%; padding-left: 5px;">
                                     <strong> of </strong>
                                 </div>
                                 <div class="col-sm-5" style="padding-left: 0">
-                                    <div id="totalPLUAcres" class="font25 text-center">0</div>
-                                    <p class="greyLabel text-center">total PLU acres</p>
+                                    <div id="totalPLUAcres" class="font25">0</div>
+                                    <p class="greyLabel">total PLU acres</p>
                                 </div>
                             </div>
                         </td>
@@ -415,7 +416,7 @@
                         <strong class="font15">Showing results for </strong>
                     </div>
                     <div class="col-sm-6">
-                        <div id="jurisdictionResultsDropdownContainer"></div>
+                        <div id="jurisdictionOVTAResultsDropdownContainer"></div>
                     </div>
                 </div>
             }
@@ -490,7 +491,114 @@
 </template>
 
 <div class="hiddenDropdownContainer" style="display: none;">
-    @Html.DropDownList("jurisdictionResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
+    @Html.DropDownList("jurisdictionOVTAResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
+</div>
+
+
+
+<style>
+    .loadBasedResultsColumn {
+        border: none;
+        border-top: none !important;
+        border-bottom: none !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+
+    .loadBasedCalculationControlTable {
+        margin-bottom: 0;
+        width: 475px;
+        /*border-collapse: separate;
+        border-spacing: 10px;*/
+    }
+
+    .loadBasedCalculationControlTable tfoot tr th {
+        padding-top: 10px;
+    }
+
+    .loadBased-lightblue {
+        color: RGB(132, 151, 176);
+    }
+
+    .loadBased-red {
+        color: RGB(255, 0, 0);
+    }
+
+    .loadBased-blue {
+        color: RGB(31, 78, 121);
+    }
+
+    .font20 {
+        font-size: 20px;
+    }
+
+    .font22 {
+        font-size: 22.5px;
+    }
+</style>
+<template id="LoadBasedResultsControlTemplate">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px;">
+        <div class="form-horizontal">
+            @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
+            {
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <div class="col-sm-6 control-label" style="padding-top: 7px;">
+                        <strong class="font15">Showing results for </strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="jurisdictionLoadResultsDropdownContainer"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <div class="col-sm-12 text-center">
+                        <strong class="font15">Showing results for @ViewDataTyped.JurisdictionSelectList.Single().Text</strong>
+                    </div>
+                </div>
+            }
+            <hr />
+            <table class="table loadBasedCalculationControlTable">
+                <tfoot>
+                <tr>
+                    <td class="text-center" colspan="4">
+                        <p class="font15"><strong>Load Reduction Achieved</strong>, gallons per year</p>
+                    </td>
+                </tr>
+                </tfoot>
+                <tbody>
+                <tr>
+                    <td class="loadBasedResultsColumn text-center">
+                        <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold">0</div>
+                        <p>Via Full Capture</p>
+                    </td>
+                    <td class="loadBasedResultsColumn text-center">
+                        <div id="viaPartialTrashCapture" class="font20 loadBased-lightblue bold">0</div>
+                        <p>Via Partial Capture</p>
+                    </td>
+                    <td class="loadBasedResultsColumn text-center">
+                        <div id="viaOVTAScore" class="font20 loadBased-lightblue bold">0</div>
+                        <p>Via OVTA Score</p>
+                    </td>
+                    <td class="loadBasedResultsColumn text-center">
+                        <div id="totalAchieved" class="font22 loadBased-blue bold">0</div>
+                        <p>Total Achieved</p>
+                    </td>
+                    <td class="loadBasedResultsColumn text-center" style="border-left: 1px solid rgb(204, 204, 204);">
+                        <div id="targetLoadReduction" class="font25 loadBased-red bold">0</div>
+                        <p><strong>Target Load Reduction</strong>, gallons per year</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<div class="hiddenDropdownContainer" style="display: none;">
+    @Html.DropDownList("jurisdictionLoadResultsDropdown", ViewDataTyped.JurisdictionSelectList, new { @class = "form-control" });
 </div>
 
 
