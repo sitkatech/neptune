@@ -714,6 +714,39 @@ NeptuneMaps.DelineationMap.prototype.changeDelineationStatus = function(verified
     });
 };
 
+NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) {
+    var jurisdictionCQLFilter = this.config.JurisdictionCQLFilter;
+    if (!Sitka.Methods.isUndefinedNullOrEmpty(jurisdictionCQLFilter)) {
+        jurisdictionCQLFilter += " AND ";
+    } else {
+        jurisdictionCQLFilter = "";
+    }
+
+    var params= {
+        cql_filter: jurisdictionCQLFilter +
+            "INTERSECTS(DelineationGeometry, POINT(" +
+            latlng.lat +
+            " " +
+            latlng.lng +
+            "))"
+    };
+    var self = this;
+    this.selectFeatureByWfs("OCStormwater:Delineations", params).then(function(response) {
+        console.log(response); 
+        // todo: grab the first delineation off the response object, look for the bmp it belongs to, select it and the delineation
+        if (response.totalFeatures === 0) {
+            return; // no one cares
+        }
+
+        var delineation = response.features[0];
+        var treatmentBMPID = delineation.properties.TreatmentBMPID;
+
+        var layer = self.treatmentBMPLayerLookup.get(treatmentBMPID);
+        self.setSelectedFeature(layer.feature);
+        self.retrieveAndShowBMPDelineation(layer.feature);
+    });
+};
+
 /* helper methods to restore UI interactions after a blocking mode returns */
 
 NeptuneMaps.DelineationMap.prototype.hookupDeselectOnClick = function () {
@@ -740,6 +773,12 @@ NeptuneMaps.DelineationMap.prototype.hookupSelectTreatmentBMPOnClick = function 
                 self.retrieveAndShowBMPDelineation(e.layer.feature);
             }
         });
+
+    this.map.on("click",
+        function(e) {
+            self.selectBMPByDelineation(e.latlng);
+        });
+
 };
 
 NeptuneMaps.DelineationMap.prototype.displayLoading = function () {
