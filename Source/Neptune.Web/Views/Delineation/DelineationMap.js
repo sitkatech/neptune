@@ -752,6 +752,7 @@ NeptuneMaps.DelineationMap.prototype.selectBMPByDelineation = function (latlng) 
             if (layer) {
                 self.setSelectedFeature(layer.feature);
                 self.retrieveAndShowBMPDelineation(layer.feature);
+                self.selectedAssetControl.treatmentBMP(layer.feature);
             }
         }
     });
