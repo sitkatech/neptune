@@ -43,20 +43,20 @@
             list-style-type: none;
         }
 
-            #tcLegend img {
-                max-height: 50px;
-                margin-right: 5px;
-            }
+        #tcLegend img {
+            max-height: 50px;
+            margin-right: 5px;
+        }
 
-            #ovtaAreaLegend img {
-                max-height: 25px;
-                margin-right: 5px;
-                border: 1px solid #ddd;
-            }
+        #ovtaAreaLegend img {
+            max-height: 25px;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+        }
 
-            #ovtaAreaLegend li {
-                padding-bottom: 10px;
-            }
+        #ovtaAreaLegend li {
+            padding-bottom: 10px;
+        }
 
 
         .bootstrap-select {
@@ -298,6 +298,19 @@
 
 
 <style>
+
+
+    @@media (min-width: 768px) {
+        .TGUColumn .table-of {
+            padding-top: 10%;
+        }
+    }   
+
+    @@media (max-width: 768px) {
+         .TGUColumn .table-of {
+             padding-top: 3%;
+         }
+     }
     .areaBasedCalculationControlTable {
         margin-bottom: 0;
     }
@@ -329,7 +342,7 @@
 </style>
 
 <template id="areaBasedCalculationControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl" style="width:80%">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="areaBasedCalculationControl">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -351,7 +364,31 @@
                 </div>
             }
             <hr />
-            <table class="table areaBasedCalculationControlTable">
+            @*<div class="row">
+                    <div class="col-sm-3 text-center">
+                        <div id="fullTrashCapture" class="font25" style="color: rgb(76, 146, 76)">0</div>
+                        <p class="greyLabel">acres</p>
+                        <br />
+                        <strong>Full Trash Capture</strong>
+                    </div>
+                    <div class="col-sm-3 text-center"">
+                        <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">0</div>
+                        <p class="greyLabel">acres via OVTA "A"</p>
+                        <br />
+                        <strong>Equivalent Area</strong>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
+                        <p class="greyLabel">acres captured</p>
+
+                        <div id="totalPLUAcres" class="font25">0</div>
+                        <p class="greyLabel">total PLU acres</p>
+                        <br/>
+                        <strong>Total Full Capture Equivalent</strong>
+                    </div>
+
+                </div>*@
+            <table class="table  table-responsive table-condensed areaBasedCalculationControlTable">
                 <tfoot>
                     <tr>
                         <td class="TGUColumn text-center">
@@ -375,19 +412,17 @@
                             <div id="equivalentArea" class="font25" style="color: rgb(140, 200, 10)">0</div>
                             <p class="greyLabel">acres via OVTA "A"</p>
                         </td>
-                        <td class="TGUColumn pull-right text-center">
-                            <div class="row">
-                                <div class="col-sm-5" style="padding-right: 0px;">
-                                    <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
-                                    <p class="greyLabel">acres captured</p>
-                                </div>
-                                <div class="col-sm-1" style="padding-top: 10%; padding-left: 5px;">
-                                    <strong> of </strong>
-                                </div>
-                                <div class="col-sm-5" style="padding-left: 0">
-                                    <div id="totalPLUAcres" class="font25">0</div>
-                                    <p class="greyLabel">total PLU acres</p>
-                                </div>
+                        <td class="TGUColumn text-center">
+                            <div class="col-sm-5 col-xs-12" style="">
+                                <div id="totalAcresCaptured" class="font25" style="color: rgb(76, 146, 76);">0</div>
+                                <p class="greyLabel">acres captured</p>
+                            </div>
+                            <div class="col-sm-1 col-xs-12 table-of" style="">
+                                <strong> of </strong>
+                            </div>
+                            <div class="col-sm-5 col-xs-12" style="">
+                                <div id="totalPLUAcres" class="font25">0</div>
+                                <p class="greyLabel">total PLU acres</p>
                             </div>
                         </td>
                     </tr>
@@ -408,16 +443,16 @@
         border: none !important;
     }
 
-    .inline-display a:hover{
+    .inline-display a:hover {
         display: inline;
     }
 
-    .inline-display a{
+    .inline-display a {
         display: inline;
     }
 </style>
 <template id="OVTABasedResultsControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl" style="width:100%">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="OVTABasedResultsControl">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -443,7 +478,7 @@
                 <thead>
                     <tr>
                         <td class="ovtaResults font15 inline-display">
-                                @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score {0}", BootstrapHtmlHelpers.MakeGlyphIcon("helpicon glyphicon glyphicon-question-sign")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { }, null, null)
+                            @ModalDialogFormHelper.ModalDialogFormLink(string.Format("Score {0}", BootstrapHtmlHelpers.MakeGlyphIcon("helpicon glyphicon glyphicon-question-sign")), ViewDataTyped.ScoreDescriptionsUrl, "Score Definitions", 600, null, "Close", new List<string> { }, null, null)
                         </td>
                         <td class="ovtaResults text-center font15" style="width: 8.75%">A</td>
                         <td class="ovtaResults text-center font15" style="width: 8.75%">B</td>
@@ -512,9 +547,9 @@
         margin-bottom: 0;
     }
 
-        .loadBasedCalculationControlTable tfoot tr th {
-            padding-top: 10px;
-        }
+    .loadBasedCalculationControlTable tfoot tr th {
+        padding-top: 10px;
+    }
 
     .loadBased-lightblue {
         color: RGB(132, 151, 176);
@@ -536,13 +571,12 @@
         font-size: 22.5px;
     }
 
-    .text-normal label{
+    .text-normal label {
         font-weight: normal;
     }
-    
 </style>
 <template id="LoadBasedResultsControlTemplate">
-    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px; width:75%">
+    <div class="leaflet-bar leaflet-control neptune-leaflet-control" id="LoadBasedResultsControl" style="max-height: 210px; max-width: 475px">
         <div class="form-horizontal">
             @if (ViewDataTyped.ViewDataForAngular.ShowDropdown)
             {
@@ -575,7 +609,7 @@
                 <tbody>
                     <tr>
                         <td class="loadBasedResultsColumn text-center" style="width: 18%">
-                            <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold" >0</div>
+                            <div id="viaFullTrashCapture" class="font20 loadBased-lightblue bold">0</div>
                             <p class="text-normal greyLabel" style="margin-top: 8px; font-weight: normal">@Html.LabelWithSugarFor(FieldDefinition.ViaFullCapture)</p>
                         </td>
                         <td class="loadBasedResultsColumn text-center" style="width: 21%">
