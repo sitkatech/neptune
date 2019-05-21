@@ -11,7 +11,7 @@ var stopClickPropagation = function (parentElement) {
 
     L.DomEvent.on(parentElement,
         "mouseout",
-        function(e) {
+        function (e) {
             window.freeze = false;
         });
 };
@@ -33,6 +33,13 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             function (e) {
                 this.exitDrawCatchmentMode(true);
             }.bind(this));
+
+        L.DomEvent.on(this.getTrackedElement("delineationVertexThinningButton"),
+            "click",
+            function(e) {
+                this.thin();
+            }.bind(this));
+
     },
 
     treatmentBMP: function (treatmentBMPFeature) {
@@ -81,12 +88,12 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
 
         // hook up event handler on button
         jQuery("#verifyDelineationButton").off("change");
-        jQuery("#verifyDelineationButton").change(function(e) {
+        jQuery("#verifyDelineationButton").change(function (e) {
             self.changeDelineationStatus(jQuery(this).prop("checked"));
         });
     },
 
-    registerDelineationButtonHandler: function(treatmentBMPFeature) {
+    registerDelineationButtonHandler: function (treatmentBMPFeature) {
         var self = this;
         var delineationButton = this.getTrackedElement("delineationButton");
         if (this._beginDelineationHandler) {
@@ -94,7 +101,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this._beginDelineationHandler = null;
         }
 
-        this._beginDelineationHandler = function(e) {
+        this._beginDelineationHandler = function (e) {
             window.delineationMap.addBeginDelineationControl(treatmentBMPFeature);
             self.disableDelineationButton();
             e.stopPropagation();
@@ -105,7 +112,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         );
     },
 
-    registerDeleteButtonHandler: function(treatmentBMPFeature) {
+    registerDeleteButtonHandler: function (treatmentBMPFeature) {
 
         var deleteButton = this.getTrackedElement("deleteDelineationButton");
         if (this._deleteDelineationHandler) {
@@ -113,7 +120,7 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
             this._deleteDelineationHandler = null;
         }
 
-        this._deleteDelineationHandler = function(e) {
+        this._deleteDelineationHandler = function (e) {
             window.delineationMap.deleteDelineation(treatmentBMPFeature);
         };
 
@@ -122,16 +129,21 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         );
     },
 
-    launchDrawCatchmentMode: function () {
-        this.getTrackedElement("saveAndCancelButtonsWrapper").classList.remove("hiddenControlElement");
+    launchDrawCatchmentMode: function (drawModeOptions) {
+        // okay to persist state because this control mode is ephemeral: see below for where it dies
+        this.drawModeOptions = drawModeOptions;
+        this.enableThinButton();
+        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.remove("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.add("hiddenControlElement");
     },
 
     exitDrawCatchmentMode: function (save) {
-        this.getTrackedElement("saveAndCancelButtonsWrapper").classList.add("hiddenControlElement");
+        // see above
+        this.drawModeOptions = null;
+
+        this.getTrackedElement("saveCancelAndThinButtonsWrapper").classList.add("hiddenControlElement");
         this.getTrackedElement("delineationButton").classList.remove("hiddenControlElement");
         this.enableDelineationButton();
-
         window.delineationMap.exitDrawCatchmentMode(save);
     },
 
@@ -140,37 +152,60 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         this.getTrackedElement("noAssetSelected").classList.remove("hiddenControlElement");
     },
 
-    reportDelineationArea: function(properties) {
+    reportDelineationArea: function (properties) {
         this.getTrackedElement("delineationArea").innerHTML = properties.Area + " ac";
         this.getTrackedElement("delineationType").innerHTML = properties.DelineationType;
     },
 
-    clearDelineationDetails: function() {
+    clearDelineationDetails: function () {
         this.getTrackedElement("delineationArea").innerHTML = "-";
         this.getTrackedElement("delineationType").innerHTML = "No delineation provided";
         this.getTrackedElement("deleteDelineationButton").style.display = "none";
         this.getTrackedElement("delineationStatus").style.display = "none";
     },
 
-    disableDelineationButton: function() {
+    disableDelineationButton: function () {
         if (!this.getTrackedElement("delineationButton")) {
             return; //misplaced call
         }
         this.getTrackedElement("delineationButton").disabled = "disabled";
     },
 
-    enableDelineationButton: function() {
+    enableDelineationButton: function () {
         if (!this.getTrackedElement("delineationButton")) {
             return; //misplaced call
         }
         this.getTrackedElement("delineationButton").removeAttribute("disabled");
     },
 
-    changeDelineationStatus:function(verified) {
+    enableThinButton: function () {
+        if (!this.getTrackedElement("delineationVertexThinningButton")) {
+            return; //misplaced call
+        }
+        this.getTrackedElement("delineationVertexThinningButton").removeAttribute("disabled");
+    },
+
+    disableThinButton: function () {
+        if (!this.getTrackedElement("delineationVertexThinningButton")) {
+            return; //misplaced call
+        }
+        this.getTrackedElement("delineationVertexThinningButton").disabled = "disabled";
+    },
+
+    thin: function () {
+        this.disableThinButton();
+        window.delineationMap.thinDelineationVertices(this.drawModeOptions);
+    },
+
+    unthin: function () {
+        window.delineationMap.unthinDelineationVertices();
+    },
+
+    changeDelineationStatus: function (verified) {
         window.delineationMap.changeDelineationStatus(verified);
     },
 
-    flipVerifyButton:function(verified) {
+    flipVerifyButton: function (verified) {
         if (!verified) {
             jQuery(this.getTrackedElement("verifyDelineationButton")).data('bs.toggle').off(true);
         } else {
@@ -178,11 +213,11 @@ L.Control.DelineationMapSelectedAsset = L.Control.TemplatedControl.extend({
         }
     },
 
-    showVerifyButton:function() {
+    showVerifyButton: function () {
         this.getTrackedElement("delineationStatus").style.display = "initial";
     },
-    showDeleteButton: function() {
-        this.getTrackedElement("deleteDelineationButton").style.display="initial";
+    showDeleteButton: function () {
+        this.getTrackedElement("deleteDelineationButton").style.display = "initial";
     }
 });
 
@@ -269,7 +304,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
         var delineationOption = jQuery("input[name='delineationOption']:checked").val();
 
         var drawModeOptions = { delineationType: flowOption, delineationStrategy: STRATEGY_MANUAL };
-        
+
         if (flowOption === "Distributed") {
             if (delineationOption === "drawDelineate") {
                 window.delineationMap.launchDrawCatchmentMode(drawModeOptions);
@@ -284,6 +319,7 @@ L.Control.BeginDelineation = L.Control.TemplatedControl.extend({
             }
         }
     },
+    
 
     enableDelineationButton() {
         this.getTrackedElement("continueDelineationButton").removeAttribute("disabled");
