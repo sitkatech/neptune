@@ -124,6 +124,19 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-xs-5 fieldLabel text-right">Urban Drool Tool Role</div>
+                    <div class="col-xs-7">
+                        @if (ViewDataTyped.UserIsAdmin)
+                        {
+                            @ViewDataTyped.Person.DroolToolRole.GetDisplayNameAsUrl()
+                        }
+                        else
+                        {
+                            @ViewDataTyped.Person.DroolToolRole.DroolToolRoleDisplayName
+                        }
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-xs-5 fieldLabel text-right">Receives System Communications</div>
                     <div class="col-xs-7">@ViewDataTyped.Person.ReceiveSupportEmails.ToYesNo()</div>
                 </div>
@@ -182,7 +195,7 @@
         <div class="panel panelNeptune">
             <div class="panel-heading panelTitle">
                 @string.Format("Organizations for which {0} is a {1}", ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinition.PrimaryContact.GetFieldDefinitionLabel())
-                @if (ViewDataTyped.CurrentPerson.IsAdministrator())
+                @if (ViewDataTyped.UserIsAdmin)
                 {
                     <span class="pull-right">
                         @ModalDialogFormHelper.MakeEditIconLink(ViewDataTyped.EditPersonOrganizationPrimaryContactUrl, string.Format("Edit {0} for which {1} is a {2}", FieldDefinition.Organization.GetFieldDefinitionLabelPluralized(), ViewDataTyped.Person.GetFullNameFirstLast(), FieldDefinition.PrimaryContact.GetFieldDefinitionLabel()), ViewDataTyped.UserCanManageThisPersonPermissions)

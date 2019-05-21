@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Neptune.Web.Areas.DroolTool.Security;
 using Neptune.Web.Common;
 
 namespace Neptune.Web.Models
@@ -14,7 +14,9 @@ namespace Neptune.Web.Models
 
         public List<FeaturePermission> GetFeaturePermissions()
         {
-            throw new System.NotImplementedException();
+            var featurePermissions = this.GetFeaturePermissions(typeof(DroolToolFeature));
+            featurePermissions.AddRange(this.GetFeaturePermissions(typeof(DroolToolFeatureWithContext)));
+            return featurePermissions;
         }
 
         public List<Person> GetPeopleWithRole()

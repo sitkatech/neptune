@@ -19,7 +19,6 @@ Source code is available upon request via <support@sitkatech.com>.
 </license>
 -----------------------------------------------------------------------*/
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Neptune.Web.Models;
@@ -38,6 +37,10 @@ namespace Neptune.Web.Views.User
         public int? RoleID { get; set; }
 
         [Required]
+        [DisplayName("Drool Tool Role")]
+        public int? DroolToolRoleID { get; set; }
+
+        [Required]
         [DisplayName("Should Receive System Communications?")]
         public bool ShouldReceiveSystemCommunications { get; set; }
 
@@ -52,13 +55,14 @@ namespace Neptune.Web.Views.User
         {
             PersonID = person.PersonID;
             RoleID = person.RoleID;
-
+            DroolToolRoleID = person.DroolToolRoleID;
             ShouldReceiveSystemCommunications = person.ReceiveSupportEmails;
         }
 
         public void UpdateModel(Person person, Person currentPerson)
         {
-            person.RoleID = RoleID.GetValueOrDefault(); // never null due to RequiredAttribute
+            person.RoleID = RoleID.Value;
+            person.DroolToolRoleID = DroolToolRoleID.Value;
             person.ReceiveSupportEmails = ShouldReceiveSystemCommunications;
 
             var assignedRole = Models.Role.AllLookupDictionary[RoleID.Value];
