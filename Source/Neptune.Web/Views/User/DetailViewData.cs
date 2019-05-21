@@ -29,22 +29,23 @@ namespace Neptune.Web.Views.User
 {
     public class DetailViewData : NeptuneViewData
     {
-        public readonly Person Person;
-        public readonly string EditPersonOrganizationPrimaryContactUrl;
-        public readonly string IndexUrl;
-        public readonly string JurisdictionIndexUrl;
+        public Person Person { get; }
+        public string EditPersonOrganizationPrimaryContactUrl { get; }
+        public string IndexUrl { get; }
+        public string JurisdictionIndexUrl { get; }
 
-        public readonly bool UserHasPersonViewPermissions;
-        public readonly bool UserCanManageThisPersonPermissions;
-        public readonly bool UserCanManagePeople;
-        public readonly bool UserHasViewEverythingPermissions;
-        public readonly bool IsViewingSelf;
-        public readonly UserNotificationGridSpec UserNotificationGridSpec;
-        public readonly string UserNotificationGridName;
-        public readonly string UserNotificationGridDataUrl;
-        public readonly string ActivateInactivateUrl;
-        public readonly HtmlString EditRolesLink;
-        public readonly HtmlString EditJurisdictionsLink;
+        public bool UserHasPersonViewPermissions { get; }
+        public bool UserCanManageThisPersonPermissions { get; }
+        public bool UserCanManagePeople { get; }
+        public bool UserIsAdmin { get; }
+        public bool UserHasViewEverythingPermissions { get; }
+        public bool IsViewingSelf { get; }
+        public UserNotificationGridSpec UserNotificationGridSpec { get; }
+        public string UserNotificationGridName { get; }
+        public string UserNotificationGridDataUrl { get; }
+        public string ActivateInactivateUrl { get; }
+        public HtmlString EditRolesLink { get; }
+        public HtmlString EditJurisdictionsLink { get; }
 
         public DetailViewData(Person currentPerson,
             Person personToView,
@@ -65,6 +66,7 @@ namespace Neptune.Web.Views.User
             UserHasPersonViewPermissions = new UserViewFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManageThisPersonPermissions = new UserEditRoleFeature().HasPermission(currentPerson, personToView).HasPermission;
             UserCanManagePeople = new UserEditFeature().HasPermissionByPerson(currentPerson);
+            UserIsAdmin = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
             UserHasViewEverythingPermissions = new NeptuneAdminFeature().HasPermissionByPerson(currentPerson);
 
             if (UserCanManagePeople)

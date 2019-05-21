@@ -32,7 +32,6 @@
                             url: '/TreatmentBMP/FindByName#%QUERY',
                             wildcard: '%QUERY',
                             transport: function (opts, onSuccess, onError) {
-                                console.log($scope.selectedTreatmentBMPTypeIDs);
                                 var url = opts.url.split("#")[0];
                                 var query = opts.url.split("#")[1];
                                 $.ajax({

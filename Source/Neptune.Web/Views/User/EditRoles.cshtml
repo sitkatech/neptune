@@ -38,6 +38,21 @@ Source code is available upon request via <support@sitkatech.com>.
                 @Html.ValidationMessageFor(m => m.RoleID)
             </div>
         </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.DroolToolRoleID, new {@class = "col-xs-12 col-sm-3 control-label"})
+                <div class="col-xs-12 col-sm-9">
+                @if (ViewDataTyped.IsAdmin)
+                {
+                    @Html.DropDownListFor(m => m.DroolToolRoleID, ViewDataTyped.DroolToolRoles, new {@class = "form-control"})
+                    @Html.ValidationMessageFor(m => m.DroolToolRoleID)
+                }
+                else
+                {
+                    @ViewDataTyped.CurrentDroolToolRole.DroolToolRoleDisplayName
+                    @Html.HiddenFor(m => m.DroolToolRoleID)
+                }
+                </div>
+            </div>
         <div class="form-group">
             @Html.LabelFor(m => m.ShouldReceiveSystemCommunications, new {@class = "col-xs-12 col-sm-3 control-label"})
             <div class="col-xs-12 col-sm-9">

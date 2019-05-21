@@ -20,16 +20,23 @@ Source code is available upon request via <support@sitkatech.com>.
 -----------------------------------------------------------------------*/
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Neptune.Web.Models;
 
 namespace Neptune.Web.Views.User
 {
     public class EditRolesViewData : NeptuneUserControlViewData
     {
-        public readonly IEnumerable<SelectListItem> Roles;
+        public IEnumerable<SelectListItem> Roles { get; }
+        public IEnumerable<SelectListItem> DroolToolRoles { get; }
+        public bool IsAdmin { get; }
+        public DroolToolRole CurrentDroolToolRole { get; }
 
-        public EditRolesViewData(IEnumerable<SelectListItem> roles)
+        public EditRolesViewData(IEnumerable<SelectListItem> roles, IEnumerable<SelectListItem> droolToolRoles, bool isAdmin, DroolToolRole currentDroolToolRole)
         {
             Roles = roles;
+            DroolToolRoles = droolToolRoles;
+            IsAdmin = isAdmin;
+            CurrentDroolToolRole = currentDroolToolRole;
         }
     }
 }
